@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:my_movie_search/data_model/search_criteria_dto.dart';
+import 'package:my_movie_search/pages/movie_search_results.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
   MovieSearchCriteriaPage({Key key}) : super(key: key);
@@ -10,17 +12,20 @@ class MovieSearchCriteriaPage extends StatefulWidget {
       _MovieSearchCriteriaPageState();
 }
 
-class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage> {
-  String _title = "";
-  String _url = "";
-
+class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
+    with SearchCriteriaDTO {
   void _searchForMovie() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values.
-      _url = "xhttps://www.imdb.com/find?q=${_title}";
+      criteriaUrl = "xhttps://www.imdb.com/find?q=${criteriaTitle}";
     });
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MovieSearchResultsPage(criteria: this)),
+    );
   }
 
   @override
@@ -40,6 +45,18 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage> {
       ),
     );
   }
+}
+
+class _MovieSearchCriteriaBody extends Center {
+  _MovieSearchCriteriaBody(_MovieSearchCriteriaPageState state)
+      : super(
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            _MovieSearchCrieriaTop(state),
+            _MovieSearchCritriaMid(state),
+          ],
+        ));
 }
 
 class _MovieSearchCrieriaTop extends Center {
@@ -67,7 +84,7 @@ class _MovieSearchCrieriaTop extends Center {
                 hintText: "Enter movie or tv series to search for",
               ),
               onChanged: (text) {
-                state._title = text;
+                state.criteriaTitle = text;
               },
               onSubmitted: (text) {
                 print("First text field: $text");
@@ -90,22 +107,10 @@ class _MovieSearchCritriaMid extends Center {
                 'You have pushed the button this many times:',
               ),
               Text(
-                state._url.toString(),
+                state.criteriaUrl,
                 style: Theme.of(state.context).textTheme.headline4,
               ),
             ],
           ),
         );
-}
-
-class _MovieSearchCriteriaBody extends Center {
-  _MovieSearchCriteriaBody(_MovieSearchCriteriaPageState state)
-      : super(
-            child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _MovieSearchCrieriaTop(state),
-            _MovieSearchCritriaMid(state),
-          ],
-        ));
 }
