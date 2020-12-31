@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'dart:async';
-import 'dart:convert';
 
 import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
@@ -9,12 +8,11 @@ import 'package:my_movie_search/search_providers/search_imdb_suggestions.dart';
 
 class MovieSearchResultsPage extends StatefulWidget {
   MovieSearchResultsPage({Key key, SearchCriteriaDTO criteria})
-      : super(key: key) {
-    _criteria = criteria;
-  }
+      : _criteria = criteria,
+        super(key: key);
 
   final String title = "Movie Search Results";
-  var _criteria = new SearchCriteriaDTO();
+  final _criteria;
 
   @override
   _MovieSearchResultsPageState createState() =>
@@ -29,7 +27,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
   int _scrolledToPosition = 0;
   var _criteria = new SearchCriteriaDTO();
   var _fetchedResults = <MovieResultDTO>[];
-  StreamController<MovieSuggestionConverter> resultsStreamController;
+  StreamController<MovieResultDTO> resultsStreamController;
 
   void _reloadResults() {
     setState(() {
@@ -49,16 +47,14 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
   }
 
   @override
-  void InitState() {
+  void initState() {
     super.initState();
     resultsStreamController = StreamController.broadcast();
 
     resultsStreamController.stream.listen(
         /*lambda*/ (searchResult) => setState(
                 /*lambda*/ () {
-              Map x = json.decode(searchResult.resultCollection);
-              MovieResultDTO y = MovieResultConverter.fromJsonMap(x);
-              _fetchedResults.add(y);
+              _fetchedResults.add(searchResult);
             }));
 
     QueryIMDBSuggestions.executeQuery(resultsStreamController, _criteria);
