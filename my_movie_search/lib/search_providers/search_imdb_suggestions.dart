@@ -44,7 +44,7 @@ class QueryIMDBSuggestions {
   }
 
   static Uri constructURI(String searchText) {
-    final String url = "${baseURL}/${searchText.substring(1, 2)}/${searchText}";
+    final String url = "${baseURL}/${searchText.substring(0, 1)}/${searchText}";
     print(url);
     return Uri.parse(url);
   }
