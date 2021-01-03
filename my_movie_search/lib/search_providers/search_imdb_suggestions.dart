@@ -1,9 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:html';
-
-import 'package:js/js.dart' as js;
-import 'dart:js' as dart_js;
 
 import 'package:http/http.dart' as http;
 
@@ -29,15 +25,8 @@ class QueryIMDBSuggestions {
 
     var request = new http.Request('get', constructURI(criteria.criteriaTitle));
     request.headers.addAll(constructHeaders());
-    // TODO add JSONP handling to prevent CORS error
-    // ccess to XMLHttpRequest at 'https://...' from origin 'http://localhost:54571'
-    // has been blocked by CORS policy:
-    // No 'Access-Control-Allow-Origin' header is present on the requested resource.
-    var originalReferrer = fakeReferer("https://www.imdb.com/");
 
     var streamResponse = await client.send(request);
-
-    fakeReferer(originalReferrer);
 
     streamResponse.stream
         .transform(utf8.decoder)
@@ -52,20 +41,8 @@ class QueryIMDBSuggestions {
         .pipe(sc);
   }
 
-  static String fakeReferer(String newRefereer) {
-    //dart_js.context.callMethod( 'ref_alertMessage', ['Flutter is calling upon JavaScript!']);
-
-    //dart_js.context.callMethod('ref_logger', ["overiding referer to $newRefereer"]);
-    return dart_js.context.callMethod('ref_override', [newRefereer]);
-
-    var state = dart_js.JsObject.fromBrowserObject(dart_js.context['state']);
-    print(
-        "flutter says js detected origianl referer ${state['original_referrer']}");
-    return state['original_referrer'];
-  }
-
   static Uri constructURI(String searchText) {
-    final String url = "${baseURL}/${searchText.substring(0, 1)}/${searchText}";
+    final String url = "$baseURL/${searchText.substring(0, 1)}/$searchText";
     print(url);
     return Uri.parse(url);
   }
