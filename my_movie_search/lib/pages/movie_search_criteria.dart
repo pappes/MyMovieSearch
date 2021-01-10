@@ -19,7 +19,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
       // so that the display can reflect the updated values.
-      criteriaUrl = "xhttps://www.imdb.com/find?q=${criteriaTitle}";
+      criteriaUrl = "xhttps://www.imdb.com/find?q=$criteriaTitle";
     });
     Navigator.push(
       context,

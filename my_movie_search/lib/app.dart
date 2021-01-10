@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+//import 'package:my_movie_search/pages/home.dart';
 import 'package:my_movie_search/pages/movie_search_criteria.dart';
-import 'package:my_movie_search/pages/home.dart';
+//import 'package:my_movie_search/pages/webveiw/webview_testing.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -12,6 +13,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: ThemeMode.system, //dark or light or system
       home: MovieSearchCriteriaPage(),
+      //   home: WebViewExample(), //MovieSearchCriteriaPage(),
     );
   }
 }

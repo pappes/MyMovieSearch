@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:http/http.dart' as http;
+import 'package:http/http.dart' as http
+    show get, Client, Request; // limit inclusions to reduce size
 
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
 import 'package:my_movie_search/data_model/search_criteria_dto.dart';
@@ -17,19 +18,35 @@ import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 //i = image with dimentions)
 
 class QueryIMDBSuggestions {
-  static final String baseURL = "https://sg.media-imdb.com/suggests/";
+  static final String baseURL = "https://sg.media-imdb.com/suggests";
 
   static executeQuery(
       StreamController<MovieResultDTO> sc, SearchCriteriaDTO criteria) async {
-    var client = new http.Client();
+    var client = http.Client();
 
-    var request = new http.Request('get', constructURI(criteria.criteriaTitle));
+    var request = http.Request('get', constructURI(criteria.criteriaTitle));
     // TODO add JSONP handling to prevent CORS error
     // ccess to XMLHttpRequest at 'https://...' from origin 'http://localhost:54571'
     // has been blocked by CORS policy:
     // No 'Access-Control-Allow-Origin' header is present on the requested resource.
-    var streamResponse = await client.send(request);
+//    var streamResponse = await client.send(request);
+    var resp = await client.get(criteria.criteriaTitle);
+    print(criteria.criteriaTitle);
+    print("response=${resp.body}");
 
+    final response =
+        await http.get('https://sg.media-imdb.com/suggests/w/wonder');
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      print(response.body);
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+    /*
     streamResponse.stream
         .transform(utf8.decoder)
         .transform(json.decoder)
@@ -41,10 +58,11 @@ class QueryIMDBSuggestions {
             element) // expand each element and put them into a collection
         .map((map) => MovieResultConverter.fromJsonMap(map))*/
         .pipe(sc);
+*/
   }
 
   static Uri constructURI(String searchText) {
-    final String url = "${baseURL}/${searchText.substring(0, 1)}/${searchText}";
+    final String url = "$baseURL/${searchText.substring(0, 1)}/$searchText";
     print(url);
     return Uri.parse(url);
   }
@@ -52,7 +70,7 @@ class QueryIMDBSuggestions {
 
 class MovieResultDTOFactory {
   static MovieResultDTO fromJsonMap(Map map) {
-    var x = new MovieResultDTO();
+    var x = MovieResultDTO();
     x.title = map['title'];
     //x.url = map['url'];
     return x;
@@ -66,7 +84,7 @@ class MovieSuggestionConverter {
     var resultCollection = map['d'];
     Map innerJson = json.decode(resultCollection);
 
-    var x = new MovieResultDTO();
+    var x = MovieResultDTO();
     x.uniqueId = innerJson['id'];
     x.title = innerJson['1'];
     x.year = innerJson['y'];

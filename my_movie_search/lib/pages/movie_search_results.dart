@@ -24,11 +24,11 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
     //_fetchedResults = QueryIMDBSuggestions.executeQuery(criteria);
     _criteria = criteria;
   }
-  int _scrolledToPosition = 0;
-  var _criteria = new SearchCriteriaDTO();
+  var _criteria = SearchCriteriaDTO();
   var _fetchedResults = <MovieResultDTO>[];
   StreamController<MovieResultDTO> resultsStreamController;
 
+  /* TODO: save and restore scroll position int _scrolledToPosition = 0;
   void _reloadResults() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -38,6 +38,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
       //scroll page down to _scrolledToPosition
     });
   }
+  */
 
   @override
   void dispose() {

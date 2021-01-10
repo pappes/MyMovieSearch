@@ -1,4 +1,4 @@
-//import 'package:my_movie_search/pages/movie_search_criteria.dart';
+//import 'package:my_movie_search/movie_search_criteria.dart';
 
 /* MyMovieSearch - backlog
 Search criteria -> search results
