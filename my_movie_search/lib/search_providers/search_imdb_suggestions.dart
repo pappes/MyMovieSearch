@@ -25,14 +25,9 @@ class QueryIMDBSuggestions {
     var client = http.Client();
 
     var request = http.Request('get', constructURI(criteria.criteriaTitle));
-    // TODO add JSONP handling to prevent CORS error
-    // ccess to XMLHttpRequest at 'https://...' from origin 'http://localhost:54571'
-    // has been blocked by CORS policy:
-    // No 'Access-Control-Allow-Origin' header is present on the requested resource.
-//    var streamResponse = await client.send(request);
-    var resp = await client.get(criteria.criteriaTitle);
-    print(criteria.criteriaTitle);
-    print("response=${resp.body}");
+    request.headers.addAll(constructHeaders());
+
+    var streamResponse = await client.send(request);
 
     final response =
         await http.get('https://sg.media-imdb.com/suggests/w/wonder');
@@ -65,6 +60,14 @@ class QueryIMDBSuggestions {
     final String url = "$baseURL/${searchText.substring(0, 1)}/$searchText";
     print(url);
     return Uri.parse(url);
+  }
+
+  static Map constructHeaders() {
+    Map<String, String> requestHeaders = {
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    };
+    return requestHeaders;
   }
 }
 
