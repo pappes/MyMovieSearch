@@ -1,7 +1,10 @@
 import 'dart:io';
+import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:my_movie_search/data_model/movie_result_dto.dart';
 
 // database table and column names
 final String tableMovie = 'Movie';
@@ -10,30 +13,38 @@ final String colMovieUniqueId = 'uniqueId';
 final String colMovieJson = 'json';
 
 // data model class
-class MovieModel extends MovieDetailsDTO {
+class MovieModel {
   int id;
   String uniqueId;
-  String json;
+  String dtoJson;
 
   MovieModel();
 
-  // convenience constructor to create a Word object
-  MovieModel.fromMap(Map<String, dynamic> map) {
-    id = map[colMovieId];
-    uniqueId = map[colMovieUniqueId];
-    json = map[colMovieJson];
-  }
-
-  // convenience method to create a Map from this Word object
+  // convenience method to create a Map from this MovieModel object
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       colMovieUniqueId: uniqueId,
-      colMovieJson: json,
+      colMovieJson: dtoJson,
     };
     if (id != null) {
       map[colMovieId] = id;
     }
     return map;
+  }
+
+  MovieResultDTO ToMovieResultDTO() {
+    var map = json.decode(dtoJson);
+    return map.ToMovieResultDTO;
+  }
+}
+
+extension ModelConversion on Map {
+  MovieModel ToMovieModel() {
+    var model = MovieModel();
+    model.id = this[colMovieId];
+    model.uniqueId = this[colMovieUniqueId];
+    model.dtoJson = this[colMovieJson];
+    return model;
   }
 }
 
@@ -79,26 +90,52 @@ class DatabaseHelper {
 
   // Database helper methods:
 
-  Future<int> insert(MovieModel word) async {
+  Future<int> insert(MovieModel movie) async {
     Database db = await database;
-    int id = await db.insert(tableMovie, word.toMap());
+    int id = await db.insert(tableMovie, movie.toMap());
     return id;
   }
 
-  Future<MovieModel> queryWord(int id) async {
+  Future<int> update(MovieModel movie) async {
     Database db = await database;
-    //db.query(tableMovie) returns a list of every row as a Map.
-    List<Map> movieMap = await db.query(tableMovie,
-        columns: [colMovieId, colMovieUniqueId, colMovieJson],
-        where: '$colMovieId = ?',
-        whereArgs: [id]);
+    int id = await db.update(
+      tableMovie,
+      movie.toMap(),
+      where: '$colMovieId = ?',
+      whereArgs: [movie.id],
+    );
+    return id;
+  }
+
+  Future<int> delete(MovieModel movie) async {
+    Database db = await database;
+    int id = await db.delete(
+      tableMovie,
+      where: '$colMovieId = ?',
+      whereArgs: [movie.id],
+    );
+    return id;
+  }
+
+  Future<MovieModel> queryMovie(int id) async {
+    Database db = await database;
+    //db.query(tableMovie) can be used to return a list of every row as a Map.
+    List<Map> movieMap = await db.query(
+      tableMovie,
+      columns: [colMovieId, colMovieUniqueId, colMovieJson],
+      where: '$colMovieId = ?',
+      whereArgs: [id],
+    );
     if (movieMap.length > 0) {
-      return MovieModel.fromMap(movieMap.first);
+      var dbmodel = movieMap.first.ToMovieModel();
+      return dbmodel;
     }
     return null;
   }
 
-  // TODO: queryAllWords()
-  // TODO: delete(int id)
-  // TODO: update(Word word)
+  Future<List<Map>> queryAllMovies() async {
+    Database db = await database;
+    List<Map> movieMap = await db.query(tableMovie);
+    return movieMap;
+  }
 }

@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: ThemeMode.system, //dark or light or system
       home: MovieSearchCriteriaPage(),
-      //   home: WebViewExample(), //MovieSearchCriteriaPage(),
+      //   home: MovieHomePage(),
     );
   }
 }
