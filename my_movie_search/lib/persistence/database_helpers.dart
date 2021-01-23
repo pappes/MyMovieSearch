@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
@@ -32,14 +31,14 @@ class MovieModel {
     return map;
   }
 
-  MovieResultDTO ToMovieResultDTO() {
+  MovieResultDTO toMovieResultDTO() {
     var map = json.decode(dtoJson);
     return map.ToMovieResultDTO;
   }
 }
 
 extension ModelConversion on Map {
-  MovieModel ToMovieModel() {
+  MovieModel toMovieModel() {
     var model = MovieModel();
     model.id = this[colMovieId];
     model.uniqueId = this[colMovieUniqueId];
@@ -127,7 +126,7 @@ class DatabaseHelper {
       whereArgs: [id],
     );
     if (movieMap.length > 0) {
-      var dbmodel = movieMap.first.ToMovieModel();
+      var dbmodel = movieMap.first.toMovieModel();
       return dbmodel;
     }
     return null;

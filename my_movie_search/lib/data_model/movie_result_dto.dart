@@ -35,8 +35,17 @@ enum CensorRatingType {
   restriced, // X, RC
   custom,
 }
+enum LanguageType {
+  none,
+  allEnglish,
+  mostlyEnglish,
+  someEnglish,
+  silent,
+  foreign,
+  custom,
+}
 
-// memebr variable names
+// member variable names
 final String movieResultDTOSource = 'source';
 final String movieResultDTOUniqueId = 'uniqueId';
 final String movieResultDTOTitle = 'title';
@@ -48,7 +57,7 @@ final String movieResultDTOCensorRating = 'censorRating';
 final String movieResultDTORunTime = 'runTime';
 
 extension DTOConversion on Map {
-  MovieResultDTO ToMovieResultDTO() {
+  MovieResultDTO toMovieResultDTO() {
     var dto = MovieResultDTO();
     dto.source = this[movieResultDTOSource];
     dto.uniqueId = this[movieResultDTOUniqueId];

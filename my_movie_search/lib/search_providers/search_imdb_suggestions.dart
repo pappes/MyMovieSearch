@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http
 
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
 import 'package:my_movie_search/data_model/search_criteria_dto.dart';
+import 'package:my_movie_search/search_providers/jsonp_transformer.dart';
 
 //query string https://sg.media-imdb.com/suggests/w/wonder%20woman.json
 //json format
@@ -55,10 +56,10 @@ final String imdbJsonPSampleFull = '''
     {"v":1,"q":"wonder_woman","d":[ $imdbJsonSampleInner ]}
   ) ''';
 Stream<String> emitImdbJsonSample() async* {
-  yield StripJsonP(imdbJsonPSampleFull);
+  yield stripJsonP(imdbJsonPSampleFull);
 }
 
-String StripJsonP(String jsonP) {
+String stripJsonP(String jsonP) {
   // find from start of string "^" through all chars ".*" non greedy "?" til first "{"
   /*var newString = jsonP.replaceAllMapped(
       RegExp(r'^.*?{'), (match) => '"${match.group(0)}"');
@@ -85,13 +86,13 @@ String StripJsonP(String jsonP) {
 }
 
 extension JsonString on String {
-  String StripJsonP() {
+  String stripJsonP() {
     final startIndex = this.indexOf("{");
     final endIndex = this.lastIndexOf("}");
     return this.substring(startIndex, endIndex + 1);
   }
 
-  Map JsonDecode() => json.decode(this);
+  Map jsonDecode() => json.decode(this);
 }
 
 class QueryIMDBSuggestions {
@@ -101,7 +102,7 @@ class QueryIMDBSuggestions {
     StreamController<MovieResultDTO> sc,
     SearchCriteriaDTO criteria,
   ) {
-    var mymap = imdbJsonPSampleFull.StripJsonP().JsonDecode();
+    var mymap = imdbJsonPSampleFull.stripJsonP().jsonDecode();
     MovieResultDTO myDTO = MovieSuggestionConverter.fromJsonMap(mymap);
   }
 }
@@ -113,7 +114,7 @@ class QueryIMDBSuggestions_temp {
     StreamController<MovieResultDTO> sc,
     SearchCriteriaDTO criteria,
   ) async {
-/*    var client = http.Client();
+    var client = http.Client();
 
     var request = http.Request('get', constructURI(criteria.criteriaTitle));
     request.headers.addAll(constructHeaders());
@@ -132,9 +133,9 @@ class QueryIMDBSuggestions_temp {
       // then throw an exception.
       throw Exception('Failed to load album');
     }
-     streamResponse.stream
-        .transform(utf8.decoder)*/
+    streamResponse.stream.transform(utf8.decoder); /**/
     emitImdbJsonSample()
+        .transform(jsonp.decoder)
         .transform(json.decoder)
         .expand((element) =>
             element) // expand each element and put them into a collection
@@ -168,14 +169,14 @@ class MovieSuggestionConverter {
     var resultCollection = map['d'];
 
     //Map innerJson = json.decode(resultCollection);
+    var x = MovieResultDTO();
     for (var innerJson in resultCollection) {
-      var x = MovieResultDTO();
       x.uniqueId = innerJson['id'];
       x.title = innerJson['l'];
       x.year = innerJson['y'];
       x.yearRange = innerJson['yr'];
       x.title = innerJson['l'];
-      return x;
     }
+    return x;
   }
 }
