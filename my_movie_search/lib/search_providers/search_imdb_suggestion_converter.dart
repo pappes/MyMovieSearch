@@ -116,23 +116,24 @@ class MovieSuggestionConverter {
 
     //Map innerJson = json.decode(resultCollection);
     var x = MovieResultDTO();
-    for (var innerJson in resultCollection) {
-      x.uniqueId = innerJson[inner_element_identity_element];
-      x.title = innerJson[inner_element_title_element];
-      x.year = innerJson[inner_element_year_element];
-      x.yearRange = innerJson[inner_element_year_range_element];
+    for (Map innerJson in resultCollection) {
+      x = fromMap(innerJson);
     }
     return x;
   }
 
   static Stream<MovieResultDTO> fromInnerJsonMap(Iterable records) async* {
-    for (var record in records) {
-      var x = MovieResultDTO();
-      x.uniqueId = record[inner_element_identity_element];
-      x.title = record[inner_element_title_element];
-      x.year = record[inner_element_year_element];
-      x.yearRange = record[inner_element_year_range_element];
-      yield x;
+    for (Map record in records) {
+      yield fromMap(record);
     }
+  }
+
+  static MovieResultDTO fromMap(Map map) {
+    var x = MovieResultDTO();
+    x.uniqueId = map[inner_element_identity_element];
+    x.title = map[inner_element_title_element];
+    x.year = map[inner_element_year_element];
+    x.yearRange = map[inner_element_year_range_element];
+    return x;
   }
 }

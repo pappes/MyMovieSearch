@@ -56,7 +56,7 @@ final String movieResultDTOUserRating = 'userRating';
 final String movieResultDTOCensorRating = 'censorRating';
 final String movieResultDTORunTime = 'runTime';
 
-extension DTOConversion on Map {
+extension MapDTOConversion on Map {
   MovieResultDTO toMovieResultDTO() {
     var dto = MovieResultDTO();
     dto.source = this[movieResultDTOSource];
@@ -72,6 +72,51 @@ extension DTOConversion on Map {
   }
 }
 
+extension DTOhelpers on MovieResultDTO {
+  Map toMap() {
+    Map<String, dynamic> map = Map();
+    map[movieResultDTOSource] = this.source;
+    map[movieResultDTOUniqueId] = this.uniqueId;
+    map[movieResultDTOTitle] = this.title;
+    map[movieResultDTOType] = this.type;
+    map[movieResultDTOYear] = this.year;
+    map[movieResultDTOYearRange] = this.yearRange;
+    map[movieResultDTOUserRating] = this.userRating;
+    map[movieResultDTOCensorRating] = this.censorRating;
+    map[movieResultDTORunTime] = this.runTime;
+    return map;
+  }
+
+  Map toUnknown() {
+    Map<String, dynamic> map = Map();
+    map[movieResultDTOSource] = this.source;
+    map[movieResultDTOUniqueId] = this.uniqueId;
+    map[movieResultDTOTitle] = 'unknown';
+    map[movieResultDTOType] = this.type;
+    map[movieResultDTOYear] = this.year;
+    map[movieResultDTOYearRange] = this.yearRange;
+    map[movieResultDTOUserRating] = this.userRating;
+    map[movieResultDTOCensorRating] = this.censorRating;
+    map[movieResultDTORunTime] = this.runTime;
+    return map;
+  }
+
+  bool compareTo(MovieResultDTO other) {
+    if (this.title == other.title && this.title == 'unknown')
+      return true;
+    else
+      return this.source == other.source &&
+          this.uniqueId == other.uniqueId &&
+          this.title == other.title &&
+          this.type == other.type &&
+          this.year == other.year &&
+          this.yearRange == other.yearRange &&
+          this.userRating == other.userRating &&
+          this.censorRating == other.censorRating &&
+          this.runTime == other.runTime;
+  }
+}
+/*
 class MovieResultDTOFactory {
   static MovieResultDTO fromJsonMap(Map map) {
     var x = MovieResultDTO();
@@ -86,4 +131,4 @@ class MovieResultDTOFactory {
     x.runTime = map[movieResultDTORunTime];
     return x;
   }
-}
+}*/
