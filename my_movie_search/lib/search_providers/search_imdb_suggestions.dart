@@ -135,7 +135,7 @@ class QueryIMDBSuggestions_temp {
     }
     streamResponse.stream.transform(utf8.decoder); /**/
     emitImdbJsonSample()
-        .transform(jsonp.decoder)
+        .transform(JsonPDecoder())
         .transform(json.decoder)
         .expand((element) =>
             element) // expand each element and put them into a collection

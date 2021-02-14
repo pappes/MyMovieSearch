@@ -1,6 +1,100 @@
 import 'dart:async';
 import 'dart:convert';
 
+class JsonPState {
+  JsonPState() {
+    buffering = false;
+    buffer = "";
+  }
+  var buffering;
+  var buffer;
+}
+
+/// This class parses JSONP string streams and builds the json string stream.
+///
+/// When used as a [StreamTransformer], the input stream may emit
+/// multiple strings. Where necesary streamed input will be buffered.
+class JsonPDecoder extends Converter<String, String> {
+  final _state;
+
+  /// Constructs a new JsonPEncoder.
+  ///
+  /// The [reviver] may be `null`.
+  JsonPDecoder() : _state = JsonPState();
+
+  String stripPrefix(String input) {
+    if (!_state.buffering) {
+      final firstRound = input.indexOf("(");
+      final firstCurly = input.indexOf("{");
+      final firstSquare = input.indexOf("[");
+
+      // Monitor for start of jsonp inner contents or start of json
+      if (firstRound > -1 || firstCurly > -1 || firstSquare > -1) {
+        _state.buffering = true;
+      }
+      if ((firstRound == -1) ||
+          (firstCurly > -1 && firstCurly < firstRound) ||
+          (firstSquare > -1 && firstSquare < firstRound)) {
+        //json encoded text starts before JSONP wrapper so no conversion required
+        return input;
+      }
+      // Found valid JSONP need to trim start
+      return input.substring(firstRound + 1, input.length);
+    }
+    return input;
+  }
+
+  String bufferSuffix(String input) {
+    if (_state.buffering) {
+      final lastRound = input.indexOf(")");
+      final lastCurly = input.indexOf("}");
+      final lastSquare = input.indexOf("]");
+      var output = "";
+
+      // Release buffer if more json has been received
+      if (lastRound > -1 || lastCurly > -1 || lastSquare > -1) {
+        output = _state.buffer;
+        _state.buffer = "";
+      }
+      if ((lastRound == -1) ||
+          (lastCurly > -1 && lastCurly > lastRound) ||
+          (lastSquare > -1 && lastSquare > lastRound)) {
+        //json encoded text continues after lst round braket no buffering required
+        return output + input;
+      }
+      // Found valid close braket, need to buffer
+      _state.buffer = input.substring(lastRound, input.length);
+      return output + input.substring(0, lastRound);
+    }
+    return input;
+  }
+
+  /// Converts the given JSONP-string [input] to its corresponding json.
+  ///
+  String convert(String input) {
+    var output = input;
+    if (!_state.buffering) output = stripPrefix(output);
+    if (_state.buffering) output = stripPrefix(output);
+    return output;
+  }
+
+  /// Starts a conversion from a chunked JSON string to its corresponding object.
+  ///
+  /// The output [sink] receives exactly one decoded element through `add`.
+  //external StringConversionSink startChunkedConversion(Sink<Object> sink);
+  StringConversionSink startChunkedConversion(Sink<Object> sink) {
+    StringConversionSink stringSink;
+    if (sink is StringConversionSink) {
+      stringSink = sink;
+    } else {
+      stringSink = StringConversionSink.from(sink);
+    }
+    return stringSink;
+  }
+}
+
+/*
+
 const JsonPCodec jsonp = JsonPCodec();
 
 /// A [JsonPCodec] encodes JSON objects to strings and decodes strings to
@@ -91,52 +185,8 @@ class JsonPCodec extends Codec<String, String> {
   }
 }
 
-/// This class parses JSON strings and builds the corresponding objects.
-///
-/// A JSON input must be the JSON encoding of a single JSON value,
-/// which can be a list or map containing other values.
-///
-/// When used as a [StreamTransformer], the input stream may emit
-/// multiple strings. The concatenation of all of these strings must
-/// be a valid JSON encoding of a single JSON value.
-class JsonPDecoder extends Converter<String, String> {
-  final Object Function(Object key, Object value) _reviver;
 
-  /// Constructs a new JsonPEncoder.
-  ///
-  /// The [reviver] may be `null`.
-  const JsonPDecoder([Object reviver(Object key, Object value)])
-      : _reviver = reviver;
 
-  String stripJsonP(String src) {
-    final startIndex = src.indexOf("{");
-    final endIndex = src.lastIndexOf("}");
-    return src.substring(startIndex, endIndex + 1);
-  }
-
-  /// Converts the given JSON-string [input] to its corresponding object.
-  ///
-  /// Parsed JSON values are of the types [num], [String], [bool], [Null],
-  /// [List]s of parsed JSON values or [Map]s from [String] to parsed JSON
-  /// values.
-  ///
-  /// If `this` was initialized with a reviver, then the parsing operation
-  /// invokes the reviver on every object or list property that has been parsed.
-  /// The arguments are the property name ([String]) or list index ([int]), and
-  /// the value is the parsed value. The return value of the reviver is used as
-  /// the value of that property instead the parsed value.
-  ///
-  /// Throws [FormatException] if the input is not valid JSON text.
-  String convert(String input) => stripJsonP(input);
-
-  /// Starts a conversion from a chunked JSON string to its corresponding object.
-  ///
-  /// The output [sink] receives exactly one decoded element through `add`.
-  external StringConversionSink startChunkedConversion(Sink<Object> sink);
-
-  // Override the base class's bind, to provide a better type.
-  Stream<String> bind(Stream<String> stream) => super.bind(stream);
-}
 
 /// This class parses JSON strings and builds the corresponding objects.
 ///
@@ -182,3 +232,4 @@ class JsonPEncoder extends Converter<String, String> {
   // Override the base class's bind, to provide a better type.
   Stream<String> bind(Stream<String> stream) => super.bind(stream);
 }
+*/

@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 
+//import 'package:my_movie_search/search_providers/jsonp_transformer_fusion.dart';
+//import 'package:my_movie_search/search_providers/jsonp_transformer_rot.dart';
 import 'package:my_movie_search/search_providers/jsonp_transformer.dart';
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
 import 'package:my_movie_search/search_providers/search_imdb_suggestion_converter.dart';
@@ -20,6 +22,7 @@ import 'package:my_movie_search/search_providers/search_imdb_suggestion_converte
 //q = title type
 //i = image with dimentions)
 
+final expectedDTOList = expectedDTOStream.toList();
 final expectedDTOStream = MovieSuggestionConverter.fromInnerJsonMap([
   {
     "l": "Wonder Woman 1984",
@@ -354,7 +357,7 @@ void main() {
       }, count: 1);
       stream.listen(expectFn);
     });
-
+/*
     test('jsonp transformer test', () {
       return;
       String testInput = imdbJsonPSampleFull;
@@ -369,13 +372,68 @@ void main() {
         expect(decodedOutput[imdbCustomKeyName], imdbCustomKeyVal);
       }, count: 1);
       stream.listen(expectFn);
-    });
+    });*/
   });
 
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
+  group('transformer', () {
+    testPrefix(input, output) {
+      expect(JsonPDecoder().stripPrefix(input), output);
+    }
+
+    testSuffix(input, output) {
+      var decoder = JsonPDecoder();
+      decoder.stripPrefix("(");
+      expect(decoder.bufferSuffix(input), output);
+    }
+
+    test('stripPrefix no change', () {
+      testPrefix("abc", "abc");
+      testPrefix("{abc}", "{abc}");
+      testPrefix("[abc]", "[abc]");
+      testPrefix("[{abc}]", "[{abc}]");
+      testPrefix("{[abc]}", "{[abc]}");
+
+      testPrefix("{()abc}", "{()abc}");
+      testPrefix("[()abc]", "[()abc]");
+      testPrefix("[(){abc}]", "[(){abc}]");
+      testPrefix("{()[abc]}", "{()[abc]}");
+      testPrefix("[{()abc}]", "[{()abc}]");
+      testPrefix("{[()abc]}", "{[()abc]}");
+    });
+    test('stripPrefix change required', () {
+      testPrefix("jsfunction(abc", "abc");
+      testPrefix("jsfunction({abc}", "{abc}");
+      testPrefix("jsfunction([abc]", "[abc]");
+      testPrefix("jsfunction([{abc}]", "[{abc}]");
+      testPrefix("jsfunction({[abc]}", "{[abc]}");
+    });
+
+    test('bufferSuffix no change', () {
+      testSuffix("abc", "abc");
+      testSuffix("{abc}", "{abc}");
+      testSuffix("[abc]", "[abc]");
+      testSuffix("[{abc}]", "[{abc}]");
+      testSuffix("{[abc]}", "{[abc]}");
+
+      testSuffix("{()abc}", "{()abc}");
+      testSuffix("[()abc]", "[()abc]");
+      testSuffix("[(){abc}]", "[(){abc}]");
+      testSuffix("{()[abc]}", "{()[abc]}");
+      testSuffix("[{()abc}]", "[{()abc}]");
+      testSuffix("{[()abc]}", "{[()abc]}");
+    });
+    test('bufferSuffix change required', () {
+      testSuffix("abc)", "abc");
+      testSuffix("{abc})", "{abc}");
+      testSuffix("[abc])", "[abc]");
+      testSuffix("[{abc}])", "[{abc}]");
+      testSuffix("{[abc]})", "{[abc]}");
+    });
+  });
   group('imdb suggestion', () {
     test('extractor', () async {
       String testInput =
@@ -391,7 +449,31 @@ void main() {
           .map((event) => MovieSuggestionConverter.fromMap(event));
       // .map((event) => (event as Map).toMovieResultDTO());
 
-      var expectedDTO = await expectedDTOStream.toList();
+      var expectedDTO = await expectedDTOList;
+      int dtoCount = 0;
+      var expectFn = expectAsync1<void, MovieResultDTO>((output) {
+        var expectedValue = expectedDTO[dtoCount++];
+        var isExpectedValue = MovieResultDTOMatcher(expectedValue);
+        expect(output, isExpectedValue);
+      }, count: expectedDTO.length, max: expectedDTO.length);
+      stream.listen(expectFn);
+    });
+    test('transformer', () async {
+      String testInput =
+          imdbJsonSampleOuter; // TODO: switch to imdbJsonPSampleFull;
+      Stream<MovieResultDTO> stream = emitByteStream(testInput)
+          .transform(utf8.decoder)
+          .transform(JsonPDecoder())
+          //.transform(JsonPCodec().decoder)
+          .transform(json.decoder)
+          .map(
+              (outerMap) => (outerMap as Map)[outer_element_results_collection])
+          .expand((element) =>
+              element) // Emit each element from the list as a seperate stream event
+          .map((event) => MovieSuggestionConverter.fromMap(event));
+      // .map((event) => (event as Map).toMovieResultDTO());
+
+      var expectedDTO = await expectedDTOList;
       int dtoCount = 0;
       var expectFn = expectAsync1<void, MovieResultDTO>((output) {
         var expectedValue = expectedDTO[dtoCount++];
