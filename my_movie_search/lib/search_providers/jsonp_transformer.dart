@@ -3,11 +3,26 @@ import 'dart:convert';
 
 class JsonPState {
   JsonPState() {
+    activated = false;
     buffering = false;
     buffer = "";
   }
-  var buffering;
-  var buffer;
+  var activated; // true if stream has encounted [, { or (
+  var buffering; // true if stream stripped a JSONP prefix.
+  var buffer; // Stream content that has not been released.
+
+  String toString() {
+    return "activated=$activated buffering=$buffering buffer=$buffer";
+  }
+}
+
+class JsonPConversionSink extends Sink<String> {
+  final _sink;
+  final _jsonPDecoder;
+
+  JsonPConversionSink(this._sink, this._jsonPDecoder);
+  add(x) => _sink.add(_jsonPDecoder.convert(x));
+  close() => _sink.close();
 }
 
 /// This class parses JSONP string streams and builds the json string stream.
@@ -18,218 +33,105 @@ class JsonPDecoder extends Converter<String, String> {
   final _state;
 
   /// Constructs a new JsonPEncoder.
-  ///
-  /// The [reviver] may be `null`.
   JsonPDecoder() : _state = JsonPState();
 
-  String stripPrefix(String input) {
-    if (!_state.buffering) {
-      final firstRound = input.indexOf("(");
-      final firstCurly = input.indexOf("{");
-      final firstSquare = input.indexOf("[");
-
-      // Monitor for start of jsonp inner contents or start of json
-      if (firstRound > -1 || firstCurly > -1 || firstSquare > -1) {
-        _state.buffering = true;
-      }
-      if ((firstRound == -1) ||
-          (firstCurly > -1 && firstCurly < firstRound) ||
-          (firstSquare > -1 && firstSquare < firstRound)) {
-        //json encoded text starts before JSONP wrapper so no conversion required
-        return input;
-      }
-      // Found valid JSONP need to trim start
-      return input.substring(firstRound + 1, input.length);
-    }
-    return input;
+  /// Converts the given JSONP-string [input] to its corresponding json.
+  String convert(String input) {
+    var output = "";
+    if (_state.activated)
+      output = input;
+    else
+      output = stripPrefix(input);
+    if (_state.buffering) output = bufferSuffix(output);
+    return output;
   }
 
+  // Internal function to Strip FunctionName( from the start of the string stream.
+  // Strips nothing if [ or { is encountered before (
+  String stripPrefix(String input) {
+    if (_state.activated) {
+      // Prefix has already been stripped (or did not need to be stripped.)
+      return input;
+    }
+
+    final firstRound = input.indexOf("(");
+    final firstCurly = input.indexOf("{");
+    final firstSquare = input.indexOf("[");
+    if (firstRound == -1 && firstCurly == -1 && firstSquare == -1) {
+      // JSON has not started, JSONP has not finished
+      return "";
+    }
+
+    // Monitor for start of JSONP inner contents or start of JSON.
+    // i.e. skip any leading blank lines.
+    if (firstRound > -1 || firstCurly > -1 || firstSquare > -1) {
+      // Ready to strip prefix (if required)
+      _state.activated = true;
+    }
+    if ((firstRound == -1) ||
+        (firstCurly > -1 && firstCurly < firstRound) ||
+        (firstSquare > -1 && firstSquare < firstRound)) {
+      // JSON encoded text starts before JSONP wrapper so no conversion required.
+      return input;
+    }
+    // Found valid JSONP need to trim start.
+    _state.buffering = true;
+    return input.substring(firstRound + 1, input.length);
+  }
+
+  // Internal function to Strip ) from the end of the string stream.
+  // Strips nothing if no valid JSONP prefix has been encountered.
+  // Buffers stripped text to allow it to be emitted if further text is streamed.
   String bufferSuffix(String input) {
     if (_state.buffering) {
       final lastRound = input.indexOf(")");
       final lastCurly = input.indexOf("}");
       final lastSquare = input.indexOf("]");
+      final firstRound = input.indexOf("(");
+      final firstCurly = input.indexOf("{");
+      final firstSquare = input.indexOf("[");
       var output = "";
 
-      // Release buffer if more json has been received
-      if (lastRound > -1 || lastCurly > -1 || lastSquare > -1) {
-        output = _state.buffer;
-        _state.buffer = "";
+      if (_state.buffer.length > 0) {
+        if (firstRound > -1 ||
+            firstCurly > -1 ||
+            firstSquare > -1 ||
+            lastRound > -1 ||
+            lastCurly > -1 ||
+            lastSquare > -1) {
+          // Release buffer if more json has been received.
+          output = _state.buffer;
+          _state.buffer = "";
+        } else {
+          _state.buffer += input;
+          return "";
+        }
       }
       if ((lastRound == -1) ||
+          (firstRound > -1 && firstRound > lastRound) ||
+          (firstCurly > -1 && firstCurly > lastRound) ||
+          (firstSquare > -1 && firstSquare > lastRound) ||
           (lastCurly > -1 && lastCurly > lastRound) ||
           (lastSquare > -1 && lastSquare > lastRound)) {
-        //json encoded text continues after lst round braket no buffering required
+        // JSON encoded text continues after last round bracket no buffering required.
         return output + input;
       }
-      // Found valid close braket, need to buffer
+      // Found valid close bracket, need to buffer.
       _state.buffer = input.substring(lastRound, input.length);
       return output + input.substring(0, lastRound);
     }
     return input;
   }
 
-  /// Converts the given JSONP-string [input] to its corresponding json.
-  ///
-  String convert(String input) {
-    var output = input;
-    if (!_state.buffering) output = stripPrefix(output);
-    if (_state.buffering) output = stripPrefix(output);
-    return output;
+  // Helper function to see inside the decoder state.
+  String toString() {
+    return _state.toString();
   }
 
-  /// Starts a conversion from a chunked JSON string to its corresponding object.
+  /// Starts a conversion from a chunked JSONP string to its corresponding JSON string.
   ///
-  /// The output [sink] receives exactly one decoded element through `add`.
-  //external StringConversionSink startChunkedConversion(Sink<Object> sink);
-  StringConversionSink startChunkedConversion(Sink<Object> sink) {
-    StringConversionSink stringSink;
-    if (sink is StringConversionSink) {
-      stringSink = sink;
-    } else {
-      stringSink = StringConversionSink.from(sink);
-    }
-    return stringSink;
+  /// The output [sink] receives one string element per input element through `add`.
+  Sink<String> startChunkedConversion(Sink<Object> sink) {
+    return JsonPConversionSink(sink, this);
   }
 }
-
-/*
-
-const JsonPCodec jsonp = JsonPCodec();
-
-/// A [JsonPCodec] encodes JSON objects to strings and decodes strings to
-/// JSON objects.
-///
-/// Examples:
-///
-///     var encoded = json.encode([1, 2, { "a": null }]);
-///     var decoded = json.decode('["foo", { "bar": 499 }]');
-class JsonPCodec extends Codec<String, String> {
-  final Object Function(Object key, Object value) _reviver;
-  final Object Function(dynamic) _toEncodable;
-
-  /// Creates a `JsonPCodec` with the given reviver and encoding function.
-  ///
-  /// The [reviver] function is called during decoding. It is invoked once for
-  /// each object or list property that has been parsed.
-  /// The `key` argument is either the integer list index for a list property,
-  /// the string map key for object properties, or `null` for the final result.
-  ///
-  /// If [reviver] is omitted, it defaults to returning the value argument.
-  ///
-  /// The [toEncodable] function is used during encoding. It is invoked for
-  /// values that are not directly encodable to a string (a value that is not a
-  /// number, boolean, string, null, list or a map with string keys). The
-  /// function must return an object that is directly encodable. The elements of
-  /// a returned list and values of a returned map do not need to be directly
-  /// encodable, and if they aren't, `toEncodable` will be used on them as well.
-  /// Please notice that it is possible to cause an infinite recursive regress
-  /// in this way, by effectively creating an infinite data structure through
-  /// repeated call to `toEncodable`.
-  ///
-  /// If [toEncodable] is omitted, it defaults to a function that returns the
-  /// result of calling `.toJson()` on the unencodable object.
-  const JsonPCodec(
-      {Object reviver(Object key, Object value),
-      Object toEncodable(dynamic object)})
-      : _reviver = reviver,
-        _toEncodable = toEncodable;
-
-  /// Creates a `JsonPCodec` with the given reviver.
-  ///
-  /// The [reviver] function is called once for each object or list property
-  /// that has been parsed during decoding. The `key` argument is either the
-  /// integer list index for a list property, the string map key for object
-  /// properties, or `null` for the final result.
-  JsonPCodec.withReviver(dynamic reviver(Object key, Object value))
-      : this(reviver: reviver);
-
-  /// Parses the string and returns the resulting Json object.
-  ///
-  /// The optional [reviver] function is called once for each object or list
-  /// property that has been parsed during decoding. The `key` argument is either
-  /// the integer list index for a list property, the string map key for object
-  /// properties, or `null` for the final result.
-  ///
-  /// The default [reviver] (when not provided) is the identity function.
-  String decode(String source, {Object reviver(Object key, Object value)}) {
-    reviver ??= _reviver;
-    if (reviver == null) return decoder.convert(source);
-    return JsonPDecoder(reviver).convert(source);
-  }
-
-  /// Converts [value] to a JSON string.
-  ///
-  /// If value contains objects that are not directly encodable to a JSON
-  /// string (a value that is not a number, boolean, string, null, list or a map
-  /// with string keys), the [toEncodable] function is used to convert it to an
-  /// object that must be directly encodable.
-  ///
-  /// If [toEncodable] is omitted, it defaults to a function that returns the
-  /// result of calling `.toJson()` on the unencodable object.
-  String encode(Object value, {Object toEncodable(dynamic object)}) {
-    toEncodable ??= _toEncodable;
-    if (toEncodable == null) return encoder.convert(value);
-    return JsonEncoder(toEncodable).convert(value);
-  }
-
-  JsonPEncoder get encoder {
-    if (_toEncodable == null) return const JsonPEncoder();
-    return JsonPEncoder(_reviver);
-//    return JsonPEncoder(_toEncodable);
-  }
-
-  JsonPDecoder get decoder {
-    if (_reviver == null) return const JsonPDecoder();
-    return JsonPDecoder(_reviver);
-  }
-}
-
-
-
-
-/// This class parses JSON strings and builds the corresponding objects.
-///
-/// A JSON input must be the JSON encoding of a single JSON value,
-/// which can be a list or map containing other values.
-///
-/// When used as a [StreamTransformer], the input stream may emit
-/// multiple strings. The concatenation of all of these strings must
-/// be a valid JSON encoding of a single JSON value.
-class JsonPEncoder extends Converter<String, String> {
-  final Object Function(Object key, Object value) _reviver;
-
-  /// Constructs a new JsonPEncoder.
-  ///
-  /// The [reviver] may be `null`.
-  const JsonPEncoder([Object reviver(Object key, Object value)])
-      : _reviver = reviver;
-
-  String addJsonP(String src) {
-    return src;
-  }
-
-  /// Converts the given JSON-string [input] to its corresponding object.
-  ///
-  /// Parsed JSON values are of the types [num], [String], [bool], [Null],
-  /// [List]s of parsed JSON values or [Map]s from [String] to parsed JSON
-  /// values.
-  ///
-  /// If `this` was initialized with a reviver, then the parsing operation
-  /// invokes the reviver on every object or list property that has been parsed.
-  /// The arguments are the property name ([String]) or list index ([int]), and
-  /// the value is the parsed value. The return value of the reviver is used as
-  /// the value of that property instead the parsed value.
-  ///
-  /// Throws [FormatException] if the input is not valid JSON text.
-  String convert(String input) => addJsonP(input);
-
-  /// Starts a conversion from a chunked JSON string to its corresponding object.
-  ///
-  /// The output [sink] receives exactly one decoded element through `add`.
-  external StringConversionSink startChunkedConversion(Sink<Object> sink);
-
-  // Override the base class's bind, to provide a better type.
-  Stream<String> bind(Stream<String> stream) => super.bind(stream);
-}
-*/

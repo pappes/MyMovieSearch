@@ -13,7 +13,7 @@ import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 //yr = year range for series
 //q = title type
 //i = image with dimentions)
-
+/*
 final String imdbJsonSampleInner = r'''
   {"l":"Wonder Woman 1984","id":"tt7126948","s":"Gal Gadot, Chris Pine","y":2020,"q":"feature","vt":35
       ,"i":["https://m.media-amazon.com/images/M/MV5BNWY2NWE0NWEtZGUwMC00NWMwLTkyNzUtNmIxMmIyYzA0MjNiXkEyXkFqcGdeQXVyMTA2OTQ3MTUy._V1_.jpg",2764,4096]
@@ -63,7 +63,7 @@ extension JsonString on String {
   }
 
   Map jsonDecode() => json.decode(this);
-}
+}*/
 
 const outer_element_results_collection = 'd';
 const inner_element_identity_element = 'id';
@@ -71,7 +71,7 @@ const inner_element_title_element = 'l';
 const inner_element_year_element = 'y';
 const inner_element_year_range_element = 'yr';
 
-class QueryIMDBSuggestions {
+/*class QueryIMDBSuggestions {
   static executeQuery(
     StreamController<MovieResultDTO> sc,
     SearchCriteriaDTO criteria,
@@ -106,7 +106,7 @@ class QueryIMDBSuggestions_temp {
         .map((map) => MovieResultConverter.fromJsonMap(map))*/
         .pipe(sc);
   }
-}
+}*/
 
 class MovieSuggestionConverter {
   static MovieResultDTO fromCompleteJsonMap(Map map) {
