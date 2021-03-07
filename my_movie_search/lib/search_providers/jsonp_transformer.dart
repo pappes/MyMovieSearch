@@ -84,9 +84,9 @@ class JsonPDecoder extends Converter<String, String> {
   // Buffers stripped text to allow it to be emitted if further text is streamed.
   String bufferSuffix(String input) {
     if (_state.buffering) {
-      final lastRound = input.indexOf(")");
-      final lastCurly = input.indexOf("}");
-      final lastSquare = input.indexOf("]");
+      final lastRound = input.lastIndexOf(")");
+      final lastCurly = input.lastIndexOf("}");
+      final lastSquare = input.lastIndexOf("]");
       final firstRound = input.indexOf("(");
       final firstCurly = input.indexOf("{");
       final firstSquare = input.indexOf("[");

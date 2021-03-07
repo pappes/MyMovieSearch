@@ -11,34 +11,14 @@ import 'package:my_movie_search/search_providers/search_imdb_suggestion_converte
 import 'package:my_movie_search/search_providers/temp_search_imdb_suggestions_data.dart';
 
 class QueryIMDBSuggestions {
-  // TODO: switch to QueryIMDBSuggestions_temp.
-
-  static executeQuery(
-    StreamController<MovieResultDTO> sc,
-    SearchCriteriaDTO criteria,
-  ) {
-    /*var mymap = JsonPDecoder.convert(imdbJsonPSampleFull).jsonDecode();
-    var myDTO = MovieSuggestionConverter.dtoFromCompleteJsonMap(mymap);*/
-    emitImdbJsonSample()
-        .transform(JsonPDecoder())
-        .transform(json.decoder)
-        .map((outerMap) => (outerMap as Map)[outer_element_results_collection])
-        .expand((element) =>
-            element) // Emit each element from the list as a seperate stream event
-        .map((event) => MovieSuggestionConverter.dtoFromMap(event))
-        .pipe(sc);
-  }
-}
-
-class QueryIMDBSuggestions_temp {
-  //TODO: proxy web connections.
   static final String baseURL = "https://sg.media-imdb.com/suggests";
 
   static executeQuery(
     StreamController<MovieResultDTO> sc,
     SearchCriteriaDTO criteria,
   ) async {
-    var client = http.Client();
+    //TODO: proxy web connections.
+    /*var client = http.Client();
 
     var request = http.Request('get', constructURI(criteria.criteriaTitle));
     request.headers.addAll(constructHeaders());
@@ -57,14 +37,15 @@ class QueryIMDBSuggestions_temp {
       // then throw an exception.
       throw Exception('Failed to load album');
     }
-    streamResponse.stream.transform(utf8.decoder); /**/
-    emitImdbJsonSample()
+    streamResponse.stream.transform(utf8.decoder)*/
+    emitImdbJsonPSample() // TODO: use response stream to populate suggestions.
         .transform(JsonPDecoder())
         .transform(json.decoder)
+        .map((outerMap) => (outerMap as Map)[
+            outer_element_results_collection]) // Pull the inner collection out of the map.
         .expand((element) =>
-            element) // expand each element from the map and put them into a collection
-        .map((map) => MovieSuggestionConverter.dtoFromCompleteJsonMap(map))
-        .expand((element) => element) // expand each element from the list
+            element) // Emit each element from the list as a seperate stream event.
+        .map((event) => MovieSuggestionConverter.dtoFromMap(event))
         .pipe(sc);
   }
 

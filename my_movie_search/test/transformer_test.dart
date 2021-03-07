@@ -90,6 +90,11 @@ void main() {
       testSuffix("[abc])", "[abc]");
       testSuffix("[{abc}])", "[{abc}]");
       testSuffix("{[abc]})", "{[abc]}");
+      testSuffix("()abc)", "()abc");
+      testSuffix("(){abc})", "(){abc}");
+      testSuffix("()[abc])", "()[abc]");
+      testSuffix("()[{abc}])", "()[{abc}]");
+      testSuffix("(){[abc]})", "(){[abc]}");
     });
     test('JsonPDecoder single line no change', () {
       testSingleLineConversion("abc", "");

@@ -43,10 +43,16 @@ final String imdbJsonSampleInner = r'''
       ,"i":["https://m.media-amazon.com/images/M/MV5BMjk0MTRlNmUtNGNmNy00OTA2LTg0MWEtMWE2M2M5YmUyMDJkL2ltYWdlXkEyXkFqcGdeQXVyNjY1ODcxNQ@@._V1_.jpg",640,428]}
 ''';
 final String imdbJsonPFunction = r'imdb$wonder_woman';
+final String imdbJsonSampleFull =
+    ' {"v":1,"q":"wonder_woman","d":[ $imdbJsonSampleInner ]}';
 final String imdbJsonPSampleFull = '''
   $imdbJsonPFunction(
-    {"v":1,"q":"wonder_woman","d":[ $imdbJsonSampleInner ]}
+    $imdbJsonSampleFull
   ) ''';
-Stream<String> emitImdbJsonSample() async* {
+Stream<String> emitImdbJsonPSample() async* {
   yield imdbJsonPSampleFull;
+}
+
+Stream<String> emitImdbJsonSample() async* {
+  yield imdbJsonSampleFull;
 }
