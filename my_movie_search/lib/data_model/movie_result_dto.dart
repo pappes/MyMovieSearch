@@ -1,5 +1,7 @@
+import 'package:my_movie_search/data_model/metadata_dto.dart';
+
 class MovieResultDTO {
-  MovieSourceType source = MovieSourceType.none;
+  DataeSourceType source = DataeSourceType.none;
   String uniqueId = "";
   String title = "";
   MovieContentType type = MovieContentType.none;
@@ -10,14 +12,6 @@ class MovieResultDTO {
   Duration runTime = Duration(hours: 0, minutes: 0, seconds: 0);
 }
 
-enum MovieSourceType {
-  none,
-  imdb,
-  omdb,
-  wiki,
-  other,
-  custom,
-}
 enum MovieContentType {
   none,
   movie, //      includes "tv movie"
@@ -116,19 +110,3 @@ extension DTOhelpers on MovieResultDTO {
           this.runTime == other.runTime;
   }
 }
-/*
-class MovieResultDTOFactory {
-  static MovieResultDTO fromJsonMap(Map map) {
-    var x = MovieResultDTO();
-    x.source = map[movieResultDTOSource];
-    x.uniqueId = map[movieResultDTOUniqueId];
-    x.title = map[movieResultDTOTitle];
-    x.type = map[movieResultDTOType];
-    x.year = map[movieResultDTOYear];
-    x.yearRange = map[movieResultDTOYearRange];
-    x.userRating = map[movieResultDTOUserRating];
-    x.censorRating = map[movieResultDTOCensorRating];
-    x.runTime = map[movieResultDTORunTime];
-    return x;
-  }
-}*/

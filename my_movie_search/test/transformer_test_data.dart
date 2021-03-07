@@ -1,3 +1,4 @@
+import 'package:my_movie_search/data_model/movie_result_dto.dart';
 import 'package:my_movie_search/search_providers/search_imdb_suggestion_converter.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -14,8 +15,14 @@ import 'package:my_movie_search/search_providers/search_imdb_suggestion_converte
 //q = title type
 //i = image with dimentions)
 
+Stream<MovieResultDTO> streamFromInnerJsonMap(Iterable records) async* {
+  for (Map record in records) {
+    yield MovieSuggestionConverter.dtoFromMap(record);
+  }
+}
+
 final expectedDTOList = expectedDTOStream.toList();
-final expectedDTOStream = MovieSuggestionConverter.fromInnerJsonMap([
+final expectedDTOStream = streamFromInnerJsonMap([
   {
     "l": "Wonder Woman 1984",
     "id": "tt7126948",

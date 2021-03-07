@@ -138,13 +138,12 @@ void main() {
       }, count: 1);
       stream.listen(expectFn);
     });
-/*
+
     test('jsonp transformer test', () {
-      return;
       String testInput = imdbJsonPSampleFull;
       var stream = emitByteStream(testInput)
           .transform(utf8.decoder)
-          .transform(jsonp.decoder)
+          .transform(JsonPDecoder())
           .transform(json.decoder);
 
       var expectFn = expectAsync1<void, Object>((output) {
@@ -153,27 +152,25 @@ void main() {
         expect(decodedOutput[imdbCustomKeyName], imdbCustomKeyVal);
       }, count: 1);
       stream.listen(expectFn);
-    });*/
+    });
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Unit tests
+  /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb suggestion', () {
     test('extractor', () async {
-      String testInput =
-          imdbJsonSampleOuter; // TODO: switch to imdbJsonPSampleFull;
+      String testInput = imdbJsonPSampleFull;
       Stream<MovieResultDTO> stream = emitByteStream(testInput)
           .transform(utf8.decoder)
-          //.transform(jsonp.decoder)
+          .transform(JsonPDecoder())
           .transform(json.decoder)
           .map(
               (outerMap) => (outerMap as Map)[outer_element_results_collection])
           .expand((element) =>
               element) // Emit each element from the list as a seperate stream event
-          .map((event) => MovieSuggestionConverter.fromMap(event));
-      // .map((event) => (event as Map).toMovieResultDTO());
+          .map((event) => MovieSuggestionConverter.dtoFromMap(event));
 
       var expectedDTO = await expectedDTOList;
       int dtoCount = 0;
@@ -185,19 +182,16 @@ void main() {
       stream.listen(expectFn);
     });
     test('transformer', () async {
-      String testInput =
-          imdbJsonSampleOuter; // TODO: switch to imdbJsonPSampleFull;
+      String testInput = imdbJsonPSampleFull;
       Stream<MovieResultDTO> stream = emitByteStream(testInput)
           .transform(utf8.decoder)
           .transform(JsonPDecoder())
-          //.transform(JsonPCodec().decoder)
           .transform(json.decoder)
           .map(
               (outerMap) => (outerMap as Map)[outer_element_results_collection])
           .expand((element) =>
               element) // Emit each element from the list as a seperate stream event
-          .map((event) => MovieSuggestionConverter.fromMap(event));
-      // .map((event) => (event as Map).toMovieResultDTO());
+          .map((event) => MovieSuggestionConverter.dtoFromMap(event));
 
       var expectedDTO = await expectedDTOList;
       int dtoCount = 0;

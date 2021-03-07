@@ -148,7 +148,6 @@ void main() {
           .transform(JsonPDecoder());
 
       var expectedString = imdbJsonSampleOuter;
-      int stringCount = 0;
       var emittedString = "";
 
       var expectFn = expectAsync1<void, String>((output) {
