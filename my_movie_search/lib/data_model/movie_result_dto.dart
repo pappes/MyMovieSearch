@@ -10,6 +10,7 @@ class MovieResultDTO {
   double userRating = 0;
   CensorRatingType censorRating = CensorRatingType.none;
   Duration runTime = Duration(hours: 0, minutes: 0, seconds: 0);
+  String imageUrl = "";
 }
 
 enum MovieContentType {
@@ -18,6 +19,7 @@ enum MovieContentType {
   series, //     anything less that an hour long that does repeat or repeats more than 4 times
   miniseries, // anything more that an hour long that does repeat
   short, //      anything less that an hour long that does not repeat
+  episode, //    anything that is part of a series or mini-series
   custom,
 }
 enum CensorRatingType {

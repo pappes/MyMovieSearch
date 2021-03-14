@@ -5,6 +5,7 @@ import 'dart:async';
 import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
 import 'package:my_movie_search/search_providers/search_imdb_suggestions.dart';
+import 'package:my_movie_search/search_providers/search_omdb_movies.dart';
 
 class MovieSearchResultsPage extends StatefulWidget {
   MovieSearchResultsPage({Key key, SearchCriteriaDTO criteria})
@@ -58,7 +59,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
               _fetchedResults.add(searchResult);
             }));
 
-    QueryIMDBSuggestions.executeQuery(resultsStreamController, _criteria);
+    //QueryIMDBSuggestions.executeQuery(resultsStreamController, _criteria);
+    QueryOMDBMovies.executeQuery(resultsStreamController, _criteria);
   }
 
   Widget build(BuildContext context) {

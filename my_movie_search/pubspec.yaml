@@ -27,6 +27,7 @@ dependencies:
   webview_flutter: ^1.0.7
   sqflite: ^1.0.0
   path_provider: ^0.4.1
+  #TODO use universal IO for environemnt variable fetching and for CORS http gets: universal_io: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.
