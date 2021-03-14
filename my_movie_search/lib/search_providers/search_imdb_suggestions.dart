@@ -14,20 +14,28 @@ class QueryIMDBSuggestions {
   static final String baseURL = "https://sg.media-imdb.com/suggests";
 
   static executeQuery(
-    StreamController<MovieResultDTO> sc,
-    SearchCriteriaDTO criteria,
-  ) async {
-    //TODO: proxy web connections.
-    /*var client = http.Client();
+      StreamController<MovieResultDTO> sc, SearchCriteriaDTO criteria,
+      //{source = _streamResult}) async {
+      {source = emitImdbJsonPSample}) async {
+    Stream<String> result = await source(criteria.criteriaTitle);
+    result
+        .transform(JsonPDecoder())
+        .transform(json.decoder)
+        .map((event) => MovieSuggestionConverter.dtoFromCompleteJsonMap(event))
+        .expand((element) =>
+            element) // Emit each element from the dto list as a seperate dto.
+        .pipe(sc);
+  }
 
-    var request = http.Request('get', constructURI(criteria.criteriaTitle));
-    request.headers.addAll(constructHeaders());
+  static Uri _constructURI(String searchText) {
+    final String url = "$baseURL/${searchText.substring(0, 1)}/$searchText";
+    return Uri.parse(url);
+  }
 
-    var streamResponse = await client.send(request);
-
+  static Future<Stream<String>> _streamResult(String criteria) async {
+    /*
     final response =
         await http.get('https://sg.media-imdb.com/suggests/w/wonder');
-
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON.
@@ -35,27 +43,18 @@ class QueryIMDBSuggestions {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load album');
-    }
-    streamResponse.stream.transform(utf8.decoder)*/
-    emitImdbJsonPSample() // TODO: use response stream to populate suggestions.
-        .transform(JsonPDecoder())
-        .transform(json.decoder)
-        .map((outerMap) => (outerMap as Map)[
-            outer_element_results_collection]) // Pull the inner collection out of the map.
-        .expand((element) =>
-            element) // Emit each element from the list as a seperate stream event.
-        .map((event) => MovieSuggestionConverter.dtoFromMap(event))
-        .pipe(sc);
+      throw Exception('Failed to load suggestions');
+    }*/
+
+    //TODO: proxy web connections.
+    final client = http.Client();
+    final request = http.Request('get', _constructURI(criteria));
+    request.headers.addAll(_constructHeaders());
+    final streamResponse = await client.send(request);
+    return streamResponse.stream.transform(utf8.decoder);
   }
 
-  static Uri constructURI(String searchText) {
-    final String url = "$baseURL/${searchText.substring(0, 1)}/$searchText";
-    print(url);
-    return Uri.parse(url);
-  }
-
-  static Map constructHeaders() {
+  static Map _constructHeaders() {
     Map<String, String> requestHeaders = {
       'Content-type': 'application/json',
       'Accept': 'application/json',

@@ -27,6 +27,14 @@ final String omdbJsonSearchEmpty =
 final String omdbJsonSearchError =
     '{"Response":"False","Error":"Invalid API key!"}';
 
-Stream<String> emitOmdbJsonSearch() async* {
+Stream<String> emitOmdbJsonSearch(String dummy) async* {
   yield omdbJsonSearchFull;
+}
+
+Stream<String> emitOmdbJsonEmpty(String dummy) async* {
+  yield omdbJsonSearchEmpty;
+}
+
+Stream<String> emitOmdbJsonError(String dummy) async* {
+  yield omdbJsonSearchError;
 }

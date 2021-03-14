@@ -19,13 +19,11 @@ const inner_element_year_range_element = 'yr';
 class MovieSuggestionConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     // deserialise outer json from map then iterate inner json
-    var resultCollection = map[outer_element_results_collection];
+    final resultCollection = map[outer_element_results_collection];
 
     List<MovieResultDTO> allSuggestions = [];
-    var suggestion = MovieResultDTO();
     for (Map innerJson in resultCollection) {
-      suggestion = dtoFromMap(innerJson);
-      allSuggestions.add(suggestion);
+      allSuggestions.add(dtoFromMap(innerJson));
     }
     return allSuggestions;
   }

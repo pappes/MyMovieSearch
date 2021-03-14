@@ -1,71 +1,44 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io' show Platform;
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http
-    show get, Client, Request; // limit inclusions to reduce size
+    show Client, Request; // limit inclusions to reduce size
 
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
 import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 import 'package:my_movie_search/search_providers/search_omdb_movie_converter.dart';
 import 'package:my_movie_search/search_providers/temp_search_omdb_movies_data.dart';
 
-final zzzomdbKey = Platform.environment["OMDB_KEY"];
-final omdbKey = "";
+final omdbKey =
+    env["OMDB_KEY"]; // From the file assests/.env (not source controlled)
 
 class QueryOMDBMovies {
   static final String baseURL = "http://www.omdbapi.com/?apikey=";
 
   static executeQuery(
-    StreamController<MovieResultDTO> sc,
-    SearchCriteriaDTO criteria,
-  ) async {
-    /*final response = await http.get(constructURI(criteria.criteriaTitle));
-
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON.
-      print(response.body);
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      print("BUGGER!");
-      throw Exception('Failed to load album');
-    }*/
-
-    /*var client = http.Client();
-
-    var request = http.Request('get', constructURI(criteria.criteriaTitle));
-    //request.headers.addAll(constructHeaders());
-
-    var streamResponse = await client.send(request);
-
-    streamResponse.stream
-        .transform(utf8.decoder)*/
-
-    emitOmdbJsonSearch() // TODO: use response stream to populate suggestions.
+      StreamController<MovieResultDTO> sc, SearchCriteriaDTO criteria,
+      //{source = _streamResult}) async {
+      {source = emitOmdbJsonSearch}) async {
+    //TODO: use BloC patterns to test the stream processing
+    Stream<String> result = await source(criteria.criteriaTitle);
+    result
         .transform(json.decoder)
-        // TODO: move outerMap extraction down into
-        .map((outerMap) => (outerMap as Map)[
-            outer_element_results_collection]) // Pull the inner collection out of the map.
+        .map((event) => OmdbMovieSearchConverter.dtoFromCompleteJsonMap(event))
         .expand((element) =>
-            element) // Emit each element from the list as a seperate stream event.
-        .map((event) => OmdbMovieSearchConverter.dtoFromMap(event))
+            element) // Emit each element from the dto list as a seperate dto.
         .pipe(sc);
   }
 
-  static Uri constructURI(String searchText, {int pageNumber = 1}) {
-    final String url =
-        "$baseURL$omdbKey&s=$searchText&page=$pageNumber"; // TODO: find out if we want t=(title search) or s= (paginated results)
-    print(url);
-    return Uri.parse(url);
+  static Future<Stream<String>> _streamResult(String criteria) async {
+    final client = http.Client();
+    final request = http.Request('get', _constructURI(criteria));
+    final streamResponse = await client.send(request);
+    return streamResponse.stream.transform(utf8.decoder);
   }
 
-/*  static Map constructHeaders() {
-    Map<String, String> requestHeaders = {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-    };
-    return requestHeaders;
-  }*/
+  static Uri _constructURI(String searchText, {int pageNumber = 1}) {
+    final encoded = Uri.encodeQueryComponent(searchText);
+    return Uri.parse("$baseURL$omdbKey&s=$encoded&page=$pageNumber");
+  }
 }

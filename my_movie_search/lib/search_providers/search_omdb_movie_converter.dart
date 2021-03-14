@@ -9,6 +9,8 @@ import 'package:my_movie_search/data_model/movie_result_dto.dart';
 //Poster = image url)
 
 const outer_element_results_collection = 'Search';
+const outer_element_search_success = 'Response';
+const outer_element_failure_reason = 'Error';
 const inner_element_identity_element = 'imdbID';
 const inner_element_title_element = 'Title';
 const inner_element_year_element = 'Year';
@@ -21,19 +23,22 @@ const OMDB_RESULT_TYPE_EPISODE = "episode";
 class OmdbMovieSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     // deserialise outer json from map then iterate inner json
-    var resultCollection = map[outer_element_results_collection];
-
     List<MovieResultDTO> allResults = [];
-    var movie = MovieResultDTO();
-    for (Map innerJson in resultCollection) {
-      movie = dtoFromMap(innerJson);
-      allResults.add(movie);
+
+    final success = map[outer_element_search_success];
+    if (success == "True") {
+      final resultCollection = map[outer_element_results_collection];
+      resultCollection.forEach((movie) => allResults.add(dtoFromMap(movie)));
+    } else {
+      final error = MovieResultDTO();
+      error.title = map[outer_element_failure_reason];
+      allResults.add(error);
     }
     return allResults;
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
-    var movie = MovieResultDTO();
+    final movie = MovieResultDTO();
     movie.uniqueId = map[inner_element_identity_element];
     movie.title = map[inner_element_title_element];
     try {
