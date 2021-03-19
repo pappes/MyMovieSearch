@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'dart:async';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
@@ -12,7 +13,7 @@ class MovieSearchResultsPage extends StatefulWidget {
       : _criteria = criteria,
         super(key: key);
 
-  final String title = "Movie Search Results";
+  final title = "Movie Search Results";
   final _criteria;
 
   @override
@@ -53,15 +54,17 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
     super.initState();
     resultsStreamController = StreamController.broadcast();
 
-    resultsStreamController.stream.listen(
-        /*lambda*/ (searchResult) => setState(
-                /*lambda*/ () {
-              _fetchedResults.add(searchResult);
-              _fetchedResults.sort((a, b) => a.title.compareTo(b.title));
-            }));
+    resultsStreamController.stream.listen(// Lambda 1
+        (searchResult) => setState(// Lambda2
+            () => addDto(searchResult)));
 
-    //QueryIMDBSuggestions.executeQuery(resultsStreamController, _criteria);
-    QueryOMDBMovies.executeQuery(resultsStreamController, _criteria);
+    //QueryIMDBSuggestions().executeQuery(resultsStreamController, _criteria);
+    QueryOMDBMovies().executeQuery(resultsStreamController, _criteria);
+  }
+
+  void addDto(MovieResultDTO searchResult) {
+    _fetchedResults.add(searchResult);
+    _fetchedResults.sort((a, b) => a.title.compareTo(b.title));
   }
 
   Widget build(BuildContext context) {

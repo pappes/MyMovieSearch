@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/app.dart';
-//import 'dart:io';
 import 'package:universal_io/io.dart'
     show Platform; // limit inclusions to reduce size
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;

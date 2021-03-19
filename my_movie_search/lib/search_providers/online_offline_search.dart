@@ -6,20 +6,13 @@ var logger = Logger();
 
 /// This class allow for dynamic change of behaviour
 /// if the developer wants to test in offline mode.
-class OnlineOffline {
-  static bool offline = true;
+class OnlineOffline<T> {
+  static var offline = true;
 
-  /// Returns appropriate Function for current mode (online or offline)
-  static Function dataSourceFn(
-      Function onlineDataSource, Function offlineDataSource) {
+  /// Returns appropriate <generic> for current mode (online or offline)
+  T selectBetween(T onlineDataSource, T offlineDataSource) {
     logger.i(
-        "dataSourceFn returning ${offline ? 'offlineDataSource' : 'onlineDataSource'}");
-    return offline ? offlineDataSource : onlineDataSource;
-  }
-
-  /// Returns appropriate object for current mode (online or offline)
-  static Object dataSourceObj(
-      Object onlineDataSource, Object offlineDataSource) {
+        "selectBetween returning ${offline ? 'offlineDataSource' : 'onlineDataSource'}");
     return offline ? offlineDataSource : onlineDataSource;
   }
 }

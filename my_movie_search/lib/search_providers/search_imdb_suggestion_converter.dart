@@ -29,11 +29,11 @@ class MovieSuggestionConverter {
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
-    var x = MovieResultDTO();
-    x.uniqueId = map[inner_element_identity_element];
-    x.title = map[inner_element_title_element];
-    x.year = map[inner_element_year_element];
-    x.yearRange = map[inner_element_year_range_element];
-    return x;
+    var dto = MovieResultDTO();
+    dto.uniqueId = map[inner_element_identity_element];
+    dto.title = map[inner_element_title_element];
+    dto.year = map[inner_element_year_element];
+    dto.yearRange = map[inner_element_year_range_element];
+    return dto;
   }
 }

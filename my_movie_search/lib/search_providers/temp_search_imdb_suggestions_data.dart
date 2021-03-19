@@ -10,7 +10,7 @@ import 'dart:async';
 //q = title type
 //i = image with dimentions)
 
-final String imdbJsonSampleInner = r'''
+final imdbJsonSampleInner = r'''
   {"l":"Wonder Woman 1984","id":"tt7126948","s":"Gal Gadot, Chris Pine","y":2020,"q":"feature","vt":35
       ,"i":["https://m.media-amazon.com/images/M/MV5BNWY2NWE0NWEtZGUwMC00NWMwLTkyNzUtNmIxMmIyYzA0MjNiXkEyXkFqcGdeQXVyMTA2OTQ3MTUy._V1_.jpg",2764,4096]
       ,"v":
@@ -42,13 +42,18 @@ final String imdbJsonSampleInner = r'''
   {"l":"Jennifer Wenger","id":"nm2628854","s":"Actress, Jimmy Kimmel Live! (2006-2007)"
       ,"i":["https://m.media-amazon.com/images/M/MV5BMjk0MTRlNmUtNGNmNy00OTA2LTg0MWEtMWE2M2M5YmUyMDJkL2ltYWdlXkEyXkFqcGdeQXVyNjY1ODcxNQ@@._V1_.jpg",640,428]}
 ''';
-final String imdbJsonPFunction = r'imdb$wonder_woman';
-final String imdbJsonSampleFull =
+final imdbJsonPFunction = r'imdb$wonder_woman';
+final imdbJsonSampleFull =
     ' {"v":1,"q":"wonder_woman","d":[ $imdbJsonSampleInner ]}';
-final String imdbJsonPSampleFull = '''
+final imdbJsonPSampleFull = '''
   $imdbJsonPFunction(
     $imdbJsonSampleFull
   ) ''';
+
+Future<Stream<String>> streamImdbJsonPOfflineData(String dummy) async {
+  return emitImdbJsonOfflineData(dummy);
+}
+
 Stream<String> emitImdbJsonOfflineData(String dummy) async* {
   yield imdbJsonPSampleFull;
 }

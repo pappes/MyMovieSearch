@@ -1,38 +1,44 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:universal_io/io.dart'; // universla_io did not help to circumvent CORS
+import 'package:universal_io/io.dart'; // Note: universal_io did not help to circumvent CORS
 
+import 'package:my_movie_search/search_providers/search_provider.dart';
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
-import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 import 'package:my_movie_search/search_providers/jsonp_transformer.dart';
-import 'package:my_movie_search/search_providers/online_offline_search.dart';
 import 'package:my_movie_search/search_providers/search_imdb_suggestion_converter.dart';
 import 'package:my_movie_search/search_providers/temp_search_imdb_suggestions_data.dart';
 
-class QueryIMDBSuggestions {
-  static final String baseURL = "https://sg.media-imdb.com/suggests";
+class QueryIMDBSuggestions extends SearchProvider<MovieResultDTO> {
+  static final baseURL = "https://sg.media-imdb.com/suggests";
 
-  static executeQuery(
-      StreamController<MovieResultDTO> sc, SearchCriteriaDTO criteria,
-      {source = _streamResult}) async {
-    source = OnlineOffline.dataSourceFn(source, emitImdbJsonOfflineData);
-    Stream<String> result = await source(criteria.criteriaTitle);
-    result
-        .transform(JsonPDecoder())
-        .transform(json.decoder)
-        .map((event) => MovieSuggestionConverter.dtoFromCompleteJsonMap(event))
-        .expand((element) =>
-            element) // Emit each element from the dto list as a seperate dto.
-        .pipe(sc);
+  @override
+  DataSourceFn offlineData() {
+    return streamImdbJsonPOfflineData;
   }
 
-  static Uri _constructURI(String searchText) {
-    final String url = "$baseURL/${searchText.substring(0, 1)}/$searchText";
+  @override
+  Stream<List<MovieResultDTO>> transformStream(Stream<String> str) {
+    return str
+        .transform(JsonPDecoder())
+        .transform(json.decoder)
+        .map((event) => MovieSuggestionConverter.dtoFromCompleteJsonMap(event));
+  }
+
+  @override
+  Uri constructURI(String searchText, {int pageNumber = 1}) {
+    final url = "$baseURL/${searchText.substring(0, 1)}/$searchText";
     return Uri.parse(url);
   }
 
-  static Future<Stream<String>> _streamResult(String criteria) async {
+  /*
+  
+  static _constructHeaders(HttpHeaders headers) {
+    headers.contentType = ContentType.json;
+    headers.set(HttpHeaders.acceptHeader, ContentType.json);
+  }
+  
+  Future<Stream<String>> streamResult(String criteria) async {
     /*
     final response =
         await http.get('https://sg.media-imdb.com/suggests/w/wonder');
@@ -48,7 +54,7 @@ class QueryIMDBSuggestions {
 
     //TODO: proxy web connections.
     final client = HttpClient();
-    final request = await client.getUrl(_constructURI(criteria));
+    final request = await client.getUrl(constructURI(criteria));
     _constructHeaders(request.headers);
 
     // Change response type
@@ -60,10 +66,6 @@ class QueryIMDBSuggestions {
     // Stream chunks
     final response = await request.close();
     return response.asBroadcastStream().transform(utf8.decoder);
-  }
+  }*/
 
-  static _constructHeaders(HttpHeaders headers) {
-    headers.contentType = ContentType.json;
-    headers.set(HttpHeaders.acceptHeader, ContentType.json);
-  }
 }
