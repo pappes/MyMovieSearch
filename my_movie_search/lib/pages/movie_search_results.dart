@@ -57,6 +57,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
         /*lambda*/ (searchResult) => setState(
                 /*lambda*/ () {
               _fetchedResults.add(searchResult);
+              _fetchedResults.sort((a, b) => a.title.compareTo(b.title));
             }));
 
     //QueryIMDBSuggestions.executeQuery(resultsStreamController, _criteria);

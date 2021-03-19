@@ -49,7 +49,7 @@ final String imdbJsonPSampleFull = '''
   $imdbJsonPFunction(
     $imdbJsonSampleFull
   ) ''';
-Stream<String> emitImdbJsonPSample(String dummy) async* {
+Stream<String> emitImdbJsonOfflineData(String dummy) async* {
   yield imdbJsonPSampleFull;
 }
 

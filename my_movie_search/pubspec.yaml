@@ -23,12 +23,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  http: ^0.12.2
-  webview_flutter: ^1.0.7
-  sqflite: ^1.0.0
-  path_provider: ^0.4.1
-  flutter_dotenv: ^3.1.0
-  #TODO use universal IO for environemnt variable fetching and for CORS http gets: universal_io: ^2.0.0
+  http: ^0.12.2           # Make calls to web URLs and stream the results.
+  sqflite: ^1.0.0         # Database storage for persisting state across sessions.
+  path_provider: ^0.4.1   # Device filesystem access for accessing database files.
+  flutter_dotenv: ^3.1.0  # Read secrests and settings from .env file.
+  logger: ^0.9.4          # Log trace messages to console.
+  #logger_flutter: ^0.7.1 # Shake device to see trace messages.
+  universal_io: ^1.0.2    # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
+  #TODO use universal IO for environment variable fetching and for CORS http gets: universal_io: ^2.0.0
 
 
   # The following adds the Cupertino Icons font to your application.

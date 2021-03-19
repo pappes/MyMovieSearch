@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:http/http.dart' as http
-    show get, Client, Request; // limit inclusions to reduce size
+import 'package:universal_io/io.dart'; // universla_io did not help to circumvent CORS
 
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
 import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 import 'package:my_movie_search/search_providers/jsonp_transformer.dart';
+import 'package:my_movie_search/search_providers/online_offline_search.dart';
 import 'package:my_movie_search/search_providers/search_imdb_suggestion_converter.dart';
 import 'package:my_movie_search/search_providers/temp_search_imdb_suggestions_data.dart';
 
@@ -15,8 +15,8 @@ class QueryIMDBSuggestions {
 
   static executeQuery(
       StreamController<MovieResultDTO> sc, SearchCriteriaDTO criteria,
-      //{source = _streamResult}) async {
-      {source = emitImdbJsonPSample}) async {
+      {source = _streamResult}) async {
+    source = OnlineOffline.dataSourceFn(source, emitImdbJsonOfflineData);
     Stream<String> result = await source(criteria.criteriaTitle);
     result
         .transform(JsonPDecoder())
@@ -47,18 +47,23 @@ class QueryIMDBSuggestions {
     }*/
 
     //TODO: proxy web connections.
-    final client = http.Client();
-    final request = http.Request('get', _constructURI(criteria));
-    request.headers.addAll(_constructHeaders());
-    final streamResponse = await client.send(request);
-    return streamResponse.stream.transform(utf8.decoder);
+    final client = HttpClient();
+    final request = await client.getUrl(_constructURI(criteria));
+    _constructHeaders(request.headers);
+
+    // Change response type
+    if (request is BrowserHttpClientRequest) {
+      request.responseType = BrowserHttpClientResponseType.text;
+      //request.credentialsMode = BrowserHttpClientCredentialsMode.include; //Credentials mode did not help to circumvent CORS
+    }
+
+    // Stream chunks
+    final response = await request.close();
+    return response.asBroadcastStream().transform(utf8.decoder);
   }
 
-  static Map _constructHeaders() {
-    Map<String, String> requestHeaders = {
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-    };
-    return requestHeaders;
+  static _constructHeaders(HttpHeaders headers) {
+    headers.contentType = ContentType.json;
+    headers.set(HttpHeaders.acceptHeader, ContentType.json);
   }
 }
