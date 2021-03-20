@@ -55,7 +55,7 @@ class MovieResultDTOMatcher extends Matcher {
     _actual = actual;
     matchState['actual'] =
         _actual is MovieResultDTO ? _actual : MovieResultDTO().toUnknown();
-    return _actual.compareTo(expected);
+    return _actual.matches(expected);
   }
 }
 

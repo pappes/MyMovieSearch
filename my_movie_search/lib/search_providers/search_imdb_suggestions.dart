@@ -1,6 +1,3 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:universal_io/io.dart'; // Note: universal_io did not help to circumvent CORS
 
 import 'package:my_movie_search/search_providers/search_provider.dart';
@@ -9,14 +6,20 @@ import 'package:my_movie_search/search_providers/jsonp_transformer.dart';
 import 'package:my_movie_search/search_providers/search_imdb_suggestion_converter.dart';
 import 'package:my_movie_search/search_providers/temp_search_imdb_suggestions_data.dart';
 
+/// Implements [SearchProvider] for the IMDB search suggestions API.
+/// Search suggestions are used by the lookup bar in the IMDB web page.
 class QueryIMDBSuggestions extends SearchProvider<MovieResultDTO> {
   static final baseURL = "https://sg.media-imdb.com/suggests";
 
+  /// Static snapshot of data for offline operation.
+  /// Does not filter data based on criteria.
   @override
   DataSourceFn offlineData() {
     return streamImdbJsonPOfflineData;
   }
 
+  /// Convert from JsonP [Stream] to
+  /// a stream containing a [List] of [MovieResultDTO].
   @override
   Stream<List<MovieResultDTO>> transformStream(Stream<String> str) {
     return str
@@ -25,11 +28,14 @@ class QueryIMDBSuggestions extends SearchProvider<MovieResultDTO> {
         .map((event) => MovieSuggestionConverter.dtoFromCompleteJsonMap(event));
   }
 
+  /// API call to IMDB search returning the top matching results for [searchText].
   @override
   Uri constructURI(String searchText, {int pageNumber = 1}) {
     final url = "$baseURL/${searchText.substring(0, 1)}/$searchText";
     return Uri.parse(url);
   }
+
+  /// Custom code to cirumvent CORS security.
 
   /*
   

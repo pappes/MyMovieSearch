@@ -23,18 +23,18 @@ const OMDB_RESULT_TYPE_EPISODE = "episode";
 class OmdbMovieSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     // deserialise outer json from map then iterate inner json
-    List<MovieResultDTO> allResults = [];
+    List<MovieResultDTO> searchResults = [];
 
-    final success = map[outer_element_search_success];
-    if (success == "True") {
-      final resultCollection = map[outer_element_results_collection];
-      resultCollection.forEach((movie) => allResults.add(dtoFromMap(movie)));
+    final resultsMatched = map[outer_element_search_success];
+    if (resultsMatched == "True") {
+      map[outer_element_results_collection]
+          .forEach((movie) => searchResults.add(dtoFromMap(movie)));
     } else {
       final error = MovieResultDTO();
       error.title = map[outer_element_failure_reason];
-      allResults.add(error);
+      searchResults.add(error);
     }
-    return allResults;
+    return searchResults;
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
@@ -45,6 +45,7 @@ class OmdbMovieSearchConverter {
       movie.year = int.parse(map[inner_element_year_element]);
     } catch (e) {
       movie.yearRange = map[inner_element_year_element];
+      movie.year = movie.maxYear();
     }
     movie.imageUrl = map[inner_element_image_element];
     switch (map[inner_element_type_element]) {

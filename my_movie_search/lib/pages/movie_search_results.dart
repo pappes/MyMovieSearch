@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'dart:async';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
@@ -23,7 +22,6 @@ class MovieSearchResultsPage extends StatefulWidget {
 
 class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
   _MovieSearchResultsPageState({SearchCriteriaDTO criteria}) {
-    //_fetchedResults = QueryIMDBSuggestions.executeQuery(criteria);
     _criteria = criteria;
   }
   var _criteria = SearchCriteriaDTO();
@@ -64,7 +62,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
 
   void addDto(MovieResultDTO searchResult) {
     _fetchedResults.add(searchResult);
-    _fetchedResults.sort((a, b) => a.title.compareTo(b.title));
+    // Sort by relevence with recent year first
+    _fetchedResults.sort((a, b) => b.compareTo(a));
   }
 
   Widget build(BuildContext context) {
@@ -112,7 +111,7 @@ class _MovieTileBuilder {
   static Widget _buildRow(MovieResultDTO movie) {
     return ListTile(
       title: Text(
-        movie.title,
+        "${movie.title}(${movie.year})",
         style: _biggerFont,
         textScaleFactor: 1.0,
       ),

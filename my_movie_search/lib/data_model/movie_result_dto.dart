@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:my_movie_search/data_model/metadata_dto.dart';
 
 class MovieResultDTO {
@@ -8,6 +10,7 @@ class MovieResultDTO {
   int year = 0;
   String yearRange = "";
   double userRating = 0;
+  int userRatingCount = 0;
   CensorRatingType censorRating = CensorRatingType.none;
   Duration runTime = Duration(hours: 0, minutes: 0, seconds: 0);
   String imageUrl = "";
@@ -49,6 +52,7 @@ final String movieResultDTOType = 'type';
 final String movieResultDTOYear = 'year';
 final String movieResultDTOYearRange = 'yearRange';
 final String movieResultDTOUserRating = 'userRating';
+final String movieResultDTOUserRatingCount = 'userRatingCount';
 final String movieResultDTOCensorRating = 'censorRating';
 final String movieResultDTORunTime = 'runTime';
 
@@ -62,13 +66,14 @@ extension MapDTOConversion on Map {
     dto.year = this[movieResultDTOYear];
     dto.yearRange = this[movieResultDTOYearRange];
     dto.userRating = this[movieResultDTOUserRating];
+    dto.userRatingCount = this[movieResultDTOUserRatingCount];
     dto.censorRating = this[movieResultDTOCensorRating];
     dto.runTime = this[movieResultDTORunTime];
     return dto;
   }
 }
 
-extension DTOhelpers on MovieResultDTO {
+extension DTOHelpers on MovieResultDTO {
   Map toMap() {
     Map<String, dynamic> map = Map();
     map[movieResultDTOSource] = this.source;
@@ -97,7 +102,7 @@ extension DTOhelpers on MovieResultDTO {
     return map;
   }
 
-  bool compareTo(MovieResultDTO other) {
+  bool matches(MovieResultDTO other) {
     if (this.title == other.title && this.title == 'unknown')
       return true;
     else
@@ -110,5 +115,61 @@ extension DTOhelpers on MovieResultDTO {
           this.userRating == other.userRating &&
           this.censorRating == other.censorRating &&
           this.runTime == other.runTime;
+  }
+}
+
+extension DTOCompare on MovieResultDTO {
+  int compareTo(MovieResultDTO other) {
+    print("comparing $this to $other");
+    if (this.userRatingCategory() != other.userRatingCategory())
+      return this.userRatingCategory().compareTo(other.userRatingCategory());
+    if (this.userContentCategory() != other.userContentCategory())
+      return this.userContentCategory().compareTo(other.userContentCategory());
+    if (this.popularityCategory() != other.popularityCategory())
+      return this.popularityCategory().compareTo(other.popularityCategory());
+    return this.yearCompare(other);
+  }
+
+  int userRatingCategory() {
+    if (this.userRatingCount == 0) return 0;
+    if (this.userRatingCount < 100) return 1;
+    if (this.userRatingCount < 10000) return 2;
+    return 3;
+  }
+
+  int userContentCategory() {
+    if (this.type == MovieContentType.custom) return 0;
+    if (this.type == MovieContentType.episode) return 1;
+    if (this.type == MovieContentType.short) return 2;
+    if (this.type == MovieContentType.series) return 3;
+    if (this.type == MovieContentType.miniseries) return 4;
+    return 5;
+  }
+
+  int popularityCategory() {
+    // Any movie with a super low rating is probably bad.
+    // A rating of 2 out of 5 is not great but better than nothing.
+    if (this.userRating < 2) return 0;
+    // Movies and series made before 2000 have a lower relevancy to today.
+    if (this.maxYear() < 2000) return 1;
+    return 2;
+  }
+
+  int yearCompare(MovieResultDTO other) {
+    return (this.maxYear().compareTo(other.maxYear()));
+  }
+
+  int maxYear() {
+    return max(this.year, this.yearRangeAsNumber());
+  }
+
+  int yearRangeAsNumber() {
+    try {
+      // Start of the string plus any quantity of numeric digits.
+      var filter = RegExp(r'[0-9]+$');
+      return int.parse(filter.stringMatch(this.yearRange));
+    } catch (e) {
+      return 0;
+    }
   }
 }
