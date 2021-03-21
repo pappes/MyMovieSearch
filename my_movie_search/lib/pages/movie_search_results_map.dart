@@ -4,7 +4,6 @@ import 'dart:async';
 
 import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
-import 'package:my_movie_search/search_providers/search_google_movies.dart';
 import 'package:my_movie_search/search_providers/search_imdb_suggestions.dart';
 import 'package:my_movie_search/search_providers/search_omdb_movies.dart';
 
@@ -24,17 +23,12 @@ class MovieSearchResultsPage extends StatefulWidget {
 class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
   _MovieSearchResultsPageState({SearchCriteriaDTO criteria}) {
     _criteria = criteria;
-    MovieResultDTO requestMore = MovieResultDTO();
-    requestMore.uniqueId = null;
-    requestMore.title = "Click to load more!";
-    _fetchedResultsMap[null] = requestMore;
   }
   var _criteria = SearchCriteriaDTO();
+  Map<String, MovieResultDTO> _fetchedResults = {};
   var _sortedResults = <MovieResultDTO>[];
-  Map<String, MovieResultDTO> _fetchedResultsMap = {};
   StreamController<MovieResultDTO> omdbStreamController;
   StreamController<MovieResultDTO> imdbStreamController;
-  StreamController<MovieResultDTO> googleStreamController;
 
   /* TODO: save and restore scroll position int _scrolledToPosition = 0;
   void _reloadResults() {
@@ -53,42 +47,33 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
     super.dispose();
     omdbStreamController?.close();
     imdbStreamController?.close();
-    googleStreamController?.close();
     omdbStreamController = null;
     imdbStreamController = null;
-    googleStreamController = null;
   }
 
   @override
   void initState() {
     super.initState();
-
     omdbStreamController = StreamController.broadcast();
     omdbStreamController.stream.listen(// Lambda 1
         (searchResult) => setState(// Lambda2
             () => addDto(searchResult)));
     QueryOMDBMovies().executeQuery(omdbStreamController, _criteria);
 
-    imdbStreamController = StreamController.broadcast();
+    /*imdbStreamController = StreamController.broadcast();
     imdbStreamController.stream.listen(// Lambda 1
         (searchResult) => setState(// Lambda2
             () => addDto(searchResult)));
-    QueryIMDBSuggestions().executeQuery(imdbStreamController, _criteria);
-
-    googleStreamController = StreamController.broadcast();
-    googleStreamController.stream.listen(// Lambda 1
-        (searchResult) => setState(// Lambda2
-            () => addDto(searchResult)));
-    QueryGoogleMovies().executeQuery(googleStreamController, _criteria);
+    QueryIMDBSuggestions().executeQuery(imdbStreamController, _criteria);*/
   }
 
   void addDto(MovieResultDTO searchResult) {
-    if (!_fetchedResultsMap.containsKey(searchResult?.uniqueId)) {
-      _fetchedResultsMap[searchResult.uniqueId] = searchResult;
-      _sortedResults = _fetchedResultsMap.values.toList();
-      // Sort by relevence with recent year first
-      _sortedResults.sort((a, b) => b.compareTo(a));
-    }
+    // if (!_fetchedResults.containsKey(searchResult?.uniqueId)) {
+    _fetchedResults[searchResult.uniqueId] = searchResult;
+    // Sort by relevence with recent year first
+    _sortedResults = _fetchedResults.values;
+    _sortedResults.sort((a, b) => b.compareTo(a));
+    //}
   }
 
   Widget build(BuildContext context) {
@@ -117,16 +102,16 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
   Widget _buildMovieResults() {
     return ListView.builder(
       padding: EdgeInsets.all(16.0),
-      //itemCount: _sortedResults.length,
+      //itemCount: _fetchedResults.length,
       itemBuilder: _movieListBuilder,
     );
   }
 
   Widget _movieListBuilder(context, listIndex) {
-    if (listIndex >= _sortedResults.length) {
+    if (listIndex >= _fetchedResults.length) {
       return null;
     }
-    MovieResultDTO fetchedResult = _sortedResults[listIndex];
+    MovieResultDTO fetchedResult = _fetchedResults[listIndex];
     return _MovieTileBuilder._buildRow(fetchedResult);
   }
 }
@@ -136,7 +121,7 @@ class _MovieTileBuilder {
   static Widget _buildRow(MovieResultDTO movie) {
     return ListTile(
       title: Text(
-        "${movie.title}(${movie.year})",
+        "${movie?.title}(${movie?.year})",
         style: _biggerFont,
         textScaleFactor: 1.0,
       ),

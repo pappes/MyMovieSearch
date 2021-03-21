@@ -4,7 +4,7 @@ import 'package:my_movie_search/data_model/metadata_dto.dart';
 
 class MovieResultDTO {
   DataeSourceType source = DataeSourceType.none;
-  String uniqueId = "";
+  String uniqueId; // = null
   String title = "";
   MovieContentType type = MovieContentType.none;
   int year = 0;
@@ -120,25 +120,35 @@ extension DTOHelpers on MovieResultDTO {
 
 extension DTOCompare on MovieResultDTO {
   int compareTo(MovieResultDTO other) {
-    print("comparing $this to $other");
+    // Treat null a lower than any other value
+    if (this.uniqueId == null && other.uniqueId != null) return -1;
+    if (this.uniqueId != null && other.uniqueId == null) return 1;
+    // See how many peopel have rated this movie.
     if (this.userRatingCategory() != other.userRatingCategory())
       return this.userRatingCategory().compareTo(other.userRatingCategory());
+    // Preference movies > series > short film > episodes.
     if (this.userContentCategory() != other.userContentCategory())
       return this.userContentCategory().compareTo(other.userContentCategory());
+    // Rank older (less than 2000) and low rated movies lower.
     if (this.popularityCategory() != other.popularityCategory())
       return this.popularityCategory().compareTo(other.popularityCategory());
+    // If all things are equal, sort by year.
     return this.yearCompare(other);
   }
 
   int userRatingCategory() {
-    if (this.userRatingCount == 0) return 0;
+    if (this == null ||
+        this.userRatingCount == null ||
+        this.userRatingCount == 0) return 0;
     if (this.userRatingCount < 100) return 1;
     if (this.userRatingCount < 10000) return 2;
     return 3;
   }
 
   int userContentCategory() {
-    if (this.type == MovieContentType.custom) return 0;
+    if (this == null ||
+        this.type == null ||
+        this.type == MovieContentType.custom) return 0;
     if (this.type == MovieContentType.episode) return 1;
     if (this.type == MovieContentType.short) return 2;
     if (this.type == MovieContentType.series) return 3;
@@ -147,27 +157,30 @@ extension DTOCompare on MovieResultDTO {
   }
 
   int popularityCategory() {
-    // Any movie with a super low rating is probably bad.
+    // Any movie with a super low rating is probably not worth watching.
     // A rating of 2 out of 5 is not great but better than nothing.
-    if (this.userRating < 2) return 0;
+    if (this == null || this.userRating == null || this.userRating < 2)
+      return 0;
     // Movies and series made before 2000 have a lower relevancy to today.
     if (this.maxYear() < 2000) return 1;
     return 2;
   }
 
   int yearCompare(MovieResultDTO other) {
-    return (this.maxYear().compareTo(other.maxYear()));
+    final thisYear = this?.maxYear() ?? 0;
+    final otherYear = other?.maxYear() ?? 0;
+    return (thisYear.compareTo(otherYear));
   }
 
   int maxYear() {
-    return max(this.year, this.yearRangeAsNumber());
+    return max(this.year ?? 0, this.yearRangeAsNumber() ?? 0);
   }
 
   int yearRangeAsNumber() {
     try {
-      // Start of the string plus any quantity of numeric digits.
-      var filter = RegExp(r'[0-9]+$');
-      return int.parse(filter.stringMatch(this.yearRange));
+      // Any quantity of numeric digits at the end of the string.
+      final filter = RegExp(r'[0-9]+$');
+      return int.parse(filter.stringMatch(this.yearRange)) ?? 0;
     } catch (e) {
       return 0;
     }

@@ -139,20 +139,33 @@ void main() {
         expect(testInput.yearCompare(testOther), expectedOutput);
       }
 
+      // Years that should be considered the same.
       testYearCompare(0, "", 0, "", 0);
       testYearCompare(2000, "", 2000, "", 0);
       testYearCompare(0, "1980-2000", 0, "1999-2000", 0);
       testYearCompare(2000, "2000", 2000, "2000", 0);
+      testYearCompare(null, null, null, null, 0);
 
+      // Year on left should be considered higher than year on right.
       testYearCompare(2000, "", 1999, "", 1);
       testYearCompare(0, "1980-2000", 0, "1998-1999", 1);
       testYearCompare(2000, "1990-1995", 1997, "1998-1999", 1);
       testYearCompare(1990, "1980-2000", 1997, "1998-1999", 1);
+      testYearCompare(2000, null, null, null, 1);
 
+      // Year on left should be considered lower than year on right.
       testYearCompare(1999, "", 2000, "", -1);
       testYearCompare(0, "1998-1999", 0, "1980-2000", -1);
       testYearCompare(1997, "1998-1999", 2000, "1990-1995", -1);
       testYearCompare(1997, "1998-1999", 1990, "1980-2000", -1);
+      testYearCompare(null, null, 2000, null, -1);
+
+      MovieResultDTO tmpYear;
+      expect(tmpYear.yearCompare(null), 0);
+      tmpYear = MovieResultDTO();
+      expect(tmpYear.yearCompare(null), 0);
+      tmpYear.year = 2000;
+      expect(tmpYear.yearCompare(null), 1);
     });
     test('yearRangeAsNumber', () {
       testYearCompare(inputYR, expectedOutput) {

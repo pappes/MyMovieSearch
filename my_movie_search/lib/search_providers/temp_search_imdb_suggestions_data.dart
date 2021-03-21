@@ -8,7 +8,7 @@ import 'dart:async';
 //y = year
 //yr = year range for series
 //q = title type
-//i = image with dimentions)
+//i = image with dimentions
 
 final imdbJsonSampleInner = r'''
   {"l":"Wonder Woman 1984","id":"tt7126948","s":"Gal Gadot, Chris Pine","y":2020,"q":"feature","vt":35
