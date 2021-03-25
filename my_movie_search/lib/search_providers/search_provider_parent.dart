@@ -62,6 +62,13 @@ abstract class SearchProvider<T> {
     return Uri();
   }
 
+  /// Define the http headers to be passed to the web server.
+  /// Returns a [Map] of header -> value.
+  Map constructHeaders() {
+    logger.i("concrete can define constructHeaders()");
+    return {};
+  }
+
   /// Fetches and [utf8] decodes online data matching [criteria].
   ///
   /// The criteria does not need to be Uri encoded for safe searching.

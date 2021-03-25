@@ -7,6 +7,7 @@ import 'package:my_movie_search/data_model/movie_result_dto.dart';
 import 'package:my_movie_search/search_providers/search_google_movies.dart';
 import 'package:my_movie_search/search_providers/search_imdb_suggestions.dart';
 import 'package:my_movie_search/search_providers/search_omdb_movies.dart';
+import 'package:my_movie_search/search_providers/search_tmdb_movies.dart';
 
 class MovieSearchResultsPage extends StatefulWidget {
   MovieSearchResultsPage({Key key, SearchCriteriaDTO criteria})
@@ -33,6 +34,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
   var _sortedResults = <MovieResultDTO>[];
   Map<String, MovieResultDTO> _fetchedResultsMap = {};
   StreamController<MovieResultDTO> omdbStreamController;
+  StreamController<MovieResultDTO> tmdbStreamController;
   StreamController<MovieResultDTO> imdbStreamController;
   StreamController<MovieResultDTO> googleStreamController;
 
@@ -52,9 +54,11 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
   void dispose() {
     super.dispose();
     omdbStreamController?.close();
+    tmdbStreamController?.close();
     imdbStreamController?.close();
     googleStreamController?.close();
     omdbStreamController = null;
+    tmdbStreamController = null;
     imdbStreamController = null;
     googleStreamController = null;
   }
@@ -68,6 +72,12 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
         (searchResult) => setState(// Lambda2
             () => addDto(searchResult)));
     QueryOMDBMovies().executeQuery(omdbStreamController, _criteria);
+
+    tmdbStreamController = StreamController.broadcast();
+    tmdbStreamController.stream.listen(// Lambda 1
+        (searchResult) => setState(// Lambda2
+            () => addDto(searchResult)));
+    QueryTMDBMovies().executeQuery(tmdbStreamController, _criteria);
 
     imdbStreamController = StreamController.broadcast();
     imdbStreamController.stream.listen(// Lambda 1
