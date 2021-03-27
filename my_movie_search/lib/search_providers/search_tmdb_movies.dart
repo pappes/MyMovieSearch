@@ -8,8 +8,7 @@ import 'package:my_movie_search/search_providers/search_tmdb_movie_converter.dar
 /// Implements [SearchProvider] for searching the Open Movie Database.
 /// The OMDb API is a free web service to obtain movie information.
 class QueryTMDBMovies extends SearchProvider<MovieResultDTO> {
-  static final baseURL =
-      "https://api.themoviedb.org/3/search/movie?api_key={api_key}";
+  static final baseURL = "https://api.themoviedb.org/3/search/movie?api_key=";
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
@@ -36,7 +35,6 @@ class QueryTMDBMovies extends SearchProvider<MovieResultDTO> {
   }
 
   /// Define custom headers for this search provider.
-  @override
   Map constructHeaders() {
     Map headers = {};
     headers["Authorization"] = " Bearer ${env["TMDB_KEY"]}";

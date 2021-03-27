@@ -35,6 +35,14 @@ class QueryIMDBSuggestions extends SearchProvider<MovieResultDTO> {
     return Uri.parse(url);
   }
 
+  /// Fetches and [utf8] decodes online data matching [criteria].
+  ///
+  /// The criteria does not need to be Uri encoded for safe searching.
+  @override
+  Future<Stream<String>> streamResult(String criteria) async {
+    return streamImdbJsonPOfflineData(criteria);
+  }
+
   /// Custom code to cirumvent CORS security.
 
   /*
