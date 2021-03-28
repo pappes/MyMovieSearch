@@ -51,6 +51,7 @@ class TmdbMovieSearchConverter {
 
   static MovieResultDTO dtoFromMap(Map map) {
     final movie = MovieResultDTO();
+    movie.source = DataSourceType.tmdb;
     movie.uniqueId = map[inner_element_identity_element].toString();
     movie.title = map[inner_element_title_element];
     movie.imageUrl = map[inner_element_image_element];

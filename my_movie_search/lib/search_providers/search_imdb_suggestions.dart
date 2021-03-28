@@ -18,40 +18,57 @@ class QueryIMDBSuggestions extends SearchProvider<MovieResultDTO> {
     return streamImdbJsonPOfflineData;
   }
 
-  /// Convert from JsonP [Stream] to
-  /// a stream containing a [List] of [MovieResultDTO].
+  // Remove JsonP from API response and convert to a map of MovieResultDTO.
   @override
   Stream<List<MovieResultDTO>> transformStream(Stream<String> str) {
     return str
         .transform(JsonPDecoder())
         .transform(json.decoder)
-        .map((event) => MovieSuggestionConverter.dtoFromCompleteJsonMap(event));
+        .map((event) => transformMapSafe(event));
   }
 
-  /// API call to IMDB search returning the top matching results for [searchText].
+  // Convert OMDB map to MovieResultDTO records.
+  @override
+  List<MovieResultDTO> transformMap(Map map) =>
+      ImdbSuggestionConverter.dtoFromCompleteJsonMap(map);
+
+  // Include entire map in the movie title when an error occurs.
+  @override
+  List<MovieResultDTO> constructError(Map map) {
+    var error = MovieResultDTO();
+    error.title =
+        "[${this.runtimeType}] Could not interpret response ${map.toString()}";
+    error.type = MovieContentType.custom;
+    error.source = DataSourceType.imdb;
+    error.uniqueId = "-${error.source}";
+    return [error];
+  }
+
+  // API call to IMDB search returning the top matching results for [searchText].
   @override
   Uri constructURI(String searchText, {int pageNumber = 1}) {
     final url = "$baseURL/${searchText.substring(0, 1)}/$searchText";
     return Uri.parse(url);
   }
 
-  /// Fetches and [utf8] decodes online data matching [criteria].
-  ///
-  /// The criteria does not need to be Uri encoded for safe searching.
+  // Override online functionality to force offline functionality
+  // until CORS safeguards can be defeated.
   @override
   Future<Stream<String>> streamResult(String criteria) async {
     return streamImdbJsonPOfflineData(criteria);
   }
 
+  // Add authorization token for compatability with the TMDB V4 API.
+  Map constructHeaders() {
+    Map headers = {};
+    headers[HttpHeaders.contentTypeHeader] = ContentType.json;
+    headers[HttpHeaders.acceptHeader] = ContentType.json;
+    return headers;
+  }
+
   /// Custom code to cirumvent CORS security.
 
-  /*
-  
-  static _constructHeaders(HttpHeaders headers) {
-    headers.contentType = ContentType.json;
-    headers.set(HttpHeaders.acceptHeader, ContentType.json);
-  }
-  
+  /*  
   Future<Stream<String>> streamResult(String criteria) async {
     /*
     final response =

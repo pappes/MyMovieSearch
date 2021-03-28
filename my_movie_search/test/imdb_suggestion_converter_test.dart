@@ -170,7 +170,7 @@ void main() {
               (outerMap) => (outerMap as Map)[outer_element_results_collection])
           .expand((element) =>
               element) // Emit each element from the list as a seperate stream event
-          .map((event) => MovieSuggestionConverter.dtoFromMap(event));
+          .map((event) => ImdbSuggestionConverter.dtoFromMap(event));
 
       var expectedDTO = await expectedDTOList;
       int dtoCount = 0;
@@ -191,7 +191,7 @@ void main() {
               (outerMap) => (outerMap as Map)[outer_element_results_collection])
           .expand((element) =>
               element) // Emit each element from the list as a seperate stream event
-          .map((event) => MovieSuggestionConverter.dtoFromMap(event));
+          .map((event) => ImdbSuggestionConverter.dtoFromMap(event));
 
       var expectedDTO = await expectedDTOList;
       int dtoCount = 0;

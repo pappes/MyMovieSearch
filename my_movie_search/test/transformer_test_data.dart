@@ -17,7 +17,7 @@ import 'package:my_movie_search/search_providers/search_imdb_suggestion_converte
 
 Stream<MovieResultDTO> streamFromInnerJsonMap(Iterable records) async* {
   for (Map record in records) {
-    yield MovieSuggestionConverter.dtoFromMap(record);
+    yield ImdbSuggestionConverter.dtoFromMap(record);
   }
 }
 

@@ -20,12 +20,25 @@ class QueryGoogleMovies extends SearchProvider<MovieResultDTO> {
     return streamGoogleMoviesJsonOfflineData;
   }
 
-  /// Convert from [json] [Stream] to
-  /// a stream containing a [List] of [MovieResultDTO].
+  // Convert OMDB map to MovieResultDTO records.
   @override
-  Stream<List<MovieResultDTO>> transformStream(Stream<String> str) {
-    return str.transform(json.decoder).map(
-        (event) => GoogleMovieSearchConverter.dtoFromCompleteJsonMap(event));
+  List<MovieResultDTO> transformMap(Map map) {
+    print(map.toString());
+    var x = GoogleMovieSearchConverter.dtoFromCompleteJsonMap(map);
+    print("done");
+    return x;
+  }
+
+  // Include entire map in the movie title when an error occurs.
+  @override
+  List<MovieResultDTO> constructError(Map map) {
+    var error = MovieResultDTO();
+    error.title =
+        "[${this.runtimeType}] Could not interpret response ${map.toString()}";
+    error.type = MovieContentType.custom;
+    error.source = DataSourceType.google;
+    error.uniqueId = "-${error.source}";
+    return [error];
   }
 
   /// API call to Google returning the top 10 matching results for [searchText].

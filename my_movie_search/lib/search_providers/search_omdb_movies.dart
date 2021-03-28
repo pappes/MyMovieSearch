@@ -17,13 +17,21 @@ class QueryOMDBMovies extends SearchProvider<MovieResultDTO> {
     return streamOmdbJsonOfflineData;
   }
 
-  /// Convert from [json] [Stream] to
-  /// a stream containing a [List] of [MovieResultDTO].
+  // Convert OMDB map to MovieResultDTO records.
   @override
-  Stream<List<MovieResultDTO>> transformStream(Stream<String> str) {
-    return str
-        .transform(json.decoder)
-        .map((event) => OmdbMovieSearchConverter.dtoFromCompleteJsonMap(event));
+  List<MovieResultDTO> transformMap(Map map) =>
+      OmdbMovieSearchConverter.dtoFromCompleteJsonMap(map);
+
+  // Include entire map in the movie title when an error occurs.
+  @override
+  List<MovieResultDTO> constructError(Map map) {
+    var error = MovieResultDTO();
+    error.title =
+        "[${this.runtimeType}] Could not interpret response ${map.toString()}";
+    error.type = MovieContentType.custom;
+    error.source = DataSourceType.omdb;
+    error.uniqueId = "-${error.source}";
+    return [error];
   }
 
   /// API call to OMDB returning the top 10 matching results for [searchText].

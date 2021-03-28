@@ -7,17 +7,19 @@ enum DetailLevel {
   custom, //          context specific
 }
 
-enum DataeSourceType {
+enum DataSourceType {
   none,
   imdb,
   omdb,
+  tmdb,
+  google,
   wiki,
   other,
   custom,
 }
 
 class MetaDataDTO {
-  DataeSourceType type = DataeSourceType.none;
+  DataSourceType type = DataSourceType.none;
   String uniqueId = "";
   DetailLevel populationDetailLevel = DetailLevel.none;
   DetailLevel viewDetailLevel = DetailLevel.none;

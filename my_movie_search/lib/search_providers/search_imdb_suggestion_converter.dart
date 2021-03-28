@@ -16,7 +16,7 @@ const inner_element_title_element = 'l';
 const inner_element_year_element = 'y';
 const inner_element_year_range_element = 'yr';
 
-class MovieSuggestionConverter {
+class ImdbSuggestionConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     // deserialise outer json from map then iterate inner json
     final resultCollection = map[outer_element_results_collection];
@@ -29,11 +29,12 @@ class MovieSuggestionConverter {
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
-    var dto = MovieResultDTO();
-    dto.uniqueId = map[inner_element_identity_element];
-    dto.title = map[inner_element_title_element];
-    dto.year = map[inner_element_year_element];
-    dto.yearRange = map[inner_element_year_range_element];
-    return dto;
+    var movie = MovieResultDTO();
+    movie.source = DataSourceType.imdb;
+    movie.uniqueId = map[inner_element_identity_element];
+    movie.title = map[inner_element_title_element];
+    movie.year = map[inner_element_year_element];
+    movie.yearRange = map[inner_element_year_range_element];
+    return movie;
   }
 }

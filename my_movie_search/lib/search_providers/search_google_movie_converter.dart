@@ -55,6 +55,7 @@ class GoogleMovieSearchConverter {
 
   static MovieResultDTO dtoFromMap(Map map) {
     final movie = MovieResultDTO();
+    movie.source = DataSourceType.google;
 
     Map metatags = map[inner_element_pagemap][inner_element_metatags].first;
     movie.uniqueId = getID(metatags);

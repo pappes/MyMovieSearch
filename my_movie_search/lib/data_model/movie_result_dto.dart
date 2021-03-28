@@ -1,9 +1,10 @@
 import 'dart:math';
 
 import 'package:my_movie_search/data_model/metadata_dto.dart';
+export 'package:my_movie_search/data_model/metadata_dto.dart';
 
 class MovieResultDTO {
-  DataeSourceType source = DataeSourceType.none;
+  DataSourceType source = DataSourceType.none;
   String uniqueId; // = null
   String title = "";
   MovieContentType type = MovieContentType.none;
@@ -86,6 +87,10 @@ extension DTOHelpers on MovieResultDTO {
     map[movieResultDTOCensorRating] = this.censorRating;
     map[movieResultDTORunTime] = this.runTime;
     return map;
+  }
+
+  String toPrintableString() {
+    return this.toMap().toString();
   }
 
   Map toUnknown() {

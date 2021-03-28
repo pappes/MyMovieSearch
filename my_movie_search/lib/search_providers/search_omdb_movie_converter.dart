@@ -39,6 +39,7 @@ class OmdbMovieSearchConverter {
 
   static MovieResultDTO dtoFromMap(Map map) {
     final movie = MovieResultDTO();
+    movie.source = DataSourceType.omdb;
     movie.uniqueId = map[inner_element_identity_element];
     movie.title = map[inner_element_title_element];
     try {
