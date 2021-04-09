@@ -24,10 +24,9 @@ class QueryOMDBMovies extends SearchProvider<MovieResultDTO> {
 
   // Include entire map in the movie title when an error occurs.
   @override
-  List<MovieResultDTO> constructError(Map map) {
+  List<MovieResultDTO> constructError(String message) {
     var error = MovieResultDTO();
-    error.title =
-        "[${this.runtimeType}] Could not interpret response ${map.toString()}";
+    error.title = "[${this.runtimeType}] $message";
     error.type = MovieContentType.custom;
     error.source = DataSourceType.omdb;
     error.uniqueId = "-${error.source}";

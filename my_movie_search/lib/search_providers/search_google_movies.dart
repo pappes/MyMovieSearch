@@ -23,18 +23,15 @@ class QueryGoogleMovies extends SearchProvider<MovieResultDTO> {
   // Convert OMDB map to MovieResultDTO records.
   @override
   List<MovieResultDTO> transformMap(Map map) {
-    print(map.toString());
     var x = GoogleMovieSearchConverter.dtoFromCompleteJsonMap(map);
-    print("done");
     return x;
   }
 
   // Include entire map in the movie title when an error occurs.
   @override
-  List<MovieResultDTO> constructError(Map map) {
+  List<MovieResultDTO> constructError(String message) {
     var error = MovieResultDTO();
-    error.title =
-        "[${this.runtimeType}] Could not interpret response ${map.toString()}";
+    error.title = "[${this.runtimeType}] $message";
     error.type = MovieContentType.custom;
     error.source = DataSourceType.google;
     error.uniqueId = "-${error.source}";

@@ -64,7 +64,7 @@ abstract class SearchProvider<T> {
   ///
   /// Should be overridden by child classes.
   /// Called from [transformMapSafe] when [transformMap] throws an exception.
-  List<T> constructError(Map map);
+  List<T> constructError(String contents);
 
   /// Define the [Uri] called to fetch online data for criteria [searchText].
   ///
@@ -85,15 +85,17 @@ abstract class SearchProvider<T> {
   /// Convert [Stream] of [String] to a stream containing a [List] of <T>.
   ///
   /// Used for both online and offline operation.
-  /// For online operation [str] is utf8 decoded
+  /// For online operation [input] is utf8 decoded
   /// before being passed to transformStream().
   ///
   /// Can be overridden by child classes.
   /// Should call [transformMapSafe]
   /// to wrap [transformMap] in exception handling.
-  Stream<List<T>> transformStream(Stream<String> str) => str
-      .transform(json.decoder)
-      .map((decodedMap) => transformMapSafe(decodedMap));
+  Stream<List<T>> transformStream(Stream<String> input) {
+    return input
+        .transform(json.decoder)
+        .map((decodedMap) => transformMapSafe(decodedMap));
+  }
 
   /// Fetches and [utf8] decodes online data matching [criteria].
   ///
@@ -120,7 +122,7 @@ abstract class SearchProvider<T> {
       logger.e("Exception raised during transformMap, constructing error.");
       logger.i(
           "${this.runtimeType}].transformMapSafe stacktrace: ${StackTrace.current}");
-      return constructError(map);
+      return constructError("Could not interpret response ${map.toString()}");
     }
   }
 }
