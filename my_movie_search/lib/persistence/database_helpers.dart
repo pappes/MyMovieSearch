@@ -17,17 +17,15 @@ class MovieModel {
   String uniqueId;
   String dtoJson;
 
-  MovieModel();
+  MovieModel({required this.id, required this.uniqueId, required this.dtoJson});
 
   // convenience method to create a Map from this MovieModel object
   Map<String, dynamic> toMap() {
     var map = <String, dynamic>{
       colMovieUniqueId: uniqueId,
       colMovieJson: dtoJson,
+      colMovieId: id,
     };
-    if (id != null) {
-      map[colMovieId] = id;
-    }
     return map;
   }
 
@@ -38,13 +36,11 @@ class MovieModel {
 }
 
 extension ModelConversion on Map {
-  MovieModel toMovieModel() {
-    var model = MovieModel();
-    model.id = this[colMovieId];
-    model.uniqueId = this[colMovieUniqueId];
-    model.dtoJson = this[colMovieJson];
-    return model;
-  }
+  MovieModel toMovieModel() => MovieModel(
+        id: this[colMovieId]!,
+        uniqueId: this[colMovieUniqueId]!,
+        dtoJson: this[colMovieJson]!,
+      );
 }
 
 // singleton class to manage the database
@@ -59,11 +55,11 @@ class DatabaseHelper {
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
   // Only allow a single open connection to the database.
-  static Database _database;
+  static Database? _database;
   Future<Database> get database async {
-    if (_database != null) return _database;
+    if (_database != null) return _database!;
     _database = await _initDatabase();
-    return _database;
+    return _database!;
   }
 
   // open the database
@@ -116,7 +112,7 @@ class DatabaseHelper {
     return id;
   }
 
-  Future<MovieModel> queryMovie(int id) async {
+  Future<MovieModel?> queryMovie(int id) async {
     Database db = await database;
     //db.query(tableMovie) can be used to return a list of every row as a Map.
     List<Map> movieMap = await db.query(
@@ -126,8 +122,7 @@ class DatabaseHelper {
       whereArgs: [id],
     );
     if (movieMap.length > 0) {
-      var dbmodel = movieMap.first.toMovieModel();
-      return dbmodel;
+      return movieMap.first.toMovieModel();
     }
     return null;
   }

@@ -90,7 +90,7 @@ class JsonPDecoder extends Converter<String, String> {
       final firstRound = input.indexOf("(");
       final firstCurly = input.indexOf("{");
       final firstSquare = input.indexOf("[");
-      var output = "";
+      String output = "";
 
       if (_state.buffer.length > 0) {
         if (firstRound > -1 ||

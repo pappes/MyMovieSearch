@@ -18,7 +18,7 @@ Future main() async {
   // Set global state to control web access or offline cached files
   // If OFFLINE environment variable is not set behavior defaults to online
   OnlineOffline.offline =
-      DotEnv.env["OFFLINE"].toLowerCase() == "true" ? true : false;
+      DotEnv.env["OFFLINE"]?.toLowerCase() == "true" ? true : false;
   logger.i("Offline status initialised to: ${OnlineOffline.offline}");
 
   runApp(MyApp());

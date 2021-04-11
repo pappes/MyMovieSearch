@@ -5,14 +5,14 @@ import 'package:my_movie_search/data_model/metadata_dto.dart';
 
 typedef MovieResultDTO MovieFetcher(String id);
 
-Map<String, MovieResultDTO> buffer;
+late Map<String, MovieResultDTO> buffer;
 
 class MovieCard extends StatefulWidget {
-  MovieCard({Key key, this.uniqueId}) : super(key: key);
+  MovieCard({Key? key, required this.uniqueId}) : super(key: key);
 
   final String uniqueId;
 
-  MovieResultDTO getMovieData(String key) => buffer[key];
+  MovieResultDTO getMovieData(String key) => buffer[key]!;
 
   @override
   _MovieCardState createState() => _MovieCardState(uniqueId, getMovieData);
@@ -22,6 +22,8 @@ class _MovieCardState extends State<MovieCard> {
   _MovieCardState(this.uniqueId, this.source);
   MovieFetcher source;
   String uniqueId;
+  // TODO move metadata handling somewhere else and
+  // use it to determine if data from a more authoritive source is required
   var _metadata = MetaDataDTO();
 
   Widget build(BuildContext context) {

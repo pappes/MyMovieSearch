@@ -15,7 +15,8 @@ import 'package:my_movie_search/search_providers/search_imdb_suggestion_converte
 //q = title type
 //i = image with dimentions)
 
-Stream<MovieResultDTO> streamFromInnerJsonMap(Iterable records) async* {
+Stream<MovieResultDTO> streamFromInnerJsonMap(
+    Iterable<Map<dynamic, dynamic>> records) async* {
   for (Map record in records) {
     yield ImdbSuggestionConverter.dtoFromMap(record);
   }

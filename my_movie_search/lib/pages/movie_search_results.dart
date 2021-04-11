@@ -10,7 +10,7 @@ import 'package:my_movie_search/search_providers/search_omdb_movies.dart';
 import 'package:my_movie_search/search_providers/search_tmdb_movies.dart';
 
 class MovieSearchResultsPage extends StatefulWidget {
-  MovieSearchResultsPage({Key key, SearchCriteriaDTO criteria})
+  MovieSearchResultsPage({Key? key, required SearchCriteriaDTO criteria})
       : _criteria = criteria,
         super(key: key);
 
@@ -19,24 +19,22 @@ class MovieSearchResultsPage extends StatefulWidget {
 
   @override
   _MovieSearchResultsPageState createState() =>
-      _MovieSearchResultsPageState(criteria: _criteria);
+      _MovieSearchResultsPageState(_criteria);
 }
 
 class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
-  _MovieSearchResultsPageState({SearchCriteriaDTO criteria}) {
-    _criteria = criteria;
+  _MovieSearchResultsPageState(this._criteria) {
     MovieResultDTO requestMore = MovieResultDTO();
-    requestMore.uniqueId = null;
     requestMore.title = "Click to load more!";
-    _fetchedResultsMap[null] = requestMore;
+    _fetchedResultsMap[requestMore.uniqueId] = requestMore;
   }
-  var _criteria = SearchCriteriaDTO();
+  final SearchCriteriaDTO _criteria;
   var _sortedResults = <MovieResultDTO>[];
   Map<String, MovieResultDTO> _fetchedResultsMap = {};
-  StreamController<MovieResultDTO> omdbStreamController;
-  StreamController<MovieResultDTO> tmdbStreamController;
-  StreamController<MovieResultDTO> imdbStreamController;
-  StreamController<MovieResultDTO> googleStreamController;
+  StreamController<MovieResultDTO>? omdbStreamController;
+  StreamController<MovieResultDTO>? tmdbStreamController;
+  StreamController<MovieResultDTO>? imdbStreamController;
+  StreamController<MovieResultDTO>? googleStreamController;
 
   /* TODO: save and restore scroll position int _scrolledToPosition = 0;
   void _reloadResults() {
@@ -68,32 +66,32 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
     super.initState();
 
     omdbStreamController = StreamController.broadcast();
-    omdbStreamController.stream.listen(// Lambda 1
+    omdbStreamController!.stream.listen(// Lambda 1
         (searchResult) => setState(// Lambda2
             () => addDto(searchResult)));
-    QueryOMDBMovies().executeQuery(omdbStreamController, _criteria);
+    QueryOMDBMovies().executeQuery(omdbStreamController!, _criteria);
 
     tmdbStreamController = StreamController.broadcast();
-    tmdbStreamController.stream.listen(// Lambda 1
+    tmdbStreamController!.stream.listen(// Lambda 1
         (searchResult) => setState(// Lambda2
             () => addDto(searchResult)));
-    QueryTMDBMovies().executeQuery(tmdbStreamController, _criteria);
+    QueryTMDBMovies().executeQuery(tmdbStreamController!, _criteria);
 
     imdbStreamController = StreamController.broadcast();
-    imdbStreamController.stream.listen(// Lambda 1
+    imdbStreamController!.stream.listen(// Lambda 1
         (searchResult) => setState(// Lambda2
             () => addDto(searchResult)));
-    QueryIMDBSuggestions().executeQuery(imdbStreamController, _criteria);
+    QueryIMDBSuggestions().executeQuery(imdbStreamController!, _criteria);
 
     googleStreamController = StreamController.broadcast();
-    googleStreamController.stream.listen(// Lambda 1
+    googleStreamController!.stream.listen(// Lambda 1
         (searchResult) => setState(// Lambda2
             () => addDto(searchResult)));
-    QueryGoogleMovies().executeQuery(googleStreamController, _criteria);
+    QueryGoogleMovies().executeQuery(googleStreamController!, _criteria);
   }
 
   void addDto(MovieResultDTO searchResult) {
-    if (!_fetchedResultsMap.containsKey(searchResult?.uniqueId)) {
+    if (!_fetchedResultsMap.containsKey(searchResult.uniqueId)) {
       _fetchedResultsMap[searchResult.uniqueId] = searchResult;
       _sortedResults = _fetchedResultsMap.values.toList();
       // Sort by relevence with recent year first
@@ -127,14 +125,15 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
   Widget _buildMovieResults() {
     return ListView.builder(
       padding: EdgeInsets.all(16.0),
-      //itemCount: _sortedResults.length,
+      itemCount: _sortedResults.length,
       itemBuilder: _movieListBuilder,
     );
   }
 
   Widget _movieListBuilder(context, listIndex) {
     if (listIndex >= _sortedResults.length) {
-      return null;
+      return ListTile(
+          title: Text("More widgets than available data to populate them!"));
     }
     MovieResultDTO fetchedResult = _sortedResults[listIndex];
     return _MovieTileBuilder._buildRow(fetchedResult);

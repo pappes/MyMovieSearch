@@ -37,13 +37,14 @@ class TmdbMovieSearchConverter {
     // deserialise outer json from map then iterate inner json
     List<MovieResultDTO> searchResults = [];
 
-    final int resultsMatched = map[outer_element_search_success];
+    final int resultsMatched = map[outer_element_search_success] ?? 0;
     if (resultsMatched > 0) {
       map[outer_element_results_collection]
           .forEach((movie) => searchResults.add(dtoFromMap(movie)));
     } else {
       final error = MovieResultDTO();
-      error.title = map[outer_element_failure_reason];
+      error.title = map[outer_element_failure_reason] ??
+          "No failure reason provided in results ${map.toString()}";
       searchResults.add(error);
     }
     return searchResults;
@@ -52,13 +53,14 @@ class TmdbMovieSearchConverter {
   static MovieResultDTO dtoFromMap(Map map) {
     final movie = MovieResultDTO();
     movie.source = DataSourceType.tmdb;
-    movie.uniqueId = map[inner_element_identity_element].toString();
-    movie.title = map[inner_element_title_element];
-    movie.imageUrl = map[inner_element_image_element];
+    movie.uniqueId =
+        map[inner_element_identity_element]?.toString() ?? movie.uniqueId;
+    movie.title = map[inner_element_title_element] ?? movie.title;
+    movie.imageUrl = map[inner_element_image_element] ?? movie.imageUrl;
     try {
-      movie.year = DateTime.parse(map[inner_element_year_element]).year;
+      movie.year = DateTime.parse(map[inner_element_year_element] ?? "").year;
     } catch (e) {
-      movie.yearRange = map[inner_element_year_element];
+      movie.yearRange = map[inner_element_year_element] ?? movie.yearRange;
     }
     return movie;
   }

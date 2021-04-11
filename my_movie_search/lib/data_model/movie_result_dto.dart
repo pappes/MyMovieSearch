@@ -5,7 +5,7 @@ export 'package:my_movie_search/data_model/metadata_dto.dart';
 
 class MovieResultDTO {
   DataSourceType source = DataSourceType.none;
-  String uniqueId; // = null
+  String uniqueId = movieResultDTOUninitialised;
   String title = "";
   MovieContentType type = MovieContentType.none;
   int year = 0;
@@ -56,6 +56,7 @@ final String movieResultDTOUserRating = 'userRating';
 final String movieResultDTOUserRatingCount = 'userRatingCount';
 final String movieResultDTOCensorRating = 'censorRating';
 final String movieResultDTORunTime = 'runTime';
+final String movieResultDTOUninitialised = '-1';
 
 extension MapDTOConversion on Map {
   MovieResultDTO toMovieResultDTO() {
@@ -126,8 +127,10 @@ extension DTOHelpers on MovieResultDTO {
 extension DTOCompare on MovieResultDTO {
   int compareTo(MovieResultDTO other) {
     // Treat null a lower than any other value
-    if (this.uniqueId == null && other.uniqueId != null) return -1;
-    if (this.uniqueId != null && other.uniqueId == null) return 1;
+    if (this.uniqueId == movieResultDTOUninitialised &&
+        other.uniqueId != movieResultDTOUninitialised) return -1;
+    if (this.uniqueId != movieResultDTOUninitialised &&
+        other.uniqueId == movieResultDTOUninitialised) return 1;
     // See how many peopel have rated this movie.
     if (this.userRatingCategory() != other.userRatingCategory())
       return this.userRatingCategory().compareTo(other.userRatingCategory());
@@ -142,17 +145,14 @@ extension DTOCompare on MovieResultDTO {
   }
 
   int userRatingCategory() {
-    if (this == null ||
-        this.userRatingCount == null ||
-        this.userRatingCount == 0) return 0;
+    if (this.userRatingCount == 0) return 0;
     if (this.userRatingCount < 100) return 1;
     if (this.userRatingCount < 10000) return 2;
     return 3;
   }
 
   int userContentCategory() {
-    if (this == null ||
-        this.type == null ||
+    if (this.type == MovieContentType.none ||
         this.type == MovieContentType.custom) return 0;
     if (this.type == MovieContentType.episode) return 1;
     if (this.type == MovieContentType.short) return 2;
@@ -164,28 +164,27 @@ extension DTOCompare on MovieResultDTO {
   int popularityCategory() {
     // Any movie with a super low rating is probably not worth watching.
     // A rating of 2 out of 5 is not great but better than nothing.
-    if (this == null || this.userRating == null || this.userRating < 2)
-      return 0;
+    if (this.userRating < 2) return 0;
     // Movies and series made before 2000 have a lower relevancy to today.
     if (this.maxYear() < 2000) return 1;
     return 2;
   }
 
-  int yearCompare(MovieResultDTO other) {
-    final thisYear = this?.maxYear() ?? 0;
+  int yearCompare(MovieResultDTO? other) {
+    final thisYear = this.maxYear();
     final otherYear = other?.maxYear() ?? 0;
     return (thisYear.compareTo(otherYear));
   }
 
   int maxYear() {
-    return max(this.year ?? 0, this.yearRangeAsNumber() ?? 0);
+    return max(this.year, this.yearRangeAsNumber());
   }
 
   int yearRangeAsNumber() {
     try {
       // Any quantity of numeric digits at the end of the string.
       final filter = RegExp(r'[0-9]+$');
-      return int.parse(filter.stringMatch(this.yearRange)) ?? 0;
+      return int.parse(filter.stringMatch(this.yearRange) ?? "");
     } catch (e) {
       return 0;
     }

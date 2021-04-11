@@ -24,7 +24,7 @@ class QueryIMDBSuggestions extends SearchProvider<MovieResultDTO> {
     return str
         .transform(JsonPDecoder())
         .transform(json.decoder)
-        .map((event) => transformMapSafe(event));
+        .map((event) => transformMapSafe(event as Map<dynamic, dynamic>?));
   }
 
   // Convert OMDB map to MovieResultDTO records.

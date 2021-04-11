@@ -31,10 +31,10 @@ class ImdbSuggestionConverter {
   static MovieResultDTO dtoFromMap(Map map) {
     var movie = MovieResultDTO();
     movie.source = DataSourceType.imdb;
-    movie.uniqueId = map[inner_element_identity_element];
-    movie.title = map[inner_element_title_element];
-    movie.year = map[inner_element_year_element];
-    movie.yearRange = map[inner_element_year_range_element];
+    movie.uniqueId = map[inner_element_identity_element] ?? movie.uniqueId;
+    movie.title = map[inner_element_title_element] ?? movie.title;
+    movie.year = map[inner_element_year_element] ?? movie.year;
+    movie.yearRange = map[inner_element_year_range_element] ?? movie.yearRange;
     return movie;
   }
 }

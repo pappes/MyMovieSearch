@@ -1,9 +1,11 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 import 'package:my_movie_search/pages/movie_search_results.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
-  MovieSearchCriteriaPage({Key key}) : super(key: key);
+  MovieSearchCriteriaPage({Key? key}) : super(key: key);
 
   final String title = "Movie Search Criteria";
 

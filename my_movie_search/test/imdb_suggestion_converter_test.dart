@@ -33,7 +33,7 @@ class QueryIMDBSuggestions_temp {
 
 class MovieResultDTOMatcher extends Matcher {
   MovieResultDTO expected;
-  MovieResultDTO _actual;
+  MovieResultDTO? _actual;
 
   MovieResultDTOMatcher(this.expected);
 
@@ -47,7 +47,7 @@ class MovieResultDTOMatcher extends Matcher {
   Description describeMismatch(dynamic item, Description mismatchDescription,
       Map<dynamic, dynamic> matchState, bool verbose) {
     return mismatchDescription
-        .add("has actual emitted MovieResultDTO = ${_actual.toMap()}");
+        .add("has actual emitted MovieResultDTO = ${_actual!.toMap()}");
   }
 
   @override
@@ -55,7 +55,7 @@ class MovieResultDTOMatcher extends Matcher {
     _actual = actual;
     matchState['actual'] =
         _actual is MovieResultDTO ? _actual : MovieResultDTO().toUnknown();
-    return _actual.matches(expected);
+    return _actual!.matches(expected);
   }
 }
 
@@ -118,9 +118,8 @@ void main() {
           .transform(utf8.decoder)
           .transform(json.decoder);
 
-      var expectFn = expectAsync1<void, Object>((output) {
-        Map decodedOutput =
-            output; // explicit cast from type Object to type Map
+      var expectFn = expectAsync1<void, Object?>((output) {
+        Map decodedOutput = output as Map<dynamic, dynamic>;
         expect(decodedOutput[imdbCustomKeyName], imdbCustomKeyVal);
       }, count: 1);
       stream.listen(expectFn);
@@ -133,7 +132,7 @@ void main() {
           .transform(json.decoder)
           .map((outerMap) => (outerMap as Map)[imdbCustomKeyName]);
 
-      var expectFn = expectAsync1<void, Object>((output) {
+      var expectFn = expectAsync1<void, Object?>((output) {
         expect(output, imdbCustomKeyVal);
       }, count: 1);
       stream.listen(expectFn);
@@ -146,9 +145,8 @@ void main() {
           .transform(JsonPDecoder())
           .transform(json.decoder);
 
-      var expectFn = expectAsync1<void, Object>((output) {
-        Map decodedOutput =
-            output; // explicit cast from type Object to type Map
+      var expectFn = expectAsync1<void, Object?>((output) {
+        Map decodedOutput = output as Map<dynamic, dynamic>;
         expect(decodedOutput[imdbCustomKeyName], imdbCustomKeyVal);
       }, count: 1);
       stream.listen(expectFn);

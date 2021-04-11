@@ -18,25 +18,24 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.11.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_bloc: ^6.1.3    # Assist with the BLoC design pattern.
-  #http: ^0.12.2           # Make calls to web URLs and stream the results.
-  sqflite: ^1.0.0         # Database storage for persisting state across sessions.
-  path_provider: ^0.4.1   # Device filesystem access for accessing database files.
-  flutter_dotenv: ^3.1.0  # Read secrests and settings from .env file.
-  logger: ^0.9.4          # Log trace messages to console.
-  #logger_flutter: ^0.7.1 # Shake device to see trace messages.
-  universal_io: ^1.0.2    # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
-  #TODO use universal IO for environment variable fetching and for CORS http gets: universal_io: ^2.0.0
+  flutter_bloc: ^7.0.0                 # Assist with the BLoC design pattern.
+  ####http: ^0.12.2                    # Make calls to web URLs and stream the results.
+  sqflite: ^2.0.0+3                    # Database storage for persisting state across sessions.
+  path_provider: ^2.0.1                # Device filesystem access for accessing database files.
+  flutter_dotenv: ^4.0.0-nullsafety.0  # Read secrests and settings from .env file.
+  logger: ^1.0.0                       # Log trace messages to console.
+  ####logger_flutter: ^0.7.1           # Shake device to see trace messages.
+  universal_io: ^2.0.4                 # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.1
+  cupertino_icons: ^1.0.2
 
 dev_dependencies:
   flutter_test:

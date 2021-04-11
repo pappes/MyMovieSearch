@@ -22,7 +22,7 @@ abstract class SearchProvider<T> {
   ///
   /// Optionally inject alternate datasource for mocking/testing.
   executeQuery(StreamController<T> sc, SearchCriteriaDTO criteria,
-      {DataSourceFn source}) async {
+      {DataSourceFn? source}) async {
     //TODO: use BloC patterns to test the stream processing
     final selecter = OnlineOffline<DataSourceFn>();
 
@@ -92,9 +92,15 @@ abstract class SearchProvider<T> {
   /// Should call [transformMapSafe]
   /// to wrap [transformMap] in exception handling.
   Stream<List<T>> transformStream(Stream<String> input) {
-    return input
-        .transform(json.decoder)
-        .map((decodedMap) => transformMapSafe(decodedMap));
+    return input.transform(json.decoder).map(
+        (decodedMap) => transformMapSafe(decodedMap as Map<dynamic, dynamic>?));
+  }
+
+  /// Decribe the source of the data for the child class.
+  ///
+  /// Can be overridden by child classes.
+  String childClassDescriptor() {
+    return constructURI("criteria").toString();
   }
 
   /// Fetches and [utf8] decodes online data matching [criteria].
@@ -115,9 +121,16 @@ abstract class SearchProvider<T> {
   /// Wraps [transformMap] in exception handling.
   ///
   /// Should not be overridden by child classes.
-  List<T> transformMapSafe(Map map) {
+  List<T> transformMapSafe(Map? map) {
+    if (map == null) {
+      logger.i("0 results returned from query");
+      return [];
+    }
     try {
-      return transformMap(map);
+      var list = transformMap(map);
+      logger
+          .i("${list.length} results returned from ${childClassDescriptor()}");
+      return list;
     } catch (e) {
       logger.e("Exception raised during transformMap, constructing error.");
       logger.i(
