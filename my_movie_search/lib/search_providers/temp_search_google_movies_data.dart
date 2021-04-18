@@ -627,7 +627,7 @@ final googleMoviesJsonSearchError = r'''
 final googleMoviesJsonSearchFull =
     ' $googleMoviesJsonSearchPrefix $googleMoviesJsonSearchInner $googleMoviesJsonSearchSuffix';
 
-Future<Stream<String>> streamGoogleMoviesJsonOfflineData(String dummy) async {
+Stream<String> streamGoogleMoviesJsonOfflineData(String dummy) {
   return emitGoogleMoviesJsonOfflineData(dummy);
 }
 

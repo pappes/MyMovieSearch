@@ -65,6 +65,12 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
   void initState() {
     super.initState();
 
+    imdbStreamController = StreamController.broadcast();
+    imdbStreamController!.stream.listen(// Lambda 1
+        (searchResult) => setState(// Lambda2
+            () => addDto(searchResult)));
+    QueryIMDBSuggestions().executeQuery(imdbStreamController!, _criteria);
+
     omdbStreamController = StreamController.broadcast();
     omdbStreamController!.stream.listen(// Lambda 1
         (searchResult) => setState(// Lambda2
@@ -76,12 +82,6 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
         (searchResult) => setState(// Lambda2
             () => addDto(searchResult)));
     QueryTMDBMovies().executeQuery(tmdbStreamController!, _criteria);
-
-    imdbStreamController = StreamController.broadcast();
-    imdbStreamController!.stream.listen(// Lambda 1
-        (searchResult) => setState(// Lambda2
-            () => addDto(searchResult)));
-    QueryIMDBSuggestions().executeQuery(imdbStreamController!, _criteria);
 
     googleStreamController = StreamController.broadcast();
     googleStreamController!.stream.listen(// Lambda 1

@@ -1,10 +1,10 @@
 import 'package:universal_io/io.dart'
-    show HttpClient; // limit inclusions to reduce size
+    show HttpClient, HttpHeaders; // limit inclusions to reduce size
 
 import 'package:my_movie_search/search_providers/search_provider.dart';
 import 'package:my_movie_search/search_providers/online_offline_search.dart';
 
-typedef Future<Stream<String>> DataSourceFn(String s);
+typedef FutureOr<Stream<String>> DataSourceFn(String s);
 
 /// Extend SearchProvider to provide a dynamically switchable stream of <T>
 /// from online and offline sources.
@@ -78,9 +78,7 @@ abstract class SearchProvider<T> {
   /// Returns a [Map] of header -> value.
   ///
   /// Can be overridden by child classes if required.
-  Map constructHeaders() {
-    return {};
-  }
+  void constructHeaders(HttpHeaders headers) {}
 
   /// Convert [Stream] of [String] to a stream containing a [List] of <T>.
   ///
@@ -111,6 +109,7 @@ abstract class SearchProvider<T> {
   Future<Stream<String>> streamResult(String criteria) async {
     final encoded = Uri.encodeQueryComponent(criteria);
     final request = await HttpClient().getUrl(constructURI(encoded));
+    constructHeaders(request.headers);
     final response = await request.close();
     return response.transform(utf8.decoder);
   }

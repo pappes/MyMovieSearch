@@ -1,3 +1,6 @@
+import 'package:universal_io/io.dart'
+    show HttpHeaders; // limit inclusions to reduce size
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:my_movie_search/search_providers/search_provider.dart';
@@ -8,7 +11,7 @@ import 'package:my_movie_search/search_providers/search_tmdb_movie_converter.dar
 /// Implements [SearchProvider] for searching the The Movie Database (TMDB).
 /// The OMDb API is a free web service to obtain movie information.
 class QueryTMDBMovies extends SearchProvider<MovieResultDTO> {
-  static final baseURL = "https://api.themoviedb.org/3/search/movie?api_key=";
+  static final baseURL = 'https://api.themoviedb.org/3/search/movie?api_key=';
 
   // Static snapshot of data for offline operation.
   // Does not filter data based on criteria.
@@ -24,10 +27,10 @@ class QueryTMDBMovies extends SearchProvider<MovieResultDTO> {
   @override
   List<MovieResultDTO> constructError(String message) {
     var error = MovieResultDTO();
-    error.title = "[${this.runtimeType}] $message";
+    error.title = '[${this.runtimeType}] $message';
     error.type = MovieContentType.custom;
     error.source = DataSourceType.tmdb;
-    error.uniqueId = "-${error.source}";
+    error.uniqueId = '-${error.source}';
     return [error];
   }
 
@@ -35,14 +38,12 @@ class QueryTMDBMovies extends SearchProvider<MovieResultDTO> {
   @override
   Uri constructURI(String searchText, {int pageNumber = 1}) {
     final omdbKey =
-        env["TMDB_KEY"]; // From the file assets/.env (not source controlled)
-    return Uri.parse("$baseURL$omdbKey&query=$searchText&page=$pageNumber");
+        env['TMDB_KEY']; // From the file assets/.env (not source controlled)
+    return Uri.parse('$baseURL$omdbKey&query=$searchText&page=$pageNumber');
   }
 
   // Add authorization token for compatability with the TMDB V4 API.
-  Map constructHeaders() {
-    Map headers = {};
-    headers["Authorization"] = " Bearer ${env["TMDB_KEY"]}";
-    return headers;
+  void constructHeaders(HttpHeaders headers) {
+    headers.add('Authorization', ' Bearer ${env['TMDB_KEY']}');
   }
 }

@@ -25,7 +25,7 @@ final omdbJsonSearchFull =
 final omdbJsonSearchEmpty = '{"Response":"False","Error":"Movie not found!"}';
 final omdbJsonSearchError = '{"Response":"False","Error":"Invalid API key!"}';
 
-Future<Stream<String>> streamOmdbJsonOfflineData(String dummy) async {
+Stream<String> streamOmdbJsonOfflineData(String dummy) {
   return emitOmdbJsonOfflineData(dummy);
 }
 
