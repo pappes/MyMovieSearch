@@ -2,8 +2,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:my_movie_search/search_providers/search_provider.dart';
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
-import 'package:my_movie_search/search_providers/temp_search_google_movies_data.dart';
-import 'package:my_movie_search/search_providers/search_google_movie_converter.dart';
+import 'package:my_movie_search/search_providers/offline/temp_search_google_movies_data.dart';
+import 'package:my_movie_search/search_providers/converters/search_google_movie_converter.dart';
 
 const GOOGLE_RESULTS_PER_PAGE = 10; // More than 10 results in an error!
 

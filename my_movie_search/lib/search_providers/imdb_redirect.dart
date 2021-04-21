@@ -1,11 +1,12 @@
 import 'package:flutter/foundation.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 /// Isolate web requests from cross origin vunerabilities.
 ///
 /// Tunnels browser requests through an intermediate server to strip headers.
 class IMDBRedirect {
   static final originURL = 'https://www.imdb.com';
-  static final tunnelBaseURL = 'http://localhost:8080';
+  static final tunnelBaseURL = DotEnv.env['TUNNEL_ADDRESS'];
 
   /// Determine if flutter framwork will invoke CORS security protections
   ///

@@ -2,7 +2,7 @@ import 'package:universal_io/io.dart'
     show HttpClient, HttpHeaders; // limit inclusions to reduce size
 
 import 'package:my_movie_search/search_providers/search_provider.dart';
-import 'package:my_movie_search/search_providers/online_offline_search.dart';
+import 'package:my_movie_search/search_providers/offline/online_offline_search.dart';
 
 typedef FutureOr<Stream<String>> DataSourceFn(String s);
 

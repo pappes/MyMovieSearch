@@ -1,8 +1,8 @@
 import 'package:my_movie_search/search_providers/search_provider.dart';
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
 import 'package:my_movie_search/search_providers/jsonp_transformer.dart';
-import 'package:my_movie_search/search_providers/search_imdb_suggestion_converter.dart';
-import 'package:my_movie_search/search_providers/temp_search_imdb_suggestions_data.dart';
+import 'package:my_movie_search/search_providers/converters/search_imdb_suggestion_converter.dart';
+import 'package:my_movie_search/search_providers/offline/temp_search_imdb_suggestions_data.dart';
 
 import 'imdb_redirect.dart';
 

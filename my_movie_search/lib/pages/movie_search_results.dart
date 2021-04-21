@@ -145,7 +145,7 @@ class _MovieTileBuilder {
   static Widget _buildRow(MovieResultDTO movie) {
     return ListTile(
       title: Text(
-        "${movie.title}(${movie.year})",
+        "${movie.title}(${movie.year}, ${movie.source.toString()})",
         style: _biggerFont,
         textScaleFactor: 1.0,
       ),

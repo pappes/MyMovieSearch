@@ -5,7 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'transformer_test_data.dart';
 import 'package:my_movie_search/search_providers/jsonp_transformer.dart';
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
-import 'package:my_movie_search/search_providers/search_imdb_suggestion_converter.dart';
+import 'package:my_movie_search/search_providers/converters/search_imdb_suggestion_converter.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Helper functions
