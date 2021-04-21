@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:universal_io/io.dart'
     show HttpHeaders; // limit inclusions to reduce size
 
@@ -13,17 +14,22 @@ import 'package:my_movie_search/search_providers/converters/search_tmdb_movie_co
 class QueryTMDBMovies extends SearchProvider<MovieResultDTO> {
   static final baseURL = 'https://api.themoviedb.org/3/search/movie?api_key=';
 
+  @override
+  String dataSourceName() {
+    return describeEnum(DataSourceType.tmdb);
+  }
+
   // Static snapshot of data for offline operation.
   // Does not filter data based on criteria.
   @override
   DataSourceFn offlineData() => streamTmdbJsonOfflineData;
 
-  // Convert TMDB map to MovieResultDTO records.
+  /// Convert TMDB map to MovieResultDTO records.
   @override
   List<MovieResultDTO> transformMap(Map map) =>
       TmdbMovieSearchConverter.dtoFromCompleteJsonMap(map);
 
-  // Include entire map in the movie title when an error occurs.
+  /// Include entire map in the movie title when an error occurs.
   @override
   List<MovieResultDTO> constructError(String message) {
     var error = MovieResultDTO();
@@ -34,7 +40,7 @@ class QueryTMDBMovies extends SearchProvider<MovieResultDTO> {
     return [error];
   }
 
-  // API call to TMDB returning the top 10 matching results for [searchText].
+  /// API call to TMDB returning the top 10 matching results for [searchText].
   @override
   Uri constructURI(String searchText, {int pageNumber = 1}) {
     final omdbKey =

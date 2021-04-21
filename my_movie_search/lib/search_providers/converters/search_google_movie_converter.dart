@@ -19,6 +19,9 @@ const inner_element_title_element = 'title';
 const inner_element_year_element = 'title';
 const inner_element_pagemap = 'pagemap';
 const inner_element_metatags = 'metatags';
+const inner_element_rating = 'aggregaterating';
+const inner_element_rating_value = 'ratingvalue';
+const inner_element_rating_count = 'ratingcount';
 const inner_element_identity_element = 'pageid';
 const inner_element_type_element = 'og:type';
 const inner_element_image_element = 'og:image';
@@ -40,7 +43,7 @@ class GoogleMovieSearchConverter {
     } catch (e) {
       final error = MovieResultDTO();
       error.title =
-          "Unknown google error - potential API change! ${map.toString()}";
+          "Unknown google error - potential API change! $e ${map.toString()}";
       searchResults.add(error);
     }
     return searchResults;
@@ -64,13 +67,20 @@ class GoogleMovieSearchConverter {
     final movie = MovieResultDTO();
     movie.source = DataSourceType.google;
 
-    Map metatags = map[inner_element_pagemap][inner_element_metatags].first;
-    movie.uniqueId = getID(metatags);
     movie.title = getTitle(map);
     movie.yearRange = getYearRange(map);
     movie.year = movie.maxYear();
-    movie.imageUrl = getImage(metatags);
-    movie.type = getType(metatags);
+    if (map[inner_element_pagemap].containsKey(inner_element_metatags)) {
+      Map metatags = map[inner_element_pagemap][inner_element_metatags].first;
+      movie.uniqueId = getID(metatags);
+      movie.imageUrl = getImage(metatags);
+      movie.type = getType(metatags);
+    }
+    if (map[inner_element_pagemap].containsKey(inner_element_rating)) {
+      Map rating = map[inner_element_pagemap][inner_element_rating].first;
+      movie.userRating = getRatingValue(rating);
+      movie.userRatingCount = getRatingCount(rating);
+    }
     return movie;
   }
 
@@ -112,20 +122,12 @@ class GoogleMovieSearchConverter {
     return map[inner_element_image_element] ?? "";
   }
 
-  static String getRatingValue(Map map) {
-    return "";
+  static double getRatingValue(Map map) {
+    return double.parse(map[inner_element_rating_value] ?? '0');
   }
 
-  static String getRatingCount(Map map) {
-    return "";
+  static int getRatingCount(Map map) {
+    var text = map[inner_element_rating_count]?.replaceAll(',', '');
+    return int.parse(text ?? '0');
   }
-
-//title = title (Year) - Source
-//pagemap.metatags.pageid = unique key
-//undefined = year
-//pagemap.metatags.og:type = title type
-//pagemap.metatags.og:image = image url
-//pagemap.aggregaterating.ratingvalue = userRating
-//pagemap.aggregaterating.ratingcount = userRatingCount
-
 }

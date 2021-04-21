@@ -1,5 +1,3 @@
-//import 'dart:html';
-
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 import 'package:my_movie_search/pages/movie_search_results.dart';
@@ -16,7 +14,7 @@ class MovieSearchCriteriaPage extends StatefulWidget {
 
 class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     with SearchCriteriaDTO {
-  void _searchForMovie() {
+  void searchForMovie() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -41,7 +39,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
       ),
       body: _MovieSearchCriteriaBody(this),
       floatingActionButton: FloatingActionButton(
-        onPressed: _searchForMovie,
+        onPressed: searchForMovie,
         tooltip: 'Search',
         child: Icon(Icons.search),
       ),
@@ -78,6 +76,7 @@ class _MovieSearchCrieriaTop extends Center {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             TextField(
+              textInputAction: TextInputAction.search,
               autofocus: true,
               autocorrect: true,
               autofillHints: [AutofillHints.sublocality],
@@ -85,11 +84,11 @@ class _MovieSearchCrieriaTop extends Center {
                 labelText: "Movie",
                 hintText: "Enter movie or tv series to search for",
               ),
-              onChanged: (text) {
+              /*onChanged: (text) {
                 state.criteriaTitle = text;
-              },
+              },*/
               onSubmitted: (text) {
-                print("First text field: $text");
+                state.searchForMovie();
               },
             ),
             TextField(

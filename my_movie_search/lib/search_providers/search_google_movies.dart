@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:my_movie_search/search_providers/search_provider.dart';
@@ -13,6 +14,11 @@ class QueryGoogleMovies extends SearchProvider<MovieResultDTO> {
   static final baseURL =
       "https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=";
 
+  @override
+  String dataSourceName() {
+    return describeEnum(DataSourceType.google);
+  }
+
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
@@ -20,14 +26,14 @@ class QueryGoogleMovies extends SearchProvider<MovieResultDTO> {
     return streamGoogleMoviesJsonOfflineData;
   }
 
-  // Convert OMDB map to MovieResultDTO records.
+  /// Convert google map to MovieResultDTO records.
   @override
   List<MovieResultDTO> transformMap(Map map) {
     var x = GoogleMovieSearchConverter.dtoFromCompleteJsonMap(map);
     return x;
   }
 
-  // Include entire map in the movie title when an error occurs.
+  /// Include entire map in the movie title when an error occurs.
   @override
   List<MovieResultDTO> constructError(String message) {
     var error = MovieResultDTO();

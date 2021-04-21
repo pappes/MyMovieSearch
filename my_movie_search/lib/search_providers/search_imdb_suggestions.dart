@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:my_movie_search/search_providers/search_provider.dart';
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
 import 'package:my_movie_search/search_providers/jsonp_transformer.dart';
@@ -11,6 +12,11 @@ import 'imdb_redirect.dart';
 class QueryIMDBSuggestions extends SearchProvider<MovieResultDTO> {
   static final baseURL = 'https://sg.media-imdb.com/suggests';
 
+  @override
+  String dataSourceName() {
+    return describeEnum(DataSourceType.imdb);
+  }
+
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
@@ -18,7 +24,7 @@ class QueryIMDBSuggestions extends SearchProvider<MovieResultDTO> {
     return streamImdbJsonPOfflineData;
   }
 
-  // Remove JsonP from API response and convert to a map of MovieResultDTO.
+  /// Remove JsonP from API response and convert to a map of MovieResultDTO.
   @override
   Stream<List<MovieResultDTO>> transformStream(Stream<String> str) {
     return str
@@ -27,12 +33,12 @@ class QueryIMDBSuggestions extends SearchProvider<MovieResultDTO> {
         .map((event) => transformMapSafe(event as Map<dynamic, dynamic>?));
   }
 
-  // Convert OMDB map to MovieResultDTO records.
+  /// Convert IMDB map to MovieResultDTO records.
   @override
   List<MovieResultDTO> transformMap(Map map) =>
       ImdbSuggestionConverter.dtoFromCompleteJsonMap(map);
 
-  // Include entire map in the movie title when an error occurs.
+  /// Include entire map in the movie title when an error occurs.
   @override
   List<MovieResultDTO> constructError(String message) {
     var error = MovieResultDTO();
@@ -43,7 +49,7 @@ class QueryIMDBSuggestions extends SearchProvider<MovieResultDTO> {
     return [error];
   }
 
-  // API call to IMDB search returning the top matching results for [searchText].
+  /// API call to IMDB search returning the top matching results for [searchText].
   @override
   Uri constructURI(String searchText, {int pageNumber = 1}) {
     final searchSuffix = '/${searchText.substring(0, 1)}/$searchText.json';

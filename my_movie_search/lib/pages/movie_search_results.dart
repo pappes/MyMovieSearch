@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-
 import 'dart:async';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 
 import 'package:my_movie_search/data_model/search_criteria_dto.dart';
 import 'package:my_movie_search/data_model/movie_result_dto.dart';
@@ -8,6 +8,8 @@ import 'package:my_movie_search/search_providers/search_google_movies.dart';
 import 'package:my_movie_search/search_providers/search_imdb_suggestions.dart';
 import 'package:my_movie_search/search_providers/search_omdb_movies.dart';
 import 'package:my_movie_search/search_providers/search_tmdb_movies.dart';
+
+import 'movie_search_details.dart';
 
 class MovieSearchResultsPage extends StatefulWidget {
   MovieSearchResultsPage({Key? key, required SearchCriteriaDTO criteria})
@@ -35,18 +37,6 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
   StreamController<MovieResultDTO>? tmdbStreamController;
   StreamController<MovieResultDTO>? imdbStreamController;
   StreamController<MovieResultDTO>? googleStreamController;
-
-  /* TODO: save and restore scroll position int _scrolledToPosition = 0;
-  void _reloadResults() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values.
-
-      //scroll page down to _scrolledToPosition
-    });
-  }
-  */
 
   @override
   void dispose() {
@@ -91,7 +81,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
   }
 
   void addDto(MovieResultDTO searchResult) {
-    if (!_fetchedResultsMap.containsKey(searchResult.uniqueId)) {
+    if (searchResult.uniqueId == '-1' ||
+        !_fetchedResultsMap.containsKey(searchResult.uniqueId)) {
       _fetchedResultsMap[searchResult.uniqueId] = searchResult;
       _sortedResults = _fetchedResultsMap.values.toList();
       // Sort by relevence with recent year first
@@ -103,9 +94,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
     // This method is rerun every time setState is called.
     return Scaffold(
         appBar: AppBar(
-          // Here we take the value from the MyHomePage object that was created by
-          // the App.build method, and use it to set our appbar title.
-          title: Text(widget.title),
+          // Use the search criteria to set our appbar title.
+          title: Text('${widget.title} - ${widget._criteria.criteriaTitle}'),
         ),
         body: Center(
           child: _buildMovieResults(),
@@ -136,32 +126,45 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
           title: Text("More widgets than available data to populate them!"));
     }
     MovieResultDTO fetchedResult = _sortedResults[listIndex];
-    return _MovieTileBuilder._buildRow(fetchedResult);
+    return _MovieTileBuilder._buildRow(context, fetchedResult);
   }
 }
 
 class _MovieTileBuilder {
+  static String _printDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
   static final _biggerFont = TextStyle(fontSize: 18.0);
-  static Widget _buildRow(MovieResultDTO movie) {
+  static Widget _buildRow(BuildContext context, MovieResultDTO movie) {
     return ListTile(
+      leading: movie.imageUrl == ''
+          ? Text('X')
+          : Image(
+              image: NetworkImage(movie.imageUrl),
+            ),
       title: Text(
-        "${movie.title}(${movie.year}, ${movie.source.toString()})",
+        "${movie.title}(${movie.yearRange == '' ? movie.year : movie.yearRange}, ${describeEnum(movie.source)})",
         style: _biggerFont,
         textScaleFactor: 1.0,
       ),
-      /*trailing: Icon(
-        alreadySaved ? Icons.favorite : Icons.favorite_border,
-        color: alreadySaved ? Colors.red : null,
-      ),*/
-      /*onTap: () {
-        setState(() {
-          if (alreadySaved) {
-            _saved.remove(resultData);
-          } else {
-            _saved.add(resultData);
-          }
-        });
-      },*/
+      subtitle: Text(
+        " ${describeEnum(movie.type)}   ${_printDuration(movie.runTime)} - ${movie.userRating} (${movie.userRatingCount})",
+        style: _biggerFont,
+        textScaleFactor: 1.0,
+      ),
+      onTap: () {
+        if (movie.uniqueId != '-1') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => MovieDetailsPage(movie: movie)),
+          );
+        }
+      },
     );
   }
 }

@@ -28,14 +28,22 @@ abstract class SearchProvider<T> {
 
     source = selecter.selectBetween(source ?? streamResult, offlineData());
     // Need to await completion of future before we can transform it.
-    logger.i("got function, getting stream");
+    logger.i(
+        'got function, getting stream for ${dataSourceName()} using ${childClassDescriptor()}');
     final Stream<String> result = await source(criteria.criteriaTitle);
-    logger.i("got stream getting data");
+    logger.i('got stream getting data');
 
     transformStream(result)
         .expand((element) =>
             element) // Emit each element from the dto list as a seperate dto.
         .pipe(sc);
+  }
+
+  /// Describe where the data is comming from.
+  ///
+  /// Should be overridden by child classes.
+  String dataSourceName() {
+    return 'unknown';
   }
 
   /// Define alternate [Stream] of data for offline operation.
@@ -98,7 +106,7 @@ abstract class SearchProvider<T> {
   ///
   /// Can be overridden by child classes.
   String childClassDescriptor() {
-    return constructURI("criteria").toString();
+    return constructURI('criteria').toString();
   }
 
   /// Fetches and [utf8] decodes online data matching [criteria].
@@ -122,19 +130,19 @@ abstract class SearchProvider<T> {
   /// Should not be overridden by child classes.
   List<T> transformMapSafe(Map? map) {
     if (map == null) {
-      logger.i("0 results returned from query");
+      logger.i('0 results returned from query');
       return [];
     }
     try {
       var list = transformMap(map);
       logger
-          .i("${list.length} results returned from ${childClassDescriptor()}");
+          .i('${list.length} results returned from ${childClassDescriptor()}');
       return list;
     } catch (e) {
-      logger.e("Exception raised during transformMap, constructing error.");
+      logger.e('Exception raised during transformMap, constructing error.');
       logger.i(
-          "${this.runtimeType}].transformMapSafe stacktrace: ${StackTrace.current}");
-      return constructError("Could not interpret response ${map.toString()}");
+          '${this.runtimeType}].transformMapSafe stacktrace: ${StackTrace.current}');
+      return constructError('Could not interpret response ${map.toString()}');
     }
   }
 }

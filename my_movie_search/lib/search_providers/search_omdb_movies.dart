@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:my_movie_search/search_providers/search_provider.dart';
@@ -10,6 +11,11 @@ import 'package:my_movie_search/search_providers/converters/search_omdb_movie_co
 class QueryOMDBMovies extends SearchProvider<MovieResultDTO> {
   static final baseURL = "http://www.omdbapi.com/?apikey=";
 
+  @override
+  String dataSourceName() {
+    return describeEnum(DataSourceType.omdb);
+  }
+
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
@@ -17,12 +23,12 @@ class QueryOMDBMovies extends SearchProvider<MovieResultDTO> {
     return streamOmdbJsonOfflineData;
   }
 
-  // Convert OMDB map to MovieResultDTO records.
+  /// Convert OMDB map to MovieResultDTO records.
   @override
   List<MovieResultDTO> transformMap(Map map) =>
       OmdbMovieSearchConverter.dtoFromCompleteJsonMap(map);
 
-  // Include entire map in the movie title when an error occurs.
+  /// Include entire map in the movie title when an error occurs.
   @override
   List<MovieResultDTO> constructError(String message) {
     var error = MovieResultDTO();
