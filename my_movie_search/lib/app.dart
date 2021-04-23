@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 //import 'package:my_movie_search/pages/home.dart';
-import 'package:my_movie_search/pages/movie_search_criteria.dart';
+import 'package:my_movie_search/movies/pages/movie_search_criteria.dart';
 //import 'package:my_movie_search/pages/webveiw/webview_testing.dart';
 
 class MyApp extends StatelessWidget {

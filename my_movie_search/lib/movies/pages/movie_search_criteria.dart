@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_movie_search/data_model/search_criteria_dto.dart';
-import 'package:my_movie_search/pages/movie_search_results.dart';
+import 'package:my_movie_search/movies/data_model/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/pages/movie_search_results.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
   MovieSearchCriteriaPage({Key? key}) : super(key: key);

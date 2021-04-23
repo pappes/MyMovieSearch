@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'transformer_test_data.dart';
-import 'package:my_movie_search/search_providers/jsonp_transformer.dart';
+import 'package:my_movie_search/movies/search_providers/jsonp_transformer.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Helper functions

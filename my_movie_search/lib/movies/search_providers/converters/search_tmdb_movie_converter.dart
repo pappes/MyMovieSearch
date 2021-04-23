@@ -1,4 +1,4 @@
-import 'package:my_movie_search/data_model/movie_result_dto.dart';
+import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
 
 //query string https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=wonder+woman
 //json format

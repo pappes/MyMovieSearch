@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:my_movie_search/search_providers/search_provider.dart';
-import 'package:my_movie_search/data_model/movie_result_dto.dart';
-import 'package:my_movie_search/search_providers/offline/temp_search_omdb_movies_data.dart';
-import 'package:my_movie_search/search_providers/converters/search_omdb_movie_converter.dart';
+import 'package:my_movie_search/movies/search_providers/search_provider.dart';
+import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
+import 'package:my_movie_search/movies/search_providers/offline/temp_search_omdb_movies_data.dart';
+import 'package:my_movie_search/movies/search_providers/converters/search_omdb_movie_converter.dart';
 
 /// Implements [SearchProvider] for searching the Open Movie Database.
 /// The OMDb API is a free web service to obtain movie information.

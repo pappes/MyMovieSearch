@@ -3,7 +3,7 @@ import 'package:my_movie_search/app.dart';
 import 'package:universal_io/io.dart'
     show Platform; // limit inclusions to reduce size
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
-import 'package:my_movie_search/search_providers/offline/online_offline_search.dart';
+import 'package:my_movie_search/movies/search_providers/offline/online_offline_search.dart';
 
 Future main() async {
   // Load variable from operating system environmnt or from .env file

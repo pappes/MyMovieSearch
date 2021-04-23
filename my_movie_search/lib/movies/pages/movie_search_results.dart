@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:my_movie_search/data_model/search_criteria_dto.dart';
-import 'package:my_movie_search/data_model/movie_result_dto.dart';
-import 'package:my_movie_search/search_providers/search_google_movies.dart';
-import 'package:my_movie_search/search_providers/search_imdb_suggestions.dart';
-import 'package:my_movie_search/search_providers/search_omdb_movies.dart';
-import 'package:my_movie_search/search_providers/search_tmdb_movies.dart';
+import 'package:my_movie_search/movies/data_model/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
+import 'package:my_movie_search/movies/search_providers/search_google_movies.dart';
+import 'package:my_movie_search/movies/search_providers/search_imdb_suggestions.dart';
+import 'package:my_movie_search/movies/search_providers/search_omdb_movies.dart';
+import 'package:my_movie_search/movies/search_providers/search_tmdb_movies.dart';
 
 import 'movie_search_details.dart';
 

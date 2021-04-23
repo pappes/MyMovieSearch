@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:my_movie_search/data_model/movie_result_dto.dart';
+import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
 
 // database table and column names
 final String tableMovie = 'Movie';

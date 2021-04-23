@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import 'package:my_movie_search/data_model/movie_result_dto.dart';
+import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   MovieDetailsPage({Key? key, required MovieResultDTO movie})
