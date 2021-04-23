@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_movie_search/movies/data_model/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/pages/movie_search_results.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
   MovieSearchCriteriaPage({Key? key}) : super(key: key);
@@ -14,7 +14,8 @@ class MovieSearchCriteriaPage extends StatefulWidget {
 
 class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     with SearchCriteriaDTO {
-  void searchForMovie() {
+  void searchForMovie({String? criteria}) {
+    this.criteriaTitle = criteria ?? this.criteriaTitle;
     setState(() {
       // This call to setState tells the Flutter framework that something has
       // changed in this State, which causes it to rerun the build method below
@@ -84,11 +85,11 @@ class _MovieSearchCrieriaTop extends Center {
                 labelText: "Movie",
                 hintText: "Enter movie or tv series to search for",
               ),
-              /*onChanged: (text) {
+              onChanged: (text) {
                 state.criteriaTitle = text;
-              },*/
+              },
               onSubmitted: (text) {
-                state.searchForMovie();
+                state.searchForMovie(criteria: text);
               },
             ),
             TextField(

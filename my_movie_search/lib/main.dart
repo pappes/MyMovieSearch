@@ -3,7 +3,7 @@ import 'package:my_movie_search/app.dart';
 import 'package:universal_io/io.dart'
     show Platform; // limit inclusions to reduce size
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
-import 'package:my_movie_search/movies/search_providers/offline/online_offline_search.dart';
+import 'package:my_movie_search/utilities/online_offline_search.dart';
 
 Future main() async {
   // Load variable from operating system environmnt or from .env file
@@ -17,9 +17,7 @@ Future main() async {
 
   // Set global state to control web access or offline cached files
   // If OFFLINE environment variable is not set behavior defaults to online
-  OnlineOffline.offline =
-      DotEnv.env["OFFLINE"]?.toLowerCase() == "true" ? true : false;
-  logger.i("Offline status initialised to: ${OnlineOffline.offline}");
+  OnlineOfflineSelector.init(DotEnv.env["OFFLINE"]);
 
   runApp(MyApp());
 }

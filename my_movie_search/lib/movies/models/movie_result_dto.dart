@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:my_movie_search/movies/data_model/metadata_dto.dart';
-export 'package:my_movie_search/movies/data_model/metadata_dto.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
+export 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 class MovieResultDTO {
   DataSourceType source = DataSourceType.none;

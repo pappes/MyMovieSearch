@@ -1,15 +1,15 @@
 import 'package:flutter/foundation.dart';
-import 'package:my_movie_search/movies/search_providers/search_provider.dart';
-import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
-import 'package:my_movie_search/movies/search_providers/jsonp_transformer.dart';
-import 'package:my_movie_search/movies/search_providers/converters/search_imdb_suggestion_converter.dart';
-import 'package:my_movie_search/movies/search_providers/offline/temp_search_imdb_suggestions_data.dart';
+import 'package:my_movie_search/utilities/provider_controller.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/jsonp_transformer.dart';
+import 'package:my_movie_search/movies/providers/search/converters/imdb_suggestion.dart';
+import 'package:my_movie_search/movies/providers/search/offline/imdb.dart';
 
-import 'imdb_redirect.dart';
+import 'package:my_movie_search/utilities/web_redirect.dart';
 
 /// Implements [SearchProvider] for the IMDB search suggestions API.
 /// Search suggestions are used by the lookup bar in the IMDB web page.
-class QueryIMDBSuggestions extends SearchProvider<MovieResultDTO> {
+class QueryIMDBSuggestions extends ProviderController<MovieResultDTO> {
   static final baseURL = 'https://sg.media-imdb.com/suggests';
 
   @override
@@ -54,6 +54,6 @@ class QueryIMDBSuggestions extends SearchProvider<MovieResultDTO> {
   Uri constructURI(String searchText, {int pageNumber = 1}) {
     final searchSuffix = '/${searchText.substring(0, 1)}/$searchText.json';
     var url = '$baseURL$searchSuffix';
-    return IMDBRedirect.constructURI(url);
+    return WebRedirect.constructURI(url);
   }
 }

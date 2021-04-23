@@ -1,4 +1,4 @@
-import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 //query string http://www.omdbapi.com/?apikey=<key>&s=wonder+woman
 //json format

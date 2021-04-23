@@ -1,4 +1,4 @@
-import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 //query string https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&q=wonder&safe=off&key=<key>
 //json format

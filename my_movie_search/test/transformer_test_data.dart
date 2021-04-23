@@ -1,5 +1,5 @@
-import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
-import 'package:my_movie_search/movies/search_providers/converters/search_imdb_suggestion_converter.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/providers/search/converters/imdb_suggestion.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Test Data

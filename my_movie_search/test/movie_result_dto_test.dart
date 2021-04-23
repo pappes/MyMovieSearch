@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Helper functions

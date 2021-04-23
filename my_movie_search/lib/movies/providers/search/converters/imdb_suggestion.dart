@@ -1,4 +1,4 @@
-import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 //query string https://sg.media-imdb.com/suggests/w/wonder%20woman.json
 //json format

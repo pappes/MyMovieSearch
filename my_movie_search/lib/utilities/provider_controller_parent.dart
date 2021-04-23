@@ -1,15 +1,17 @@
+library pappes.utilites;
+
 import 'package:universal_io/io.dart'
     show HttpClient, HttpHeaders; // limit inclusions to reduce size
 
-import 'package:my_movie_search/movies/search_providers/search_provider.dart';
-import 'package:my_movie_search/movies/search_providers/offline/online_offline_search.dart';
+import 'package:my_movie_search/utilities/provider_controller.dart';
+import 'package:my_movie_search/utilities/online_offline_search.dart';
 
 typedef FutureOr<Stream<String>> DataSourceFn(String s);
 
-/// Extend SearchProvider to provide a dynamically switchable stream of <T>
+/// Extend ProviderController to provide a dynamically switchable stream of <T>
 /// from online and offline sources.
 ///
-/// Classes extending SearchProvider can be interchanged
+/// Classes extending ProviderController can be interchanged
 /// making it easy to switch datasource
 /// without changing the rest of the application.
 ///
@@ -17,26 +19,38 @@ typedef FutureOr<Stream<String>> DataSourceFn(String s);
 ///   web/file -> Json via [offlineData] or [constructURI]
 ///   Json(Map) -> Objects of type T via [transformMap]
 ///   Exception handling via [constructError]
-abstract class SearchProvider<T> {
+abstract class ProviderController<T> {
   /// Populate [StreamController] with data matching [criteria].
   ///
-  /// Optionally inject alternate datasource for mocking/testing.
-  executeQuery(StreamController<T> sc, SearchCriteriaDTO criteria,
+  /// Optionally inject [source] as an alternate datasource for mocking/testing.
+  void populate(StreamController<T> sc, SearchCriteriaDTO criteria,
+      {DataSourceFn? source}) async {
+    (await fetch(criteria, source: source)).pipe(sc);
+  }
+
+  /// Return a list with data matching [criteria].
+  ///
+  /// Optionally inject [source] as an alternate datasource for mocking/testing.
+  Future<List<T>> read(SearchCriteriaDTO criteria,
+      {DataSourceFn? source}) async {
+    return (await fetch(criteria, source: source)).toList();
+  }
+
+  /// Create a stream with data matching [criteria].
+  Future<Stream<T>> fetch(SearchCriteriaDTO criteria,
       {DataSourceFn? source}) async {
     //TODO: use BloC patterns to test the stream processing
-    final selecter = OnlineOffline<DataSourceFn>();
+    final selecter = OnlineOfflineSelector<DataSourceFn>();
 
-    source = selecter.selectBetween(source ?? streamResult, offlineData());
+    source = selecter.select(source ?? streamResult, offlineData());
     // Need to await completion of future before we can transform it.
     logger.i(
         'got function, getting stream for ${dataSourceName()} using ${childClassDescriptor()}');
     final Stream<String> result = await source(criteria.criteriaTitle);
     logger.i('got stream getting data');
 
-    transformStream(result)
-        .expand((element) =>
-            element) // Emit each element from the dto list as a seperate dto.
-        .pipe(sc);
+    // Emit each element from the list as a seperate element.
+    return transformStream(result).expand((element) => element);
   }
 
   /// Describe where the data is comming from.

@@ -4,14 +4,14 @@ import 'package:universal_io/io.dart'
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:my_movie_search/movies/search_providers/search_provider.dart';
-import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
-import 'package:my_movie_search/movies/search_providers/offline/temp_search_tmdb_movies_data.dart';
-import 'package:my_movie_search/movies/search_providers/converters/search_tmdb_movie_converter.dart';
+import 'package:my_movie_search/utilities/provider_controller.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/providers/search/offline/tmdb.dart';
+import 'package:my_movie_search/movies/providers/search/converters/tmdb.dart';
 
 /// Implements [SearchProvider] for searching the The Movie Database (TMDB).
 /// The OMDb API is a free web service to obtain movie information.
-class QueryTMDBMovies extends SearchProvider<MovieResultDTO> {
+class QueryTMDBMovies extends ProviderController<MovieResultDTO> {
   static final baseURL = 'https://api.themoviedb.org/3/search/movie?api_key=';
 
   @override

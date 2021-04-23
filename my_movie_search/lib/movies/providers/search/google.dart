@@ -1,16 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:my_movie_search/movies/search_providers/search_provider.dart';
-import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
-import 'package:my_movie_search/movies/search_providers/offline/temp_search_google_movies_data.dart';
-import 'package:my_movie_search/movies/search_providers/converters/search_google_movie_converter.dart';
+import 'package:my_movie_search/utilities/provider_controller.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/providers/search/offline/google.dart';
+import 'package:my_movie_search/movies/providers/search/converters/google.dart';
 
 const GOOGLE_RESULTS_PER_PAGE = 10; // More than 10 results in an error!
 
 /// Implements [SearchProvider] for searching the Open Movie Database.
 /// The Google API is a free web service to obtain movie information.
-class QueryGoogleMovies extends SearchProvider<MovieResultDTO> {
+class QueryGoogleMovies extends ProviderController<MovieResultDTO> {
   static final baseURL =
       "https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=";
 

@@ -2,12 +2,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:my_movie_search/movies/data_model/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/data_model/movie_result_dto.dart';
-import 'package:my_movie_search/movies/search_providers/search_google_movies.dart';
-import 'package:my_movie_search/movies/search_providers/search_imdb_suggestions.dart';
-import 'package:my_movie_search/movies/search_providers/search_omdb_movies.dart';
-import 'package:my_movie_search/movies/search_providers/search_tmdb_movies.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/providers/search/google.dart';
+import 'package:my_movie_search/movies/providers/search/imdb_suggestions.dart';
+import 'package:my_movie_search/movies/providers/search/omdb.dart';
+import 'package:my_movie_search/movies/providers/search/tmdb.dart';
 
 import 'movie_search_details.dart';
 
@@ -59,25 +59,25 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
     imdbStreamController!.stream.listen(// Lambda 1
         (searchResult) => setState(// Lambda2
             () => addDto(searchResult)));
-    QueryIMDBSuggestions().executeQuery(imdbStreamController!, _criteria);
+    QueryIMDBSuggestions().populate(imdbStreamController!, _criteria);
 
     omdbStreamController = StreamController.broadcast();
     omdbStreamController!.stream.listen(// Lambda 1
         (searchResult) => setState(// Lambda2
             () => addDto(searchResult)));
-    QueryOMDBMovies().executeQuery(omdbStreamController!, _criteria);
+    QueryOMDBMovies().populate(omdbStreamController!, _criteria);
 
     tmdbStreamController = StreamController.broadcast();
     tmdbStreamController!.stream.listen(// Lambda 1
         (searchResult) => setState(// Lambda2
             () => addDto(searchResult)));
-    QueryTMDBMovies().executeQuery(tmdbStreamController!, _criteria);
+    QueryTMDBMovies().populate(tmdbStreamController!, _criteria);
 
     googleStreamController = StreamController.broadcast();
     googleStreamController!.stream.listen(// Lambda 1
         (searchResult) => setState(// Lambda2
             () => addDto(searchResult)));
-    QueryGoogleMovies().executeQuery(googleStreamController!, _criteria);
+    QueryGoogleMovies().populate(googleStreamController!, _criteria);
   }
 
   void addDto(MovieResultDTO searchResult) {
