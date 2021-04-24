@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:my_movie_search/app.dart';
 import 'package:universal_io/io.dart'
     show Platform; // limit inclusions to reduce size
+import 'package:my_movie_search/app.dart';
+
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 import 'package:my_movie_search/utilities/online_offline_search.dart';
+import 'package:my_movie_search/movies/providers/repository.dart';
 
 Future main() async {
   // Load variable from operating system environmnt or from .env file
@@ -19,5 +21,5 @@ Future main() async {
   // If OFFLINE environment variable is not set behavior defaults to online
   OnlineOfflineSelector.init(DotEnv.env["OFFLINE"]);
 
-  runApp(MMSearchApp());
+  runApp(MMSearchApp(movieRepository:MovieRepository ()));
 }

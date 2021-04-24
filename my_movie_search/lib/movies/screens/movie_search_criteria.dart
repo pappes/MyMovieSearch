@@ -10,6 +10,10 @@ class MovieSearchCriteriaPage extends StatefulWidget {
   @override
   _MovieSearchCriteriaPageState createState() =>
       _MovieSearchCriteriaPageState();
+
+  static Route route() {
+    return MaterialPageRoute<void>(builder: (_) => MovieSearchCriteriaPage());
+  }
 }
 
 class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
@@ -55,7 +59,7 @@ class _MovieSearchCriteriaBody extends Center {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             _MovieSearchCrieriaTop(state),
-            _MovieSearchCritriaMid(state),
+            _MovieSearchCriteriaMid(state),
           ],
         ));
 }
@@ -99,8 +103,8 @@ class _MovieSearchCrieriaTop extends Center {
         ));
 }
 
-class _MovieSearchCritriaMid extends Center {
-  _MovieSearchCritriaMid(_MovieSearchCriteriaPageState state)
+class _MovieSearchCriteriaMid extends Center {
+  _MovieSearchCriteriaMid(_MovieSearchCriteriaPageState state)
       : super(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
