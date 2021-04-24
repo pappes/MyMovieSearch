@@ -1,3 +1,18 @@
+import 'package:equatable/equatable.dart';
+
+class SearchRequest extends Equatable {
+  const SearchRequest(this.title);
+
+  final String title;
+
+  @override
+  List<Object> get props => [title];
+
+  static const empty = SearchRequest('-');
+}
+
+enum SearchStatus { awaitingInput, searching, displayingResults }
+
 enum SearchCriteriaSource {
   none,
   google,

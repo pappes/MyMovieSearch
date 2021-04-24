@@ -3,7 +3,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
-  MovieSearchCriteriaPage({Key? key}) : super(key: key);
+  const MovieSearchCriteriaPage({Key? key}) : super(key: key);
 
   final String title = "Movie Search Criteria";
 

@@ -4,14 +4,10 @@ import 'dart:async';
 import 'dart:convert';
 
 class JsonPState {
-  JsonPState() {
-    activated = false;
-    buffering = false;
-    buffer = "";
-  }
-  var activated; // true if stream has encounted [, { or (
-  var buffering; // true if stream stripped a JSONP prefix.
-  var buffer; // Stream content that has not been released.
+  JsonPState();
+  var activated = false; // true if stream has encounted [, { or (
+  var buffering = false; // true if stream stripped a JSONP prefix.
+  var buffer = ""; // Stream content that has not been released.
 
   String toString() {
     return "activated=$activated buffering=$buffering buffer=$buffer";
@@ -32,10 +28,10 @@ class JsonPConversionSink extends Sink<String> {
 /// When used as a [StreamTransformer], the input stream may emit
 /// multiple strings. Where necesary streamed input will be buffered.
 class JsonPDecoder extends Converter<String, String> {
-  final _state;
+  final _state = JsonPState();
 
   /// Constructs a new JsonPEncoder.
-  JsonPDecoder() : _state = JsonPState();
+  JsonPDecoder();
 
   /// Converts the given JSONP-string [input] to its corresponding json.
   String convert(String input) {

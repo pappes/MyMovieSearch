@@ -37,9 +37,7 @@ void main() {
     testMultiLineConversion(List<String> lines, expectedOutput) {
       var decoder = JsonPDecoder();
       var actualOutput = "";
-      lines.forEach((line) {
-        actualOutput += decoder.convert(line);
-      });
+      for (var line in lines) actualOutput += decoder.convert(line);
       expect(actualOutput, expectedOutput,
           reason: "input:$lines decoder:${decoder.toString()}");
     }

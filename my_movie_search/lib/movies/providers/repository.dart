@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 
@@ -11,6 +13,7 @@ class MovieRepository {
   final QueryOMDBMovies _omdbSearch;
   final QueryTMDBMovies _tmdbSearch;
   final QueryGoogleMovies _googleSearch;
+  final _controller = StreamController<MovieResultDTO>();
 
   MovieRepository()
       : _imdbSearch = QueryIMDBSuggestions(),
@@ -18,36 +21,45 @@ class MovieRepository {
         _tmdbSearch = QueryTMDBMovies(),
         _googleSearch = QueryGoogleMovies();
 
-  Future<List<MovieResultDTO>> search(SearchCriteriaDTO criteria) async {
-    // TODO: error handling and concurrency
-    final imdbData = _imdbSearch.read(criteria);
-    final omdbData = _omdbSearch.read(criteria);
-    final tmdbData = _tmdbSearch.read(criteria);
-    final googleData = _googleSearch.read(criteria);
-    final Map<String, MovieResultDTO> allResults = {};
-    final List<MovieResultDTO> sortedResults = [];
-    addDto(allResults, sortedResults, imdbData);
-    addDto(allResults, sortedResults, omdbData);
-    addDto(allResults, sortedResults, tmdbData);
-    addDto(allResults, sortedResults, googleData);
+  Stream<MovieResultDTO> search(SearchCriteriaDTO criteria) async* {
+    var feedback = MovieResultDTO();
+    feedback.title = 'Searching ...';
+    yield feedback;
 
-    Future.wait([imdbData, omdbData, tmdbData, googleData]);
-    return sortedResults;
+    // TODO: error handling
+    _initSearch(criteria);
+
+    yield* _controller.stream;
   }
-}
 
-void addDto(
-  Map<String, MovieResultDTO> allResults,
-  List<MovieResultDTO> uniqueResults,
-  Future<List<MovieResultDTO>> newResults,
-) async {
-  (await newResults).forEach((newValue) {
+  void dispose() => _controller.close();
+
+  void _initSearch(
+    SearchCriteriaDTO criteria,
+  ) {
+    for (var provider in [
+      _imdbSearch,
+      _omdbSearch,
+      _tmdbSearch,
+      _googleSearch,
+    ]) {
+      provider
+          .read(criteria)
+          .then((values) => values.forEach((dto) => _controller.add(dto)));
+    }
+  }
+
+  static void insertSort(
+    Map<String, MovieResultDTO> allResults,
+    List<MovieResultDTO>? sortedResults,
+    MovieResultDTO newValue,
+  ) {
     if (newValue.uniqueId == '-1' ||
         !allResults.containsKey(newValue.uniqueId)) {
       allResults[newValue.uniqueId] = newValue;
-      uniqueResults = allResults.values.toList();
+      sortedResults = allResults.values.toList();
       // Sort by relevence with recent year first
-      uniqueResults.sort((a, b) => b.compareTo(a));
+      sortedResults.sort((a, b) => b.compareTo(a));
     }
-  });
+  }
 }

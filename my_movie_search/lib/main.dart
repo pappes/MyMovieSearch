@@ -19,5 +19,5 @@ Future main() async {
   // If OFFLINE environment variable is not set behavior defaults to online
   OnlineOfflineSelector.init(DotEnv.env["OFFLINE"]);
 
-  runApp(MyApp());
+  runApp(MMSearchApp());
 }
