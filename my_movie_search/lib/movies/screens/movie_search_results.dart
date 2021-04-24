@@ -142,11 +142,11 @@ class _MovieTileBuilder {
   static Widget _buildRow(BuildContext context, MovieResultDTO movie) {
     return ListTile(
       leading: movie.imageUrl == ''
-          ? Text('X')
+          ? CircularProgressIndicator()
           : Image(
               image: NetworkImage(movie.imageUrl),
             ),
-      title: Text(
+      title: SelectableText(
         "${movie.title}(${movie.yearRange == '' ? movie.year : movie.yearRange}, ${describeEnum(movie.source)})",
         style: _biggerFont,
         textScaleFactor: 1.0,

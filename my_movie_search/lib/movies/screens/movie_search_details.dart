@@ -39,7 +39,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       ),
       body: Column(
         children: [
-          Text(_movie.title, style: _biggerFont),
+          SelectableText(_movie.title, style: _biggerFont),
           Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             _movie.yearRange == ''
                 ? Text('Year: ${_movie.year.toString()}')

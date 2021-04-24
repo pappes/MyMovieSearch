@@ -25,8 +25,8 @@ const inner_element_rating_count = 'ratingcount';
 const inner_element_identity_element = 'pageid';
 const inner_element_type_element = 'og:type';
 const inner_element_image_element = 'og:image';
-const OMDB_RESULT_TYPE_MOVIE = "video.movie";
-const OMDB_RESULT_TYPE_SERIES = "video.tv_show";
+const OMDB_RESULT_TYPE_MOVIE = 'video.movie';
+const OMDB_RESULT_TYPE_SERIES = 'video.tv_show';
 
 class GoogleMovieSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
@@ -43,7 +43,7 @@ class GoogleMovieSearchConverter {
     } catch (e) {
       final error = MovieResultDTO();
       error.title =
-          "Unknown google error - potential API change! $e ${map.toString()}";
+          'Unknown google error - potential API change! $e ${map.toString()}';
       searchResults.add(error);
     }
     return searchResults;
@@ -55,11 +55,11 @@ class GoogleMovieSearchConverter {
     final resultsError = map[outer_element_error_failure];
     if (resultsError != null) {
       error.title = resultsError[inner_element_error_failure_reason] ??
-          "No failure reason provided in results";
+          'No failure reason provided in results';
     } else {
-      error.title = "Google found no matching results ${map.toString()}";
+      error.title = 'Google found no matching results ${map.toString()}';
     }
-    error.title += " ${map.toString()}";
+    error.title += ' ${map.toString()}';
     return [error];
   }
 
@@ -85,9 +85,9 @@ class GoogleMovieSearchConverter {
   }
 
   static String getTitle(Map map) {
-    final String title = map[inner_element_title_element] ?? "";
-    final lastOpen = title.lastIndexOf("(");
-    return title.substring(0, lastOpen);
+    final String title = map[inner_element_title_element] ?? '';
+    final lastOpen = title.lastIndexOf('(');
+    return lastOpen > 1 ? title.substring(0, lastOpen) : title;
   }
 
   static String getID(Map map) {
@@ -95,15 +95,16 @@ class GoogleMovieSearchConverter {
   }
 
   static String getYearRange(Map map) {
-    // Extract year range from "title (TV Series 1988–1993)"
-    final String title = map[inner_element_title_element] ?? "";
-    final lastOpen = title.lastIndexOf("(");
-    final lastClose = title.lastIndexOf(")");
-    final yearRange = title.substring(lastOpen + 1, lastClose);
+    // Extract year range from 'title (TV Series 1988–1993)'
+    final String title = map[inner_element_title_element] ?? '';
+    final lastOpen = title.lastIndexOf('(');
+    final lastClose = title.lastIndexOf(')');
+    if (lastOpen == -1 || lastClose == -1) return '';
 
+    final yearRange = title.substring(lastOpen + 1, lastClose);
     final filter = RegExp(r'[0-9].*[0-9]');
     final numerics = filter.stringMatch(yearRange);
-    return numerics ?? "";
+    return numerics ?? '';
   }
 
   static MovieContentType getType(Map map) {
@@ -119,7 +120,7 @@ class GoogleMovieSearchConverter {
   }
 
   static String getImage(Map map) {
-    return map[inner_element_image_element] ?? "";
+    return map[inner_element_image_element] ?? '';
   }
 
   static double getRatingValue(Map map) {
