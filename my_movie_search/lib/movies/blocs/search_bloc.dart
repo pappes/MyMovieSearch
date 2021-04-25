@@ -47,5 +47,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   void receiveDTO(MovieResultDTO newValue) {
     MovieRepository.insertSort(allResults!, sortedResults, newValue);
+    add(SearchDataReceived());
   }
 }

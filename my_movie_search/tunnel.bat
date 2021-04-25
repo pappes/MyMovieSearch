@@ -1,2 +1,2 @@
-cd \Users\dj\Documents\git\SimpleProxy\simple_proxy
+cd ..\..\SimpleProxy\simple_proxy
 dart run

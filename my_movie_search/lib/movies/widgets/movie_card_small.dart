@@ -1,48 +1,46 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
+import 'package:my_movie_search/movies/screens/movie_search_details.dart';
+import 'package:my_movie_search/utilities/extensions.dart';
 
-typedef MovieResultDTO MovieFetcher(String id);
+class MovieTile extends ListTile {
+  MovieTile(BuildContext context, MovieResultDTO movie)
+      : super(
+          leading: _getImage(movie.imageUrl),
+          title: _getTitle(movie),
+          subtitle: _getDescription(movie),
+          onTap: () => _openDetails(context, movie),
+        );
 
-late Map<String, MovieResultDTO> buffer;
-
-class MovieCard extends StatefulWidget {
-  MovieCard({Key? key, required this.uniqueId}) : super(key: key);
-
-  final String uniqueId;
-
-  MovieResultDTO getMovieData(String key) => buffer[key]!;
-
-  @override
-  _MovieCardState createState() => _MovieCardState(uniqueId, getMovieData);
-}
-
-class _MovieCardState extends State<MovieCard> {
-  _MovieCardState(this.uniqueId, this.source);
-  MovieFetcher source;
-  String uniqueId;
-  // TODO move metadata handling somewhere else and
-  // use it to determine if data from a more authoritive source is required
-  var _metadata = MetaDataDTO();
-
-  Widget build(BuildContext context) {
-    // This method is rerun every time setState is called.
-    return _MovieTileWidgetBuilder.buildCard(source(uniqueId));
-  }
-}
-
-class _MovieTileWidgetBuilder {
-  _MovieTileWidgetBuilder();
-
-  static final _biggerFont = TextStyle(fontSize: 18.0);
-  static Widget buildCard(MovieResultDTO movie) {
-    return ListTile(
-      title: Text(
-        movie.title,
-        style: _biggerFont,
-        textScaleFactor: 1.0,
-      ),
+  static Widget _getTitle(MovieResultDTO movie) {
+    return SelectableText(
+      '${movie.title}(${movie.yearRange == '' ? movie.year : movie.yearRange}, '
+      '${describeEnum(movie.source)})',
+      textScaleFactor: 1.0,
     );
+  }
+
+  static Widget _getDescription(MovieResultDTO movie) {
+    return Text(
+      ' ${describeEnum(movie.type)}   ${movie.runTime.toFormattedTime()} - '
+      '${movie.userRating} (${movie.userRatingCount})',
+      textScaleFactor: 1.0,
+    );
+  }
+
+  static _openDetails(BuildContext context, MovieResultDTO movie) {
+    if (movie.uniqueId != '-1') {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MovieDetailsPage(movie: movie)),
+      );
+    }
+  }
+
+  static Widget _getImage(String url) {
+    if (url == '') return CircularProgressIndicator();
+    return Image(image: NetworkImage(url));
   }
 }

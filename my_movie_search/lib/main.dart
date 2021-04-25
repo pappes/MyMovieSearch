@@ -10,6 +10,7 @@ import 'package:my_movie_search/movies/providers/repository.dart';
 Future main() async {
   // Load variable from operating system environmnt or from .env file
   try {
+    await DotEnv.testLoad(fileInput: "OFFLINE=true");
     await DotEnv.load(fileName: ".env");
     await DotEnv.load(mergeWith: Platform.environment);
   } catch (e) {
@@ -21,5 +22,5 @@ Future main() async {
   // If OFFLINE environment variable is not set behavior defaults to online
   OnlineOfflineSelector.init(DotEnv.env["OFFLINE"]);
 
-  runApp(MMSearchApp(movieRepository:MovieRepository ()));
+  runApp(MMSearchApp(movieRepository: MovieRepository()));
 }

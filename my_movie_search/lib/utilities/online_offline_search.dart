@@ -11,7 +11,10 @@ class OnlineOfflineSelector<T> {
 
   /// Initialise the selector.
   static init(offline) {
-    _offline = offline?.toString().toLowerCase() == "true" ? true : false;
+    if (offline == null)
+      _offline = true;
+    else
+      _offline = offline.toString().toLowerCase() == "true";
     logger.i('OnlineOfflineSelector initialised to: '
         '${_offline ? 'offline' : 'online'}');
   }

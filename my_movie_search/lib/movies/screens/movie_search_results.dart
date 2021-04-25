@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/providers/search/google.dart';
 import 'package:my_movie_search/movies/providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/movies/providers/search/omdb.dart';
 import 'package:my_movie_search/movies/providers/search/tmdb.dart';
+import 'package:my_movie_search/movies/widgets/movie_card_small.dart';
 
 import 'movie_search_details.dart';
 
@@ -93,23 +94,14 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called.
     return Scaffold(
-        appBar: AppBar(
-          // Use the search criteria to set our appbar title.
-          title: Text('${widget.title} - ${widget._criteria.criteriaTitle}'),
-        ),
-        body: Center(
-          child: _buildMovieResults(),
-        )
-        //ListView.builder(
-        //itemBuilder: (BuildContext context, int index) => _buildMovieResults(),
-        //body: _buildMovieResults(),
-/*      body: _MovieSearchResultsBody(this),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _reloadResults,
-        tooltip: 'Search',
-        child: Icon(Icons.search),
-      ),*/
-        );
+      appBar: AppBar(
+        // Use the search criteria to set our appbar title.
+        title: Text('${widget.title} - ${widget._criteria.criteriaTitle}'),
+      ),
+      body: Center(
+        child: _buildMovieResults(),
+      ),
+    );
   }
 
   Widget _buildMovieResults() {
@@ -120,51 +112,12 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsPage> {
     );
   }
 
-  Widget _movieListBuilder(context, listIndex) {
+  Widget _movieListBuilder(BuildContext context, int listIndex) {
     if (listIndex >= _sortedResults.length) {
       return ListTile(
           title: Text("More widgets than available data to populate them!"));
     }
     MovieResultDTO fetchedResult = _sortedResults[listIndex];
-    return _MovieTileBuilder._buildRow(context, fetchedResult);
-  }
-}
-
-class _MovieTileBuilder {
-  static String _printDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
-    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
-  }
-
-  static final _biggerFont = TextStyle(fontSize: 18.0);
-  static Widget _buildRow(BuildContext context, MovieResultDTO movie) {
-    return ListTile(
-      leading: movie.imageUrl == ''
-          ? CircularProgressIndicator()
-          : Image(
-              image: NetworkImage(movie.imageUrl),
-            ),
-      title: SelectableText(
-        "${movie.title}(${movie.yearRange == '' ? movie.year : movie.yearRange}, ${describeEnum(movie.source)})",
-        style: _biggerFont,
-        textScaleFactor: 1.0,
-      ),
-      subtitle: Text(
-        " ${describeEnum(movie.type)}   ${_printDuration(movie.runTime)} - ${movie.userRating} (${movie.userRatingCount})",
-        style: _biggerFont,
-        textScaleFactor: 1.0,
-      ),
-      onTap: () {
-        if (movie.uniqueId != '-1') {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MovieDetailsPage(movie: movie)),
-          );
-        }
-      },
-    );
+    return MovieTile(context, fetchedResult);
   }
 }
