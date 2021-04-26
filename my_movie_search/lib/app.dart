@@ -36,19 +36,6 @@ class MMSearchApp extends StatelessWidget {
     );
   }
 }
-// This widget is the root of your application.
-/*@override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'My Movie Search',
-      theme: ThemeData(brightness: Brightness.light),
-      darkTheme: ThemeData(brightness: Brightness.dark),
-      themeMode: ThemeMode.system, //dark or light or system
-      home: MovieSearchCriteriaPage(),
-      //   home: MovieHomePage(),
-    );
-  }*/
-//}
 
 class AppView extends StatefulWidget {
   @override

@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:equatable/equatable.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 export 'package:my_movie_search/movies/models/metadata_dto.dart';
 

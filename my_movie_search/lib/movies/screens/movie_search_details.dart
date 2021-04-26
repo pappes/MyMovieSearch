@@ -32,16 +32,20 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       body: Column(
         children: [
           SelectableText(_movie.title, style: biggerFont),
-          Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            _movie.yearRange == ''
-                ? Text('Year: ${_movie.year.toString()}')
-                : Text('Year Range: ${_movie.yearRange}'),
-            Align(
-                alignment: Alignment.centerRight,
-                child: Text('Run Time: ${_movie.runTime.toFormattedTime()}')),
-          ]),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _movie.yearRange == ''
+                  ? Text('Year: ${_movie.year.toString()}')
+                  : Text('Year Range: ${_movie.yearRange}'),
+              Align(
+                  alignment: Alignment.centerRight,
+                  child: Text('Run Time: ${_movie.runTime.toFormattedTime()}')),
+            ],
+          ),
           Expanded(
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,13 +60,18 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                     ]),
                   ],
                 ),
-                _movie.imageUrl == ''
-                    ? Text('NoImage')
-                    : Expanded(
-                        child: Image(
-                            image: NetworkImage(_movie.imageUrl),
-                            alignment: Alignment.centerRight),
-                      ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    _movie.imageUrl == '' || !_movie.imageUrl.startsWith('http')
+                        ? Text('NoImage')
+                        : Expanded(
+                            child: Image(
+                                image: NetworkImage(_movie.imageUrl),
+                                alignment: Alignment.centerRight),
+                          ),
+                  ],
+                ),
               ],
             ),
           ),

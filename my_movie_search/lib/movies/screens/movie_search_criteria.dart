@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 
+import 'movie_search_results_new.dart';
+
 class MovieSearchCriteriaPage extends StatefulWidget {
   const MovieSearchCriteriaPage({Key? key}) : super(key: key);
 
@@ -29,7 +31,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => MovieSearchResultsPage(criteria: this)),
+          builder: (context) => MovieSearchResultsNewPage(criteria: this)),
     );
   }
 

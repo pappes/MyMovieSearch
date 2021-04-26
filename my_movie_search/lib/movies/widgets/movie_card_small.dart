@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/movie_search_details.dart';
+import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/utilities/extensions.dart';
 
 class MovieTile extends ListTile {
@@ -25,22 +26,21 @@ class MovieTile extends ListTile {
   static Widget _getDescription(MovieResultDTO movie) {
     return Text(
       ' ${describeEnum(movie.type)}   ${movie.runTime.toFormattedTime()} - '
-      '${movie.userRating} (${movie.userRatingCount})',
+      '${movie.userRating} (${formatter.format(movie.userRatingCount)})',
       textScaleFactor: 1.0,
     );
   }
 
   static _openDetails(BuildContext context, MovieResultDTO movie) {
-    if (movie.uniqueId != '-1') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MovieDetailsPage(movie: movie)),
-      );
-    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => MovieDetailsPage(movie: movie)),
+    );
   }
 
   static Widget _getImage(String url) {
-    if (url == '') return CircularProgressIndicator();
+    if (url == '' || !url.startsWith('http'))
+      return CircularProgressIndicator();
     return Image(image: NetworkImage(url));
   }
 }

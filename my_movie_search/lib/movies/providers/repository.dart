@@ -51,13 +51,14 @@ class MovieRepository {
 
   static void insertSort(
     Map<String, MovieResultDTO> allResults,
-    List<MovieResultDTO>? sortedResults,
+    List<MovieResultDTO> sortedResults,
     MovieResultDTO newValue,
   ) {
     if (newValue.uniqueId == '-1' ||
         !allResults.containsKey(newValue.uniqueId)) {
       allResults[newValue.uniqueId] = newValue;
-      sortedResults = allResults.values.toList();
+      sortedResults.clear();
+      sortedResults.addAll(allResults.values.toList());
       // Sort by relevence with recent year first
       sortedResults.sort((a, b) => b.compareTo(a));
     }

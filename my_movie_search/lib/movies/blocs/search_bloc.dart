@@ -14,27 +14,30 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   final MovieRepository movieRepository;
   StreamSubscription<MovieResultDTO>? _searchStatusSubscription;
-  Map<String, MovieResultDTO>? allResults;
-  List<MovieResultDTO>? sortedResults;
+  Map<String, MovieResultDTO> allResults = {};
+  List<MovieResultDTO> sortedResults = [];
 
   @override
   Stream<SearchState> mapEventToState(
     SearchEvent event,
   ) async* {
     if (event is SearchCompleted) {
-      yield SearchState.displayingResults();
+      yield SearchState.displayingResults(sortedResults);
     } else if (event is SearchCancelled) {
       yield SearchState.awaitingInput();
     } else if (event is SearchDataReceived) {
-      yield SearchState.updateResults();
+      //TODO : get UI to respond to every SearchDataReceived event (even non unique events)
+      yield SearchState.updateResultsTic();
+      yield SearchState.updateResultsToc();
     } else if (event is SearchRequested) {
       yield SearchState.searching(SearchRequest(event.criteria.criteriaTitle));
-      allResults = {};
+      //allResults.clear();
+      //sortedResults.clear();
       _searchStatusSubscription = movieRepository
           .search(event.criteria)
           .listen((dto) => receiveDTO(dto))
             ..onDone(() => add(SearchCompleted()));
-      yield SearchState.updateResults();
+      yield SearchState.updateResultsTic();
     }
   }
 
@@ -46,7 +49,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   void receiveDTO(MovieResultDTO newValue) {
-    MovieRepository.insertSort(allResults!, sortedResults, newValue);
+    MovieRepository.insertSort(allResults, sortedResults, newValue);
     add(SearchDataReceived());
   }
 }

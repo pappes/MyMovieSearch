@@ -10,8 +10,6 @@ import 'package:my_movie_search/movies/providers/search/omdb.dart';
 import 'package:my_movie_search/movies/providers/search/tmdb.dart';
 import 'package:my_movie_search/movies/widgets/movie_card_small.dart';
 
-import 'movie_search_details.dart';
-
 class MovieSearchResultsPage extends StatefulWidget {
   MovieSearchResultsPage({Key? key, required SearchCriteriaDTO criteria})
       : _criteria = criteria,

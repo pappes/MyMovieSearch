@@ -11,9 +11,10 @@ class SearchState extends Equatable {
   const SearchState.searching(SearchRequest request)
       : this._(status: SearchStatus.searching, request: request);
 
-  const SearchState.updateResults() : this._();
+  const SearchState.updateResultsTic() : this._();
+  const SearchState.updateResultsToc() : this._();
 
-  const SearchState.displayingResults()
+  const SearchState.displayingResults(List<MovieResultDTO> _results)
       : this._(status: SearchStatus.displayingResults);
 
   final SearchStatus status;
