@@ -22,34 +22,41 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     SearchEvent event,
   ) async* {
     if (event is SearchCompleted) {
-      yield SearchState.displayingResults(sortedResults);
+      sortResults();
+      yield SearchState.displayingResults();
     } else if (event is SearchCancelled) {
       yield SearchState.awaitingInput();
-    } else if (event is SearchDataReceived) {
-      //TODO : get UI to respond to every SearchDataReceived event (even non unique events)
-      yield SearchState.updateResultsTic();
-      yield SearchState.updateResultsToc();
     } else if (event is SearchRequested) {
       yield SearchState.searching(SearchRequest(event.criteria.criteriaTitle));
-      //allResults.clear();
-      //sortedResults.clear();
+      allResults.clear();
+      sortedResults.clear();
       _searchStatusSubscription = movieRepository
           .search(event.criteria)
           .listen((dto) => receiveDTO(dto))
             ..onDone(() => add(SearchCompleted()));
-      yield SearchState.updateResultsTic();
     }
   }
 
   @override
   Future<void> close() {
     _searchStatusSubscription?.cancel();
-    movieRepository.dispose();
+    movieRepository.close();
     return super.close();
   }
 
   void receiveDTO(MovieResultDTO newValue) {
-    MovieRepository.insertSort(allResults, sortedResults, newValue);
-    add(SearchDataReceived());
+    if (newValue.uniqueId == '-1' ||
+        !allResults.containsKey(newValue.uniqueId)) {
+      allResults[newValue.uniqueId] = newValue;
+    }
+    add(SearchDataReceived(allResults.values.toList()));
+  }
+
+  void sortResults() {
+    sortedResults.clear();
+    sortedResults.addAll(allResults.values.toList());
+    // Sort by relevence with recent year first
+    sortedResults.sort((a, b) => b.compareTo(a));
+    add(SearchDataReceived(sortedResults));
   }
 }

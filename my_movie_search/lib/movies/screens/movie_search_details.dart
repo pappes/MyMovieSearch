@@ -25,8 +25,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
 
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created
-        // by the App.build method, and use it to set our appbar title.
+        // Get title from the StatefulWidget MovieDetailsPage.
         title: Text(widget._movie.title),
       ),
       body: Column(

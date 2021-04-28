@@ -17,10 +17,11 @@ class SearchRequested extends SearchEvent {
 }
 
 class SearchDataReceived extends SearchEvent {
-  const SearchDataReceived();
+  const SearchDataReceived(this.results);
 
+  final List<MovieResultDTO> results;
   @override
-  List<Object> get props => [];
+  List<Object> get props => [results];
 }
 
 class SearchCompleted extends SearchEvent {

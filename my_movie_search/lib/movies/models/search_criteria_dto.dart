@@ -11,7 +11,7 @@ class SearchRequest extends Equatable {
   static const empty = SearchRequest('-');
 }
 
-enum SearchStatus { awaitingInput, searching, displayingResults }
+enum SearchStatus { awaitingInput, searching, cacheDirty, displayingResults }
 
 enum SearchCriteriaSource {
   none,

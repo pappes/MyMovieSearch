@@ -6,13 +6,11 @@ import 'package:my_movie_search/movies/blocs/search_bloc.dart';
 import 'package:my_movie_search/movies/screens/movie_search_criteria.dart';
 //import 'package:my_movie_search/screens/webveiw/webview_testing.dart';
 
-//class MyApp extends MaterialApp {
-
-/// {@template counter_app}
+/// {@template mmsearch_app}
 /// A [MaterialApp] which sets the `home` to [MovieSearchCriteriaPage].
 /// {@endtemplate}
 class MMSearchApp extends StatelessWidget {
-  /// {@macro counter_app}
+  /// {@macro mmsearch_app}
   const MMSearchApp({Key? key, required this.movieRepository})
       : super(
           key: key,
@@ -27,6 +25,7 @@ class MMSearchApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO: use bloc provider and reposiotry provider on search screens
     return RepositoryProvider.value(
       value: movieRepository,
       child: BlocProvider(
@@ -51,7 +50,7 @@ class _AppViewState extends State<AppView> {
   Widget build(BuildContext context) {
     return MaterialApp(
       navigatorKey: _navigatorKey,
-      builder: (context, child) {
+      /*builder: (context, child) {
         return BlocListener<SearchBloc, SearchState>(
           listener: (context, state) {
             switch (state.status) {
@@ -73,7 +72,7 @@ class _AppViewState extends State<AppView> {
           },
           child: child,
         );
-      },
+      },*/
       onGenerateRoute: (_) => MovieSearchCriteriaPage.route(),
     );
   }

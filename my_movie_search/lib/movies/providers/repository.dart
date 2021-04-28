@@ -13,7 +13,8 @@ class MovieRepository {
   final QueryOMDBMovies _omdbSearch;
   final QueryTMDBMovies _tmdbSearch;
   final QueryGoogleMovies _googleSearch;
-  final _controller = StreamController<MovieResultDTO>();
+  StreamController<MovieResultDTO>? _movieStreamController;
+  var awaitingProviders = 0;
 
   MovieRepository()
       : _imdbSearch = QueryIMDBSuggestions(),
@@ -26,13 +27,20 @@ class MovieRepository {
     feedback.title = 'Searching ...';
     yield feedback;
 
+    _movieStreamController = StreamController<MovieResultDTO>();
     // TODO: error handling
     _initSearch(criteria);
 
-    yield* _controller.stream;
+    yield* _movieStreamController!.stream;
   }
 
-  void dispose() => _controller.close();
+  void close() {
+    var feedback = MovieResultDTO();
+    feedback.title = 'Search completed ...';
+    _movieStreamController?.add(feedback);
+    _movieStreamController?.close();
+    _movieStreamController = null;
+  }
 
   void _initSearch(
     SearchCriteriaDTO criteria,
@@ -43,24 +51,20 @@ class MovieRepository {
       _tmdbSearch,
       _googleSearch,
     ]) {
+      awaitingProviders++;
       provider
           .read(criteria)
-          .then((values) => values.forEach((dto) => _controller.add(dto)));
+          .then((values) => _addResults(values))
+          .whenComplete(_finishProvider);
     }
   }
 
-  static void insertSort(
-    Map<String, MovieResultDTO> allResults,
-    List<MovieResultDTO> sortedResults,
-    MovieResultDTO newValue,
-  ) {
-    if (newValue.uniqueId == '-1' ||
-        !allResults.containsKey(newValue.uniqueId)) {
-      allResults[newValue.uniqueId] = newValue;
-      sortedResults.clear();
-      sortedResults.addAll(allResults.values.toList());
-      // Sort by relevence with recent year first
-      sortedResults.sort((a, b) => b.compareTo(a));
-    }
+  void _addResults(List<MovieResultDTO> values) {
+    values.forEach((dto) => _movieStreamController?.add(dto));
+  }
+
+  void _finishProvider() {
+    awaitingProviders = awaitingProviders - 1;
+    if (awaitingProviders == 0) close();
   }
 }
