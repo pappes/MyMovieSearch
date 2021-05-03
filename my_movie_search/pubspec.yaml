@@ -33,6 +33,7 @@ dependencies:
   universal_io: ^2.0.4                 # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
   intl: ^0.17.0                        # internationalisation including number and data formatting
   equatable: ^2.0.0                    # Simplify object comparisons
+  web_scraper: ^0.1.4
 
 
   # The following adds the Cupertino Icons font to your application.

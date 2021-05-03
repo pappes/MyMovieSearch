@@ -48,6 +48,8 @@ abstract class ProviderController<T> {
         'got function, getting stream for ${dataSourceName()} using ${childClassDescriptor()}');
     final Stream<String> result = await source(criteria.criteriaTitle);
     logger.i('got stream getting data');
+    //var content = await result.reduce((value, element) => value + element);
+    //logger.i('reduced stream getting data$content');
 
     // Emit each element from the list as a seperate element.
     return transformStream(result).expand((element) => element);
@@ -111,8 +113,8 @@ abstract class ProviderController<T> {
   /// Can be overridden by child classes.
   /// Should call [transformMapSafe]
   /// to wrap [transformMap] in exception handling.
-  Stream<List<T>> transformStream(Stream<String> input) {
-    return input.transform(json.decoder).map(
+  Stream<List<T>> transformStream(Stream<String> input) async* {
+    yield* input.transform(json.decoder).map(
         (decodedMap) => transformMapSafe(decodedMap as Map<dynamic, dynamic>?));
   }
 

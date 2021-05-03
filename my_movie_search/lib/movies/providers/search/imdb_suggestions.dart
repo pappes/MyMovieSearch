@@ -3,7 +3,7 @@ import 'package:my_movie_search/utilities/provider_controller.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/jsonp_transformer.dart';
 import 'package:my_movie_search/movies/providers/search/converters/imdb_suggestion.dart';
-import 'package:my_movie_search/movies/providers/search/offline/imdb.dart';
+import 'package:my_movie_search/movies/providers/search/offline/imdb_suggestions.dart';
 
 import 'package:my_movie_search/utilities/web_redirect.dart';
 

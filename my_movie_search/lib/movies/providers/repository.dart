@@ -3,13 +3,15 @@ import 'dart:async';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 
-import 'package:my_movie_search/movies/providers/search/google.dart';
 import 'package:my_movie_search/movies/providers/search/imdb_suggestions.dart';
+import 'package:my_movie_search/movies/providers/search/imdb_search.dart';
 import 'package:my_movie_search/movies/providers/search/omdb.dart';
 import 'package:my_movie_search/movies/providers/search/tmdb.dart';
+import 'package:my_movie_search/movies/providers/search/google.dart';
 
 class MovieRepository {
-  final QueryIMDBSuggestions _imdbSearch;
+  final QueryIMDBSuggestions _imdbSuggestions;
+  final QueryIMDBSearch _imdbSearch;
   final QueryOMDBMovies _omdbSearch;
   final QueryTMDBMovies _tmdbSearch;
   final QueryGoogleMovies _googleSearch;
@@ -17,7 +19,8 @@ class MovieRepository {
   var awaitingProviders = 0;
 
   MovieRepository()
-      : _imdbSearch = QueryIMDBSuggestions(),
+      : _imdbSuggestions = QueryIMDBSuggestions(),
+        _imdbSearch = QueryIMDBSearch(),
         _omdbSearch = QueryOMDBMovies(),
         _tmdbSearch = QueryTMDBMovies(),
         _googleSearch = QueryGoogleMovies();
@@ -46,7 +49,8 @@ class MovieRepository {
     SearchCriteriaDTO criteria,
   ) {
     for (var provider in [
-      _imdbSearch,
+      //_imdbSearch,
+      _imdbSuggestions,
       _omdbSearch,
       _tmdbSearch,
       _googleSearch,
