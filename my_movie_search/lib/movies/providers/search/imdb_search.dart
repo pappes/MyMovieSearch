@@ -32,41 +32,59 @@ class QueryIMDBSearch extends ProviderController<MovieResultDTO> {
   }
 
   /// Scrape movie data from rows in the html table named findList.
-  //@override
+  @override
   Stream<List<MovieResultDTO>> transformStream(Stream<String> str) async* {
     List<MovieResultDTO> convertedResults = [];
 
-    //var content = await str.reduce((value, element) => value + element);
-    var content = imdbHtmlSampleFull;
+    // Combine all HTTP chunks together for HTML parsing
+    var content = await str.reduce((value, element) => '$value\n$element');
     var document = parse(content);
 
+    // Extract required tables from the dom (anthing named findList).
     var tables = document.getElementsByClassName(SEARCH_RESULTS_TABLE);
-    for (var table in tables) {
-      var rows = table.getElementsByType(ElementType.row);
-      for (var row in rows) {
-        var rowData = extractRowData(row);
-        var dtos = transformMapSafe(rowData);
-        convertedResults.addAll(dtos);
-      }
-    }
+    extractRowsFromTables(tables).forEach(
+        (rowData) => convertedResults.addAll(transformMapSafe(rowData)));
 
     yield convertedResults;
   }
 
-  /// Convert HTML row element into a map individual field data.
+  /// Scrape movie data from rows in any html table named findList.
+  List<Map> extractRowsFromTables(List<Element> tables) {
+    List<Map> htmlMovies = [];
+
+    for (var table in tables) {
+      var rows = table.getElementsByType(ElementType.row);
+      for (var row in rows) {
+        htmlMovies.add(extractRowData(row));
+      }
+    }
+
+    return htmlMovies;
+  }
+
+  /// Convert HTML row element into a map of individual field data.
+  /// <a title>       -> Title
+  /// <img>           -> Image
+  /// <a href>        -> AnchorAddress
+  /// <td> text </td> -> Info (year and type)
   Map<String, String?> extractRowData(Element tableRow) {
     Map<String, String?> rowData = {};
     for (var tableColumn in tableRow.children) {
       if (tableColumn.className == COLUMN_MOVIE_TEXT) {
-        rowData['Info'] = tableColumn.text;
+        // <td> text </td> -> Info
+        rowData[inner_element_info_element] = tableColumn.text;
         tableColumn.getElementsByType(ElementType.anchor).forEach((element) {
-          rowData['anchorAddress'] =
+          // <a href> -> AnchorAddress
+          rowData[inner_element_identity_element] =
               element.getAttribute(AttributeType.address);
-          rowData['Title'] = element.text;
+          // <a title> -> Title
+          rowData[inner_element_title_element] = element.text;
         });
       } else if (tableColumn.className == COLUMN_MOVIE_POSTER) {
+        // <img> -> Image
         tableColumn.getElementsByType(ElementType.image).forEach((element) {
-          rowData['image'] = element.getAttribute(AttributeType.source);
+          rowData[inner_element_image_element] =
+              element.getAttribute(AttributeType.source);
         });
       }
     }
@@ -80,13 +98,12 @@ class QueryIMDBSearch extends ProviderController<MovieResultDTO> {
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  List<MovieResultDTO> constructError(String message) {
+  MovieResultDTO constructError(String message) {
     var error = MovieResultDTO();
     error.title = '[${this.runtimeType}] $message';
     error.type = MovieContentType.custom;
     error.source = DataSourceType.imdb;
-    error.uniqueId = '-${error.source}';
-    return [error];
+    return error;
   }
 
   /// API call to IMDB search returning the top matching results for [searchText].

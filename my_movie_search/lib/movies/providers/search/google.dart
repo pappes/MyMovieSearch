@@ -35,13 +35,12 @@ class QueryGoogleMovies extends ProviderController<MovieResultDTO> {
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  List<MovieResultDTO> constructError(String message) {
-    var error = MovieResultDTO();
+  MovieResultDTO constructError(String message) {
+    var error = MovieResultDTO().error();
     error.title = "[${this.runtimeType}] $message";
     error.type = MovieContentType.custom;
     error.source = DataSourceType.google;
-    error.uniqueId = "-${error.source}";
-    return [error];
+    return error;
   }
 
   /// API call to Google returning the top 10 matching results for [searchText].

@@ -7,6 +7,7 @@ import 'package:my_movie_search/utilities/provider_controller.dart';
 import 'package:my_movie_search/utilities/online_offline_search.dart';
 
 typedef FutureOr<Stream<String>> DataSourceFn(String s);
+typedef List TransformFn(Map? map);
 
 /// Extend ProviderController to provide a dynamically switchable stream of <T>
 /// from online and offline sources.
@@ -48,8 +49,6 @@ abstract class ProviderController<T> {
         'got function, getting stream for ${dataSourceName()} using ${childClassDescriptor()}');
     final Stream<String> result = await source(criteria.criteriaTitle);
     logger.i('got stream getting data');
-    //var content = await result.reduce((value, element) => value + element);
-    //logger.i('reduced stream getting data$content');
 
     // Emit each element from the list as a seperate element.
     return transformStream(result).expand((element) => element);
@@ -88,7 +87,7 @@ abstract class ProviderController<T> {
   ///
   /// Should be overridden by child classes.
   /// Called from [transformMapSafe] when [transformMap] throws an exception.
-  List<T> constructError(String contents);
+  T constructError(String contents);
 
   /// Define the [Uri] called to fetch online data for criteria [searchText].
   ///
@@ -108,7 +107,7 @@ abstract class ProviderController<T> {
   ///
   /// Used for both online and offline operation.
   /// For online operation [input] is utf8 decoded
-  /// before being passed to transformStream().
+  /// before being passed to transformStreaawait m().
   ///
   /// Can be overridden by child classes.
   /// Should call [transformMapSafe]
@@ -155,10 +154,13 @@ abstract class ProviderController<T> {
           .i('${list.length} results returned from ${childClassDescriptor()}');
       return list;
     } catch (e) {
-      logger.e('Exception raised during transformMap, constructing error.');
-      logger.i(
-          '${this.runtimeType}].transformMapSafe stacktrace: ${StackTrace.current}');
-      return constructError('Could not interpret response ${map.toString()}');
+      logger.e('Exception raised during transformMap, constructing error'
+          ' for ${map.toString()}.');
+      logger.i('${this.runtimeType}].transformMapSafe stacktrace: '
+          '${StackTrace.current}');
+      var error =
+          constructError('Could not interpret response ' '${map.toString()}');
+      return [error];
     }
   }
 }

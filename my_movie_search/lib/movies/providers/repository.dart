@@ -49,7 +49,7 @@ class MovieRepository {
     SearchCriteriaDTO criteria,
   ) {
     for (var provider in [
-      //_imdbSearch,
+      _imdbSearch,
       _imdbSuggestions,
       _omdbSearch,
       _tmdbSearch,

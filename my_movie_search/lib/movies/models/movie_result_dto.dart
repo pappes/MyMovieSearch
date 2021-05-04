@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:equatable/equatable.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 export 'package:my_movie_search/movies/models/metadata_dto.dart';
 
@@ -77,6 +76,7 @@ extension MapDTOConversion on Map {
 }
 
 extension DTOHelpers on MovieResultDTO {
+  static int _lastError = -1;
   Map toMap() {
     Map<String, dynamic> map = Map();
     map[movieResultDTOSource] = this.source;
@@ -89,6 +89,12 @@ extension DTOHelpers on MovieResultDTO {
     map[movieResultDTOCensorRating] = this.censorRating;
     map[movieResultDTORunTime] = this.runTime;
     return map;
+  }
+
+  MovieResultDTO error() {
+    _lastError = _lastError - 1;
+    this.uniqueId = _lastError.toString();
+    return this;
   }
 
   String toPrintableString() {

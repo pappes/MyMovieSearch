@@ -116,7 +116,6 @@ class GoogleMovieSearchConverter {
       default:
         return MovieContentType.none;
     }
-    //}
   }
 
   static String getImage(Map map) {
