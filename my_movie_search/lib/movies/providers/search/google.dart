@@ -14,6 +14,7 @@ class QueryGoogleMovies extends ProviderController<MovieResultDTO> {
   static final baseURL =
       "https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=";
 
+  /// Describe where the data is comming from.
   @override
   String dataSourceName() {
     return describeEnum(DataSourceType.google);
@@ -29,8 +30,7 @@ class QueryGoogleMovies extends ProviderController<MovieResultDTO> {
   /// Convert google map to MovieResultDTO records.
   @override
   List<MovieResultDTO> transformMap(Map map) {
-    var x = GoogleMovieSearchConverter.dtoFromCompleteJsonMap(map);
-    return x;
+    return GoogleMovieSearchConverter.dtoFromCompleteJsonMap(map);
   }
 
   /// Include entire map in the movie title when an error occurs.

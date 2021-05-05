@@ -19,6 +19,7 @@ const COLUMN_MOVIE_POSTER = 'primary_photo';
 class QueryIMDBSearch extends ProviderController<MovieResultDTO> {
   static final baseURL = 'https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=';
 
+  /// Describe where the data is comming from.
   @override
   String dataSourceName() {
     return describeEnum(DataSourceType.imdb);
@@ -31,7 +32,7 @@ class QueryIMDBSearch extends ProviderController<MovieResultDTO> {
     return streamImdbHtmlOfflineData;
   }
 
-  /// Scrape movie data from rows in the html table named findList.
+  /// Scrape movie data from html table(s) named findList.
   @override
   Stream<List<MovieResultDTO>> transformStream(Stream<String> str) async* {
     List<MovieResultDTO> convertedResults = [];
@@ -48,7 +49,7 @@ class QueryIMDBSearch extends ProviderController<MovieResultDTO> {
     yield convertedResults;
   }
 
-  /// Scrape movie data from rows in any html table named findList.
+  /// Extract movie data from rows in html table(s).
   List<Map> extractRowsFromTables(List<Element> tables) {
     List<Map> htmlMovies = [];
 

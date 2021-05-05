@@ -11,6 +11,7 @@ import 'package:my_movie_search/movies/providers/search/converters/omdb.dart';
 class QueryOMDBMovies extends ProviderController<MovieResultDTO> {
   static final baseURL = "http://www.omdbapi.com/?apikey=";
 
+  /// Describe where the data is comming from.
   @override
   String dataSourceName() {
     return describeEnum(DataSourceType.omdb);

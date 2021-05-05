@@ -43,9 +43,9 @@ final imdbHtmlSampleFull = '''
               <div class="article">
                 <div  class="findSection">
                   <table class="findList">
-                    <tbody> 
+                  <tbody> 
 $imdbHtmlSampleInner
-                    </tbody>
+                  </tbody>
                   </table>
                 </div>
               </div>

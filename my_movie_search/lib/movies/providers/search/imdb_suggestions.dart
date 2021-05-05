@@ -12,6 +12,7 @@ import 'package:my_movie_search/utilities/web_redirect.dart';
 class QueryIMDBSuggestions extends ProviderController<MovieResultDTO> {
   static final baseURL = 'https://sg.media-imdb.com/suggests';
 
+  /// Describe where the data is comming from.
   @override
   String dataSourceName() {
     return describeEnum(DataSourceType.imdb);

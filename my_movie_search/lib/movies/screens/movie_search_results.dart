@@ -44,10 +44,13 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage> {
   Widget _buildMovieResults() {
     return BlocBuilder<SearchBloc, SearchState>(
       builder: (context, state) {
-        return ListView.builder(
-          padding: EdgeInsets.all(16.0),
-          itemCount: _searchBloc!.sortedResults.length,
-          itemBuilder: _movieListBuilder,
+        return Scrollbar(
+          isAlwaysShown: true,
+          child: ListView.builder(
+            padding: EdgeInsets.all(16.0),
+            itemCount: _searchBloc!.sortedResults.length,
+            itemBuilder: _movieListBuilder,
+          ),
         );
       },
     );

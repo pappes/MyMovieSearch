@@ -10,6 +10,7 @@ import 'package:my_movie_search/movies/providers/search/tmdb.dart';
 import 'package:my_movie_search/movies/providers/search/google.dart';
 
 class MovieRepository {
+  final QueryIMDBSuggestions _imdbDetails;
   final QueryIMDBSuggestions _imdbSuggestions;
   final QueryIMDBSearch _imdbSearch;
   final QueryOMDBMovies _omdbSearch;
@@ -19,7 +20,8 @@ class MovieRepository {
   var awaitingProviders = 0;
 
   MovieRepository()
-      : _imdbSuggestions = QueryIMDBSuggestions(),
+      : _imdbDetails = QueryIMDBSuggestions(),
+        _imdbSuggestions = QueryIMDBSuggestions(),
         _imdbSearch = QueryIMDBSearch(),
         _omdbSearch = QueryOMDBMovies(),
         _tmdbSearch = QueryTMDBMovies(),
@@ -64,6 +66,18 @@ class MovieRepository {
   }
 
   void _addResults(List<MovieResultDTO> values) {
+    values.forEach((dto) => _movieStreamController?.add(dto));
+    values.forEach((dto) => _getDetails(dto));
+  }
+
+  void _getDetails(MovieResultDTO value) async {
+    var criteria = SearchCriteriaDTO();
+    criteria.criteriaTitle = value.uniqueId;
+    _imdbDetails.read(criteria).then((values) => _addDetails(values));
+  }
+
+  void _addDetails(List<MovieResultDTO> values) {
+    values.forEach((dto) => print(dto.toString()));
     values.forEach((dto) => _movieStreamController?.add(dto));
   }
 

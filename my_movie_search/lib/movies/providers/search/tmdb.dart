@@ -14,13 +14,14 @@ import 'package:my_movie_search/movies/providers/search/converters/tmdb.dart';
 class QueryTMDBMovies extends ProviderController<MovieResultDTO> {
   static final baseURL = 'https://api.themoviedb.org/3/search/movie?api_key=';
 
+  /// Describe where the data is comming from.
   @override
   String dataSourceName() {
     return describeEnum(DataSourceType.tmdb);
   }
 
-  // Static snapshot of data for offline operation.
-  // Does not filter data based on criteria.
+  /// Static snapshot of data for offline operation.
+  /// Does not filter data based on criteria.
   @override
   DataSourceFn offlineData() => streamTmdbJsonOfflineData;
 
