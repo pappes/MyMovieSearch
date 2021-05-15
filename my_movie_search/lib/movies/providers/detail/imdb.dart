@@ -36,7 +36,7 @@ class QueryIMDBDetails extends ProviderController<MovieResultDTO> {
   @override
   Stream<List<MovieResultDTO>> transformStream(Stream<String> str) async* {
     // Combine all HTTP chunks together for HTML parsing.
-    final content = await str.reduce((value, element) => '$value\n$element');
+    final content = await str.reduce((value, element) => '$value$element');
 
     var movieData = scrapeWebPage(content);
     if (movieData[outer_element_description] == null) {
@@ -79,7 +79,7 @@ class QueryIMDBDetails extends ProviderController<MovieResultDTO> {
     getAttributeValue(movieData, document, inner_element_rating_count);
     getAttributeValue(movieData, document, inner_element_rating_value);
 
-    movieData['id'] = criteria!.criteriaTitle;
+    movieData['id'] = criteria?.criteriaTitle ?? movieData['id'];
     return movieData;
   }
 

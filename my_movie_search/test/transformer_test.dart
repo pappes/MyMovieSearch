@@ -2,18 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'transformer_test_data.dart';
 import 'package:my_movie_search/utilities/jsonp_transformer.dart';
-
-////////////////////////////////////////////////////////////////////////////////
-/// Helper functions
-////////////////////////////////////////////////////////////////////////////////
-
-Stream<List<int>> emitByteStream(String str) async* {
-  for (var rune in str.runes.toList()) {
-    yield [rune];
-  }
-}
+import 'test_data/imdb_suggestion_converter_data.dart';
+import 'test_helper.dart';
 
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
@@ -29,17 +20,17 @@ void main() {
 
     testSuffix(input, expectedOutput) {
       var decoder = JsonPDecoder();
-      decoder.stripPrefix("(");
+      decoder.stripPrefix('(');
       var actualOutput = decoder.bufferSuffix(input);
       expect(actualOutput, expectedOutput, reason: decoder.toString());
     }
 
     testMultiLineConversion(List<String> lines, expectedOutput) {
       var decoder = JsonPDecoder();
-      var actualOutput = "";
+      var actualOutput = '';
       for (var line in lines) actualOutput += decoder.convert(line);
       expect(actualOutput, expectedOutput,
-          reason: "input:$lines decoder:${decoder.toString()}");
+          reason: 'input:$lines decoder:${decoder.toString()}');
     }
 
     testSingleLineConversion(input, expectedOutput) {
@@ -47,100 +38,100 @@ void main() {
     }
 
     test('stripPrefix no change', () {
-      testPrefix("abc", "");
-      testPrefix("{abc}", "{abc}");
-      testPrefix("[abc]", "[abc]");
-      testPrefix("[{abc}]", "[{abc}]");
-      testPrefix("{[abc]}", "{[abc]}");
+      testPrefix('abc', '');
+      testPrefix('{abc}', '{abc}');
+      testPrefix('[abc]', '[abc]');
+      testPrefix('[{abc}]', '[{abc}]');
+      testPrefix('{[abc]}', '{[abc]}');
 
-      testPrefix("{()abc}", "{()abc}");
-      testPrefix("[()abc]", "[()abc]");
-      testPrefix("[(){abc}]", "[(){abc}]");
-      testPrefix("{()[abc]}", "{()[abc]}");
-      testPrefix("[{()abc}]", "[{()abc}]");
-      testPrefix("{[()abc]}", "{[()abc]}");
+      testPrefix('{()abc}', '{()abc}');
+      testPrefix('[()abc]', '[()abc]');
+      testPrefix('[(){abc}]', '[(){abc}]');
+      testPrefix('{()[abc]}', '{()[abc]}');
+      testPrefix('[{()abc}]', '[{()abc}]');
+      testPrefix('{[()abc]}', '{[()abc]}');
     });
     test('stripPrefix change required', () {
-      testPrefix("jsfunction(abc", "abc");
-      testPrefix("jsfunction({abc}", "{abc}");
-      testPrefix("jsfunction([abc]", "[abc]");
-      testPrefix("jsfunction([{abc}]", "[{abc}]");
-      testPrefix("jsfunction({[abc]}", "{[abc]}");
+      testPrefix('jsfunction(abc', 'abc');
+      testPrefix('jsfunction({abc}', '{abc}');
+      testPrefix('jsfunction([abc]', '[abc]');
+      testPrefix('jsfunction([{abc}]', '[{abc}]');
+      testPrefix('jsfunction({[abc]}', '{[abc]}');
     });
 
     test('bufferSuffix no change', () {
-      testSuffix("abc", "abc");
-      testSuffix("{abc}", "{abc}");
-      testSuffix("[abc]", "[abc]");
-      testSuffix("[{abc}]", "[{abc}]");
-      testSuffix("{[abc]}", "{[abc]}");
+      testSuffix('abc', 'abc');
+      testSuffix('{abc}', '{abc}');
+      testSuffix('[abc]', '[abc]');
+      testSuffix('[{abc}]', '[{abc}]');
+      testSuffix('{[abc]}', '{[abc]}');
 
-      testSuffix("{()abc}", "{()abc}");
-      testSuffix("[()abc]", "[()abc]");
-      testSuffix("[(){abc}]", "[(){abc}]");
-      testSuffix("{()[abc]}", "{()[abc]}");
-      testSuffix("[{()abc}]", "[{()abc}]");
-      testSuffix("{[()abc]}", "{[()abc]}");
+      testSuffix('{()abc}', '{()abc}');
+      testSuffix('[()abc]', '[()abc]');
+      testSuffix('[(){abc}]', '[(){abc}]');
+      testSuffix('{()[abc]}', '{()[abc]}');
+      testSuffix('[{()abc}]', '[{()abc}]');
+      testSuffix('{[()abc]}', '{[()abc]}');
     });
     test('bufferSuffix change required', () {
-      testSuffix("abc)", "abc");
-      testSuffix("{abc})", "{abc}");
-      testSuffix("[abc])", "[abc]");
-      testSuffix("[{abc}])", "[{abc}]");
-      testSuffix("{[abc]})", "{[abc]}");
-      testSuffix("()abc)", "()abc");
-      testSuffix("(){abc})", "(){abc}");
-      testSuffix("()[abc])", "()[abc]");
-      testSuffix("()[{abc}])", "()[{abc}]");
-      testSuffix("(){[abc]})", "(){[abc]}");
+      testSuffix('abc)', 'abc');
+      testSuffix('{abc})', '{abc}');
+      testSuffix('[abc])', '[abc]');
+      testSuffix('[{abc}])', '[{abc}]');
+      testSuffix('{[abc]})', '{[abc]}');
+      testSuffix('()abc)', '()abc');
+      testSuffix('(){abc})', '(){abc}');
+      testSuffix('()[abc])', '()[abc]');
+      testSuffix('()[{abc}])', '()[{abc}]');
+      testSuffix('(){[abc]})', '(){[abc]}');
     });
     test('JsonPDecoder single line no change', () {
-      testSingleLineConversion("abc", "");
-      testSingleLineConversion("{abc}", "{abc}");
-      testSingleLineConversion("[abc]", "[abc]");
-      testSingleLineConversion("[{abc}]", "[{abc}]");
-      testSingleLineConversion("{[abc]}", "{[abc]}");
+      testSingleLineConversion('abc', '');
+      testSingleLineConversion('{abc}', '{abc}');
+      testSingleLineConversion('[abc]', '[abc]');
+      testSingleLineConversion('[{abc}]', '[{abc}]');
+      testSingleLineConversion('{[abc]}', '{[abc]}');
 
-      testSingleLineConversion("{()abc}", "{()abc}");
-      testSingleLineConversion("[()abc]", "[()abc]");
-      testSingleLineConversion("[(){abc}]", "[(){abc}]");
-      testSingleLineConversion("{()[abc]}", "{()[abc]}");
-      testSingleLineConversion("[{()abc}]", "[{()abc}]");
-      testSingleLineConversion("{[()abc]}", "{[()abc]}");
+      testSingleLineConversion('{()abc}', '{()abc}');
+      testSingleLineConversion('[()abc]', '[()abc]');
+      testSingleLineConversion('[(){abc}]', '[(){abc}]');
+      testSingleLineConversion('{()[abc]}', '{()[abc]}');
+      testSingleLineConversion('[{()abc}]', '[{()abc}]');
+      testSingleLineConversion('{[()abc]}', '{[()abc]}');
 
-      testSingleLineConversion("{abc}()", "{abc}()");
-      testSingleLineConversion("[abc]()", "[abc]()");
-      testSingleLineConversion("[{abc}]()", "[{abc}]()");
-      testSingleLineConversion("{[abc]}()", "{[abc]}()");
-      testSingleLineConversion("[{abc}]()", "[{abc}]()");
-      testSingleLineConversion("{[abc]}()", "{[abc]}()");
+      testSingleLineConversion('{abc}()', '{abc}()');
+      testSingleLineConversion('[abc]()', '[abc]()');
+      testSingleLineConversion('[{abc}]()', '[{abc}]()');
+      testSingleLineConversion('{[abc]}()', '{[abc]}()');
+      testSingleLineConversion('[{abc}]()', '[{abc}]()');
+      testSingleLineConversion('{[abc]}()', '{[abc]}()');
 
-      testSingleLineConversion("abc)", "");
-      testSingleLineConversion("{abc})", "{abc})");
-      testSingleLineConversion("[abc])", "[abc])");
-      testSingleLineConversion("[{abc}])", "[{abc}])");
-      testSingleLineConversion("{[abc]})", "{[abc]})");
+      testSingleLineConversion('abc)', '');
+      testSingleLineConversion('{abc})', '{abc})');
+      testSingleLineConversion('[abc])', '[abc])');
+      testSingleLineConversion('[{abc}])', '[{abc}])');
+      testSingleLineConversion('{[abc]})', '{[abc]})');
     });
     test('JsonPDecoder single line change required', () {
-      testSingleLineConversion("jsfunction(abc", "abc");
-      testSingleLineConversion("jsfunction({abc}", "{abc}");
-      testSingleLineConversion("jsfunction([abc]", "[abc]");
-      testSingleLineConversion("jsfunction([{abc}]", "[{abc}]");
-      testSingleLineConversion("jsfunction({[abc]}", "{[abc]}");
+      testSingleLineConversion('jsfunction(abc', 'abc');
+      testSingleLineConversion('jsfunction({abc}', '{abc}');
+      testSingleLineConversion('jsfunction([abc]', '[abc]');
+      testSingleLineConversion('jsfunction([{abc}]', '[{abc}]');
+      testSingleLineConversion('jsfunction({[abc]}', '{[abc]}');
 
-      testSingleLineConversion("jsfunction(abc)", "abc");
-      testSingleLineConversion("jsfunction({abc})", "{abc}");
-      testSingleLineConversion("jsfunction([abc])", "[abc]");
-      testSingleLineConversion("jsfunction([{abc}])", "[{abc}]");
-      testSingleLineConversion("jsfunction({[abc]})", "{[abc]}");
+      testSingleLineConversion('jsfunction(abc)', 'abc');
+      testSingleLineConversion('jsfunction({abc})', '{abc}');
+      testSingleLineConversion('jsfunction([abc])', '[abc]');
+      testSingleLineConversion('jsfunction([{abc}])', '[{abc}]');
+      testSingleLineConversion('jsfunction({[abc]})', '{[abc]}');
     });
     test('JsonPDecoder multiline change required', () {
-      testMultiLineConversion(["\n", "jsfunction(abc", "\n"], "abc\n");
-      testMultiLineConversion(["\n", "jsfunction(", "abc"], "abc");
+      testMultiLineConversion(['\n', 'jsfunction(abc', '\n'], 'abc\n');
+      testMultiLineConversion(['\n', 'jsfunction(', 'abc'], 'abc');
 
-      testMultiLineConversion(["jsfunction(", "abc", ")\n"], "abc");
-      testMultiLineConversion(["jsfunction(", "(", "abc", ")", ")\n"], "(abc)");
-      testMultiLineConversion(["jsfunction(", "()", "abc", "", ")\n"], "()abc");
+      testMultiLineConversion(['jsfunction(', 'abc', ')\n'], 'abc');
+      testMultiLineConversion(['jsfunction(', '(', 'abc', ')', ')\n'], '(abc)');
+      testMultiLineConversion(['jsfunction(', '()', 'abc', '', ')\n'], '()abc');
     });
   });
   group('stream test', () {
@@ -151,10 +142,10 @@ void main() {
           .transform(JsonPDecoder());
 
       var expectedString = imdbJsonSampleOuter;
-      var emittedString = "";
+      var emittedString = '';
 
       var expectFn = expectAsync1<void, String>((output) {
-        if (output != "") {
+        if (output != '') {
           emittedString += output;
           expect(
               emittedString, expectedString.substring(0, emittedString.length));

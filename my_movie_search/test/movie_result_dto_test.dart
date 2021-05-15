@@ -35,14 +35,14 @@ class MovieResultDTOMatcher extends Matcher {
   @override
   Description describe(Description description) {
     return description
-        .add("has expected MovieResultDTO content = ${expected.toMap()}");
+        .add('has expected MovieResultDTO content = ${expected.toMap()}');
   }
 
   @override
   Description describeMismatch(dynamic item, Description mismatchDescription,
       Map<dynamic, dynamic> matchState, bool verbose) {
     return mismatchDescription
-        .add("has actual emitted MovieResultDTO = ${_actual.toMap()}");
+        .add('has actual emitted MovieResultDTO = ${_actual.toMap()}');
   }
 
   @override
@@ -146,22 +146,22 @@ void main() {
       }
 
       // Years that should be considered the same.
-      testYearCompare(0, "", 0, "", 0);
-      testYearCompare(2000, "", 2000, "", 0);
-      testYearCompare(0, "1980-2000", 0, "1999-2000", 0);
-      testYearCompare(2000, "2000", 2000, "2000", 0);
+      testYearCompare(0, '', 0, '', 0);
+      testYearCompare(2000, '', 2000, '', 0);
+      testYearCompare(0, '1980-2000', 0, '1999-2000', 0);
+      testYearCompare(2000, '2000', 2000, '2000', 0);
 
       // Year on left should be considered higher than year on right.
-      testYearCompare(2000, "", 1999, "", 1);
-      testYearCompare(0, "1980-2000", 0, "1998-1999", 1);
-      testYearCompare(2000, "1990-1995", 1997, "1998-1999", 1);
-      testYearCompare(1990, "1980-2000", 1997, "1998-1999", 1);
+      testYearCompare(2000, '', 1999, '', 1);
+      testYearCompare(0, '1980-2000', 0, '1998-1999', 1);
+      testYearCompare(2000, '1990-1995', 1997, '1998-1999', 1);
+      testYearCompare(1990, '1980-2000', 1997, '1998-1999', 1);
 
       // Year on left should be considered lower than year on right.
-      testYearCompare(1999, "", 2000, "", -1);
-      testYearCompare(0, "1998-1999", 0, "1980-2000", -1);
-      testYearCompare(1997, "1998-1999", 2000, "1990-1995", -1);
-      testYearCompare(1997, "1998-1999", 1990, "1980-2000", -1);
+      testYearCompare(1999, '', 2000, '', -1);
+      testYearCompare(0, '1998-1999', 0, '1980-2000', -1);
+      testYearCompare(1997, '1998-1999', 2000, '1990-1995', -1);
+      testYearCompare(1997, '1998-1999', 1990, '1980-2000', -1);
 
       MovieResultDTO tmpYear = MovieResultDTO();
       expect(tmpYear.yearCompare(null), 0);
@@ -175,10 +175,10 @@ void main() {
         expect(testInput.yearRangeAsNumber(), expectedOutput);
       }
 
-      testYearCompare("0", 0);
-      testYearCompare("1999", 1999);
-      testYearCompare("2000", 2000);
-      testYearCompare("1999-2000", 2000);
+      testYearCompare('0', 0);
+      testYearCompare('1999', 1999);
+      testYearCompare('2000', 2000);
+      testYearCompare('1999-2000', 2000);
     });
   });
 }

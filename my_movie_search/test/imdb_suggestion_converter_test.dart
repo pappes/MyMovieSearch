@@ -2,18 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'transformer_test_data.dart';
+import 'test_helper.dart';
+import 'test_data/imdb_suggestion_converter_data.dart';
 import 'package:my_movie_search/utilities/jsonp_transformer.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/providers/search/converters/imdb_suggestion.dart';
-
-////////////////////////////////////////////////////////////////////////////////
-/// Helper functions
-////////////////////////////////////////////////////////////////////////////////
-
-/*Stream<String> emitString(String str) async* {
-  yield str;
-}*/
 
 /* TODO: test executeQuery()
 class QueryIMDBSuggestions_temp {
@@ -31,49 +24,6 @@ class QueryIMDBSuggestions_temp {
 }
 */
 
-class MovieResultDTOMatcher extends Matcher {
-  MovieResultDTO expected;
-  MovieResultDTO? _actual;
-
-  MovieResultDTOMatcher(this.expected);
-
-  @override
-  Description describe(Description description) {
-    return description
-        .add("has expected MovieResultDTO content = ${expected.toMap()}");
-  }
-
-  @override
-  Description describeMismatch(dynamic item, Description mismatchDescription,
-      Map<dynamic, dynamic> matchState, bool verbose) {
-    return mismatchDescription
-        .add("has actual emitted MovieResultDTO = ${_actual!.toMap()}");
-  }
-
-  @override
-  bool matches(actual, Map matchState) {
-    _actual = actual;
-    matchState['actual'] =
-        _actual is MovieResultDTO ? _actual : MovieResultDTO().toUnknown();
-    return _actual!.matches(expected);
-  }
-}
-
-Stream<List<int>> emitByteStream(String str) async* {
-  for (var rune in str.runes.toList()) {
-    yield [rune];
-  }
-}
-
-Stream<List<int>> emitConsolidatedByteStream(String str) async* {
-  List<int> lst = [];
-
-  for (var rune in str.runes.toList()) {
-    lst.add(rune);
-  }
-  yield lst;
-}
-
 ////////////////////////////////////////////////////////////////////////////////
 /// Conceptual testing
 ////////////////////////////////////////////////////////////////////////////////
@@ -88,67 +38,130 @@ void main() {
         [97],
         [41]
       ];
-      var stream = emitByteStream(testInput);
 
-      int runeCount = 0;
-      var expectFn = expectAsync1<void, List<int>>((output) {
-        expect(output, expectedOutput[runeCount]);
-        runeCount++;
-      }, count: testInput.length);
+      int currentRune = 0;
+      // Compare the stream output to the expected output.
+      void checkOutput(List<int> streamOutput) {
+        var char = testInput.substring(currentRune, currentRune + 1);
+        var rune = expectedOutput[currentRune];
+        expect(
+          streamOutput,
+          rune,
+          reason: 'String charactor $char needs to match rune $rune',
+        );
+        currentRune++;
+      }
+
+      var expectFn = expectAsync1<void, List<int>>(
+        checkOutput,
+        count: testInput.length,
+      );
+
+      var stream = emitByteStream(testInput);
+      // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn, onDone: () {
-        expect(runeCount, testInput.length);
-        print('stream done, all $runeCount elements consumed');
+        expect(currentRune, testInput.length,
+            reason: 'emmitted rune count needs to equal expected runes');
+        print('stream done, all $currentRune elements consumed');
       });
     });
 
-    test('UTF8 test', () {
+    test('UTF8 decoder test', () {
       String testInput = '$imdbJsonPFunction(a)';
-      var stream = emitByteStream(testInput).transform(utf8.decoder);
 
-      int runeCount = 0;
-      var expectFn = expectAsync1<void, String>((output) {
-        expect(output, testInput.substring(runeCount++, runeCount));
-      }, count: testInput.length);
+      int currentChar = 0;
+      // Compare the stream output to the expected output.
+      void checkOutput(String streamOutput) {
+        var expected = testInput.substring(currentChar, currentChar + 1);
+        expect(
+          streamOutput,
+          expected,
+          reason: 'Emmitted string $streamOutput '
+              'needs to match input string $expected',
+        );
+        currentChar++;
+      }
+
+      var expectFn = expectAsync1<void, String>(
+        checkOutput,
+        count: testInput.length,
+      );
+
+      var stream = emitByteStream(testInput) // Add in UTF8 decoding to the test
+          .transform(utf8.decoder);
+      // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn);
     });
 
-    test('json test', () {
+    test('json decoder test', () {
       String testInput = imdbJsonSampleOuter;
+
+      // Compare the stream output to the expected output.
+      void checkOutput(Object? streamOutput) {
+        Map decodedOutput = streamOutput as Map<dynamic, dynamic>;
+        expect(
+          decodedOutput[imdbCustomKeyName],
+          imdbCustomKeyVal,
+          reason: 'Emmitted map key ${decodedOutput[imdbCustomKeyName]} '
+              'needs to contain expected value $imdbCustomKeyVal',
+        );
+      }
+
+      var expectFn = expectAsync1<void, Object?>(checkOutput, count: 1);
+
       var stream = emitByteStream(testInput)
           .transform(utf8.decoder)
           .transform(json.decoder);
-
-      var expectFn = expectAsync1<void, Object?>((output) {
-        Map decodedOutput = output as Map<dynamic, dynamic>;
-        expect(decodedOutput[imdbCustomKeyName], imdbCustomKeyVal);
-      }, count: 1);
+      // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn);
     });
 
-    test('outer map test', () {
-      String testInput = imdbJsonSampleOuter;
-      var stream = emitConsolidatedByteStream(testInput)
-          .transform(utf8.decoder)
-          .transform(json.decoder)
-          .map((outerMap) => (outerMap as Map)[imdbCustomKeyName]);
-
-      var expectFn = expectAsync1<void, Object?>((output) {
-        expect(output, imdbCustomKeyVal);
-      }, count: 1);
-      stream.listen(expectFn);
-    });
-
+    // This is the main thing that we want to tes.
+    //Surrounding tests are just simpler examples to see ho this one was built.
     test('jsonp transformer test', () {
       String testInput = imdbJsonPSampleFull;
+
+      // Compare the stream output to the expected output.
+      void checkOutput(Object? streamOutput) {
+        Map decodedOutput = streamOutput as Map<dynamic, dynamic>;
+        expect(
+          decodedOutput[imdbCustomKeyName],
+          imdbCustomKeyVal,
+          reason: 'Emmitted map key ${decodedOutput[imdbCustomKeyName]}} '
+              'needs to contain expected value $imdbCustomKeyVal',
+        );
+      }
+
+      var expectFn = expectAsync1<void, Object?>(checkOutput, count: 1);
+
       var stream = emitByteStream(testInput)
           .transform(utf8.decoder)
           .transform(JsonPDecoder())
           .transform(json.decoder);
+      // Listen to the stream running the test function on each emitted value.
+      stream.listen(expectFn);
+    });
 
-      var expectFn = expectAsync1<void, Object?>((output) {
-        Map decodedOutput = output as Map<dynamic, dynamic>;
-        expect(decodedOutput[imdbCustomKeyName], imdbCustomKeyVal);
-      }, count: 1);
+    test('extract value from map test', () {
+      String testInput = imdbJsonSampleOuter;
+
+      // Compare the stream output to the expected output.
+      void checkOutput(Object? streamOutput) {
+        expect(
+          streamOutput,
+          imdbCustomKeyVal,
+          reason: 'Emmitted value $streamOutput} '
+              'needs to match expected value $imdbCustomKeyVal',
+        );
+      }
+
+      var expectFn = expectAsync1<void, Object?>(checkOutput, count: 1);
+
+      var stream = emitConsolidatedByteStream(testInput)
+          .transform(utf8.decoder)
+          .transform(json.decoder)
+          .map((outerMap) => (outerMap as Map)[imdbCustomKeyName]);
+      // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn);
     });
   });
@@ -158,46 +171,42 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb suggestion', () {
-    test('extractor', () async {
+    test('convert Json to DTO', () async {
       String testInput = imdbJsonPSampleFull;
+
+      var expectedDTO = await expectedDTOList;
+      int dtoCount = 0;
+
+      // Compare the stream output to the expected output.
+      void checkOutput(MovieResultDTO streamOutput) {
+        var expectedValue = expectedDTO[dtoCount];
+        var isExpectedValue = MovieResultDTOMatcher(expectedValue);
+        expect(
+          streamOutput,
+          isExpectedValue,
+          reason: 'Emmitted DTO $streamOutput} '
+              'needs to match expected DTO ${expectedDTO[dtoCount]}',
+        );
+        dtoCount++;
+      }
+
+      var expectFn = expectAsync1<void, MovieResultDTO>(
+        checkOutput,
+        count: expectedDTO.length,
+        max: expectedDTO.length,
+      );
+
       Stream<MovieResultDTO> stream = emitByteStream(testInput)
           .transform(utf8.decoder)
           .transform(JsonPDecoder())
           .transform(json.decoder)
-          .map(
-              (outerMap) => (outerMap as Map)[outer_element_results_collection])
-          .expand((element) =>
-              element) // Emit each element from the list as a seperate stream event
+          // Stream the results collection from within the map.
+          .map((outerMap) => (outerMap as Map) //
+              [outer_element_results_collection])
+          // Emit each member of the list as a seperate stream event.
+          .expand((listMember) => listMember)
+          // Convert each Map result to a DTO
           .map((event) => ImdbSuggestionConverter.dtoFromMap(event));
-
-      var expectedDTO = await expectedDTOList;
-      int dtoCount = 0;
-      var expectFn = expectAsync1<void, MovieResultDTO>((output) {
-        var expectedValue = expectedDTO[dtoCount++];
-        var isExpectedValue = MovieResultDTOMatcher(expectedValue);
-        expect(output, isExpectedValue);
-      }, count: expectedDTO.length, max: expectedDTO.length);
-      stream.listen(expectFn);
-    });
-    test('transformer', () async {
-      String testInput = imdbJsonPSampleFull;
-      Stream<MovieResultDTO> stream = emitByteStream(testInput)
-          .transform(utf8.decoder)
-          .transform(JsonPDecoder())
-          .transform(json.decoder)
-          .map(
-              (outerMap) => (outerMap as Map)[outer_element_results_collection])
-          .expand((element) =>
-              element) // Emit each element from the list as a seperate stream event
-          .map((event) => ImdbSuggestionConverter.dtoFromMap(event));
-
-      var expectedDTO = await expectedDTOList;
-      int dtoCount = 0;
-      var expectFn = expectAsync1<void, MovieResultDTO>((output) {
-        var expectedValue = expectedDTO[dtoCount++];
-        var isExpectedValue = MovieResultDTOMatcher(expectedValue);
-        expect(output, isExpectedValue);
-      }, count: expectedDTO.length, max: expectedDTO.length);
       stream.listen(expectFn);
     });
   });

@@ -121,7 +121,7 @@ abstract class ProviderController<T> {
         (decodedMap) => transformMapSafe(decodedMap as Map<dynamic, dynamic>?));
   }
 
-  /// Decribe the source of the data for the child class.
+  /// Describe the source of the data for the child class.
   ///
   /// Can be overridden by child classes.
   String childClassDescriptor() {

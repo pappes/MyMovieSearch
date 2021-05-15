@@ -61,16 +61,17 @@ final String movieResultDTOUninitialised = '-1';
 extension MapDTOConversion on Map {
   MovieResultDTO toMovieResultDTO() {
     var dto = MovieResultDTO();
-    dto.source = this[movieResultDTOSource];
-    dto.uniqueId = this[movieResultDTOUniqueId];
-    dto.title = this[movieResultDTOTitle];
-    dto.type = this[movieResultDTOType];
-    dto.year = this[movieResultDTOYear];
-    dto.yearRange = this[movieResultDTOYearRange];
-    dto.userRating = this[movieResultDTOUserRating];
-    dto.userRatingCount = this[movieResultDTOUserRatingCount];
-    dto.censorRating = this[movieResultDTOCensorRating];
-    dto.runTime = this[movieResultDTORunTime];
+    dto.source = this[movieResultDTOSource] ?? dto.source;
+    dto.uniqueId = this[movieResultDTOUniqueId] ?? dto.uniqueId;
+    dto.title = this[movieResultDTOTitle] ?? dto.title;
+    dto.type = this[movieResultDTOType] ?? dto.type;
+    dto.year = this[movieResultDTOYear] ?? dto.year;
+    dto.yearRange = this[movieResultDTOYearRange] ?? dto.yearRange;
+    dto.userRating = this[movieResultDTOUserRating] ?? dto.userRating;
+    dto.userRatingCount =
+        this[movieResultDTOUserRatingCount] ?? dto.userRatingCount;
+    dto.censorRating = this[movieResultDTOCensorRating] ?? dto.censorRating;
+    dto.runTime = this[movieResultDTORunTime] ?? dto.runTime;
     return dto;
   }
 }
