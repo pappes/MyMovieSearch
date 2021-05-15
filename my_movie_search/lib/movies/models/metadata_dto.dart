@@ -10,6 +10,8 @@ enum DetailLevel {
 enum DataSourceType {
   none,
   imdb,
+  imdbSearch,
+  imdbSuggestions,
   omdb,
   tmdb,
   google,

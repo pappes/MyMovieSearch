@@ -21,12 +21,15 @@ typedef List TransformFn(Map? map);
 ///   Json(Map) -> Objects of type T via [transformMap]
 ///   Exception handling via [constructError]
 abstract class ProviderController<T> {
+  SearchCriteriaDTO? criteria;
+
   /// Populate [StreamController] with data matching [criteria].
   ///
   /// Optionally inject [source] as an alternate datasource for mocking/testing.
   void populate(StreamController<T> sc, SearchCriteriaDTO criteria,
       {DataSourceFn? source}) async {
-    (await fetch(criteria, source: source)).pipe(sc);
+    this.criteria = criteria;
+    (await fetch(source: source)).pipe(sc);
   }
 
   /// Return a list with data matching [criteria].
@@ -34,24 +37,25 @@ abstract class ProviderController<T> {
   /// Optionally inject [source] as an alternate datasource for mocking/testing.
   Future<List<T>> read(SearchCriteriaDTO criteria,
       {DataSourceFn? source}) async {
-    return (await fetch(criteria, source: source)).toList();
+    this.criteria = criteria;
+    var results = fetch(source: source);
+    return (await results).toList();
   }
 
   /// Create a stream with data matching [criteria].
-  Future<Stream<T>> fetch(SearchCriteriaDTO criteria,
-      {DataSourceFn? source}) async {
+  Future<Stream<T>> fetch({DataSourceFn? source}) async {
     //TODO: use BloC patterns to test the stream processing
     final selecter = OnlineOfflineSelector<DataSourceFn>();
 
     source = selecter.select(source ?? streamResult, offlineData());
     // Need to await completion of future before we can transform it.
-    logger.i(
-        'got function, getting stream for ${dataSourceName()} using ${childClassDescriptor()}');
-    final Stream<String> result = await source(criteria.criteriaTitle);
-    logger.i('got stream getting data');
+    //logger.i('got function, getting stream for ${dataSourceName()} using ${childClassDescriptor()}');
+    var result = source(criteria!.criteriaTitle);
+    final Stream<String> data = await result;
+    //logger.i('got stream getting data');
 
     // Emit each element from the list as a seperate element.
-    return transformStream(result).expand((element) => element);
+    return transformStream(data).expand((element) => element);
   }
 
   /// Describe where the data is comming from.
@@ -131,9 +135,13 @@ abstract class ProviderController<T> {
   /// Should not be overridden by child classes.
   Future<Stream<String>> streamResult(String criteria) async {
     final encoded = Uri.encodeQueryComponent(criteria);
-    final request = await HttpClient().getUrl(constructURI(encoded));
+    final address = constructURI(encoded);
+
+    logger.e('querying ${address.toString()}');
+    final request = await HttpClient().getUrl(address);
     constructHeaders(request.headers);
     final response = await request.close();
+    // TODO: check for HTTP status before transforming (avoid 404)
     return response.transform(utf8.decoder);
   }
 
@@ -150,8 +158,7 @@ abstract class ProviderController<T> {
     }
     try {
       var list = transformMap(map);
-      logger
-          .i('${list.length} results returned from ${childClassDescriptor()}');
+      //logger.i('${list.length} results returned from ${childClassDescriptor()}');
       return list;
     } catch (e) {
       logger.e('Exception raised during transformMap, constructing error'

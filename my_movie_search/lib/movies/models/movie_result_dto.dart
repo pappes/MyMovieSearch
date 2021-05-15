@@ -77,6 +77,12 @@ extension MapDTOConversion on Map {
 
 extension DTOHelpers on MovieResultDTO {
   static int _lastError = -1;
+  MovieResultDTO error() {
+    _lastError = _lastError - 1;
+    this.uniqueId = _lastError.toString();
+    return this;
+  }
+
   Map toMap() {
     Map<String, dynamic> map = Map();
     map[movieResultDTOSource] = this.source;
@@ -86,15 +92,47 @@ extension DTOHelpers on MovieResultDTO {
     map[movieResultDTOYear] = this.year;
     map[movieResultDTOYearRange] = this.yearRange;
     map[movieResultDTOUserRating] = this.userRating;
+    map[movieResultDTOUserRatingCount] = this.userRatingCount;
     map[movieResultDTOCensorRating] = this.censorRating;
     map[movieResultDTORunTime] = this.runTime;
     return map;
   }
 
-  MovieResultDTO error() {
-    _lastError = _lastError - 1;
-    this.uniqueId = _lastError.toString();
-    return this;
+  void merge(MovieResultDTO newValue) {
+    if (newValue.userRatingCount > this.userRatingCount) {
+      this.title = bestval(newValue.title, this.title);
+      this.year = bestval(newValue.year, this.year);
+      this.yearRange = bestval(newValue.yearRange, this.yearRange);
+      this.userRating = bestval(newValue.userRating, this.userRating);
+      this.userRatingCount =
+          bestval(newValue.userRatingCount, this.userRatingCount);
+      this.runTime = bestval(newValue.runTime, this.runTime);
+      this.type = bestval(newValue.type, this.type);
+      this.censorRating = bestval(newValue.censorRating, this.censorRating);
+      this.source = bestval(newValue.source, this.source);
+    }
+  }
+
+  T bestval<T>(T a, T b) {
+    if (a is num && b is num && a < b) return b;
+    if (a.toString().length < b.toString().length) return b;
+    if (stringAsNumber(a.toString()) < stringAsNumber(b.toString())) return b;
+    return a;
+  }
+
+  MovieContentType bestType(MovieContentType a, MovieContentType b) {
+    if (b.index > a.index) return b;
+    return a;
+  }
+
+  CensorRatingType bestRating(CensorRatingType a, CensorRatingType b) {
+    if (b.index > a.index) return b;
+    return a;
+  }
+
+  DataSourceType bestSource(DataSourceType a, DataSourceType b) {
+    if (b == DataSourceType.imdb) return b;
+    return a;
   }
 
   String toPrintableString() {
@@ -188,10 +226,14 @@ extension DTOCompare on MovieResultDTO {
   }
 
   int yearRangeAsNumber() {
+    return stringAsNumber(this.yearRange);
+  }
+
+  int stringAsNumber(String str) {
     try {
       // Any quantity of numeric digits at the end of the string.
       final filter = RegExp(r'[0-9]+$');
-      return int.parse(filter.stringMatch(this.yearRange) ?? "");
+      return int.parse(filter.stringMatch(str) ?? "");
     } catch (e) {
       return 0;
     }

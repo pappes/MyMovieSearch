@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^7.0.0                 # Assist with the BLoC design pattern.
+  html: ^0.15.0                        # Dart fom and html utilities
   ####http: ^0.12.2                    # Make calls to web URLs and stream the results.
   sqflite: ^2.0.0+3                    # Database storage for persisting state across sessions.
   path_provider: ^2.0.1                # Device filesystem access for accessing database files.
@@ -33,7 +34,7 @@ dependencies:
   universal_io: ^2.0.4                 # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
   intl: ^0.17.0                        # internationalisation including number and data formatting
   equatable: ^2.0.0                    # Simplify object comparisons
-  web_scraper: ^0.1.4
+  #web_scraper: ^0.1.4
 
 
   # The following adds the Cupertino Icons font to your application.

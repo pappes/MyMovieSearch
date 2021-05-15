@@ -30,7 +30,7 @@ class ImdbSuggestionConverter {
 
   static MovieResultDTO dtoFromMap(Map map) {
     var movie = MovieResultDTO();
-    movie.source = DataSourceType.imdb;
+    movie.source = DataSourceType.imdbSuggestions;
     movie.uniqueId = map[inner_element_identity_element] ?? movie.uniqueId;
     movie.title = map[inner_element_title_element] ?? movie.title;
     movie.year = map[inner_element_year_element] ?? movie.year;

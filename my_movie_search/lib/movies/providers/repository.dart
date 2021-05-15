@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/providers/detail/imdb.dart';
 
 import 'package:my_movie_search/movies/providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/movies/providers/search/imdb_search.dart';
@@ -10,7 +11,7 @@ import 'package:my_movie_search/movies/providers/search/tmdb.dart';
 import 'package:my_movie_search/movies/providers/search/google.dart';
 
 class MovieRepository {
-  final QueryIMDBSuggestions _imdbDetails;
+  final QueryIMDBDetails _imdbDetails;
   final QueryIMDBSuggestions _imdbSuggestions;
   final QueryIMDBSearch _imdbSearch;
   final QueryOMDBMovies _omdbSearch;
@@ -20,7 +21,7 @@ class MovieRepository {
   var awaitingProviders = 0;
 
   MovieRepository()
-      : _imdbDetails = QueryIMDBSuggestions(),
+      : _imdbDetails = QueryIMDBDetails(),
         _imdbSuggestions = QueryIMDBSuggestions(),
         _imdbSearch = QueryIMDBSearch(),
         _omdbSearch = QueryOMDBMovies(),

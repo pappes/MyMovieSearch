@@ -48,7 +48,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     if (newValue.uniqueId == '-1' ||
         !allResults.containsKey(newValue.uniqueId)) {
       allResults[newValue.uniqueId] = newValue;
-    }
+    } else
+      allResults[newValue.uniqueId]!.merge(newValue);
     add(SearchDataReceived(allResults.values.toList()));
   }
 

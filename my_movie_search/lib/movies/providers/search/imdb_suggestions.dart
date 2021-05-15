@@ -15,7 +15,7 @@ class QueryIMDBSuggestions extends ProviderController<MovieResultDTO> {
   /// Describe where the data is comming from.
   @override
   String dataSourceName() {
-    return describeEnum(DataSourceType.imdb);
+    return describeEnum(DataSourceType.imdbSuggestions);
   }
 
   /// Static snapshot of data for offline operation.
@@ -45,7 +45,7 @@ class QueryIMDBSuggestions extends ProviderController<MovieResultDTO> {
     var error = MovieResultDTO();
     error.title = "[${this.runtimeType}] $message";
     error.type = MovieContentType.custom;
-    error.source = DataSourceType.imdb;
+    error.source = DataSourceType.imdbSuggestions;
     return error;
   }
 

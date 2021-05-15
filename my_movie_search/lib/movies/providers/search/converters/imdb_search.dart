@@ -12,7 +12,7 @@ class ImdbSearchConverter {
 
   static MovieResultDTO dtoFromMap(Map map) {
     var movie = MovieResultDTO();
-    movie.source = DataSourceType.imdb;
+    movie.source = DataSourceType.imdbSearch;
     movie.uniqueId =
         getID(map[inner_element_identity_element]) ?? movie.uniqueId;
     movie.title = map[inner_element_info_element] ?? movie.title;
