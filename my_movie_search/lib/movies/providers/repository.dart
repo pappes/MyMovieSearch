@@ -72,9 +72,11 @@ class MovieRepository {
   }
 
   void _getDetails(MovieResultDTO value) async {
-    var criteria = SearchCriteriaDTO();
-    criteria.criteriaTitle = value.uniqueId;
-    _imdbDetails.read(criteria).then((values) => _addDetails(values));
+    if (value.uniqueId.startsWith('tt')) {
+      var criteria = SearchCriteriaDTO();
+      criteria.criteriaTitle = value.uniqueId;
+      _imdbDetails.read(criteria).then((values) => _addDetails(values));
+    }
   }
 
   void _addDetails(List<MovieResultDTO> values) {

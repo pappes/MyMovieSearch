@@ -137,7 +137,7 @@ abstract class ProviderController<T> {
     final encoded = Uri.encodeQueryComponent(criteria);
     final address = constructURI(encoded);
 
-    logger.e('querying ${address.toString()}');
+    logger.i('querying ${address.toString()}');
     final request = await HttpClient().getUrl(address);
     constructHeaders(request.headers);
     final response = await request.close();
@@ -162,7 +162,7 @@ abstract class ProviderController<T> {
       return list;
     } catch (e) {
       logger.e('Exception raised during transformMap, constructing error'
-          ' for ${map.toString()}.');
+          ' for ${map.toString()}\n ${e.toString()}.');
       logger.i('${this.runtimeType}].transformMapSafe stacktrace: '
           '${StackTrace.current}');
       var error =
