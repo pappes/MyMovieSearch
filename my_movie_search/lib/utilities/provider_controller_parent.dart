@@ -137,10 +137,13 @@ abstract class ProviderController<T> {
     final encoded = Uri.encodeQueryComponent(criteria);
     final address = constructURI(encoded);
 
-    logger.i('querying ${address.toString()}');
-    final request = await HttpClient().getUrl(address);
-    constructHeaders(request.headers);
-    final response = await request.close();
+    logger.d('querying ${address.toString()}');
+    final client = await HttpClient().getUrl(address);
+    constructHeaders(client.headers);
+    final request = client.close();
+
+    await Future.delayed(const Duration(seconds: 10), () => "1");
+    final response = await request;
     // TODO: check for HTTP status before transforming (avoid 404)
     return response.transform(utf8.decoder);
   }
@@ -160,11 +163,11 @@ abstract class ProviderController<T> {
       var list = transformMap(map);
       //logger.i('${list.length} results returned from ${childClassDescriptor()}');
       return list;
-    } catch (e) {
+    } catch (exception, stacktrace) {
       logger.e('Exception raised during transformMap, constructing error'
-          ' for ${map.toString()}\n ${e.toString()}.');
+          ' for ${map.toString()}\n ${exception.toString()}.');
       logger.i('${this.runtimeType}].transformMapSafe stacktrace: '
-          '${StackTrace.current}');
+          '${stacktrace.toString()}');
       var error =
           constructError('Could not interpret response ' '${map.toString()}');
       return [error];

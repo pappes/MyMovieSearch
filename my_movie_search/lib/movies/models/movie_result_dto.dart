@@ -7,6 +7,7 @@ class MovieResultDTO {
   DataSourceType source = DataSourceType.none;
   String uniqueId = movieResultDTOUninitialised;
   String title = "";
+  String description = "";
   MovieContentType type = MovieContentType.none;
   int year = 0;
   String yearRange = "";
@@ -49,6 +50,7 @@ enum LanguageType {
 final String movieResultDTOSource = 'source';
 final String movieResultDTOUniqueId = 'uniqueId';
 final String movieResultDTOTitle = 'title';
+final String movieResultDTODescription = 'description';
 final String movieResultDTOType = 'type';
 final String movieResultDTOYear = 'year';
 final String movieResultDTOYearRange = 'yearRange';
@@ -64,6 +66,7 @@ extension MapDTOConversion on Map {
     dto.source = this[movieResultDTOSource] ?? dto.source;
     dto.uniqueId = this[movieResultDTOUniqueId] ?? dto.uniqueId;
     dto.title = this[movieResultDTOTitle] ?? dto.title;
+    dto.description = this[movieResultDTODescription] ?? dto.description;
     dto.type = this[movieResultDTOType] ?? dto.type;
     dto.year = this[movieResultDTOYear] ?? dto.year;
     dto.yearRange = this[movieResultDTOYearRange] ?? dto.yearRange;
@@ -76,7 +79,7 @@ extension MapDTOConversion on Map {
   }
 }
 
-extension DTOHelpers on MovieResultDTO {
+extension MovieResultDTOHelpers on MovieResultDTO {
   static int _lastError = -1;
   MovieResultDTO error() {
     _lastError = _lastError - 1;
@@ -89,6 +92,7 @@ extension DTOHelpers on MovieResultDTO {
     map[movieResultDTOSource] = this.source;
     map[movieResultDTOUniqueId] = this.uniqueId;
     map[movieResultDTOTitle] = this.title;
+    map[movieResultDTODescription] = this.description;
     map[movieResultDTOType] = this.type;
     map[movieResultDTOYear] = this.year;
     map[movieResultDTOYearRange] = this.yearRange;
@@ -100,8 +104,14 @@ extension DTOHelpers on MovieResultDTO {
   }
 
   void merge(MovieResultDTO newValue) {
+    if (this.description != "") {
+      print(this.description);
+    }
     if (newValue.userRatingCount > this.userRatingCount) {
+      this.source = bestval(newValue.source, this.source);
       this.title = bestval(newValue.title, this.title);
+      this.description = bestval(newValue.description, this.description);
+      this.type = bestval(newValue.type, this.type);
       this.year = bestval(newValue.year, this.year);
       this.yearRange = bestval(newValue.yearRange, this.yearRange);
       this.userRating = bestval(newValue.userRating, this.userRating);
@@ -115,6 +125,9 @@ extension DTOHelpers on MovieResultDTO {
   }
 
   T bestval<T>(T a, T b) {
+    if (a is MovieContentType && b is MovieContentType) bestType(a, b);
+    if (a is CensorRatingType && b is CensorRatingType) bestRating(a, b);
+    if (a is DataSourceType && b is DataSourceType) bestSource(a, b);
     if (a is num && b is num && a < b) return b;
     if (a.toString().length < b.toString().length) return b;
     if (stringAsNumber(a.toString()) < stringAsNumber(b.toString())) return b;
@@ -145,6 +158,7 @@ extension DTOHelpers on MovieResultDTO {
     map[movieResultDTOSource] = this.source;
     map[movieResultDTOUniqueId] = this.uniqueId;
     map[movieResultDTOTitle] = 'unknown';
+    map[movieResultDTODescription] = this.description;
     map[movieResultDTOType] = this.type;
     map[movieResultDTOYear] = this.year;
     map[movieResultDTOYearRange] = this.yearRange;
@@ -161,6 +175,7 @@ extension DTOHelpers on MovieResultDTO {
       return this.source == other.source &&
           this.uniqueId == other.uniqueId &&
           this.title == other.title &&
+          this.description == other.description &&
           this.type == other.type &&
           this.year == other.year &&
           this.yearRange == other.yearRange &&
@@ -170,9 +185,19 @@ extension DTOHelpers on MovieResultDTO {
   }
 }
 
+extension ListMovieResultDTOHelpers on List<MovieResultDTO> {
+  String toPrintableString() {
+    String listContents = "";
+    for (var i = 0; i < this.length - 1; i++) {
+      listContents += "${this[i].toPrintableString()},\n";
+    }
+    return 'List<MovieResultDTO>(${this.length})[\n$listContents\n]';
+  }
+}
+
 extension DTOCompare on MovieResultDTO {
   int compareTo(MovieResultDTO other) {
-    // Treat null a lower than any other value
+    // Treat null as lower than any other value
     if (this.uniqueId == movieResultDTOUninitialised &&
         other.uniqueId != movieResultDTOUninitialised) return -1;
     if (this.uniqueId != movieResultDTOUninitialised &&

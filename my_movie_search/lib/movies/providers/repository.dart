@@ -68,15 +68,25 @@ class MovieRepository {
 
   void _addResults(List<MovieResultDTO> values) {
     values.forEach((dto) => _movieStreamController?.add(dto));
-    values.forEach((dto) => _getDetails(dto));
+    _getDetails(values);
   }
 
-  void _getDetails(MovieResultDTO value) async {
-    if (value.uniqueId.startsWith('tt')) {
-      var criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = value.uniqueId;
-      _imdbDetails.read(criteria).then((values) => _addDetails(values));
+  void _getDetails(List<MovieResultDTO> values) async {
+    var futures = [];
+    values.forEach((dto) => futures = _queueDetailSearch(dto));
+    futures.forEach(
+        (detailSearch) => detailSearch.then((values) => _addDetails(values)));
+  }
+
+  List<Future> _queueDetailSearch(MovieResultDTO dto) {
+    List<Future> futures = [];
+    var criteria = SearchCriteriaDTO();
+
+    if (dto.uniqueId.startsWith('tt')) {
+      criteria.criteriaTitle = dto.uniqueId;
+      futures.add(_imdbDetails.read(criteria));
     }
+    return futures;
   }
 
   void _addDetails(List<MovieResultDTO> values) {

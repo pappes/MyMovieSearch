@@ -57,6 +57,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
                       Text('Source: ${describeEnum(_movie.source)} '),
                       Text('UniqueId: ${_movie.uniqueId}'),
                     ]),
+                    Row(children: [
+                      Text('Description: ${_movie.description} '),
+                    ]),
                   ],
                 ),
                 Column(

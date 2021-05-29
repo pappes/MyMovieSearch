@@ -1,4 +1,5 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/duration_extensions.dart';
 
 /*{
@@ -125,9 +126,9 @@ const outer_element_description = 'description';
 const outer_element_year_element = 'datePublished';
 const outer_element_duration = 'duration';
 const outer_element_censor_rating = 'contentRating';
-const outer_element_rating = 'aggregaterating';
-const inner_element_rating_value = 'ratingvalue';
-const inner_element_rating_count = 'ratingcount';
+const outer_element_rating = 'aggregateRating';
+const inner_element_rating_value = 'ratingValue';
+const inner_element_rating_count = 'ratingCount';
 const outer_element_type_element = '@type';
 const outer_element_image_element = 'image';
 
@@ -145,11 +146,10 @@ class ImdbMoviePageConverter {
     movie.censorRating =
         getCensorRating(map[outer_element_censor_rating]) ?? movie.censorRating;
 
-    movie.userRating = map[outer_element_rating]?[inner_element_rating_value] ??
-        movie.userRating;
+    movie.userRating =
+        getUserRating(map[outer_element_rating]) ?? movie.userRating;
     movie.userRatingCount =
         getRatingCount(map[outer_element_rating]) ?? movie.userRatingCount;
-    movie.type = getType(map[outer_element_type_element]) ?? movie.type;
 
     try {
       movie.year = DateTime.parse(map[outer_element_year_element] ?? "").year;
@@ -161,27 +161,27 @@ class ImdbMoviePageConverter {
     } catch (e) {
       movie.runTime = Duration(hours: 0, minutes: 0, seconds: 0);
     }
+    movie.type = getImdbMovieContentType(
+            map[outer_element_type_element], movie.runTime.inMinutes) ??
+        movie.type;
 
     return movie;
   }
 
   static int? getRatingCount(Map? map) {
-    var text = map?[inner_element_rating_count]?.replaceAll(',', '');
-    var count = int.parse(text ?? '0');
+    var formattedText = map?[inner_element_rating_count];
+    if (formattedText == null) return null;
+    var text = formattedText.toString().replaceAll(',', '');
+    var count = int.parse(text);
     return count == 0 ? null : count;
   }
 
-  static MovieContentType? getType(String? type) {
-    if (type == null) return null;
-    if (type.lastIndexOf('TV Movie') > -1) return MovieContentType.movie;
-    if (type.lastIndexOf('TV Mini-Series') > -1)
-      return MovieContentType.miniseries;
-    if (type.lastIndexOf('Short') > -1) return MovieContentType.short;
-    if (type.lastIndexOf('Video') > -1) return MovieContentType.short;
-    if (type.lastIndexOf('TV Episode') > -1) return MovieContentType.episode;
-    if (type.lastIndexOf('TV Series') > -1) return MovieContentType.series;
-    if (type.lastIndexOf('TV Special') > -1) return MovieContentType.series;
-    return MovieContentType.movie;
+  static double? getUserRating(Map? map) {
+    var formattedText = map?[inner_element_rating_count];
+    if (formattedText == null) return null;
+    var text = formattedText.toString().replaceAll(',', '');
+    var count = double.parse(text);
+    return count == 0 ? null : count;
   }
 
   static CensorRatingType? getCensorRating(String? type) {

@@ -15,13 +15,13 @@ class OnlineOfflineSelector<T> {
       _offline = true;
     else
       _offline = offline.toString().toLowerCase() == "true";
-    logger.i('OnlineOfflineSelector initialised to: '
+    logger.d('OnlineOfflineSelector initialised to: '
         '${_offline ? 'offline' : 'online'}');
   }
 
   /// Returns appropriate <generic> for current mode (online or offline)
   T select(T onlineDataSource, T offlineDataSource) {
-    logger.i('OnlineOfflineSelector.select returning '
+    logger.v('OnlineOfflineSelector.select returning '
         '${_offline ? 'offlineDataSource' : 'onlineDataSource'}');
     return _offline ? offlineDataSource : onlineDataSource;
   }

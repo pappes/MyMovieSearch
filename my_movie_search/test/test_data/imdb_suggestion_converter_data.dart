@@ -79,7 +79,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "q": "feature",
     "vt": 23,
     "i": [
-      "https://m.media-amazon.com/images/M/MV5BMTYzODQzYjQtNTczNC00MzZhLTg1ZWYtZDUxYmQ3ZTY4NzA1XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B...ODE5NzE3OTE@._V1_.jpg",
       2025,
       3000
     ],
@@ -89,7 +89,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
         "id": "vi1553381657",
         "s": "2:36",
         "i": [
-          "https://m.media-amazon.com/images/M/MV5BZWVhYzE0NzgtM2U1Yi00OWM1LWJlZTUtZmNkNWZhM2VkMDczXkEyXkFqcGdeQW1yb3NzZXI@._V1_.jpg",
+          "https://m.media-amazon.com/images/M/MV5B...NzZXI@._V1_.jpg",
           1492,
           788
         ]
@@ -99,7 +99,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
         "id": "vi237027609",
         "s": "3:57",
         "i": [
-          "https://m.media-amazon.com/images/M/MV5BYjQ3NGRmZTctYWRiNi00ODgxLTg4OWUtZWViYmZiMDJhODg2XkEyXkFqcGdeQWFsZWxvZw@@._V1_.jpg",
+          "https://m.media-amazon.com/images/M/MV5B...ZWxvZw@@._V1_.jpg",
           1920,
           1080
         ]
@@ -109,7 +109,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
         "id": "vi1901311513",
         "s": "2:30",
         "i": [
-          "https://m.media-amazon.com/images/M/MV5BMDdhNDBhYzQtOWI4Yy00MjMyLWE4ZDYtMzU1ODllMTljZTMxXkEyXkFqcGdeQXVyMjM4OTI2MTU@._V1_.jpg",
+          "https://m.media-amazon.com/images/M/MV5B...TI2MTU@._V1_.jpg",
           1280,
           720
         ]
@@ -123,7 +123,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "y": 2011,
     "q": "TV movie",
     "i": [
-      "https://m.media-amazon.com/images/M/MV5BMjA0MzYzNzY3OV5BMl5BanBnXkFtZTcwMzM4ODM4NA@@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B...M4ODM4NA@@._V1_.jpg",
       761,
       1800
     ]
@@ -136,7 +136,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "yr": "1975-1979",
     "q": "TV series",
     "i": [
-      "https://m.media-amazon.com/images/M/MV5BZjAxYTcxMDUtZTRmMi00NTk3LThkZTItNGNlZTQ3NWRhMjY5XkEyXkFqcGdeQXVyNjExODE1MDc@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B...ODE1MDc@._V1_.jpg",
       702,
       998
     ]
@@ -148,7 +148,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "y": 2019,
     "q": "feature",
     "i": [
-      "https://m.media-amazon.com/images/M/MV5BZTkyNmMzMTEtZTNjMC00NTg4LWJlNTktZDdmNzE1M2YxN2E4XkEyXkFqcGdeQXVyNzU3NjUxMzE@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B...UxMzE@._V1_.jpg",
       1365,
       2048
     ]
@@ -160,7 +160,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "y": 1974,
     "q": "TV movie",
     "i": [
-      "https://m.media-amazon.com/images/M/MV5BMTQ3NDkxNjM0Ml5BMl5BanBnXkFtZTgwNzQxNTkwMDE@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B.NTkwMDE@._V1_.jpg",
       353,
       500
     ]
@@ -172,7 +172,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "y": 2009,
     "q": "video",
     "i": [
-      "https://m.media-amazon.com/images/M/MV5BNzU1NmNmNTgtMTUyYS00ZmRmLTkzOWItOTY2ZWZiYjVkYzkzXkEyXkFqcGdeQXVyNjExODE1MDc@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B...ODE1MDc@._V1_.jpg",
       500,
       741
     ]
@@ -182,7 +182,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "id": "nm2628854",
     "s": "Actress, Jimmy Kimmel Live! (2006-2007)",
     "i": [
-      "https://m.media-amazon.com/images/M/MV5BMjk0MTRlNmUtNGNmNy00OTA2LTg0MWEtMWE2M2M5YmUyMDJkL2ltYWdlXkEyXkFqcGdeQXVyNjY1ODcxNQ@@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B...DcxNQ@@._V1_.jpg",
       640,
       428
     ]
@@ -206,7 +206,7 @@ final String imdbJsonSampleInner = r'''
               ,"i":["https://m.media-amazon.com/images/M/MV5B...zZXI@._V1_.jpg",1492,788]},
           {"l":"Meet Maxwell Lord: The 'Wonder Woman 1984' Big Bad","id":"vi237027609","s":"3:57"
               ,"i":["https://m.media-amazon.com/images/M/MV5B...xvZw@@._V1_.jpg",1920,1080]},
-          {"l":"Official Origin Trailer","id":"vi1901311513","s":"2:30","i":["https://m.media-amazon.com/images/M/MV5B...FqcGdeQXVyMjM4OTI2MTU@._V1_.jpg",1280,720]}
+          {"l":"Official Origin Trailer","id":"vi1901311513","s":"2:30","i":["https://m.media-amazon.com/images/M/MV5B...OTI2MTU@._V1_.jpg",1280,720]}
       ]},
   {"l":"Wonder Woman","id":"tt1740828","s":"Pedro Pascal, Adrianne Palicki","y":2011,"q":"TV movie"
       ,"i":["https://m.media-amazon.com/images/M/MV5B...DM4NA@@._V1_.jpg",761,1800]},
@@ -227,3 +227,7 @@ final String imdbCustomKeyVal = 'jsonpPTest';
 final String imdbJsonSampleOuter =
     '{"v":1,"q":"wonder_woman","d":[ $imdbJsonSampleInner ],"$imdbCustomKeyName":"$imdbCustomKeyVal"}';
 final String imdbJsonPSampleFull = '$imdbJsonPFunction($imdbJsonSampleOuter)';
+
+Stream<String> emitImdbJsonSample(String dummy) async* {
+  yield imdbJsonPSampleFull;
+}

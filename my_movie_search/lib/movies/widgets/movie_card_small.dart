@@ -16,7 +16,7 @@ class MovieTile extends ListTile {
         );
 
   static Widget _getTitle(MovieResultDTO movie) {
-    return SelectableText(
+    return Text(
       '${movie.title}(${movie.yearRange == '' ? movie.year : movie.yearRange}, '
       '${describeEnum(movie.source)})',
       textScaleFactor: 1.0,

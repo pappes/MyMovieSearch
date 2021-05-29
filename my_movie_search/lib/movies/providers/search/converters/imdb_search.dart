@@ -1,4 +1,5 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/providers/common/imdb_helpers.dart';
 
 const inner_element_identity_element = 'AnchorAddress';
 const inner_element_title_element = 'Title';
@@ -20,7 +21,11 @@ class ImdbSearchConverter {
     movie.yearRange =
         getYearRange(map[inner_element_info_element]) ?? movie.yearRange;
     movie.year = movie.maxYear();
-    movie.type = getType(map[inner_element_info_element]) ?? movie.type;
+    movie.type = getImdbMovieContentType(
+          map[inner_element_info_element],
+          movie.runTime.inMinutes,
+        ) ??
+        movie.type;
     return movie;
   }
 
@@ -35,33 +40,21 @@ class ImdbSearchConverter {
     return id.substring(secondLastSlash + 1, lastSlash);
   }
 
-  // Extract year range from 'title (1988–1993) (TV Series)'
+  // Extract year range from 'title 123 (1988–1993) (TV Series) aka title 123'
   static String? getYearRange(Object? info) {
     if (info == null) return null;
     final String title = info.toString();
-    final dates = title.lastIndexOf(RegExp(r'[0-9]'));
-    final lastOpen = title.lastIndexOf('(', dates);
-    final lastClose = title.indexOf(')', dates);
-    if (lastOpen == -1 || lastClose == -1) return null;
+    final lastClose = title.lastIndexOf(')');
+    if (lastClose == -1) return null;
+    final dates = title.lastIndexOf(RegExp(r'[0-9]'), lastClose);
+    if (dates == -1) return null;
+    final yearOpen = title.lastIndexOf('(', dates);
+    final yearClose = title.indexOf(')', dates);
+    if (yearOpen == -1 || yearClose == -1) return null;
 
-    final yearRange = title.substring(lastOpen + 1, lastClose);
+    final yearRange = title.substring(yearOpen + 1, yearClose);
     final filter = RegExp(r'[0-9].*[0-9]');
     final numerics = filter.stringMatch(yearRange);
     return numerics;
-  }
-
-  static MovieContentType? getType(Object? info) {
-    if (info == null) return null;
-    final String title = info.toString();
-    if (title.lastIndexOf('TV Movie') > -1) return MovieContentType.movie;
-    if (title.lastIndexOf('TV Mini-Series') > -1)
-      return MovieContentType.miniseries;
-    if (title.lastIndexOf('Short') > -1) return MovieContentType.short;
-    if (title.lastIndexOf('Video') > -1) return MovieContentType.short;
-    if (title.lastIndexOf('TV Episode') > -1) return MovieContentType.episode;
-    if (title.lastIndexOf('TV Series') > -1) return MovieContentType.series;
-    if (title.lastIndexOf('TV Special') > -1) return MovieContentType.series;
-    return MovieContentType.movie;
-    return null;
   }
 }

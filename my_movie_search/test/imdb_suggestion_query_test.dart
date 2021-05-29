@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/providers/search/imdb_suggestions.dart';
 
 import 'test_helper.dart';
 import 'test_data/imdb_suggestion_converter_data.dart';
@@ -29,6 +31,7 @@ class QueryIMDBSuggestions_temp {
 ////////////////////////////////////////////////////////////////////////////////
 
 void main() {
+  /*
   group('stream basics', () {
     test('simple Bytesteam test', () {
       String testInput = 'B(a)';
@@ -164,50 +167,30 @@ void main() {
       // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn);
     });
-  });
+  });*/
 
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('imdb suggestion converter', () {
-    test('convert Json to DTO', () async {
-      String testInput = imdbJsonPSampleFull;
+  group('imdb suggestion query', () {
+    test('Run ExecuteQuery()', () async {
+      List<MovieResultDTO> queryResult = [];
+      final QueryIMDBSuggestions _imdbSuggestions = QueryIMDBSuggestions();
+      await _imdbSuggestions
+              .read(SearchCriteriaDTO(), source: emitImdbJsonSample)
+              .then((values) => queryResult.addAll(values))
+          /*..onError(
+            (error, stackTrace) => print('$error, ${stackTrace.toString()}'))*/
+          ;
 
-      var expectedDTO = await expectedDTOList;
-      int dtoCount = 0;
-
-      // Compare the stream output to the expected output.
-      void checkOutput(MovieResultDTO streamOutput) {
-        var expectedValue = expectedDTO[dtoCount];
-        var isExpectedValue = MovieResultDTOMatcher(expectedValue);
-        expect(
-          streamOutput,
-          isExpectedValue,
-          reason: 'Emmitted DTO $streamOutput} '
-              'needs to match expected DTO ${expectedDTO[dtoCount]}',
-        );
-        dtoCount++;
-      }
-
-      var expectFn = expectAsync1<void, MovieResultDTO>(
-        checkOutput,
-        count: expectedDTO.length,
-        max: expectedDTO.length,
+      var expectedValue = await expectedDTOList;
+      expect(
+        queryResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emmitted DTO list ${queryResult.toString()} '
+            'needs to match expected DTO list ${expectedValue.toString()}',
       );
-
-      Stream<MovieResultDTO> stream = emitByteStream(testInput)
-          .transform(utf8.decoder)
-          .transform(JsonPDecoder())
-          .transform(json.decoder)
-          // Stream the results collection from within the map.
-          .map((outerMap) => (outerMap as Map) //
-              [outer_element_results_collection])
-          // Emit each member of the list as a seperate stream event.
-          .expand((listMember) => listMember)
-          // Convert each Map result to a DTO
-          .map((event) => ImdbSuggestionConverter.dtoFromMap(event));
-      stream.listen(expectFn);
     });
   });
 }
