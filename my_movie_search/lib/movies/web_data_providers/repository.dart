@@ -17,8 +17,9 @@ class MovieRepository {
   final QueryTMDBMovies _tmdbSearch;
   final QueryGoogleMovies _googleSearch;
   StreamController<MovieResultDTO>? _movieStreamController;
-  var awaitingProviders = 0;
-  var awaitingDetails = 0;
+  var _awaitingProviders = 0;
+  var _awaitingDetails = 0;
+  final List<String> _requestedDetails = [];
 
   MovieRepository()
       : _imdbSuggestions = QueryIMDBSuggestions(),
@@ -33,6 +34,7 @@ class MovieRepository {
     yield feedback;
 
     _movieStreamController = StreamController<MovieResultDTO>();
+    _requestedDetails.clear();
     // TODO: error handling
     _initSearch(criteria);
 
@@ -51,13 +53,13 @@ class MovieRepository {
     SearchCriteriaDTO criteria,
   ) {
     for (var provider in [
-      /*_imdbSearch,
+      _imdbSearch,
       _imdbSuggestions,
       _omdbSearch,
-      _tmdbSearch,*/
+      _tmdbSearch,
       _googleSearch,
     ]) {
-      awaitingProviders++;
+      _awaitingProviders++;
       provider
           .read(criteria)
           .then((values) => _addResults(values))
@@ -79,14 +81,17 @@ class MovieRepository {
 
   List<Future> _queueDetailSearch(MovieResultDTO dto) {
     List<Future> futures = [];
-    var criteria = SearchCriteriaDTO();
+    if (!_requestedDetails.contains(dto.uniqueId)) {
+      _requestedDetails.add(dto.uniqueId);
+      var criteria = SearchCriteriaDTO();
 
-    if (dto.uniqueId.startsWith('tt')) {
-      final imdbDetails =
-          QueryIMDBDetails(); //Seperate instance per search (async)
-      criteria.criteriaTitle = dto.uniqueId;
-      futures.add(imdbDetails.read(criteria));
-      awaitingDetails++;
+      if (dto.uniqueId.startsWith('tt')) {
+        final imdbDetails =
+            QueryIMDBDetails(); //Seperate instance per search (async)
+        criteria.criteriaTitle = dto.uniqueId;
+        futures.add(imdbDetails.read(criteria));
+        _awaitingDetails++;
+      }
     }
     return futures;
   }
@@ -98,12 +103,12 @@ class MovieRepository {
   }
 
   void _finishDetails(int count) {
-    awaitingDetails = awaitingDetails - count;
-    if (awaitingProviders == 0 && awaitingDetails == 0) close();
+    _awaitingDetails = _awaitingDetails - count;
+    if (_awaitingProviders == 0 && _awaitingDetails == 0) close();
   }
 
   void _finishProvider() {
-    awaitingProviders = awaitingProviders - 1;
-    if (awaitingProviders == 0 && awaitingDetails == 0) close();
+    _awaitingProviders = _awaitingProviders - 1;
+    if (_awaitingProviders == 0 && _awaitingDetails == 0) close();
   }
 }

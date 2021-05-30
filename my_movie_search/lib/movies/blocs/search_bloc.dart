@@ -15,21 +15,22 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   final MovieRepository movieRepository;
   StreamSubscription<MovieResultDTO>? _searchStatusSubscription;
-  Map<String, MovieResultDTO> allResults = {};
+  Map<String, MovieResultDTO> _allResults = {};
   List<MovieResultDTO> sortedResults = [];
+  double _uid = 0.0; //Unique value representing the results list contents.
 
   @override
   Stream<SearchState> mapEventToState(
     SearchEvent event,
   ) async* {
-    if (event is SearchCompleted) {
-      sortResults();
-      yield SearchState.displayingResults();
+    if (event is SearchCompleted || event is SearchDataReceived) {
+      //sortResults();
+      yield SearchState.displayingResults(_uid);
     } else if (event is SearchCancelled) {
       yield SearchState.awaitingInput();
     } else if (event is SearchRequested) {
       yield SearchState.searching(SearchRequest(event.criteria.criteriaTitle));
-      allResults.clear();
+      _allResults.clear();
       sortedResults.clear();
       _searchStatusSubscription = movieRepository
           .search(event.criteria)
@@ -47,23 +48,24 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   void receiveDTO(MovieResultDTO newValue) {
     if (newValue.uniqueId == '-1' ||
-        !allResults.containsKey(newValue.uniqueId)) {
-      allResults[newValue.uniqueId] = newValue;
+        !_allResults.containsKey(newValue.uniqueId)) {
+      _allResults[newValue.uniqueId] = newValue;
     } else {
-      allResults[newValue.uniqueId]!.merge(newValue);
+      _allResults[newValue.uniqueId]!.merge(newValue);
     }
-    List<MovieResultDTO> x = allResults.values.toList();
-    add(SearchDataReceived(allResults.values.toList()));
-    print('new DTO added to unsorted list ${x.toPrintableString()}');
+    sortResults();
   }
 
   void sortResults() {
     sortedResults.clear();
-    sortedResults.addAll(allResults.values.toList());
+    sortedResults.addAll(_allResults.values.toList());
     // Sort by relevence with recent year first
     sortedResults.sort((a, b) => b.compareTo(a));
+    _uid = sortedResults.length.toDouble();
+    sortedResults.forEach((element) {
+      _uid += element.userRating;
+    });
 
-    print('sorted results $sortedResults');
     add(SearchDataReceived(sortedResults));
   }
 }

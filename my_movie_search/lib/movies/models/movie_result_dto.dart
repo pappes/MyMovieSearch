@@ -189,7 +189,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 extension ListMovieResultDTOHelpers on List<MovieResultDTO> {
   String toPrintableString() {
     String listContents = "";
-    for (var i = 0; i < this.length - 1; i++) {
+    for (var i = 0; i < this.length; i++) {
       listContents += "${this[i].toPrintableString()},\n";
     }
     return 'List<MovieResultDTO>(${this.length})[\n$listContents\n]';
