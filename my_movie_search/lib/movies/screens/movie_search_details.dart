@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
-import 'package:my_movie_search/utilities/duration_extensions.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   MovieDetailsPage({Key? key, required MovieResultDTO movie})

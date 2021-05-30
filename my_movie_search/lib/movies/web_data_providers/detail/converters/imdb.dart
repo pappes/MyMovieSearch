@@ -1,6 +1,7 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/utilities/duration_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
 /*{
     "@context": "http://schema.org",
@@ -143,13 +144,19 @@ class ImdbMoviePageConverter {
     movie.uniqueId = map[outer_element_identity_element] ?? movie.uniqueId;
     movie.title = map[outer_element_title_element] ?? movie.title;
     movie.imageUrl = map[outer_element_image_element] ?? movie.imageUrl;
-    movie.censorRating =
-        getCensorRating(map[outer_element_censor_rating]) ?? movie.censorRating;
+    movie.censorRating = getImdbCensorRating(
+          map[outer_element_censor_rating],
+        ) ??
+        movie.censorRating;
 
-    movie.userRating =
-        getUserRating(map[outer_element_rating]) ?? movie.userRating;
-    movie.userRatingCount =
-        getRatingCount(map[outer_element_rating]) ?? movie.userRatingCount;
+    movie.userRating = DoubleHelper.fromText(
+      map[outer_element_rating]?[inner_element_rating_value],
+      nullValueSubstitute: movie.userRating,
+    )!;
+    movie.userRatingCount = IntHelper.fromText(
+      map[outer_element_rating]?[inner_element_rating_count],
+      nullValueSubstitute: movie.userRatingCount,
+    )!;
 
     try {
       movie.year = DateTime.parse(map[outer_element_year_element] ?? "").year;
@@ -162,84 +169,11 @@ class ImdbMoviePageConverter {
       movie.runTime = Duration(hours: 0, minutes: 0, seconds: 0);
     }
     movie.type = getImdbMovieContentType(
-            map[outer_element_type_element], movie.runTime.inMinutes) ??
+          map[outer_element_type_element],
+          movie.runTime.inMinutes,
+        ) ??
         movie.type;
 
     return movie;
-  }
-
-  static int? getRatingCount(Map? map) {
-    var formattedText = map?[inner_element_rating_count];
-    if (formattedText == null) return null;
-    var text = formattedText.toString().replaceAll(',', '');
-    var count = int.parse(text);
-    return count == 0 ? null : count;
-  }
-
-  static double? getUserRating(Map? map) {
-    var formattedText = map?[inner_element_rating_count];
-    if (formattedText == null) return null;
-    var text = formattedText.toString().replaceAll(',', '');
-    var count = double.parse(text);
-    return count == 0 ? null : count;
-  }
-
-  static CensorRatingType? getCensorRating(String? type) {
-    // Details available at https://help.imdb.com/article/contribution/titles/certificates/GU757M8ZJ9ZPXB39
-    if (type == null) return null;
-    if (type.lastIndexOf('Banned') > -1) return CensorRatingType.adult;
-    if (type.lastIndexOf('X') > -1) return CensorRatingType.adult;
-    if (type.lastIndexOf('R21') > -1) return CensorRatingType.adult;
-
-    if (type.lastIndexOf('Z') > -1) return CensorRatingType.restriced;
-    if (type.lastIndexOf('R') > -1)
-      return CensorRatingType.restriced; //R, R(A), RP18
-    if (type.lastIndexOf('Mature') > -1) return CensorRatingType.restriced;
-    if (type.lastIndexOf('Adult') > -1) return CensorRatingType.restriced;
-    if (type.lastIndexOf('GA') > -1) return CensorRatingType.restriced;
-    if (type.lastIndexOf('18') > -1)
-      return CensorRatingType.restriced; //18, R18, M18, RP18, 18+, VM18
-    if (type.lastIndexOf('17') > -1) return CensorRatingType.restriced; //NC-17
-
-    if (type.lastIndexOf('16') > -1)
-      return CensorRatingType.mature; // 16, NC16, R16, RP16, VM 16
-    if (type.lastIndexOf('15') > -1)
-      return CensorRatingType.mature; // 15+, B15, R15+, 15A, 15PG
-    if (type.lastIndexOf('14') > -1)
-      return CensorRatingType.mature; // 14+, VM14
-    if (type.lastIndexOf('M') > -1)
-      return CensorRatingType.mature; // M, MA, TV-MA
-    if (type.lastIndexOf('GY') > -1) return CensorRatingType.mature;
-    if (type.lastIndexOf('D') > -1) return CensorRatingType.mature;
-    if (type.lastIndexOf('LH') > -1) return CensorRatingType.mature;
-
-    if (type.lastIndexOf('Approved') > -1) return CensorRatingType.family;
-    if (type.lastIndexOf('13') > -1)
-      return CensorRatingType.family; // PG-13, 13+, R13, RP13
-    if (type.lastIndexOf('12') > -1)
-      return CensorRatingType.family; // 12+, 12A, PG12, 12A, 12PG
-    if (type.lastIndexOf('11') > -1) return CensorRatingType.family; // 11
-    if (type.lastIndexOf('10') > -1) return CensorRatingType.family; // 10
-    if (type.lastIndexOf('9') > -1) return CensorRatingType.family; // 9+
-    if (type.lastIndexOf('Teen') > -1) return CensorRatingType.family; // Teen
-    if (type.lastIndexOf('TE') > -1) return CensorRatingType.family; // TE
-    if (type.lastIndexOf('7') > -1) return CensorRatingType.family; // 7+
-    if (type.lastIndexOf('6') > -1) return CensorRatingType.family; // 6+
-    if (type.lastIndexOf('S') > -1) return CensorRatingType.family;
-    if (type.lastIndexOf('G') > -1)
-      return CensorRatingType.family; // G, PG, PG-13
-
-    if (type.lastIndexOf('C') > -1) return CensorRatingType.kids;
-    if (type.lastIndexOf('Y') > -1) return CensorRatingType.kids; //TV-Y
-    if (type.lastIndexOf('U') > -1) return CensorRatingType.kids;
-    if (type.lastIndexOf('Btl') > -1) return CensorRatingType.kids;
-    if (type.lastIndexOf('TP') > -1) return CensorRatingType.kids;
-    if (type.lastIndexOf('0') > -1) return CensorRatingType.kids; // 0+
-    if (type.lastIndexOf('A') > -1)
-      return CensorRatingType.kids; // A, All, AL, AA
-
-    if (type.lastIndexOf('T') > -1) return CensorRatingType.family; // T
-    if (type.lastIndexOf('B') > -1) return CensorRatingType.family;
-    return CensorRatingType.none;
   }
 }

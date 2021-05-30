@@ -6,69 +6,6 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 /// Helper functions
 ////////////////////////////////////////////////////////////////////////////////
 
-/*Stream<String> emitString(String str) async* {
-  yield str;
-}*/
-
-/* TODO: test executeQuery()
-class QueryIMDBSuggestions_temp {
-  static executeQuery(
-    StreamController<MovieResultDTO> sc,
-    SearchCriteriaDTO criteria,
-  ) async {
-    emitImdbJsonSample()
-        .transform(json.decoder)
-        .transform(json.decoder)
-        .expand((element) =>
-            element) // expand the JSON collection and emit the single results record into a new stream
-        .pipe(sc);
-  }
-}
-*/
-/*
-class MovieResultDTOMatcher extends Matcher {
-  MovieResultDTO expected;
-  MovieResultDTO _actual;
-
-  MovieResultDTOMatcher(this.expected);
-
-  @override
-  Description describe(Description description) {
-    return description
-        .add('has expected MovieResultDTO content = ${expected.toMap()}');
-  }
-
-  @override
-  Description describeMismatch(dynamic item, Description mismatchDescription,
-      Map<dynamic, dynamic> matchState, bool verbose) {
-    return mismatchDescription
-        .add('has actual emitted MovieResultDTO = ${_actual.toMap()}');
-  }
-
-  @override
-  bool matches(actual, Map matchState) {
-    _actual = actual;
-    matchState['actual'] =
-        _actual is MovieResultDTO ? _actual : MovieResultDTO().toUnknown();
-    return _actual.matches(expected);
-  }
-}
-
-Stream<List<int>> emitByteStream(String str) async* {
-  for (var rune in str.runes.toList()) {
-    yield [rune];
-  }
-}
-
-Stream<List<int>> emitConsolidatedByteStream(String str) async* {
-  List<int> lst = [];
-
-  for (var rune in str.runes.toList()) {
-    lst.add(rune);
-  }
-  yield lst;
-}*/
-
 ////////////////////////////////////////////////////////////////////////////////
 /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////

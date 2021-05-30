@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import 'package:my_movie_search/app.dart';
-import 'package:my_movie_search/movies/providers/repository.dart';
 
 import 'package:my_movie_search/utilities/environment.dart';
-import 'package:my_movie_search/utilities/online_offline_search.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+import 'package:my_movie_search/movies/web_data_providers/repository.dart';
 
 import 'package:bloc/bloc.dart';
 import 'movies/blocs/bloc_parts/mm_search_observer.dart';

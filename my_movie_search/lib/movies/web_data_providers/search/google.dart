@@ -1,10 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-import 'package:my_movie_search/utilities/provider_controller.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/providers/search/offline/google.dart';
-import 'package:my_movie_search/movies/providers/search/converters/google.dart';
+import 'package:my_movie_search/utilities/web_data/provider_controller.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/google.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/google.dart';
 
 const GOOGLE_RESULTS_PER_PAGE = 10; // More than 10 results in an error!
 

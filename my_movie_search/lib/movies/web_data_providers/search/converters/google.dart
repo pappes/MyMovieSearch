@@ -1,4 +1,5 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 //query string https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&q=wonder&safe=off&key=<key>
 //json format
@@ -44,6 +45,8 @@ class GoogleMovieSearchConverter {
       final error = MovieResultDTO();
       error.title =
           'Unknown google error - potential API change! $e ${map.toString()}';
+      print(error.title);
+
       searchResults.add(error);
     }
     return searchResults;
@@ -123,11 +126,16 @@ class GoogleMovieSearchConverter {
   }
 
   static double getRatingValue(Map map) {
-    return double.parse(map[inner_element_rating_value] ?? '0');
+    return DoubleHelper.fromText(
+      map[inner_element_rating_value],
+      nullValueSubstitute: 0,
+    )!;
   }
 
   static int getRatingCount(Map map) {
-    var text = map[inner_element_rating_count]?.replaceAll(',', '');
-    return int.parse(text ?? '0');
+    return IntHelper.fromText(
+      map[inner_element_rating_count],
+      nullValueSubstitute: 0,
+    )!;
   }
 }

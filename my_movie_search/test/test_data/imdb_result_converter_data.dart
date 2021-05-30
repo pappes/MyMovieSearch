@@ -27,8 +27,8 @@ final expectedDTOStream = streamMovieResultDTOFromJsonMap([
     movieResultDTOYear: 2016,
 // movieResultDTOYearRange = 'yearRange';
     movieResultDTOType: MovieContentType.movie,
-    //movieResultDTOUserRating: 6.5,
-    //movieResultDTOUserRatingCount: 6.5,
+    movieResultDTOUserRating: 6.5,
+    movieResultDTOUserRatingCount: 10,
 // movieResultDTOCensorRating = 'censorRating';
     //movieResultDTORunTime: 'Wonder Woman',
   }

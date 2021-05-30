@@ -1,5 +1,5 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
 const inner_element_identity_element = 'AnchorAddress';
 const inner_element_title_element = 'Title';

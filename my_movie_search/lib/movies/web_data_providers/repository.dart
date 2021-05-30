@@ -2,13 +2,13 @@ import 'dart:async';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/providers/detail/imdb.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb.dart';
 
-import 'package:my_movie_search/movies/providers/search/imdb_suggestions.dart';
-import 'package:my_movie_search/movies/providers/search/imdb_search.dart';
-import 'package:my_movie_search/movies/providers/search/omdb.dart';
-import 'package:my_movie_search/movies/providers/search/tmdb.dart';
-import 'package:my_movie_search/movies/providers/search/google.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/google.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
 
 class MovieRepository {
   final QueryIMDBDetails _imdbDetails;
@@ -71,7 +71,7 @@ class MovieRepository {
     _getDetails(values);
   }
 
-  void _getDetails(List<MovieResultDTO> values) async {
+  Future<void> _getDetails(List<MovieResultDTO> values) async {
     var futures = [];
     values.forEach((dto) => futures = _queueDetailSearch(dto));
     futures.forEach(

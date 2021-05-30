@@ -3,8 +3,8 @@ library pappes.utilites;
 import 'package:universal_io/io.dart'
     show HttpClient, HttpHeaders; // limit inclusions to reduce size
 
-import 'package:my_movie_search/utilities/provider_controller.dart';
-import 'package:my_movie_search/utilities/online_offline_search.dart';
+import 'package:my_movie_search/utilities/web_data/provider_controller.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 typedef FutureOr<Stream<String>> DataSourceFn(String s);
 typedef List TransformFn(Map? map);
@@ -29,7 +29,8 @@ abstract class ProviderController<T> {
   void populate(StreamController<T> sc, SearchCriteriaDTO criteria,
       {DataSourceFn? source}) async {
     this.criteria = criteria;
-    (await fetch(source: source)).pipe(sc);
+    (await fetch(source: source)).pipe(sc).onError((error, stackTrace) =>
+        print('Error in provider populate $error\n${stackTrace.toString()}'));
   }
 
   /// Return a list with data matching [criteria].
@@ -49,10 +50,11 @@ abstract class ProviderController<T> {
 
     source = selecter.select(source ?? streamResult, offlineData());
     // Need to await completion of future before we can transform it.
-    //logger.i('got function, getting stream for ${dataSourceName()} using ${childClassDescriptor()}');
+    logger.v('got function, getting stream for ${dataSourceName()} '
+        'using ${childClassDescriptor()}');
     var result = source(criteria!.criteriaTitle);
     final Stream<String> data = await result;
-    //logger.i('got stream getting data');
+    logger.v('got stream getting data');
 
     // Emit each element from the list as a seperate element.
     return transformStream(data).expand((element) => element);
@@ -143,7 +145,13 @@ abstract class ProviderController<T> {
     final request = client.close();
 
     await Future.delayed(const Duration(seconds: 10), () => "1");
-    final response = await request;
+    var response;
+    try {
+      response = await request;
+    } catch (error, stackTrace) {
+      print('Error in provider read $error\n${stackTrace.toString()}');
+      rethrow;
+    }
     // TODO: check for HTTP status before transforming (avoid 404)
     return response.transform(utf8.decoder);
   }
@@ -161,7 +169,8 @@ abstract class ProviderController<T> {
     }
     try {
       var list = transformMap(map);
-      //logger.i('${list.length} results returned from ${childClassDescriptor()}');
+      logger.v('${list.length} results returned from ' // Verbose message/
+          '${childClassDescriptor()}');
       return list;
     } catch (exception, stacktrace) {
       logger.e('Exception raised during transformMap, constructing error'

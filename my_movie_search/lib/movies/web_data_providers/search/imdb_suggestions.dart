@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
-import 'package:my_movie_search/utilities/provider_controller.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/utilities/jsonp_transformer.dart';
-import 'package:my_movie_search/movies/providers/search/converters/imdb_suggestion.dart';
-import 'package:my_movie_search/movies/providers/search/offline/imdb_suggestions.dart';
 
-import 'package:my_movie_search/utilities/web_redirect.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/web_data/provider_controller.dart';
+import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
+import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_suggestions.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_suggestion.dart';
 
 /// Implements [SearchProvider] for the IMDB search suggestions API.
 /// Search suggestions are used by the lookup bar in the IMDB web page.

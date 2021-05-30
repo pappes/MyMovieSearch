@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_movie_search/movies/providers/repository.dart';
+import 'package:my_movie_search/movies/web_data_providers/repository.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
 //import 'package:my_movie_search/screens/home.dart';
 import 'package:my_movie_search/movies/screens/movie_search_criteria.dart';
@@ -25,7 +25,7 @@ class MMSearchApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: use bloc provider and reposiotry provider on search screens
+    // TODO: use bloc provider and repository provider on search screens
     return RepositoryProvider.value(
       value: movieRepository,
       child: BlocProvider(

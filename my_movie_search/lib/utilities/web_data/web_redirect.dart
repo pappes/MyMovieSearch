@@ -7,10 +7,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 ///
 /// Tunnels browser requests through an intermediate server to strip headers.
 class WebRedirect {
+  //TODO make origin URL optional
   static final originURL = 'https://www.imdb.com';
   static final tunnelBaseURL = DotEnv.env['TUNNEL_ADDRESS'];
 
-  /// Determine if flutter framwork will invoke CORS security protections
+  /// Determine if we need to invoke CORS security circumventions
   ///
   /// If running in a web browser flutter uses XHR to process web requests.
   static bool tunnelRequests() {

@@ -1,15 +1,14 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:html/parser.dart';
 import 'package:html/dom.dart';
-import 'package:my_movie_search/utilities/dom_extentions.dart';
+import 'package:html/parser.dart';
 
-import 'package:my_movie_search/utilities/provider_controller.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/providers/search/converters/imdb_search.dart';
-import 'package:my_movie_search/movies/providers/search/offline/imdb_search.dart';
-
-import 'package:my_movie_search/utilities/web_redirect.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extentions.dart';
+import 'package:my_movie_search/utilities/web_data/provider_controller.dart';
+import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_search.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_search.dart';
 
 const SEARCH_RESULTS_TABLE = 'findList';
 const COLUMN_MOVIE_TEXT = 'result_text';

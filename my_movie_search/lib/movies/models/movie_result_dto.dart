@@ -130,7 +130,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (a is DataSourceType && b is DataSourceType) bestSource(a, b);
     if (a is num && b is num && a < b) return b;
     if (a.toString().length < b.toString().length) return b;
-    if (stringAsNumber(a.toString()) < stringAsNumber(b.toString())) return b;
+    if (lastNumberFromString(a.toString()) < lastNumberFromString(b.toString()))
+      return b;
     return a;
   }
 
@@ -252,10 +253,10 @@ extension DTOCompare on MovieResultDTO {
   }
 
   int yearRangeAsNumber() {
-    return stringAsNumber(this.yearRange);
+    return lastNumberFromString(this.yearRange);
   }
 
-  int stringAsNumber(String str) {
+  int lastNumberFromString(String str) {
     try {
       // Any quantity of numeric digits at the end of the string.
       final filter = RegExp(r'[0-9]+$');

@@ -4,25 +4,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'test_helper.dart';
 import 'test_data/imdb_suggestion_converter_data.dart';
-import 'package:my_movie_search/utilities/jsonp_transformer.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/providers/search/converters/imdb_suggestion.dart';
-
-/* TODO: test executeQuery()
-class QueryIMDBSuggestions_temp {
-  static executeQuery(
-    StreamController<MovieResultDTO> sc,
-    SearchCriteriaDTO criteria,
-  ) async {
-    emitImdbJsonSample()
-        .transform(json.decoder)
-        .transform(json.decoder)
-        .expand((element) =>
-            element) // expand the JSON collection and emit the single results record into a new stream
-        .pipe(sc);
-  }
-}
-*/
+import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_suggestion.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Conceptual testing
