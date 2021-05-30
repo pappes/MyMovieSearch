@@ -24,6 +24,7 @@ const inner_element_rating = 'aggregaterating';
 const inner_element_rating_value = 'ratingvalue';
 const inner_element_rating_count = 'ratingcount';
 const inner_element_identity_element = 'pageid';
+const inner_element_pageconst_element = 'imdb:pageconst';
 const inner_element_type_element = 'og:type';
 const inner_element_image_element = 'og:image';
 const OMDB_RESULT_TYPE_MOVIE = 'video.movie';
@@ -94,7 +95,9 @@ class GoogleMovieSearchConverter {
   }
 
   static String getID(Map map) {
-    return map[inner_element_identity_element] ?? movieResultDTOUninitialised;
+    return map[inner_element_identity_element] ??
+        map[inner_element_pageconst_element] ??
+        movieResultDTOUninitialised;
   }
 
   static String getYearRange(Map map) {

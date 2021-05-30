@@ -51,7 +51,7 @@ abstract class ProviderController<T> {
     source = selecter.select(source ?? streamResult, offlineData());
     // Need to await completion of future before we can transform it.
     logger.v('got function, getting stream for ${dataSourceName()} '
-        'using ${childClassDescriptor()}');
+        'using ${constructURI(criteria!.criteriaTitle).toString()}');
     var result = source(criteria!.criteriaTitle);
     final Stream<String> data = await result;
     logger.v('got stream getting data');
@@ -123,13 +123,6 @@ abstract class ProviderController<T> {
         (decodedMap) => transformMapSafe(decodedMap as Map<dynamic, dynamic>?));
   }
 
-  /// Describe the source of the data for the child class.
-  ///
-  /// Can be overridden by child classes.
-  String childClassDescriptor() {
-    return constructURI('criteria').toString();
-  }
-
   /// Fetches and [utf8] decodes online data matching [criteria].
   ///
   /// The criteria does not need to be Uri encoded for safe searching.
@@ -170,7 +163,7 @@ abstract class ProviderController<T> {
     try {
       var list = transformMap(map);
       logger.v('${list.length} results returned from ' // Verbose message/
-          '${childClassDescriptor()}');
+          '${dataSourceName()}');
       return list;
     } catch (exception, stacktrace) {
       logger.e('Exception raised during transformMap, constructing error'

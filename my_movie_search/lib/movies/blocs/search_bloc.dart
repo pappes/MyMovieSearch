@@ -49,9 +49,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     if (newValue.uniqueId == '-1' ||
         !allResults.containsKey(newValue.uniqueId)) {
       allResults[newValue.uniqueId] = newValue;
-    } else
+    } else {
       allResults[newValue.uniqueId]!.merge(newValue);
+    }
+    List<MovieResultDTO> x = allResults.values.toList();
     add(SearchDataReceived(allResults.values.toList()));
+    print('new DTO added to unsorted list ${x.toPrintableString()}');
   }
 
   void sortResults() {
@@ -59,6 +62,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     sortedResults.addAll(allResults.values.toList());
     // Sort by relevence with recent year first
     sortedResults.sort((a, b) => b.compareTo(a));
+
+    print('sorted results $sortedResults');
     add(SearchDataReceived(sortedResults));
   }
 }

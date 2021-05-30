@@ -143,6 +143,7 @@ class ImdbMoviePageConverter {
     movie.source = DataSourceType.imdb;
     movie.uniqueId = map[outer_element_identity_element] ?? movie.uniqueId;
     movie.title = map[outer_element_title_element] ?? movie.title;
+    movie.description = map[outer_element_description] ?? movie.title;
     movie.imageUrl = map[outer_element_image_element] ?? movie.imageUrl;
     movie.censorRating = getImdbCensorRating(
           map[outer_element_censor_rating],

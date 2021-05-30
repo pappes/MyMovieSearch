@@ -11,7 +11,6 @@ import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
 
 class MovieRepository {
-  final QueryIMDBDetails _imdbDetails;
   final QueryIMDBSuggestions _imdbSuggestions;
   final QueryIMDBSearch _imdbSearch;
   final QueryOMDBMovies _omdbSearch;
@@ -19,10 +18,10 @@ class MovieRepository {
   final QueryGoogleMovies _googleSearch;
   StreamController<MovieResultDTO>? _movieStreamController;
   var awaitingProviders = 0;
+  var awaitingDetails = 0;
 
   MovieRepository()
-      : _imdbDetails = QueryIMDBDetails(),
-        _imdbSuggestions = QueryIMDBSuggestions(),
+      : _imdbSuggestions = QueryIMDBSuggestions(),
         _imdbSearch = QueryIMDBSearch(),
         _omdbSearch = QueryOMDBMovies(),
         _tmdbSearch = QueryTMDBMovies(),
@@ -52,10 +51,10 @@ class MovieRepository {
     SearchCriteriaDTO criteria,
   ) {
     for (var provider in [
-      _imdbSearch,
+      /*_imdbSearch,
       _imdbSuggestions,
       _omdbSearch,
-      _tmdbSearch,
+      _tmdbSearch,*/
       _googleSearch,
     ]) {
       awaitingProviders++;
@@ -71,9 +70,9 @@ class MovieRepository {
     _getDetails(values);
   }
 
-  Future<void> _getDetails(List<MovieResultDTO> values) async {
-    var futures = [];
-    values.forEach((dto) => futures = _queueDetailSearch(dto));
+  void _getDetails(List<MovieResultDTO> values) {
+    List<Future> futures = [];
+    values.forEach((dto) => futures.addAll(_queueDetailSearch(dto)));
     futures.forEach(
         (detailSearch) => detailSearch.then((values) => _addDetails(values)));
   }
@@ -83,19 +82,28 @@ class MovieRepository {
     var criteria = SearchCriteriaDTO();
 
     if (dto.uniqueId.startsWith('tt')) {
+      final imdbDetails =
+          QueryIMDBDetails(); //Seperate instance per search (async)
       criteria.criteriaTitle = dto.uniqueId;
-      futures.add(_imdbDetails.read(criteria));
+      futures.add(imdbDetails.read(criteria));
+      awaitingDetails++;
     }
     return futures;
   }
 
   void _addDetails(List<MovieResultDTO> values) {
-    values.forEach((dto) => print(dto.toString()));
+    values.forEach((dto) => print(dto.toPrintableString()));
     values.forEach((dto) => _movieStreamController?.add(dto));
+    _finishDetails(values.length);
+  }
+
+  void _finishDetails(int count) {
+    awaitingDetails = awaitingDetails - count;
+    if (awaitingProviders == 0 && awaitingDetails == 0) close();
   }
 
   void _finishProvider() {
     awaitingProviders = awaitingProviders - 1;
-    if (awaitingProviders == 0) close();
+    if (awaitingProviders == 0 && awaitingDetails == 0) close();
   }
 }

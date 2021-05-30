@@ -104,8 +104,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   }
 
   void merge(MovieResultDTO newValue) {
-    if (this.description != "") {
-      print(this.description);
+    if (newValue.description != "") {
+      print(newValue.description);
     }
     if (newValue.userRatingCount > this.userRatingCount) {
       this.source = bestval(newValue.source, this.source);
