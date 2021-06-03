@@ -627,18 +627,18 @@ final googleMoviesJsonSearchError = r'''
 final googleMoviesJsonSearchFull =
     ' $googleMoviesJsonSearchPrefix $googleMoviesJsonSearchInner $googleMoviesJsonSearchSuffix';
 
-Stream<String> streamGoogleMoviesJsonOfflineData(String dummy) {
+Stream<String> streamGoogleMoviesJsonOfflineData(dynamic dummy) {
   return emitGoogleMoviesJsonOfflineData(dummy);
 }
 
-Stream<String> emitGoogleMoviesJsonOfflineData(String dummy) async* {
+Stream<String> emitGoogleMoviesJsonOfflineData(dynamic dummy) async* {
   yield googleMoviesJsonSearchFull;
 }
 
-Stream<String> emitGoogleMoviesJsonEmpty(String dummy) async* {
+Stream<String> emitGoogleMoviesJsonEmpty(dynamic dummy) async* {
   yield googleMoviesJsonSearchEmpty;
 }
 
-Stream<String> emitGoogleMoviesJsonError(String dummy) async* {
+Stream<String> emitGoogleMoviesJsonError(dynamic dummy) async* {
   yield googleMoviesJsonSearchError;
 }

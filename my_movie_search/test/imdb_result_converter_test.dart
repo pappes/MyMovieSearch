@@ -42,7 +42,7 @@ void main() {
       );
 
       criteria.criteriaTitle = 'tt7602562';
-      imdbResult.criteria = criteria;
+      imdbResult.setCriteria(criteria);
 
       Stream<String> str = emitByteStream(testInput).transform(utf8.decoder);
       Stream<MovieResultDTO> stream = imdbResult

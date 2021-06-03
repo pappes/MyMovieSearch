@@ -50,14 +50,14 @@ final imdbJsonPSampleFull = '''
     $imdbJsonSampleFull
   ) ''';
 
-Stream<String> streamImdbJsonPOfflineData(String dummy) {
+Stream<String> streamImdbJsonPOfflineData(dynamic dummy) {
   return emitImdbJsonOfflineData(dummy);
 }
 
-Stream<String> emitImdbJsonOfflineData(String dummy) async* {
+Stream<String> emitImdbJsonOfflineData(dynamic dummy) async* {
   yield imdbJsonPSampleFull;
 }
 
-Stream<String> emitImdbJsonSample(String dummy) async* {
+Stream<String> emitImdbJsonSample(dynamic dummy) async* {
   yield imdbJsonSampleFull;
 }

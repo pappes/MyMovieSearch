@@ -1,22 +1,15 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility that Flutter provides. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'dart:convert';
-import 'package:universal_io/io.dart' show HttpClient;
+import 'dart:io';
 
-//import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:my_movie_search/app.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/repository.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb.dart';
 
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+
+////////////////////////////////////////////////////////////////////////////////
+/// Mock provider
+////////////////////////////////////////////////////////////////////////////////
 final _imdbHtmlSampleFull = r'''
 <!DOCTYPE html>
 <html
@@ -102,20 +95,40 @@ List<Future> _queueDetailSearch(List<String> queries) {
   return futures;
 }
 
-testRead(List<String> criteria, List<MovieResultDTO> expectedValue) async {
-  var futures = _queueDetailSearch(criteria);
-
-  List<MovieResultDTO> queryResult = [];
-  futures.forEach((future) {
-    future.then((value) => queryResult.addAll(value));
-  });
-  for (var future in futures) {
-    await future;
-  }
-}
-
 void main() async {
-  var queries = _makeQueries(300);
-  var queryResult = _makeResults(queries.length);
-  await testRead(queries, queryResult);
+////////////////////////////////////////////////////////////////////////////////
+  /// Integration tests
+////////////////////////////////////////////////////////////////////////////////
+
+  group('provider controller parent', () {
+    testRead(List<String> criteria, List<MovieResultDTO> expectedValue) async {
+      var futures = _queueDetailSearch(criteria);
+
+      List<MovieResultDTO> queryResult = [];
+      futures.forEach((future) {
+        future.then((value) => queryResult.addAll(value));
+      });
+      for (var future in futures) {
+        await future;
+      }
+      /* expect(
+        queryResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emmitted DTO list ${queryResult.toString()} '
+            'needs to match expected DTO list ${expectedValue.toString()}',
+      );*/
+    }
+
+    test('Run read(3)', () async {
+      var queries = _makeQueries(3);
+      var queryResult = _makeResults(queries.length);
+      await testRead(queries, queryResult);
+    });
+
+    test('Run read(300)', () async {
+      var queries = _makeQueries(300);
+      var queryResult = _makeResults(queries.length);
+      await testRead(queries, queryResult);
+    });
+  });
 }

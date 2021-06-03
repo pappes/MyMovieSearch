@@ -11,7 +11,8 @@ import 'package:my_movie_search/movies/web_data_providers/search/converters/tmdb
 
 /// Implements [SearchProvider] for searching the The Movie Database (TMDB).
 /// The OMDb API is a free web service to obtain movie information.
-class QueryTMDBMovies extends ProviderController<MovieResultDTO> {
+class QueryTMDBMovies
+    extends ProviderController<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'https://api.themoviedb.org/3/search/movie?api_key=';
 
   /// Describe where the data is comming from.
@@ -30,6 +31,12 @@ class QueryTMDBMovies extends ProviderController<MovieResultDTO> {
   List<MovieResultDTO> transformMap(Map map) =>
       TmdbMovieSearchConverter.dtoFromCompleteJsonMap(map);
 
+  /// converts <INPUT_TYPE> to a string representation.
+  @override
+  String toText(dynamic contents) {
+    return contents!.criteriaTitle;
+  }
+
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO constructError(String message) {
@@ -42,10 +49,11 @@ class QueryTMDBMovies extends ProviderController<MovieResultDTO> {
 
   /// API call to TMDB returning the top 10 matching results for [searchText].
   @override
-  Uri constructURI(String searchText, {int pageNumber = 1}) {
+  Uri constructURI(String searchCriteria, {int pageNumber = 1}) {
     final omdbKey =
         env['TMDB_KEY']; // From the file assets/.env (not source controlled)
-    return Uri.parse('$baseURL$omdbKey&query=$searchText&page=$pageNumber');
+    return Uri.parse('$baseURL$omdbKey&query=$searchCriteria'
+        '&page=$pageNumber');
   }
 
   // Add authorization token for compatability with the TMDB V4 API.

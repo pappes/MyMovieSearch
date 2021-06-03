@@ -8,8 +8,9 @@ import 'package:my_movie_search/movies/web_data_providers/search/converters/omdb
 
 /// Implements [SearchProvider] for searching the Open Movie Database.
 /// The OMDb API is a free web service to obtain movie information.
-class QueryOMDBMovies extends ProviderController<MovieResultDTO> {
-  static final baseURL = "http://www.omdbapi.com/?apikey=";
+class QueryOMDBMovies
+    extends ProviderController<MovieResultDTO, SearchCriteriaDTO> {
+  static final baseURL = 'http://www.omdbapi.com/?apikey=';
 
   /// Describe where the data is comming from.
   @override
@@ -29,6 +30,12 @@ class QueryOMDBMovies extends ProviderController<MovieResultDTO> {
   List<MovieResultDTO> transformMap(Map map) =>
       OmdbMovieSearchConverter.dtoFromCompleteJsonMap(map);
 
+  /// converts <INPUT_TYPE> to a string representation.
+  @override
+  String toText(dynamic contents) {
+    return contents!.criteriaTitle;
+  }
+
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO constructError(String message) {
@@ -41,9 +48,10 @@ class QueryOMDBMovies extends ProviderController<MovieResultDTO> {
 
   /// API call to OMDB returning the top 10 matching results for [searchText].
   @override
-  Uri constructURI(String searchText, {int pageNumber = 1}) {
+  Uri constructURI(String searchCriteria, {int pageNumber = 1}) {
     final omdbKey =
         env["OMDB_KEY"]; // From the file assets/.env (not source controlled)
-    return Uri.parse("$baseURL$omdbKey&s=$searchText&page=$pageNumber");
+    return Uri.parse('$baseURL$omdbKey&s=$searchCriteria'
+        '&page=$pageNumber');
   }
 }

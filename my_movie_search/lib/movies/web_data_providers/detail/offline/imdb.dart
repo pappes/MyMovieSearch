@@ -3422,10 +3422,10 @@ csa.plugin(function(e){var i="transitionStart",n="pageVisible",t="PageTiming",a=
 </html>
 ''';
 
-Stream<String> streamImdbHtmlOfflineData(String dummy) {
+Stream<String> streamImdbHtmlOfflineData(dynamic dummy) {
   return emitImdbHtmlSample(dummy);
 }
 
-Stream<String> emitImdbHtmlSample(String dummy) async* {
+Stream<String> emitImdbHtmlSample(dynamic dummy) async* {
   yield imdbHtmlSampleFull;
 }

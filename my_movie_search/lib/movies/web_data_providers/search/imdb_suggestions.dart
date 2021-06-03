@@ -7,9 +7,12 @@ import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_suggestions.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_suggestion.dart';
 
+const _DEFAULT_SEARCH_RESULTS_LIMIT = 10;
+
 /// Implements [SearchProvider] for the IMDB search suggestions API.
 /// Search suggestions are used by the lookup bar in the IMDB web page.
-class QueryIMDBSuggestions extends ProviderController<MovieResultDTO> {
+class QueryIMDBSuggestions
+    extends ProviderController<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'https://sg.media-imdb.com/suggests';
 
   /// Describe where the data is comming from.
@@ -26,8 +29,11 @@ class QueryIMDBSuggestions extends ProviderController<MovieResultDTO> {
   }
 
   /// Remove JsonP from API response and convert to a map of MovieResultDTO.
+  /// Limit results to 10 most relevant by default.
   @override
   Stream<List<MovieResultDTO>> transformStream(Stream<String> str) {
+    if (getSearchResultsLimit == null)
+      setSearchResultsLimit(_DEFAULT_SEARCH_RESULTS_LIMIT);
     return str
         .transform(JsonPDecoder())
         .transform(json.decoder)
@@ -38,6 +44,12 @@ class QueryIMDBSuggestions extends ProviderController<MovieResultDTO> {
   @override
   List<MovieResultDTO> transformMap(Map map) =>
       ImdbSuggestionConverter.dtoFromCompleteJsonMap(map);
+
+  /// converts <INPUT_TYPE> to a string representation.
+  @override
+  String toText(dynamic contents) {
+    return contents!.criteriaTitle;
+  }
 
   /// Include entire map in the movie title when an error occurs.
   @override
@@ -51,8 +63,9 @@ class QueryIMDBSuggestions extends ProviderController<MovieResultDTO> {
 
   /// API call to IMDB search returning the top matching results for [searchText].
   @override
-  Uri constructURI(String searchText, {int pageNumber = 1}) {
-    final searchSuffix = '/${searchText.substring(0, 1)}/$searchText.json';
+  Uri constructURI(String searchCriteria, {int pageNumber = 1}) {
+    final searchSuffix =
+        '/${searchCriteria.substring(0, 1)}/$searchCriteria.json';
     var url = '$baseURL$searchSuffix';
     return WebRedirect.constructURI(url);
   }

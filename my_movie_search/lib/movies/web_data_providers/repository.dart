@@ -61,18 +61,18 @@ class MovieRepository {
     ]) {
       _awaitingProviders++;
       provider
-          .read(criteria)
+          .read(criteria, limit: 10)
           .then((values) => _addResults(values))
           .whenComplete(_finishProvider);
     }
   }
 
-  void _addResults(List<MovieResultDTO> values) {
+  void _addResults(List<dynamic> values) {
     values.forEach((dto) => _movieStreamController?.add(dto));
     _getDetails(values);
   }
 
-  void _getDetails(List<MovieResultDTO> values) {
+  void _getDetails(List<dynamic> values) {
     List<Future> futures = [];
     values.forEach((dto) => futures.addAll(_queueDetailSearch(dto)));
     futures.forEach(

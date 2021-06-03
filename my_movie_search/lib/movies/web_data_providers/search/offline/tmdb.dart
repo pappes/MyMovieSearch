@@ -43,18 +43,18 @@ final tmdbJsonSearchEmpty =
 final tmdbJsonSearchError =
     '{ "status_message": "Invalid API key: You must be granted a valid key.", "success": false, "status_code": 7 }';
 
-Stream<String> streamTmdbJsonOfflineData(String dummy) {
+Stream<String> streamTmdbJsonOfflineData(dynamic dummy) {
   return emitTmdbJsonOfflineData(dummy);
 }
 
-Stream<String> emitTmdbJsonOfflineData(String dummy) async* {
+Stream<String> emitTmdbJsonOfflineData(dynamic dummy) async* {
   yield tmdbJsonSearchFull;
 }
 
-Stream<String> emitTmdbJsonEmpty(String dummy) async* {
+Stream<String> emitTmdbJsonEmpty(dynamic dummy) async* {
   yield tmdbJsonSearchEmpty;
 }
 
-Stream<String> emitTmdbJsonError(String dummy) async* {
+Stream<String> emitTmdbJsonError(dynamic dummy) async* {
   yield tmdbJsonSearchError;
 }

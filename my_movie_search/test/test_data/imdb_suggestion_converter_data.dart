@@ -226,6 +226,6 @@ final String imdbJsonSampleOuter =
     '{"v":1,"q":"wonder_woman","d":[ $imdbJsonSampleInner ],"$imdbCustomKeyName":"$imdbCustomKeyVal"}';
 final String imdbJsonPSampleFull = '$imdbJsonPFunction($imdbJsonSampleOuter)';
 
-Stream<String> emitImdbJsonSample(String dummy) async* {
+Stream<String> emitImdbJsonSample(dynamic dummy) async* {
   yield imdbJsonPSampleFull;
 }

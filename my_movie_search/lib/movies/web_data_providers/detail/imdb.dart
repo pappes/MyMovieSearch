@@ -14,7 +14,8 @@ const COLUMN_MOVIE_TEXT = 'result_text';
 const COLUMN_MOVIE_POSTER = 'primary_photo';
 
 /// Implements [SearchProvider] for the IMDB search html webscraper.
-class QueryIMDBDetails extends ProviderController<MovieResultDTO> {
+class QueryIMDBDetails
+    extends ProviderController<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'https://www.imdb.com/title/';
   static final baseURLsuffix = '/?ref_=fn_tt_tt_1';
 
@@ -44,10 +45,16 @@ class QueryIMDBDetails extends ProviderController<MovieResultDTO> {
     yield transformMapSafe(movieData);
   }
 
+  /// converts <INPUT_TYPE> to a string representation.
+  @override
+  String toText(dynamic contents) {
+    return contents!.criteriaTitle;
+  }
+
   /// API call to IMDB search returning the top matching results for [searchText].
   @override
-  Uri constructURI(String searchText, {int pageNumber = 1}) {
-    var url = '$baseURL$searchText$baseURLsuffix';
+  Uri constructURI(String searchCriteria, {int pageNumber = 1}) {
+    var url = '$baseURL$searchCriteria$baseURLsuffix';
     print("fetching imdb details $url");
     return WebRedirect.constructURI(url);
   }
@@ -78,7 +85,7 @@ class QueryIMDBDetails extends ProviderController<MovieResultDTO> {
     getAttributeValue(movieData, document, inner_element_rating_count);
     getAttributeValue(movieData, document, inner_element_rating_value);
 
-    movieData['id'] = criteria?.criteriaTitle ?? movieData['id'];
+    movieData['id'] = getCriteriaText ?? movieData['id'];
     return movieData;
   }
 

@@ -25,18 +25,18 @@ final omdbJsonSearchFull =
 final omdbJsonSearchEmpty = '{"Response":"False","Error":"Movie not found!"}';
 final omdbJsonSearchError = '{"Response":"False","Error":"Invalid API key!"}';
 
-Stream<String> streamOmdbJsonOfflineData(String dummy) {
+Stream<String> streamOmdbJsonOfflineData(dynamic dummy) {
   return emitOmdbJsonOfflineData(dummy);
 }
 
-Stream<String> emitOmdbJsonOfflineData(String dummy) async* {
+Stream<String> emitOmdbJsonOfflineData(dynamic dummy) async* {
   yield omdbJsonSearchFull;
 }
 
-Stream<String> emitOmdbJsonEmpty(String dummy) async* {
+Stream<String> emitOmdbJsonEmpty(dynamic dummy) async* {
   yield omdbJsonSearchEmpty;
 }
 
-Stream<String> emitOmdbJsonError(String dummy) async* {
+Stream<String> emitOmdbJsonError(dynamic dummy) async* {
   yield omdbJsonSearchError;
 }
