@@ -1,5 +1,3 @@
-import 'dart:async';
-
 //query string https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=wonder%20woman
 
 final imdbHtmlSampleInner = r'''

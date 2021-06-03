@@ -1,10 +1,12 @@
 library pappes.utilites;
 
+import 'dart:async' show StreamController, FutureOr;
+import 'dart:convert' show json, utf8;
+
 import 'package:universal_io/io.dart'
     show HttpClient, HttpHeaders; // limit inclusions to reduce size
 
-import 'package:my_movie_search/utilities/web_data/provider_controller.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+import 'online_offline_search.dart';
 
 typedef FutureOr<Stream<String>> DataSourceFn(dynamic s);
 typedef List TransformFn(Map? map);
@@ -22,7 +24,7 @@ const _DEFAULT_SEARCH_RESULTS_LIMIT = 100;
 ///   web/file -> Json via [offlineData] or [constructURI]
 ///   Json(Map) -> Objects of type OUTPUT_TYPE via [transformMap]
 ///   Exception handling via [constructError]
-abstract class ProviderController<OUTPUT_TYPE, INPUT_TYPE> {
+abstract class WebFetch<OUTPUT_TYPE, INPUT_TYPE> {
   INPUT_TYPE? _criteria;
   int? _searchResultsLimit;
   int _searchResultsreturned = 0;

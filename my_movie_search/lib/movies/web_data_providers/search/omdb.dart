@@ -1,15 +1,15 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter/foundation.dart' show describeEnum;
+import 'package:flutter_dotenv/flutter_dotenv.dart' show env;
 
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/web_data/provider_controller.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/offline/omdb.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/converters/omdb.dart';
+import 'offline/omdb.dart';
+import 'converters/omdb.dart';
 
 /// Implements [SearchProvider] for searching the Open Movie Database.
 /// The OMDb API is a free web service to obtain movie information.
-class QueryOMDBMovies
-    extends ProviderController<MovieResultDTO, SearchCriteriaDTO> {
+class QueryOMDBMovies extends WebFetch<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'http://www.omdbapi.com/?apikey=';
 
   /// Describe where the data is comming from.

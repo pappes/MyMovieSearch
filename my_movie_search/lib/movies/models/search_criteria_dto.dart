@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+import 'package:equatable/equatable.dart' show Equatable;
 
 class SearchRequest extends Equatable {
   const SearchRequest(this.title);

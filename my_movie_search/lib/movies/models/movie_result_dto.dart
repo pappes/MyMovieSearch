@@ -1,7 +1,6 @@
-import 'dart:math';
+import 'dart:math' show max;
 
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
-export 'package:my_movie_search/movies/models/metadata_dto.dart';
+import 'metadata_dto.dart';
 
 class MovieResultDTO {
   DataSourceType source = DataSourceType.none;

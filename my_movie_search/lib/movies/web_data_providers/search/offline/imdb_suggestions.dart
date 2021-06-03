@@ -1,5 +1,3 @@
-import 'dart:async';
-
 //query string https://sg.media-imdb.com/suggests/w/wonder%20woman.json
 //json format
 //1 = title/name

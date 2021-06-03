@@ -1,9 +1,29 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    show
+        Widget,
+        Route,
+        MaterialPageRoute,
+        State,
+        StatefulWidget,
+        Navigator,
+        BuildContext,
+        Scaffold,
+        MainAxisAlignment,
+        FloatingActionButton,
+        AppBar,
+        Text,
+        Column,
+        Icon,
+        Icons,
+        TextField,
+        Center,
+        TextInputAction,
+        InputDecoration,
+        AutofillHints,
+        Key;
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/screens/movie_search_results.dart';
-import 'package:my_movie_search/movies/screens/styles.dart';
-
-import 'movie_search_results.dart';
+import 'movie_search_results.dart' show MovieSearchResultsNewPage;
+import 'styles.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
   const MovieSearchCriteriaPage({Key? key}) : super(key: key);

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 //query string https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=home
 //json format
 //title = title/name

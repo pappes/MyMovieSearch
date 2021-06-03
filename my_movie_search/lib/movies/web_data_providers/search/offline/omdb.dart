@@ -1,5 +1,3 @@
-import 'dart:async';
-
 //query string http://www.omdbapi.com/?apikey=<key>&s=wonder+woman
 //json format
 //Title = title/name

@@ -1,5 +1,24 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show describeEnum;
+import 'package:flutter/material.dart'
+    show
+        Widget,
+        StatefulWidget,
+        State,
+        Key,
+        BuildContext,
+        Scaffold,
+        AppBar,
+        Text,
+        SelectableText,
+        Column,
+        Row,
+        Alignment,
+        Align,
+        Expanded,
+        Image,
+        NetworkImage,
+        MainAxisAlignment,
+        CrossAxisAlignment;
 
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';

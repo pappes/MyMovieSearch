@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';

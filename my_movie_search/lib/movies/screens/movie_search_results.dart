@@ -1,6 +1,19 @@
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart'
+    show
+        StatefulWidget,
+        State,
+        Widget,
+        BuildContext,
+        Scaffold,
+        AppBar,
+        Text,
+        Center,
+        Scrollbar,
+        ListView,
+        Key,
+        EdgeInsets,
+        ListTile;
+import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider, BlocBuilder;
 
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/widgets/movie_card_small.dart';

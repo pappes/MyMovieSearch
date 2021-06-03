@@ -6,6 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'dart:convert';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:universal_io/io.dart' show HttpClient;
 
 //import 'package:flutter/material.dart';

@@ -1,8 +1,9 @@
-import 'dart:io';
-import 'dart:convert';
-import 'package:path/path.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:path_provider/path_provider.dart';
+import 'dart:io' show Directory;
+import 'dart:convert' show json;
+import 'package:path/path.dart' show join;
+import 'package:sqflite/sqflite.dart' show Database, openDatabase;
+import 'package:path_provider/path_provider.dart'
+    show getApplicationDocumentsDirectory;
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 // database table and column names

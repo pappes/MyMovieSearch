@@ -1,14 +1,13 @@
-import 'dart:async';
+import 'dart:async' show StreamController;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb.dart';
-
-import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/google.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
+import 'detail/imdb.dart';
+import 'search/imdb_suggestions.dart';
+import 'search/imdb_search.dart';
+import 'search/google.dart';
+import 'search/omdb.dart';
+import 'search/tmdb.dart';
 
 class MovieRepository {
   final QueryIMDBSuggestions _imdbSuggestions;

@@ -1,4 +1,4 @@
-import 'package:html/dom.dart';
+import 'package:html/dom.dart' show Element, Node;
 
 enum ElementType { anchor, image, text, table, row }
 

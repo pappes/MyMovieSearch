@@ -1,6 +1,6 @@
 library pappes.utilites;
 
-import 'package:logger/logger.dart';
+import 'package:logger/logger.dart' show Logger;
 
 var logger = Logger();
 

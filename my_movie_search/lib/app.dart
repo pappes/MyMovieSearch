@@ -1,9 +1,20 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'
+    show
+        StatelessWidget,
+        State,
+        Widget,
+        MaterialApp,
+        BuildContext,
+        GlobalKey,
+        StatefulWidget,
+        Key,
+        NavigatorState;
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:my_movie_search/movies/web_data_providers/repository.dart';
-import 'package:my_movie_search/movies/blocs/search_bloc.dart';
+
+import 'movies/web_data_providers/repository.dart';
+import 'movies/blocs/search_bloc.dart';
+import 'movies/screens/movie_search_criteria.dart';
 //import 'package:my_movie_search/screens/home.dart';
-import 'package:my_movie_search/movies/screens/movie_search_criteria.dart';
 //import 'package:my_movie_search/screens/webveiw/webview_testing.dart';
 
 /// {@template mmsearch_app}

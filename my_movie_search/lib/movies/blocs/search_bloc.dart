@@ -1,6 +1,6 @@
-import 'dart:async';
+import 'dart:async' show StreamSubscription;
 
-import 'package:bloc/bloc.dart';
+import 'package:bloc/bloc.dart' show SearchBloc, Bloc;
 import 'package:equatable/equatable.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';

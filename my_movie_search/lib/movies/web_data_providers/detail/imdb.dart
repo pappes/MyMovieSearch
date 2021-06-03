@@ -1,21 +1,21 @@
-import 'package:flutter/foundation.dart';
+import 'dart:convert' show json;
+import 'package:html/dom.dart' show Document, Element;
+import 'package:html/parser.dart' show parse;
+import 'package:flutter/foundation.dart' show describeEnum;
 
-import 'package:html/dom.dart';
-import 'package:html/parser.dart';
-
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/web_data/provider_controller.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb.dart';
+import 'converters/imdb.dart';
+import 'offline/imdb.dart';
 
 const SEARCH_RESULTS_TABLE = 'findList';
 const COLUMN_MOVIE_TEXT = 'result_text';
 const COLUMN_MOVIE_POSTER = 'primary_photo';
 
 /// Implements [SearchProvider] for the IMDB search html webscraper.
-class QueryIMDBDetails
-    extends ProviderController<MovieResultDTO, SearchCriteriaDTO> {
+class QueryIMDBDetails extends WebFetch<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'https://www.imdb.com/title/';
   static final baseURLsuffix = '/?ref_=fn_tt_tt_1';
 

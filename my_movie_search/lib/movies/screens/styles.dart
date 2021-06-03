@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/material.dart' show TextStyle;
+import 'package:intl/intl.dart' show NumberFormat;
 
 final hugeFont = TextStyle(fontSize: 38.0);
 final biggerFont = TextStyle(fontSize: 18.0);

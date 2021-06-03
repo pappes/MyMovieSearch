@@ -1,6 +1,6 @@
 library pappes.utilites;
 
-import 'package:flutter/foundation.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
 
 /// Isolate web requests from cross origin vunerabilities.

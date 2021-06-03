@@ -1,7 +1,6 @@
 library pappes.utilites;
 
-import 'dart:async';
-import 'dart:convert';
+import 'dart:convert' show Converter;
 
 class JsonPState {
   JsonPState();
