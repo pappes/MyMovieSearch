@@ -45,10 +45,7 @@ void main() {
       imdbResult.setCriteria(criteria);
 
       Stream<String> str = emitByteStream(testInput).transform(utf8.decoder);
-      Stream<MovieResultDTO> stream = imdbResult
-          .transformStream(str)
-          // Emit each member from the list as a seperate stream event.
-          .expand((listMember) => listMember);
+      Stream<MovieResultDTO> stream = imdbResult.transformStream(str);
 
       stream.listen(expectFn);
     });

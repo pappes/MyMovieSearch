@@ -24,14 +24,14 @@ const _DEFAULT_SEARCH_RESULTS_LIMIT = 100;
 ///   web/file -> Json via [offlineData] or [constructURI]
 ///   Json(Map) -> Objects of type OUTPUT_TYPE via [transformMap]
 ///   Exception handling via [constructError]
-abstract class WebFetch<OUTPUT_TYPE, INPUT_TYPE> {
+abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   INPUT_TYPE? _criteria;
   int? _searchResultsLimit;
   int _searchResultsreturned = 0;
 
   void setCriteria(INPUT_TYPE criteria) => _criteria = criteria;
   void setSearchResultsLimit(int limit) => _searchResultsLimit = limit;
-  String get getCriteriaText => toText(_criteria);
+  String? get getCriteriaText => toText(_criteria);
   int? get getSearchResultsLimit => _searchResultsLimit;
 
   /// Populate [StreamController] with data matching [criteria].
@@ -73,7 +73,7 @@ abstract class WebFetch<OUTPUT_TYPE, INPUT_TYPE> {
     logger.v('got stream getting data');
 
     // Emit each element from the list as a seperate element.
-    return transformStream(data).expand((element) => element);
+    return transformStream(data);
   }
 
   /// Describe where the data is comming from.
@@ -106,7 +106,7 @@ abstract class WebFetch<OUTPUT_TYPE, INPUT_TYPE> {
   /// converts <INPUT_TYPE> to a string representation.
   ///
   /// should be overridden by child classes.
-  String toText(dynamic contents) {
+  String? toText(dynamic contents) {
     return contents.toString();
   }
 
@@ -132,18 +132,22 @@ abstract class WebFetch<OUTPUT_TYPE, INPUT_TYPE> {
   /// Can be overridden by child classes if required.
   void constructHeaders(HttpHeaders headers) {}
 
-  /// Convert [Stream] of [String] to a stream containing a [List] of <OUTPUT_TYPE>.
+  /// Convert [Stream] of [String] to a stream of <OUTPUT_TYPE>.
   ///
   /// Used for both online and offline operation.
-  /// For online operation [input_TYPE] is utf8 decoded
-  /// before being passed to transformStreaawait m().
+  /// For online operation [str] is utf8 decoded
+  /// before being passed to transformStream.
   ///
   /// Can be overridden by child classes.
   /// Should call [transformMapSafe]
   /// to wrap [transformMap] in exception handling.
-  Stream<List<OUTPUT_TYPE>> transformStream(Stream<String> input_TYPE) async* {
-    yield* input_TYPE.transform(json.decoder).map(
-        (decodedMap) => transformMapSafe(decodedMap as Map<dynamic, dynamic>?));
+  Stream<OUTPUT_TYPE> transformStream(Stream<String> str) async* {
+    var fnFromMapToListOfOutputType =
+        (decodedMap) => transformMapSafe(decodedMap as Map<dynamic, dynamic>?);
+    yield* str
+        .transform(json.decoder)
+        .map(fnFromMapToListOfOutputType)
+        .expand((element) => element);
   }
 
   /// Fetches and [utf8] decodes online data matching [criteria].
@@ -152,7 +156,7 @@ abstract class WebFetch<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Should not be overridden by child classes.
   Future<Stream<String>> streamResult(dynamic criteria) async {
-    final encoded = Uri.encodeQueryComponent(toText(criteria));
+    final encoded = Uri.encodeQueryComponent(toText(criteria) ?? '');
     final address = constructURI(encoded);
 
     logger.d('querying ${address.toString()}');

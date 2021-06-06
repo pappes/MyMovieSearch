@@ -9,7 +9,7 @@ import 'converters/omdb.dart';
 
 /// Implements [SearchProvider] for searching the Open Movie Database.
 /// The OMDb API is a free web service to obtain movie information.
-class QueryOMDBMovies extends WebFetch<MovieResultDTO, SearchCriteriaDTO> {
+class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'http://www.omdbapi.com/?apikey=';
 
   /// Describe where the data is comming from.

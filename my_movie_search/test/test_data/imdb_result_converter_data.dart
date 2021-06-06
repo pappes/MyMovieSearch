@@ -26,6 +26,7 @@ final expectedDTOStream = streamMovieResultDTOFromJsonMap([
     movieResultDTOUniqueId: 'tt7602562',
     movieResultDTOSource: DataSourceType.imdb,
     movieResultDTOYear: 2016,
+    movieResultDTODescription: '1234 is a movie ... terror in the country.',
 // movieResultDTOYearRange = 'yearRange';
     movieResultDTOType: MovieContentType.movie,
     movieResultDTOUserRating: 6.5,

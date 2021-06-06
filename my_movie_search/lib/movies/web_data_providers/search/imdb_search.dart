@@ -16,7 +16,7 @@ const COLUMN_MOVIE_TEXT = 'result_text';
 const COLUMN_MOVIE_POSTER = 'primary_photo';
 
 /// Implements [SearchProvider] for the IMDB search html webscraper.
-class QueryIMDBSearch extends WebFetch<MovieResultDTO, SearchCriteriaDTO> {
+class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=';
 
   /// Describe where the data is comming from.
@@ -34,19 +34,15 @@ class QueryIMDBSearch extends WebFetch<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Scrape movie data from html table(s) named findList.
   @override
-  Stream<List<MovieResultDTO>> transformStream(Stream<String> str) async* {
-    List<MovieResultDTO> convertedResults = [];
-
+  Stream<MovieResultDTO> transformStream(Stream<String> str) async* {
     // Combine all HTTP chunks together for HTML parsing
     var content = await str.reduce((value, element) => '$value\n$element');
     var document = parse(content);
 
     // Extract required tables from the dom (anthing named findList).
     var tables = document.getElementsByClassName(SEARCH_RESULTS_TABLE);
-    extractRowsFromTables(tables).forEach(
-        (rowData) => convertedResults.addAll(transformMapSafe(rowData)));
-
-    yield convertedResults;
+    var rows = extractRowsFromTables(tables);
+    for (var row in rows) yield* Stream.fromIterable(transformMapSafe(row));
   }
 
   /// Extract movie data from rows in html table(s).

@@ -15,7 +15,7 @@ const COLUMN_MOVIE_TEXT = 'result_text';
 const COLUMN_MOVIE_POSTER = 'primary_photo';
 
 /// Implements [SearchProvider] for the IMDB search html webscraper.
-class QueryIMDBDetails extends WebFetch<MovieResultDTO, SearchCriteriaDTO> {
+class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'https://www.imdb.com/title/';
   static final baseURLsuffix = '/?ref_=fn_tt_tt_1';
 
@@ -34,15 +34,15 @@ class QueryIMDBDetails extends WebFetch<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Scrape movie data from rows in the html table named findList.
   @override
-  Stream<List<MovieResultDTO>> transformStream(Stream<String> str) async* {
+  Stream<MovieResultDTO> transformStream(Stream<String> str) async* {
     // Combine all HTTP chunks together for HTML parsing.
     final content = await str.reduce((value, element) => '$value$element');
 
     var movieData = scrapeWebPage(content);
     if (movieData[outer_element_description] == null) {
-      yield [constructError("imdb webscraper json data not detected")];
+      yield constructError("imdb webscraper json data not detected");
     }
-    yield transformMapSafe(movieData);
+    yield* Stream.fromIterable(transformMapSafe(movieData));
   }
 
   /// converts <INPUT_TYPE> to a string representation.

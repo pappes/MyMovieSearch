@@ -13,7 +13,8 @@ const _DEFAULT_SEARCH_RESULTS_LIMIT = 10;
 
 /// Implements [SearchProvider] for the IMDB search suggestions API.
 /// Search suggestions are used by the lookup bar in the IMDB web page.
-class QueryIMDBSuggestions extends WebFetch<MovieResultDTO, SearchCriteriaDTO> {
+class QueryIMDBSuggestions
+    extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'https://sg.media-imdb.com/suggests';
 
   /// Describe where the data is comming from.
@@ -32,13 +33,16 @@ class QueryIMDBSuggestions extends WebFetch<MovieResultDTO, SearchCriteriaDTO> {
   /// Remove JsonP from API response and convert to a map of MovieResultDTO.
   /// Limit results to 10 most relevant by default.
   @override
-  Stream<List<MovieResultDTO>> transformStream(Stream<String> str) {
+  Stream<MovieResultDTO> transformStream(Stream<String> str) async* {
+    var fnFromMapToListOfOutputType =
+        (decodedMap) => transformMapSafe(decodedMap as Map<dynamic, dynamic>?);
     if (getSearchResultsLimit == null)
       setSearchResultsLimit(_DEFAULT_SEARCH_RESULTS_LIMIT);
-    return str
+    yield* str
         .transform(JsonPDecoder())
         .transform(json.decoder)
-        .map((event) => transformMapSafe(event as Map<dynamic, dynamic>?));
+        .map(fnFromMapToListOfOutputType)
+        .expand((element) => element);
   }
 
   /// Convert IMDB map to MovieResultDTO records.

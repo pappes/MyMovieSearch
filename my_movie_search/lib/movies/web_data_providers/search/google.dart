@@ -11,7 +11,8 @@ const GOOGLE_RESULTS_PER_PAGE = 10; // More than 10 results in an error!
 
 /// Implements [SearchProvider] for searching the Open Movie Database.
 /// The Google API is a free web service to obtain movie information.
-class QueryGoogleMovies extends WebFetch<MovieResultDTO, SearchCriteriaDTO> {
+class QueryGoogleMovies
+    extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL =
       'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
 
