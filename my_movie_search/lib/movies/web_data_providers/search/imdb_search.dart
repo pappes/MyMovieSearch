@@ -6,7 +6,7 @@ import 'package:html/parser.dart' show parse;
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extentions.dart';
-import 'package:my_movie_search/utilities/web_data/provider_controller.dart';
+import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 import 'offline/imdb_search.dart';
 import 'converters/imdb_search.dart';
@@ -21,20 +21,21 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Describe where the data is comming from.
   @override
-  String dataSourceName() {
+  String myDataSourceName() {
     return describeEnum(DataSourceType.imdbSearch);
   }
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
-  DataSourceFn offlineData() {
+  DataSourceFn myOfflineData() {
     return streamImdbHtmlOfflineData;
   }
 
   /// Scrape movie data from html table(s) named findList.
   @override
-  Stream<MovieResultDTO> transformStream(Stream<String> str) async* {
+  Stream<MovieResultDTO> baseTransformTextStreamToOutput(
+      Stream<String> str) async* {
     // Combine all HTTP chunks together for HTML parsing
     var content = await str.reduce((value, element) => '$value\n$element');
     var document = parse(content);
@@ -42,7 +43,8 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     // Extract required tables from the dom (anthing named findList).
     var tables = document.getElementsByClassName(SEARCH_RESULTS_TABLE);
     var rows = extractRowsFromTables(tables);
-    for (var row in rows) yield* Stream.fromIterable(transformMapSafe(row));
+    for (var row in rows)
+      yield* Stream.fromIterable(baseTransformMapToOutputHandler(row));
   }
 
   /// Extract movie data from rows in html table(s).
@@ -90,18 +92,18 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Convert IMDB map to MovieResultDTO records.
   @override
-  List<MovieResultDTO> transformMap(Map map) =>
+  List<MovieResultDTO> myTransformMapToOutput(Map map) =>
       ImdbSearchConverter.dtoFromCompleteJsonMap(map);
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String toText(dynamic contents) {
+  String myFormatInputAsText(dynamic contents) {
     return contents!.criteriaTitle;
   }
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO constructError(String message) {
+  MovieResultDTO myYieldError(String message) {
     var error = MovieResultDTO();
     error.title = '[${this.runtimeType}] $message';
     error.type = MovieContentType.custom;
@@ -111,7 +113,7 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// API call to IMDB search returning the top matching results for [searchText].
   @override
-  Uri constructURI(String searchCriteria, {int pageNumber = 1}) {
+  Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     var url = '$baseURL$searchCriteria';
     return WebRedirect.constructURI(url);
   }

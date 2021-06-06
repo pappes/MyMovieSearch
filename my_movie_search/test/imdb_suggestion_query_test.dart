@@ -16,7 +16,7 @@ void main() {
       List<MovieResultDTO> queryResult = [];
       final QueryIMDBSuggestions _imdbSuggestions = QueryIMDBSuggestions();
       await _imdbSuggestions
-          .read(SearchCriteriaDTO(), source: emitImdbJsonSample)
+          .readList(SearchCriteriaDTO(), source: emitImdbJsonSample)
           .then((values) => queryResult.addAll(values))
           .onError(
               (error, stackTrace) => print('$error, ${stackTrace.toString()}'));

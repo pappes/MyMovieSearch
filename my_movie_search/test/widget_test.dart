@@ -1,4 +1,4 @@
-// This is a basic Flutter widget test.
+/*// This is a basic Flutter widget test.
 //
 // To perform an interaction with a widget in your test, use the WidgetTester
 // utility that Flutter provides. For example, you can send tap and scroll
@@ -98,7 +98,7 @@ List<Future> _queueDetailSearch(List<String> queries) {
     final imdbDetails =
         QueryIMDBDetails(); //Seperate instance per search (async)
     criteria.criteriaTitle = queryKey;
-    futures.add(imdbDetails.read(criteria, source: _onlineSearch));
+    futures.add(imdbDetails.readList(criteria, source: _onlineSearch));
   });
   return futures;
 }
@@ -120,3 +120,4 @@ void main() async {
   var queryResult = _makeResults(queries.length);
   await testRead(queries, queryResult);
 }
+*/

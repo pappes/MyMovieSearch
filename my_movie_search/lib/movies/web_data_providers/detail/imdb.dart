@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart' show describeEnum;
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/utilities/web_data/provider_controller.dart';
+import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 import 'converters/imdb.dart';
 import 'offline/imdb.dart';
@@ -21,39 +21,40 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Describe where the data is comming from.
   @override
-  String dataSourceName() {
+  String myDataSourceName() {
     return describeEnum(DataSourceType.imdb);
   }
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
-  DataSourceFn offlineData() {
+  DataSourceFn myOfflineData() {
     return streamImdbHtmlOfflineData;
   }
 
   /// Scrape movie data from rows in the html table named findList.
   @override
-  Stream<MovieResultDTO> transformStream(Stream<String> str) async* {
+  Stream<MovieResultDTO> baseTransformTextStreamToOutput(
+      Stream<String> str) async* {
     // Combine all HTTP chunks together for HTML parsing.
     final content = await str.reduce((value, element) => '$value$element');
 
     var movieData = scrapeWebPage(content);
     if (movieData[outer_element_description] == null) {
-      yield constructError("imdb webscraper json data not detected");
+      yield myYieldError("imdb webscraper json data not detected");
     }
-    yield* Stream.fromIterable(transformMapSafe(movieData));
+    yield* Stream.fromIterable(baseTransformMapToOutputHandler(movieData));
   }
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String toText(dynamic contents) {
+  String myFormatInputAsText(dynamic contents) {
     return contents!.criteriaTitle;
   }
 
   /// API call to IMDB search returning the top matching results for [searchText].
   @override
-  Uri constructURI(String searchCriteria, {int pageNumber = 1}) {
+  Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     var url = '$baseURL$searchCriteria$baseURLsuffix';
     print("fetching imdb details $url");
     return WebRedirect.constructURI(url);
@@ -61,12 +62,12 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Convert IMDB map to MovieResultDTO records.
   @override
-  List<MovieResultDTO> transformMap(Map map) =>
+  List<MovieResultDTO> myTransformMapToOutput(Map map) =>
       ImdbMoviePageConverter.dtoFromCompleteJsonMap(map);
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO constructError(String message) {
+  MovieResultDTO myYieldError(String message) {
     var error = MovieResultDTO();
     error.title = '[${this.runtimeType}] $message';
     error.type = MovieContentType.custom;

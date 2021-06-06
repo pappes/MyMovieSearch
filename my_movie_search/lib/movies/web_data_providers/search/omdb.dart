@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' show env;
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/utilities/web_data/provider_controller.dart';
+import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'offline/omdb.dart';
 import 'converters/omdb.dart';
 
@@ -14,31 +14,31 @@ class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Describe where the data is comming from.
   @override
-  String dataSourceName() {
+  String myDataSourceName() {
     return describeEnum(DataSourceType.omdb);
   }
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
-  DataSourceFn offlineData() {
+  DataSourceFn myOfflineData() {
     return streamOmdbJsonOfflineData;
   }
 
   /// Convert OMDB map to MovieResultDTO records.
   @override
-  List<MovieResultDTO> transformMap(Map map) =>
+  List<MovieResultDTO> myTransformMapToOutput(Map map) =>
       OmdbMovieSearchConverter.dtoFromCompleteJsonMap(map);
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String toText(dynamic contents) {
+  String myFormatInputAsText(dynamic contents) {
     return contents!.criteriaTitle;
   }
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO constructError(String message) {
+  MovieResultDTO myYieldError(String message) {
     var error = MovieResultDTO();
     error.title = "[${this.runtimeType}] $message";
     error.type = MovieContentType.custom;
@@ -48,7 +48,7 @@ class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// API call to OMDB returning the top 10 matching results for [searchText].
   @override
-  Uri constructURI(String searchCriteria, {int pageNumber = 1}) {
+  Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     final omdbKey =
         env["OMDB_KEY"]; // From the file assets/.env (not source controlled)
     return Uri.parse('$baseURL$omdbKey&s=$searchCriteria'

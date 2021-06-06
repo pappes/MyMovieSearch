@@ -50,8 +50,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     if (newValue.uniqueId == '-1' ||
         !_allResults.containsKey(newValue.uniqueId)) {
       _allResults[newValue.uniqueId] = newValue;
+      //print('adding ${newValue.uniqueId}');
     } else {
       _allResults[newValue.uniqueId]!.merge(newValue);
+      //print('merging ${newValue.uniqueId}');
     }
     sortResults();
   }

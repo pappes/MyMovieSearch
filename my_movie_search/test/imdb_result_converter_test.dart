@@ -42,10 +42,11 @@ void main() {
       );
 
       criteria.criteriaTitle = 'tt7602562';
-      imdbResult.setCriteria(criteria);
+      imdbResult.baseTestSetCriteria(criteria);
 
       Stream<String> str = emitByteStream(testInput).transform(utf8.decoder);
-      Stream<MovieResultDTO> stream = imdbResult.transformStream(str);
+      Stream<MovieResultDTO> stream =
+          imdbResult.baseTransformTextStreamToOutput(str);
 
       stream.listen(expectFn);
     });

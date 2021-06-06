@@ -32,7 +32,7 @@ class MovieRepository {
     feedback.title = 'Searching ...';
     yield feedback;
 
-    _movieStreamController = StreamController<MovieResultDTO>();
+    _movieStreamController = StreamController<MovieResultDTO>(sync: true);
     _requestedDetails.clear();
     // TODO: error handling
     _initSearch(criteria);
@@ -60,7 +60,7 @@ class MovieRepository {
     ]) {
       _awaitingProviders++;
       provider
-          .read(criteria, limit: 10)
+          .readList(criteria, limit: 10)
           .then((values) => _addResults(values))
           .whenComplete(_finishProvider);
     }
@@ -88,7 +88,7 @@ class MovieRepository {
         final imdbDetails =
             QueryIMDBDetails(); //Seperate instance per search (async)
         criteria.criteriaTitle = dto.uniqueId;
-        futures.add(imdbDetails.read(criteria));
+        futures.add(imdbDetails.readList(criteria));
         _awaitingDetails++;
       }
     }

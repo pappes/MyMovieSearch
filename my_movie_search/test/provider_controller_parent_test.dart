@@ -91,7 +91,7 @@ List<Future> _queueDetailSearch(List<String> queries) {
     final imdbDetails =
         QueryIMDBDetails(); //Seperate instance per search (async)
     criteria.criteriaTitle = queryKey;
-    futures.add(imdbDetails.read(criteria, source: _onlineSearch));
+    futures.add(imdbDetails.readList(criteria, source: _onlineSearch));
   });
   return futures;
 }
