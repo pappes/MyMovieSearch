@@ -62,12 +62,13 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
   /// Create a stream with data matching [criteria].
   Future<Stream<OUTPUT_TYPE>> fetch({DataSourceFn? source}) async {
+    _searchResultsreturned = 0;
     final selecter = OnlineOfflineSelector<DataSourceFn>();
 
     source = selecter.select(source ?? streamResult, offlineData());
     // Need to await completion of future before we can transform it.
     logger.v('got function, getting stream for ${dataSourceName()} '
-        'using ${constructURI(_criteria.toString()).toString()}');
+        'using ${constructURI(getCriteriaText ?? '').toString()}');
     var result = source(_criteria);
     final Stream<String> data = await result;
     logger.v('got stream getting data');
