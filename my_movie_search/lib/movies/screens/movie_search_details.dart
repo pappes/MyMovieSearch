@@ -65,37 +65,54 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Type: ${describeEnum(_movie.type)}'),
-                    Text('User Rating: ${_movie.userRating.toString()} '
-                        '(${formatter.format(_movie.userRatingCount)})'),
-                    Text('Censor Rating: ${describeEnum(_movie.censorRating)}'),
-                    Row(children: [
-                      Text('Source: ${describeEnum(_movie.source)} '),
-                      Text('UniqueId: ${_movie.uniqueId}'),
-                    ]),
-                    Row(children: [
-                      Text('Description: ${_movie.description} '),
-                    ]),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    _movie.imageUrl == '' || !_movie.imageUrl.startsWith('http')
-                        ? Text('NoImage')
-                        : Expanded(
-                            child: Image(
-                                image: NetworkImage(_movie.imageUrl),
-                                alignment: Alignment.centerRight),
-                          ),
-                  ],
-                ),
+                leftColumn(),
+                rightColumn(),
               ],
             ),
           ),
+        ],
+      ),
+    );
+  }
+
+  Expanded rightColumn() {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          _movie.imageUrl == '' || !_movie.imageUrl.startsWith('http')
+              ? Text('NoImage')
+              : Expanded(
+                  child: Image(
+                      image: NetworkImage(_movie.imageUrl),
+                      alignment: Alignment.centerRight),
+                ),
+        ],
+      ),
+    );
+  }
+
+  Expanded leftColumn() {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text('Type: ${describeEnum(_movie.type)}'),
+          Text('User Rating: ${_movie.userRating.toString()} '
+              '(${formatter.format(_movie.userRatingCount)})'),
+          Text('Censor Rating: ${describeEnum(_movie.censorRating)}'),
+          Row(children: [
+            Text('Source: ${describeEnum(_movie.source)} '),
+            Text('UniqueId: ${_movie.uniqueId}'),
+          ]),
+          Row(children: [
+            Expanded(
+              child: Text(
+                '\nDescription: \n${_movie.description} ',
+                style: biggerFont,
+              ),
+            ),
+          ]),
         ],
       ),
     );

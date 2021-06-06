@@ -49,11 +49,11 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   void receiveDTO(MovieResultDTO newValue) {
     if (newValue.uniqueId == '-1' ||
         !_allResults.containsKey(newValue.uniqueId)) {
+      print('Adding: ${newValue.uniqueId}');
       _allResults[newValue.uniqueId] = newValue;
-      //print('adding ${newValue.uniqueId}');
     } else {
+      print('Merging: ${newValue.uniqueId}');
       _allResults[newValue.uniqueId]!.merge(newValue);
-      //print('merging ${newValue.uniqueId}');
     }
     sortResults();
   }

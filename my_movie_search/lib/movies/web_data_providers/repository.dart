@@ -17,8 +17,7 @@ class MovieRepository {
   final QueryGoogleMovies _googleSearch;
   StreamController<MovieResultDTO>? _movieStreamController;
   var _awaitingProviders = 0;
-  var _awaitingDetails = 0;
-  final List<String> _requestedDetails = [];
+  final Map _requestedDetails = {};
 
   MovieRepository()
       : _imdbSuggestions = QueryIMDBSuggestions(),
@@ -44,6 +43,7 @@ class MovieRepository {
     var feedback = MovieResultDTO();
     feedback.title = 'Search completed ...';
     _movieStreamController?.add(feedback);
+    print('closing stream');
     _movieStreamController?.close();
     _movieStreamController = null;
   }
@@ -66,22 +66,21 @@ class MovieRepository {
     }
   }
 
-  void _addResults(List<dynamic> values) {
-    values.forEach((dto) => _movieStreamController?.add(dto));
-    _getDetails(values);
+  void _addResults(List<dynamic> results) {
+    results.forEach((dto) => _movieStreamController?.add(dto));
+    _getDetails(results);
   }
 
-  void _getDetails(List<dynamic> values) {
+  void _getDetails(List<dynamic> searchResults) {
     List<Future> futures = [];
-    values.forEach((dto) => futures.addAll(_queueDetailSearch(dto)));
-    futures.forEach(
-        (detailSearch) => detailSearch.then((values) => _addDetails(values)));
+    searchResults.forEach((dto) => futures.addAll(_queueDetailSearch(dto)));
+    futures.forEach((detailSearch) =>
+        detailSearch.then((searchResults) => _addDetails(searchResults)));
   }
 
   List<Future> _queueDetailSearch(MovieResultDTO dto) {
     List<Future> futures = [];
-    if (!_requestedDetails.contains(dto.uniqueId)) {
-      _requestedDetails.add(dto.uniqueId);
+    if (!_requestedDetails.containsKey(dto.uniqueId) && dto.uniqueId != '-1') {
       var criteria = SearchCriteriaDTO();
 
       if (dto.uniqueId.startsWith('tt')) {
@@ -89,25 +88,32 @@ class MovieRepository {
             QueryIMDBDetails(); //Seperate instance per search (async)
         criteria.criteriaTitle = dto.uniqueId;
         futures.add(imdbDetails.readList(criteria));
-        _awaitingDetails++;
+        _requestedDetails[dto.uniqueId] = null;
       }
     }
     return futures;
   }
 
   void _addDetails(List<MovieResultDTO> values) {
-    values.forEach((dto) => print(dto.toPrintableString()));
-    values.forEach((dto) => _movieStreamController?.add(dto));
-    _finishDetails(values.length);
+    print('received ${values.length}');
+    for (var dto in values) {
+      _movieStreamController?.add(dto);
+      print('${dto.toPrintableString()}');
+      _requestedDetails[dto.uniqueId] = dto.title;
+    }
+    print(_requestedDetails.toString());
   }
 
-  void _finishDetails(int count) {
-    _awaitingDetails = _awaitingDetails - count;
-    if (_awaitingProviders == 0 && _awaitingDetails == 0) close();
+  bool get _awaitingDetails {
+    return _requestedDetails.values.contains(null);
+  }
+
+  void _finishDetails() {
+    if (_awaitingProviders == 0 && !_awaitingDetails) close();
   }
 
   void _finishProvider() {
     _awaitingProviders = _awaitingProviders - 1;
-    if (_awaitingProviders == 0 && _awaitingDetails == 0) close();
+    if (_awaitingProviders == 0 && !_awaitingDetails) close();
   }
 }
