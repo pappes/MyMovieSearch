@@ -8,6 +8,8 @@ const outer_element_identity_element = 'id';
 
 const outer_element_title_element = 'name';
 const outer_element_description = 'description';
+const outer_element_keywords = 'keywords';
+const outer_element_genre = 'genre';
 const outer_element_year_element = 'datePublished';
 const outer_element_duration = 'duration';
 const outer_element_censor_rating = 'contentRating';
@@ -28,6 +30,8 @@ class ImdbMoviePageConverter {
     movie.uniqueId = map[outer_element_identity_element] ?? movie.uniqueId;
     movie.title = map[outer_element_title_element] ?? movie.title;
     movie.description = map[outer_element_description] ?? movie.title;
+    movie.description += '\ngenre: ${map[outer_element_genre]}';
+    movie.description += '\nkeywords: ${map[outer_element_keywords]}';
     movie.imageUrl = map[outer_element_image_element] ?? movie.imageUrl;
     movie.censorRating = getImdbCensorRating(
           map[outer_element_censor_rating],

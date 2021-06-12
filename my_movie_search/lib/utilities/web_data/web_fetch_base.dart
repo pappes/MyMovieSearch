@@ -31,8 +31,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
   void baseTestSetCriteria(INPUT_TYPE criteria) => _criteria = criteria;
   void setSearchResultsLimit(int limit) => _searchResultsLimit = limit;
-  String? get getCriteriaText => myFormatInputAsText(_criteria);
   int? get getSearchResultsLimit => _searchResultsLimit;
+  String? get getCriteriaText => myFormatInputAsText(_criteria);
+  String? get _getFetchContext =>
+      '${myDataSourceName()} with criteria $getCriteriaText';
 
   /// Populate [StreamController] with data matching [criteria].
   ///
@@ -77,7 +79,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
     source = selecter.select(source ?? baseFetchWebText, myOfflineData());
     // Need to await completion of future before we can transform it.
-    logger.v('got function, getting stream for ${myDataSourceName()} '
+    logger.v('got function, getting stream for $_getFetchContext '
         'using ${myConstructURI(getCriteriaText ?? '').toString()}');
     var result = source(_criteria);
     final Stream<String> data = await result;
@@ -152,11 +154,11 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// the limit requested by read() or populate().
   ///
   /// Should not be overridden by child classes.
-  List<OUTPUT_TYPE> baseTransformMapToOutputHandler(Map? map) {
+  List<OUTPUT_TYPE> baseTransformMapToOutputHandler(Map? resultMap) {
     List<OUTPUT_TYPE> retval = [];
     int remaining = double.maxFinite.toInt();
-    if (map == null) {
-      logger.i('0 results returned from query');
+    if (resultMap == null) {
+      logger.i('0 results returned from query for $_getFetchContext');
       return retval;
     }
     if (_searchResultsLimit != null) {
@@ -164,18 +166,20 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
     if (remaining > 1) {
       try {
-        var list = myTransformMapToOutput(map);
+        var list = myTransformMapToOutput(resultMap);
         _searchResultsreturned += list.length;
         logger.v('${list.length} results returned from ' // Verbose message/
-            '${myDataSourceName()}');
+            '$_getFetchContext');
         retval = list.take(remaining).toList();
       } catch (exception, stacktrace) {
-        logger.e('Exception raised during transformMap, constructing error'
-            ' for ${map.toString()}\n ${exception.toString()}.');
-        logger.i('${this.runtimeType}].transformMapSafe stacktrace: '
+        logger.e(
+            'Exception raised during myTransformMapToOutput for _getFetchContext, '
+            'constructing error for data ${resultMap.toString()}\n '
+            '${exception.toString()}.');
+        logger.i('${this.runtimeType}.myTransformMapToOutput stacktrace: '
             '${stacktrace.toString()}');
-        var error =
-            myYieldError('Could not interpret response ' '${map.toString()}');
+        var error = myYieldError(
+            'Could not interpret response ' '${resultMap.toString()}');
         retval = [error];
       }
     }
@@ -220,7 +224,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     try {
       response = await request;
     } catch (error, stackTrace) {
-      print('Error in provider read $error\n${stackTrace.toString()}');
+      print('Error in $_getFetchContext fetching web text:'
+          ' $error\n${stackTrace.toString()}');
       rethrow;
     }
     // TODO: check for HTTP status before transforming (avoid 404)

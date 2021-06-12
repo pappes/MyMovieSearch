@@ -41,7 +41,8 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
     var movieData = scrapeWebPage(content);
     if (movieData[outer_element_description] == null) {
-      yield myYieldError("imdb webscraper json data not detected");
+      yield myYieldError('imdb webscraper data not detected '
+          'for criteria $getCriteriaText');
     }
     yield* Stream.fromIterable(baseTransformMapToOutputHandler(movieData));
   }
@@ -68,7 +69,7 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) {
-    var error = MovieResultDTO();
+    var error = MovieResultDTO().error();
     error.title = '[${this.runtimeType}] $message';
     error.type = MovieContentType.custom;
     error.source = DataSourceType.imdb;
@@ -96,6 +97,7 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     var scriptElement =
         document.querySelector('script[type="application/ld+json"]');
     if (scriptElement == null || scriptElement.innerHtml.length == 0) {
+      print('no JSON details found for title $getCriteriaText');
       return '{}';
     }
     return scriptElement.innerHtml;
@@ -123,7 +125,7 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     Map attributes = {};
     attributes['id'] = recommendation
         .querySelector('div[data-tconst]')
-        ?.attributes['data-tconst']; //"tt1037705"
+        ?.attributes['data-tconst']; //tt1037705
     attributes['name'] = recommendation
         .querySelector('div.rec-title')
         ?.querySelector('b')
