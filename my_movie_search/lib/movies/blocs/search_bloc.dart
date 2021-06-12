@@ -9,6 +9,14 @@ import 'package:my_movie_search/movies/web_data_providers/repository.dart';
 part 'bloc_parts/search_event.dart';
 part 'bloc_parts/search_state.dart';
 
+/// Moview search business logic wrapper
+///
+/// Provides a [Bloc] compliant business logic layer to
+/// manage fetching movie data
+/// manage search state
+/// marshal data into a display ready format (sorting)
+///
+/// In progress search results can be accessed from [SearchBloc].[sortedResults].
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc({required this.movieRepository})
       : super(const SearchState.awaitingInput());
@@ -17,36 +25,44 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   StreamSubscription<MovieResultDTO>? _searchStatusSubscription;
   Map<String, MovieResultDTO> _allResults = {};
   List<MovieResultDTO> sortedResults = [];
-  double _uid = 0.0; //Unique value representing the results list contents.
+  double _searchProgress = 0.0; // Value representing the search progress.
 
   @override
   Stream<SearchState> mapEventToState(
     SearchEvent event,
   ) async* {
     if (event is SearchCompleted || event is SearchDataReceived) {
-      //sortResults();
-      yield SearchState.displayingResults(_uid);
+      yield SearchState.displayingResults(_searchProgress);
     } else if (event is SearchCancelled) {
       yield SearchState.awaitingInput();
     } else if (event is SearchRequested) {
       yield SearchState.searching(SearchRequest(event.criteria.criteriaTitle));
-      _allResults.clear();
-      sortedResults.clear();
-      _searchStatusSubscription = movieRepository
-          .search(event.criteria)
-          .listen((dto) => receiveDTO(dto))
-            ..onDone(() => add(SearchCompleted()));
+      _initiateSearch(event.criteria);
     }
   }
 
   @override
+  // Clean up all open objects.
   Future<void> close() {
     _searchStatusSubscription?.cancel();
     movieRepository.close();
     return super.close();
   }
 
-  void receiveDTO(MovieResultDTO newValue) {
+  /// Clean up the results of any previous search and submit the new search criteria.
+  void _initiateSearch(SearchCriteriaDTO criteria) {
+    movieRepository.close();
+    _allResults.clear();
+    sortedResults.clear();
+    _searchStatusSubscription = movieRepository
+        .search(criteria)
+        .listen((dto) => _receiveDTO(dto))
+          ..onDone(() => add(SearchCompleted()));
+  }
+
+  /// Maintain map of fetched movie snippets and details.
+  /// Update bloc state to indicate that new data is available.
+  void _receiveDTO(MovieResultDTO newValue) {
     if (newValue.uniqueId == '-1' ||
         !_allResults.containsKey(newValue.uniqueId)) {
       print('Adding: ${newValue.uniqueId}');
@@ -55,19 +71,28 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       print('Merging: ${newValue.uniqueId}');
       _allResults[newValue.uniqueId]!.merge(newValue);
     }
-    sortResults();
+    _sortResults();
   }
 
-  void sortResults() {
+  /// Prepare data for display by sorting by relevence and
+  /// update bloc state to indicate that new data is available.
+  void _sortResults() {
     sortedResults.clear();
     sortedResults.addAll(_allResults.values.toList());
     // Sort by relevence with recent year first
     sortedResults.sort((a, b) => b.compareTo(a));
-    _uid = sortedResults.length.toDouble();
-    sortedResults.forEach((element) {
-      _uid += element.userRating;
-    });
+    _updateProgress();
 
     add(SearchDataReceived(sortedResults));
+  }
+
+  /// Calculate a value representing the search progress.
+  /// Currently uses count of rows + sum of user rating values
+  /// to account for progressive population of movie details.
+  void _updateProgress() {
+    _searchProgress = sortedResults.length.toDouble();
+    sortedResults.forEach((element) {
+      _searchProgress += element.userRating;
+    });
   }
 }

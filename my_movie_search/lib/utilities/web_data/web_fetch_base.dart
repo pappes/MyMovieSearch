@@ -13,7 +13,7 @@ typedef List TransformFn(Map? map);
 
 const _DEFAULT_SEARCH_RESULTS_LIMIT = 100;
 
-/// Extend ProviderController to provide a dynamically switchable stream of <OUTPUT_TYPE>
+/// Extend WebFetchBase to provide a dynamically switchable stream of <OUTPUT_TYPE>
 /// from online and offline sources.
 ///
 /// Classes extending ProviderController can be interchanged
