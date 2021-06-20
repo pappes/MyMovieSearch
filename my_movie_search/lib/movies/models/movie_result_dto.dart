@@ -15,6 +15,7 @@ class MovieResultDTO {
   CensorRatingType censorRating = CensorRatingType.none;
   Duration runTime = Duration(hours: 0, minutes: 0, seconds: 0);
   String imageUrl = "";
+  LanguageType language = LanguageType.none;
 }
 
 enum MovieContentType {
@@ -58,6 +59,7 @@ final String movieResultDTOUserRatingCount = 'userRatingCount';
 final String movieResultDTOCensorRating = 'censorRating';
 final String movieResultDTORunTime = 'runTime';
 final String movieResultImageUrl = 'imageUrl';
+final String movieResultLanguage = 'language';
 final String movieResultDTOUninitialised = '-1';
 
 extension MapDTOConversion on Map {
@@ -76,6 +78,7 @@ extension MapDTOConversion on Map {
     dto.censorRating = this[movieResultDTOCensorRating] ?? dto.censorRating;
     dto.runTime = this[movieResultDTORunTime] ?? dto.runTime;
     dto.imageUrl = this[movieResultImageUrl] ?? dto.imageUrl;
+    dto.language = this[movieResultLanguage] ?? dto.language;
     return dto;
   }
 }
@@ -102,6 +105,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     map[movieResultDTOCensorRating] = this.censorRating;
     map[movieResultDTORunTime] = this.runTime;
     map[movieResultImageUrl] = this.imageUrl;
+    map[movieResultLanguage] = this.language;
     return map;
   }
 
@@ -129,6 +133,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       this.type = bestval(newValue.type, this.type);
       this.censorRating = bestval(newValue.censorRating, this.censorRating);
       this.imageUrl = bestval(newValue.imageUrl, this.imageUrl);
+      this.language = bestval(newValue.language, this.language);
       this.userRating = bestUserRating(
         newValue.userRating,
         newValue.userRatingCount,
@@ -144,6 +149,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (a is MovieContentType && b is MovieContentType) bestType(a, b);
     if (a is CensorRatingType && b is CensorRatingType) bestCensorRating(a, b);
     if (a is DataSourceType && b is DataSourceType) bestSource(a, b);
+    if (a is LanguageType && b is LanguageType) bestLanguage(a, b);
     if (a is num && b is num && a < b) return b;
     if (a.toString().length < b.toString().length) return b;
     if (lastNumberFromString(a.toString()) < lastNumberFromString(b.toString()))
@@ -172,6 +178,11 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return a;
   }
 
+  LanguageType bestLanguage(LanguageType a, LanguageType b) {
+    if (b.index > a.index) return b;
+    return a;
+  }
+
   String toPrintableString() {
     return this.toMap().toString();
   }
@@ -190,6 +201,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     map[movieResultDTOCensorRating] = this.censorRating;
     map[movieResultDTORunTime] = this.runTime;
     map[movieResultImageUrl] = this.imageUrl;
+    map[movieResultLanguage] = this.language;
     return map;
   }
 
@@ -207,6 +219,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
           this.userRating == other.userRating &&
           this.censorRating == other.censorRating &&
           this.runTime == other.runTime &&
+          this.language == other.language &&
           this.imageUrl == other.imageUrl;
   }
 }
@@ -228,11 +241,14 @@ extension DTOCompare on MovieResultDTO {
         other.uniqueId != movieResultDTOUninitialised) return -1;
     if (this.uniqueId != movieResultDTOUninitialised &&
         other.uniqueId == movieResultDTOUninitialised) return 1;
-    // See how many peopel have rated this movie.
+    // See how many people have rated this movie.
     if (this.userRatingCategory() != other.userRatingCategory())
       return this.userRatingCategory().compareTo(other.userRatingCategory());
     // Preference movies > series > short film > episodes.
     if (this.userContentCategory() != other.userContentCategory())
+      return this.userContentCategory().compareTo(other.userContentCategory());
+    // Preference English > Foreign Language.
+    if (this.language.index != other.language.index)
       return this.userContentCategory().compareTo(other.userContentCategory());
     // Rank older (less than 2000) and low rated movies lower.
     if (this.popularityCategory() != other.popularityCategory())
@@ -256,6 +272,11 @@ extension DTOCompare on MovieResultDTO {
     if (this.type == MovieContentType.series) return 3;
     if (this.type == MovieContentType.miniseries) return 4;
     return 5;
+  }
+
+  int languageCategory() {
+    // Need to reverse the enum order for use with CompareTo().
+    return this.language.index * -1;
   }
 
   int popularityCategory() {

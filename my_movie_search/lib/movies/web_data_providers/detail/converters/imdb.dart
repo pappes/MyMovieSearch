@@ -18,6 +18,7 @@ const inner_element_rating_value = 'ratingValue';
 const inner_element_rating_count = 'ratingCount';
 const outer_element_type_element = '@type';
 const outer_element_image_element = 'image';
+const outer_element_language_element = 'language';
 
 class ImdbMoviePageConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
@@ -33,6 +34,7 @@ class ImdbMoviePageConverter {
     movie.description += '\ngenre: ${map[outer_element_genre]}';
     movie.description += '\nkeywords: ${map[outer_element_keywords]}';
     movie.imageUrl = map[outer_element_image_element] ?? movie.imageUrl;
+    movie.language = map[outer_element_language_element] ?? movie.language;
     movie.censorRating = getImdbCensorRating(
           map[outer_element_censor_rating],
         ) ??

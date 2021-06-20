@@ -28,7 +28,7 @@ class MovieTile extends ListTile {
   static Widget _getTitle(MovieResultDTO movie) {
     return Text(
       '${movie.title}(${movie.yearRange == '' ? movie.year : movie.yearRange}, '
-      '${describeEnum(movie.source)})',
+      '${describeEnum(movie.source)}), ${describeEnum(movie.language)})',
       textScaleFactor: 1.0,
     );
   }
