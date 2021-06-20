@@ -3,6 +3,7 @@ library pappes.utilites;
 import 'package:logger/logger.dart' show Logger;
 
 var logger = Logger();
+const DEFAULT_TO_OFFLINE = false;
 
 /// This class allow for dynamic change of behaviour
 /// if the developer wants to test in offline mode.
@@ -12,7 +13,7 @@ class OnlineOfflineSelector<T> {
   /// Initialise the selector.
   static init(offline) {
     if (offline == null)
-      _offline = true;
+      _offline = DEFAULT_TO_OFFLINE;
     else
       _offline = offline.toString().toLowerCase() == "true";
     logger.d('OnlineOfflineSelector initialised to: '

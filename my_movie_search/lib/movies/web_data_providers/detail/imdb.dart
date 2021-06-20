@@ -82,6 +82,11 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     var document = parse(content);
     var movieData = json.decode(getMovieJson(document));
 
+    if (movieData == {}) {
+      scrapeBasicDetails(document, movieData);
+    }
+    scrapeDescription(document, movieData);
+
     getRecomendations(movieData, document.querySelectorAll('div.rec_overview'));
 
     getAttributeValue(movieData, document, inner_element_rating_count);
@@ -101,6 +106,57 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       return '{}';
     }
     return scriptElement.innerHtml;
+  }
+
+  /// Extract details that were not found in JSON from HTML
+  scrapeBasicDetails(Document document, Map movieData) {
+    getAttributeValue(movieData, document, outer_element_type_element);
+  }
+
+  /// Extract type, year, Censor Rating and duration from ul<TitleBlockMetaData>
+  scrapeTitleMetadataDetails(Document document, Map movieData) {
+    var titleMetaData =
+        document.querySelector('ul[data-testid="hero-title-block__metadata"]');
+    if (null == titleMetaData) {
+      document.querySelector('ul[class*="TitleBlockMetaData"]');
+    }
+    if (null != titleMetaData && titleMetaData.hasChildNodes()) {
+      for (var item in titleMetaData.children) {
+        // See if this lineitem is the year
+        var year = item.querySelector('a[href*="releaseinfo"]')?.text;
+        if (null != year) {
+          movieData[outer_element_year_element] = year;
+          continue;
+        }
+        // See if this lineitem is the rating
+        var censorrating = item.querySelector('a[href*="parentalguide"]')?.text;
+        if (null != censorrating) {
+          movieData[outer_element_censor_rating] = censorrating;
+          continue;
+        }
+        var otheritem = item.text;
+        if (null == movieData[outer_element_type_element] &&
+            null == movieData[outer_element_year_element] &&
+            null == movieData[outer_element_censor_rating]) {
+          // Assume first unknown Item is movie type
+          movieData[outer_element_type_element] = otheritem;
+        }
+        // Assume last unknown Item is duration
+        movieData[outer_element_duration] = otheritem;
+      }
+    }
+  }
+
+  /// Extract short description of movie from web page.
+  scrapeDescription(Document document, Map movieData) {
+    var description =
+        document.querySelector('div[data-testid="storyline-plot-summary"]');
+    if (null == description) {
+      document.querySelector('span[data-testid*="plot"]');
+    }
+    if (null != description?.text) {
+      movieData[outer_element_description] = description?.text;
+    }
   }
 
   /// Use CSS selector to find the text on the page

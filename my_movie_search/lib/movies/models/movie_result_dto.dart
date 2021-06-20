@@ -106,26 +106,36 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (newValue.description != "") {
       print(newValue.description);
     }
-    if (newValue.userRatingCount > this.userRatingCount) {
+    if (newValue.userRatingCount > this.userRatingCount ||
+        DataSourceType.imdb == newValue.source) {
       this.source = bestval(newValue.source, this.source);
-      this.title = bestval(newValue.title, this.title);
+      if (DataSourceType.imdb == this.source && "" != newValue.title) {
+        this.title = newValue.title;
+      } else {
+        this.title = bestval(newValue.title, this.title);
+      }
+
       this.description = bestval(newValue.description, this.description);
       this.type = bestval(newValue.type, this.type);
       this.year = bestval(newValue.year, this.year);
       this.yearRange = bestval(newValue.yearRange, this.yearRange);
-      this.userRating = bestval(newValue.userRating, this.userRating);
-      this.userRatingCount =
-          bestval(newValue.userRatingCount, this.userRatingCount);
       this.runTime = bestval(newValue.runTime, this.runTime);
       this.type = bestval(newValue.type, this.type);
       this.censorRating = bestval(newValue.censorRating, this.censorRating);
-      this.source = bestval(newValue.source, this.source);
+      this.userRating = bestUserRating(
+        newValue.userRating,
+        newValue.userRatingCount,
+        this.userRating,
+        this.userRatingCount,
+      );
+      this.userRatingCount =
+          bestval(newValue.userRatingCount, this.userRatingCount);
     }
   }
 
   T bestval<T>(T a, T b) {
     if (a is MovieContentType && b is MovieContentType) bestType(a, b);
-    if (a is CensorRatingType && b is CensorRatingType) bestRating(a, b);
+    if (a is CensorRatingType && b is CensorRatingType) bestCensorRating(a, b);
     if (a is DataSourceType && b is DataSourceType) bestSource(a, b);
     if (a is num && b is num && a < b) return b;
     if (a.toString().length < b.toString().length) return b;
@@ -134,12 +144,18 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return a;
   }
 
+  double bestUserRating(
+      double rating1, num count1, double rating2, num count2) {
+    if (count1 > count2) return rating1;
+    return rating2;
+  }
+
   MovieContentType bestType(MovieContentType a, MovieContentType b) {
     if (b.index > a.index) return b;
     return a;
   }
 
-  CensorRatingType bestRating(CensorRatingType a, CensorRatingType b) {
+  CensorRatingType bestCensorRating(CensorRatingType a, CensorRatingType b) {
     if (b.index > a.index) return b;
     return a;
   }
