@@ -57,6 +57,7 @@ final String movieResultDTOUserRating = 'userRating';
 final String movieResultDTOUserRatingCount = 'userRatingCount';
 final String movieResultDTOCensorRating = 'censorRating';
 final String movieResultDTORunTime = 'runTime';
+final String movieResultImageUrl = 'imageUrl';
 final String movieResultDTOUninitialised = '-1';
 
 extension MapDTOConversion on Map {
@@ -74,6 +75,7 @@ extension MapDTOConversion on Map {
         this[movieResultDTOUserRatingCount] ?? dto.userRatingCount;
     dto.censorRating = this[movieResultDTOCensorRating] ?? dto.censorRating;
     dto.runTime = this[movieResultDTORunTime] ?? dto.runTime;
+    dto.imageUrl = this[movieResultImageUrl] ?? dto.imageUrl;
     return dto;
   }
 }
@@ -99,6 +101,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     map[movieResultDTOUserRatingCount] = this.userRatingCount;
     map[movieResultDTOCensorRating] = this.censorRating;
     map[movieResultDTORunTime] = this.runTime;
+    map[movieResultImageUrl] = this.imageUrl;
     return map;
   }
 
@@ -106,10 +109,13 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (newValue.description != "") {
       print(newValue.description);
     }
+    if (DataSourceType.imdb == newValue.source) {
+      print(newValue.description);
+    }
     if (newValue.userRatingCount > this.userRatingCount ||
         DataSourceType.imdb == newValue.source) {
       this.source = bestval(newValue.source, this.source);
-      if (DataSourceType.imdb == this.source && "" != newValue.title) {
+      if (DataSourceType.imdb == newValue.source && "" != newValue.title) {
         this.title = newValue.title;
       } else {
         this.title = bestval(newValue.title, this.title);
@@ -122,6 +128,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       this.runTime = bestval(newValue.runTime, this.runTime);
       this.type = bestval(newValue.type, this.type);
       this.censorRating = bestval(newValue.censorRating, this.censorRating);
+      this.imageUrl = bestval(newValue.imageUrl, this.imageUrl);
       this.userRating = bestUserRating(
         newValue.userRating,
         newValue.userRatingCount,
@@ -179,8 +186,10 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     map[movieResultDTOYear] = this.year;
     map[movieResultDTOYearRange] = this.yearRange;
     map[movieResultDTOUserRating] = this.userRating;
+    map[movieResultDTOUserRatingCount] = this.userRatingCount;
     map[movieResultDTOCensorRating] = this.censorRating;
     map[movieResultDTORunTime] = this.runTime;
+    map[movieResultImageUrl] = this.imageUrl;
     return map;
   }
 
@@ -197,7 +206,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
           this.yearRange == other.yearRange &&
           this.userRating == other.userRating &&
           this.censorRating == other.censorRating &&
-          this.runTime == other.runTime;
+          this.runTime == other.runTime &&
+          this.imageUrl == other.imageUrl;
   }
 }
 

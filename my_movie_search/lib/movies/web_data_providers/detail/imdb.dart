@@ -83,8 +83,11 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     var movieData = json.decode(getMovieJson(document));
 
     if (movieData == {}) {
+      scrapeName(document, movieData);
       scrapeBasicDetails(document, movieData);
     }
+    // Get better details form the web page where possible.
+    scrapePoster(document, movieData);
     scrapeDescription(document, movieData);
 
     getRecomendations(movieData, document.querySelectorAll('div.rec_overview'));
@@ -118,7 +121,7 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     var titleMetaData =
         document.querySelector('ul[data-testid="hero-title-block__metadata"]');
     if (null == titleMetaData) {
-      document.querySelector('ul[class*="TitleBlockMetaData"]');
+      titleMetaData = document.querySelector('ul[class*="TitleBlockMetaData"]');
     }
     if (null != titleMetaData && titleMetaData.hasChildNodes()) {
       for (var item in titleMetaData.children) {
@@ -147,15 +150,63 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     }
   }
 
+  /// Extract list of genres from from li<TitleBlockMetaData>
+  scrapeGenreDetails(Document document, Map movieData) {
+    var genreData =
+        document.querySelector('li[data-testid="storyline-genres"]');
+    if (null != genreData) {
+      genreData = genreData.querySelector('div'); // Discard the "Genres" label.
+    }
+    if (null == genreData) {
+      genreData = document
+          .querySelector('a[href*="genre"]')
+          ?.parent // li - line item containing the anchor
+          ?.parent; // ul - list containing the line items
+    }
+    if (null != genreData && "" != genreData.text) {
+      movieData[outer_element_genre] = genreData.text;
+    }
+  }
+
   /// Extract short description of movie from web page.
   scrapeDescription(Document document, Map movieData) {
     var description =
         document.querySelector('div[data-testid="storyline-plot-summary"]');
     if (null == description) {
-      document.querySelector('span[data-testid*="plot"]');
+      description = document.querySelector('span[data-testid*="plot"]');
     }
     if (null != description?.text) {
       movieData[outer_element_description] = description?.text;
+    }
+  }
+
+  /// Extract Official name of movie from web page.
+  scrapeName(Document document, Map movieData) {
+    var description =
+        document.querySelector('h1[data-testid="hero-title-block"]');
+    if (null == description) {
+      description = document.querySelector('h1[class*="TitleHeader"]');
+    }
+    if (null != description?.text) {
+      movieData[outer_element_title_element] = description?.text;
+    }
+  }
+
+  /// Search for movie poster.
+  scrapePoster(Document document, Map movieData) {
+    var posterBlock =
+        document.querySelector('div[data-testid="hero-media__poster"]');
+    if (null == posterBlock) {
+      posterBlock =
+          document.querySelector('div[class="Media__PosterContainer"]');
+    }
+    if (null != posterBlock && posterBlock.hasChildNodes()) {
+      for (var poster in posterBlock.querySelectorAll('img')) {
+        if (null != poster.attributes['src']) {
+          movieData[outer_element_image_element] = poster.attributes['src'];
+          break;
+        }
+      }
     }
   }
 
