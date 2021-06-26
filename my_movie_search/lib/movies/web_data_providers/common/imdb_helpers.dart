@@ -77,3 +77,23 @@ CensorRatingType? getImdbCensorRating(String? type) {
   if (type.lastIndexOf('B') > -1) return CensorRatingType.family;
   return CensorRatingType.none;
 }
+
+/// Strip image size information from an imdb url
+String getBigImage(String? smallImage) {
+  // e.g.    https://m.media-amazon.com/images/M/MV5BODQxYWM2ODItYjE4ZC00YzAxLTljZDQtMjRjMmE0ZGMwYzZjXkEyXkFqcGdeQXVyODIyOTEyMzY@._V1_UY268_CR9,0,182,268_AL_.jpg
+  // becomes https://m.media-amazon.com/images/M/MV5BODQxYWM2ODItYjE4ZC00YzAxLTljZDQtMjRjMmE0ZGMwYzZjXkEyXkFqcGdeQXVyODIyOTEyMzY@
+  print(smallImage);
+  if (null != smallImage && smallImage.startsWith('http')) {
+    // http followed by zero or more of anything (http.*)
+    // followed by a period then mutple non periods (\.[^.]*)
+    // followed by .jpg (\.jpg)
+    var match = RegExp(r'^(http.*)(\.[^.]*)(\.jpg)$').firstMatch(smallImage);
+    if (null != match) {
+      if (null != match.group(1)) {
+        return match.group(1)! + '.jpg';
+      }
+    }
+    return smallImage;
+  }
+  return '';
+}

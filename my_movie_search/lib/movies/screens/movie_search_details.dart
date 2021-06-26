@@ -1,27 +1,29 @@
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart'
     show
-        Widget,
-        StatefulWidget,
-        State,
-        Key,
-        BuildContext,
-        Scaffold,
-        AppBar,
-        Text,
-        SelectableText,
-        Column,
-        Row,
-        Alignment,
         Align,
+        Alignment,
+        AppBar,
+        BuildContext,
+        Column,
+        CrossAxisAlignment,
         Expanded,
         Image,
-        NetworkImage,
+        Key,
         MainAxisAlignment,
-        CrossAxisAlignment;
+        NetworkImage,
+        Row,
+        Scaffold,
+        SelectableText,
+        State,
+        StatefulWidget,
+        Text,
+        Widget,
+        Wrap;
 
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 
 class MovieDetailsPage extends StatefulWidget {
@@ -49,13 +51,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       ),
       body: Column(
         children: [
-          SelectableText(_movie.title, style: biggerFont),
+          SelectableText(_movie.title, style: hugeFont),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _movie.yearRange == ''
-                  ? Text('Year: ${_movie.year.toString()}')
-                  : Text('Year Range: ${_movie.yearRange}'),
+              _movie.year == ''
+                  ? Text('Year Range: ${_movie.yearRange}')
+                  : Text('Year: ${_movie.year.toString()}'),
               Align(
                   alignment: Alignment.centerRight,
                   child: Text('Run Time: ${_movie.runTime.toFormattedTime()}')),
@@ -80,13 +82,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          _movie.imageUrl == '' || !_movie.imageUrl.startsWith('http')
-              ? Text('NoImage')
-              : Expanded(
+          getBigImage(_movie.imageUrl).startsWith('http')
+              ? Expanded(
                   child: Image(
-                      image: NetworkImage(_movie.imageUrl),
+                      image: NetworkImage(getBigImage(_movie.imageUrl)),
                       alignment: Alignment.centerRight),
-                ),
+                )
+              : Text('NoImage'),
+          SelectableText(getBigImage(_movie.imageUrl), style: tinyFont),
         ],
       ),
     );
@@ -101,7 +104,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
           Text('User Rating: ${_movie.userRating.toString()} '
               '(${formatter.format(_movie.userRatingCount)})'),
           Text('Censor Rating: ${describeEnum(_movie.censorRating)}'),
-          Row(children: [
+          Wrap(children: [
             Text('Source: ${describeEnum(_movie.source)} '),
             Text('UniqueId: ${_movie.uniqueId}'),
           ]),
