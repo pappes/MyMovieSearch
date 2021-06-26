@@ -84,7 +84,7 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
     if (movieData == {}) {
       scrapeName(document, movieData);
-      scrapeBasicDetails(document, movieData);
+      scrapeType(document, movieData);
     }
     // Get better details form the web page where possible.
     scrapePoster(document, movieData);
@@ -112,9 +112,13 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     return scriptElement.innerHtml;
   }
 
-  /// Extract details that were not found in JSON from HTML
-  scrapeBasicDetails(Document document, Map movieData) {
-    getAttributeValue(movieData, document, outer_element_type_element);
+  /// Extract movie type not found in JSON from HTML
+  scrapeType(Document document, Map movieData) {
+    getAttributeValue(movieData, document, outer_element_type);
+    if ("" == movieData[outer_element_type] &&
+        null != document.querySelector('a[href*="genre=short"]')) {
+      movieData[outer_element_type] = "Short";
+    }
   }
 
   /// Extract type, year, Censor Rating and duration from ul<TitleBlockMetaData>
@@ -129,7 +133,7 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         // See if this lineitem is the year
         var year = item.querySelector('a[href*="releaseinfo"]')?.text;
         if (null != year) {
-          movieData[outer_element_year_element] = year;
+          movieData[outer_element_year] = year;
           continue;
         }
         // See if this lineitem is the rating
@@ -138,15 +142,17 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
           movieData[outer_element_censor_rating] = censorrating;
           continue;
         }
-        var otheritem = item.text;
-        if (null == movieData[outer_element_type_element] &&
-            null == movieData[outer_element_year_element] &&
-            null == movieData[outer_element_censor_rating]) {
-          // Assume first unknown Item is movie type
-          movieData[outer_element_type_element] = otheritem;
+        String otheritem = item.text;
+        if ("" != otheritem) {
+          if (null == movieData[outer_element_type] &&
+              null == movieData[outer_element_year] &&
+              null == movieData[outer_element_censor_rating]) {
+            // Assume first unknown Item is movie type
+            movieData[outer_element_type] = otheritem;
+          }
+          // Assume last unknown Item is duration
+          movieData[outer_element_duration] = otheritem;
         }
-        // Assume last unknown Item is duration
-        movieData[outer_element_duration] = otheritem;
       }
     }
   }
@@ -189,7 +195,7 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       description = document.querySelector('h1[class*="TitleHeader"]');
     }
     if (null != description?.text) {
-      movieData[outer_element_title_element] = description?.text;
+      movieData[outer_element_title] = description?.text;
     }
   }
 
@@ -204,7 +210,7 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     if (null != posterBlock && posterBlock.hasChildNodes()) {
       for (var poster in posterBlock.querySelectorAll('img')) {
         if (null != poster.attributes['src']) {
-          movieData[outer_element_image_element] = poster.attributes['src'];
+          movieData[outer_element_image] = poster.attributes['src'];
           break;
         }
       }
@@ -213,39 +219,41 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Extract type, year, Censor Rating and duration from ul<TitleBlockMetaData>
   scrapeLanguageDetails(Document document, Map movieData) {
-    movieData[outer_element_language_element] = LanguageType.none;
-    var languageMetaData =
+    movieData[outer_element_language] = LanguageType.none;
+    var languageHtml =
         document.querySelector('li[data-testid="title-details-languages"]');
-    if (null == languageMetaData) {
-      languageMetaData = document
+    if (null == languageHtml) {
+      languageHtml = document
           .querySelector('a[href*="primary_language"]')
           ?.parent // li - line item for the language.
-          ?.parent; // ul - list of langages.
+          ?.parent; // ul - list of languages.
     }
-    if (null != languageMetaData && languageMetaData.hasChildNodes()) {
-      for (var item
-          in languageMetaData.querySelectorAll('a[href*="language="]')) {
+    if (null != languageHtml && languageHtml.hasChildNodes()) {
+      var silent = languageHtml.querySelector('a[href*="language=zxx"]');
+      if (null != silent) {
+        movieData[outer_element_language] = LanguageType.silent;
+        return;
+      }
+      for (var item in languageHtml.querySelectorAll('a[href*="language="]')) {
         // Loop through all languages in order to see how dominant English is.
-        var english = item.parent?.querySelector('a[href*="language=en"]');
-        if (null != english) {
-          if (LanguageType.none == movieData[outer_element_language_element]) {
-            // First item found is English, assume all English until other langages found.
-            movieData[outer_element_language_element] = LanguageType.allEnglish;
+        String link = item.attributes['href']!;
+        if (link.contains('language=en')) {
+          if (LanguageType.none == movieData[outer_element_language] ||
+              LanguageType.allEnglish == movieData[outer_element_language]) {
+            // First items found are English, assume all English until other languages found.
+            movieData[outer_element_language] = LanguageType.allEnglish;
             continue;
           } else {
-            movieData[outer_element_language_element] =
-                LanguageType.someEnglish;
+            movieData[outer_element_language] = LanguageType.someEnglish;
             return;
           }
         }
-        if (LanguageType.allEnglish ==
-            movieData[outer_element_language_element]) {
-          movieData[outer_element_language_element] =
-              LanguageType.mostlyEnglish;
+        if (LanguageType.allEnglish == movieData[outer_element_language]) {
+          movieData[outer_element_language] = LanguageType.mostlyEnglish;
           return;
         } else {
-          // First item found is foreign, assume all foreign until other langages found.
-          movieData[outer_element_language_element] = LanguageType.foreign;
+          // First item found is foreign, assume all foreign until other languages found.
+          movieData[outer_element_language] = LanguageType.foreign;
           continue;
         }
       }

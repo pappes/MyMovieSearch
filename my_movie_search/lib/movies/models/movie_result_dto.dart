@@ -249,7 +249,7 @@ extension DTOCompare on MovieResultDTO {
       return this.userContentCategory().compareTo(other.userContentCategory());
     // Preference English > Foreign Language.
     if (this.language.index != other.language.index)
-      return this.userContentCategory().compareTo(other.userContentCategory());
+      return this.languageCategory().compareTo(other.languageCategory());
     // Rank older (less than 2000) and low rated movies lower.
     if (this.popularityCategory() != other.popularityCategory())
       return this.popularityCategory().compareTo(other.popularityCategory());
