@@ -5,15 +5,19 @@ import 'package:flutter/material.dart'
         Alignment,
         AppBar,
         BuildContext,
+        Center,
         Column,
+        Container,
         CrossAxisAlignment,
         Expanded,
         Image,
         Key,
+        ListView,
         MainAxisAlignment,
         NetworkImage,
         Row,
         Scaffold,
+        Scrollbar,
         SelectableText,
         State,
         StatefulWidget,
@@ -49,31 +53,46 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         // Get title from the StatefulWidget MovieDetailsPage.
         title: Text(widget._movie.title),
       ),
-      body: Column(
-        children: [
-          SelectableText(_movie.title, style: hugeFont),
-          Row(
+      body: Scrollbar(
+        isAlwaysShown: true,
+        child: ListView(
+          children: <Widget>[
+            Container(
+              height:
+                  900, //TODO: work out how to cet the container to have variable heigh in a list view
+              child: Center(child: bodySection()),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Column bodySection() {
+    return Column(
+      children: [
+        SelectableText(_movie.title, style: hugeFont),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _movie.year == ''
+                ? Text('Year Range: ${_movie.yearRange}')
+                : Text('Year: ${_movie.year.toString()}'),
+            Align(
+                alignment: Alignment.centerRight,
+                child: Text('Run Time: ${_movie.runTime.toFormattedTime()}')),
+          ],
+        ),
+        Expanded(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _movie.year == ''
-                  ? Text('Year Range: ${_movie.yearRange}')
-                  : Text('Year: ${_movie.year.toString()}'),
-              Align(
-                  alignment: Alignment.centerRight,
-                  child: Text('Run Time: ${_movie.runTime.toFormattedTime()}')),
+              leftColumn(),
+              rightColumn(),
             ],
           ),
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                leftColumn(),
-                rightColumn(),
-              ],
-            ),
-          ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -83,10 +102,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           getBigImage(_movie.imageUrl).startsWith('http')
-              ? Expanded(
-                  child: Image(
-                      image: NetworkImage(getBigImage(_movie.imageUrl)),
-                      alignment: Alignment.centerRight),
+              ? Image(
+                  image: NetworkImage(getBigImage(_movie.imageUrl)),
+                  alignment: Alignment.topCenter,
                 )
               : Text('NoImage'),
           SelectableText(getBigImage(_movie.imageUrl), style: tinyFont),

@@ -82,7 +82,6 @@ CensorRatingType? getImdbCensorRating(String? type) {
 String getBigImage(String? smallImage) {
   // e.g.    https://m.media-amazon.com/images/M/MV5BODQxYWM2ODItYjE4ZC00YzAxLTljZDQtMjRjMmE0ZGMwYzZjXkEyXkFqcGdeQXVyODIyOTEyMzY@._V1_UY268_CR9,0,182,268_AL_.jpg
   // becomes https://m.media-amazon.com/images/M/MV5BODQxYWM2ODItYjE4ZC00YzAxLTljZDQtMjRjMmE0ZGMwYzZjXkEyXkFqcGdeQXVyODIyOTEyMzY@
-  print(smallImage);
   if (null != smallImage && smallImage.startsWith('http')) {
     // http followed by zero or more of anything (http.*)
     // followed by a period then mutple non periods (\.[^.]*)
