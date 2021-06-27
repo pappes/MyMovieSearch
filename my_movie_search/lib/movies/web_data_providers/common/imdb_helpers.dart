@@ -84,7 +84,7 @@ String getBigImage(String? smallImage) {
   // becomes https://m.media-amazon.com/images/M/MV5BODQxYWM2ODItYjE4ZC00YzAxLTljZDQtMjRjMmE0ZGMwYzZjXkEyXkFqcGdeQXVyODIyOTEyMzY@
   if (null != smallImage && smallImage.startsWith('http')) {
     // http followed by zero or more of anything (http.*)
-    // followed by a period then mutple non periods (\.[^.]*)
+    // followed by a period then multiple non periods (\.[^.]*)
     // followed by .jpg (\.jpg)
     var match = RegExp(r'^(http.*)(\.[^.]*)(\.jpg)$').firstMatch(smallImage);
     if (null != match) {

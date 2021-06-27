@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart' show Equatable;
 
+import 'movie_result_dto.dart';
+
 class SearchRequest extends Equatable {
   const SearchRequest(this.title);
 
@@ -25,5 +27,5 @@ enum SearchCriteriaSource {
 class SearchCriteriaDTO {
   String criteriaTitle = "";
   SearchCriteriaSource criteriaSource = SearchCriteriaSource.none;
-  String criteriaUrl = "";
+  List<MovieResultDTO> criteriaList = [];
 }

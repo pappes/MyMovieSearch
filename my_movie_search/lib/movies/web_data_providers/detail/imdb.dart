@@ -91,7 +91,7 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     scrapeDescription(document, movieData);
     scrapeLanguageDetails(document, movieData);
 
-    getRecomendations(movieData, document.querySelectorAll('div.rec_overview'));
+    getRecomendations(movieData, document);
 
     getAttributeValue(movieData, document, inner_element_rating_count);
     getAttributeValue(movieData, document, inner_element_rating_value);
@@ -274,36 +274,78 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   }
 
   /// Extract the movie recommendations from the current movie.
-  void getRecomendations(movieData, List<Element> recommendations) {
-    recommendations.forEach((element) => getRecomendation(movieData, element));
+  void getRecomendations(Map movieData, Document document) {
+    movieData[outer_element_related] = [];
+    List<Element> recommendations =
+        document.querySelectorAll('div.rec_overview');
+    if (0 != recommendations.length) {
+      recommendations
+          .forEach((element) => getRecomendationOld(movieData, element));
+    }
+    recommendations = document.querySelectorAll('div.ipc-poster-card--base');
+    if (0 != recommendations.length) {
+      recommendations
+          .forEach((element) => getRecomendationNew(movieData, element));
+    }
   }
 
-  getRecomendation(movieData, Element recommendation) {
+  getRecomendationNew(Map movieData, Element recommendation) {
     Map attributes = {};
-    attributes['id'] = recommendation
+    //"/title/tt0145681/?ref_=tt_sims_tt_t_9"
+    var link =
+        recommendation.querySelector('a[href*="title/tt"]')?.attributes['href'];
+    attributes[outer_element_identity_element] = getIdFromLink(link);
+    attributes[outer_element_title] = recommendation
+        .querySelector('span[data-testid="title"]')
+        ?.text; //The Book of Eli
+    attributes[outer_element_image] =
+        recommendation.querySelector('img')?.attributes['src'];
+    attributes[inner_element_rating_value] =
+        recommendation.querySelector('span.ipc-rating-star--imdb')?.text; //6.9
+    movieData[outer_element_related].add(attributes);
+  }
+
+  getRecomendationOld(Map movieData, Element recommendation) {
+    Map attributes = {};
+    attributes[outer_element_identity_element] = recommendation
         .querySelector('div[data-tconst]')
         ?.attributes['data-tconst']; //tt1037705
-    attributes['name'] = recommendation
+    attributes[outer_element_title] = recommendation
         .querySelector('div.rec-title')
         ?.querySelector('b')
         ?.innerHtml; //The Book of Eli
-    attributes['year'] = recommendation
+    attributes[outer_element_year] = recommendation
         .querySelector('div.rec-title')
         ?.querySelector('span')
         ?.innerHtml; //(2010)
-    attributes['poster'] =
+    attributes[outer_element_image] =
         recommendation.querySelector('img')?.attributes['src'];
-    attributes['ratingValue'] = recommendation
+    attributes[inner_element_rating_value] = recommendation
         .querySelector('span.rating-rating')
         ?.querySelector('span.value')
         ?.innerHtml; //6.9
-    attributes['ratingCount'] = recommendation
+    attributes[inner_element_rating_count] = recommendation
             .querySelector('span.rating-list')
             ?.attributes[
         'title']; //"Users rated this 6.9/10 (297,550 votes) - click stars to rate"
-    attributes['description'] = recommendation
+    attributes[outer_element_description] = recommendation
         .querySelector('div.rec-outline')
         ?.querySelector('p')
         ?.innerHtml; //A post-apocalyptic tale... saving humankind.
+    movieData[outer_element_related].add(attributes);
+  }
+
+  // Convert /title/tt0145681/?ref_=tt_sims_tt_t_9 to tt0145681
+  String getIdFromLink(String? link) {
+    // /title/  (/title/)
+    // followed multiple non forwardslash ([^/]*)
+    // followed by forwardslash questionmark multiple anything (/?.*)
+    var match = RegExp(r'^(/title/)([^/]*)(/?.*)$').firstMatch(link ?? '');
+    if (null != match) {
+      if (null != match.group(2)) {
+        return match.group(2)!;
+      }
+    }
+    return '';
   }
 }

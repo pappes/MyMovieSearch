@@ -41,7 +41,7 @@ class BaseMovieRepository {
   void close() {
     var feedback = MovieResultDTO();
     feedback.title = 'Search completed ...';
-    _movieStreamController?.add(feedback);
+    yieldResult(feedback);
     print('closing stream');
     _movieStreamController?.close();
     _movieStreamController = null;
@@ -50,9 +50,9 @@ class BaseMovieRepository {
   /// Initiates a search with all known movie search providers.
   /// To be overridden by specific implementations, calling:
   ///   initProvider() before requesting data for a source.
-  ///   addResults() for matching data.
+  ///   addResults(searchUID,dto) for matching data.
   ///   finishProvider() as each source completes.
-  void initSearch(int originalSearchUID, SearchCriteriaDTO criteria) {}
+  void initSearch(int searchUID, SearchCriteriaDTO criteria) {}
 
   /// Cease waiting for data provider to complete.
   /// Close the stream if all WebFetch operations have completed.
@@ -66,12 +66,22 @@ class BaseMovieRepository {
     _awaitingProviders = _awaitingProviders + 1;
   }
 
-  /// Yields incomplete results in the stream
+  /// Yields incomplete or completed results in the stream.
+  void yieldResult(MovieResultDTO result) {
+    _movieStreamController?.add(result);
+  }
+
+  /// Determines if a new search has been initatatd since originalSearchUID.
+  bool searchInterrupted(int originalSearchUID) {
+    return originalSearchUID != _searchUID;
+  }
+
+  /// Yields incomplete or completed results in the stream
   /// and initiates retrieval of movie details.
-  void addResults(int originalSearchUID, List<dynamic> results) {
-    if (originalSearchUID == _searchUID) {
+  void addResults(int originalSearchUID, List<MovieResultDTO> results) {
+    if (!searchInterrupted(originalSearchUID)) {
       // Ensure a new search has not been started.
-      results.forEach((dto) => _movieStreamController?.add(dto));
+      results.forEach((dto) => yieldResult(dto));
       results.forEach((dto) => _getDetails(originalSearchUID, dto));
     }
   }
@@ -98,8 +108,7 @@ class BaseMovieRepository {
 
   /// Add fetched movie details into the stream.
   void _addDetails(int originalSearchUID, List<MovieResultDTO> values) {
-    if (originalSearchUID == _searchUID) {
-      // Ensure a new search has not been started.
+    if (!searchInterrupted(originalSearchUID)) {
       print('received list length ${values.length}');
       for (var dto in values) {
         _finishDetails(dto);
@@ -118,7 +127,7 @@ class BaseMovieRepository {
   /// and update map to inidicate detail fetch is no longer in progress.
   /// Close the stream if all WebFetch operations have completed.
   void _finishDetails(MovieResultDTO dto) {
-    _movieStreamController?.add(dto);
+    yieldResult(dto);
     _requestedDetails[dto.uniqueId] = dto.title;
     if (_awaitingProviders == 0 && !_awaitingDetails) close();
   }

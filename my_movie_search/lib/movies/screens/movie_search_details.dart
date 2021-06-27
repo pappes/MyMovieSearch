@@ -10,10 +10,13 @@ import 'package:flutter/material.dart'
         Container,
         CrossAxisAlignment,
         Expanded,
+        GestureDetector,
         Image,
         Key,
         ListView,
         MainAxisAlignment,
+        MaterialPageRoute,
+        Navigator,
         NetworkImage,
         Row,
         Scaffold,
@@ -24,11 +27,14 @@ import 'package:flutter/material.dart'
         Text,
         Widget,
         Wrap;
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
+
+import 'movie_search_results.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   MovieDetailsPage({Key? key, required MovieResultDTO movie})
@@ -44,6 +50,15 @@ class MovieDetailsPage extends StatefulWidget {
 class _MovieDetailsPageState extends State<MovieDetailsPage> {
   _MovieDetailsPageState(this._movie);
   final MovieResultDTO _movie;
+  void searchForRelated(MovieResultDTO movie) {
+    var criteria = SearchCriteriaDTO();
+    criteria.criteriaList = movie.related;
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => MovieSearchResultsNewPage(criteria: criteria)),
+    );
+  }
 
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called.
@@ -102,9 +117,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           getBigImage(_movie.imageUrl).startsWith('http')
-              ? Image(
-                  image: NetworkImage(getBigImage(_movie.imageUrl)),
-                  alignment: Alignment.topCenter,
+              ? GestureDetector(
+                  onTap: () => searchForRelated(_movie),
+                  child: Image(
+                    image: NetworkImage(getBigImage(_movie.imageUrl)),
+                    alignment: Alignment.topCenter,
+                  ),
                 )
               : Text('NoImage'),
           SelectableText(getBigImage(_movie.imageUrl), style: tinyFont),

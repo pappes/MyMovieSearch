@@ -19,6 +19,7 @@ const inner_element_rating_count = 'ratingCount';
 const outer_element_type = '@type';
 const outer_element_image = 'image';
 const outer_element_language = 'language';
+const outer_element_related = 'related';
 
 class ImdbMoviePageConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
@@ -65,6 +66,13 @@ class ImdbMoviePageConverter {
         ) ??
         movie.type;
 
+    //map[outer_element_related]        .forEach((relatedMap) => movie.related.add(dtoFromMap(relatedMap)));
+
     return movie;
+  }
+
+  MovieResultDTO getRelated(Map relatedMap) {
+    var dto = dtoFromMap(relatedMap);
+    return dto;
   }
 }

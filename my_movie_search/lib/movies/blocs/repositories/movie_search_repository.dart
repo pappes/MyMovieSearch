@@ -1,9 +1,5 @@
-import 'dart:async' show StreamController;
-
 import 'base_movie_repository.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/google.dart';
@@ -31,8 +27,17 @@ class MovieSearchRepository extends BaseMovieRepository {
 
   @override
 
+  /// Initiates a search for the provied criteria.
+  void initSearch(int searchUID, SearchCriteriaDTO criteria) {
+    if (0 == criteria.criteriaList.length) {
+      searchText(searchUID, criteria);
+    } else {
+      searchList(searchUID, criteria);
+    }
+  }
+
   /// Initiates a search with all known movie search providers.
-  void initSearch(int originalSearchUID, SearchCriteriaDTO criteria) {
+  void searchText(int searchUID, SearchCriteriaDTO criteria) {
     for (var provider in [
       _imdbSearch,
       _imdbSuggestions,
@@ -43,8 +48,15 @@ class MovieSearchRepository extends BaseMovieRepository {
       initProvider();
       provider
           .readList(criteria, limit: 10)
-          .then((values) => addResults(originalSearchUID, values))
+          .then((values) => addResults(searchUID, values))
           .whenComplete(finishProvider);
     }
+  }
+
+  /// Initiates a search for a specified list of movies.
+  void searchList(int searchUID, SearchCriteriaDTO criteria) {
+    initProvider();
+    addResults(searchUID, criteria.criteriaList);
+    finishProvider();
   }
 }
