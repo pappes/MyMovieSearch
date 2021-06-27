@@ -7,7 +7,7 @@ import 'package:my_movie_search/utilities/environment.dart'
     show EnvironmentVars;
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
-import 'movies/web_data_providers/repository.dart';
+import 'movies/blocs/repositories/movie_search_repository.dart';
 import 'movies/blocs/bloc_parts/mm_search_observer.dart';
 
 Future main() async {
@@ -18,6 +18,6 @@ Future main() async {
   Bloc.observer = MMSearchObserver();
 
   runApp(
-    MMSearchApp(movieRepository: MovieRepository()),
+    MMSearchApp(movieRepository: MovieSearchRepository()),
   );
 }

@@ -11,7 +11,7 @@ import 'package:flutter/material.dart'
         NavigatorState;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'movies/web_data_providers/repository.dart';
+import 'movies/blocs/repositories/movie_search_repository.dart';
 import 'movies/blocs/search_bloc.dart';
 import 'movies/screens/movie_search_criteria.dart';
 //import 'package:my_movie_search/screens/home.dart';
@@ -32,7 +32,7 @@ class MMSearchApp extends StatelessWidget {
           //darkTheme: ThemeData(brightness: Brightness.dark),
           //themeMode: ThemeMode.system, //dark or light or system
         );
-  final MovieRepository movieRepository;
+  final MovieSearchRepository movieRepository;
 
   @override
   Widget build(BuildContext context) {

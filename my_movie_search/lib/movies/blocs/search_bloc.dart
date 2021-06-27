@@ -4,7 +4,7 @@ import 'package:bloc/bloc.dart' show SearchBloc, Bloc;
 import 'package:equatable/equatable.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/repository.dart';
+import 'repositories/movie_search_repository.dart';
 
 part 'bloc_parts/search_event.dart';
 part 'bloc_parts/search_state.dart';
@@ -21,7 +21,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc({required this.movieRepository})
       : super(const SearchState.awaitingInput());
 
-  final MovieRepository movieRepository;
+  final MovieSearchRepository movieRepository;
   StreamSubscription<MovieResultDTO>? _searchStatusSubscription;
   Map<String, MovieResultDTO> _allResults = {};
   List<MovieResultDTO> sortedResults = [];

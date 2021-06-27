@@ -2,35 +2,20 @@ import 'dart:async' show StreamController;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'detail/imdb.dart';
-import 'search/imdb_suggestions.dart';
-import 'search/imdb_search.dart';
-import 'search/google.dart';
-import 'search/omdb.dart';
-import 'search/tmdb.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb.dart';
 
 /// BlockRepository to consolidate data retrieval from multiple search
 /// and detail providers using the WebFetch framework.
 ///
 /// [Search] provides a stream of incomplete and complete results.
 /// [Close] can be used to cancel a search.
-class MovieRepository {
-  final QueryIMDBSuggestions _imdbSuggestions;
-  final QueryIMDBSearch _imdbSearch;
-  final QueryOMDBMovies _omdbSearch;
-  final QueryTMDBMovies _tmdbSearch;
-  final QueryGoogleMovies _googleSearch;
+class BaseMovieRepository {
   StreamController<MovieResultDTO>? _movieStreamController;
   var _awaitingProviders = 0;
   final Map _requestedDetails = {};
   static int _searchUID = 1;
 
-  MovieRepository()
-      : _imdbSuggestions = QueryIMDBSuggestions(),
-        _imdbSearch = QueryIMDBSearch(),
-        _omdbSearch = QueryOMDBMovies(),
-        _tmdbSearch = QueryTMDBMovies(),
-        _googleSearch = QueryGoogleMovies();
+  BaseMovieRepository();
 
   /// Return a stream of data matching [criteria].
   ///
@@ -47,7 +32,7 @@ class MovieRepository {
     _movieStreamController = StreamController<MovieResultDTO>(sync: true);
     _requestedDetails.clear();
     // TODO: error handling
-    _initSearch(_searchUID, criteria);
+    initSearch(_searchUID, criteria);
 
     yield* _movieStreamController!.stream;
   }
@@ -63,25 +48,27 @@ class MovieRepository {
   }
 
   /// Initiates a search with all known movie search providers.
-  void _initSearch(int originalSearchUID, SearchCriteriaDTO criteria) {
-    for (var provider in [
-      _imdbSearch,
-      _imdbSuggestions,
-      _omdbSearch,
-      _tmdbSearch,
-      _googleSearch,
-    ]) {
-      _awaitingProviders++;
-      provider
-          .readList(criteria, limit: 10)
-          .then((values) => _addResults(originalSearchUID, values))
-          .whenComplete(_finishProvider);
-    }
+  /// To be overridden by specific implementations, calling:
+  ///   initProvider() before requesting data for a source.
+  ///   addResults() for matching data.
+  ///   finishProvider() as each source completes.
+  void initSearch(int originalSearchUID, SearchCriteriaDTO criteria) {}
+
+  /// Cease waiting for data provider to complete.
+  /// Close the stream if all WebFetch operations have completed.
+  void finishProvider() {
+    _awaitingProviders = _awaitingProviders - 1;
+    if (_awaitingProviders == 0 && !_awaitingDetails) close();
+  }
+
+  /// Begin waiting for another data provider to complete.
+  void initProvider() {
+    _awaitingProviders = _awaitingProviders + 1;
   }
 
   /// Yields incomplete results in the stream
   /// and initiates retrieval of movie details.
-  void _addResults(int originalSearchUID, List<dynamic> results) {
+  void addResults(int originalSearchUID, List<dynamic> results) {
     if (originalSearchUID == _searchUID) {
       // Ensure a new search has not been started.
       results.forEach((dto) => _movieStreamController?.add(dto));
@@ -133,13 +120,6 @@ class MovieRepository {
   void _finishDetails(MovieResultDTO dto) {
     _movieStreamController?.add(dto);
     _requestedDetails[dto.uniqueId] = dto.title;
-    if (_awaitingProviders == 0 && !_awaitingDetails) close();
-  }
-
-  /// Cease waiting for WebFetch provider to complete.
-  /// Close the stream if all WebFetch operations have completed.
-  void _finishProvider() {
-    _awaitingProviders = _awaitingProviders - 1;
     if (_awaitingProviders == 0 && !_awaitingDetails) close();
   }
 }
