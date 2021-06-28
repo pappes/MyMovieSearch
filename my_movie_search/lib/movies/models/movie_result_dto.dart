@@ -61,6 +61,7 @@ final String movieResultDTOCensorRating = 'censorRating';
 final String movieResultDTORunTime = 'runTime';
 final String movieResultImageUrl = 'imageUrl';
 final String movieResultLanguage = 'language';
+final String movieResultRelated = 'related';
 final String movieResultDTOUninitialised = '-1';
 
 extension MapDTOConversion on Map {
@@ -80,6 +81,7 @@ extension MapDTOConversion on Map {
     dto.runTime = this[movieResultDTORunTime] ?? dto.runTime;
     dto.imageUrl = this[movieResultImageUrl] ?? dto.imageUrl;
     dto.language = this[movieResultLanguage] ?? dto.language;
+    //TODO related
     return dto;
   }
 }
@@ -107,6 +109,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     map[movieResultDTORunTime] = this.runTime;
     map[movieResultImageUrl] = this.imageUrl;
     map[movieResultLanguage] = this.language;
+    //TODO: related
     return map;
   }
 
@@ -143,6 +146,16 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       );
       this.userRatingCount =
           bestval(newValue.userRatingCount, this.userRatingCount);
+      mergeDtoList(this.related, newValue.related);
+    }
+  }
+
+  void mergeDtoList(
+      List<MovieResultDTO> existingDtos, List<MovieResultDTO> newDtos) {
+    for (var dto in newDtos) {
+      if (!existingDtos.contains(dto)) {
+        existingDtos.add(dto);
+      }
     }
   }
 
@@ -203,6 +216,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     map[movieResultDTORunTime] = this.runTime;
     map[movieResultImageUrl] = this.imageUrl;
     map[movieResultLanguage] = this.language;
+    map[movieResultRelated] = this.related;
     return map;
   }
 
@@ -221,7 +235,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
           this.censorRating == other.censorRating &&
           this.runTime == other.runTime &&
           this.language == other.language &&
-          this.imageUrl == other.imageUrl;
+          this.imageUrl == other.imageUrl &&
+          this.related.toPrintableString() == other.related.toPrintableString();
   }
 }
 

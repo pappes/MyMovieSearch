@@ -51,7 +51,7 @@ class ImdbMoviePageConverter {
     )!;
 
     try {
-      movie.year = DateTime.parse(map[outer_element_year] ?? "").year;
+      movie.year = DateTime.parse(map[outer_element_year] ?? '').year;
     } catch (e) {
       movie.yearRange = map[outer_element_year] ?? movie.yearRange;
     }
@@ -66,12 +66,15 @@ class ImdbMoviePageConverter {
         ) ??
         movie.type;
 
-    //map[outer_element_related]        .forEach((relatedMap) => movie.related.add(dtoFromMap(relatedMap)));
+    if (null != map[outer_element_related]) {
+      map[outer_element_related]
+          .forEach((relatedMap) => movie.related.add(getRelated(relatedMap)));
+    }
 
     return movie;
   }
 
-  MovieResultDTO getRelated(Map relatedMap) {
+  static MovieResultDTO getRelated(Map relatedMap) {
     var dto = dtoFromMap(relatedMap);
     return dto;
   }
