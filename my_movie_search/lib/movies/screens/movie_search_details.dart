@@ -1,37 +1,9 @@
 import 'package:flutter/foundation.dart' show describeEnum;
-import 'package:flutter/material.dart'
-    show
-        Align,
-        Alignment,
-        AppBar,
-        BuildContext,
-        Center,
-        Column,
-        Container,
-        CrossAxisAlignment,
-        Expanded,
-        GestureDetector,
-        Image,
-        Key,
-        ListView,
-        MainAxisAlignment,
-        MaterialPageRoute,
-        Navigator,
-        NetworkImage,
-        Row,
-        Scaffold,
-        Scrollbar,
-        SelectableText,
-        State,
-        StatefulWidget,
-        Text,
-        Widget,
-        Wrap;
-import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:flutter/material.dart';
 
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 
 import 'movie_search_results.dart';
@@ -116,16 +88,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          getBigImage(_movie.imageUrl).startsWith('http')
-              ? GestureDetector(
-                  onTap: () => searchForRelated(_movie),
-                  child: Image(
-                    image: NetworkImage(getBigImage(_movie.imageUrl)),
-                    alignment: Alignment.topCenter,
-                  ),
+          _movie.imageUrl.startsWith('http')
+              ? Image(
+                  image: NetworkImage(_movie.imageUrl),
+                  alignment: Alignment.topCenter,
                 )
               : Text('NoImage'),
-          SelectableText(getBigImage(_movie.imageUrl), style: tinyFont),
+          SelectableText(_movie.imageUrl, style: tinyFont),
         ],
       ),
     );
@@ -139,9 +108,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
           Text('Type: ${describeEnum(_movie.type)}'),
           Text('User Rating: ${_movie.userRating.toString()} '
               '(${formatter.format(_movie.userRatingCount)})'),
-          Text('Censor Rating: ${describeEnum(_movie.censorRating)}'),
           Wrap(children: [
-            Text('Source: ${describeEnum(_movie.source)} '),
+            Text('Censor Rating: ${describeEnum(_movie.censorRating)}     '),
+            Text('Language: ${describeEnum(_movie.language)}'),
+          ]),
+          Wrap(children: [
+            Text('Source: ${describeEnum(_movie.source)}      '),
             Text('UniqueId: ${_movie.uniqueId}'),
           ]),
           Row(children: [
@@ -152,6 +124,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
               ),
             ),
           ]),
+          Text('Related:'),
+          GestureDetector(
+            onTap: () => searchForRelated(_movie),
+            child: Text(
+              _movie.related.toShortString(),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ],
       ),
     );

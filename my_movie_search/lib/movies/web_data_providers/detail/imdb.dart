@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart' show describeEnum;
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 import 'converters/imdb.dart';
@@ -195,7 +196,7 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       description = document.querySelector('h1[class*="TitleHeader"]');
     }
     if (null != description?.text) {
-      movieData[outer_element_title] = description?.text;
+      movieData[outer_element_official_title] = description?.text;
     }
   }
 
@@ -215,6 +216,8 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         }
       }
     }
+    movieData[outer_element_image] =
+        getBigImage(movieData[outer_element_image]);
   }
 
   /// Extract type, year, Censor Rating and duration from ul<TitleBlockMetaData>
@@ -229,6 +232,8 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
           ?.parent; // ul - list of languages.
     }
     if (null != languageHtml && languageHtml.hasChildNodes()) {
+      movieData[outer_element_languages] =
+          languageHtml.querySelector('div')?.text;
       var silent = languageHtml.querySelector('a[href*="language=zxx"]');
       if (null != silent) {
         movieData[outer_element_language] = LanguageType.silent;
@@ -295,7 +300,7 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     var link =
         recommendation.querySelector('a[href*="title/tt"]')?.attributes['href'];
     attributes[outer_element_identity_element] = getIdFromLink(link);
-    attributes[outer_element_title] = recommendation
+    attributes[outer_element_official_title] = recommendation
         .querySelector('span[data-testid="title"]')
         ?.text; //The Book of Eli
     attributes[outer_element_image] =
@@ -310,7 +315,7 @@ class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     attributes[outer_element_identity_element] = recommendation
         .querySelector('div[data-tconst]')
         ?.attributes['data-tconst']; //tt1037705
-    attributes[outer_element_title] = recommendation
+    attributes[outer_element_official_title] = recommendation
         .querySelector('div.rec-title')
         ?.querySelector('b')
         ?.innerHtml; //The Book of Eli

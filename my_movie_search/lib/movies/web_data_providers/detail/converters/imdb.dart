@@ -6,7 +6,8 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 
 const outer_element_identity_element = 'id';
 
-const outer_element_title = 'name';
+const outer_element_official_title = 'name';
+const outer_element_common_title = 'alternateName';
 const outer_element_description = 'description';
 const outer_element_keywords = 'keywords';
 const outer_element_genre = 'genre';
@@ -19,6 +20,7 @@ const inner_element_rating_count = 'ratingCount';
 const outer_element_type = '@type';
 const outer_element_image = 'image';
 const outer_element_language = 'language';
+const outer_element_languages = 'languages';
 const outer_element_related = 'related';
 
 class ImdbMoviePageConverter {
@@ -30,10 +32,13 @@ class ImdbMoviePageConverter {
     var movie = MovieResultDTO();
     movie.source = DataSourceType.imdb;
     movie.uniqueId = map[outer_element_identity_element] ?? movie.uniqueId;
-    movie.title = map[outer_element_title] ?? movie.title;
+    movie.title = map[outer_element_official_title] ?? movie.title;
+    if (null != map[outer_element_common_title])
+      movie.title += ' (${map[outer_element_common_title]})';
     movie.description = map[outer_element_description] ?? movie.title;
-    movie.description += '\ngenre: ${map[outer_element_genre]}';
-    movie.description += '\nkeywords: ${map[outer_element_keywords]}';
+    movie.description += '\nGenres: ${map[outer_element_genre]}';
+    movie.description += '\nKeywords: ${map[outer_element_keywords]}';
+    movie.description += '\nLanguages: ${map[outer_element_languages]}';
     movie.imageUrl = map[outer_element_image] ?? movie.imageUrl;
     movie.language = map[outer_element_language] ?? movie.language;
     movie.censorRating = getImdbCensorRating(

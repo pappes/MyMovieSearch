@@ -242,11 +242,19 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
 extension ListMovieResultDTOHelpers on List<MovieResultDTO> {
   String toPrintableString() {
-    String listContents = "";
+    String listContents = '';
     for (var i = 0; i < this.length; i++) {
-      listContents += "${this[i].toPrintableString()},\n";
+      listContents += '${this[i].toPrintableString()},\n';
     }
     return 'List<MovieResultDTO>(${this.length})[\n$listContents\n]';
+  }
+
+  String toShortString() {
+    String listContents = '';
+    for (var i = 0; i < this.length; i++) {
+      listContents += '${this[i].title},\n';
+    }
+    return listContents;
   }
 }
 

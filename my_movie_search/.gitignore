@@ -4,6 +4,7 @@
 *.pyc
 *.swp
 .env*
+secret.dart
 .DS_Store
 .atom/
 .buildlog/
