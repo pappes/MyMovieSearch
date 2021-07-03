@@ -3,6 +3,7 @@ import 'dart:async' show StreamController;
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tmdb.dart';
 
 /// BlockRepository to consolidate data retrieval from multiple search
 /// and detail providers using the WebFetch framework.
@@ -89,32 +90,45 @@ class BaseMovieRepository {
   /// Maintain a map of unique movie detail requests
   /// and request retrieval if the fetch is not already in progress.
   void _getDetails(int originalSearchUID, MovieResultDTO dto) {
-    if (!_requestedDetails.containsKey(dto.uniqueId) && dto.uniqueId != '-1') {
-      // Ensure a new search has not been started.
+    if ("null" != dto.uniqueId &&
+        !_requestedDetails.containsKey(dto.uniqueId) &&
+        dto.uniqueId != '-1') {
       var detailCriteria = SearchCriteriaDTO();
+      detailCriteria.criteriaTitle = dto.uniqueId;
+      _requestedDetails[dto.uniqueId] = null;
 
       if (dto.uniqueId.startsWith('tt')) {
         final imdbDetails =
             QueryIMDBDetails(); //Seperate instance per search (async)
-        detailCriteria.criteriaTitle = dto.uniqueId;
-        _requestedDetails[dto.uniqueId] = null;
-        imdbDetails.readList(detailCriteria).then(
-            (searchResults) => _addDetails(originalSearchUID, searchResults));
+        imdbDetails.readList(detailCriteria).then((searchResults) =>
+            _addImdbDetails(originalSearchUID, searchResults));
       } else {
-        // TODO: fetch details from alternate source
+        final tmdbDetails =
+            QueryTMDBDetails(); //Seperate instance per search (async)
+        tmdbDetails.readList(detailCriteria).then((searchResults) =>
+            _addTmdbDetails(originalSearchUID, searchResults));
+      }
+    }
+  }
+
+  /// Add fetched tmbd movie details into the stream and search imdb.
+  void _addTmdbDetails(int originalSearchUID, List<MovieResultDTO> values) {
+    if (!searchInterrupted(originalSearchUID)) {
+      for (var dto in values) {
+        if (dto.alternateId.startsWith('tt')) {
+          var imdbDetails = MovieResultDTO();
+          imdbDetails.uniqueId = dto.alternateId;
+          _getDetails(originalSearchUID, imdbDetails);
+        }
+        _finishDetails(dto);
       }
     }
   }
 
   /// Add fetched movie details into the stream.
-  void _addDetails(int originalSearchUID, List<MovieResultDTO> values) {
+  void _addImdbDetails(int originalSearchUID, List<MovieResultDTO> values) {
     if (!searchInterrupted(originalSearchUID)) {
-      print('received list length ${values.length}');
-      for (var dto in values) {
-        _finishDetails(dto);
-        print('${dto.toPrintableString()}');
-      }
-      print(_requestedDetails.toString());
+      values.forEach((dto) => _finishDetails(dto));
     }
   }
 

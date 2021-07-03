@@ -5,16 +5,17 @@ import 'metadata_dto.dart';
 class MovieResultDTO {
   DataSourceType source = DataSourceType.none;
   String uniqueId = movieResultDTOUninitialised;
-  String title = "";
-  String description = "";
+  String alternateId = '';
+  String title = '';
+  String description = '';
   MovieContentType type = MovieContentType.none;
   int year = 0;
-  String yearRange = "";
+  String yearRange = '';
   double userRating = 0;
   int userRatingCount = 0;
   CensorRatingType censorRating = CensorRatingType.none;
   Duration runTime = Duration(hours: 0, minutes: 0, seconds: 0);
-  String imageUrl = "";
+  String imageUrl = '';
   LanguageType language = LanguageType.none;
   List<MovieResultDTO> related = [];
 }
@@ -50,6 +51,7 @@ enum LanguageType {
 // member variable names
 final String movieResultDTOSource = 'source';
 final String movieResultDTOUniqueId = 'uniqueId';
+final String movieResultDTOAlternateId = 'alternateId';
 final String movieResultDTOTitle = 'title';
 final String movieResultDTODescription = 'description';
 final String movieResultDTOType = 'type';
@@ -69,6 +71,7 @@ extension MapDTOConversion on Map {
     var dto = MovieResultDTO();
     dto.source = this[movieResultDTOSource] ?? dto.source;
     dto.uniqueId = this[movieResultDTOUniqueId] ?? dto.uniqueId;
+    dto.alternateId = this[movieResultDTOAlternateId] ?? dto.alternateId;
     dto.title = this[movieResultDTOTitle] ?? dto.title;
     dto.description = this[movieResultDTODescription] ?? dto.description;
     dto.type = this[movieResultDTOType] ?? dto.type;
@@ -98,6 +101,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     Map<String, dynamic> map = Map();
     map[movieResultDTOSource] = this.source;
     map[movieResultDTOUniqueId] = this.uniqueId;
+    map[movieResultDTOAlternateId] = this.alternateId;
     map[movieResultDTOTitle] = this.title;
     map[movieResultDTODescription] = this.description;
     map[movieResultDTOType] = this.type;
@@ -114,12 +118,13 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   }
 
   void merge(MovieResultDTO newValue) {
-    if (newValue.description != "") {
+    if (newValue.description != '') {
       print(newValue.description);
     }
     if (DataSourceType.imdb == newValue.source) {
       print(newValue.description);
     }
+    //TODO alternate ID
     if (newValue.userRatingCount > this.userRatingCount ||
         DataSourceType.imdb == newValue.source) {
       this.source = bestval(newValue.source, this.source);
@@ -205,6 +210,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     Map<String, dynamic> map = Map();
     map[movieResultDTOSource] = this.source;
     map[movieResultDTOUniqueId] = this.uniqueId;
+    map[movieResultDTOAlternateId] = this.alternateId;
     map[movieResultDTOTitle] = 'unknown';
     map[movieResultDTODescription] = this.description;
     map[movieResultDTOType] = this.type;
@@ -226,6 +232,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     else
       return this.source == other.source &&
           this.uniqueId == other.uniqueId &&
+          this.alternateId == other.alternateId &&
           this.title == other.title &&
           this.description == other.description &&
           this.type == other.type &&
@@ -259,6 +266,7 @@ extension ListMovieResultDTOHelpers on List<MovieResultDTO> {
 }
 
 extension DTOCompare on MovieResultDTO {
+  //Rank movies against each other for sorting
   int compareTo(MovieResultDTO other) {
     // Treat null as lower than any other value
     if (this.uniqueId == movieResultDTOUninitialised &&

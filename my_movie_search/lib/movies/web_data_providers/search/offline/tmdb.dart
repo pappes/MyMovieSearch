@@ -1,15 +1,15 @@
 //query string https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=home
 //json format
 //title = title/name
-//id = unique key"
-//release_date = date the moive was released e.g. "2019-06-28",
+//id = unique key
+//release_date = date the movie was released e.g. "2019-06-28",
 //vote_average = User rating
-//vote_count =  Count of users taht have rated
-//poster_path = "image url fragment
+//vote_count =  Count of users that have rated
+//poster_path = image url fragment
 //backdrop_path = alternate image url fragment
 //video = indicator of low quality movie (true/false)
 //adult = indicator of adult content (true/false)
-//genre_ids = list of numeric ids that need to be correlated with aonthed  web service call e.g. [28, 12, 878]
+//genre_ids = list of numeric ids that need to be correlated with another web service call e.g. [28, 12, 878]
 //original_language = language spoken during the movie (iso_639_1) e.g. "en"
 //original_title = previous title assigned to the movie
 //overview = synopsis of the movie plot

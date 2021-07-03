@@ -125,13 +125,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
             ),
           ]),
           Text('Related:'),
-          GestureDetector(
-            onTap: () => searchForRelated(_movie),
-            child: Text(
-              _movie.related.toShortString(),
-              textAlign: TextAlign.center,
+          Center(
+            child: GestureDetector(
+              onTap: () => searchForRelated(_movie),
+              child: Text(
+                _movie.related.toShortString(),
+                textAlign: TextAlign.center,
+              ),
             ),
-          ),
+          )
         ],
       ),
     );

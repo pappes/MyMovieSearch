@@ -63,6 +63,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   /// Maintain map of fetched movie snippets and details.
   /// Update bloc state to indicate that new data is available.
   void _receiveDTO(MovieResultDTO newValue) {
+    if ('' != newValue.alternateId) {
+      //replace placeholder with new record
+      print('Deleting: ${newValue.uniqueId}');
+      _allResults.remove(newValue.uniqueId);
+      newValue.uniqueId = newValue.alternateId;
+    }
     if (newValue.uniqueId == '-1' ||
         !_allResults.containsKey(newValue.uniqueId)) {
       print('Adding: ${newValue.uniqueId}');
