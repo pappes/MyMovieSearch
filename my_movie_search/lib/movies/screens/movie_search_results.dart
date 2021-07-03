@@ -14,6 +14,7 @@ import 'package:flutter/material.dart'
         EdgeInsets,
         ListTile;
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider, BlocBuilder;
+import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
 
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/widgets/movie_card_small.dart';
@@ -38,7 +39,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage> {
   @override
   void initState() {
     super.initState();
-    _searchBloc = BlocProvider.of<SearchBloc>(context);
+    //TODO: use a factory in inject search bloc instances _searchBloc = BlocProvider.of<SearchBloc>(context);
+    _searchBloc = SearchBloc(movieRepository: MovieSearchRepository());
     _searchBloc!.add(SearchRequested(widget._criteria));
   }
 
@@ -56,6 +58,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage> {
 
   Widget _buildMovieResults() {
     return BlocBuilder<SearchBloc, SearchState>(
+      bloc: _searchBloc,
       builder: (context, state) {
         return Scrollbar(
           isAlwaysShown: true,

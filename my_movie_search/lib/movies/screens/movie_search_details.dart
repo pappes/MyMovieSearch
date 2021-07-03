@@ -74,7 +74,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
           children: <Widget>[
             Container(
               height:
-                  900, //TODO: work out how to cet the container to have variable heigh in a list view
+                  9000, //TODO: work out how to set the container to have variable height in a list view
               child: Center(child: bodySection()),
             )
           ],
