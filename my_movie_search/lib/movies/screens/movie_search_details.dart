@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
+import 'package:url_launcher/link.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
@@ -115,6 +117,16 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
           Wrap(children: [
             Text('Source: ${describeEnum(_movie.source)}      '),
             Text('UniqueId: ${_movie.uniqueId}'),
+            Link(
+              uri: Uri.parse('https://flutter.dev'),
+              builder: makeLink,
+            ),
+            Center(
+              child: ElevatedButton(
+                onPressed: _launchURL,
+                child: Text('Show Flutter homepage'),
+              ),
+            ),
           ]),
           Row(children: [
             Expanded(
@@ -138,4 +150,23 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       ),
     );
   }
+
+  Widget makeLink(BuildContext, FollowLink? followLink) {
+    //return Text('hyperlink');
+
+    return ElevatedButton(
+      onPressed: followLink,
+      child: Text('Click me!!'),
+    );
+
+    /*
+    return ElevatedButton(
+      onPressed: followLink, child: Text('hyperlink'),
+      // ... other properties here ...
+    );*/
+  }
+
+  void _launchURL() async => await canLaunch('https://flutter.dev')
+      ? await launch('https://flutter.dev')
+      : throw 'Could not launch https://flutter.dev';
 }

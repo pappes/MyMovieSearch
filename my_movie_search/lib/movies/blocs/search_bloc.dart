@@ -69,7 +69,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       _allResults.remove(newValue.uniqueId);
       newValue.uniqueId = newValue.alternateId;
     }
-    if (newValue.uniqueId == '-1' ||
+
+    if (newValue.uniqueId.startsWith(movieResultDTOMessagePrefix) ||
         !_allResults.containsKey(newValue.uniqueId)) {
       print('Adding: ${newValue.uniqueId}');
       _allResults[newValue.uniqueId] = newValue;

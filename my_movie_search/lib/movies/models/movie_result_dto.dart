@@ -65,6 +65,7 @@ final String movieResultImageUrl = 'imageUrl';
 final String movieResultLanguage = 'language';
 final String movieResultRelated = 'related';
 final String movieResultDTOUninitialised = '-1';
+final String movieResultDTOMessagePrefix = '-';
 
 extension MapDTOConversion on Map {
   MovieResultDTO toMovieResultDTO() {

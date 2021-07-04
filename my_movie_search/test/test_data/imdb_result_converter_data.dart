@@ -7,18 +7,6 @@ import '../test_helper.dart';
 /// Test Data
 ////////////////////////////////////////////////////////////////////////////////
 
-// movieResultDTOSource = 'source';
-// movieResultDTOUniqueId = 'uniqueId';
-// movieResultDTOTitle = 'title';
-// movieResultDTOType = 'type';
-// movieResultDTOYear = 'year';
-// movieResultDTOYearRange = 'yearRange';
-// movieResultDTOUserRating = 'userRating';
-// movieResultDTOUserRatingCount = 'userRatingCount';
-// movieResultDTOCensorRating = 'censorRating';
-// movieResultDTORunTime = 'runTime';
-// movieResultDTOUninitialised = '-1';
-
 final expectedDTOList = expectedDTOStream.toList();
 final expectedDTOStream = streamMovieResultDTOFromJsonMap([
   {

@@ -1,5 +1,8 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
+const IMDB_TITLE_PREFIX = 'tt';
+const IMDB_PERSON_PREFIX = 'nm';
+
 MovieContentType? getImdbMovieContentType(Object? info, int? duration) {
   if (info == null) return null;
   final String title = info.toString().toLowerCase();

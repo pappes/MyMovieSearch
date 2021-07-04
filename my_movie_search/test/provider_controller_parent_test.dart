@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -89,7 +89,7 @@ List<Future> _queueDetailSearch(List<String> queries) {
   queries.forEach((queryKey) {
     var criteria = SearchCriteriaDTO();
     final imdbDetails =
-        QueryIMDBDetails(); //Seperate instance per search (async)
+        QueryIMDBTitleDetails(); //Seperate instance per search (async)
     criteria.criteriaTitle = queryKey;
     futures.add(imdbDetails.readList(criteria, source: _onlineSearch));
   });

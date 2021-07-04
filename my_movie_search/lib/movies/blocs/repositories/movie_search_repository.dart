@@ -39,11 +39,11 @@ class MovieSearchRepository extends BaseMovieRepository {
   /// Initiates a search with all known movie search providers.
   void searchText(int searchUID, SearchCriteriaDTO criteria) {
     for (var provider in [
-      //_imdbSearch,
-      //_imdbSuggestions,
-      //_omdbSearch,
+      _imdbSearch,
+      _imdbSuggestions,
+      _omdbSearch,
       _tmdbSearch,
-      //_googleSearch,
+      _googleSearch,
     ]) {
       initProvider();
       provider

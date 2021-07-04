@@ -8,15 +8,16 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
-import 'converters/imdb.dart';
-import 'offline/imdb.dart';
+import 'converters/imdb_title.dart';
+import 'offline/imdb_title.dart';
 
 const SEARCH_RESULTS_TABLE = 'findList';
 const COLUMN_MOVIE_TEXT = 'result_text';
 const COLUMN_MOVIE_POSTER = 'primary_photo';
 
 /// Implements [SearchProvider] for the IMDB search html webscraper.
-class QueryIMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
+class QueryIMDBTitleDetails
+    extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'https://www.imdb.com/title/';
   static final baseURLsuffix = '/?ref_=fn_tt_tt_1';
 

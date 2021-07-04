@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 
 import 'test_helper.dart';
 import 'test_data/imdb_result_converter_data.dart';
@@ -16,7 +16,7 @@ void main() {
   group('imdb result converter', () {
     test('convert HTML to DTO', () async {
       String testInput = htmlSampleFull;
-      final imdbResult = QueryIMDBDetails();
+      final imdbResult = QueryIMDBTitleDetails();
       final criteria = SearchCriteriaDTO();
 
       var expectedDTO = await expectedDTOList;
