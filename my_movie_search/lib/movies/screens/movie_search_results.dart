@@ -31,10 +31,8 @@ class MovieSearchResultsNewPage extends StatefulWidget {
 }
 
 class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage> {
-  _MovieSearchResultsPageState();
-
   SearchBloc? _searchBloc;
-  final _title = "Movie Search Results";
+  final _title = "Results ";
 
   @override
   void initState() {

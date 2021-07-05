@@ -3,6 +3,20 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 const IMDB_TITLE_PREFIX = 'tt';
 const IMDB_PERSON_PREFIX = 'nm';
 
+const IMDB_BASE_URL = 'http://imdb.com';
+const IMDB_TITLE_URL = '/title/';
+const IMDB_PERSON_URL = '/name/';
+
+String makeImdbUrl(String key) {
+  if (key.startsWith(IMDB_TITLE_PREFIX)) {
+    return '$IMDB_TITLE_URL$key';
+  }
+  if (key.startsWith(IMDB_PERSON_PREFIX)) {
+    return '$IMDB_PERSON_URL$key';
+  }
+  return IMDB_BASE_URL;
+}
+
 MovieContentType? getImdbMovieContentType(Object? info, int? duration) {
   if (info == null) return null;
   final String title = info.toString().toLowerCase();
