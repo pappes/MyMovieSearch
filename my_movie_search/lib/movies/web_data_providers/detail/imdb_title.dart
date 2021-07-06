@@ -217,7 +217,6 @@ class QueryIMDBTitleDetails
         }
       }
     }
-    movieData[outer_element_image] = movieData[outer_element_image];
   }
 
   /// Extract type, year, Censor Rating and duration from ul<TitleBlockMetaData>
