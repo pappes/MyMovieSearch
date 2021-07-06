@@ -3,6 +3,7 @@ import 'dart:async' show StreamController;
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb.dart';
 
@@ -105,7 +106,7 @@ class BaseMovieRepository {
             _addImdbMovieDetails(originalSearchUID, searchResults));
       } else if (dto.uniqueId.startsWith(IMDB_PERSON_PREFIX)) {
         final imdbDetails =
-            QueryIMDBTitleDetails(); //Seperate instance per search (async)
+            QueryIMDBNameDetails(); //Seperate instance per search (async)
         imdbDetails.readList(detailCriteria).then((searchResults) =>
             _addImdbMovieDetails(originalSearchUID, searchResults));
       } else {
