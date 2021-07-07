@@ -23,6 +23,8 @@ const outer_element_language = 'language';
 const outer_element_languages = 'languages';
 const outer_element_related = 'related';
 
+const related_movies_label = 'Suggestions';
+
 class ImdbMoviePageConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     return [dtoFromMap(map)];
@@ -71,16 +73,17 @@ class ImdbMoviePageConverter {
         ) ??
         movie.type;
 
-    if (null != map[outer_element_related]) {
-      map[outer_element_related]
-          .forEach((relatedMap) => movie.related.add(getRelated(relatedMap)));
-    }
+    getRelated(movie, map[outer_element_related]);
 
     return movie;
   }
 
-  static MovieResultDTO getRelated(Map relatedMap) {
-    var dto = dtoFromMap(relatedMap);
-    return dto;
+  static getRelated(MovieResultDTO movie, dynamic suggestions) {
+    if (null != suggestions) {
+      for (var relatedMap in suggestions) {
+        MovieResultDTO dto = dtoFromMap(relatedMap);
+        movie.addRelated(related_movies_label, dto);
+      }
+    }
   }
 }

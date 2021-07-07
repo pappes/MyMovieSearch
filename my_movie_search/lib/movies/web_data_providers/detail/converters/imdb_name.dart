@@ -68,16 +68,11 @@ class ImdbNamePageConverter {
         ) ??
         movie.type;
 
-    if (null != map[outer_element_related]) {
-      map[outer_element_related]
-          .forEach((relatedMap) => movie.related.add(getRelated(relatedMap)));
-    }
+    /*for (var relatedMap in map[outer_element_related]) {
+      MovieResultDTO dto = dtoFromMap(relatedMap);
+      movie.addRelated('Suggestions', dto);
+    }*/
 
     return movie;
-  }
-
-  static MovieResultDTO getRelated(Map relatedMap) {
-    var dto = dtoFromMap(relatedMap);
-    return dto;
   }
 }

@@ -17,7 +17,7 @@ class MovieResultDTO {
   Duration runTime = Duration(hours: 0, minutes: 0, seconds: 0);
   String imageUrl = '';
   LanguageType language = LanguageType.none;
-  List<MovieResultDTO> related = [];
+  Map<String, List<MovieResultDTO>> related = {};
 }
 
 enum MovieContentType {
@@ -119,6 +119,13 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return map;
   }
 
+  addRelated(String key, MovieResultDTO relatedDto) {
+    if (!this.related.containsKey(key)) {
+      this.related[key] = [];
+    }
+    this.related[key]!.add(relatedDto);
+  }
+
   void merge(MovieResultDTO newValue) {
     if (newValue.description != '') {
       print(newValue.description);
@@ -153,7 +160,18 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       );
       this.userRatingCount =
           bestval(newValue.userRatingCount, this.userRatingCount);
-      mergeDtoList(this.related, newValue.related);
+      mergeDtoMapList(this.related, newValue.related);
+    }
+  }
+
+  void mergeDtoMapList(Map<String, List<MovieResultDTO>> existingDtos,
+      Map<String, List<MovieResultDTO>> newDtos) {
+    for (var key in newDtos.keys) {
+      if (!existingDtos.containsKey(key)) {
+        // Create empty list to pass through to merge function.
+        existingDtos[key] = [];
+      }
+      mergeDtoList(existingDtos[key]!, newDtos[key]!);
     }
   }
 
@@ -252,18 +270,44 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 extension ListMovieResultDTOHelpers on List<MovieResultDTO> {
   String toPrintableString() {
     String listContents = '';
+    String separator = '';
     for (var i = 0; i < this.length; i++) {
-      listContents += '${this[i].toPrintableString()},\n';
+      listContents += '$separator${this[i].toPrintableString()}';
+      separator = ',\n';
     }
     return 'List<MovieResultDTO>(${this.length})[\n$listContents\n]';
   }
 
   String toShortString() {
     String listContents = '';
+    String separator = '';
     for (var i = 0; i < this.length; i++) {
-      listContents += '${this[i].title},\n';
+      listContents += '$separator${this[i].title}';
+      separator = ',\n';
     }
     return listContents;
+  }
+}
+
+extension MapListMovieResultDTOHelpers on Map<String, List<MovieResultDTO>> {
+  String toPrintableString() {
+    String listContents = '';
+    String separator = '';
+    for (var key in this.keys) {
+      listContents += '$separator$key:${this[key]!.toPrintableString()}';
+      separator = ',\n';
+    }
+    return '{$listContents}';
+  }
+
+  String toShortString() {
+    String listContents = '';
+    String separator = '';
+    for (var key in this.keys) {
+      listContents += '$separator$key:${this[key]!.toShortString()}';
+      separator = ',\n';
+    }
+    return '$listContents';
   }
 }
 

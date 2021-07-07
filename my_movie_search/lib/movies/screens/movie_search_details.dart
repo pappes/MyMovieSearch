@@ -30,7 +30,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   MovieResultDTO _movie;
   void searchForRelated(MovieResultDTO movie) {
     var criteria = SearchCriteriaDTO();
-    criteria.criteriaList = movie.related;
+    criteria.criteriaList = [];
+    for (var key in movie.related.keys) {
+      criteria.criteriaList.addAll(movie.related[key]!);
+    }
     criteria.criteriaTitle = 'Related to: ${movie.title}';
     Navigator.push(
       context,
@@ -142,7 +145,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
               ),
             ),
           ]),
-          Text('Related:'),
           Center(
             child: GestureDetector(
               onTap: () => searchForRelated(_movie),
