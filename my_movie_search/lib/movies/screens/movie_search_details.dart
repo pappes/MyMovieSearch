@@ -28,13 +28,10 @@ class MovieDetailsPage extends StatefulWidget {
 class _MovieDetailsPageState extends State<MovieDetailsPage> {
   _MovieDetailsPageState(this._movie);
   MovieResultDTO _movie;
-  void searchForRelated(MovieResultDTO movie) {
+  void searchForRelated(String description, List<MovieResultDTO> movies) {
     var criteria = SearchCriteriaDTO();
-    criteria.criteriaList = [];
-    for (var key in movie.related.keys) {
-      criteria.criteriaList.addAll(movie.related[key]!);
-    }
-    criteria.criteriaTitle = 'Related to: ${movie.title}';
+    criteria.criteriaList.addAll(movies);
+    criteria.criteriaTitle = description;
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -145,18 +142,37 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
               ),
             ),
           ]),
-          Center(
-            child: GestureDetector(
-              onTap: () => searchForRelated(_movie),
-              child: Text(
-                _movie.related.toShortString(),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          )
+          Expanded(
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: related()),
+          ),
         ],
       ),
     );
+  }
+
+  List<Widget> related() {
+    List<Widget> categories = [];
+    for (var category in _movie.related.entries) {
+      String description = category.value.toShortString();
+      categories.add(Text('${category.key}:'));
+      categories.add(
+        Center(
+          child: GestureDetector(
+            onTap: () => searchForRelated(
+              '${category.key}: ${_movie.title}',
+              category.value,
+            ),
+            child: Text(
+              description,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ),
+      );
+    }
+    return categories;
   }
 
   Widget makeLink(BuildContext, FollowLink? followLink) {

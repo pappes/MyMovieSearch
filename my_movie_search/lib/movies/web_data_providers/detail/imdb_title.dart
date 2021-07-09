@@ -93,7 +93,7 @@ class QueryIMDBTitleDetails
     scrapeDescription(document, movieData);
     scrapeLanguageDetails(document, movieData);
 
-    getRecomendations(movieData, document);
+    getRecomendationList(movieData, document);
 
     getAttributeValue(movieData, document, inner_element_rating_count);
     getAttributeValue(movieData, document, inner_element_rating_value);
@@ -278,7 +278,7 @@ class QueryIMDBTitleDetails
   }
 
   /// Extract the movie recommendations from the current movie.
-  void getRecomendations(Map movieData, Document document) {
+  void getRecomendationList(Map movieData, Document document) {
     movieData[outer_element_related] = [];
     List<Element> recommendations =
         document.querySelectorAll('div.rec_overview');
@@ -293,12 +293,12 @@ class QueryIMDBTitleDetails
     }
   }
 
-  getRecomendationNew(Map movieData, Element recommendation) {
+  void getRecomendationNew(Map movieData, Element recommendation) {
     Map attributes = {};
     //"/title/tt0145681/?ref_=tt_sims_tt_t_9"
     var link =
         recommendation.querySelector('a[href*="title/tt"]')?.attributes['href'];
-    attributes[outer_element_identity_element] = getIdFromLink(link);
+    attributes[outer_element_identity_element] = getIdFromTitleLink(link);
     attributes[outer_element_official_title] = recommendation
         .querySelector('span[data-testid="title"]')
         ?.text; //The Book of Eli
@@ -337,19 +337,5 @@ class QueryIMDBTitleDetails
         ?.querySelector('p')
         ?.innerHtml; //A post-apocalyptic tale... saving humankind.
     movieData[outer_element_related].add(attributes);
-  }
-
-  // Convert /title/tt0145681/?ref_=tt_sims_tt_t_9 to tt0145681
-  String getIdFromLink(String? link) {
-    // /title/  (/title/)
-    // followed multiple non forwardslash ([^/]*)
-    // followed by forwardslash questionmark multiple anything (/?.*)
-    var match = RegExp(r'^(/title/)([^/]*)(/?.*)$').firstMatch(link ?? '');
-    if (null != match) {
-      if (null != match.group(2)) {
-        return match.group(2)!;
-      }
-    }
-    return '';
   }
 }

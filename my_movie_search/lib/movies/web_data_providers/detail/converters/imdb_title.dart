@@ -22,8 +22,13 @@ const outer_element_image = 'image';
 const outer_element_language = 'language';
 const outer_element_languages = 'languages';
 const outer_element_related = 'related';
+const outer_element_actors = 'actor';
+const outer_element_director = 'director';
+const outer_element_link = 'url';
 
 const related_movies_label = 'Suggestions';
+const related_actors_label = 'Actors';
+const related_directors_label = 'Directors';
 
 class ImdbMoviePageConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
@@ -74,6 +79,8 @@ class ImdbMoviePageConverter {
         movie.type;
 
     getRelated(movie, map[outer_element_related]);
+    getPeople(movie, map[outer_element_actors], related_actors_label);
+    getPeople(movie, map[outer_element_director], related_directors_label);
 
     return movie;
   }
@@ -85,5 +92,29 @@ class ImdbMoviePageConverter {
         movie.addRelated(related_movies_label, dto);
       }
     }
+  }
+
+  static getPeople(MovieResultDTO movie, dynamic people, String label) {
+    if (null != people) {
+      for (var relatedMap in people) {
+        MovieResultDTO? dto = dtoFromPersonMap(relatedMap);
+        if (null != dto) {
+          movie.addRelated(label, dto);
+        }
+      }
+    }
+  }
+
+  static MovieResultDTO? dtoFromPersonMap(Map map) {
+    var id = getIdFromNameLink(map[outer_element_link]);
+    if (map[outer_element_type] != 'Person' || id == '') {
+      return null;
+    }
+    var movie = MovieResultDTO();
+    movie.source = DataSourceType.imdbSuggestions;
+    movie.uniqueId = id;
+    movie.title = map[outer_element_official_title] ?? movie.title;
+
+    return movie;
   }
 }

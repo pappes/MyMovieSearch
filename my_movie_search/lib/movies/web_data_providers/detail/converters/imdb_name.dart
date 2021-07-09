@@ -23,6 +23,7 @@ const inner_element_rating_count = 'ratingCount';
 const outer_element_language = 'language';
 const outer_element_languages = 'languages';
 const outer_element_related = 'related';
+const outer_element_link = 'url';
 
 class ImdbNamePageConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
@@ -68,10 +69,40 @@ class ImdbNamePageConverter {
         ) ??
         movie.type;
 
-    /*for (var relatedMap in map[outer_element_related]) {
-      MovieResultDTO dto = dtoFromMap(relatedMap);
-      movie.addRelated('Suggestions', dto);
-    }*/
+    if (map.containsKey(outer_element_related) &&
+        map[outer_element_related].length > 0) {
+      for (var category in map[outer_element_related]) {
+        getMovies(
+          movie,
+          category.values.first,
+          category.keys.first,
+        );
+      }
+    }
+
+    return movie;
+  }
+
+  static getMovies(MovieResultDTO movie, dynamic movies, String label) {
+    if (null != movies) {
+      for (var relatedMap in movies) {
+        MovieResultDTO? dto = dtoFromRelatedMap(relatedMap);
+        if (null != dto) {
+          movie.addRelated(label, dto);
+        }
+      }
+    }
+  }
+
+  static MovieResultDTO? dtoFromRelatedMap(Map map) {
+    var id = getIdFromTitleLink(map[outer_element_link]);
+    if (id == '') {
+      return null;
+    }
+    var movie = MovieResultDTO();
+    movie.source = DataSourceType.imdbSuggestions;
+    movie.uniqueId = id;
+    movie.title = map[outer_element_official_title] ?? movie.title;
 
     return movie;
   }

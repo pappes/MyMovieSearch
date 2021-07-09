@@ -19,7 +19,6 @@ const COLUMN_MOVIE_POSTER = 'primary_photo';
 class QueryIMDBNameDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'https://www.imdb.com/name/';
-  static final baseURLsuffix = '/?ref_=fn_tt_tt_1';
 
   /// Describe where the data is comming from.
   @override
@@ -58,7 +57,7 @@ class QueryIMDBNameDetails
   /// API call to IMDB search returning the top matching results for [searchText].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    var url = '$baseURL$searchCriteria$baseURLsuffix';
+    var url = '$baseURL$searchCriteria';
     print("fetching imdb person $url");
     return WebRedirect.constructURI(url);
   }
@@ -84,6 +83,7 @@ class QueryIMDBNameDetails
     var document = parse(content);
     var movieData = json.decode(getMovieJson(document));
     scrapeName(document, movieData);
+    scrapeRelated(document, movieData);
 /*
     // Get better details form the web page where possible.
     scrapePoster(document, movieData);
@@ -269,81 +269,36 @@ class QueryIMDBNameDetails
         moviedata[attribute] = webPageText;
       }
     }
-  }
+  }*/
 
-  /// Extract the movie recommendations from the current movie.
-  void getRecomendations(Map movieData, Document document) {
+  /// Extract the movies for the current person.
+  void scrapeRelated(Document document, Map movieData) {
     movieData[outer_element_related] = [];
-    List<Element> recommendations =
-        document.querySelectorAll('div.rec_overview');
-    if (0 != recommendations.length) {
-      recommendations
-          .forEach((element) => getRecomendationOld(movieData, element));
-    }
-    recommendations = document.querySelectorAll('div.ipc-poster-card--base');
-    if (0 != recommendations.length) {
-      recommendations
-          .forEach((element) => getRecomendationNew(movieData, element));
-    }
-  }
-
-  getRecomendationNew(Map movieData, Element recommendation) {
-    Map attributes = {};
-    //"/Name/tt0145681/?ref_=tt_sims_tt_t_9"
-    var link =
-        recommendation.querySelector('a[href*="Name/tt"]')?.attributes['href'];
-    attributes[outer_element_identity_element] = getIdFromLink(link);
-    attributes[outer_element_official_title] = recommendation
-        .querySelector('span[data-testid="Name"]')
-        ?.text; //The Book of Eli
-    attributes[outer_element_image] =
-        recommendation.querySelector('img')?.attributes['src'];
-    attributes[inner_element_rating_value] =
-        recommendation.querySelector('span.ipc-rating-star--imdb')?.text; //6.9
-    movieData[outer_element_related].add(attributes);
-  }
-
-  getRecomendationOld(Map movieData, Element recommendation) {
-    Map attributes = {};
-    attributes[outer_element_identity_element] = recommendation
-        .querySelector('div[data-tconst]')
-        ?.attributes['data-tconst']; //tt1037705
-    attributes[outer_element_official_title] = recommendation
-        .querySelector('div.rec-Name')
-        ?.querySelector('b')
-        ?.innerHtml; //The Book of Eli
-    attributes[outer_element_year] = recommendation
-        .querySelector('div.rec-Name')
-        ?.querySelector('span')
-        ?.innerHtml; //(2010)
-    attributes[outer_element_image] =
-        recommendation.querySelector('img')?.attributes['src'];
-    attributes[inner_element_rating_value] = recommendation
-        .querySelector('span.rating-rating')
-        ?.querySelector('span.value')
-        ?.innerHtml; //6.9
-    attributes[inner_element_rating_count] = recommendation
-            .querySelector('span.rating-list')
-            ?.attributes[
-        'Name']; //"Users rated this 6.9/10 (297,550 votes) - click stars to rate"
-    attributes[outer_element_description] = recommendation
-        .querySelector('div.rec-outline')
-        ?.querySelector('p')
-        ?.innerHtml; //A post-apocalyptic tale... saving humankind.
-    movieData[outer_element_related].add(attributes);
-  }
-*/
-  // Convert /name/nm0145681/?ref_=nm_sims_nm_t_9 to nm0145681
-  String getIdFromLink(String? link) {
-    // /name/  (/name/)
-    // followed multiple non forwardslash ([^/]*)
-    // followed by forwardslash questionmark multiple anything (/?.*)
-    var match = RegExp(r'^(/name/)([^/]*)(/?.*)$').firstMatch(link ?? '');
-    if (null != match) {
-      if (null != match.group(2)) {
-        return match.group(2)!;
+    var filmography = document.querySelector('#filmography');
+    if (null != filmography) {
+      var headerText = '';
+      for (var child in filmography.children) {
+        if (!child.classes.contains('filmo-category-section')) {
+          headerText = child.attributes['data-category'] ?? '?';
+        } else {
+          var movieList = getMovieList(child.children);
+          movieData[outer_element_related].add({headerText: movieList});
+        }
       }
     }
-    return '';
+  }
+
+  List<Map> getMovieList(List<Element> rows) {
+    List<Map> movies = [];
+    for (var child in rows) {
+      var link = child.querySelector('a');
+      if (null != link) {
+        Map movie = {};
+        movie[outer_element_official_title] = link.text;
+        movie[outer_element_link] = link.attributes['href'];
+        movies.add(movie);
+      }
+    }
+    return movies;
   }
 }

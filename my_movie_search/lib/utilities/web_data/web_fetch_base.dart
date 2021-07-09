@@ -83,7 +83,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         'using ${myConstructURI(getCriteriaText ?? '').toString()}');
     var result = source(_criteria);
     final Stream<String> data = await result;
-    logger.v('got stream getting data');
+    logger.v('got stream getting data for $_getFetchContext');
 
     // Emit each element from the list as a seperate element.
     yield* baseTransformTextStreamToOutput(data);

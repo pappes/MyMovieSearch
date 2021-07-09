@@ -17,6 +17,34 @@ String makeImdbUrl(String key) {
   return IMDB_BASE_URL;
 }
 
+// Convert /name/nm0145681/?ref_=nm_sims_nm_t_9 to nm0145681
+String getIdFromNameLink(String? link) {
+  // /name/  (/name/)
+  // followed multiple non forwardslash ([^/]*)
+  // followed by forwardslash questionmark multiple anything (/?.*)
+  var match = RegExp(r'^(/name/)([^/]*)(/?.*)$').firstMatch(link ?? '');
+  if (null != match) {
+    if (null != match.group(2)) {
+      return match.group(2)!;
+    }
+  }
+  return '';
+}
+
+// Convert /title/tt0145681/?ref_=nm_sims_nm_t_9 to tt0145681
+String getIdFromTitleLink(String? link) {
+  // /title/  (/title/)
+  // followed multiple non forwardslash ([^/]*)
+  // followed by forwardslash questionmark multiple anything (/?.*)
+  var match = RegExp(r'^(/title/)([^/]*)(/?.*)$').firstMatch(link ?? '');
+  if (null != match) {
+    if (null != match.group(2)) {
+      return match.group(2)!;
+    }
+  }
+  return '';
+}
+
 MovieContentType? getImdbMovieContentType(Object? info, int? duration) {
   if (info == null) return null;
   final String title = info.toString().toLowerCase();
