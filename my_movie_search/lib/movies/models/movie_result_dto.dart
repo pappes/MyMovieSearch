@@ -286,6 +286,9 @@ extension ListMovieResultDTOHelpers on List<MovieResultDTO> {
       listContents += '$separator${this[i].title}';
       separator = ',\n';
     }
+    if (listContents.length > 1000) {
+      listContents = listContents.substring(0, 500) + '...';
+    }
     return listContents;
   }
 }

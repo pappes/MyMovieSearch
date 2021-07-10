@@ -1,16 +1,11 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
-import 'package:my_movie_search/movies/screens/web_page.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:url_launcher/link.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 
 import 'movie_search_results.dart';
 
@@ -23,13 +18,23 @@ class PersonDetailsPage extends StatefulWidget {
 
   @override
   _PersonDetailsPageState createState() => _PersonDetailsPageState(_person);
-
-  fetchPersonDetails() {}
 }
 
 class _PersonDetailsPageState extends State<PersonDetailsPage> {
-  _PersonDetailsPageState(this._person);
-  MovieResultDTO _person;
+  final MovieResultDTO _person;
+  _PersonDetailsPageState(this._person) {
+    var detailCriteria = SearchCriteriaDTO();
+    detailCriteria.criteriaTitle = _person.uniqueId;
+    // Pull back details at this point because it is very slow and CPU intensive
+    final imdbDetails = QueryIMDBNameDetails();
+    imdbDetails.readList(detailCriteria).then((searchResults) {
+      setState(() => mergeDetails(searchResults));
+    });
+  }
+  mergeDetails(List<MovieResultDTO> details) {
+    details.forEach((dto) => _person.merge(dto));
+  }
+
   void searchForRelated(String description, List<MovieResultDTO> movies) {
     var criteria = SearchCriteriaDTO();
     criteria.criteriaList.addAll(movies);
@@ -47,7 +52,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         // Get title from the StatefulWidget PersonDetailsPage.
-        title: Text(widget._person.title),
+        title: Text(_person.title),
       ),
       body: Scrollbar(
         isAlwaysShown: true,
@@ -67,13 +72,13 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
   Column bodySection() {
     return Column(
       children: [
-        SelectableText(widget._person.title, style: hugeFont),
+        SelectableText(_person.title, style: hugeFont),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            widget._person.year == ''
-                ? Text('Year Range: ${widget._person.yearRange}')
-                : Text('Year: ${widget._person.year.toString()}'),
+            _person.year == ''
+                ? Text('Year Range: ${_person.yearRange}')
+                : Text('Year: ${_person.year.toString()}'),
           ],
         ),
         Expanded(
@@ -94,13 +99,13 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          widget._person.imageUrl.startsWith('http')
+          _person.imageUrl.startsWith('http')
               ? Image(
-                  image: NetworkImage(getBigImage(widget._person.imageUrl)),
+                  image: NetworkImage(getBigImage(_person.imageUrl)),
                   alignment: Alignment.topCenter,
                 )
               : Text('NoImage'),
-          SelectableText(widget._person.imageUrl, style: tinyFont),
+          SelectableText(_person.imageUrl, style: tinyFont),
         ],
       ),
     );
@@ -112,23 +117,13 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Wrap(children: [
-            Text('Source: ${describeEnum(widget._person.source)}      '),
-            Text('UniqueId: ${widget._person.uniqueId}'),
-            Link(
-              uri: Uri.parse('https://flutter.dev'),
-              builder: makeLink,
-            ),
-            Center(
-              child: ElevatedButton(
-                onPressed: () => _viewImdbPage(widget._person.uniqueId),
-                child: Text('webview'),
-              ),
-            ),
+            Text('Source: ${describeEnum(_person.source)}      '),
+            Text('UniqueId: ${_person.uniqueId}'),
           ]),
           Row(children: [
             Expanded(
               child: Text(
-                '\nDescription: \n${widget._person.description} ',
+                '\nDescription: \n${_person.description} ',
                 style: biggerFont,
               ),
             ),
@@ -164,34 +159,5 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
       );
     }
     return categories;
-  }
-
-  Widget makeLink(BuildContext, FollowLink? followLink) {
-    //return Text('hyperlink');
-
-    return ElevatedButton(
-      onPressed: followLink,
-      child: Text('Hyperlink'),
-    );
-
-    /*
-    return ElevatedButton(
-      onPressed: followLink, child: Text('hyperlink'),
-      // ... other properties here ...
-    );*/
-  }
-
-  void _launchURL() async => await canLaunch('https://flutter.dev')
-      ? await launch('https://flutter.dev')
-      : throw 'Could not launch https://flutter.dev';
-
-  void _viewImdbPage(String pageRef) {
-    if (Platform.isAndroid) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => WebPage(url: makeImdbUrl(pageRef))),
-      );
-    }
   }
 }
