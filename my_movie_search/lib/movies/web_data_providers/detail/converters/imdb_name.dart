@@ -66,6 +66,7 @@ class ImdbNamePageConverter {
     movie.type = getImdbMovieContentType(
           map[outer_element_type],
           movie.runTime.inMinutes,
+          movie.uniqueId,
         ) ??
         movie.type;
 

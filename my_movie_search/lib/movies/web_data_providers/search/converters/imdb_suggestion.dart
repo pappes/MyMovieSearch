@@ -13,11 +13,12 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 //i = image with dimentions)
 
 const outer_element_results_collection = 'd';
-const inner_element_identity_element = 'id';
-const inner_element_title_element = 'l';
-const inner_element_year_element = 'y';
-const inner_element_type_element = 'q';
-const inner_element_year_range_element = 'yr';
+const inner_element_identity = 'id';
+const inner_element_title = 'l';
+const inner_element_image = 'i';
+const inner_element_year = 'y';
+const inner_element_type = 'q';
+const inner_element_year_range = 'yr';
 
 class ImdbSuggestionConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
@@ -34,15 +35,21 @@ class ImdbSuggestionConverter {
   static MovieResultDTO dtoFromMap(Map map) {
     var movie = MovieResultDTO();
     movie.source = DataSourceType.imdbSuggestions;
-    movie.uniqueId = map[inner_element_identity_element] ?? movie.uniqueId;
-    movie.title = map[inner_element_title_element] ?? movie.title;
-    movie.year = map[inner_element_year_element] ?? movie.year;
-    movie.yearRange = map[inner_element_year_range_element] ?? movie.yearRange;
+    movie.uniqueId = map[inner_element_identity] ?? movie.uniqueId;
+    movie.title = map[inner_element_title] ?? movie.title;
+    movie.imageUrl = getImage(map[inner_element_image]) ?? movie.imageUrl;
+    movie.year = map[inner_element_year] ?? movie.year;
+    movie.yearRange = map[inner_element_year_range] ?? movie.yearRange;
     movie.type = getImdbMovieContentType(
-          map[inner_element_type_element],
+          map[inner_element_type],
           movie.runTime.inMinutes,
+          movie.uniqueId,
         ) ??
         movie.type;
     return movie;
+  }
+
+  static String? getImage(List? imageData) {
+    return imageData?.first;
   }
 }

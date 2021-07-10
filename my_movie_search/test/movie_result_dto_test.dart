@@ -30,7 +30,7 @@ void main() {
       testUserContentCategory(input, expectedOutput) {
         var testInput = MovieResultDTO();
         testInput.type = input;
-        expect(testInput.userContentCategory(), expectedOutput);
+        expect(testInput.titleContentCategory(), expectedOutput);
       }
 
       testUserContentCategory(MovieContentType.custom, 0);

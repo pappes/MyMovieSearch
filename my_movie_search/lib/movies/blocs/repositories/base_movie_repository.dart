@@ -6,6 +6,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 
 /// BlockRepository to consolidate data retrieval from multiple search
 /// and detail providers using the WebFetch framework.
@@ -106,7 +107,8 @@ class BaseMovieRepository {
             _addImdbMovieDetails(originalSearchUID, searchResults));
       } else if (dto.uniqueId.startsWith(IMDB_PERSON_PREFIX)) {
         final imdbDetails =
-            QueryIMDBNameDetails(); //Seperate instance per search (async)
+            //QueryIMDBNameDetails(); // Cant pull back details at this point because it is very slow and CPU intensive
+            QueryIMDBSuggestions(); //Seperate instance per search (async)
         imdbDetails.readList(detailCriteria).then((searchResults) =>
             _addImdbMovieDetails(originalSearchUID, searchResults));
       } else {

@@ -4,8 +4,8 @@ const IMDB_TITLE_PREFIX = 'tt';
 const IMDB_PERSON_PREFIX = 'nm';
 
 const IMDB_BASE_URL = 'http://imdb.com';
-const IMDB_TITLE_URL = '/title/';
-const IMDB_PERSON_URL = '/name/';
+const IMDB_TITLE_URL = '$IMDB_BASE_URL/title/';
+const IMDB_PERSON_URL = '$IMDB_BASE_URL/name/';
 
 String makeImdbUrl(String key) {
   if (key.startsWith(IMDB_TITLE_PREFIX)) {
@@ -45,8 +45,17 @@ String getIdFromTitleLink(String? link) {
   return '';
 }
 
-MovieContentType? getImdbMovieContentType(Object? info, int? duration) {
-  if (info == null) return null;
+MovieContentType? getImdbMovieContentType(
+  Object? info,
+  int? duration,
+  String id,
+) {
+  if (id.startsWith(IMDB_PERSON_PREFIX)) return MovieContentType.person;
+  if (info == null) {
+    if (duration != null && duration < 50 && duration > 0)
+      return MovieContentType.short;
+    return null;
+  }
   final String title = info.toString().toLowerCase();
   if (title.lastIndexOf('game') > -1) return MovieContentType.custom;
   if (title.lastIndexOf('creativework') > -1) return MovieContentType.custom;

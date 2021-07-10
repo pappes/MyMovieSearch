@@ -135,6 +135,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     }
     //TODO alternate ID
     if (newValue.userRatingCount > this.userRatingCount ||
+        0 == this.userRatingCount ||
         DataSourceType.imdb == newValue.source) {
       this.source = bestval(newValue.source, this.source);
       if (DataSourceType.imdb == newValue.source && "" != newValue.title) {
@@ -314,17 +315,22 @@ extension MapListMovieResultDTOHelpers on Map<String, List<MovieResultDTO>> {
 extension DTOCompare on MovieResultDTO {
   //Rank movies against each other for sorting
   int compareTo(MovieResultDTO other) {
-    // Treat null as lower than any other value
+    // Treat null and negative numbers as lower than any other value
     if (this.uniqueId == movieResultDTOUninitialised &&
         other.uniqueId != movieResultDTOUninitialised) return -1;
     if (this.uniqueId != movieResultDTOUninitialised &&
         other.uniqueId == movieResultDTOUninitialised) return 1;
+    // Preference people > movies.
+    if (this.contentCategory() != other.contentCategory())
+      return this.contentCategory().compareTo(other.contentCategory());
     // See how many people have rated this movie.
     if (this.userRatingCategory() != other.userRatingCategory())
       return this.userRatingCategory().compareTo(other.userRatingCategory());
     // Preference movies > series > short film > episodes.
-    if (this.userContentCategory() != other.userContentCategory())
-      return this.userContentCategory().compareTo(other.userContentCategory());
+    if (this.titleContentCategory() != other.titleContentCategory())
+      return this
+          .titleContentCategory()
+          .compareTo(other.titleContentCategory());
     // Preference English > Foreign Language.
     if (this.language.index != other.language.index)
       return this.languageCategory().compareTo(other.languageCategory());
@@ -342,7 +348,7 @@ extension DTOCompare on MovieResultDTO {
     return 3;
   }
 
-  int userContentCategory() {
+  int titleContentCategory() {
     if (this.type == MovieContentType.none ||
         this.type == MovieContentType.custom) return 0;
     if (this.type == MovieContentType.episode) return 1;
@@ -350,6 +356,13 @@ extension DTOCompare on MovieResultDTO {
     if (this.type == MovieContentType.series) return 3;
     if (this.type == MovieContentType.miniseries) return 4;
     return 5;
+  }
+
+  int contentCategory() {
+    if (this.type == MovieContentType.person) {
+      return 1;
+    }
+    return 0;
   }
 
   int languageCategory() {

@@ -25,6 +25,7 @@ class ImdbSearchConverter {
     movie.type = getImdbMovieContentType(
           map[inner_element_info_element],
           movie.runTime.inMinutes,
+          movie.uniqueId,
         ) ??
         movie.type;
     return movie;
