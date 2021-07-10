@@ -10,10 +10,11 @@ import 'package:flutter/material.dart'
         CircularProgressIndicator,
         Image,
         NetworkImage;
+import 'package:my_movie_search/movies/screens/person_details.dart';
 
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/screens/movie_search_details.dart';
+import 'package:my_movie_search/movies/screens/movie_details.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 
 class MovieTile extends ListTile {
@@ -42,10 +43,18 @@ class MovieTile extends ListTile {
   }
 
   static _openDetails(BuildContext context, MovieResultDTO movie) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => MovieDetailsPage(movie: movie)),
-    );
+    if (movie.uniqueId.startsWith('nm')) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PersonDetailsPage(person: movie)),
+      );
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => MovieDetailsPage(movie: movie)),
+      );
+    }
   }
 
   static Widget _getImage(String url) {
