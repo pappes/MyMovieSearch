@@ -2,6 +2,8 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 const IMDB_TITLE_PREFIX = 'tt';
 const IMDB_PERSON_PREFIX = 'nm';
+const IMDB_TITLE_PATH = '/title/';
+const IMDB_PERSON_PATH = '/name/';
 
 const IMDB_BASE_URL = 'http://imdb.com';
 const IMDB_TITLE_URL = '$IMDB_BASE_URL/title/';
@@ -17,32 +19,45 @@ String makeImdbUrl(String key) {
   return IMDB_BASE_URL;
 }
 
-// Convert /name/nm0145681/?ref_=nm_sims_nm_t_9 to nm0145681
-String getIdFromNameLink(String? link) {
-  // /name/  (/name/)
-  // followed multiple non forwardslash ([^/]*)
-  // followed by forwardslash questionmark multiple anything (/?.*)
-  var match = RegExp(r'^(/name/)([^/]*)(/?.*)$').firstMatch(link ?? '');
-  if (null != match) {
-    if (null != match.group(2)) {
-      return match.group(2)!;
-    }
-  }
-  return '';
-}
+String getIdFromIMDBLink(String? link) {
+  const START_STRING = '^';
+  const MULTIPLE_NON_SLASH = '[^/]*';
+  const MULTIPLE_ANYTHING = '.*';
+  const END_STRING = r'$';
 
-// Convert /title/tt0145681/?ref_=nm_sims_nm_t_9 to tt0145681
-String getIdFromTitleLink(String? link) {
-  // /title/  (/title/)
-  // followed multiple non forwardslash ([^/]*)
-  // followed by forwardslash questionmark multiple anything (/?.*)
-  var match = RegExp(r'^(/title/)([^/]*)(/?.*)$').firstMatch(link ?? '');
+  String? getGroup2(String formula) {
+    var match = RegExp(formula).firstMatch(link ?? '');
+    if (null != match) {
+      if (null != match.group(2)) {
+        return match.group(2)!;
+      }
+    }
+  }
+
+  // Convert /title/tt0145681/?ref_=nm_sims_nm_t_9 to tt0145681
+  var titleRegexpFormula = '$START_STRING($IMDB_TITLE_PATH)'
+      '($MULTIPLE_NON_SLASH)(/$MULTIPLE_ANYTHING)$END_STRING';
+  // Convert /name/nm0145681/?ref_=nm_sims_nm_t_9 to nm0145681
+  var nameRegexpFormula = '$START_STRING($IMDB_PERSON_PATH)'
+      '($MULTIPLE_NON_SLASH)(/$MULTIPLE_ANYTHING)$END_STRING';
+  // (group1)(group2)(group3) - only care about group 2
+  return getGroup2(titleRegexpFormula) ?? getGroup2(nameRegexpFormula) ?? '';
+/*  var match = RegExp(regexpFormula).firstMatch(link ?? '');
   if (null != match) {
     if (null != match.group(2)) {
       return match.group(2)!;
     }
   }
-  return '';
+  // Convert /name/nm0145681/?ref_=nm_sims_nm_t_9 to nm0145681
+  match = RegExp('$START_STRING($IMDB_PERSON_PATH)($MULTIPLE_NON_SLASH)'
+          '(/$MULTIPLE_ANYTHING)$END_STRING')
+      .firstMatch(link ?? '');
+  if (null != match) {
+    if (null != match.group(2)) {
+      return match.group(2)!;
+    }
+  }
+  return '';*/
 }
 
 MovieContentType? getImdbMovieContentType(

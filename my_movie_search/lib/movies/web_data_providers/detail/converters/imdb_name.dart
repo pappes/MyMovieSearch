@@ -16,7 +16,7 @@ const outer_element_yearrange = 'duration';
 const outer_element_common_title = 'alternateName';
 const outer_element_keywords = 'keywords';
 const outer_element_genre = 'genre';
-const outer_element_censor_rating = 'contentRating';
+const odeuter_element_censor_rating = 'contentRating';
 const outer_element_rating = 'aggregateRating';
 const inner_element_rating_value = 'ratingValue';
 const inner_element_rating_count = 'ratingCount';
@@ -43,10 +43,6 @@ class ImdbNamePageConverter {
     movie.description += '\nLanguages: ${map[outer_element_languages]}';
     movie.imageUrl = map[outer_element_image] ?? movie.imageUrl;
     movie.language = map[outer_element_language] ?? movie.language;
-    movie.censorRating = getImdbCensorRating(
-          map[outer_element_censor_rating],
-        ) ??
-        movie.censorRating;
 
     movie.userRating = DoubleHelper.fromText(
       map[outer_element_rating]?[inner_element_rating_value],
@@ -96,7 +92,7 @@ class ImdbNamePageConverter {
   }
 
   static MovieResultDTO? dtoFromRelatedMap(Map map) {
-    var id = getIdFromTitleLink(map[outer_element_link]);
+    var id = getIdFromIMDBLink(map[outer_element_link]);
     if (id == '') {
       return null;
     }

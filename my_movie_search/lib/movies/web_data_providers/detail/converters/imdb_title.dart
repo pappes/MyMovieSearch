@@ -107,7 +107,7 @@ class ImdbMoviePageConverter {
   }
 
   static MovieResultDTO? dtoFromPersonMap(Map map) {
-    var id = getIdFromNameLink(map[outer_element_link]);
+    var id = getIdFromIMDBLink(map[outer_element_link]);
     if (map[outer_element_type] != 'Person' || id == '') {
       return null;
     }

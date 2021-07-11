@@ -298,7 +298,7 @@ class QueryIMDBTitleDetails
     //"/title/tt0145681/?ref_=tt_sims_tt_t_9"
     var link =
         recommendation.querySelector('a[href*="title/tt"]')?.attributes['href'];
-    attributes[outer_element_identity_element] = getIdFromTitleLink(link);
+    attributes[outer_element_identity_element] = getIdFromIMDBLink(link);
     attributes[outer_element_official_title] = recommendation
         .querySelector('span[data-testid="title"]')
         ?.text; //The Book of Eli

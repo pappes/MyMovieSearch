@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/screens/web_page.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 import 'package:url_launcher/link.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -26,8 +27,22 @@ class MovieDetailsPage extends StatefulWidget {
 }
 
 class _MovieDetailsPageState extends State<MovieDetailsPage> {
-  _MovieDetailsPageState(this._movie);
   MovieResultDTO _movie;
+
+  _MovieDetailsPageState(this._movie) {
+    var detailCriteria = SearchCriteriaDTO();
+    detailCriteria.criteriaTitle = _movie.uniqueId;
+    // Pull back details at this point because it is very slow and CPU intensive
+    final imdbDetails = QueryIMDBCastDetails();
+    imdbDetails.readList(detailCriteria).then((searchResults) {
+      // Call setSetState to update page when data is ready.
+      setState(() => mergeDetails(searchResults));
+    });
+  }
+  mergeDetails(List<MovieResultDTO> details) {
+    details.forEach((dto) => _movie.merge(dto));
+  }
+
   void searchForRelated(String description, List<MovieResultDTO> movies) {
     var criteria = SearchCriteriaDTO();
     criteria.criteriaList.addAll(movies);
@@ -40,12 +55,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   }
 
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called.
-
     return Scaffold(
       appBar: AppBar(
-        // Get title from the StatefulWidget MovieDetailsPage.
-        title: Text(widget._movie.title),
+        title: Text(_movie.title),
       ),
       body: Scrollbar(
         isAlwaysShown: true,
@@ -65,13 +77,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   Column bodySection() {
     return Column(
       children: [
-        SelectableText(widget._movie.title, style: hugeFont),
+        SelectableText(_movie.title, style: hugeFont),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            widget._movie.year == ''
-                ? Text('Year Range: ${widget._movie.yearRange}')
-                : Text('Year: ${widget._movie.year.toString()}'),
+            _movie.year == ''
+                ? Text('Year Range: ${_movie.yearRange}')
+                : Text('Year: ${_movie.year.toString()}'),
             Align(
                 alignment: Alignment.centerRight,
                 child: Text('Run Time: ${_movie.runTime.toFormattedTime()}')),
@@ -95,13 +107,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          widget._movie.imageUrl.startsWith('http')
+          _movie.imageUrl.startsWith('http')
               ? Image(
-                  image: NetworkImage(getBigImage(widget._movie.imageUrl)),
+                  image: NetworkImage(getBigImage(_movie.imageUrl)),
                   alignment: Alignment.topCenter,
                 )
               : Text('NoImage'),
-          SelectableText(widget._movie.imageUrl, style: tinyFont),
+          SelectableText(_movie.imageUrl, style: tinyFont),
         ],
       ),
     );
@@ -112,32 +124,34 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Type: ${describeEnum(widget._movie.type)}'),
-          Text('User Rating: ${widget._movie.userRating.toString()} '
-              '(${formatter.format(widget._movie.userRatingCount)})'),
+          Text('Type: ${describeEnum(_movie.type)}'),
+          Text('User Rating: ${_movie.userRating.toString()} '
+              '(${formatter.format(_movie.userRatingCount)})'),
           Wrap(children: [
-            Text(
-                'Censor Rating: ${describeEnum(widget._movie.censorRating)}     '),
-            Text('Language: ${describeEnum(widget._movie.language)}'),
+            Text('Censor Rating: ${describeEnum(_movie.censorRating)}     '),
+            Text('Language: ${describeEnum(_movie.language)}'),
           ]),
           Wrap(children: [
-            Text('Source: ${describeEnum(widget._movie.source)}      '),
-            Text('UniqueId: ${widget._movie.uniqueId}'),
-            Link(
-              uri: Uri.parse('https://flutter.dev'),
-              builder: makeLink,
+            Text('Source: ${describeEnum(_movie.source)}      '),
+            Text('UniqueId: ${_movie.uniqueId}'),
+            Center(
+              child: ElevatedButton(
+                onPressed: () => _viewWebPage(
+                    makeImdbUrl('https://tpb.party/search/${_movie.title}')),
+                child: Text('Tor'),
+              ),
             ),
             Center(
               child: ElevatedButton(
-                onPressed: () => _viewImdbPage(widget._movie.uniqueId),
-                child: Text('webview'),
+                onPressed: () => _viewWebPage(makeImdbUrl(_movie.uniqueId)),
+                child: Text('IMDB'),
               ),
             ),
           ]),
           Row(children: [
             Expanded(
               child: Text(
-                '\nDescription: \n${widget._movie.description} ',
+                '\nDescription: \n${_movie.description} ',
                 style: biggerFont,
               ),
             ),
@@ -175,32 +189,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     return categories;
   }
 
-  Widget makeLink(BuildContext, FollowLink? followLink) {
-    //return Text('hyperlink');
-
-    return ElevatedButton(
-      onPressed: followLink,
-      child: Text('Hyperlink'),
+  void _viewWebPage(String url) {
+//    if (Platform.isAndroid) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => WebPage(url: url)),
     );
-
-    /*
-    return ElevatedButton(
-      onPressed: followLink, child: Text('hyperlink'),
-      // ... other properties here ...
-    );*/
   }
-
-  void _launchURL() async => await canLaunch('https://flutter.dev')
-      ? await launch('https://flutter.dev')
-      : throw 'Could not launch https://flutter.dev';
-
-  void _viewImdbPage(String pageRef) {
-    if (Platform.isAndroid) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => WebPage(url: makeImdbUrl(pageRef))),
-      );
-    }
-  }
+  //}
 }
