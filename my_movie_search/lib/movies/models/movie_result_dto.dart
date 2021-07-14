@@ -7,6 +7,7 @@ class MovieResultDTO {
   String uniqueId = movieResultDTOUninitialised;
   String alternateId = '';
   String title = '';
+  String alternateTitle = '';
   String description = '';
   MovieContentType type = MovieContentType.none;
   int year = 0;
@@ -17,7 +18,8 @@ class MovieResultDTO {
   Duration runTime = Duration(hours: 0, minutes: 0, seconds: 0);
   String imageUrl = '';
   LanguageType language = LanguageType.none;
-  Map<String, List<MovieResultDTO>> related = {};
+  // Related DTOs are in a category, then keyed by uniqueId
+  Map<String, Map<String, MovieResultDTO>> related = {};
 }
 
 enum MovieContentType {
@@ -54,6 +56,7 @@ final String movieResultDTOSource = 'source';
 final String movieResultDTOUniqueId = 'uniqueId';
 final String movieResultDTOAlternateId = 'alternateId';
 final String movieResultDTOTitle = 'title';
+final String movieResultDTOAlternateTitle = 'alternateTitle';
 final String movieResultDTODescription = 'description';
 final String movieResultDTOType = 'type';
 final String movieResultDTOYear = 'year';
@@ -75,6 +78,9 @@ extension MapDTOConversion on Map {
     dto.uniqueId = this[movieResultDTOUniqueId] ?? dto.uniqueId;
     dto.alternateId = this[movieResultDTOAlternateId] ?? dto.alternateId;
     dto.title = this[movieResultDTOTitle] ?? dto.title;
+    dto.alternateTitle =
+        this[movieResultDTOAlternateTitle] ?? dto.alternateTitle;
+
     dto.description = this[movieResultDTODescription] ?? dto.description;
     dto.type = this[movieResultDTOType] ?? dto.type;
     dto.year = this[movieResultDTOYear] ?? dto.year;
@@ -105,6 +111,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     map[movieResultDTOUniqueId] = this.uniqueId;
     map[movieResultDTOAlternateId] = this.alternateId;
     map[movieResultDTOTitle] = this.title;
+    map[movieResultDTOAlternateTitle] = this.alternateTitle;
+
     map[movieResultDTODescription] = this.description;
     map[movieResultDTOType] = this.type;
     map[movieResultDTOYear] = this.year;
@@ -121,9 +129,13 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   addRelated(String key, MovieResultDTO relatedDto) {
     if (!this.related.containsKey(key)) {
-      this.related[key] = [];
+      this.related[key] = {};
     }
-    this.related[key]!.add(relatedDto);
+    if (!this.related[key]!.containsKey(relatedDto.uniqueId)) {
+      this.related[key]![relatedDto.uniqueId] = relatedDto;
+    } else {
+      this.related[key]![relatedDto.uniqueId]!.merge(relatedDto);
+    }
   }
 
   void merge(MovieResultDTO newValue) {
@@ -144,6 +156,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         this.title = bestval(newValue.title, this.title);
       }
 
+      this.alternateTitle =
+          bestval(newValue.alternateTitle, this.alternateTitle);
       this.description = bestval(newValue.description, this.description);
       this.type = bestval(newValue.type, this.type);
       this.year = bestval(newValue.year, this.year);
@@ -161,26 +175,28 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       );
       this.userRatingCount =
           bestval(newValue.userRatingCount, this.userRatingCount);
-      mergeDtoMapList(this.related, newValue.related);
+      mergeDtoMapMap(this.related, newValue.related);
     }
   }
 
-  void mergeDtoMapList(Map<String, List<MovieResultDTO>> existingDtos,
-      Map<String, List<MovieResultDTO>> newDtos) {
+  void mergeDtoMapMap(Map<String, Map<String, MovieResultDTO>> existingDtos,
+      Map<String, Map<String, MovieResultDTO>> newDtos) {
     for (var key in newDtos.keys) {
       if (!existingDtos.containsKey(key)) {
         // Create empty list to pass through to merge function.
-        existingDtos[key] = [];
+        existingDtos[key] = {};
       }
       mergeDtoList(existingDtos[key]!, newDtos[key]!);
     }
   }
 
-  void mergeDtoList(
-      List<MovieResultDTO> existingDtos, List<MovieResultDTO> newDtos) {
-    for (var dto in newDtos) {
-      if (!existingDtos.contains(dto)) {
-        existingDtos.add(dto);
+  void mergeDtoList(Map<String, MovieResultDTO> existingDtos,
+      Map<String, MovieResultDTO> newDtos) {
+    for (var dto in newDtos.entries) {
+      if (existingDtos.keys.contains(dto.key)) {
+        existingDtos[dto.key]!.merge(dto.value);
+      } else {
+        existingDtos[dto.key] = dto.value;
       }
     }
   }
@@ -233,6 +249,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     map[movieResultDTOUniqueId] = this.uniqueId;
     map[movieResultDTOAlternateId] = this.alternateId;
     map[movieResultDTOTitle] = 'unknown';
+    map[movieResultDTOAlternateTitle] = this.alternateTitle;
+
     map[movieResultDTODescription] = this.description;
     map[movieResultDTOType] = this.type;
     map[movieResultDTOYear] = this.year;
@@ -255,6 +273,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
           this.uniqueId == other.uniqueId &&
           this.alternateId == other.alternateId &&
           this.title == other.title &&
+          this.alternateTitle == other.alternateTitle &&
           this.description == other.description &&
           this.type == other.type &&
           this.year == other.year &&
@@ -268,12 +287,12 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   }
 }
 
-extension ListMovieResultDTOHelpers on List<MovieResultDTO> {
+extension ListMovieResultDTOHelpers on Map<String, MovieResultDTO> {
   String toPrintableString() {
     String listContents = '';
     String separator = '';
-    for (var i = 0; i < this.length; i++) {
-      listContents += '$separator${this[i].toPrintableString()}';
+    for (var key in keys) {
+      listContents += '$separator${this[key]!.toPrintableString()}';
       separator = ',\n';
     }
     return 'List<MovieResultDTO>(${this.length})[\n$listContents\n]';
@@ -282,8 +301,8 @@ extension ListMovieResultDTOHelpers on List<MovieResultDTO> {
   String toShortString() {
     String listContents = '';
     String separator = '';
-    for (var i = 0; i < this.length; i++) {
-      listContents += '$separator${this[i].title}';
+    for (var key in keys) {
+      listContents += '$separator${this[key]!.title}';
       separator = ',\n';
     }
     if (listContents.length > 1000) {
@@ -293,7 +312,8 @@ extension ListMovieResultDTOHelpers on List<MovieResultDTO> {
   }
 }
 
-extension MapListMovieResultDTOHelpers on Map<String, List<MovieResultDTO>> {
+extension MapListMovieResultDTOHelpers
+    on Map<String, Map<String, MovieResultDTO>> {
   String toPrintableString() {
     String listContents = '';
     String separator = '';

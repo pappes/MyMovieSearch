@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 
 const outer_element_identity_element = 'id';
 const outer_element_official_title = 'name';
+const outer_element_alternate_title = 'alternateTitle';
 
 const outer_element_related = 'related';
 const outer_element_link = 'url';
@@ -51,6 +52,8 @@ class ImdbCastConverter {
     movie.source = DataSourceType.imdbSuggestions;
     movie.uniqueId = id;
     movie.title = map[outer_element_official_title] ?? movie.title;
+    movie.alternateTitle =
+        map[outer_element_alternate_title] ?? movie.alternateTitle;
 
     return movie;
   }

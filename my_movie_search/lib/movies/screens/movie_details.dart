@@ -5,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/screens/web_page.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
-import 'package:url_launcher/link.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
@@ -134,18 +132,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
           Wrap(children: [
             Text('Source: ${describeEnum(_movie.source)}      '),
             Text('UniqueId: ${_movie.uniqueId}'),
-            Center(
-              child: ElevatedButton(
-                onPressed: () => _viewWebPage(
-                    makeImdbUrl('https://tpb.party/search/${_movie.title}')),
-                child: Text('Tor'),
-              ),
+            ElevatedButton(
+              onPressed: () => _viewWebPage(
+                  makeImdbUrl('https://tpb.party/search/${_movie.title}')),
+              child: Text('Tor'),
             ),
-            Center(
-              child: ElevatedButton(
-                onPressed: () => _viewWebPage(makeImdbUrl(_movie.uniqueId)),
-                child: Text('IMDB'),
-              ),
+            ElevatedButton(
+              onPressed: () => _viewWebPage(makeImdbUrl(_movie.uniqueId)),
+              child: Text('IMDB'),
             ),
           ]),
           Row(children: [
@@ -169,14 +163,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   List<Widget> related() {
     List<Widget> categories = [];
     for (var category in _movie.related.entries) {
-      String description = category.value.toShortString();
-      categories.add(Text('${category.key}:'));
+      var map = category.value;
+      String description = map.toShortString();
+      categories.add(Text('${category.key}'));
       categories.add(
         Center(
           child: GestureDetector(
             onTap: () => searchForRelated(
               '${category.key}: ${_movie.title}',
-              category.value,
+              category.value.values.toList(),
             ),
             child: Text(
               description,
@@ -190,11 +185,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   }
 
   void _viewWebPage(String url) {
-//    if (Platform.isAndroid) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => WebPage(url: url)),
-    );
+    if (Platform.isAndroid) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => WebPage(url: url)),
+      );
+    }
   }
-  //}
 }

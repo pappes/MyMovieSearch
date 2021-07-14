@@ -36,8 +36,10 @@ class MovieTile extends ListTile {
 
   static Widget _getDescription(MovieResultDTO movie) {
     return Text(
-      ' ${describeEnum(movie.type)}   ${movie.runTime.toFormattedTime()} - '
-      '${movie.userRating} (${formatter.format(movie.userRatingCount)})',
+      '${describeEnum(movie.censorRating)} ${describeEnum(movie.type)}  '
+      '${movie.alternateTitle} '
+      '${movie.runTime.toFormattedTime()} - ${movie.userRating} '
+      '(${formatter.format(movie.userRatingCount)})',
       textScaleFactor: 1.0,
     );
   }

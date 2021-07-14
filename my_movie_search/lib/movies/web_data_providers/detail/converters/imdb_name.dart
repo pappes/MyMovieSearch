@@ -35,12 +35,9 @@ class ImdbNamePageConverter {
     movie.source = DataSourceType.imdb;
     movie.uniqueId = map[outer_element_identity_element] ?? movie.uniqueId;
     movie.title = map[outer_element_official_title] ?? movie.title;
-    if (null != map[outer_element_common_title])
-      movie.title += ' (${map[outer_element_common_title]})';
+    movie.alternateTitle =
+        map[outer_element_common_title] ?? movie.alternateTitle;
     movie.description = map[outer_element_description] ?? movie.title;
-    movie.description += '\nGenres: ${map[outer_element_genre]}';
-    movie.description += '\nKeywords: ${map[outer_element_keywords]}';
-    movie.description += '\nLanguages: ${map[outer_element_languages]}';
     movie.imageUrl = map[outer_element_image] ?? movie.imageUrl;
     movie.language = map[outer_element_language] ?? movie.language;
 

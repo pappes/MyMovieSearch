@@ -27,8 +27,8 @@ const outer_element_director = 'director';
 const outer_element_link = 'url';
 
 const related_movies_label = 'Suggestions';
-const related_actors_label = 'Actors';
-const related_directors_label = 'Directors';
+const related_actors_label = 'Cast:';
+const related_directors_label = 'Directed by:';
 
 class ImdbMoviePageConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
@@ -40,8 +40,8 @@ class ImdbMoviePageConverter {
     movie.source = DataSourceType.imdb;
     movie.uniqueId = map[outer_element_identity_element] ?? movie.uniqueId;
     movie.title = map[outer_element_official_title] ?? movie.title;
-    if (null != map[outer_element_common_title])
-      movie.title += ' (${map[outer_element_common_title]})';
+    movie.alternateTitle =
+        map[outer_element_common_title] ?? movie.alternateTitle;
     movie.description = map[outer_element_description] ?? movie.title;
     movie.description += '\nGenres: ${map[outer_element_genre]}';
     movie.description += '\nKeywords: ${map[outer_element_keywords]}';

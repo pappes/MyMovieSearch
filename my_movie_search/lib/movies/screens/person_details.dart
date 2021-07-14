@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
+import 'package:my_movie_search/movies/screens/web_page.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -119,6 +122,10 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
           Wrap(children: [
             Text('Source: ${describeEnum(_person.source)}      '),
             Text('UniqueId: ${_person.uniqueId}'),
+            ElevatedButton(
+              onPressed: () => _viewWebPage(makeImdbUrl(_person.uniqueId)),
+              child: Text('IMDB'),
+            ),
           ]),
           Row(children: [
             Expanded(
@@ -141,14 +148,15 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
   List<Widget> related() {
     List<Widget> categories = [];
     for (var category in _person.related.entries) {
-      String description = category.value.toShortString();
+      var map = category.value;
+      String description = map.toShortString();
       categories.add(Text('${category.key}:'));
       categories.add(
         Center(
           child: GestureDetector(
             onTap: () => searchForRelated(
               '${category.key}: ${_person.title}',
-              category.value,
+              category.value.values.toList(),
             ),
             child: Text(
               description,
@@ -159,5 +167,14 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
       );
     }
     return categories;
+  }
+
+  void _viewWebPage(String url) {
+    if (Platform.isAndroid) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => WebPage(url: url)),
+      );
+    }
   }
 }

@@ -107,13 +107,22 @@ class QueryIMDBCastDetails
     movieData[role].addAll(cast);
   }
 
-  List<Map> getCast(Element rows) {
+  List<Map> getCast(Element table) {
     List<Map> movies = [];
-    for (var link in rows.querySelectorAll('a[href*="/name/nm"]')) {
-      Map movie = {};
-      movie[outer_element_official_title] = link.text.trim().split('\n').first;
-      movie[outer_element_link] = link.attributes['href'];
-      movies.add(movie);
+    for (var row in table.querySelectorAll('tr')) {
+      Map person = {outer_element_official_title: ''};
+      for (var link in row.querySelectorAll('a[href*="/name/nm"]')) {
+        person[outer_element_official_title] +=
+            link.text.trim().split('\n').first;
+        person[outer_element_link] = link.attributes['href'];
+      }
+      if (person[outer_element_official_title].length > 0) {
+        var charactor = row.querySelector('a[href*="/title/tt"]')?.text;
+        if (null != charactor) {
+          person[outer_element_alternate_title] = charactor;
+        }
+        movies.add(person);
+      }
     }
     return movies;
   }
