@@ -287,7 +287,19 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   }
 }
 
-extension ListMovieResultDTOHelpers on Map<String, MovieResultDTO> {
+extension ListMovieResultDTOHelpers on List<MovieResultDTO> {
+  String toPrintableString() {
+    String listContents = '';
+    String separator = '';
+    for (var key in this) {
+      listContents += '$separator${key.toPrintableString()}';
+      separator = ',\n';
+    }
+    return 'List<MovieResultDTO>(${this.length})[\n$listContents\n]';
+  }
+}
+
+extension mapMovieResultDTOHelpers on Map<String, MovieResultDTO> {
   String toPrintableString() {
     String listContents = '';
     String separator = '';
@@ -312,7 +324,7 @@ extension ListMovieResultDTOHelpers on Map<String, MovieResultDTO> {
   }
 }
 
-extension MapListMovieResultDTOHelpers
+extension MapMapMovieResultDTOHelpers
     on Map<String, Map<String, MovieResultDTO>> {
   String toPrintableString() {
     String listContents = '';

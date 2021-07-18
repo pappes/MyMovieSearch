@@ -1,3 +1,5 @@
+import 'package:html_unescape/html_unescape_small.dart';
+
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
@@ -31,6 +33,8 @@ const related_actors_label = 'Cast:';
 const related_directors_label = 'Directed by:';
 
 class ImdbMoviePageConverter {
+  static final htmlDecode = HtmlUnescape();
+
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     return [dtoFromMap(map)];
   }
@@ -86,6 +90,9 @@ class ImdbMoviePageConverter {
     getPeople(movie, map[outer_element_actors], related_actors_label);
     getPeople(movie, map[outer_element_director], related_directors_label);
 
+    movie.title = htmlDecode.convert(movie.title);
+    movie.alternateTitle = htmlDecode.convert(movie.alternateTitle);
+    movie.description = htmlDecode.convert(movie.description);
     return movie;
   }
 

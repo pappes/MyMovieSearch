@@ -1,3 +1,4 @@
+import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
@@ -17,6 +18,8 @@ const outer_element_related = 'related';
 const outer_element_link = 'url';
 
 class ImdbNamePageConverter {
+  static final htmlDecode = HtmlUnescape();
+
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     return [dtoFromMap(map)];
   }
@@ -52,6 +55,9 @@ class ImdbNamePageConverter {
       }
     }
 
+    movie.title = htmlDecode.convert(movie.title);
+    movie.alternateTitle = htmlDecode.convert(movie.alternateTitle);
+    movie.description = htmlDecode.convert(movie.description);
     return movie;
   }
 

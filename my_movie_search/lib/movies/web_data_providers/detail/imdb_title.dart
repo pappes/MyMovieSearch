@@ -185,7 +185,7 @@ class QueryIMDBTitleDetails
       description = document.querySelector('span[data-testid*="plot"]');
     }
     if (null != description?.text) {
-      movieData[outer_element_description] = description?.text;
+      movieData[outer_element_description] = description!.text;
     }
   }
 
@@ -197,7 +197,7 @@ class QueryIMDBTitleDetails
       description = document.querySelector('h1[class*="TitleHeader"]');
     }
     if (null != description?.text) {
-      movieData[outer_element_official_title] = description?.text;
+      movieData[outer_element_official_title] = description!.text;
     }
   }
 
