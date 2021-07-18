@@ -417,17 +417,13 @@ extension DTOCompare on MovieResultDTO {
   }
 
   int lastNumberFromString(String str) {
-    try {
-      // one or more numeric digits ([0-9]+)
-      // followed by 0 or more dashes ([\-]*)
-      var match = RegExp(r'([0-9]+)([\-]*)$').firstMatch(str);
-      if (null != match) {
-        if (null != match.group(1)) {
-          return int.parse(match.group(1)!);
-        }
+    // one or more numeric digits ([0-9]+)
+    // followed by 0 or more dashes ([\-]*)
+    var match = RegExp(r'([0-9]+)([\-]*)$').firstMatch(str);
+    if (null != match) {
+      if (null != match.group(1)) {
+        return int.tryParse(match.group(1)!) ?? 0;
       }
-    } catch (e) {
-      return 0;
     }
     return 0;
   }

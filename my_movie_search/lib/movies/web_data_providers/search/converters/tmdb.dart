@@ -1,5 +1,6 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 //query string https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=wonder+woman
 //json format
@@ -57,11 +58,14 @@ class TmdbMovieSearchConverter {
     movie.uniqueId = '${map[inner_element_identity_element]}';
     movie.title = map[inner_element_title_element] ?? movie.title;
     movie.imageUrl = map[inner_element_image_element] ?? movie.imageUrl;
-    try {
-      movie.year = DateTime.parse(map[inner_element_year_element] ?? '').year;
-    } catch (e) {
+
+    var year = getYear(map[inner_element_year_element]);
+    if (null != year) {
+      movie.year = year;
+    } else {
       movie.yearRange = map[inner_element_year_element] ?? movie.yearRange;
     }
+
     return movie;
   }
 }

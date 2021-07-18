@@ -38,7 +38,7 @@ class GoogleMovieSearchConverter {
     try {
       var resultCount = map[outer_element_search_information]
           [inner_element_search_info_count];
-      if (int.parse(resultCount) == 0) {
+      if ((int.tryParse(resultCount) ?? 0) == 0) {
         return searchError(map);
       }
       map[outer_element_results_collection]

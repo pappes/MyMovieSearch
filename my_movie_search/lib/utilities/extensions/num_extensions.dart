@@ -10,15 +10,10 @@ extension DoubleHelper on double {
     double? count;
     if (formattedText != null) {
       var text = formattedText.toString().replaceAll(',', '');
-      try {
-        count = double.parse(text);
-      } on FormatException catch (e) {
-        // Process as null if no valid number parsed.
-      }
+      count = double.tryParse(text);
     }
-    if (count == null) return nullValueSubstitute;
-    if (count == 0 || zeroValueSubstitute == null) return zeroValueSubstitute;
-    return count;
+    if (count == 0 && zeroValueSubstitute != null) return zeroValueSubstitute;
+    return count ?? nullValueSubstitute;
   }
 }
 
@@ -39,4 +34,16 @@ extension IntHelper on int {
     if (number == null) return null;
     return number.round();
   }
+}
+
+int? getYear(String? yeartext) {
+  if (null != yeartext) {
+    if (4 == yeartext.length) {
+      return DateTime.tryParse('${yeartext}-01-01')?.year;
+    }
+    if (4 < yeartext.length) {
+      return DateTime.tryParse(yeartext)?.year;
+    }
+  }
+  return null;
 }

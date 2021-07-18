@@ -79,9 +79,9 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _person.year == ''
-                ? Text('Year Range: ${_person.yearRange}')
-                : Text('Year: ${_person.year.toString()}'),
+            _person.yearRange == ''
+                ? Text('Born: ${_person.year.toString()}')
+                : Text('Lifespan: ${_person.yearRange}'),
           ],
         ),
         Expanded(

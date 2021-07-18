@@ -79,7 +79,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            _movie.year == ''
+            _movie.yearRange != ''
                 ? Text('Year Range: ${_movie.yearRange}')
                 : Text('Year: ${_movie.year.toString()}'),
             Align(
@@ -126,7 +126,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
           Text('User Rating: ${_movie.userRating.toString()} '
               '(${formatter.format(_movie.userRatingCount)})'),
           Wrap(children: [
-            Text('Censor Rating: ${describeEnum(_movie.censorRating)}     '),
+            new GestureDetector(
+              onTap: () {
+                _viewWebPage('${makeImdbUrl(_movie.uniqueId)}parentalguide');
+              },
+              child: Text(
+                  'Censor Rating: ${describeEnum(_movie.censorRating)}     '),
+            ),
             Text('Language: ${describeEnum(_movie.language)}'),
           ]),
           Wrap(children: [
@@ -135,7 +141,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
             ElevatedButton(
               onPressed: () => _viewWebPage(
                   makeImdbUrl('https://tpb.party/search/${_movie.title}')),
-              child: Text('Tor'),
+              child: Text('External'),
             ),
             ElevatedButton(
               onPressed: () => _viewWebPage(makeImdbUrl(_movie.uniqueId)),

@@ -72,9 +72,11 @@ class TmdbMovieDetailConverter {
           map[inner_element_common_title] ??
           movie.imageUrl;
     }
-    try {
-      movie.year = DateTime.parse(map[inner_element_year] ?? '').year;
-    } catch (e) {
+
+    var year = DateTime.tryParse(map[inner_element_year] ?? '')?.year;
+    if (null != year) {
+      movie.year = year;
+    } else {
       movie.yearRange = map[inner_element_year] ?? movie.yearRange;
     }
 

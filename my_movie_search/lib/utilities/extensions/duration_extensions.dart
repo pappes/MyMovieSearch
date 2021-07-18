@@ -47,6 +47,7 @@ extension DurationHelper on Duration {
       return 0;
     }
     final timeString = timeMatch.group(0)!;
-    return int.parse(timeString.substring(0, timeString.length - 1));
+    var numbers = timeString.substring(0, timeString.length - 1);
+    return int.tryParse(numbers) ?? 0;
   }
 }

@@ -1,5 +1,6 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 //query string http://www.omdbapi.com/?apikey=<key>&s=wonder+woman
 //json format
@@ -44,12 +45,15 @@ class OmdbMovieSearchConverter {
     movie.source = DataSourceType.omdb;
     movie.uniqueId = map[inner_element_identity_element] ?? movie.uniqueId;
     movie.title = map[inner_element_title_element] ?? movie.title;
-    try {
-      movie.year = int.parse(map[inner_element_year_element] ?? "");
-    } catch (e) {
+
+    var year = getYear(map[inner_element_year_element]);
+    if (null != year) {
+      movie.year = year;
+    } else {
       movie.yearRange = map[inner_element_year_element] ?? movie.yearRange;
       movie.year = movie.maxYear();
     }
+
     movie.imageUrl = map[inner_element_image_element] ?? movie.imageUrl;
     switch (map[inner_element_type_element]) {
       case OMDB_RESULT_TYPE_MOVIE:

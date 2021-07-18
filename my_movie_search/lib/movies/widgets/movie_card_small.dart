@@ -35,11 +35,26 @@ class MovieTile extends ListTile {
   }
 
   static Widget _getDescription(MovieResultDTO movie) {
+    var rating = (movie.censorRating != CensorRatingType.none)
+        ? '${describeEnum(movie.censorRating)} '
+        : '';
+    var content = (movie.type != MovieContentType.none)
+        ? '${describeEnum(movie.type)}    '
+        : '';
+    var ratingCount = (movie.userRatingCount > 0)
+        ? '${movie.userRating} (${formatter.format(movie.userRatingCount)})'
+        : '';
+    var runtime =
+        (movie.runTime > Duration()) ? movie.runTime.toFormattedTime() : '';
+    var seperator =
+        (runtime.length > 0 && ratingCount.length > 0) ? ' - ' : ' ';
     return Text(
-      '${describeEnum(movie.censorRating)} ${describeEnum(movie.type)}  '
-      '${movie.alternateTitle} '
-      '${movie.runTime.toFormattedTime()} - ${movie.userRating} '
-      '(${formatter.format(movie.userRatingCount)})',
+      rating +
+          content +
+          '${movie.alternateTitle} ' +
+          runtime +
+          seperator +
+          ratingCount,
       textScaleFactor: 1.0,
     );
   }

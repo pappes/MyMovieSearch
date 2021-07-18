@@ -62,13 +62,16 @@ class ImdbMoviePageConverter {
       nullValueSubstitute: movie.userRatingCount,
     )!;
 
-    try {
-      movie.year = DateTime.parse(map[outer_element_year] ?? '').year;
-    } catch (e) {
+    var year = getYear(map[outer_element_year]);
+    if (null != year) {
+      movie.year = year;
+    } else {
       movie.yearRange = map[outer_element_year] ?? movie.yearRange;
     }
     try {
-      movie.runTime = Duration().fromIso8601(map[outer_element_duration]);
+      if ('' != (map[outer_element_duration] ?? '')) {
+        movie.runTime = Duration().fromIso8601(map[outer_element_duration]!);
+      }
     } catch (e) {
       movie.runTime = Duration(hours: 0, minutes: 0, seconds: 0);
     }
