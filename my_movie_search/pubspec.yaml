@@ -36,6 +36,7 @@ dependencies:
   equatable: ^2.0.0                    # Simplify object comparisons.
   url_launcher: ^6.0.8                 # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
   webview_flutter: ^2.0.9              # Show web page
+  flutter_custom_tabs: ^1.0.2          # replace webview with andorid chrome browser
   html_unescape: ^2.0.0                # decode &apos;
 
 

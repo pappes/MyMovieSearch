@@ -2,7 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
-import 'package:my_movie_search/movies/screens/web_page.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+//import 'package:my_movie_search/movies/screens/web_custom_tabs_page.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -169,12 +170,53 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
     return categories;
   }
 
+  void _launchURL(/*BuildContext context*/ String url) async {
+    try {
+      await launch(
+        url,
+        customTabsOption: CustomTabsOption(
+          toolbarColor: Theme.of(context).primaryColor,
+          enableDefaultShare: true,
+          enableUrlBarHiding: true,
+          showPageTitle: true,
+/*          animation: CustomTabsAnimation.slideIn(),
+          // or user defined animation.
+          animation: const CustomTabsAnimation(
+            startEnter: 'slide_up',
+            startExit: 'android:anim/fade_out',
+            endEnter: 'android:anim/fade_in',
+            endExit: 'slide_down',
+          ),
+          extraCustomTabs: const <String>[
+            // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
+            'org.mozilla.firefox',
+            // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
+            'com.microsoft.emmx',
+          ],
+        ),
+        safariVCOption: SafariViewControllerOption(
+          preferredBarTintColor: Theme.of(context).primaryColor,
+          preferredControlTintColor: Colors.white,
+          barCollapsingEnabled: true,
+          entersReaderIfAvailable: false,
+          dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
+*/
+        ),
+      );
+    } catch (e) {
+      // An exception is thrown if browser app is not installed on Android device.
+      debugPrint(e.toString());
+    }
+  }
+
   void _viewWebPage(String url) {
     if (Platform.isAndroid) {
+      _launchURL(url);
+      /*
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => WebPage(url: url)),
-      );
+        MaterialPageRoute(builder: (context) => WebCustomeTabsPage(url: url)),
+      );*/
     }
   }
 }
