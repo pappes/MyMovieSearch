@@ -5,7 +5,7 @@ const IMDB_PERSON_PREFIX = 'nm';
 const IMDB_TITLE_PATH = '/title/';
 const IMDB_PERSON_PATH = '/name/';
 
-const IMDB_BASE_URL = 'http://imdb.com';
+const IMDB_BASE_URL = 'https://imdb.com';
 const IMDB_TITLE_URL = '$IMDB_BASE_URL/title/';
 const IMDB_PERSON_URL = '$IMDB_BASE_URL/name/';
 
@@ -42,22 +42,6 @@ String getIdFromIMDBLink(String? link) {
       '($MULTIPLE_NON_SLASH)(/$MULTIPLE_ANYTHING)$END_STRING';
   // (group1)(group2)(group3) - only care about group 2
   return getGroup2(titleRegexpFormula) ?? getGroup2(nameRegexpFormula) ?? '';
-/*  var match = RegExp(regexpFormula).firstMatch(link ?? '');
-  if (null != match) {
-    if (null != match.group(2)) {
-      return match.group(2)!;
-    }
-  }
-  // Convert /name/nm0145681/?ref_=nm_sims_nm_t_9 to nm0145681
-  match = RegExp('$START_STRING($IMDB_PERSON_PATH)($MULTIPLE_NON_SLASH)'
-          '(/$MULTIPLE_ANYTHING)$END_STRING')
-      .firstMatch(link ?? '');
-  if (null != match) {
-    if (null != match.group(2)) {
-      return match.group(2)!;
-    }
-  }
-  return '';*/
 }
 
 MovieContentType? getImdbMovieContentType(

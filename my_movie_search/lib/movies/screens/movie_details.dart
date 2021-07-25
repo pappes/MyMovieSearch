@@ -151,7 +151,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           Wrap(children: [
             new GestureDetector(
               onTap: () {
-                _viewWebPage('${makeImdbUrl(_movie.uniqueId)}parentalguide');
+                _viewWebPage('${makeImdbUrl(_movie.uniqueId)}/parentalguide');
               },
               child: Text(
                   'Censor Rating: ${describeEnum(_movie.censorRating)}     '),

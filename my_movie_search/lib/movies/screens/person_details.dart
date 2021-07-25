@@ -145,7 +145,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
             Text('Source: ${describeEnum(_person.source)}      '),
             Text('UniqueId: ${_person.uniqueId}'),
             ElevatedButton(
-              onPressed: () => _viewWebPage(makeImdbUrl(_person.uniqueId)),
+              onPressed: () => _launchURL(makeImdbUrl(_person.uniqueId)),
               child: Text('IMDB'),
             ),
           ]),
@@ -191,26 +191,22 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     return categories;
   }
 
-  void _launchURL(/*BuildContext context*/ String url) async {
+  void _launchURL(String url) async {
     try {
-      await launch(
-        url,
-        customTabsOption: CustomTabsOption(
-          toolbarColor: Theme.of(context).primaryColor,
-          enableDefaultShare: true,
-          enableUrlBarHiding: true,
-          showPageTitle: true,
-        ),
-      );
+      if (Platform.isAndroid) {
+        await launch(
+          url,
+          customTabsOption: CustomTabsOption(
+            toolbarColor: Theme.of(context).primaryColor,
+            enableDefaultShare: true,
+            enableUrlBarHiding: true,
+            showPageTitle: true,
+          ),
+        );
+      }
     } catch (e) {
       // An exception is thrown if browser app is not installed on Android device.
       debugPrint(e.toString());
-    }
-  }
-
-  void _viewWebPage(String url) {
-    if (Platform.isAndroid) {
-      _launchURL(url);
     }
   }
 }
