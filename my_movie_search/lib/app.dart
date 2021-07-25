@@ -60,6 +60,7 @@ class _AppViewState extends State<AppView> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      restorationScopeId: 'root',
       navigatorKey: _navigatorKey,
       /*builder: (context, child) {
         return BlocListener<SearchBloc, SearchState>(

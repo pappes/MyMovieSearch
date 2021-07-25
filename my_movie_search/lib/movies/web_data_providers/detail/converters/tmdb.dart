@@ -109,6 +109,9 @@ class TmdbMovieDetailConverter {
   }
 
   static Duration? getDuration(mins) {
+    if (null == mins) {
+      return null;
+    }
     try {
       return Duration(minutes: mins);
     } catch (e) {

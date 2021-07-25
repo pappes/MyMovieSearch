@@ -1,26 +1,28 @@
 import 'package:flutter/material.dart'
     show
-        Widget,
-        Route,
-        MaterialPageRoute,
-        State,
-        StatefulWidget,
-        Navigator,
-        BuildContext,
-        Scaffold,
-        MainAxisAlignment,
-        FloatingActionButton,
         AppBar,
-        Text,
+        AutofillHints,
+        BuildContext,
+        Center,
         Column,
+        FloatingActionButton,
         Icon,
         Icons,
-        TextField,
-        Center,
-        TextInputAction,
         InputDecoration,
-        AutofillHints,
-        Key;
+        Key,
+        MainAxisAlignment,
+        MaterialPageRoute,
+        Navigator,
+        RestorationBucket,
+        RestorationMixin,
+        Route,
+        Scaffold,
+        State,
+        StatefulWidget,
+        Text,
+        TextField,
+        TextInputAction,
+        Widget;
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'movie_search_results.dart' show MovieSearchResultsNewPage;
 import 'styles.dart';
@@ -39,19 +41,41 @@ class MovieSearchCriteriaPage extends StatefulWidget {
   }
 }
 
-class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage> {
-  final criteria = SearchCriteriaDTO();
+class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
+    with RestorationMixin {
+  var _criteria = SearchCriteriaDTO();
+  var _restorableCriteria = RestorableSearchCriteria();
   void searchForMovie() {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => MovieSearchResultsNewPage(criteria: criteria)),
+          builder: (context) => MovieSearchResultsNewPage(criteria: _criteria)),
     );
+  }
+
+  @override
+  // The restoration bucket id for this page.
+  String get restorationId =>
+      runtimeType.toString(); //+ _criteria.value.criteriaTitle;
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    // Register our property to be saved every time it changes,
+    // and to be restored every time our app is killed by the OS!
+    registerForRestoration(_restorableCriteria, 'criteria');
+  }
+
+  @override
+  void dispose() {
+    // Restorables must be disposed when no longer used.
+    _restorableCriteria.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called.
+    _restorableCriteria.value = _criteria;
     return Scaffold(
       appBar: AppBar(
         // Get title from the StatefulWidget MovieSearchCriteriaPage.
@@ -86,10 +110,10 @@ class _CriteriaInput extends Center {
               hintText: "Enter movie or tv series to search for",
             ),
             onChanged: (text) {
-              state.criteria.criteriaTitle = text;
+              state._criteria.criteriaTitle = text;
             },
             onSubmitted: (text) {
-              state.criteria.criteriaTitle = text;
+              state._criteria.criteriaTitle = text;
               state.searchForMovie();
             },
           ),

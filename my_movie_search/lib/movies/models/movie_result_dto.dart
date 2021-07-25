@@ -1,4 +1,8 @@
+import 'dart:convert';
 import 'dart:math' show max;
+
+import 'package:flutter/material.dart';
+import 'package:my_movie_search/utilities/extensions/enum.dart';
 
 import 'metadata_dto.dart';
 
@@ -71,10 +75,79 @@ final String movieResultRelated = 'related';
 final String movieResultDTOUninitialised = '-1';
 final String movieResultDTOMessagePrefix = '-';
 
-extension MapDTOConversion on Map {
+class RestorableMovie extends RestorableValue<MovieResultDTO> {
+  @override
+  MovieResultDTO createDefaultValue() => MovieResultDTO();
+
+  @override
+  void didUpdateValue(MovieResultDTO? oldValue) {
+    if (oldValue == null || !oldValue.matches(value)) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  MovieResultDTO fromPrimitives(Object? data) {
+    if (data != null) {
+      Map<String, String> map = jsonDecode(data as String);
+      return map.toMovieResultDTO();
+    }
+    return MovieResultDTO();
+  }
+
+  @override
+  Object toPrimitives() => jsonEncode(value.toMap());
+}
+
+class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
+  @override
+  List<MovieResultDTO> createDefaultValue() => [];
+
+  @override
+  void didUpdateValue(List<MovieResultDTO>? oldValue) {
+    if (oldValue == null ||
+        oldValue.toPrintableString() != value.toPrintableString()) {
+      notifyListeners();
+    }
+  }
+
+  @override
+  List<MovieResultDTO> fromPrimitives(Object? data) {
+    if (data != null) {
+      List<String> list = jsonDecode(data as String);
+      return value.decodeList(list);
+    }
+    return [];
+  }
+
+  @override
+  Object toPrimitives() => jsonEncode(value.encodeList());
+}
+
+extension ListDTOConversion on List<MovieResultDTO> {
+  List<MovieResultDTO> decodeList(List<String> encoded) {
+    List<MovieResultDTO> retval = [];
+    for (var json in encoded) {
+      retval.add(jsonDecode(json));
+    }
+    return retval;
+  }
+
+  List<String> encodeList() {
+    List<String> retval = [];
+    for (var dto in this) {
+      retval.add(jsonEncode(dto.toMap()));
+    }
+    return retval;
+  }
+}
+
+extension MapDTOConversion on Map<String, String> {
   MovieResultDTO toMovieResultDTO() {
     var dto = MovieResultDTO();
-    dto.source = this[movieResultDTOSource] ?? dto.source;
+    dto.source =
+        getEnumFromString(this[movieResultDTOSource], DataSourceType.values) ??
+            dto.source;
     dto.uniqueId = this[movieResultDTOUniqueId] ?? dto.uniqueId;
     dto.alternateId = this[movieResultDTOAlternateId] ?? dto.alternateId;
     dto.title = this[movieResultDTOTitle] ?? dto.title;
@@ -82,16 +155,25 @@ extension MapDTOConversion on Map {
         this[movieResultDTOAlternateTitle] ?? dto.alternateTitle;
 
     dto.description = this[movieResultDTODescription] ?? dto.description;
-    dto.type = this[movieResultDTOType] ?? dto.type;
-    dto.year = this[movieResultDTOYear] ?? dto.year;
+    dto.type =
+        getEnumFromString(this[movieResultDTOType], MovieContentType.values) ??
+            dto.type;
+    dto.year = int.tryParse(this[movieResultDTOYear] ?? '') ?? dto.year;
     dto.yearRange = this[movieResultDTOYearRange] ?? dto.yearRange;
-    dto.userRating = this[movieResultDTOUserRating] ?? dto.userRating;
+    dto.userRating =
+        double.tryParse(this[movieResultDTOUserRating] ?? '') ?? dto.userRating;
     dto.userRatingCount =
-        this[movieResultDTOUserRatingCount] ?? dto.userRatingCount;
-    dto.censorRating = this[movieResultDTOCensorRating] ?? dto.censorRating;
-    dto.runTime = this[movieResultDTORunTime] ?? dto.runTime;
+        int.tryParse(this[movieResultDTOUserRatingCount] ?? '') ??
+            dto.userRatingCount;
+    dto.censorRating = getEnumFromString(
+            this[movieResultDTOCensorRating], CensorRatingType.values) ??
+        dto.censorRating;
+    int? seconds = int.tryParse(this[movieResultDTORunTime] ?? '');
+    dto.runTime = seconds != null ? Duration(seconds: seconds) : dto.runTime;
     dto.imageUrl = this[movieResultImageUrl] ?? dto.imageUrl;
-    dto.language = this[movieResultLanguage] ?? dto.language;
+    dto.language =
+        getEnumFromString(this[movieResultLanguage], LanguageType.values) ??
+            dto.language;
     //TODO related
     return dto;
   }
@@ -107,22 +189,22 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   Map toMap() {
     Map<String, dynamic> map = Map();
-    map[movieResultDTOSource] = this.source;
+    map[movieResultDTOSource] = this.source.toString();
     map[movieResultDTOUniqueId] = this.uniqueId;
     map[movieResultDTOAlternateId] = this.alternateId;
     map[movieResultDTOTitle] = this.title;
     map[movieResultDTOAlternateTitle] = this.alternateTitle;
 
     map[movieResultDTODescription] = this.description;
-    map[movieResultDTOType] = this.type;
+    map[movieResultDTOType] = this.type.toString();
     map[movieResultDTOYear] = this.year;
     map[movieResultDTOYearRange] = this.yearRange;
     map[movieResultDTOUserRating] = this.userRating;
     map[movieResultDTOUserRatingCount] = this.userRatingCount;
-    map[movieResultDTOCensorRating] = this.censorRating;
-    map[movieResultDTORunTime] = this.runTime;
+    map[movieResultDTOCensorRating] = this.censorRating.toString();
+    map[movieResultDTORunTime] = this.runTime.inSeconds;
     map[movieResultImageUrl] = this.imageUrl;
-    map[movieResultLanguage] = this.language;
+    map[movieResultLanguage] = this.language.toString();
     //TODO: related
     return map;
   }
@@ -296,6 +378,26 @@ extension ListMovieResultDTOHelpers on List<MovieResultDTO> {
       separator = ',\n';
     }
     return 'List<MovieResultDTO>(${this.length})[\n$listContents\n]';
+  }
+
+  String toJson() {
+    List<String> listContents = [];
+    for (var key in this) {
+      listContents.add(jsonEncode(key.toMap()));
+    }
+    return jsonEncode(listContents);
+  }
+}
+
+extension StringMovieResultDTOHelpers on String {
+  List<MovieResultDTO> jsonToList() {
+    List<String> listContents = jsonDecode(this);
+    List<MovieResultDTO> dtos = [];
+    for (String json in listContents) {
+      Map<String, String> map = jsonDecode(json);
+      dtos.add(map.toMovieResultDTO());
+    }
+    return dtos;
   }
 }
 

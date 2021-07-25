@@ -24,8 +24,11 @@ class PersonDetailsPage extends StatefulWidget {
   _PersonDetailsPageState createState() => _PersonDetailsPageState(_person);
 }
 
-class _PersonDetailsPageState extends State<PersonDetailsPage> {
-  final MovieResultDTO _person;
+class _PersonDetailsPageState extends State<PersonDetailsPage>
+    with RestorationMixin {
+  var _person = MovieResultDTO();
+  var _restorablePerson = RestorableMovie();
+
   _PersonDetailsPageState(this._person) {
     var detailCriteria = SearchCriteriaDTO();
     detailCriteria.criteriaTitle = _person.uniqueId;
@@ -50,9 +53,27 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
     );
   }
 
+  @override
+  // The restoration bucket id for this page.
+  String get restorationId => runtimeType.toString() + _person.uniqueId;
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    // Register our property to be saved every time it changes,
+    // and to be restored every time our app is killed by the OS!
+    registerForRestoration(_restorablePerson, _person.uniqueId);
+  }
+
+  @override
+  void dispose() {
+    // Restorables must be disposed when no longer used.
+    _restorablePerson.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called.
-
+    _restorablePerson.value = _person;
     return Scaffold(
       appBar: AppBar(
         // Get title from the StatefulWidget PersonDetailsPage.
@@ -179,28 +200,6 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
           enableDefaultShare: true,
           enableUrlBarHiding: true,
           showPageTitle: true,
-/*          animation: CustomTabsAnimation.slideIn(),
-          // or user defined animation.
-          animation: const CustomTabsAnimation(
-            startEnter: 'slide_up',
-            startExit: 'android:anim/fade_out',
-            endEnter: 'android:anim/fade_in',
-            endExit: 'slide_down',
-          ),
-          extraCustomTabs: const <String>[
-            // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
-            'org.mozilla.firefox',
-            // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
-            'com.microsoft.emmx',
-          ],
-        ),
-        safariVCOption: SafariViewControllerOption(
-          preferredBarTintColor: Theme.of(context).primaryColor,
-          preferredControlTintColor: Colors.white,
-          barCollapsingEnabled: true,
-          entersReaderIfAvailable: false,
-          dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
-*/
         ),
       );
     } catch (e) {
@@ -212,11 +211,6 @@ class _PersonDetailsPageState extends State<PersonDetailsPage> {
   void _viewWebPage(String url) {
     if (Platform.isAndroid) {
       _launchURL(url);
-      /*
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => WebCustomeTabsPage(url: url)),
-      );*/
     }
   }
 }

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
-//import 'package:my_movie_search/movies/screens/web_custom_tabs_page.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 
@@ -25,10 +24,13 @@ class MovieDetailsPage extends StatefulWidget {
   _MovieDetailsPageState createState() => _MovieDetailsPageState(_movie);
 }
 
-class _MovieDetailsPageState extends State<MovieDetailsPage> {
-  MovieResultDTO _movie;
+class _MovieDetailsPageState extends State<MovieDetailsPage>
+    with RestorationMixin {
+  var _movie = MovieResultDTO();
+  var _restorableMovie = RestorableMovie();
 
-  _MovieDetailsPageState(this._movie) {
+  _MovieDetailsPageState(MovieResultDTO movie) {
+    this._movie = movie;
     var detailCriteria = SearchCriteriaDTO();
     detailCriteria.criteriaTitle = _movie.uniqueId;
     // Pull back details at this point because it is very slow and CPU intensive
@@ -38,6 +40,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
       setState(() => mergeDetails(searchResults));
     });
   }
+
   mergeDetails(List<MovieResultDTO> details) {
     details.forEach((dto) => _movie.merge(dto));
   }
@@ -53,7 +56,26 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
     );
   }
 
+  @override
+  // The restoration bucket id for this page.
+  String get restorationId => runtimeType.toString() + _movie.uniqueId;
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    // Register our property to be saved every time it changes,
+    // and to be restored every time our app is killed by the OS!
+    registerForRestoration(_restorableMovie, _movie.uniqueId);
+  }
+
+  @override
+  void dispose() {
+    // Restorables must be disposed when no longer used.
+    _restorableMovie.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
+    _restorableMovie.value = _movie;
     return Scaffold(
       appBar: AppBar(
         title: Text(_movie.title),
@@ -200,28 +222,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
           enableDefaultShare: true,
           enableUrlBarHiding: true,
           showPageTitle: true,
-/*          animation: CustomTabsAnimation.slideIn(),
-          // or user defined animation.
-          animation: const CustomTabsAnimation(
-            startEnter: 'slide_up',
-            startExit: 'android:anim/fade_out',
-            endEnter: 'android:anim/fade_in',
-            endExit: 'slide_down',
-          ),
-          extraCustomTabs: const <String>[
-            // ref. https://play.google.com/store/apps/details?id=org.mozilla.firefox
-            'org.mozilla.firefox',
-            // ref. https://play.google.com/store/apps/details?id=com.microsoft.emmx
-            'com.microsoft.emmx',
-          ],
-        ),
-        safariVCOption: SafariViewControllerOption(
-          preferredBarTintColor: Theme.of(context).primaryColor,
-          preferredControlTintColor: Colors.white,
-          barCollapsingEnabled: true,
-          entersReaderIfAvailable: false,
-          dismissButtonStyle: SafariViewControllerDismissButtonStyle.close,
-*/
         ),
       );
     } catch (e) {
@@ -233,11 +233,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage> {
   void _viewWebPage(String url) {
     if (Platform.isAndroid) {
       _launchURL(url);
-      /*
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => WebCustomeTabsPage(url: url)),
-      );*/
     }
   }
 }
