@@ -150,9 +150,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
               '(${formatter.format(_movie.userRatingCount)})'),
           Wrap(children: [
             new GestureDetector(
-              onTap: () {
-                _viewWebPage('${makeImdbUrl(_movie.uniqueId)}/parentalguide');
-              },
+              onTap: () => _viewWebPage(
+                makeImdbUrl(
+                  _movie.uniqueId,
+                  path: '/parentalguide',
+                  mobile: true,
+                ),
+              ),
               child: Text(
                   'Censor Rating: ${describeEnum(_movie.censorRating)}     '),
             ),
@@ -162,12 +166,17 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
             Text('Source: ${describeEnum(_movie.source)}      '),
             Text('UniqueId: ${_movie.uniqueId}'),
             ElevatedButton(
-              onPressed: () => _viewWebPage(
-                  makeImdbUrl('https://tpb.party/search/${_movie.title}')),
+              onPressed: () =>
+                  _viewWebPage('https://tpb.party/search/${_movie.title}'),
               child: Text('External'),
             ),
             ElevatedButton(
-              onPressed: () => _viewWebPage(makeImdbUrl(_movie.uniqueId)),
+              onPressed: () => _viewWebPage(
+                makeImdbUrl(
+                  _movie.uniqueId,
+                  mobile: true,
+                ),
+              ),
               child: Text('IMDB'),
             ),
           ]),

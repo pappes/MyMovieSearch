@@ -145,7 +145,12 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
             Text('Source: ${describeEnum(_person.source)}      '),
             Text('UniqueId: ${_person.uniqueId}'),
             ElevatedButton(
-              onPressed: () => _launchURL(makeImdbUrl(_person.uniqueId)),
+              onPressed: () => _launchURL(
+                makeImdbUrl(
+                  _person.uniqueId,
+                  mobile: true,
+                ),
+              ),
               child: Text('IMDB'),
             ),
           ]),

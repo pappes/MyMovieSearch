@@ -5,18 +5,21 @@ const IMDB_PERSON_PREFIX = 'nm';
 const IMDB_TITLE_PATH = '/title/';
 const IMDB_PERSON_PATH = '/name/';
 
-const IMDB_BASE_URL = 'https://imdb.com';
-const IMDB_TITLE_URL = '$IMDB_BASE_URL/title/';
-const IMDB_PERSON_URL = '$IMDB_BASE_URL/name/';
+const IMDB_BASE_URL = 'https://www.imdb.com';
+const IMDB_MOBILE_URL = 'https://m.imdb.com';
+const IMDB_TITLE_URL = '/title/';
+const IMDB_PERSON_URL = '/name/';
+const IMDB_SUFFIX_URL = '?ref_=nv_sr_srsg_0';
 
-String makeImdbUrl(String key) {
+String makeImdbUrl(String key, {String path = '', bool mobile = false}) {
+  var url = mobile ? IMDB_MOBILE_URL : IMDB_BASE_URL;
   if (key.startsWith(IMDB_TITLE_PREFIX)) {
-    return '$IMDB_TITLE_URL$key';
+    url += key + IMDB_TITLE_URL;
   }
   if (key.startsWith(IMDB_PERSON_PREFIX)) {
-    return '$IMDB_PERSON_URL$key';
+    url += key + IMDB_PERSON_URL;
   }
-  return IMDB_BASE_URL;
+  return url + IMDB_SUFFIX_URL;
 }
 
 String getIdFromIMDBLink(String? link) {
