@@ -42,10 +42,10 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   var _searchId = '';
   var _restorableList = RestorableMovieList();
   var _restorableId = RestorableString('');
-  var _title = "Results ";
+  var _title = 'Results';
 
   _MovieSearchResultsPageState(SearchCriteriaDTO criteria) {
-    _title = '$_title - ${criteria.criteriaTitle}';
+    _title = criteria.criteriaTitle;
   }
 
   @override
