@@ -9,17 +9,17 @@ const IMDB_BASE_URL = 'https://www.imdb.com';
 const IMDB_MOBILE_URL = 'https://m.imdb.com';
 const IMDB_TITLE_URL = '/title/';
 const IMDB_PERSON_URL = '/name/';
-const IMDB_SUFFIX_URL = '?ref_=nv_sr_srsg_0';
+const IMDB_SUFFIX_URL = '/?ref_=nv_sr_srsg_0';
 
 String makeImdbUrl(String key, {String path = '', bool mobile = false}) {
   var url = mobile ? IMDB_MOBILE_URL : IMDB_BASE_URL;
   if (key.startsWith(IMDB_TITLE_PREFIX)) {
-    url += key + IMDB_TITLE_URL;
+    url += IMDB_TITLE_URL;
   }
   if (key.startsWith(IMDB_PERSON_PREFIX)) {
-    url += key + IMDB_PERSON_URL;
+    url += IMDB_PERSON_URL;
   }
-  return url + IMDB_SUFFIX_URL;
+  return url + key + path + IMDB_SUFFIX_URL;
 }
 
 String getIdFromIMDBLink(String? link) {

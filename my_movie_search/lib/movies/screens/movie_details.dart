@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:my_movie_search/movies/screens/popup.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 
@@ -242,6 +243,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   void _viewWebPage(String url) {
     if (Platform.isAndroid) {
       _launchURL(url);
+    } else {
+      showPopup(context, url);
     }
   }
 }

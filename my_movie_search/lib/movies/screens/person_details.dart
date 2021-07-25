@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:my_movie_search/movies/screens/popup.dart';
 //import 'package:my_movie_search/movies/screens/web_custom_tabs_page.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
@@ -208,6 +209,8 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
             showPageTitle: true,
           ),
         );
+      } else {
+        showPopup(context, url);
       }
     } catch (e) {
       // An exception is thrown if browser app is not installed on Android device.
