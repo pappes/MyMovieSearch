@@ -86,6 +86,7 @@ CensorRatingType? getImdbCensorRating(String? type) {
   if (type.lastIndexOf('Z') > -1) return CensorRatingType.restriced;
   if (type.lastIndexOf('R') > -1)
     return CensorRatingType.restriced; //R, R(A), RP18
+  if (type.lastIndexOf('Unrated') > -1) return CensorRatingType.restriced;
   if (type.lastIndexOf('Mature') > -1) return CensorRatingType.restriced;
   if (type.lastIndexOf('Adult') > -1) return CensorRatingType.restriced;
   if (type.lastIndexOf('GA') > -1) return CensorRatingType.restriced;

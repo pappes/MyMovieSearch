@@ -293,6 +293,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (a is DataSourceType && b is DataSourceType) bestSource(a, b);
     if (a is LanguageType && b is LanguageType) bestLanguage(a, b);
     if (a is num && b is num && a < b) return b;
+    if (a is Duration && b is Duration && a < b) return b;
     if (a.toString().length < b.toString().length) return b;
     if (lastNumberFromString(a.toString()) < lastNumberFromString(b.toString()))
       return b;
