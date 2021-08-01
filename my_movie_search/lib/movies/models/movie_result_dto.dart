@@ -206,6 +206,10 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     map[movieResultImageUrl] = this.imageUrl;
     map[movieResultLanguage] = this.language.toString();
     //TODO: related
+    Map<String, String> related = {};
+    this.related.forEach((key, childMap) => // Get comma delimted uniqueIds
+        related[key] = (childMap).keys.toString());
+    map[movieResultRelated] = related;
     return map;
   }
 
