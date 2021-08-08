@@ -1,14 +1,18 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart'
     show
-        StatelessWidget,
-        State,
-        Widget,
-        MaterialApp,
         BuildContext,
         GlobalKey,
-        StatefulWidget,
         Key,
-        NavigatorState;
+        MaterialApp,
+        NavigatorState,
+        State,
+        StatefulWidget,
+        StatelessWidget,
+        ThemeData,
+        ThemeMode,
+        Widget;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'movies/blocs/repositories/movie_search_repository.dart';
@@ -25,12 +29,6 @@ class MMSearchApp extends StatelessWidget {
   const MMSearchApp({Key? key, required this.movieRepository})
       : super(
           key: key,
-          //home: const MovieSearchCriteriaPage(movieRepository),
-          //   home: MovieHomePage(),
-          //title: 'My Movie Search',
-          //theme: ThemeData(brightness: Brightness.light),
-          //darkTheme: ThemeData(brightness: Brightness.dark),
-          //themeMode: ThemeMode.system, //dark or light or system
         );
   final MovieSearchRepository movieRepository;
 
@@ -62,6 +60,12 @@ class _AppViewState extends State<AppView> {
     return MaterialApp(
       restorationScopeId: 'root',
       navigatorKey: _navigatorKey,
+      //home: const MovieSearchCriteriaPage(movieRepository),
+      //   home: MovieHomePage(),
+      title: 'My Movie Search',
+      theme: ThemeData(brightness: Brightness.light),
+      darkTheme: ThemeData(brightness: Brightness.dark),
+      themeMode: ThemeMode.system, //dark or light or system
       /*builder: (context, child) {
         return BlocListener<SearchBloc, SearchState>(
           listener: (context, state) {
