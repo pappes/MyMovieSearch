@@ -96,7 +96,8 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   }
 
   @override
-  Object toPrimitives() => jsonEncode(value.toMap());
+  Object toPrimitives() =>
+      jsonEncode(value.toMap(excludeCopywritedData: false));
 }
 
 class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
@@ -136,7 +137,7 @@ extension ListDTOConversion on List<MovieResultDTO> {
   List<String> encodeList() {
     List<String> retval = [];
     for (var dto in this) {
-      retval.add(jsonEncode(dto.toMap()));
+      retval.add(jsonEncode(dto.toMap(excludeCopywritedData: false)));
     }
     return retval;
   }
@@ -187,24 +188,32 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return this;
   }
 
-  Map toMap() {
+  Map<String, dynamic> toMap({bool excludeCopywritedData = true}) {
     Map<String, dynamic> map = Map();
     map[movieResultDTOSource] = this.source.toString();
     map[movieResultDTOUniqueId] = this.uniqueId;
-    map[movieResultDTOAlternateId] = this.alternateId;
-    map[movieResultDTOTitle] = this.title;
-    map[movieResultDTOAlternateTitle] = this.alternateTitle;
+    if ('' == this.alternateId)
+      map[movieResultDTOAlternateId] = this.alternateId;
+    if ('' == this.title) map[movieResultDTOTitle] = this.title;
+    if ('' == this.alternateTitle)
+      map[movieResultDTOAlternateTitle] = this.alternateTitle;
 
-    map[movieResultDTODescription] = this.description;
     map[movieResultDTOType] = this.type.toString();
-    map[movieResultDTOYear] = this.year;
-    map[movieResultDTOYearRange] = this.yearRange;
-    map[movieResultDTOUserRating] = this.userRating;
-    map[movieResultDTOUserRatingCount] = this.userRatingCount;
-    map[movieResultDTOCensorRating] = this.censorRating.toString();
-    map[movieResultDTORunTime] = this.runTime.inSeconds;
-    map[movieResultImageUrl] = this.imageUrl;
+    if ('' == this.description) map[movieResultDTOYear] = this.description;
+    if ('' == this.yearRange) map[movieResultDTOYearRange] = this.yearRange;
+    if (0 == this.runTime.inSeconds)
+      map[movieResultDTORunTime] = this.runTime.inSeconds;
     map[movieResultLanguage] = this.language.toString();
+
+    if (!excludeCopywritedData) {
+      if ('' == this.description)
+        map[movieResultDTODescription] = this.description;
+      if (0 == this.userRating) map[movieResultDTOUserRating] = this.userRating;
+      if (0 == this.userRatingCount)
+        map[movieResultDTOUserRatingCount] = this.userRatingCount;
+      map[movieResultDTOCensorRating] = this.censorRating.toString();
+      if ('' == this.imageUrl) map[movieResultImageUrl] = this.imageUrl;
+    }
     //TODO: related
     Map<String, String> related = {};
     this.related.forEach((key, childMap) => // Get comma delimted uniqueIds
@@ -327,7 +336,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   }
 
   String toPrintableString() {
-    return this.toMap().toString();
+    return this.toMap(excludeCopywritedData: false).toString();
   }
 
   Map toUnknown() {
@@ -388,7 +397,7 @@ extension ListMovieResultDTOHelpers on List<MovieResultDTO> {
   String toJson() {
     List<String> listContents = [];
     for (var key in this) {
-      listContents.add(jsonEncode(key.toMap()));
+      listContents.add(jsonEncode(key.toMap(excludeCopywritedData: false)));
     }
     return jsonEncode(listContents);
   }
