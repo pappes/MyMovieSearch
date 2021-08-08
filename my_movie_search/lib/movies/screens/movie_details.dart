@@ -183,9 +183,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           ]),
           Row(children: [
             Expanded(
-              child: Text(
-                '\nDescription: \n${_movie.description} ',
-                style: biggerFont,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _label('Description:'),
+                  Text(
+                    _movie.description,
+                    style: biggerFont,
+                  ),
+                ],
               ),
             ),
           ]),
@@ -204,7 +210,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     for (var category in _movie.related.entries) {
       var map = category.value;
       String description = map.toShortString();
-      categories.add(Text('${category.key}'));
+      categories.add(_label(category.key));
       categories.add(
         Center(
           child: GestureDetector(
@@ -246,5 +252,16 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     } else {
       showPopup(context, url);
     }
+  }
+
+  Widget _label(string) {
+    return (Text(
+      string,
+      textAlign: TextAlign.left,
+      style: TextStyle(
+        fontFamily: 'RobotoMono',
+        fontWeight: FontWeight.bold,
+      ),
+    ));
   }
 }

@@ -65,6 +65,26 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+
+  fonts:
+     - family: Lato
+       fonts: 
+         - asset: fonts/Lato-Regular.ttf
+         - asset: fonts/Lato-Black.ttf
+           weight: 700
+         - asset: fonts/Lato-BlackItalic.ttf
+           weight: 700
+           style: italic
+         - asset: fonts/Lato-Italic.ttf
+           style: italic
+         - asset: fonts/Lato-Light.ttf
+         - asset: fonts/Lato-LightItalic.ttf
+           style: italic
+         - asset: fonts/Lato-Thin.ttf
+         - asset: fonts/Lato-ThinItalic.ttf
+           style: italic
+
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
@@ -99,21 +119,3 @@ assets:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-
-  - fonts:
-     - family: Lato
-       fonts:
-         - asset: fonts/Lato-Regular.ttf
-         - asset: fonts/Lato-Black.ttf
-           weight: 700
-         - asset: fonts/Lato-BlackItalic.ttf
-           weight: 700
-           style: italic
-         - asset: fonts/Lato-Italic.ttf
-           style: italic
-         - asset: fonts/Lato-Light.ttf
-         - asset: fonts/Lato-LightItalic.ttf
-           style: italic
-         - asset: fonts/Lato-Thin.ttf
-         - asset: fonts/Lato-ThinItalic.ttf
-           style: italic

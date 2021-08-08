@@ -63,7 +63,10 @@ class _AppViewState extends State<AppView> {
       //home: const MovieSearchCriteriaPage(movieRepository),
       //   home: MovieHomePage(),
       title: 'My Movie Search',
-      theme: ThemeData(brightness: Brightness.light),
+      theme: ThemeData(
+        //brightness: Brightness.light,
+        fontFamily: 'Lato',
+      ),
       darkTheme: ThemeData(brightness: Brightness.dark),
       themeMode: ThemeMode.system, //dark or light or system
       /*builder: (context, child) {
