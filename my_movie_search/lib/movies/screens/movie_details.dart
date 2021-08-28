@@ -10,6 +10,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart'
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/widgets/controls.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 
 import 'movie_search_results.dart';
@@ -29,6 +30,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     with RestorationMixin {
   var _movie = MovieResultDTO();
   var _restorableMovie = RestorableMovie();
+  var _mobileLayout = true;
 
   _MovieDetailsPageState(MovieResultDTO movie) {
     this._movie = movie;
@@ -77,6 +79,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
   Widget build(BuildContext context) {
     _restorableMovie.value = _movie;
+    _mobileLayout = useMobileLayout(context);
     return Scaffold(
       appBar: AppBar(
         title: Text(_movie.title),
@@ -114,31 +117,25 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              leftColumn(),
-              rightColumn(),
-            ],
+            children: [leftColumn()] + posterSection(!_mobileLayout),
           ),
         ),
       ],
     );
   }
 
-  Expanded rightColumn() {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          _movie.imageUrl.startsWith('http')
-              ? Image(
-                  image: NetworkImage(getBigImage(_movie.imageUrl)),
-                  alignment: Alignment.topCenter,
-                )
-              : Text('NoImage'),
-          SelectableText(_movie.imageUrl, style: tinyFont),
-        ],
-      ),
-    );
+  List<Expanded> posterSection(bool showPoster) {
+    if (!showPoster) {
+      return [];
+    }
+    return [
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: poster(_movie.imageUrl, showPoster),
+        ),
+      )
+    ];
   }
 
   Expanded leftColumn() {
@@ -185,13 +182,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _label('Description:'),
-                  Text(
-                    _movie.description,
-                    style: biggerFont,
-                  ),
-                ],
+                children: poster(_movie.imageUrl, _mobileLayout) +
+                    [
+                      BoldLabel('Description:'),
+                      Text(
+                        _movie.description,
+                        style: biggerFont,
+                      ),
+                    ],
               ),
             ),
           ]),
@@ -210,7 +208,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     for (var category in _movie.related.entries) {
       var map = category.value;
       String description = map.toShortString();
-      categories.add(_label(category.key));
+      categories.add(BoldLabel(category.key));
       categories.add(
         Center(
           child: GestureDetector(
@@ -252,16 +250,5 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     } else {
       showPopup(context, url);
     }
-  }
-
-  Widget _label(string) {
-    return (Text(
-      string,
-      textAlign: TextAlign.left,
-      style: TextStyle(
-        fontFamily: 'RobotoMono',
-        fontWeight: FontWeight.bold,
-      ),
-    ));
   }
 }

@@ -11,6 +11,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
+import 'package:my_movie_search/movies/widgets/controls.dart';
 
 import 'movie_search_results.dart';
 
@@ -29,6 +30,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     with RestorationMixin {
   var _person = MovieResultDTO();
   var _restorablePerson = RestorableMovie();
+  var _mobileLayout = true;
 
   _PersonDetailsPageState(this._person) {
     var detailCriteria = SearchCriteriaDTO();
@@ -73,7 +75,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   }
 
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called.
+    _mobileLayout = useMobileLayout(context);
     _restorablePerson.value = _person;
     return Scaffold(
       appBar: AppBar(
@@ -110,31 +112,25 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              leftColumn(),
-              rightColumn(),
-            ],
+            children: [leftColumn()] + posterSection(!_mobileLayout),
           ),
         ),
       ],
     );
   }
 
-  Expanded rightColumn() {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          _person.imageUrl.startsWith('http')
-              ? Image(
-                  image: NetworkImage(getBigImage(_person.imageUrl)),
-                  alignment: Alignment.topCenter,
-                )
-              : Text('NoImage'),
-          SelectableText(_person.imageUrl, style: tinyFont),
-        ],
-      ),
-    );
+  List<Expanded> posterSection(bool showPoster) {
+    if (!showPoster) {
+      return [];
+    }
+    return [
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: poster(_person.imageUrl, showPoster),
+        ),
+      )
+    ];
   }
 
   Expanded leftColumn() {
@@ -155,18 +151,26 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
               child: Text('IMDB'),
             ),
           ]),
-          Row(children: [
-            Expanded(
-              child: Text(
-                '\nDescription: \n${_person.description} ',
-                style: biggerFont,
+          Wrap(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: poster(_person.imageUrl, _mobileLayout) +
+                      [
+                        Text(
+                          '\nDescription: \n${_person.description} ',
+                          style: biggerFont,
+                        ),
+                      ],
+                ),
               ),
-            ),
-          ]),
-          Expanded(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: related()),
+              Expanded(
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: related()),
+              ),
+            ],
           ),
         ],
       ),
@@ -178,7 +182,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     for (var category in _person.related.entries) {
       var map = category.value;
       String description = map.toShortString();
-      categories.add(Text('${category.key}:'));
+      categories.add(BoldLabel('${category.key}:'));
       categories.add(
         Center(
           child: GestureDetector(
