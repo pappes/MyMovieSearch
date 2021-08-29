@@ -6,16 +6,14 @@ import 'package:flutter/material.dart'
         ListTile,
         BuildContext,
         Navigator,
-        MaterialPageRoute,
         CircularProgressIndicator,
         Image,
         NetworkImage;
-import 'package:my_movie_search/movies/screens/person_details.dart';
 
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/screens/movie_details.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieTile extends ListTile {
   MovieTile(BuildContext context, MovieResultDTO movie)
@@ -23,7 +21,10 @@ class MovieTile extends ListTile {
           leading: _getImage(movie.imageUrl),
           title: _getTitle(movie),
           subtitle: _getDescription(movie),
-          onTap: () => _openDetails(context, movie),
+          onTap: () => Navigator.push(
+            context,
+            getRoute(context, movie),
+          ),
         );
 
   static Widget _getTitle(MovieResultDTO movie) {
@@ -57,21 +58,6 @@ class MovieTile extends ListTile {
           ratingCount,
       textScaleFactor: 1.0,
     );
-  }
-
-  static _openDetails(BuildContext context, MovieResultDTO movie) {
-    if (movie.uniqueId.startsWith('nm')) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => PersonDetailsPage(person: movie)),
-      );
-    } else {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MovieDetailsPage(movie: movie)),
-      );
-    }
   }
 
   static Widget _getImage(String url) {

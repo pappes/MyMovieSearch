@@ -7,6 +7,7 @@ import 'package:flutter/material.dart'
         Key,
         ListTile,
         ListView,
+        Navigator,
         RestorableString,
         RestorationBucket,
         RestorationMixin,
@@ -23,6 +24,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/widgets/movie_card_small.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieSearchResultsNewPage extends StatefulWidget {
   MovieSearchResultsNewPage({Key? key, required SearchCriteriaDTO criteria})
@@ -78,9 +80,10 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   }
 
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called.
+    // Save state for restoration in case app is put to sleep.
     _restorableList.value = _sortedList;
     _restorableId = _restorableId;
+
     return Scaffold(
         appBar: AppBar(
           // Use the search criteria to set our appbar title.

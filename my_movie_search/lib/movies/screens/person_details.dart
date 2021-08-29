@@ -1,10 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
-import 'package:my_movie_search/movies/screens/popup.dart';
-//import 'package:my_movie_search/movies/screens/web_custom_tabs_page.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -13,8 +8,6 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/widgets/controls.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
-
-import 'movie_search_results.dart';
 
 class PersonDetailsPage extends StatefulWidget {
   PersonDetailsPage({Key? key, required MovieResultDTO person})
@@ -44,17 +37,6 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   }
   mergeDetails(List<MovieResultDTO> details) {
     details.forEach((dto) => _person.merge(dto));
-  }
-
-  void searchForRelated(String description, List<MovieResultDTO> movies) {
-    var criteria = SearchCriteriaDTO();
-    criteria.criteriaList.addAll(movies);
-    criteria.criteriaTitle = description;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => MovieSearchResultsNewPage(criteria: criteria)),
-    );
   }
 
   @override
@@ -132,11 +114,12 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
                     Text('Source: ${describeEnum(_person.source)}      '),
                     Text('UniqueId: ${_person.uniqueId}'),
                     ElevatedButton(
-                      onPressed: () => _launchURL(
+                      onPressed: () => viewWebPage(
                         makeImdbUrl(
                           _person.uniqueId,
                           mobile: true,
                         ),
+                        context,
                       ),
                       child: Text('IMDB'),
                     ),
@@ -186,6 +169,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
             onTap: () => searchForRelated(
               '${category.key}: ${_person.title}',
               category.value.values.toList(),
+              context,
             ),
             child: Text(
               description,
@@ -196,26 +180,5 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       );
     }
     return categories;
-  }
-
-  void _launchURL(String url) async {
-    try {
-      if (Platform.isAndroid) {
-        await launch(
-          url,
-          customTabsOption: CustomTabsOption(
-            toolbarColor: Theme.of(context).primaryColor,
-            enableDefaultShare: true,
-            enableUrlBarHiding: true,
-            showPageTitle: true,
-          ),
-        );
-      } else {
-        showPopup(context, url);
-      }
-    } catch (e) {
-      // An exception is thrown if browser app is not installed on Android device.
-      debugPrint(e.toString());
-    }
   }
 }

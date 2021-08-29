@@ -1,9 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
-import 'package:my_movie_search/movies/screens/popup.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 
@@ -13,8 +9,6 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/widgets/controls.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
-
-import 'movie_search_results.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   MovieDetailsPage({Key? key, required MovieResultDTO movie})
@@ -47,17 +41,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
   mergeDetails(List<MovieResultDTO> details) {
     details.forEach((dto) => _movie.merge(dto));
-  }
-
-  void searchForRelated(String description, List<MovieResultDTO> movies) {
-    var criteria = SearchCriteriaDTO();
-    criteria.criteriaList.addAll(movies);
-    criteria.criteriaTitle = description;
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => MovieSearchResultsNewPage(criteria: criteria)),
-    );
   }
 
   @override
@@ -236,6 +219,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
             onTap: () => searchForRelated(
               '${category.key}: ${_movie.title}',
               category.value.values.toList(),
+              context,
             ),
             child: Text(
               description,
