@@ -8,10 +8,7 @@ bool useMobileLayout(BuildContext context) {
   return MediaQuery.of(context).size.width < 600;
 }
 
-List<Widget> poster(String url, bool showPoster) {
-  if (!showPoster) {
-    return [];
-  }
+List<Widget> poster(String url) {
   return [
     url.startsWith('http')
         ? Image(

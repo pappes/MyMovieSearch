@@ -112,14 +112,14 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [leftColumn()] + posterSection(!_mobileLayout),
+            children: leftColumn() + posterSection(!_mobileLayout),
           ),
         ),
       ],
     );
   }
 
-  List<Expanded> posterSection(bool showPoster) {
+  List<Widget> posterSection(bool showPoster) {
     if (!showPoster) {
       return [];
     }
@@ -127,54 +127,44 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: poster(_person.imageUrl, showPoster),
+          children: poster(_person.imageUrl),
         ),
       )
     ];
   }
 
-  Expanded leftColumn() {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Wrap(children: [
-            Text('Source: ${describeEnum(_person.source)}      '),
-            Text('UniqueId: ${_person.uniqueId}'),
-            ElevatedButton(
-              onPressed: () => _launchURL(
-                makeImdbUrl(
-                  _person.uniqueId,
-                  mobile: true,
-                ),
-              ),
-              child: Text('IMDB'),
-            ),
-          ]),
-          Wrap(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: poster(_person.imageUrl, _mobileLayout) +
-                      [
-                        Text(
-                          '\nDescription: \n${_person.description} ',
-                          style: biggerFont,
+  List<Widget> leftColumn() {
+    return [
+      Expanded(
+        child: Column(
+          children: [
+            Wrap(
+              children: [
+                    Text('Source: ${describeEnum(_person.source)}      '),
+                    Text('UniqueId: ${_person.uniqueId}'),
+                    ElevatedButton(
+                      onPressed: () => _launchURL(
+                        makeImdbUrl(
+                          _person.uniqueId,
+                          mobile: true,
                         ),
-                      ],
-                ),
-              ),
-              Expanded(
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: related()),
-              ),
-            ],
-          ),
-        ],
+                      ),
+                      child: Text('IMDB'),
+                    ),
+                  ] +
+                  posterSection(_mobileLayout) +
+                  [
+                    Text(
+                      '\nDescription: \n${_person.description} ',
+                      style: biggerFont,
+                    ),
+                  ] +
+                  related(),
+            ),
+          ],
+        ),
       ),
-    );
+    ];
   }
 
   List<Widget> related() {

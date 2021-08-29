@@ -117,90 +117,100 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [leftColumn()] + posterSection(!_mobileLayout),
+            children: leftColumn() +
+                // Only show right column on tablet
+                (_mobileLayout ? [] : posterSection()),
           ),
         ),
       ],
     );
   }
 
-  List<Expanded> posterSection(bool showPoster) {
-    if (!showPoster) {
-      return [];
-    }
+  List<Widget> leftColumn() {
     return [
       Expanded(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: poster(_movie.imageUrl, showPoster),
+          children: [
+            Wrap(
+              children: leftHeader() +
+                  // Only show poster in left column on mobile
+                  (_mobileLayout ? posterSection() : []) +
+                  [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        BoldLabel('Description:'),
+                        Text(
+                          _movie.description,
+                          style: biggerFont,
+                        ),
+                      ],
+                    ),
+                  ] +
+                  related(),
+            ),
+          ],
         ),
       )
     ];
   }
 
-  Expanded leftColumn() {
-    return Expanded(
-      child: Column(
+  List<Widget> posterSection() {
+    return [
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: poster(_movie.imageUrl),
+        ),
+      )
+    ];
+  }
+
+  List<Widget> leftHeader() {
+    return [
+      Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text('Type: ${describeEnum(_movie.type)}'),
           Text('User Rating: ${_movie.userRating.toString()} '
               '(${formatter.format(_movie.userRatingCount)})'),
-          Wrap(children: [
-            new GestureDetector(
-              onTap: () => _viewWebPage(
-                makeImdbUrl(
-                  _movie.uniqueId,
-                  path: '/parentalguide',
-                  mobile: true,
+          Wrap(
+            children: [
+              new GestureDetector(
+                onTap: () => _viewWebPage(
+                  makeImdbUrl(
+                    _movie.uniqueId,
+                    path: '/parentalguide',
+                    mobile: true,
+                  ),
                 ),
+                child: Text(
+                    'Censor Rating: ${describeEnum(_movie.censorRating)}     '),
               ),
-              child: Text(
-                  'Censor Rating: ${describeEnum(_movie.censorRating)}     '),
-            ),
-            Text('Language: ${describeEnum(_movie.language)}'),
-          ]),
-          Wrap(children: [
-            Text('Source: ${describeEnum(_movie.source)}      '),
-            Text('UniqueId: ${_movie.uniqueId}'),
-            ElevatedButton(
-              onPressed: () =>
-                  _viewWebPage('https://tpb.party/search/${_movie.title}'),
-              child: Text('External'),
-            ),
-            ElevatedButton(
-              onPressed: () => _viewWebPage(
-                makeImdbUrl(
-                  _movie.uniqueId,
-                  mobile: true,
-                ),
-              ),
-              child: Text('IMDB'),
-            ),
-          ]),
-          Row(children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: poster(_movie.imageUrl, _mobileLayout) +
-                    [
-                      BoldLabel('Description:'),
-                      Text(
-                        _movie.description,
-                        style: biggerFont,
-                      ),
-                    ],
-              ),
-            ),
-          ]),
-          Expanded(
-            child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: related()),
+              Text('Language: ${describeEnum(_movie.language)}'),
+            ],
           ),
         ],
       ),
-    );
+      Wrap(children: [
+        Text('Source: ${describeEnum(_movie.source)}      '),
+        Text('UniqueId: ${_movie.uniqueId}'),
+        ElevatedButton(
+          onPressed: () =>
+              _viewWebPage('https://tpb.party/search/${_movie.title}'),
+          child: Text('External'),
+        ),
+        ElevatedButton(
+          onPressed: () => _viewWebPage(
+            makeImdbUrl(
+              _movie.uniqueId,
+              mobile: true,
+            ),
+          ),
+          child: Text('IMDB'),
+        ),
+      ]),
+    ];
   }
 
   List<Widget> related() {
@@ -224,10 +234,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         ),
       );
     }
-    return categories;
+    return [
+      Expanded(
+        child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start, children: categories),
+      )
+    ];
   }
 
-  void _launchURL(/*BuildContext context*/ String url) async {
+  void _launchURL(String url) async {
     try {
       await launch(
         url,
