@@ -10,14 +10,28 @@ const IMDB_MOBILE_URL = 'https://m.imdb.com';
 const IMDB_TITLE_URL = '/title/';
 const IMDB_PERSON_URL = '/name/';
 const IMDB_SUFFIX_URL = '?ref_=nv_sr_srsg_0';
+const IMDB_PHOTOS_SUFFIX = 'mediaindex';
+const IMDB_PARENTAL_SUFFIX = 'parentalguide';
 
-String makeImdbUrl(String key, {String path = '/', bool mobile = false}) {
+String makeImdbUrl(
+  String key, {
+  String path = '/',
+  bool mobile = false,
+  bool photos = false,
+  bool parentalGuide = false,
+}) {
   var url = mobile ? IMDB_MOBILE_URL : IMDB_BASE_URL;
   if (key.startsWith(IMDB_TITLE_PREFIX)) {
     url += IMDB_TITLE_URL;
   }
   if (key.startsWith(IMDB_PERSON_PREFIX)) {
     url += IMDB_PERSON_URL;
+  }
+  if (photos) {
+    path += IMDB_PHOTOS_SUFFIX;
+  }
+  if (parentalGuide) {
+    path += IMDB_PARENTAL_SUFFIX;
   }
   return url + key + path + IMDB_SUFFIX_URL;
 }
@@ -43,7 +57,7 @@ String getIdFromIMDBLink(String? link) {
   // Convert /name/nm0145681/?ref_=nm_sims_nm_t_9 to nm0145681
   var nameRegexpFormula = '$START_STRING($IMDB_PERSON_PATH)'
       '($MULTIPLE_NON_SLASH)(/$MULTIPLE_ANYTHING)$END_STRING';
-  // (group1)(group2)(group3) - only care about group 2
+  // (group1)(group2)(group3) - only care about group 2 - MULTIPLE_NON_SLASH
   return getGroup2(titleRegexpFormula) ?? getGroup2(nameRegexpFormula) ?? '';
 }
 

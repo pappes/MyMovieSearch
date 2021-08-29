@@ -12,6 +12,7 @@ import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/widgets/controls.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 import 'movie_search_results.dart';
 
@@ -160,7 +161,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       Expanded(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: poster(_movie.imageUrl),
+          children: poster(
+            _movie.imageUrl,
+            onTap: () => viewWebPage(
+              makeImdbUrl(_movie.uniqueId, photos: true, mobile: true),
+              context,
+            ),
+          ),
         ),
       )
     ];
@@ -176,16 +183,17 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
               '(${formatter.format(_movie.userRatingCount)})'),
           Wrap(
             children: [
-              new GestureDetector(
-                onTap: () => _viewWebPage(
-                  makeImdbUrl(
-                    _movie.uniqueId,
-                    path: '/parentalguide',
-                    mobile: true,
-                  ),
-                ),
+              GestureDetector(
                 child: Text(
                     'Censor Rating: ${describeEnum(_movie.censorRating)}     '),
+                onTap: () => viewWebPage(
+                  makeImdbUrl(
+                    _movie.uniqueId,
+                    parentalGuide: true,
+                    mobile: true,
+                  ),
+                  context,
+                ),
               ),
               Text('Language: ${describeEnum(_movie.language)}'),
             ],
@@ -196,16 +204,19 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         Text('Source: ${describeEnum(_movie.source)}      '),
         Text('UniqueId: ${_movie.uniqueId}'),
         ElevatedButton(
-          onPressed: () =>
-              _viewWebPage('https://tpb.party/search/${_movie.title}'),
+          onPressed: () => viewWebPage(
+            'https://tpb.party/search/${_movie.title}',
+            context,
+          ),
           child: Text('External'),
         ),
         ElevatedButton(
-          onPressed: () => _viewWebPage(
+          onPressed: () => viewWebPage(
             makeImdbUrl(
               _movie.uniqueId,
               mobile: true,
             ),
+            context,
           ),
           child: Text('IMDB'),
         ),
@@ -240,30 +251,5 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
             crossAxisAlignment: CrossAxisAlignment.start, children: categories),
       )
     ];
-  }
-
-  void _launchURL(String url) async {
-    try {
-      await launch(
-        url,
-        customTabsOption: CustomTabsOption(
-          toolbarColor: Theme.of(context).primaryColor,
-          enableDefaultShare: true,
-          enableUrlBarHiding: true,
-          showPageTitle: true,
-        ),
-      );
-    } catch (e) {
-      // An exception is thrown if browser app is not installed on Android device.
-      debugPrint(e.toString());
-    }
-  }
-
-  void _viewWebPage(String url) {
-    if (Platform.isAndroid) {
-      _launchURL(url);
-    } else {
-      showPopup(context, url);
-    }
   }
 }

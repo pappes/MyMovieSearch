@@ -12,6 +12,7 @@ import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/widgets/controls.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 import 'movie_search_results.dart';
 
@@ -112,25 +113,13 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: leftColumn() + posterSection(!_mobileLayout),
+            children: leftColumn() +
+                // Only show right column on tablet
+                (_mobileLayout ? [] : posterSection()),
           ),
         ),
       ],
     );
-  }
-
-  List<Widget> posterSection(bool showPoster) {
-    if (!showPoster) {
-      return [];
-    }
-    return [
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: poster(_person.imageUrl),
-        ),
-      )
-    ];
   }
 
   List<Widget> leftColumn() {
@@ -152,7 +141,8 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
                       child: Text('IMDB'),
                     ),
                   ] +
-                  posterSection(_mobileLayout) +
+                  // Only show poster in left column on mobile
+                  (_mobileLayout ? posterSection() : []) +
                   [
                     Text(
                       '\nDescription: \n${_person.description} ',
@@ -164,6 +154,23 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
           ],
         ),
       ),
+    ];
+  }
+
+  List<Widget> posterSection() {
+    return [
+      Expanded(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: poster(
+            _person.imageUrl,
+            onTap: () => viewWebPage(
+              makeImdbUrl(_person.uniqueId, photos: true, mobile: true),
+              context,
+            ),
+          ),
+        ),
+      )
     ];
   }
 

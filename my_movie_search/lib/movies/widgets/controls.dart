@@ -8,13 +8,16 @@ bool useMobileLayout(BuildContext context) {
   return MediaQuery.of(context).size.width < 600;
 }
 
-List<Widget> poster(String url) {
+List<Widget> poster(String url, {void Function()? onTap}) {
   return [
     url.startsWith('http')
-        ? Image(
-            image: NetworkImage(getBigImage(url)),
-            alignment: Alignment.topCenter,
-            fit: BoxFit.fitWidth,
+        ? GestureDetector(
+            child: Image(
+              image: NetworkImage(getBigImage(url)),
+              alignment: Alignment.topCenter,
+              fit: BoxFit.fitWidth,
+            ),
+            onTap: onTap,
           )
         : Text('NoImage'),
     SelectableText(url, style: tinyFont),
