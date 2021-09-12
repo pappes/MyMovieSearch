@@ -135,6 +135,6 @@ void main() async {
       var queries = _makeQueries(300);
       var queryResult = _makeResults(queries.length);
       await testRead(queries, queryResult);
-    }, timeout: Timeout(Duration(seconds: 45)));
+    }, timeout: Timeout(Duration(seconds: 120)));
   });
 }

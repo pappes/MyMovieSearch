@@ -1,5 +1,6 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 
 //query string https://api.themoviedb.org/3/movie/{movieID}?api_key={api_key}
 //json format
@@ -91,20 +92,15 @@ class TmdbMovieDetailConverter {
     movie.runTime = getDuration(map[inner_element_runtime]) ?? movie.runTime;
     movie.userRatingCount =
         map[inner_element_vote_count] ?? movie.userRatingCount;
-    movie..userRating = map[inner_element_vote_average] ?? movie.userRating;
-    /*movie.uniqueId = map[inner_element_imdb_id] ?? movie.uniqueId;
-    movie.uniqueId = map[inner_element_imdb_id] ?? movie.uniqueId;
-    movie.uniqueId = map[inner_element_imdb_id] ?? movie.uniqueId;
-    movie.uniqueId = map[inner_element_imdb_id] ?? movie.uniqueId;
-    movie.uniqueId = map[inner_element_imdb_id] ?? movie.uniqueId;
-    movie.uniqueId = map[inner_element_imdb_id] ?? movie.uniqueId;
-    movie.uniqueId = map[inner_element_imdb_id] ?? movie.uniqueId;
-
-    
+    movie.userRating = map[inner_element_vote_average] ?? movie.userRating;
+    movie.languages.combineUnique(map[inner_element_original_language]);
+    movie.languages.combineUnique(map[inner_element_spoken_languages]);
+    /*TODO
     const inner_element_genres = 'genres';
     const inner_element_poster_path = 'poster_path';
-    const inner_element_original_language = 'original_language';
-    const inner_element_spoken_languages = 'spoken_languages';*/
+    movie.uniqueId = map[inner_element_genres] ?? movie.uniqueId;
+    movie.uniqueId = map[inner_element_poster_path] ?? movie.uniqueId;*/
+
     return movie;
   }
 

@@ -2,6 +2,7 @@ import 'package:html_unescape/html_unescape_small.dart';
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
@@ -49,9 +50,9 @@ class ImdbMoviePageConverter {
     movie.description = map[outer_element_description] ?? movie.title;
     movie.description += '\nGenres: ${map[outer_element_genre]}';
     movie.description += '\nKeywords: ${map[outer_element_keywords]}';
-    movie.description += '\nLanguages: ${map[outer_element_languages]}';
     movie.imageUrl = map[outer_element_image] ?? movie.imageUrl;
     movie.language = map[outer_element_language] ?? movie.language;
+    movie.languages.combineUnique(map[outer_element_languages]);
     movie.censorRating = getImdbCensorRating(
           map[outer_element_censor_rating],
         ) ??

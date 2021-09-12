@@ -16,8 +16,8 @@ final expectedDTOStream = streamMovieResultDTOFromJsonMap([
     movieResultDTOYear: '2016',
     movieResultDTODescription: '1234 is a movie ... terror in the country.'
         '\nGenres: Drama'
-        '\nKeywords: terror'
-        '\nLanguages: null',
+        '\nKeywords: terror',
+    movieResultLanguages: 'null',
 // movieResultDTOYearRange = 'yearRange';
     movieResultDTOType: MovieContentType.movie.toString(),
     movieResultDTOUserRating: '6.5',

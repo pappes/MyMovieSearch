@@ -231,12 +231,14 @@ class QueryIMDBTitleDetails
           ?.parent; // ul - list of languages.
     }
     if (null != languageHtml && languageHtml.hasChildNodes()) {
-      movieData[outer_element_languages] =
-          languageHtml.querySelector('div')?.text;
       var silent = languageHtml.querySelector('a[href*="language=zxx"]');
       if (null != silent) {
         movieData[outer_element_language] = LanguageType.silent;
         return;
+      }
+      movieData[outer_element_languages] = [];
+      for (var item in languageHtml.querySelectorAll('a[href*="language="]')) {
+        movieData[outer_element_languages].add(item.text);
       }
       for (var item in languageHtml.querySelectorAll('a[href*="language="]')) {
         // Loop through all languages in order to see how dominant English is.

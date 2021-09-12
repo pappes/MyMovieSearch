@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' show max;
 
 import 'package:flutter/material.dart';
+import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 
 import 'metadata_dto.dart';
@@ -22,6 +23,7 @@ class MovieResultDTO {
   Duration runTime = Duration(hours: 0, minutes: 0, seconds: 0);
   String imageUrl = '';
   LanguageType language = LanguageType.none;
+  List<String> languages = [];
   // Related DTOs are in a category, then keyed by uniqueId
   Map<String, Map<String, MovieResultDTO>> related = {};
 }
@@ -71,6 +73,7 @@ final String movieResultDTOCensorRating = 'censorRating';
 final String movieResultDTORunTime = 'runTime';
 final String movieResultImageUrl = 'imageUrl';
 final String movieResultLanguage = 'language';
+final String movieResultLanguages = 'languages';
 final String movieResultRelated = 'related';
 final String movieResultDTOUninitialised = '-1';
 final String movieResultDTOMessagePrefix = '-';
@@ -175,6 +178,8 @@ extension MapDTOConversion on Map<String, String> {
     dto.language =
         getEnumFromString(this[movieResultLanguage], LanguageType.values) ??
             dto.language;
+    dto.languages =
+        ListHelper.fromJson(this[movieResultLanguages]) as List<String>;
     //TODO related
     return dto;
   }
@@ -204,6 +209,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (0 != this.runTime.inSeconds)
       map[movieResultDTORunTime] = this.runTime.inSeconds;
     map[movieResultLanguage] = this.language.toString();
+    map[movieResultLanguages] = json.encode(this.languages);
 
     if (!excludeCopywritedData) {
       if ('' != this.description)
@@ -262,6 +268,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       this.censorRating = bestval(newValue.censorRating, this.censorRating);
       this.imageUrl = bestval(newValue.imageUrl, this.imageUrl);
       this.language = bestval(newValue.language, this.language);
+      this.languages = bestList(newValue.languages, this.languages);
       this.userRating = bestUserRating(
         newValue.userRating,
         newValue.userRatingCount,
@@ -307,6 +314,15 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (lastNumberFromString(a.toString()) < lastNumberFromString(b.toString()))
       return b;
     return a;
+  }
+
+  List<String> bestList(List<String> a, List<String> b) {
+    // Add both lists to a set to remove duplicates;
+    Set<String> result = {};
+    result.addAll(a);
+    result.addAll(b);
+
+    return result.toList();
   }
 
   double bestUserRating(
@@ -357,6 +373,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     map[movieResultDTORunTime] = this.runTime;
     map[movieResultImageUrl] = this.imageUrl;
     map[movieResultLanguage] = this.language;
+    map[movieResultLanguages] = this.languages;
     map[movieResultRelated] = this.related;
     return map;
   }
@@ -398,6 +415,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (this.language != other.language)
       print(
           'language mismatch left(${this.language}) right (${other.language})');
+    if (this.languages.toString() != other.languages.toString())
+      print(
+          'languages mismatch left(${this.languages}) right (${other.languages})');
     if (this.imageUrl != other.imageUrl)
       print(
           'imageUrl mismatch left(${this.imageUrl}) right (${other.imageUrl})');
@@ -418,6 +438,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         this.censorRating == other.censorRating &&
         this.runTime == other.runTime &&
         this.language == other.language &&
+        this.languages.toString() == other.languages.toString() &&
         this.imageUrl == other.imageUrl;
     // TODO reinstate when toMovieResultDTO can convert text to related.
     // this.related.toPrintableString() == other.related.toPrintableString();

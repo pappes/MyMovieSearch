@@ -128,6 +128,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
                           _movie.description,
                           style: biggerFont,
                         ),
+                        Text('Languages: ${_movie.languages.toString()}'),
                       ],
                     ),
                   ] +
