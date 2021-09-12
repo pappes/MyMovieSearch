@@ -192,27 +192,27 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     Map<String, dynamic> map = Map();
     map[movieResultDTOSource] = this.source.toString();
     map[movieResultDTOUniqueId] = this.uniqueId;
-    if ('' == this.alternateId)
+    if ('' != this.alternateId)
       map[movieResultDTOAlternateId] = this.alternateId;
-    if ('' == this.title) map[movieResultDTOTitle] = this.title;
-    if ('' == this.alternateTitle)
+    if ('' != this.title) map[movieResultDTOTitle] = this.title;
+    if ('' != this.alternateTitle)
       map[movieResultDTOAlternateTitle] = this.alternateTitle;
 
     map[movieResultDTOType] = this.type.toString();
-    if ('' == this.description) map[movieResultDTOYear] = this.description;
-    if ('' == this.yearRange) map[movieResultDTOYearRange] = this.yearRange;
-    if (0 == this.runTime.inSeconds)
+    if ('' != this.year) map[movieResultDTOYear] = this.year;
+    if ('' != this.yearRange) map[movieResultDTOYearRange] = this.yearRange;
+    if (0 != this.runTime.inSeconds)
       map[movieResultDTORunTime] = this.runTime.inSeconds;
     map[movieResultLanguage] = this.language.toString();
 
     if (!excludeCopywritedData) {
-      if ('' == this.description)
+      if ('' != this.description)
         map[movieResultDTODescription] = this.description;
-      if (0 == this.userRating) map[movieResultDTOUserRating] = this.userRating;
-      if (0 == this.userRatingCount)
+      if (0 != this.userRating) map[movieResultDTOUserRating] = this.userRating;
+      if (0 != this.userRatingCount)
         map[movieResultDTOUserRatingCount] = this.userRatingCount;
       map[movieResultDTOCensorRating] = this.censorRating.toString();
-      if ('' == this.imageUrl) map[movieResultImageUrl] = this.imageUrl;
+      if ('' != this.imageUrl) map[movieResultImageUrl] = this.imageUrl;
     }
     //TODO: related
     Map<String, String> related = {};
@@ -364,22 +364,39 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   bool matches(MovieResultDTO other) {
     if (this.title == other.title && this.title == 'unknown')
       return true;
-    else
-      return this.source == other.source &&
-          this.uniqueId == other.uniqueId &&
-          this.alternateId == other.alternateId &&
-          this.title == other.title &&
-          this.alternateTitle == other.alternateTitle &&
-          this.description == other.description &&
-          this.type == other.type &&
-          this.year == other.year &&
-          this.yearRange == other.yearRange &&
-          this.userRating == other.userRating &&
-          this.censorRating == other.censorRating &&
-          this.runTime == other.runTime &&
-          this.language == other.language &&
-          this.imageUrl == other.imageUrl &&
-          this.related.toPrintableString() == other.related.toPrintableString();
+    else if (this.source != other.source) print('bad source');
+    if (this.uniqueId != other.uniqueId) print('bad uniqueId');
+    if (this.alternateId != other.alternateId) print('bad alternateId');
+    if (this.title != other.title) print('bad title');
+    if (this.alternateTitle != other.alternateTitle)
+      print('bad alternateTitle');
+    if (this.description != other.description) print('bad description');
+    if (this.type != other.type) print('bad type');
+    if (this.year != other.year) print('bad year');
+    if (this.yearRange != other.yearRange) print('bad yearRange');
+    if (this.userRating != other.userRating) print('bad userRating');
+    if (this.censorRating != other.censorRating) print('bad censorRating');
+    if (this.runTime != other.runTime) print('bad runTime');
+    if (this.language != other.language) print('bad language');
+    if (this.imageUrl != other.imageUrl)
+      print('bad imageUrl left(${this.imageUrl}) right (${other.imageUrl})');
+    if (this.related.toPrintableString() != other.related.toPrintableString())
+      print('bad related');
+    return this.source == other.source &&
+        this.uniqueId == other.uniqueId &&
+        this.alternateId == other.alternateId &&
+        this.title == other.title &&
+        this.alternateTitle == other.alternateTitle &&
+        this.description == other.description &&
+        this.type == other.type &&
+        this.year == other.year &&
+        this.yearRange == other.yearRange &&
+        this.userRating == other.userRating &&
+        this.censorRating == other.censorRating &&
+        this.runTime == other.runTime &&
+        this.language == other.language &&
+        this.imageUrl == other.imageUrl &&
+        this.related.toPrintableString() == other.related.toPrintableString();
   }
 }
 

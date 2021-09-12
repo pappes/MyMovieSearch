@@ -163,15 +163,16 @@ void main() {
 
       // Compare the stream output to the expected output.
       void checkOutput(MovieResultDTO streamOutput) {
-        var expectedValue = expectedDTO[dtoCount];
+        var currentExpected = dtoCount;
+        dtoCount++;
+        var expectedValue = expectedDTO[currentExpected];
         var isExpectedValue = MovieResultDTOMatcher(expectedValue);
         expect(
           streamOutput,
           isExpectedValue,
           reason: 'Emmitted DTO $streamOutput} '
-              'needs to match expected DTO ${expectedDTO[dtoCount]}',
+              'needs to match expected DTO[$currentExpected] ${expectedDTO[currentExpected]}',
         );
-        dtoCount++;
       }
 
       var expectFn = expectAsync1<void, MovieResultDTO>(

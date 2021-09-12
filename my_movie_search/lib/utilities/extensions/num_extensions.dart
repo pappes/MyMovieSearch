@@ -12,7 +12,7 @@ extension DoubleHelper on double {
       var text = formattedText.toString().replaceAll(',', '');
       count = double.tryParse(text);
     }
-    if (count == 0 && zeroValueSubstitute != null) return zeroValueSubstitute;
+    if (count == 0) return zeroValueSubstitute;
     return count ?? nullValueSubstitute;
   }
 }

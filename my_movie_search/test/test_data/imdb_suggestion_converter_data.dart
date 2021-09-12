@@ -32,7 +32,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "q": "feature",
     "vt": 35,
     "i": [
-      "https://m.media-amazon.com/images/M/MV5BNWY2NWE0NWEtZGUwMC00NWMwLTkyNzUtNmIxMmIyYzA0MjNiXkEyXkFqcGdeQXVyMTA2OTQ3MTUy._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B...Q3MTUy._V1_.jpg",
       2764,
       4096
     ],
@@ -42,7 +42,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
         "id": "vi3944268057",
         "s": "2:31",
         "i": [
-          "https://m.media-amazon.com/images/M/MV5BMzVkZTY5YzMtMThkZS00YmI1LWEwMWUtNDhhOGQ3N2MwMmRlXkEyXkFqcGdeQWRvb2xpbmhk._V1_.jpg",
+          "https://m.media-amazon.com/images/M/MV5B...Rvb2xpbmhk._V1_.jpg",
           1404,
           790
         ]
@@ -52,7 +52,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
         "id": "vi321831193",
         "s": "3:26",
         "i": [
-          "https://m.media-amazon.com/images/M/MV5BODNjNmI0N2MtYTlkYi00YzgxLTg4NTAtMTFiNWRkY2U0NjVmXkEyXkFqcGdeQWRvb2xpbmhk._V1_.jpg",
+          "https://m.media-amazon.com/images/M/MV5B...QWRvb2xpbmhk._V1_.jpg",
           1343,
           756
         ]
@@ -62,7 +62,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
         "id": "vi2517680409",
         "s": "1:32",
         "i": [
-          "https://m.media-amazon.com/images/M/MV5BOGE3NTkyNTYtMGI2ZC00MGY2LWExZDAtY2VkZWI2YTBlNzAxXkEyXkFqcGdeQVRoaXJkUGFydHlJbmdlc3Rpb25Xb3JrZmxvdw@@._V1_.jpg",
+          "https://m.media-amazon.com/images/M/MV5B...Zmxvdw@@._V1_.jpg",
           1920,
           1080
         ]
@@ -77,7 +77,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "q": "feature",
     "vt": 23,
     "i": [
-      "https://m.media-amazon.com/images/M/MV5B...ODE5NzE3OTE@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B...zE3OTE@._V1_.jpg",
       2025,
       3000
     ],
@@ -121,7 +121,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "y": 2011,
     "q": "TV movie",
     "i": [
-      "https://m.media-amazon.com/images/M/MV5B...M4ODM4NA@@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B...DM4NA@@._V1_.jpg",
       761,
       1800
     ]
@@ -146,7 +146,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "y": 2019,
     "q": "feature",
     "i": [
-      "https://m.media-amazon.com/images/M/MV5B...UxMzE@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5BZ...UxMzE@._V1_.jpg",
       1365,
       2048
     ]
@@ -158,7 +158,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "y": 1974,
     "q": "TV movie",
     "i": [
-      "https://m.media-amazon.com/images/M/MV5B.NTkwMDE@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B...kwMDE@._V1_.jpg",
       353,
       500
     ]
@@ -170,7 +170,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "y": 2009,
     "q": "video",
     "i": [
-      "https://m.media-amazon.com/images/M/MV5B...ODE1MDc@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B...xODE1MDc@._V1_.jpg",
       500,
       741
     ]
@@ -180,7 +180,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
     "id": "nm2628854",
     "s": "Actress, Jimmy Kimmel Live! (2006-2007)",
     "i": [
-      "https://m.media-amazon.com/images/M/MV5B...DcxNQ@@._V1_.jpg",
+      "https://m.media-amazon.com/images/M/MV5B...cxNQ@@._V1_.jpg",
       640,
       428
     ]

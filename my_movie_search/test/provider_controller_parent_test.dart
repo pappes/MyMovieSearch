@@ -36,7 +36,7 @@ List<MovieResultDTO> _makeResults(int qty) {
   List<MovieResultDTO> results = [];
   for (int i = 0; i < qty; i++) {
     results.add({
-      'source': DataSourceType.imdb,
+      'source': DataSourceType.imdb.toString(),
       'uniqueId': '123',
       'description': '123.',
     }.toMovieResultDTO());
