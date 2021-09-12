@@ -107,7 +107,12 @@ class ImdbMoviePageConverter {
 
   static getPeople(MovieResultDTO movie, dynamic people, String label) {
     if (null != people) {
-      for (var relatedMap in people) {
+      List peopleList;
+      if (people is List)
+        peopleList = people;
+      else
+        peopleList = [people];
+      for (var relatedMap in peopleList) {
         MovieResultDTO? dto = dtoFromPersonMap(relatedMap);
         if (null != dto) {
           movie.addRelated(label, dto);

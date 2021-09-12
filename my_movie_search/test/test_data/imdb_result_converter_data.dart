@@ -12,15 +12,19 @@ final expectedDTOStream = streamMovieResultDTOFromJsonMap([
   {
     movieResultDTOTitle: '1234',
     movieResultDTOUniqueId: 'tt7602562',
-    movieResultDTOSource: DataSourceType.imdb,
-    movieResultDTOYear: 2016,
-    movieResultDTODescription: '1234 is a movie ... terror in the country.',
+    movieResultDTOSource: DataSourceType.imdb.toString(),
+    movieResultDTOYear: '2016',
+    movieResultDTODescription: '1234 is a movie ... terror in the country.'
+        '\nGenres: Drama'
+        '\nKeywords: terror'
+        '\nLanguages: null',
 // movieResultDTOYearRange = 'yearRange';
-    movieResultDTOType: MovieContentType.movie,
-    movieResultDTOUserRating: 6.5,
-    movieResultDTOUserRatingCount: 10,
+    movieResultDTOType: MovieContentType.movie.toString(),
+    movieResultDTOUserRating: '6.5',
+    movieResultDTOUserRatingCount: '10',
 // movieResultDTOCensorRating = 'censorRating';
-    //movieResultDTORunTime: 'Wonder Woman',
+    movieResultImageUrl:
+        'https://m.media-amazon.com/images/M/MV5B...c4OTM4NjE@._V1_.jpg',
   }
 ]);
 

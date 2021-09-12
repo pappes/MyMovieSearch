@@ -89,8 +89,8 @@ Stream<List<int>> emitConsolidatedByteStream(String str) async* {
 }
 
 Stream<MovieResultDTO> streamMovieResultDTOFromJsonMap(
-    Iterable<Map<dynamic, dynamic>> records) async* {
-  for (Map record in records) {
-    yield (record as Map<String, String>).toMovieResultDTO();
+    Iterable<Map<String, String>> records) async* {
+  for (Map<String, String> record in records) {
+    yield (record).toMovieResultDTO();
   }
 }

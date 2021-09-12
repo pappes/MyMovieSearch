@@ -362,26 +362,49 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   }
 
   bool matches(MovieResultDTO other) {
-    if (this.title == other.title && this.title == 'unknown')
-      return true;
-    else if (this.source != other.source) print('bad source');
-    if (this.uniqueId != other.uniqueId) print('bad uniqueId');
-    if (this.alternateId != other.alternateId) print('bad alternateId');
-    if (this.title != other.title) print('bad title');
+    if (this.title == other.title && this.title == 'unknown') return true;
+
+    if (this.source != other.source)
+      print('source mismatch left(${this.source}) right (${other.source})');
+    if (this.uniqueId != other.uniqueId)
+      print(
+          'uniqueId mismatch left(${this.uniqueId}) right (${other.uniqueId})');
+    if (this.alternateId != other.alternateId)
+      print(
+          'alternateId mismatch left(${this.alternateId}) right (${other.alternateId})');
+    if (this.title != other.title)
+      print('title mismatch left(${this.title}) right (${other.title})');
     if (this.alternateTitle != other.alternateTitle)
-      print('bad alternateTitle');
-    if (this.description != other.description) print('bad description');
-    if (this.type != other.type) print('bad type');
-    if (this.year != other.year) print('bad year');
-    if (this.yearRange != other.yearRange) print('bad yearRange');
-    if (this.userRating != other.userRating) print('bad userRating');
-    if (this.censorRating != other.censorRating) print('bad censorRating');
-    if (this.runTime != other.runTime) print('bad runTime');
-    if (this.language != other.language) print('bad language');
+      print(
+          'alternateTitle mismatch left(${this.alternateTitle}) right (${other.alternateTitle})');
+    if (this.description != other.description)
+      print(
+          'description mismatch left(${this.description}) right (${other.description})');
+    if (this.type != other.type)
+      print('type mismatch left(${this.type}) right (${other.type})');
+    if (this.year != other.year)
+      print('year mismatch left(${this.year}) right (${other.year})');
+    if (this.yearRange != other.yearRange)
+      print(
+          'yearRange mismatch left(${this.yearRange}) right (${other.yearRange})');
+    if (this.userRating != other.userRating)
+      print(
+          'userRating mismatch left(${this.userRating}) right (${other.userRating})');
+    if (this.censorRating != other.censorRating)
+      print(
+          'censorRating mismatch left(${this.censorRating}) right (${other.censorRating})');
+    if (this.runTime != other.runTime)
+      print('runTime mismatch left(${this.runTime}) right (${other.runTime})');
+    if (this.language != other.language)
+      print(
+          'language mismatch left(${this.language}) right (${other.language})');
     if (this.imageUrl != other.imageUrl)
-      print('bad imageUrl left(${this.imageUrl}) right (${other.imageUrl})');
+      print(
+          'imageUrl mismatch left(${this.imageUrl}) right (${other.imageUrl})');
     if (this.related.toPrintableString() != other.related.toPrintableString())
-      print('bad related');
+      print(
+          'related mismatch left(${this.related.toPrintableString()}) right (${other.related.toPrintableString()})');
+
     return this.source == other.source &&
         this.uniqueId == other.uniqueId &&
         this.alternateId == other.alternateId &&
@@ -395,8 +418,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         this.censorRating == other.censorRating &&
         this.runTime == other.runTime &&
         this.language == other.language &&
-        this.imageUrl == other.imageUrl &&
-        this.related.toPrintableString() == other.related.toPrintableString();
+        this.imageUrl == other.imageUrl;
+    // TODO reinstate when toMovieResultDTO can convert text to related.
+    // this.related.toPrintableString() == other.related.toPrintableString();
   }
 }
 

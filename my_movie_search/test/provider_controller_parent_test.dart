@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
@@ -27,7 +28,7 @@ final _imdbHtmlSampleFull = r'''
 List<String> _makeQueries(int qty) {
   List<String> results = [];
   for (int i = 0; i < qty; i++) {
-    results.add('123');
+    results.add((1000 + i).toString());
   }
   return results;
 }
@@ -45,7 +46,7 @@ List<MovieResultDTO> _makeResults(int qty) {
 }
 
 Stream<String> _offlineSearch(String dummy) async* {
-  await Future.delayed(const Duration(seconds: 10), () => "1");
+  await Future.delayed(const Duration(seconds: 10), () => '1');
   yield _imdbHtmlSampleFull;
 }
 
@@ -53,25 +54,29 @@ Uri constructURI(String searchText, {int pageNumber = 1}) {
   final baseURL = 'https://www.imdb.com/title/';
   final baseURLsuffix = '/?ref_=fn_tt_tt_1';
   var url = '${baseURL}tt0451279$baseURLsuffix';
-  print("fetching imdb details $url");
+  print('fetching imdb details $url');
 
-  url = 'http://localhost:8080?origin=https://www.imdb.com&'
-      'referer=https://www.imdb.com/&'
-      'destination=${Uri.encodeQueryComponent(url)}';
+  // Route web requests through a tunnel if using the Javascript
+  // XMLHttpRequest http client library.
+  if (kIsWeb)
+    url = 'http://localhost:8080?origin=https://www.imdb.com&'
+        'referer=https://www.imdb.com/&'
+        'destination=${Uri.encodeQueryComponent(url)}';
+
   return Uri.parse(url);
 }
 
 Future<Stream<String>> _onlineSearch(dynamic criteria) async {
   final encoded = Uri.encodeQueryComponent(criteria!.criteriaTitle);
   final address = constructURI(encoded);
-  print("fetching redirected details ${address.toString()}");
+  print('fetching redirected details ${address.toString()}');
 
   //logger.d('querying ${address.toString()}');
   final client = await HttpClient().getUrl(address);
   //constructHeaders(client.headers);
   final request = client.close();
 
-  //await Future.delayed(const Duration(seconds: 10), () => "1");
+  //await Future.delayed(const Duration(seconds: 10), () => '1');
   var response;
   try {
     response = await request;
@@ -130,6 +135,6 @@ void main() async {
       var queries = _makeQueries(300);
       var queryResult = _makeResults(queries.length);
       await testRead(queries, queryResult);
-    });
+    }, timeout: Timeout(Duration(seconds: 45)));
   });
 }
