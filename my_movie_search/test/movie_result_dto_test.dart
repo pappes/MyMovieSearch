@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-
+import 'test_helper.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -116,6 +117,41 @@ void main() {
       testYearCompare('1999', 1999);
       testYearCompare('2000', 2000);
       testYearCompare('1999-2000', 2000);
+    });
+  });
+
+  group('toMap_toMovieResultDTO', () {
+    MovieResultDTO makeDTO(String sample) {
+      var dto = MovieResultDTO();
+
+      dto.source = DataSourceType.wiki;
+      dto.uniqueId = sample + '_uniqueId';
+      dto.alternateId = sample + '_alternateId';
+      dto.title = sample + '_title';
+      dto.alternateTitle = sample + '_alternateTitle';
+      dto.description = sample + '_description';
+      dto.type = MovieContentType.custom;
+      dto.year = 123;
+      dto.yearRange = sample + '_yearRange';
+      dto.userRating = 456;
+      dto.userRatingCount = 789;
+      dto.censorRating = CensorRatingType.family;
+      dto.runTime = Duration(hours: 1, minutes: 2, seconds: 3);
+      dto.imageUrl = sample + '_imageUrl';
+      dto.language = LanguageType.mostlyEnglish;
+      dto.languages = [sample + '_language1', sample + '_language2'];
+      return dto;
+    }
+
+    test_toMap_toMovieResultDTO(MovieResultDTO input) {
+      var map = input.toMap(excludeCopywritedData: false);
+      print(map.toString());
+      var output = map.toMovieResultDTO();
+      expect(input, MovieResultDTOMatcher(output));
+    }
+
+    test('single', () {
+      test_toMap_toMovieResultDTO(makeDTO('abc'));
     });
   });
 }

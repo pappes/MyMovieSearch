@@ -193,38 +193,49 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return this;
   }
 
-  Map<String, dynamic> toMap({bool excludeCopywritedData = true}) {
-    Map<String, dynamic> map = Map();
-    map[movieResultDTOSource] = this.source.toString();
-    map[movieResultDTOUniqueId] = this.uniqueId;
-    if ('' != this.alternateId)
+  Map<String, String> toMap({bool excludeCopywritedData = true}) {
+    Map<String, String> map = Map();
+    var defaultVals = MovieResultDTO();
+    if (this.source != defaultVals.source)
+      map[movieResultDTOSource] = this.source.toString();
+    if (this.uniqueId != defaultVals.uniqueId)
+      map[movieResultDTOUniqueId] = this.uniqueId;
+    if (this.alternateId != defaultVals.alternateId)
       map[movieResultDTOAlternateId] = this.alternateId;
-    if ('' != this.title) map[movieResultDTOTitle] = this.title;
-    if ('' != this.alternateTitle)
+    if (this.title != defaultVals.title) map[movieResultDTOTitle] = this.title;
+    if (this.alternateTitle != defaultVals.alternateTitle)
       map[movieResultDTOAlternateTitle] = this.alternateTitle;
 
-    map[movieResultDTOType] = this.type.toString();
-    if ('' != this.year) map[movieResultDTOYear] = this.year;
-    if ('' != this.yearRange) map[movieResultDTOYearRange] = this.yearRange;
-    if (0 != this.runTime.inSeconds)
-      map[movieResultDTORunTime] = this.runTime.inSeconds;
-    map[movieResultLanguage] = this.language.toString();
-    map[movieResultLanguages] = json.encode(this.languages);
+    if (this.type != defaultVals.type)
+      map[movieResultDTOType] = this.type.toString();
+    if (this.year != defaultVals.year)
+      map[movieResultDTOYear] = this.year.toString();
+    if (this.yearRange != defaultVals.yearRange)
+      map[movieResultDTOYearRange] = this.yearRange;
+    if (this.runTime != defaultVals.runTime)
+      map[movieResultDTORunTime] = this.runTime.inSeconds.toString();
+    if (this.language != defaultVals.language)
+      map[movieResultLanguage] = this.language.toString();
+    if (this.languages != defaultVals.languages)
+      map[movieResultLanguages] = json.encode(this.languages);
 
     if (!excludeCopywritedData) {
-      if ('' != this.description)
+      if (this.description != defaultVals.description)
         map[movieResultDTODescription] = this.description;
-      if (0 != this.userRating) map[movieResultDTOUserRating] = this.userRating;
-      if (0 != this.userRatingCount)
-        map[movieResultDTOUserRatingCount] = this.userRatingCount;
-      map[movieResultDTOCensorRating] = this.censorRating.toString();
-      if ('' != this.imageUrl) map[movieResultImageUrl] = this.imageUrl;
+      if (this.userRating != defaultVals.userRating)
+        map[movieResultDTOUserRating] = this.userRating.toString();
+      if (this.userRatingCount != defaultVals.userRatingCount)
+        map[movieResultDTOUserRatingCount] = this.userRatingCount.toString();
+      if (this.censorRating != defaultVals.censorRating)
+        map[movieResultDTOCensorRating] = this.censorRating.toString();
+      if (this.imageUrl != defaultVals.imageUrl)
+        map[movieResultImageUrl] = this.imageUrl;
     }
     //TODO: related
     Map<String, String> related = {};
     this.related.forEach((key, childMap) => // Get comma delimted uniqueIds
         related[key] = (childMap).keys.toString());
-    map[movieResultRelated] = related;
+    map[movieResultRelated] = related.toString();
     return map;
   }
 

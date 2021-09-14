@@ -9,7 +9,7 @@ final String lastAccess = 'lastAccess';
 class DatabaseHelper {
   // Database helper methods:
   Future<void> addMovie(MovieResultDTO movie) {
-    var map = movie.toMap();
+    Map<String, dynamic> map = movie.toMap();
     map[lastAccess] = FieldValue.serverTimestamp();
 
     var table = FirebaseFirestore.instance.collection(tableMovie);
