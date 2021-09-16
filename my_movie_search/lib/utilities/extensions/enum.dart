@@ -1,7 +1,10 @@
-dynamic getEnumFromString(String? val, List values) {
-  for (var element in values) {
-    if (element.toString() == val) {
-      return element;
+dynamic getEnumValue(dynamic val, List values) {
+  if (val != null) {
+    String str = val.toString();
+    for (var element in values) {
+      if (element.toString() == str) {
+        return element;
+      }
     }
   }
 }

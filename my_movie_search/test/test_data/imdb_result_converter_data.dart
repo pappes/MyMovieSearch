@@ -17,13 +17,13 @@ final expectedDTOStream = streamMovieResultDTOFromJsonMap([
     movieResultDTODescription: '1234 is a movie ... terror in the country.'
         '\nGenres: Drama'
         '\nKeywords: terror',
-    movieResultLanguages: 'null',
+    movieResultDTOLanguages: 'null',
 // movieResultDTOYearRange = 'yearRange';
     movieResultDTOType: MovieContentType.movie.toString(),
     movieResultDTOUserRating: '6.5',
     movieResultDTOUserRatingCount: '10',
 // movieResultDTOCensorRating = 'censorRating';
-    movieResultImageUrl:
+    movieResultDTOImageUrl:
         'https://m.media-amazon.com/images/M/MV5B...c4OTM4NjE@._V1_.jpg',
   }
 ]);

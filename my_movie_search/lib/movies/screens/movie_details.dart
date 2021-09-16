@@ -122,17 +122,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
                   [
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        BoldLabel('Description:'),
-                        Text(
-                          _movie.description,
-                          style: biggerFont,
-                        ),
-                        Text('Languages: ${_movie.languages.toString()}'),
-                      ],
+                      children: description() + related(),
                     ),
-                  ] +
-                  related(),
+                  ],
             ),
           ],
         ),
@@ -208,6 +200,17 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     ];
   }
 
+  List<Widget> description() {
+    return [
+      BoldLabel('Description:'),
+      Text(
+        _movie.description,
+        style: biggerFont,
+      ),
+      Text('Languages: ${_movie.languages.toString()}'),
+    ];
+  }
+
   List<Widget> related() {
     List<Widget> categories = [];
     for (var category in _movie.related.entries) {
@@ -230,11 +233,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         ),
       );
     }
-    return [
-      Expanded(
-        child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start, children: categories),
-      )
-    ];
+    return categories;
   }
 }

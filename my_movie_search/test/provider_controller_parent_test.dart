@@ -9,6 +9,8 @@ import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 
+import 'test_helper.dart';
+
 ////////////////////////////////////////////////////////////////////////////////
 /// Mock provider
 ////////////////////////////////////////////////////////////////////////////////
@@ -122,7 +124,7 @@ void main() async {
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emmitted DTO list ${queryResult.toString()} '
             'needs to match expected DTO list ${expectedValue.toString()}',
-      );*/
+      ); */
     }
 
     test('Run read(3)', () async {
@@ -131,10 +133,12 @@ void main() async {
       await testRead(queries, queryResult);
     });
 
+    /* only run test occasionaly as it hammers IMDB
     test('Run read(300)', () async {
       var queries = _makeQueries(300);
       var queryResult = _makeResults(queries.length);
       await testRead(queries, queryResult);
     }, timeout: Timeout(Duration(seconds: 120)));
+    */
   });
 }

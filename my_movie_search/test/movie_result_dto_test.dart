@@ -94,12 +94,14 @@ void main() {
       testYearCompare(0, '1980-2000', 0, '1998-1999', 1);
       testYearCompare(2000, '1990-1995', 1997, '1998-1999', 1);
       testYearCompare(1990, '1980-2000', 1997, '1998-1999', 1);
+      testYearCompare(0, '1998-', 0, '1980-', 1);
 
       // Year on left should be considered lower than year on right.
       testYearCompare(1999, '', 2000, '', -1);
       testYearCompare(0, '1998-1999', 0, '1980-2000', -1);
       testYearCompare(1997, '1998-1999', 2000, '1990-1995', -1);
       testYearCompare(1997, '1998-1999', 1990, '1980-2000', -1);
+      testYearCompare(0, '1980-', 0, '1998-', -1);
 
       MovieResultDTO tmpYear = MovieResultDTO();
       expect(tmpYear.yearCompare(null), 0);
@@ -143,15 +145,41 @@ void main() {
       return dto;
     }
 
-    test_toMap_toMovieResultDTO(MovieResultDTO input) {
-      var map = input.toMap(excludeCopywritedData: false);
+    test_toMovieResultDTO(MovieResultDTO expected, Map<String, String> map) {
       print(map.toString());
-      var output = map.toMovieResultDTO();
-      expect(input, MovieResultDTOMatcher(output));
+      var actual = map.toMovieResultDTO();
+      expect(expected, MovieResultDTOMatcher(actual));
     }
 
-    test('single', () {
-      test_toMap_toMovieResultDTO(makeDTO('abc'));
+    test('single_DTO', () {
+      var dto = makeDTO('abc');
+      var map = dto.toMap(excludeCopywritedData: false);
+      test_toMovieResultDTO(dto, map);
+    });
+
+    test('copywrite_DTO', () {
+      var dto = makeDTO('abc');
+      var map = dto.toMap();
+      dto.description = '';
+      dto.imageUrl = '';
+      dto.userRating = 0;
+      dto.censorRating = CensorRatingType.none;
+      test_toMovieResultDTO(dto, map);
+    });
+
+    test('multiple_DTO', () {
+      List<MovieResultDTO> list = [];
+      list.add(makeDTO('abc'));
+      list.add(makeDTO('def'));
+      list.add(makeDTO('ghi'));
+      var encoded = list.encodeList();
+
+      List<MovieResultDTO> emptylist = [];
+      var decoded = emptylist.decodeList(encoded);
+
+      expect(list[0], MovieResultDTOMatcher(decoded[0]));
+      expect(list[1], MovieResultDTOMatcher(decoded[1]));
+      expect(list[2], MovieResultDTOMatcher(decoded[2]));
     });
   });
 }

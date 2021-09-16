@@ -60,7 +60,7 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
     retVal.searchId = map['searchId'] ?? retVal.searchId;
     retVal.criteriaTitle = map['criteriaTitle'] ?? retVal.criteriaTitle;
     retVal.criteriaSource =
-        getEnumFromString(map['criteriaSource'], SearchCriteriaSource.values);
+        getEnumValue(map['criteriaSource'], SearchCriteriaSource.values);
 //    retVal.criteriaList = map['criteriaList'] ?? retVal.criteriaList;
     return retVal;
   }
