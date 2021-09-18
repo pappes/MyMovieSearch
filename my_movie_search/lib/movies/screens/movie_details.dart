@@ -101,41 +101,36 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: leftColumn() +
-                // Only show right column on tablet
-                (_mobileLayout ? [] : posterSection()),
+            children: [
+                  ExpandedColumn(children: [leftColumn()])
+                ] +
+                (_mobileLayout // Only show right column on tablet
+                    ? []
+                    : [ExpandedColumn(children: posterSection())]),
           ),
         ),
       ],
     );
   }
 
-  List<Widget> leftColumn() {
-    return [
-      Expanded(
-        child: Column(
-          children: [
-            Wrap(
-              children: leftHeader() +
-                  // Only show poster in left column on mobile
-                  (_mobileLayout ? posterSection() : []) +
-                  [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: description() + related(),
-                    ),
-                  ],
+  Widget leftColumn() {
+    return Wrap(
+      children: leftHeader() +
+          // Only show poster in left column on mobile
+          (_mobileLayout ? posterSection() : []) +
+          [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: description() + related(),
             ),
           ],
-        ),
-      )
-    ];
+    );
   }
 
   List<Widget> posterSection() {
     return [
-      Expanded(
-        child: Column(
+      Row(children: [
+        ExpandedColumn(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: poster(
             _movie.imageUrl,
@@ -145,7 +140,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
             ),
           ),
         ),
-      )
+      ]),
     ];
   }
 

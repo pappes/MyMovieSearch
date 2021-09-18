@@ -24,6 +24,29 @@ List<Widget> poster(String url, {void Function()? onTap}) {
   ];
 }
 
+class ExpandedColumn extends Expanded {
+  ExpandedColumn({
+    Key? key,
+    MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
+    MainAxisSize mainAxisSize = MainAxisSize.max,
+    CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
+    TextDirection? textDirection,
+    VerticalDirection verticalDirection = VerticalDirection.down,
+    TextBaseline? textBaseline,
+    List<Widget> children = const <Widget>[],
+  }) : super(
+            child: Column(
+          children: children,
+          key: key,
+          mainAxisAlignment: mainAxisAlignment,
+          mainAxisSize: mainAxisSize,
+          crossAxisAlignment: crossAxisAlignment,
+          textDirection: textDirection,
+          verticalDirection: verticalDirection,
+          textBaseline: textBaseline,
+        ));
+}
+
 class BoldLabel extends Text {
   BoldLabel(string)
       : super(

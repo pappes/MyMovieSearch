@@ -95,65 +95,62 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: leftColumn() +
-                // Only show right column on tablet
-                (_mobileLayout ? [] : posterSection()),
+            children: [
+                  ExpandedColumn(children: [leftColumn()])
+                ] +
+                (_mobileLayout // Only show right column on tablet
+                    ? []
+                    : [ExpandedColumn(children: posterSection())]),
           ),
         ),
       ],
     );
   }
 
-  List<Widget> leftColumn() {
-    return [
-      Expanded(
-        child: Column(
-          children: [
-            Wrap(
-              children: [
-                    Text('Source: ${describeEnum(_person.source)}      '),
-                    Text('UniqueId: ${_person.uniqueId}'),
-                    ElevatedButton(
-                      onPressed: () => viewWebPage(
-                        makeImdbUrl(
-                          _person.uniqueId,
-                          mobile: true,
-                        ),
-                        context,
-                      ),
-                      child: Text('IMDB'),
-                    ),
-                  ] +
-                  // Only show poster in left column on mobile
-                  (_mobileLayout ? posterSection() : []) +
-                  [
-                    Text(
-                      '\nDescription: \n${_person.description} ',
-                      style: biggerFont,
-                    ),
-                  ] +
-                  related(),
+  Widget leftColumn() {
+    return Wrap(
+      children: [
+            Text('Source: ${describeEnum(_person.source)}      '),
+            Text('UniqueId: ${_person.uniqueId}'),
+            ElevatedButton(
+              onPressed: () => viewWebPage(
+                makeImdbUrl(
+                  _person.uniqueId,
+                  mobile: true,
+                ),
+                context,
+              ),
+              child: Text('IMDB'),
             ),
-          ],
-        ),
-      ),
-    ];
+          ] +
+          // Only show poster in left column on mobile
+          (_mobileLayout ? posterSection() : []) +
+          [
+            Text(
+              '\nDescription: \n${_person.description} ',
+              style: biggerFont,
+            ),
+          ] +
+          related(),
+    );
   }
 
   List<Widget> posterSection() {
     return [
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: poster(
-            _person.imageUrl,
-            onTap: () => viewWebPage(
-              makeImdbUrl(_person.uniqueId, photos: true, mobile: true),
-              context,
+      Row(
+        children: [
+          ExpandedColumn(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: poster(
+              _person.imageUrl,
+              onTap: () => viewWebPage(
+                makeImdbUrl(_person.uniqueId, photos: true, mobile: true),
+                context,
+              ),
             ),
-          ),
-        ),
-      )
+          )
+        ],
+      ),
     ];
   }
 
