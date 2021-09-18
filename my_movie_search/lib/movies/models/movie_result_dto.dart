@@ -92,15 +92,16 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   @override
   MovieResultDTO fromPrimitives(Object? data) {
     if (data != null) {
-      Map<String, String> map = jsonDecode(data as String);
+      Map<String, dynamic> map = jsonDecode(data as String);
       return map.toMovieResultDTO();
     }
     return MovieResultDTO();
   }
 
   @override
-  Object toPrimitives() =>
-      jsonEncode(value.toMap(excludeCopywritedData: false));
+  Object toPrimitives() => dtoToPrimitives(value);
+  Object dtoToPrimitives(MovieResultDTO dto) =>
+      jsonEncode(dto.toMap(excludeCopywritedData: false));
 }
 
 class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
@@ -118,23 +119,25 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
   @override
   List<MovieResultDTO> fromPrimitives(Object? data) {
     if (data != null) {
-      List<String> list = jsonDecode(data as String);
+      List<dynamic> list = jsonDecode(data as String);
       return value.decodeList(list);
     }
     return [];
   }
 
   @override
-  Object toPrimitives() => jsonEncode(value.encodeList());
+  Object toPrimitives() => listToPrimitives(value);
+  Object listToPrimitives(List<MovieResultDTO> list) =>
+      jsonEncode(list.encodeList());
 }
 
 extension ListDTOConversion on Iterable<MovieResultDTO> {
   /// Convert a [List] of json encoded [String]s into a [List] of [MovieResultDTO] objects
   ///
-  List<MovieResultDTO> decodeList(Iterable<String> encoded) {
+  List<MovieResultDTO> decodeList(Iterable<dynamic> encoded) {
     List<MovieResultDTO> retval = [];
     for (var json in encoded) {
-      var decoded = jsonDecode(json);
+      var decoded = jsonDecode(json.toString());
       if (decoded is Map) retval.add(decoded.toMovieResultDTO());
     }
     return retval;

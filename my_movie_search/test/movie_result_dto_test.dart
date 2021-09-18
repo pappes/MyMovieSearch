@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'test_helper.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
@@ -6,6 +7,28 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 ////////////////////////////////////////////////////////////////////////////////
 /// Helper functions
 ////////////////////////////////////////////////////////////////////////////////
+class RestorationTestParent extends State with RestorationMixin {
+  RestorationTestParent(this.uniqueId) {}
+  String uniqueId;
+  var movie = RestorableMovie();
+  var list = RestorableMovieList();
+
+  @override
+  // The restoration bucket id for this page.
+  String get restorationId => 'abc';
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    // Register our property to be saved every time it changes,
+    // and to be restored every time our app is killed by the OS!
+    registerForRestoration(movie, uniqueId + 'movie');
+    registerForRestoration(list, uniqueId + 'list');
+  }
+
+  Widget build(BuildContext context) {
+    return Text('');
+  }
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Unit tests
@@ -180,6 +203,27 @@ void main() {
       expect(list[0], MovieResultDTOMatcher(decoded[0]));
       expect(list[1], MovieResultDTOMatcher(decoded[1]));
       expect(list[2], MovieResultDTOMatcher(decoded[2]));
+    });
+    test('RestorableMovie', () {
+      var movie = makeDTO('abcd');
+      var rtp = RestorationTestParent(movie.uniqueId);
+      rtp.restoreState(null, true);
+      var encoded = rtp.movie.dtoToPrimitives(movie);
+      var decoded = rtp.movie.fromPrimitives(encoded);
+
+      expect(movie, MovieResultDTOMatcher(decoded));
+    });
+    test('RestorableMovieList', () {
+      List<MovieResultDTO> list = [];
+      list.add(makeDTO('abc'));
+      list.add(makeDTO('def'));
+      list.add(makeDTO('ghi'));
+      var rtp = RestorationTestParent(list[1].uniqueId);
+      rtp.restoreState(null, true);
+      var encoded = rtp.list.listToPrimitives(list);
+      var decoded = rtp.list.fromPrimitives(encoded);
+
+      expect(list, MovieResultDTOListMatcher(decoded));
     });
   });
 }
