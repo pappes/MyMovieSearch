@@ -1,3 +1,5 @@
+/// Extend [Duration] to provide convenience functions.
+///
 extension DurationHelper on Duration {
   /// Format [Duration] as H:MM:SS
   String toFormattedTime() {

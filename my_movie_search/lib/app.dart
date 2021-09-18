@@ -18,8 +18,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'movies/blocs/repositories/movie_search_repository.dart';
 import 'movies/blocs/search_bloc.dart';
 import 'movies/screens/movie_search_criteria.dart';
-//import 'package:my_movie_search/screens/home.dart';
-//import 'package:my_movie_search/screens/webveiw/webview_testing.dart';
 
 /// {@template mmsearch_app}
 /// A [MaterialApp] which sets the `home` to [MovieSearchCriteriaPage].
@@ -32,6 +30,9 @@ class MMSearchApp extends StatelessWidget {
         );
   final MovieSearchRepository movieRepository;
 
+  /// Set up information for the bloc design pattern
+  /// then initialise the Material application user interface.
+  ///
   @override
   Widget build(BuildContext context) {
     // TODO: use bloc provider and repository provider on search screens
@@ -55,6 +56,8 @@ class _AppViewState extends State<AppView> {
 
   NavigatorState get _navigator => _navigatorKey.currentState!;
 
+  /// Initialise the Material app with app specific settings.
+  ///
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

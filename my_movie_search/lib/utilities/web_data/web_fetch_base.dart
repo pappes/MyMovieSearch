@@ -13,7 +13,7 @@ typedef List TransformFn(Map? map);
 
 const _DEFAULT_SEARCH_RESULTS_LIMIT = 100;
 
-/// Extend WebFetchBase to provide a dynamically switchable stream of <OUTPUT_TYPE>
+/// Extend [WebFetchBase] to provide a dynamically switchable stream of <[OUTPUT_TYPE]>
 /// from online and offline sources.
 ///
 /// Classes extending ProviderController can be interchanged
@@ -22,7 +22,7 @@ const _DEFAULT_SEARCH_RESULTS_LIMIT = 100;
 ///
 /// Workflow delegated to child class:
 ///   web/file -> Json via [offlineData] or [myConstructURI]
-///   Json(Map) -> Objects of type OUTPUT_TYPE via [myTransformMapToOutput]
+///   Json(Map) -> Objects of type [OUTPUT_TYPE] via [myTransformMapToOutput]
 ///   Exception handling via [myYieldError]
 abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   INPUT_TYPE? _criteria;

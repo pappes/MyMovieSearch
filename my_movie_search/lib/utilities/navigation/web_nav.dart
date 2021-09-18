@@ -26,6 +26,9 @@ void _launchURL(String url, BuildContext context) async {
   }
 }
 
+/// Render web page [url] in a child page of the current screen.
+///
+/// For platforms that don't support CustomTabs, the URL is displayed to the user.
 void viewWebPage(String url, BuildContext context) {
   if (Platform.isAndroid) {
     _launchURL(
@@ -37,6 +40,9 @@ void viewWebPage(String url, BuildContext context) {
   }
 }
 
+/// Construct route to Material user interface page as appropriate for the dto.
+///
+/// Chooses a MovieDetailsPage or PersonDetailsPage based on the IMDB unique ID.
 MaterialPageRoute<dynamic> getRoute(
   BuildContext context,
   MovieResultDTO movie,
@@ -50,6 +56,8 @@ MaterialPageRoute<dynamic> getRoute(
   }
 }
 
+/// Navigates to a search results page populated with a predefined list of dtos.
+///
 void searchForRelated(
   String description,
   List<MovieResultDTO> movies,

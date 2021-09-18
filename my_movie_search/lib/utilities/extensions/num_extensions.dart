@@ -1,9 +1,11 @@
+/// Extend [double] to provide convenience functions.
+///
 extension DoubleHelper on double {
-  /// Convert an object to decimal representation ignoring thousand seperators
+  /// Convert an [formattedText] to decimal representation ignoring thousand seperators
   ///
   /// Allows substitution of null values and zero values
   static double? fromText(
-    Object? formattedText, {
+    dynamic formattedText, {
     double? nullValueSubstitute,
     double? zeroValueSubstitute: 0,
   }) {
@@ -17,12 +19,14 @@ extension DoubleHelper on double {
   }
 }
 
+/// Extend [int] to provide convenience functions.
+///
 extension IntHelper on int {
-  /// Convert an object to int representation ignoring thousand seperators
+  /// Convert an [formattedText] to int representation ignoring thousand seperators
   ///
   /// Allows substitution of null values and zero values
   static int? fromText(
-    Object? formattedText, {
+    dynamic formattedText, {
     int? nullValueSubstitute,
     int? zeroValueSubstitute: 0,
   }) {
@@ -36,6 +40,10 @@ extension IntHelper on int {
   }
 }
 
+/// Extract last numeric year value from a text date representation.
+///
+/// Supports [yeartext] values in the format 'YYYY', 'yyyy-YYYY' and 'YYYY-'
+/// e.g. '2005-2009' will return 2009
 int? getYear(String? yeartext) {
   if (null != yeartext) {
     if (4 == yeartext.length) {

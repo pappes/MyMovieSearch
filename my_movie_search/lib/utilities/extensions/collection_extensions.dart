@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+/// Extend [List]<[String]> to provide convenience functions.
+///
 extension ListHelper on List<String> {
   /// Pull a list out of a json value - even if it is not represented as a list
   ///

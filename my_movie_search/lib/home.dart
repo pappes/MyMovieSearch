@@ -12,7 +12,7 @@ done Details -> Torrent web search
 TorSearch (lime web)
 TorSearch (TPB web)
 done Details -> related details
-TorSearch -> download tor
+done TorSearch -> download tor
 Details history persistant store
 search history
 TorSearch (repository of sites)
