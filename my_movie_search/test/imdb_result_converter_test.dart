@@ -14,40 +14,44 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb result converter', () {
+    // Check that IMDB html input is converted to matching dto by QueryIMDBTitleDetails
     test('convert HTML to DTO', () async {
-      String testInput = htmlSampleFull;
-      final imdbResult = QueryIMDBTitleDetails();
-      final criteria = SearchCriteriaDTO();
-
       var expectedDTO = await expectedDTOList;
-      int dtoCount = 0;
 
       // Compare the stream output to the expected output.
+      var currentExpectedValueIndex = 0;
       void checkOutput(MovieResultDTO streamOutput) {
-        var expectedValue = expectedDTO[dtoCount];
+        var expectedValue = expectedDTO[currentExpectedValueIndex];
         var isExpectedValue = MovieResultDTOMatcher(expectedValue);
         expect(
           streamOutput,
           isExpectedValue,
           reason: 'Emmitted DTO $streamOutput '
-              'needs to match expected DTO ${expectedDTO[dtoCount]}',
+              'needs to match expected DTO $expectedValue',
         );
-        dtoCount++;
+        currentExpectedValueIndex++;
       }
 
+      // check output against expectations.
       var expectFn = expectAsync1<void, MovieResultDTO>(
         checkOutput,
         count: expectedDTO.length,
         max: expectedDTO.length,
       );
 
+      // Set up criteria to initialise IMDB search
+      final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = 'tt7602562';
+      final imdbResult = QueryIMDBTitleDetails();
       imdbResult.baseTestSetCriteria(criteria);
-
+      String testInput = htmlSampleFull;
       Stream<String> str = emitByteStream(testInput).transform(utf8.decoder);
+
+      // Invoke the search.
       Stream<MovieResultDTO> stream =
           imdbResult.baseTransformTextStreamToOutput(str);
 
+      // Test the results.
       stream.listen(expectFn);
     });
   });

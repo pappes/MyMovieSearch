@@ -84,7 +84,7 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
 
   @override
   void didUpdateValue(MovieResultDTO? oldValue) {
-    if (oldValue == null || !oldValue.matches(value)) {
+    if (null == oldValue || !oldValue.matches(value)) {
       notifyListeners();
     }
   }
@@ -110,7 +110,7 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
 
   @override
   void didUpdateValue(List<MovieResultDTO>? oldValue) {
-    if (oldValue == null ||
+    if (null == oldValue ||
         oldValue.toPrintableString() != value.toPrintableString()) {
       notifyListeners();
     }

@@ -13,8 +13,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb
 ////////////////////////////////////////////////////////////////////////////////
 
 void main() {
+  ///Sample tests to understand how the test framework works.
   group('stream basics', () {
+    // Observe a string being represented as a stream of bytes.
     test('simple Bytesteam test', () {
+      // Set up the test data.
       String testInput = 'B(a)';
       List<List<int>> expectedOutput = [
         [66],
@@ -41,7 +44,9 @@ void main() {
         count: testInput.length,
       );
 
+      // Invoke the functionality.
       var stream = emitByteStream(testInput);
+
       // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn, onDone: () {
         expect(currentRune, testInput.length,
@@ -50,7 +55,9 @@ void main() {
       });
     });
 
+    // Observe UTF8 decoding of the byte stream.
     test('UTF8 decoder test', () {
+      // Set up the test data.
       String testInput = '$imdbJsonPFunction(a)';
 
       int currentChar = 0;
@@ -71,13 +78,16 @@ void main() {
         count: testInput.length,
       );
 
-      var stream = emitByteStream(testInput) // Add in UTF8 decoding to the test
-          .transform(utf8.decoder);
+      // Invoke the functionality.
+      var stream = emitByteStream(testInput).transform(utf8.decoder);
+
       // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn);
     });
 
+    // Observe JSON decoding of the byte stream into a Map.
     test('json decoder test', () {
+      // Set up the test data.
       String testInput = imdbJsonSampleOuter;
 
       // Compare the stream output to the expected output.
@@ -93,16 +103,19 @@ void main() {
 
       var expectFn = expectAsync1<void, Object?>(checkOutput, count: 1);
 
+      // Invoke the functionality.
       var stream = emitByteStream(testInput)
           .transform(utf8.decoder)
           .transform(json.decoder);
+
       // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn);
     });
 
-    // This is the main thing that we want to tes.
-    //Surrounding tests are just simpler examples to see ho this one was built.
+    // This is the main thing that we want to test.
+    // Preceeding tests are simpler examples to see how this test was built.
     test('jsonp transformer test', () {
+      // Set up the test data.
       String testInput = imdbJsonPSampleFull;
 
       // Compare the stream output to the expected output.
@@ -118,15 +131,18 @@ void main() {
 
       var expectFn = expectAsync1<void, Object?>(checkOutput, count: 1);
 
+      // Invoke the functionality.
       var stream = emitByteStream(testInput)
           .transform(utf8.decoder)
           .transform(JsonPDecoder())
           .transform(json.decoder);
+
       // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn);
     });
 
     test('extract value from map test', () {
+      // Set up the test data.
       String testInput = imdbJsonSampleOuter;
 
       // Compare the stream output to the expected output.
@@ -141,10 +157,12 @@ void main() {
 
       var expectFn = expectAsync1<void, Object?>(checkOutput, count: 1);
 
+      // Invoke the functionality.
       var stream = emitConsolidatedByteStream(testInput)
           .transform(utf8.decoder)
           .transform(json.decoder)
           .map((outerMap) => (outerMap as Map)[imdbCustomKeyName]);
+
       // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn);
     });
@@ -155,13 +173,14 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb suggestion converter', () {
+    // Convert IMDB suggestions from JSON to dto.
     test('convert Json to DTO', () async {
+      // Set up the test data.
       String testInput = imdbJsonPSampleFull;
-
       var expectedDTO = await expectedDTOList;
-      int dtoCount = 0;
 
       // Compare the stream output to the expected output.
+      int dtoCount = 0;
       void checkOutput(MovieResultDTO streamOutput) {
         var currentExpected = dtoCount;
         dtoCount++;
@@ -170,8 +189,8 @@ void main() {
         expect(
           streamOutput,
           isExpectedValue,
-          reason: 'Emmitted DTO $streamOutput} '
-              'needs to match expected DTO[$currentExpected] ${expectedDTO[currentExpected]}',
+          reason: 'Emmitted DTO $streamOutput needs to match expected '
+              'DTO[$currentExpected] ${expectedDTO[currentExpected]}',
         );
       }
 
@@ -181,6 +200,7 @@ void main() {
         max: expectedDTO.length,
       );
 
+      // Invoke the functionality.
       Stream<MovieResultDTO> stream = emitByteStream(testInput)
           .transform(utf8.decoder)
           .transform(JsonPDecoder())
@@ -192,6 +212,8 @@ void main() {
           .expand((listMember) => listMember)
           // Convert each Map result to a DTO
           .map((event) => ImdbSuggestionConverter.dtoFromMap(event));
+
+      // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn);
     });
   });

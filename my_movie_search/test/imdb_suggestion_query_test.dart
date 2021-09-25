@@ -12,16 +12,21 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb suggestion query', () {
-    test('Run ExecuteQuery()', () async {
+    // Read IMDB suggestions from a simulated bytestream and convert JSON to dtos.
+    test('Run readList()', () async {
+      // Set up the test data.
+      var expectedValue = await expectedDTOList;
       List<MovieResultDTO> queryResult = [];
-      final QueryIMDBSuggestions _imdbSuggestions = QueryIMDBSuggestions();
+      final _imdbSuggestions = QueryIMDBSuggestions();
+
+      // Invoke the functionality.
       await _imdbSuggestions
           .readList(SearchCriteriaDTO(), source: emitImdbJsonSample)
           .then((values) => queryResult.addAll(values))
           .onError(
               (error, stackTrace) => print('$error, ${stackTrace.toString()}'));
 
-      var expectedValue = await expectedDTOList;
+      // Check the results.
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),

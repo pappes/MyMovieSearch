@@ -12,19 +12,23 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('transformer', () {
+    /// Confirms the JSONP function prefix is removed from the input (if present).
     testPrefix(input, expectedOutput) {
       var decoder = JsonPDecoder();
       var actualOutput = decoder.stripPrefix(input);
       expect(actualOutput, expectedOutput, reason: decoder.toString());
     }
 
+    /// Confirms the closing pearenthesis is removed from the input (if present).
     testSuffix(input, expectedOutput) {
       var decoder = JsonPDecoder();
+      // Prime the decoder so that it does not strip the prefix from the input.
       decoder.stripPrefix('(');
       var actualOutput = decoder.bufferSuffix(input);
       expect(actualOutput, expectedOutput, reason: decoder.toString());
     }
 
+    /// Confirm removal is prefix and suffix even across multiple line of input.
     testMultiLineConversion(List<String> lines, expectedOutput) {
       var decoder = JsonPDecoder();
       var actualOutput = '';
@@ -33,10 +37,12 @@ void main() {
           reason: 'input:$lines decoder:${decoder.toString()}');
     }
 
+    /// Confirm removal is prefix and suffix fior a single line of input.
     testSingleLineConversion(input, expectedOutput) {
       testMultiLineConversion([input], expectedOutput);
     }
 
+    // No change made where JSON text encoutered before opening Parenthesis.
     test('stripPrefix no change', () {
       testPrefix('abc', '');
       testPrefix('{abc}', '{abc}');
@@ -51,6 +57,7 @@ void main() {
       testPrefix('[{()abc}]', '[{()abc}]');
       testPrefix('{[()abc]}', '{[()abc]}');
     });
+    // Strip function name and opening parenthesis.
     test('stripPrefix change required', () {
       testPrefix('jsfunction(abc', 'abc');
       testPrefix('jsfunction({abc}', '{abc}');
@@ -59,6 +66,7 @@ void main() {
       testPrefix('jsfunction({[abc]}', '{[abc]}');
     });
 
+    // No change made where closing Parenthesis is followed by JSON text.
     test('bufferSuffix no change', () {
       testSuffix('abc', 'abc');
       testSuffix('{abc}', '{abc}');
@@ -73,6 +81,7 @@ void main() {
       testSuffix('[{()abc}]', '[{()abc}]');
       testSuffix('{[()abc]}', '{[()abc]}');
     });
+    // Strip closing parenthesis and keep any opening parenthesis.
     test('bufferSuffix change required', () {
       testSuffix('abc)', 'abc');
       testSuffix('{abc})', '{abc}');
@@ -85,6 +94,7 @@ void main() {
       testSuffix('()[{abc}])', '()[{abc}]');
       testSuffix('(){[abc]})', '(){[abc]}');
     });
+    // No change made where JSON text encoutered before opening Parenthesis.
     test('JsonPDecoder single line no change', () {
       testSingleLineConversion('abc', '');
       testSingleLineConversion('{abc}', '{abc}');
@@ -111,20 +121,26 @@ void main() {
       testSingleLineConversion('[abc])', '[abc])');
       testSingleLineConversion('[{abc}])', '[{abc}])');
       testSingleLineConversion('{[abc]})', '{[abc]})');
+      testSingleLineConversion('{[ab)c]}', '{[ab)c]}');
     });
+    // Strip function name, opening parenthesis and closing parenthesis (if present).
     test('JsonPDecoder single line change required', () {
       testSingleLineConversion('jsfunction(abc', 'abc');
       testSingleLineConversion('jsfunction({abc}', '{abc}');
       testSingleLineConversion('jsfunction([abc]', '[abc]');
       testSingleLineConversion('jsfunction([{abc}]', '[{abc}]');
       testSingleLineConversion('jsfunction({[abc]}', '{[abc]}');
+      testSingleLineConversion('jsfunction({[ab)c]}', '{[ab)c]}');
 
       testSingleLineConversion('jsfunction(abc)', 'abc');
       testSingleLineConversion('jsfunction({abc})', '{abc}');
       testSingleLineConversion('jsfunction([abc])', '[abc]');
       testSingleLineConversion('jsfunction([{abc}])', '[{abc}]');
       testSingleLineConversion('jsfunction({[abc]})', '{[abc]}');
+      testSingleLineConversion('jsfunction({[ab)c]})', '{[ab)c]}');
     });
+    // Strip function name, opening parenthesis and closing parenthesis
+    // even across multiple lines.
     test('JsonPDecoder multiline change required', () {
       testMultiLineConversion(['\n', 'jsfunction(abc', '\n'], 'abc\n');
       testMultiLineConversion(['\n', 'jsfunction(', 'abc'], 'abc');
@@ -136,14 +152,12 @@ void main() {
   });
   group('stream test', () {
     test('transformer', () async {
+      // Set up the test data.
       String testInput = imdbJsonPSampleFull;
-      Stream<String> stream = emitByteStream(testInput)
-          .transform(utf8.decoder)
-          .transform(JsonPDecoder());
-
       var expectedString = imdbJsonSampleOuter;
       var emittedString = '';
 
+      // Compare the stream output to the expected output.
       var expectFn = expectAsync1<void, String>((output) {
         if (output != '') {
           emittedString += output;
@@ -155,6 +169,11 @@ void main() {
       doneFn() {
         expect(emittedString, expectedString);
       }
+
+      // Invoke the functionality.
+      Stream<String> stream = emitByteStream(testInput)
+          .transform(utf8.decoder)
+          .transform(JsonPDecoder());
 
       stream.listen(expectFn, onDone: doneFn);
     });
