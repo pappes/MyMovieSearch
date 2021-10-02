@@ -191,20 +191,10 @@ class QueryIMDBTitleDetails
 
   /// Extract list of genres from from li<TitleBlockMetaData>
   scrapeGenreDetails(Document document, Map movieData) {
-    var genreData =
-        document.querySelector('li[data-testid="storyline-genres"]');
-    if (null != genreData) {
-      genreData = genreData.querySelector('div'); // Discard the "Genres" label.
-    }
-    if (null == genreData) {
-      genreData = document
-          .querySelector('a[href*="genre"]')
-          ?.parent // li - line item containing the anchor
-          ?.parent; // ul - list containing the line items
-    }
-    if (null != genreData && "" != genreData.text) {
-      movieData[outer_element_genre] = genreData.text;
-    }
+    document.querySelectorAll('a[href*="genre"]').forEach((genre) {
+      if ("" != genre.text.length > 0)
+        movieData[outer_element_genre].add(genre.text);
+    });
   }
 
   /// Extract short description of movie from web page.

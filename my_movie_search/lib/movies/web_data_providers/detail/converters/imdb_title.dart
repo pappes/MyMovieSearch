@@ -48,11 +48,11 @@ class ImdbMoviePageConverter {
     movie.alternateTitle =
         map[outer_element_common_title] ?? movie.alternateTitle;
     movie.description = map[outer_element_description] ?? movie.title;
-    movie.description += '\nGenres: ${map[outer_element_genre]}';
     movie.description += '\nKeywords: ${map[outer_element_keywords]}';
     movie.imageUrl = map[outer_element_image] ?? movie.imageUrl;
     movie.language = map[outer_element_language] ?? movie.language;
     movie.languages.combineUnique(map[outer_element_languages]);
+    movie.genres.combineUnique(map[outer_element_genre]);
     movie.censorRating = getImdbCensorRating(
           map[outer_element_censor_rating],
         ) ??

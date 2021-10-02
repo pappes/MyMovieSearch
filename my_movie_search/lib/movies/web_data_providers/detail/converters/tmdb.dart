@@ -95,10 +95,11 @@ class TmdbMovieDetailConverter {
     movie.userRating = map[inner_element_vote_average] ?? movie.userRating;
     movie.languages.combineUnique(map[inner_element_original_language]);
     movie.languages.combineUnique(map[inner_element_spoken_languages]);
+    for (Map<String, String> genre in map[inner_element_genres]) {
+      movie.genres.combineUnique(genre['name']);
+    }
     /*TODO
-    const inner_element_genres = 'genres';
     const inner_element_poster_path = 'poster_path';
-    movie.uniqueId = map[inner_element_genres] ?? movie.uniqueId;
     movie.uniqueId = map[inner_element_poster_path] ?? movie.uniqueId;*/
 
     return movie;

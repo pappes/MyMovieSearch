@@ -171,27 +171,23 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           ),
         ],
       ),
-      Wrap(children: [
-        Text('Source: ${describeEnum(_movie.source)}      '),
-        Text('UniqueId: ${_movie.uniqueId}'),
-        ElevatedButton(
-          onPressed: () => viewWebPage(
-            'https://tpb.party/search/${_movie.title}',
-            context,
-          ),
-          child: Text('External'),
-        ),
-        ElevatedButton(
-          onPressed: () => viewWebPage(
-            makeImdbUrl(
-              _movie.uniqueId,
-              mobile: true,
-            ),
-            context,
-          ),
-          child: Text('IMDB'),
-        ),
-      ]),
+      Wrap(
+        children: [
+              Text('Source: ${describeEnum(_movie.source)}      '),
+              Text('UniqueId: ${_movie.uniqueId}'),
+              ElevatedButton(
+                onPressed: () => viewWebPage(
+                  makeImdbUrl(
+                    _movie.uniqueId,
+                    mobile: true,
+                  ),
+                  context,
+                ),
+                child: Text('IMDB'),
+              ),
+            ] +
+            externalSearch(),
+      ),
     ];
   }
 
@@ -203,6 +199,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         style: biggerFont,
       ),
       Text('Languages: ${_movie.languages.toString()}'),
+      Text('Genres: ${_movie.genres.toString()}'),
     ];
   }
 
@@ -229,5 +226,28 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       );
     }
     return categories;
+  }
+
+  List<Widget> externalSearch() {
+    List<Widget> buttons = [
+      ElevatedButton(
+        onPressed: () => viewWebPage(
+          'https://tpb.party/search/${_movie.title} ${_movie.year}',
+          context,
+        ),
+        child: Text(_movie.title),
+      ),
+    ];
+    if (_movie.alternateTitle.length > 0)
+      buttons.add(
+        ElevatedButton(
+          onPressed: () => viewWebPage(
+            'https://tpb.party/search/${_movie.alternateTitle} ${_movie.year}',
+            context,
+          ),
+          child: Text(_movie.alternateTitle),
+        ),
+      );
+    return buttons;
   }
 }

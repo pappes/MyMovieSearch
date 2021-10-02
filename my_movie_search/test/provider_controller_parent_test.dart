@@ -36,7 +36,6 @@ List<MovieResultDTO> _makeExpectedResults(int qty) {
       'source': DataSourceType.imdb.toString(),
       'uniqueId': '$uniqueId',
       'description': '''$uniqueId.
-Genres: null
 Keywords: null''',
     }.toMovieResultDTO());
   }
@@ -159,6 +158,13 @@ void main() async {
         );
       }
     }
+
+    // Convert 1 sample offline page into a dto.
+    test('Run read 1 offline page', () async {
+      var queries = _makeQueries(1);
+      var queryResult = _makeExpectedResults(queries.length);
+      await testRead(queries, queryResult, online: false);
+    });
 
     // Convert 300 sample offline pages into dtos.
     test('Run read 300 offline pages', () async {

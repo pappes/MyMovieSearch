@@ -132,5 +132,6 @@ MovieResultDTO makeDTO(String sample) {
   dto.imageUrl = sample + '_imageUrl';
   dto.language = LanguageType.mostlyEnglish;
   dto.languages = [sample + '_language1', sample + '_language2'];
+  dto.genres = [sample + '_genre1', sample + '_genre2'];
   return dto;
 }
