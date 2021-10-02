@@ -15,7 +15,7 @@ const SEARCH_RESULTS_TABLE = 'findList';
 const COLUMN_MOVIE_TEXT = 'result_text';
 const COLUMN_MOVIE_POSTER = 'primary_photo';
 
-/// Implements [SearchProvider] for the IMDB search html webscraper.
+/// Implements [WebFetchBase] for the IMDB search html webscraper.
 class QueryIMDBTitleDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'https://www.imdb.com/title/';

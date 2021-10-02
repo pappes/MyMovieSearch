@@ -11,7 +11,7 @@ import 'converters/imdb_suggestion.dart';
 
 const _DEFAULT_SEARCH_RESULTS_LIMIT = 10;
 
-/// Implements [SearchProvider] for the IMDB search suggestions API.
+/// Implements [WebFetchBase] for the IMDB search suggestions API.
 /// Search suggestions are used by the lookup bar in the IMDB web page.
 class QueryIMDBSuggestions
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {

@@ -16,7 +16,7 @@ const _DEFAULT_SEARCH_RESULTS_LIMIT = 100;
 /// Extend [WebFetchBase] to provide a dynamically switchable stream of <[OUTPUT_TYPE]>
 /// from online and offline sources.
 ///
-/// Classes extending ProviderController can be interchanged
+/// Classes extending WebFetchBase can be interchanged
 /// making it easy to switch datasource
 /// without changing the rest of the application.
 ///

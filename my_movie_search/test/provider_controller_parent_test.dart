@@ -135,7 +135,7 @@ void main() async {
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('provider controller parent', () {
+  group('WebFetchBase parent', () {
     testRead(List<String> criteria, List<MovieResultDTO> expectedValue,
         {bool online = true}) async {
       // Call IMDB for each criteria in the list.

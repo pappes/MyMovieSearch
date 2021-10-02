@@ -9,7 +9,7 @@ import 'converters/google.dart';
 
 const GOOGLE_RESULTS_PER_PAGE = 10; // More than 10 results in an error!
 
-/// Implements [SearchProvider] for searching the Open Movie Database.
+/// Implements [WebFetchBase] for searching the Open Movie Database.
 /// The Google API is a free web service to obtain movie information.
 class QueryGoogleMovies
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
