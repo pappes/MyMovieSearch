@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart' show describeEnum;
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 import 'converters/imdb_cast.dart';
@@ -14,6 +15,7 @@ class QueryIMDBCastDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'https://www.imdb.com/title/';
   static final baseURLsuffix = '/fullcredits/';
+  static var cache = TieredCache();
 
   /// Describe where the data is comming from.
   @override
@@ -66,6 +68,35 @@ class QueryIMDBCastDetails
     error.type = MovieContentType.custom;
     error.source = DataSourceType.imdb;
     return error;
+  }
+
+  /// Check cache to see if data has already been fetched.
+  @override
+  bool myIsResultCached(SearchCriteriaDTO criteria) {
+    return cache.isCached(criteria.criteriaTitle);
+  }
+
+  /// Check cache to see if data in cache should be refreshed.
+  @override
+  bool myIsCacheStale(SearchCriteriaDTO criteria) {
+    return false;
+    return cache.isCached(criteria.criteriaTitle);
+  }
+
+  /// Insert transformed data into cache.
+  @override
+  void myAddResultToCache(MovieResultDTO fetchedResult) {
+    cache.add(fetchedResult.uniqueId, fetchedResult);
+  }
+
+  /// Retrieve cached result.
+  @override
+  Stream<MovieResultDTO> myFetchResultFromCache(
+      SearchCriteriaDTO criteria) async* {
+    var value = await cache.get(criteria.criteriaTitle);
+    if (value is MovieResultDTO) {
+      yield value;
+    }
   }
 
   /// Collect webpage text to construct a map of the movie data.

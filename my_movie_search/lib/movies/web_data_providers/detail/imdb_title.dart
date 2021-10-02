@@ -103,9 +103,9 @@ class QueryIMDBTitleDetails
   @override
   Stream<MovieResultDTO> myFetchResultFromCache(
       SearchCriteriaDTO criteria) async* {
-    var movie = await cache.get(criteria.criteriaTitle);
-    if (movie is MovieResultDTO) {
-      yield movie;
+    var value = await cache.get(criteria.criteriaTitle);
+    if (value is MovieResultDTO) {
+      yield value;
     }
   }
 
