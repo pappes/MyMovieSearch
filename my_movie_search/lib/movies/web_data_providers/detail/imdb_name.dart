@@ -9,7 +9,7 @@ import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 import 'converters/imdb_name.dart';
 import 'offline/imdb_name.dart';
 
-/// Implements [WebFetchBase] for the IMDB search html webscraper.
+/// Implements [WebFetchBase] for retrieving person details from IMDB.
 class QueryIMDBNameDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final baseURL = 'https://www.imdb.com/name/';

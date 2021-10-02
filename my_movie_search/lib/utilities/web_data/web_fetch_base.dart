@@ -136,13 +136,14 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Can be overridden by child classes if required.
   void myConstructHeaders(HttpHeaders headers) {}
 
-  /// Convert a map of the response to a [List] of <OUTPUT_TYPE>.
+  /// Convert a [Map] representation of the response to a [List] of <OUTPUT_TYPE>.
   ///
   /// Used for both online and offline operation.
   ///
   /// Should be overridden by child classes.
   /// Should not be called directly by child classes,
-  /// child classes call [baseTransformMapToOutputHandler] as a wrapper to transformMap.
+  /// Child classes can call [baseTransformMapToOutputHandler]
+  ///     as a wrapper to myTransformMapToOutput.
   List<OUTPUT_TYPE> myTransformMapToOutput(Map map);
 
   /// Convert a map of the response to a [List] of <OUTPUT_TYPE>.
@@ -186,15 +187,15 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     return retval;
   }
 
-  /// Convert [Stream] of [String] to a stream of <OUTPUT_TYPE>.
+  /// Convert [Stream] of [String] to a [Stream]of <OUTPUT_TYPE>.
   ///
   /// Used for both online and offline operation.
-  /// For online operation [str] is utf8 decoded
-  /// before being passed to transformStream.
+  /// For online operation [str] is utf8 decoded before being passed to
+  ///     transformStream.
   ///
   /// Can be overridden by child classes.
   /// Should call [baseTransformMapToOutputHandler]
-  /// to wrap [myTransformMapToOutput] in exception handling.
+  ///     to wrap [myTransformMapToOutput] in exception handling.
   Stream<OUTPUT_TYPE> baseTransformTextStreamToOutput(
       Stream<String> str) async* {
     var fnFromMapToListOfOutputType = (decodedMap) =>
@@ -228,7 +229,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
           ' $error\n${stackTrace.toString()}');
       rethrow;
     }
-    // TODO: check for HTTP status before transforming (avoid 404)
+    // Check for successful HTTP status before transforming (avoid HTTP 404)
+    if (200 != response.statusCode) {
+      print('Error in http read, HTTP status code : ${response.statusCode}');
+      var offlineFunction = myOfflineData();
+      return offlineFunction(criteria);
+    }
     return response.transform(utf8.decoder);
   }
 }
