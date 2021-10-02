@@ -189,6 +189,8 @@ void main() {
       dto.imageUrl = '';
       dto.userRating = 0;
       dto.censorRating = CensorRatingType.none;
+      dto.languages.clear();
+      dto.genres.clear();
 
       test_toMovieResultDTO(dto, map);
     });

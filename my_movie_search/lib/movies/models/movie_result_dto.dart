@@ -245,12 +245,12 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       map[movieResultDTORunTime] = this.runTime.inSeconds.toString();
     if (this.language != defaultVals.language)
       map[movieResultDTOLanguage] = this.language.toString();
-    if (this.languages != defaultVals.languages)
-      map[movieResultDTOLanguages] = json.encode(this.languages);
-    if (this.genres != defaultVals.genres)
-      map[movieResultDTOGenres] = json.encode(this.genres);
 
     if (!excludeCopywritedData) {
+      if (this.languages != defaultVals.languages)
+        map[movieResultDTOLanguages] = json.encode(this.languages);
+      if (this.genres != defaultVals.genres)
+        map[movieResultDTOGenres] = json.encode(this.genres);
       if (this.description != defaultVals.description)
         map[movieResultDTODescription] = this.description;
       if (this.userRating != defaultVals.userRating)
