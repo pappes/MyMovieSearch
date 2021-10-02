@@ -3,6 +3,7 @@ library pappes.utilites;
 import 'dart:async' show StreamController, FutureOr;
 import 'dart:convert' show json, utf8;
 
+import 'package:logger/logger.dart';
 import 'package:universal_io/io.dart'
     show HttpClient, HttpHeaders; // limit inclusions to reduce size
 
@@ -72,21 +73,28 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     required int? resultSize,
     DataSourceFn? source,
   }) async* {
-    _searchResultsreturned = 0;
-    _criteria = criteria;
-    _searchResultsLimit = resultSize;
-    final selecter = OnlineOfflineSelector<DataSourceFn>();
+    // if cached yield from cache
+    if (myIsResultCached(criteria)) {
+      yield* myFetchResultFromCache(criteria);
+    }
+    // if not cached or cache is stale retrieve fresh data
+    if (!myIsResultCached(criteria) || myIsCacheStale(criteria)) {
+      _searchResultsreturned = 0;
+      _criteria = criteria;
+      _searchResultsLimit = resultSize;
+      final selecter = OnlineOfflineSelector<DataSourceFn>();
 
-    source = selecter.select(source ?? baseFetchWebText, myOfflineData());
-    // Need to await completion of future before we can transform it.
-    logger.v('got function, getting stream for $_getFetchContext '
-        'using ${myConstructURI(getCriteriaText ?? '').toString()}');
-    var result = source(_criteria);
-    final Stream<String> data = await result;
-    logger.v('got stream getting data for $_getFetchContext');
+      source = selecter.select(source ?? baseFetchWebText, myOfflineData());
+      // Need to await completion of future before we can transform it.
+      logger.v('got function, getting stream for $_getFetchContext '
+          'using ${myConstructURI(getCriteriaText ?? '').toString()}');
+      var result = source(_criteria);
+      final Stream<String> data = await result;
+      logger.v('got stream getting data for $_getFetchContext');
 
-    // Emit each element from the list as a seperate element.
-    yield* baseTransformTextStreamToOutput(data);
+      // Emit each element from the list as a seperate element.
+      yield* baseTransformTextStreamToOutput(data);
+    }
   }
 
   /// Describe where the data is comming from.
@@ -136,6 +144,30 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Can be overridden by child classes if required.
   void myConstructHeaders(HttpHeaders headers) {}
 
+  /// Check cache to see if data has already been fetched.
+  ///
+  /// Can be overridden by child classes if required.
+  bool myIsResultCached(INPUT_TYPE criteria) {
+    return false;
+  }
+
+  /// Check cache to see if data in cache should be refreshed.
+  ///
+  /// Can be overridden by child classes if required.
+  bool myIsCacheStale(INPUT_TYPE criteria) {
+    return false;
+  }
+
+  /// Insert transformed data into cache.
+  ///
+  /// Can be overridden by child classes if required.
+  void myAddResultToCache(OUTPUT_TYPE fetchedResult) {}
+
+  /// Retrieve cached result.
+  ///
+  /// Can be overridden by child classes if required.
+  Stream<OUTPUT_TYPE> myFetchResultFromCache(INPUT_TYPE criteria) async* {}
+
   /// Convert a [Map] representation of the response to a [List] of <OUTPUT_TYPE>.
   ///
   /// Used for both online and offline operation.
@@ -157,20 +189,26 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should not be overridden by child classes.
   List<OUTPUT_TYPE> baseTransformMapToOutputHandler(Map? resultMap) {
     List<OUTPUT_TYPE> retval = [];
-    int remaining = double.maxFinite.toInt();
     if (resultMap == null) {
       logger.i('0 results returned from query for $_getFetchContext');
       return retval;
     }
+
+    int remaining = double.maxFinite.toInt(); // Default to unlimited results.
     if (_searchResultsLimit != null) {
       remaining = _searchResultsLimit! - _searchResultsreturned;
     }
+
+    // Construct resultset with a subset of results
     if (remaining > 1) {
       try {
         var list = myTransformMapToOutput(resultMap);
         _searchResultsreturned += list.length;
-        logger.v('${list.length} results returned from ' // Verbose message/
-            '$_getFetchContext');
+        logger.log(Level.verbose,
+            '${list.length} results returned from $_getFetchContext');
+        list.forEach((element) {
+          myAddResultToCache(element);
+        });
         retval = list.take(remaining).toList();
       } catch (exception, stacktrace) {
         logger.e(

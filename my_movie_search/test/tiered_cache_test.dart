@@ -25,7 +25,8 @@ void main() async {
           });
         });
         expectedOutput.forEach((key, value) {
-          var actualOutput = cache.get(key, nullCallback);
+          expect(cache.isCached(key), true);
+          var actualOutput = cache.get(key, callback: nullCallback);
           actualOutput.then((value) {
             expect(value, expectedOutput[key]);
           });
