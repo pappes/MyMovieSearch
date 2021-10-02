@@ -80,7 +80,6 @@ Uri constructURI(String searchText) {
   final baseURLsuffix = '/?ref_=fn_tt_tt_1';
   final titleId = searchText.padLeft(7, '0');
   var url = '${baseURL}tt$titleId$baseURLsuffix';
-  print('fetching imdb details $url');
 
   // Route web requests through a tunnel if using the Javascript
   // XMLHttpRequest http client library.

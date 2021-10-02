@@ -86,11 +86,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
       source = selecter.select(source ?? baseFetchWebText, myOfflineData());
       // Need to await completion of future before we can transform it.
-      logger.v('got function, getting stream for $_getFetchContext '
-          'using ${myConstructURI(getCriteriaText ?? '').toString()}');
       var result = source(_criteria);
       final Stream<String> data = await result;
-      logger.v('got stream getting data for $_getFetchContext');
 
       // Emit each element from the list as a seperate element.
       yield* baseTransformTextStreamToOutput(data);
@@ -204,8 +201,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       try {
         var list = myTransformMapToOutput(resultMap);
         _searchResultsreturned += list.length;
-        logger.log(Level.verbose,
-            '${list.length} results returned from $_getFetchContext');
         list.forEach((element) {
           myAddResultToCache(element);
         });
@@ -254,7 +249,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         Uri.encodeQueryComponent(myFormatInputAsText(criteria) ?? '');
     final address = myConstructURI(encoded);
 
-    logger.d('querying ${address.toString()}');
     final client = await HttpClient().getUrl(address);
     myConstructHeaders(client.headers);
     final request = client.close();

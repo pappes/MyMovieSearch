@@ -281,12 +281,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Combine information from [newValue] into a [MovieResultDTO].
   ///
   void merge(MovieResultDTO newValue) {
-    if (newValue.description != '') {
-      print(newValue.description);
-    }
-    if (DataSourceType.imdb == newValue.source) {
-      print(newValue.description);
-    }
     //TODO alternate ID
     if (newValue.userRatingCount > this.userRatingCount ||
         0 == this.userRatingCount ||
@@ -448,50 +442,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Explains any difference found.
   bool matches(MovieResultDTO other) {
     if (this.title == other.title && this.title == 'unknown') return true;
-
-    if (this.source != other.source)
-      print('source mismatch left(${this.source}) right (${other.source})');
-    if (this.uniqueId != other.uniqueId)
-      print(
-          'uniqueId mismatch left(${this.uniqueId}) right (${other.uniqueId})');
-    if (this.alternateId != other.alternateId)
-      print(
-          'alternateId mismatch left(${this.alternateId}) right (${other.alternateId})');
-    if (this.title != other.title)
-      print('title mismatch left(${this.title}) right (${other.title})');
-    if (this.alternateTitle != other.alternateTitle)
-      print(
-          'alternateTitle mismatch left(${this.alternateTitle}) right (${other.alternateTitle})');
-    if (this.description != other.description)
-      print(
-          'description mismatch left(${this.description}) right (${other.description})');
-    if (this.type != other.type)
-      print('type mismatch left(${this.type}) right (${other.type})');
-    if (this.year != other.year)
-      print('year mismatch left(${this.year}) right (${other.year})');
-    if (this.yearRange != other.yearRange)
-      print(
-          'yearRange mismatch left(${this.yearRange}) right (${other.yearRange})');
-    if (this.userRating != other.userRating)
-      print(
-          'userRating mismatch left(${this.userRating}) right (${other.userRating})');
-    if (this.censorRating != other.censorRating)
-      print(
-          'censorRating mismatch left(${this.censorRating}) right (${other.censorRating})');
-    if (this.runTime != other.runTime)
-      print('runTime mismatch left(${this.runTime}) right (${other.runTime})');
-    if (this.language != other.language)
-      print(
-          'language mismatch left(${this.language}) right (${other.language})');
-    if (this.languages.toString() != other.languages.toString())
-      print(
-          'languages mismatch left(${this.languages}) right (${other.languages})');
-    if (this.imageUrl != other.imageUrl)
-      print(
-          'imageUrl mismatch left(${this.imageUrl}) right (${other.imageUrl})');
-    if (this.related.toPrintableString() != other.related.toPrintableString())
-      print(
-          'related mismatch left(${this.related.toPrintableString()}) right (${other.related.toPrintableString()})');
 
     return this.source == other.source &&
         this.uniqueId == other.uniqueId &&

@@ -57,7 +57,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     _searchStatusSubscription = movieRepository
         .search(criteria)
         .listen((dto) => _receiveDTO(dto))
-          ..onDone(() => add(SearchCompleted()));
+      ..onDone(() => add(SearchCompleted()));
   }
 
   /// Maintain map of fetched movie snippets and details.
@@ -65,17 +65,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   void _receiveDTO(MovieResultDTO newValue) {
     if ('' != newValue.alternateId) {
       //replace placeholder with new record
-      print('Deleting: ${newValue.uniqueId}');
       _allResults.remove(newValue.uniqueId);
       newValue.uniqueId = newValue.alternateId;
     }
 
     if (newValue.uniqueId.startsWith(movieResultDTOMessagePrefix) ||
         !_allResults.containsKey(newValue.uniqueId)) {
-      print('Adding: ${newValue.uniqueId}');
       _allResults[newValue.uniqueId] = newValue;
     } else {
-      print('Merging: ${newValue.uniqueId}');
       _allResults[newValue.uniqueId]!.merge(newValue);
     }
     _sortResults();

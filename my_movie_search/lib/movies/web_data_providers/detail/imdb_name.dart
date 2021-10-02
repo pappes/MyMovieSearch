@@ -54,7 +54,6 @@ class QueryIMDBNameDetails
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     var url = '$baseURL$searchCriteria';
-    print("fetching imdb person $url");
     return WebRedirect.constructURI(url);
   }
 

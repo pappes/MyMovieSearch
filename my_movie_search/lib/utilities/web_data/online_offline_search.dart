@@ -22,8 +22,6 @@ class OnlineOfflineSelector<T> {
 
   /// Returns appropriate <generic> for current mode (online or offline)
   T select(T onlineDataSource, T offlineDataSource) {
-    logger.v('OnlineOfflineSelector.select returning '
-        '${_offline ? 'offlineDataSource' : 'onlineDataSource'}');
     return _offline ? offlineDataSource : onlineDataSource;
   }
 }
