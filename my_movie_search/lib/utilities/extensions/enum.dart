@@ -1,11 +1,11 @@
 /// String representation of an Enum to Enum representation.
 ///
-dynamic getEnumValue(dynamic stringValue, List enumClass) {
+T? getEnumValue<T>(dynamic stringValue, List enumClass) {
   if (stringValue != null) {
-    String str = stringValue.toString();
-    for (var element in enumClass) {
+    final String str = stringValue.toString();
+    for (final element in enumClass) {
       if (element.toString() == str) {
-        return element;
+        return element as T;
       }
     }
   }

@@ -44,7 +44,8 @@ class QueryIMDBCastDetails
   /// converts <INPUT_TYPE> to a string representation.
   @override
   String myFormatInputAsText(dynamic contents) {
-    return contents!.criteriaTitle;
+    final criteria = contents as SearchCriteriaDTO;
+    return criteria.criteriaTitle;
   }
 
   /// API call to IMDB search returning the top matching results for [searchText].
@@ -112,41 +113,46 @@ class QueryIMDBCastDetails
 
   /// Extract the cast for the current movie.
   void scrapeRelated(Document document, Map movieData) {
-    var roleText;
-    for (var credits
-        in document.querySelector('#fullcredits_content')?.children ?? []) {
-      roleText = getRole(credits) ?? roleText;
-      var cast = getCast(credits);
-      addCast(movieData, roleText ?? '?', cast);
+    String? roleText;
+    final children = document.querySelector('#fullcredits_content')?.children;
+    if (null != children) {
+      for (var credits in children) {
+        roleText = _getRole(credits) ?? roleText;
+        var cast = _getCast(credits);
+        _addCast(movieData, roleText ?? '?', cast);
+      }
     }
   }
 
-  String? getRole(credits) {
+  String? _getRole(Element credits) {
     if (credits.classes.contains('dataHeaderWithBorder')) {
-      var text = credits.text ??
-          credits.attributes['id'] ??
-          credits.attributes['name'];
+      var text = credits.text;
+      if (text.isEmpty) {
+        text = credits.attributes['id'] ?? credits.attributes['name'] ?? '?';
+      }
       return text.trim().split('\n').first + ':';
     }
   }
 
-  addCast(Map movieData, String role, dynamic cast) {
+  _addCast(Map movieData, String role, dynamic cast) {
     if (!movieData.containsKey(role)) {
       movieData[role] = [];
     }
     movieData[role].addAll(cast);
   }
 
-  List<Map> getCast(Element table) {
+  List<Map> _getCast(Element table) {
     List<Map> movies = [];
     for (var row in table.querySelectorAll('tr')) {
-      Map person = {outer_element_official_title: ''};
+      var title = '';
+      var linkURL = '';
       for (var link in row.querySelectorAll('a[href*="/name/nm"]')) {
-        person[outer_element_official_title] +=
-            link.text.trim().split('\n').first;
-        person[outer_element_link] = link.attributes['href'];
+        title += link.text.trim().split('\n').first;
+        linkURL = link.attributes['href'] ?? '';
       }
-      if (person[outer_element_official_title].length > 0) {
+      if (title.isNotEmpty) {
+        Map<String, String> person = {outer_element_official_title: title};
+        person[outer_element_link] = linkURL;
         var charactor = row.querySelector('a[href*="/title/tt"]')?.text;
         if (null != charactor) {
           person[outer_element_alternate_title] = charactor;

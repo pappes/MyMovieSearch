@@ -43,7 +43,7 @@ class QueryIMDBTitleDetails
     // Combine all HTTP chunks together for HTML parsing.
     final content = await str.reduce((value, element) => '$value$element');
 
-    var movieData = scrapeWebPage(content);
+    var movieData = _scrapeWebPage(content);
     if (movieData[outer_element_description] == null) {
       yield myYieldError('imdb webscraper data not detected '
           'for criteria $getCriteriaText');
@@ -54,7 +54,8 @@ class QueryIMDBTitleDetails
   /// converts <INPUT_TYPE> to a string representation.
   @override
   String myFormatInputAsText(dynamic contents) {
-    return contents!.criteriaTitle;
+    final criteria = contents as SearchCriteriaDTO;
+    return criteria.criteriaTitle;
   }
 
   /// API call to IMDB search returning the top matching results for [searchText].
@@ -109,24 +110,24 @@ class QueryIMDBTitleDetails
   }
 
   /// Collect JSON and webpage text to construct a map of the movie data.
-  Map scrapeWebPage(String content) {
+  Map _scrapeWebPage(String content) {
     // Extract embedded JSON.
     var document = parse(content);
-    var movieData = json.decode(getMovieJson(document));
+    final movieData = json.decode(getMovieJson(document)) as Map;
 
     if (movieData == {}) {
-      scrapeName(document, movieData);
-      scrapeType(document, movieData);
+      _scrapeName(document, movieData);
+      _scrapeType(document, movieData);
     }
     // Get better details form the web page where possible.
-    scrapePoster(document, movieData);
-    scrapeDescription(document, movieData);
-    scrapeLanguageDetails(document, movieData);
+    _scrapePoster(document, movieData);
+    _scrapeDescription(document, movieData);
+    _scrapeLanguageDetails(document, movieData);
 
-    getRecomendationList(movieData, document);
+    _getRecomendationList(movieData, document);
 
-    getAttributeValue(movieData, document, inner_element_rating_count);
-    getAttributeValue(movieData, document, inner_element_rating_value);
+    _getAttributeValue(movieData, document, inner_element_rating_count);
+    _getAttributeValue(movieData, document, inner_element_rating_value);
 
     movieData['id'] = getCriteriaText ?? movieData['id'];
     return movieData;
@@ -145,8 +146,8 @@ class QueryIMDBTitleDetails
   }
 
   /// Extract movie type not found in JSON from HTML
-  scrapeType(Document document, Map movieData) {
-    getAttributeValue(movieData, document, outer_element_type);
+  _scrapeType(Document document, Map movieData) {
+    _getAttributeValue(movieData, document, outer_element_type);
     if ("" == movieData[outer_element_type] &&
         null != document.querySelector('a[href*="genre=short"]')) {
       movieData[outer_element_type] = "Short";
@@ -198,7 +199,7 @@ class QueryIMDBTitleDetails
   }
 
   /// Extract short description of movie from web page.
-  scrapeDescription(Document document, Map movieData) {
+  _scrapeDescription(Document document, Map movieData) {
     var description =
         document.querySelector('div[data-testid="storyline-plot-summary"]');
     if (null == description) {
@@ -210,7 +211,7 @@ class QueryIMDBTitleDetails
   }
 
   /// Extract Official name of movie from web page.
-  scrapeName(Document document, Map movieData) {
+  _scrapeName(Document document, Map movieData) {
     var description =
         document.querySelector('h1[data-testid="hero-title-block"]');
     if (null == description) {
@@ -222,7 +223,7 @@ class QueryIMDBTitleDetails
   }
 
   /// Search for movie poster.
-  scrapePoster(Document document, Map movieData) {
+  _scrapePoster(Document document, Map movieData) {
     var posterBlock =
         document.querySelector('div[data-testid="hero-media__poster"]');
     if (null == posterBlock) {
@@ -240,7 +241,7 @@ class QueryIMDBTitleDetails
   }
 
   /// Extract type, year, Censor Rating and duration from ul<TitleBlockMetaData>
-  scrapeLanguageDetails(Document document, Map movieData) {
+  _scrapeLanguageDetails(Document document, Map movieData) {
     movieData[outer_element_language] = LanguageType.none;
     var languageHtml =
         document.querySelector('li[data-testid="title-details-languages"]');
@@ -288,7 +289,7 @@ class QueryIMDBTitleDetails
 
   /// Use CSS selector to find the text on the page
   /// and extract values from the page.
-  void getAttributeValue(Map moviedata, Document document, String attribute) {
+  void _getAttributeValue(Map moviedata, Document document, String attribute) {
     if (moviedata[attribute] != null) return;
     var elements = document.querySelectorAll('span[itemprop="$attribute"]');
     for (var element in elements) {
@@ -300,7 +301,7 @@ class QueryIMDBTitleDetails
   }
 
   /// Extract the movie recommendations from the current movie.
-  void getRecomendationList(Map movieData, Document document) {
+  void _getRecomendationList(Map movieData, Document document) {
     movieData[outer_element_related] = [];
     List<Element> recommendations =
         document.querySelectorAll('div.rec_overview');

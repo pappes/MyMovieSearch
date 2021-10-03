@@ -47,7 +47,8 @@ class QueryIMDBNameDetails
   /// converts <INPUT_TYPE> to a string representation.
   @override
   String myFormatInputAsText(dynamic contents) {
-    return contents!.criteriaTitle;
+    final criteria = contents as SearchCriteriaDTO;
+    return criteria.criteriaTitle;
   }
 
   /// API call to IMDB person details for person id.
@@ -105,7 +106,7 @@ class QueryIMDBNameDetails
   Map scrapeWebPage(String content) {
     // Extract embedded JSON.
     var document = parse(content);
-    var movieData = json.decode(getMovieJson(document));
+    var movieData = json.decode(getMovieJson(document)) as Map;
     scrapeName(document, movieData);
     scrapeRelated(document, movieData);
 

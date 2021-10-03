@@ -11,19 +11,20 @@ const outer_element_link = 'url';
 
 class ImdbCastConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
-    return [dtoFromMap(map)];
+    return [_dtoFromMap(map)];
   }
 
-  static MovieResultDTO dtoFromMap(Map map) {
+  static MovieResultDTO _dtoFromMap(Map map) {
     var movie = MovieResultDTO();
     movie.source = DataSourceType.imdb;
-    movie.uniqueId = map[outer_element_identity_element] ?? movie.uniqueId;
+    movie.uniqueId =
+        map[outer_element_identity_element]?.toString() ?? movie.uniqueId;
 
     if (map.length > 0) {
       for (var category in map.entries) {
-        getMovies(
+        _getMovies(
           movie,
-          category.key,
+          category.key.toString(),
           category.value,
         );
       }
@@ -32,28 +33,30 @@ class ImdbCastConverter {
     return movie;
   }
 
-  static getMovies(MovieResultDTO movie, String label, dynamic movies) {
+  static _getMovies(MovieResultDTO movie, String label, dynamic movies) {
     if (null != movies && movies is List) {
       for (var relatedMap in movies) {
-        MovieResultDTO? dto = dtoFromRelatedMap(relatedMap);
-        if (null != dto) {
-          movie.addRelated(label, dto);
+        if (relatedMap is Map) {
+          MovieResultDTO? dto = dtoFromRelatedMap(relatedMap);
+          if (null != dto) {
+            movie.addRelated(label, dto);
+          }
         }
       }
     }
   }
 
   static MovieResultDTO? dtoFromRelatedMap(Map map) {
-    var id = getIdFromIMDBLink(map[outer_element_link]);
+    var id = getIdFromIMDBLink(map[outer_element_link]?.toString());
     if (id == '') {
       return null;
     }
     var movie = MovieResultDTO();
     movie.source = DataSourceType.imdbSuggestions;
     movie.uniqueId = id;
-    movie.title = map[outer_element_official_title] ?? movie.title;
+    movie.title = map[outer_element_official_title]?.toString() ?? movie.title;
     movie.alternateTitle =
-        map[outer_element_alternate_title] ?? movie.alternateTitle;
+        map[outer_element_alternate_title]?.toString() ?? movie.alternateTitle;
 
     return movie;
   }

@@ -1,10 +1,9 @@
-import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_helper.dart';
-import 'test_data/imdb_suggestion_converter_data.dart';
 import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
+import 'test_data/imdb_suggestion_converter_data.dart';
+import 'test_helper.dart';
 
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
@@ -13,32 +12,34 @@ void main() {
 
   group('transformer', () {
     /// Confirms the JSONP function prefix is removed from the input (if present).
-    testPrefix(input, expectedOutput) {
-      var decoder = JsonPDecoder();
-      var actualOutput = decoder.stripPrefix(input);
+    void testPrefix(String input, String expectedOutput) {
+      final decoder = JsonPDecoder();
+      final actualOutput = decoder.stripPrefix(input);
       expect(actualOutput, expectedOutput, reason: decoder.toString());
     }
 
     /// Confirms the closing pearenthesis is removed from the input (if present).
-    testSuffix(input, expectedOutput) {
-      var decoder = JsonPDecoder();
+    void testSuffix(String input, String expectedOutput) {
+      final decoder = JsonPDecoder();
       // Prime the decoder so that it does not strip the prefix from the input.
       decoder.stripPrefix('(');
-      var actualOutput = decoder.bufferSuffix(input);
+      final actualOutput = decoder.bufferSuffix(input);
       expect(actualOutput, expectedOutput, reason: decoder.toString());
     }
 
     /// Confirm removal is prefix and suffix even across multiple line of input.
-    testMultiLineConversion(List<String> lines, expectedOutput) {
-      var decoder = JsonPDecoder();
-      var actualOutput = '';
-      for (var line in lines) actualOutput += decoder.convert(line);
-      expect(actualOutput, expectedOutput,
+    void testMultiLineConversion(List<String> lines, String expectedOutput) {
+      final decoder = JsonPDecoder();
+      final actualOutput = StringBuffer();
+      for (final line in lines) {
+        actualOutput.write(decoder.convert(line));
+      }
+      expect(actualOutput.toString(), expectedOutput,
           reason: 'input:$lines decoder:${decoder.toString()}');
     }
 
     /// Confirm removal is prefix and suffix fior a single line of input.
-    testSingleLineConversion(input, expectedOutput) {
+    void testSingleLineConversion(String input, String expectedOutput) {
       testMultiLineConversion([input], expectedOutput);
     }
 
@@ -153,12 +154,12 @@ void main() {
   group('stream test', () {
     test('transformer', () async {
       // Set up the test data.
-      String testInput = imdbJsonPSampleFull;
-      var expectedString = imdbJsonSampleOuter;
+      final testInput = imdbJsonPSampleFull;
+      final expectedString = imdbJsonSampleOuter;
       var emittedString = '';
 
       // Compare the stream output to the expected output.
-      var expectFn = expectAsync1<void, String>((output) {
+      final expectFn = expectAsync1<void, String>((output) {
         if (output != '') {
           emittedString += output;
           expect(
@@ -166,12 +167,12 @@ void main() {
         }
       }, count: imdbJsonPSampleFull.length, max: imdbJsonPSampleFull.length);
 
-      doneFn() {
+      void doneFn() {
         expect(emittedString, expectedString);
       }
 
       // Invoke the functionality.
-      Stream<String> stream = emitByteStream(testInput)
+      final stream = emitByteStream(testInput)
           .transform(utf8.decoder)
           .transform(JsonPDecoder());
 

@@ -1,6 +1,7 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 //query string https://api.themoviedb.org/3/movie/{movieID}?api_key={api_key}
 //json format
@@ -52,7 +53,7 @@ class TmdbMovieDetailConverter {
       searchResults.add(dtoFromMap(map));
     } else {
       final error = MovieResultDTO();
-      error.title = map[outer_element_failure_reason] ??
+      error.title = map[outer_element_failure_reason]?.toString() ??
           'No failure reason provided in results ${map.toString()}';
       searchResults.add(error);
     }
@@ -63,40 +64,53 @@ class TmdbMovieDetailConverter {
     final movie = MovieResultDTO();
     movie.source = DataSourceType.tmdb;
     movie.uniqueId = '${map[inner_element_identity]}';
-    movie.alternateId = map[inner_element_imdb_id] ?? movie.alternateId;
+    movie.alternateId =
+        map[inner_element_imdb_id]?.toString() ?? movie.alternateId;
     if (null != map[inner_element_common_title] &&
         null != map[inner_element_original_title]) {
       movie.title = '${map[inner_element_original_title]} '
           '(${map[inner_element_common_title]}';
     } else {
-      movie.imageUrl = map[inner_element_image] ??
-          map[inner_element_common_title] ??
+      movie.imageUrl = map[inner_element_image]?.toString() ??
+          map[inner_element_common_title]?.toString() ??
           movie.imageUrl;
     }
 
-    var year = DateTime.tryParse(map[inner_element_year] ?? '')?.year;
+    var year =
+        DateTime.tryParse(map[inner_element_year]?.toString() ?? '')?.year;
     if (null != year) {
       movie.year = year;
     } else {
-      movie.yearRange = map[inner_element_year] ?? movie.yearRange;
+      movie.yearRange = map[inner_element_year]?.toString() ?? movie.yearRange;
     }
 
-    movie.imageUrl = map[inner_element_poster_path] ?? movie.imageUrl;
+    movie.imageUrl =
+        map[inner_element_poster_path]?.toString() ?? movie.imageUrl;
     if ('true' == map[inner_element_type]) {
       movie.type = MovieContentType.short;
     }
     if ('true' == map[inner_element_adult]) {
       movie.censorRating = CensorRatingType.adult;
     }
-    movie.description = map[inner_element_overview] ?? movie.description;
-    movie.runTime = getDuration(map[inner_element_runtime]) ?? movie.runTime;
-    movie.userRatingCount =
-        map[inner_element_vote_count] ?? movie.userRatingCount;
-    movie.userRating = map[inner_element_vote_average] ?? movie.userRating;
+    movie.description =
+        map[inner_element_overview]?.toString() ?? movie.description;
+
+    movie.userRating = DoubleHelper.fromText(
+      map[inner_element_vote_average],
+      nullValueSubstitute: movie.userRating,
+    )!;
+    movie.userRatingCount = IntHelper.fromText(
+      map[inner_element_vote_count],
+      nullValueSubstitute: movie.userRatingCount,
+    )!;
+
+    int? mins = IntHelper.fromText(map[inner_element_runtime]);
+    movie.runTime = _getDuration(mins) ?? movie.runTime;
+
     movie.languages.combineUnique(map[inner_element_original_language]);
     movie.languages.combineUnique(map[inner_element_spoken_languages]);
-    for (Map<String, String> genre in map[inner_element_genres]) {
-      movie.genres.combineUnique(genre['name']);
+    for (Map genre in map[inner_element_genres]) {
+      movie.genres.combineUnique(genre['name'] as String);
     }
     /*TODO
     const inner_element_poster_path = 'poster_path';
@@ -105,7 +119,7 @@ class TmdbMovieDetailConverter {
     return movie;
   }
 
-  static Duration? getDuration(mins) {
+  static Duration? _getDuration(int? mins) {
     if (null == mins) {
       return null;
     }

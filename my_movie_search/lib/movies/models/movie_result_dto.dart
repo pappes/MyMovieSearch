@@ -59,26 +59,26 @@ enum LanguageType {
 }
 
 // member variable names
-final String movieResultDTOSource = 'source';
-final String movieResultDTOUniqueId = 'uniqueId';
-final String movieResultDTOAlternateId = 'alternateId';
-final String movieResultDTOTitle = 'title';
-final String movieResultDTOAlternateTitle = 'alternateTitle';
-final String movieResultDTODescription = 'description';
-final String movieResultDTOType = 'type';
-final String movieResultDTOYear = 'year';
-final String movieResultDTOYearRange = 'yearRange';
-final String movieResultDTOUserRating = 'userRating';
-final String movieResultDTOUserRatingCount = 'userRatingCount';
-final String movieResultDTOCensorRating = 'censorRating';
-final String movieResultDTORunTime = 'runTime';
-final String movieResultDTOImageUrl = 'imageUrl';
-final String movieResultDTOLanguage = 'language';
-final String movieResultDTOLanguages = 'languages';
-final String movieResultDTOGenres = 'genres';
-final String movieResultDTORelated = 'related';
-final String movieResultDTOUninitialised = '-1';
-final String movieResultDTOMessagePrefix = '-';
+const String movieResultDTOSource = 'source';
+const String movieResultDTOUniqueId = 'uniqueId';
+const String movieResultDTOAlternateId = 'alternateId';
+const String movieResultDTOTitle = 'title';
+const String movieResultDTOAlternateTitle = 'alternateTitle';
+const String movieResultDTODescription = 'description';
+const String movieResultDTOType = 'type';
+const String movieResultDTOYear = 'year';
+const String movieResultDTOYearRange = 'yearRange';
+const String movieResultDTOUserRating = 'userRating';
+const String movieResultDTOUserRatingCount = 'userRatingCount';
+const String movieResultDTOCensorRating = 'censorRating';
+const String movieResultDTORunTime = 'runTime';
+const String movieResultDTOImageUrl = 'imageUrl';
+const String movieResultDTOLanguage = 'language';
+const String movieResultDTOLanguages = 'languages';
+const String movieResultDTOGenres = 'genres';
+const String movieResultDTORelated = 'related';
+const String movieResultDTOUninitialised = '-1';
+const String movieResultDTOMessagePrefix = '-';
 
 class RestorableMovie extends RestorableValue<MovieResultDTO> {
   @override
@@ -93,9 +93,11 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
 
   @override
   MovieResultDTO fromPrimitives(Object? data) {
-    if (data != null) {
-      Map<String, dynamic> map = jsonDecode(data as String);
-      return map.toMovieResultDTO();
+    if (data != null && data is String) {
+      final decoded = jsonDecode(data);
+      if (decoded is Map) {
+        return decoded.toMovieResultDTO();
+      }
     }
     return MovieResultDTO();
   }
@@ -120,9 +122,11 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
 
   @override
   List<MovieResultDTO> fromPrimitives(Object? data) {
-    if (data != null) {
-      List<dynamic> list = jsonDecode(data as String);
-      return value.decodeList(list);
+    if (data != null && data is String) {
+      final decoded = jsonDecode(data);
+      if (decoded is List) {
+        return value.decodeList(decoded);
+      }
     }
     return [];
   }
@@ -166,7 +170,7 @@ extension MapDTOConversion on Map {
     if (val is int) return val;
     if (val is String) return int.tryParse(val) ?? 0;
     if (val == null) return 0;
-    return int.tryParse(val) ?? 0;
+    return int.tryParse(val.toString()) ?? 0;
   }
 
   double _getDouble(dynamic val) {
@@ -179,34 +183,50 @@ extension MapDTOConversion on Map {
   /// Convert a [Map] into a [MovieResultDTO] object
   ///
   MovieResultDTO toMovieResultDTO() {
-    var dto = MovieResultDTO();
-    dto.source =
-        getEnumValue(this[movieResultDTOSource], DataSourceType.values) ??
-            dto.source;
+    final dto = MovieResultDTO();
     dto.uniqueId = _getString(this[movieResultDTOUniqueId]);
     dto.alternateId = _getString(this[movieResultDTOAlternateId]);
     dto.title = _getString(this[movieResultDTOTitle]);
     dto.alternateTitle = _getString(this[movieResultDTOAlternateTitle]);
 
     dto.description = _getString(this[movieResultDTODescription]);
-    dto.type =
-        getEnumValue(this[movieResultDTOType], MovieContentType.values) ??
-            dto.type;
     dto.year = _getInt(this[movieResultDTOYear]);
     dto.yearRange = _getString(this[movieResultDTOYearRange]);
     dto.userRating = _getDouble(this[movieResultDTOUserRating]);
     dto.userRatingCount = _getInt(this[movieResultDTOUserRatingCount]);
-    dto.censorRating = getEnumValue(
-            this[movieResultDTOCensorRating], CensorRatingType.values) ??
-        dto.censorRating;
     dto.runTime = Duration(seconds: _getInt(this[movieResultDTORunTime]));
     dto.imageUrl = _getString(this[movieResultDTOImageUrl]);
-    dto.language =
-        getEnumValue(this[movieResultDTOLanguage], LanguageType.values) ??
-            dto.language;
-    dto.languages =
-        ListHelper.fromJson(_getString(this[movieResultDTOLanguages]));
-    dto.genres = ListHelper.fromJson(_getString(this[movieResultDTOGenres]));
+
+    dto.source = getEnumValue<DataSourceType>(
+          this[movieResultDTOSource],
+          DataSourceType.values,
+        ) ??
+        dto.source;
+    dto.type = getEnumValue<MovieContentType>(
+          this[movieResultDTOType],
+          MovieContentType.values,
+        ) ??
+        dto.type;
+    dto.censorRating = getEnumValue<CensorRatingType>(
+          this[movieResultDTOCensorRating],
+          CensorRatingType.values,
+        ) ??
+        dto.censorRating;
+    dto.language = getEnumValue<LanguageType>(
+          this[movieResultDTOLanguage],
+          LanguageType.values,
+        ) ??
+        dto.language;
+    dto.languages = ListHelper.fromJson(
+      _getString(
+        this[movieResultDTOLanguages],
+      ),
+    );
+    dto.genres = ListHelper.fromJson(
+      _getString(
+        this[movieResultDTOGenres],
+      ),
+    );
     //TODO related
     return dto;
   }
@@ -420,28 +440,28 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Create a placeholder for a value that can not be easily represented
   /// as a [MovieResultDTO].
   ///
-  Map toUnknown() {
-    Map<String, dynamic> map = Map();
-    map[movieResultDTOSource] = this.source;
-    map[movieResultDTOUniqueId] = this.uniqueId;
-    map[movieResultDTOAlternateId] = this.alternateId;
-    map[movieResultDTOTitle] = 'unknown';
-    map[movieResultDTOAlternateTitle] = this.alternateTitle;
+  MovieResultDTO toUnknown() {
+    final dto = MovieResultDTO();
+    dto.source = source;
+    dto.uniqueId = uniqueId;
+    dto.alternateId = alternateId;
+    dto.title = 'unknown';
+    dto.alternateTitle = alternateTitle;
 
-    map[movieResultDTODescription] = this.description;
-    map[movieResultDTOType] = this.type;
-    map[movieResultDTOYear] = this.year;
-    map[movieResultDTOYearRange] = this.yearRange;
-    map[movieResultDTOUserRating] = this.userRating;
-    map[movieResultDTOUserRatingCount] = this.userRatingCount;
-    map[movieResultDTOCensorRating] = this.censorRating;
-    map[movieResultDTORunTime] = this.runTime;
-    map[movieResultDTOImageUrl] = this.imageUrl;
-    map[movieResultDTOLanguage] = this.language;
-    map[movieResultDTOLanguages] = this.languages;
-    map[movieResultDTOGenres] = this.genres;
-    map[movieResultDTORelated] = this.related;
-    return map;
+    dto.description = description;
+    dto.type = type;
+    dto.year = year;
+    dto.yearRange = yearRange;
+    dto.userRating = userRating;
+    dto.userRatingCount = userRatingCount;
+    dto.censorRating = censorRating;
+    dto.runTime = runTime;
+    dto.imageUrl = imageUrl;
+    dto.language = language;
+    dto.languages = languages;
+    dto.genres = genres;
+    dto.related = related;
+    return dto;
   }
 
   /// Test framework matcher to compare current [MovieResultDTO] to [other]
@@ -499,11 +519,15 @@ extension StringMovieResultDTOHelpers on String {
   /// Decode a json encoded representation of a [List]<[MovieResultDTO]>.
   ///
   List<MovieResultDTO> jsonToList() {
-    List<String> listContents = jsonDecode(this);
-    List<MovieResultDTO> dtos = [];
-    for (String json in listContents) {
-      Map<String, String> map = jsonDecode(json);
-      dtos.add(map.toMovieResultDTO());
+    final List<MovieResultDTO> dtos = [];
+    final listContents = jsonDecode(this);
+    if (listContents is List) {
+      for (final json in listContents) {
+        final decoded = jsonDecode(json.toString());
+        if (decoded is Map) {
+          dtos.add(decoded.toMovieResultDTO());
+        }
+      }
     }
     return dtos;
   }

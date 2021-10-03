@@ -17,8 +17,9 @@ class ImdbSearchConverter {
     movie.source = DataSourceType.imdbSearch;
     movie.uniqueId =
         getID(map[inner_element_identity_element]) ?? movie.uniqueId;
-    movie.title = map[inner_element_info_element] ?? movie.title;
-    movie.imageUrl = map[inner_element_image_element] ?? movie.imageUrl;
+    movie.title = map[inner_element_info_element]?.toString() ?? movie.title;
+    movie.imageUrl =
+        map[inner_element_image_element]?.toString() ?? movie.imageUrl;
     movie.yearRange =
         getYearRange(map[inner_element_info_element]) ?? movie.yearRange;
     movie.year = movie.maxYear();

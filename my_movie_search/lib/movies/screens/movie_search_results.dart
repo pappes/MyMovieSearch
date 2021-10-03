@@ -30,7 +30,7 @@ class MovieSearchResultsNewPage extends StatefulWidget {
   MovieSearchResultsNewPage({Key? key, required SearchCriteriaDTO criteria})
       : criteria = criteria,
         super(key: key);
-  final criteria;
+  final SearchCriteriaDTO criteria;
 
   @override
   _MovieSearchResultsPageState createState() =>
@@ -111,7 +111,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     );
   }
 
-  Widget _movieListBuilder(context, listIndex) {
+  Widget _movieListBuilder(BuildContext context, int listIndex) {
     if (listIndex >= _sortedList.length) {
       return ListTile(
           title: Text("More widgets than available data to populate them!"));

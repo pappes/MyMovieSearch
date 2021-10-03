@@ -48,9 +48,9 @@ class ExpandedColumn extends Expanded {
 }
 
 class BoldLabel extends Text {
-  BoldLabel(string)
+  BoldLabel(String string)
       : super(
-          formatString(string),
+          _formatString(string),
           textAlign: TextAlign.left,
           style: TextStyle(
             fontFamily: 'RobotoMono',
@@ -58,14 +58,14 @@ class BoldLabel extends Text {
           ),
         ) {}
 
-  static formatString(string) {
+  static String _formatString(String string) {
     var newString = '';
     var words = string.split('_');
-    words.forEach((word) => newString += initCap(word) + ' ');
+    words.forEach((word) => newString += _initCap(word) + ' ');
     return newString;
   }
 
-  static initCap(string) {
+  static String _initCap(String string) {
     return '${string[0].toUpperCase()}${string.substring(1)}';
   }
 }

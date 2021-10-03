@@ -206,12 +206,14 @@ void main() {
           .transform(JsonPDecoder())
           .transform(json.decoder)
           // Stream the results collection from within the map.
-          .map((outerMap) => (outerMap as Map) //
-              [outer_element_results_collection])
+          .map(
+            (outerMap) =>
+                (outerMap! as Map)[outer_element_results_collection] as List,
+          )
           // Emit each member of the list as a seperate stream event.
           .expand((listMember) => listMember)
           // Convert each Map result to a DTO
-          .map((event) => ImdbSuggestionConverter.dtoFromMap(event));
+          .map((event) => ImdbSuggestionConverter.dtoFromMap(event as Map));
 
       // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn);

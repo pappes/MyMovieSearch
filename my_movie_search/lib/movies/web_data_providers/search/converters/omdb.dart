@@ -30,10 +30,10 @@ class OmdbMovieSearchConverter {
     final resultsMatched = map[outer_element_search_success] ?? "";
     if (resultsMatched == "True") {
       map[outer_element_results_collection]
-          .forEach((movie) => searchResults.add(dtoFromMap(movie)));
+          .forEach((movie) => searchResults.add(dtoFromMap(movie as Map)));
     } else {
       final error = MovieResultDTO();
-      error.title = map[outer_element_failure_reason] ??
+      error.title = map[outer_element_failure_reason]?.toString() ??
           "No failure reason provided in results ${map.toString()}";
       searchResults.add(error);
     }
@@ -43,18 +43,21 @@ class OmdbMovieSearchConverter {
   static MovieResultDTO dtoFromMap(Map map) {
     final movie = MovieResultDTO();
     movie.source = DataSourceType.omdb;
-    movie.uniqueId = map[inner_element_identity_element] ?? movie.uniqueId;
-    movie.title = map[inner_element_title_element] ?? movie.title;
+    movie.uniqueId =
+        map[inner_element_identity_element]?.toString() ?? movie.uniqueId;
+    movie.title = map[inner_element_title_element]?.toString() ?? movie.title;
 
-    var year = getYear(map[inner_element_year_element]);
+    var year = getYear(map[inner_element_year_element]?.toString());
     if (null != year) {
       movie.year = year;
     } else {
-      movie.yearRange = map[inner_element_year_element] ?? movie.yearRange;
+      movie.yearRange =
+          map[inner_element_year_element]?.toString() ?? movie.yearRange;
       movie.year = movie.maxYear();
     }
 
-    movie.imageUrl = map[inner_element_image_element] ?? movie.imageUrl;
+    movie.imageUrl =
+        map[inner_element_image_element]?.toString() ?? movie.imageUrl;
     switch (map[inner_element_type_element]) {
       case OMDB_RESULT_TYPE_MOVIE:
         movie.type = MovieContentType.movie;

@@ -4,40 +4,30 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
-
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 
 import 'test_helper.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Mock provider
 ////////////////////////////////////////////////////////////////////////////////
-final _imdbHtmlSampleFull = r'''
-<!DOCTYPE html>
-<html
-    <head>
-      <script type="application/ld+json">{
-        "description": "123." }
-      </script>
-    </head>
-    <body>
-    </body>
-</html>
-''';
 
 /// Make dummy dto results for offline queries.
 List<MovieResultDTO> _makeExpectedResults(int qty) {
-  List<MovieResultDTO> results = [];
+  final List<MovieResultDTO> results = [];
   for (int i = 0; i < qty; i++) {
-    var uniqueId = 1000 + i;
-    results.add({
-      'source': DataSourceType.imdb.toString(),
-      'uniqueId': '$uniqueId',
-      'description': '''$uniqueId.
+    final uniqueId = 1000 + i;
+    results.add(
+      {
+        'source': DataSourceType.imdb.toString(),
+        'uniqueId': '$uniqueId',
+        'description': '''
+$uniqueId.
 Keywords: null''',
-    }.toMovieResultDTO());
+      }.toMovieResultDTO(),
+    );
   }
   return results;
 }
@@ -66,7 +56,7 @@ Future<Stream<String>> _offlineSearch(dynamic criteria) async {
 
 /// Create a string list with [qty] unique criteria values.
 List<String> _makeQueries(int qty) {
-  List<String> results = [];
+  final List<String> results = [];
   for (int i = 0; i < qty; i++) {
     results.add((1000 + i).toString());
   }
@@ -75,17 +65,18 @@ List<String> _makeQueries(int qty) {
 
 /// Build a live IMDB url and route Javascript requests through a HTTP tunnel.
 Uri constructURI(String searchText) {
-  final baseURL = 'https://www.imdb.com/title/';
-  final baseURLsuffix = '/?ref_=fn_tt_tt_1';
+  const baseURL = 'https://www.imdb.com/title/';
+  const baseURLsuffix = '/?ref_=fn_tt_tt_1';
   final titleId = searchText.padLeft(7, '0');
   var url = '${baseURL}tt$titleId$baseURLsuffix';
 
   // Route web requests through a tunnel if using the Javascript
   // XMLHttpRequest http client library.
-  if (kIsWeb)
+  if (kIsWeb) {
     url = 'http://localhost:8080?origin=https://www.imdb.com&'
         'referer=https://www.imdb.com/&'
         'destination=${Uri.encodeQueryComponent(url)}';
+  }
 
   print('fetching redirected details $url');
   return Uri.parse(url);
@@ -93,7 +84,8 @@ Uri constructURI(String searchText) {
 
 /// Retrieve HTML from IMDB.
 Future<Stream<String>> _onlineSearch(dynamic criteria) async {
-  final encoded = Uri.encodeQueryComponent(criteria!.criteriaTitle);
+  final SearchCriteriaDTO criteriaText = criteria as SearchCriteriaDTO;
+  final encoded = Uri.encodeQueryComponent(criteriaText.criteriaTitle);
   final address = constructURI(encoded);
 
   final client = await HttpClient().getUrl(address);
@@ -108,43 +100,53 @@ Future<Stream<String>> _onlineSearch(dynamic criteria) async {
   }
   // Check for successful HTTP status before transforming (avoid HTTP 404)
   if (200 != response.statusCode) {
-    print('Error in http read, HTTP status code : ${response.statusCode}');
+    print(
+        'Error in http read, HTTP status code : ${response.statusCode} for address');
     return _offlineSearch(criteria);
   }
   return response.transform(utf8.decoder);
 }
 
 /// Call IMDB for each criteria in the list.
-List<Future> _queueDetailSearch(List<String> queries, bool online) {
-  List<Future> futures = [];
-  queries.forEach((queryKey) {
-    var criteria = SearchCriteriaDTO();
+List<Future<List<MovieResultDTO>>> _queueDetailSearch(
+  List<String> queries,
+  bool online,
+) {
+  final List<Future<List<MovieResultDTO>>> futures = [];
+  for (final queryKey in queries) {
+    final criteria = SearchCriteriaDTO();
     final imdbDetails =
         QueryIMDBTitleDetails(); //Seperate instance per search (async)
     criteria.criteriaTitle = queryKey;
-    futures.add(imdbDetails.readList(criteria,
-        source: (online ? _onlineSearch : _offlineSearch)));
-  });
+    final future = imdbDetails.readList(
+      criteria,
+      source: online ? _onlineSearch : _offlineSearch,
+    );
+    futures.add(future);
+  }
   return futures;
 }
 
-void main() async {
+void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////
 
   group('WebFetchBase parent', () {
-    testRead(List<String> criteria, List<MovieResultDTO> expectedValue,
-        {bool online = true}) async {
+    Future<void> testRead(
+      List<String> criteria,
+      List<MovieResultDTO> expectedValue, {
+      bool online = true,
+    }) async {
       // Call IMDB for each criteria in the list.
-      var futures = _queueDetailSearch(criteria, online);
+      final futures = _queueDetailSearch(criteria, online);
 
       // Collect the result of all the IMDB queries.
-      List<MovieResultDTO> queryResult = [];
-      futures.forEach((future) {
+      final List<MovieResultDTO> queryResult = [];
+      for (final future in futures) {
         future.then((value) => queryResult.addAll(value));
-      });
-      for (var future in futures) {
+      }
+      for (final future in futures) {
         await future;
       }
 
@@ -161,22 +163,22 @@ void main() async {
 
     // Convert 1 sample offline page into a dto.
     test('Run read 1 offline page', () async {
-      var queries = _makeQueries(1);
-      var queryResult = _makeExpectedResults(queries.length);
+      final queries = _makeQueries(1);
+      final queryResult = _makeExpectedResults(queries.length);
       await testRead(queries, queryResult, online: false);
     });
 
     // Convert 300 sample offline pages into dtos.
     test('Run read 300 offline pages', () async {
-      var queries = _makeQueries(300);
-      var queryResult = _makeExpectedResults(queries.length);
+      final queries = _makeQueries(300);
+      final queryResult = _makeExpectedResults(queries.length);
       await testRead(queries, queryResult, online: false);
     });
 
     // Convert 3 IMDB pages into dtos.
     test('Run read 3 pages from IMDB', () async {
-      var queries = _makeQueries(3);
-      var queryResult = _makeExpectedResults(queries.length);
+      final queries = _makeQueries(3);
+      final queryResult = _makeExpectedResults(queries.length);
       await testRead(queries, queryResult);
     });
 

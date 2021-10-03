@@ -35,11 +35,12 @@ class ImdbSuggestionConverter {
   static MovieResultDTO dtoFromMap(Map map) {
     var movie = MovieResultDTO();
     movie.source = DataSourceType.imdbSuggestions;
-    movie.uniqueId = map[inner_element_identity] ?? movie.uniqueId;
-    movie.title = map[inner_element_title] ?? movie.title;
-    movie.imageUrl = getImage(map[inner_element_image]) ?? movie.imageUrl;
-    movie.year = map[inner_element_year] ?? movie.year;
-    movie.yearRange = map[inner_element_year_range] ?? movie.yearRange;
+    movie.uniqueId = map[inner_element_identity]?.toString() ?? movie.uniqueId;
+    movie.title = map[inner_element_title]?.toString() ?? movie.title;
+    movie.imageUrl = _getImage(map[inner_element_image]) ?? movie.imageUrl;
+    movie.year = map[inner_element_year] as int? ?? movie.year;
+    movie.yearRange =
+        map[inner_element_year_range]?.toString() ?? movie.yearRange;
     movie.type = getImdbMovieContentType(
           map[inner_element_type],
           movie.runTime.inMinutes,
@@ -49,7 +50,7 @@ class ImdbSuggestionConverter {
     return movie;
   }
 
-  static String? getImage(List? imageData) {
-    return imageData?.first;
+  static String? _getImage(imageData) {
+    if (imageData is List<String>) return imageData.first;
   }
 }

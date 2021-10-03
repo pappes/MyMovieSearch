@@ -14,7 +14,7 @@ class PersonDetailsPage extends StatefulWidget {
       : _person = person,
         super(key: key);
 
-  final _person;
+  final MovieResultDTO _person;
 
   @override
   _PersonDetailsPageState createState() => _PersonDetailsPageState(_person);

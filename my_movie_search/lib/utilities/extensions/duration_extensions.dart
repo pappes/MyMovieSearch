@@ -10,19 +10,21 @@ extension DurationHelper on Duration {
   }
 
   /// Convert ISO 8601 [String] e.g. PT1H46M to Dart [Duration]
-  Duration fromIso8601(String isoString) {
+  Duration fromIso8601(dynamic val) {
+    final isoString = val?.toString() ?? '';
     //logic adapted from https://dev.to/ashishrawat2911/parse-iso8601-duration-string-to-duration-object-in-dart-flutter-1gc1
-    if (!RegExp(r'^(-|\+)?P'
-            '(?:([-+]?[0-9,.]*)Y)?'
-            '(?:([-+]?[0-9,.]*)M)?'
-            '(?:([-+]?[0-9,.]*)W)?'
-            '(?:([-+]?[0-9,.]*)D)?'
-            '(?:T'
-            '(?:([-+]?[0-9,.]*)H)?'
-            '(?:([-+]?[0-9,.]*)M)?'
-            '(?:([-+]?[0-9,.]*)S)?'
-            r')?$')
-        .hasMatch(isoString)) {
+    if (!RegExp(
+      r'^(-|\+)?P'
+      '(?:([-+]?[0-9,.]*)Y)?'
+      '(?:([-+]?[0-9,.]*)M)?'
+      '(?:([-+]?[0-9,.]*)W)?'
+      '(?:([-+]?[0-9,.]*)D)?'
+      '(?:T'
+      '(?:([-+]?[0-9,.]*)H)?'
+      '(?:([-+]?[0-9,.]*)M)?'
+      '(?:([-+]?[0-9,.]*)S)?'
+      r')?$',
+    ).hasMatch(isoString)) {
       throw ArgumentError('String does not follow correct format');
     }
 

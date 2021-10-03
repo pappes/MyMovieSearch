@@ -5,7 +5,10 @@ import 'dart:convert' show json, utf8;
 
 import 'package:logger/logger.dart';
 import 'package:universal_io/io.dart'
-    show HttpClient, HttpHeaders; // limit inclusions to reduce size
+    show
+        HttpClient,
+        HttpClientResponse,
+        HttpHeaders; // limit inclusions to reduce size
 
 import 'online_offline_search.dart';
 
@@ -245,15 +248,15 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Should not be overridden by child classes.
   Future<Stream<String>> baseFetchWebText(dynamic criteria) async {
-    final encoded =
-        Uri.encodeQueryComponent(myFormatInputAsText(criteria) ?? '');
+    final encoded = Uri.encodeQueryComponent(
+        myFormatInputAsText(criteria as INPUT_TYPE) ?? '');
     final address = myConstructURI(encoded);
 
     final client = await HttpClient().getUrl(address);
     myConstructHeaders(client.headers);
     final request = client.close();
 
-    var response;
+    HttpClientResponse response;
     try {
       response = await request;
     } catch (error, stackTrace) {
@@ -263,7 +266,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
     // Check for successful HTTP status before transforming (avoid HTTP 404)
     if (200 != response.statusCode) {
-      print('Error in http read, HTTP status code : ${response.statusCode}');
+      print(
+          'Error in http read, HTTP status code : ${response.statusCode} for $address');
       var offlineFunction = myOfflineData();
       return offlineFunction(criteria);
     }

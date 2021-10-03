@@ -24,10 +24,11 @@ class TieredCache<T> {
 
   /// Get data from the cache.
   ///
-  /// If data is not in any cache executes [callback] to construct the value.
+  /// If data is not in any cache, executes [callback] to construct the value.
   Future<T> get(dynamic key, {Future<T> Function()? callback}) async {
-    if (memoryCache.containsKey(key) && memoryCache[key] is T) {
-      return memoryCache[key];
+    final val = memoryCache[key];
+    if (val is T) {
+      return val;
     }
     assert(null != callback);
     return callback!();

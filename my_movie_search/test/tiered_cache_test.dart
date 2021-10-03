@@ -12,21 +12,24 @@ Future<dynamic> nullCallback() async {
 /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-void main() async {
+void main() {
   group('Store In Memory', () {
     test('String', () {
       /// Run a series of values through the cache and compare to expected output
-      testCache(List<Map> input, Map expectedOutput) {
-        var cache = TieredCache();
+      void testCache(List<Map> input, Map expectedOutput) {
+        final cache = TieredCache();
 
-        input.forEach((listitem) {
+        void addMapContentsToCache(Map listitem) {
           listitem.forEach((key, value) {
             cache.add(key, value);
           });
-        });
+        }
+
+        input.forEach(addMapContentsToCache);
+
         expectedOutput.forEach((key, value) {
           expect(cache.isCached(key), true);
-          var actualOutput = cache.get(key, callback: nullCallback);
+          final actualOutput = cache.get(key, callback: nullCallback);
           actualOutput.then((value) {
             expect(value, expectedOutput[key]);
           });

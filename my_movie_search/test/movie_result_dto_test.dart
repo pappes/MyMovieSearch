@@ -39,7 +39,7 @@ void main() {
   group('DTOCompare', () {
     // Categorise dto based on popularity from userRatingCount.
     test('userRatingCategory', () {
-      testUserRatingCategory(input, expectedOutput) {
+      testUserRatingCategory(int input, expectedOutput) {
         var testInput = MovieResultDTO();
         testInput.userRatingCount = input;
         expect(testInput.userRatingCategory(), expectedOutput);
@@ -54,7 +54,7 @@ void main() {
     });
     // Categorise dto based on title type from MovieContentType.
     test('userContentCategory', () {
-      testUserContentCategory(input, expectedOutput) {
+      testUserContentCategory(MovieContentType input, expectedOutput) {
         var testInput = MovieResultDTO();
         testInput.type = input;
         expect(testInput.titleContentCategory(), expectedOutput);
@@ -147,7 +147,7 @@ void main() {
     });
     // Determine definative year based on text based year range
     test('yearRangeAsNumber', () {
-      testYearCompare(inputYR, expectedOutput) {
+      testYearCompare(String inputYR, expectedOutput) {
         var testInput = MovieResultDTO();
         testInput.yearRange = inputYR;
         expect(testInput.yearRangeAsNumber(), expectedOutput);

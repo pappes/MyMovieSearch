@@ -30,17 +30,19 @@ class MovieModel {
     return map;
   }
 
-  MovieResultDTO toMovieResultDTO() {
-    var map = json.decode(dtoJson);
-    return map.ToMovieResultDTO;
+  MovieResultDTO? xtoMovieResultDTO() {
+    var decoded = json.decode(dtoJson);
+    if (decoded is Map) {
+      return decoded.toMovieResultDTO();
+    }
   }
 }
 
 extension ModelConversion on Map {
   MovieModel toMovieModel() => MovieModel(
-        id: this[colMovieId]!,
-        uniqueId: this[colMovieUniqueId]!,
-        dtoJson: this[colMovieJson]!,
+        id: this[colMovieId]! as int,
+        uniqueId: this[colMovieUniqueId]!.toString(),
+        dtoJson: this[colMovieJson]!.toString(),
       );
 }
 
@@ -64,7 +66,7 @@ class DatabaseHelper {
   }
 
   // open the database
-  _initDatabase() async {
+  Future<Database> _initDatabase() async {
     // The path_provider plugin gets the right directory for Android or iOS.
     Directory documentsDirectory = await getApplicationDocumentsDirectory();
     String path = join(documentsDirectory.path, _databaseName);

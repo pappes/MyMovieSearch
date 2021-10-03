@@ -21,21 +21,24 @@ class ImdbNamePageConverter {
   static final htmlDecode = HtmlUnescape();
 
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
-    return [dtoFromMap(map)];
+    return [_dtoFromMap(map)];
   }
 
-  static MovieResultDTO dtoFromMap(Map map) {
+  static MovieResultDTO _dtoFromMap(Map map) {
     var movie = MovieResultDTO();
     movie.source = DataSourceType.imdb;
-    movie.uniqueId = map[outer_element_identity_element] ?? movie.uniqueId;
-    movie.title = map[outer_element_official_title] ?? movie.title;
+    movie.uniqueId =
+        map[outer_element_identity_element]?.toString() ?? movie.uniqueId;
+    movie.title = map[outer_element_official_title]?.toString() ?? movie.title;
     movie.alternateTitle =
-        map[outer_element_common_title] ?? movie.alternateTitle;
-    movie.description = map[outer_element_description] ?? movie.title;
-    movie.imageUrl = map[outer_element_image] ?? movie.imageUrl;
+        map[outer_element_common_title]?.toString() ?? movie.alternateTitle;
+    movie.description =
+        map[outer_element_description]?.toString() ?? movie.title;
+    movie.imageUrl = map[outer_element_image]?.toString() ?? movie.imageUrl;
 
-    movie.year = getYear(map[outer_element_born]) ?? movie.year;
-    String deathDate = getYear(map[outer_element_died])?.toString() ?? '';
+    movie.year = getYear(map[outer_element_born]?.toString()) ?? movie.year;
+    String deathDate =
+        getYear(map[outer_element_died]?.toString())?.toString() ?? '';
     movie.yearRange = movie.year.toString() + '-' + deathDate;
     movie.type = getImdbMovieContentType(
           map[outer_element_type],
@@ -44,14 +47,16 @@ class ImdbNamePageConverter {
         ) ??
         movie.type;
 
-    if (map.containsKey(outer_element_related) &&
-        map[outer_element_related].length > 0) {
-      for (var category in map[outer_element_related]) {
-        getMovies(
-          movie,
-          category.values.first,
-          category.keys.first,
-        );
+    final categories = map[outer_element_related];
+    if (categories is List && categories.length > 0) {
+      for (var category in categories) {
+        if (category is Map) {
+          _getMovies(
+            movie,
+            category.values.first,
+            category.keys.first.toString(),
+          );
+        }
       }
     }
 
@@ -61,26 +66,28 @@ class ImdbNamePageConverter {
     return movie;
   }
 
-  static getMovies(MovieResultDTO movie, dynamic movies, String label) {
-    if (null != movies) {
+  static _getMovies(MovieResultDTO movie, dynamic movies, String label) {
+    if (null != movies && movies is List) {
       for (var relatedMap in movies) {
-        MovieResultDTO? dto = dtoFromRelatedMap(relatedMap);
-        if (null != dto) {
-          movie.addRelated(label, dto);
+        if (relatedMap is Map) {
+          MovieResultDTO? dto = dtoFromRelatedMap(relatedMap);
+          if (null != dto) {
+            movie.addRelated(label, dto);
+          }
         }
       }
     }
   }
 
   static MovieResultDTO? dtoFromRelatedMap(Map map) {
-    var id = getIdFromIMDBLink(map[outer_element_link]);
+    var id = getIdFromIMDBLink(map[outer_element_link]?.toString());
     if (id == '') {
       return null;
     }
     var movie = MovieResultDTO();
     movie.source = DataSourceType.imdbSuggestions;
     movie.uniqueId = id;
-    movie.title = map[outer_element_official_title] ?? movie.title;
+    movie.title = map[outer_element_official_title]?.toString() ?? movie.title;
 
     return movie;
   }

@@ -43,18 +43,23 @@ class ImdbMoviePageConverter {
   static MovieResultDTO dtoFromMap(Map map) {
     var movie = MovieResultDTO();
     movie.source = DataSourceType.imdb;
-    movie.uniqueId = map[outer_element_identity_element] ?? movie.uniqueId;
-    movie.title = map[outer_element_official_title] ?? movie.title;
+    movie.uniqueId =
+        map[outer_element_identity_element]?.toString() ?? movie.uniqueId;
+    movie.title = map[outer_element_official_title]?.toString() ?? movie.title;
     movie.alternateTitle =
-        map[outer_element_common_title] ?? movie.alternateTitle;
-    movie.description = map[outer_element_description] ?? movie.title;
+        map[outer_element_common_title]?.toString() ?? movie.alternateTitle;
+    movie.description =
+        map[outer_element_description]?.toString() ?? movie.title;
     movie.description += '\nKeywords: ${map[outer_element_keywords]}';
-    movie.imageUrl = map[outer_element_image] ?? movie.imageUrl;
-    movie.language = map[outer_element_language] ?? movie.language;
+    movie.imageUrl = map[outer_element_image]?.toString() ?? movie.imageUrl;
+    final language = map[outer_element_language];
+    if (language is LanguageType) {
+      movie.language = language;
+    }
     movie.languages.combineUnique(map[outer_element_languages]);
     movie.genres.combineUnique(map[outer_element_genre]);
     movie.censorRating = getImdbCensorRating(
-          map[outer_element_censor_rating],
+          map[outer_element_censor_rating]?.toString(),
         ) ??
         movie.censorRating;
 
@@ -67,16 +72,14 @@ class ImdbMoviePageConverter {
       nullValueSubstitute: movie.userRatingCount,
     )!;
 
-    var year = getYear(map[outer_element_year]);
+    var year = getYear(map[outer_element_year]?.toString());
     if (null != year) {
       movie.year = year;
     } else {
-      movie.yearRange = map[outer_element_year] ?? movie.yearRange;
+      movie.yearRange = map[outer_element_year]?.toString() ?? movie.yearRange;
     }
     try {
-      if ('' != (map[outer_element_duration] ?? '')) {
-        movie.runTime = Duration().fromIso8601(map[outer_element_duration]!);
-      }
+      movie.runTime = Duration().fromIso8601(map[outer_element_duration]);
     } catch (e) {
       movie.runTime = Duration(hours: 0, minutes: 0, seconds: 0);
     }
@@ -87,9 +90,9 @@ class ImdbMoviePageConverter {
         ) ??
         movie.type;
 
-    getRelated(movie, map[outer_element_related]);
-    getPeople(movie, map[outer_element_actors], related_actors_label);
-    getPeople(movie, map[outer_element_director], related_directors_label);
+    _getRelated(movie, map[outer_element_related]);
+    _getPeople(movie, map[outer_element_actors], related_actors_label);
+    _getPeople(movie, map[outer_element_director], related_directors_label);
 
     movie.title = htmlDecode.convert(movie.title);
     movie.alternateTitle = htmlDecode.convert(movie.alternateTitle);
@@ -97,40 +100,47 @@ class ImdbMoviePageConverter {
     return movie;
   }
 
-  static getRelated(MovieResultDTO movie, dynamic suggestions) {
-    if (null != suggestions) {
+  static _getRelated(MovieResultDTO movie, dynamic suggestions) {
+    if (null != suggestions && suggestions is Iterable) {
       for (var relatedMap in suggestions) {
-        MovieResultDTO dto = dtoFromMap(relatedMap);
-        movie.addRelated(related_movies_label, dto);
-      }
-    }
-  }
-
-  static getPeople(MovieResultDTO movie, dynamic people, String label) {
-    if (null != people) {
-      List peopleList;
-      if (people is List)
-        peopleList = people;
-      else
-        peopleList = [people];
-      for (var relatedMap in peopleList) {
-        MovieResultDTO? dto = dtoFromPersonMap(relatedMap);
-        if (null != dto) {
-          movie.addRelated(label, dto);
+        if (relatedMap is Map) {
+          MovieResultDTO dto = dtoFromMap(relatedMap);
+          movie.addRelated(related_movies_label, dto);
         }
       }
     }
   }
 
-  static MovieResultDTO? dtoFromPersonMap(Map map) {
-    var id = getIdFromIMDBLink(map[outer_element_link]);
+  static _getPeople(MovieResultDTO movie, dynamic people, String label) {
+    if (null != people) {
+      Iterable peopleList;
+      if (people is Iterable) {
+        peopleList = people;
+      } else if (people is Map) {
+        peopleList = [people];
+      } else {
+        return;
+      }
+      for (var relatedMap in peopleList) {
+        if (relatedMap is Map) {
+          MovieResultDTO? dto = _dtoFromPersonMap(relatedMap);
+          if (null != dto) {
+            movie.addRelated(label, dto);
+          }
+        }
+      }
+    }
+  }
+
+  static MovieResultDTO? _dtoFromPersonMap(Map map) {
+    var id = getIdFromIMDBLink(map[outer_element_link]?.toString());
     if (map[outer_element_type] != 'Person' || id == '') {
       return null;
     }
     var movie = MovieResultDTO();
     movie.source = DataSourceType.imdbSuggestions;
     movie.uniqueId = id;
-    movie.title = map[outer_element_official_title] ?? movie.title;
+    movie.title = map[outer_element_official_title]?.toString() ?? movie.title;
 
     return movie;
   }
