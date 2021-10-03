@@ -2,11 +2,11 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'test_helper.dart';
-import 'test_data/imdb_suggestion_converter_data.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_suggestion.dart';
+import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
+import 'test_data/imdb_suggestion_converter_data.dart';
+import 'test_helper.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Conceptual testing
@@ -18,8 +18,8 @@ void main() {
     // Observe a string being represented as a stream of bytes.
     test('simple Bytesteam test', () {
       // Set up the test data.
-      String testInput = 'B(a)';
-      List<List<int>> expectedOutput = [
+      const testInput = 'B(a)';
+      final List<List<int>> expectedOutput = [
         [66],
         [40],
         [97],
@@ -29,8 +29,8 @@ void main() {
       int currentRune = 0;
       // Compare the stream output to the expected output.
       void checkOutput(List<int> streamOutput) {
-        var char = testInput.substring(currentRune, currentRune + 1);
-        var rune = expectedOutput[currentRune];
+        final char = testInput.substring(currentRune, currentRune + 1);
+        final rune = expectedOutput[currentRune];
         expect(
           streamOutput,
           rune,
@@ -39,31 +39,38 @@ void main() {
         currentRune++;
       }
 
-      var expectFn = expectAsync1<void, List<int>>(
+      final expectFn = expectAsync1<void, List<int>>(
         checkOutput,
         count: testInput.length,
       );
 
       // Invoke the functionality.
-      var stream = emitByteStream(testInput);
+      final stream = emitByteStream(testInput);
 
       // Listen to the stream running the test function on each emitted value.
-      stream.listen(expectFn, onDone: () {
-        expect(currentRune, testInput.length,
-            reason: 'emmitted rune count needs to equal expected runes');
-        print('stream done, all $currentRune elements consumed');
-      });
+      stream.listen(
+        expectFn,
+        onDone: () {
+          expect(
+            currentRune,
+            testInput.length,
+            reason: 'emmitted rune count needs to equal expected runes',
+          );
+          // ignore: avoid_print
+          print('stream done, all $currentRune elements consumed');
+        },
+      );
     });
 
     // Observe UTF8 decoding of the byte stream.
     test('UTF8 decoder test', () {
       // Set up the test data.
-      String testInput = '$imdbJsonPFunction(a)';
+      final testInput = '$imdbJsonPFunction(a)';
 
       int currentChar = 0;
       // Compare the stream output to the expected output.
       void checkOutput(String streamOutput) {
-        var expected = testInput.substring(currentChar, currentChar + 1);
+        final expected = testInput.substring(currentChar, currentChar + 1);
         expect(
           streamOutput,
           expected,
@@ -73,13 +80,13 @@ void main() {
         currentChar++;
       }
 
-      var expectFn = expectAsync1<void, String>(
+      final expectFn = expectAsync1<void, String>(
         checkOutput,
         count: testInput.length,
       );
 
       // Invoke the functionality.
-      var stream = emitByteStream(testInput).transform(utf8.decoder);
+      final stream = emitByteStream(testInput).transform(utf8.decoder);
 
       // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn);
@@ -88,11 +95,11 @@ void main() {
     // Observe JSON decoding of the byte stream into a Map.
     test('json decoder test', () {
       // Set up the test data.
-      String testInput = imdbJsonSampleOuter;
+      final testInput = imdbJsonSampleOuter;
 
       // Compare the stream output to the expected output.
       void checkOutput(Object? streamOutput) {
-        Map decodedOutput = streamOutput as Map<dynamic, dynamic>;
+        final decodedOutput = streamOutput! as Map<dynamic, dynamic>;
         expect(
           decodedOutput[imdbCustomKeyName],
           imdbCustomKeyVal,
@@ -101,10 +108,10 @@ void main() {
         );
       }
 
-      var expectFn = expectAsync1<void, Object?>(checkOutput, count: 1);
+      final expectFn = expectAsync1<void, Object?>(checkOutput, count: 1);
 
       // Invoke the functionality.
-      var stream = emitByteStream(testInput)
+      final stream = emitByteStream(testInput)
           .transform(utf8.decoder)
           .transform(json.decoder);
 
@@ -116,11 +123,11 @@ void main() {
     // Preceeding tests are simpler examples to see how this test was built.
     test('jsonp transformer test', () {
       // Set up the test data.
-      String testInput = imdbJsonPSampleFull;
+      final testInput = imdbJsonPSampleFull;
 
       // Compare the stream output to the expected output.
       void checkOutput(Object? streamOutput) {
-        Map decodedOutput = streamOutput as Map<dynamic, dynamic>;
+        final decodedOutput = streamOutput! as Map<dynamic, dynamic>;
         expect(
           decodedOutput[imdbCustomKeyName],
           imdbCustomKeyVal,
@@ -129,10 +136,10 @@ void main() {
         );
       }
 
-      var expectFn = expectAsync1<void, Object?>(checkOutput, count: 1);
+      final expectFn = expectAsync1<void, Object?>(checkOutput, count: 1);
 
       // Invoke the functionality.
-      var stream = emitByteStream(testInput)
+      final stream = emitByteStream(testInput)
           .transform(utf8.decoder)
           .transform(JsonPDecoder())
           .transform(json.decoder);
@@ -143,7 +150,7 @@ void main() {
 
     test('extract value from map test', () {
       // Set up the test data.
-      String testInput = imdbJsonSampleOuter;
+      final testInput = imdbJsonSampleOuter;
 
       // Compare the stream output to the expected output.
       void checkOutput(Object? streamOutput) {
@@ -155,13 +162,13 @@ void main() {
         );
       }
 
-      var expectFn = expectAsync1<void, Object?>(checkOutput, count: 1);
+      final expectFn = expectAsync1<void, Object?>(checkOutput, count: 1);
 
       // Invoke the functionality.
-      var stream = emitConsolidatedByteStream(testInput)
+      final stream = emitConsolidatedByteStream(testInput)
           .transform(utf8.decoder)
           .transform(json.decoder)
-          .map((outerMap) => (outerMap as Map)[imdbCustomKeyName]);
+          .map((outerMap) => (outerMap! as Map)[imdbCustomKeyName]);
 
       // Listen to the stream running the test function on each emitted value.
       stream.listen(expectFn);
@@ -176,16 +183,16 @@ void main() {
     // Convert IMDB suggestions from JSON to dto.
     test('convert Json to DTO', () async {
       // Set up the test data.
-      String testInput = imdbJsonPSampleFull;
-      var expectedDTO = await expectedDTOList;
+      final testInput = imdbJsonPSampleFull;
+      final expectedDTO = await expectedDTOList;
 
       // Compare the stream output to the expected output.
       int dtoCount = 0;
       void checkOutput(MovieResultDTO streamOutput) {
-        var currentExpected = dtoCount;
+        final currentExpected = dtoCount;
         dtoCount++;
-        var expectedValue = expectedDTO[currentExpected];
-        var isExpectedValue = MovieResultDTOMatcher(expectedValue);
+        final expectedValue = expectedDTO[currentExpected];
+        final isExpectedValue = MovieResultDTOMatcher(expectedValue);
         expect(
           streamOutput,
           isExpectedValue,
@@ -194,14 +201,14 @@ void main() {
         );
       }
 
-      var expectFn = expectAsync1<void, MovieResultDTO>(
+      final expectFn = expectAsync1<void, MovieResultDTO>(
         checkOutput,
         count: expectedDTO.length,
         max: expectedDTO.length,
       );
 
       // Invoke the functionality.
-      Stream<MovieResultDTO> stream = emitByteStream(testInput)
+      final Stream<MovieResultDTO> stream = emitByteStream(testInput)
           .transform(utf8.decoder)
           .transform(JsonPDecoder())
           .transform(json.decoder)

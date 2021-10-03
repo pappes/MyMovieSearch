@@ -105,19 +105,28 @@ void main() {
         testFromJson('{"first":1, "second":2 }', ['1', '2']);
         testFromJson('[{"first":1, "second":2 }]', ['{first: 1, second: 2}']);
         testFromJson(
-            '[{"first":"one", "second":"two" }, {"first":"eleven", "second":"twelve" }]',
-            ['{first: one, second: two}', '{first: eleven, second: twelve}']);
+          '[{"first":"one", "second":"two" }, {"first":"eleven", "second":"twelve" }]',
+          ['{first: one, second: two}', '{first: eleven, second: twelve}'],
+        );
         testFromJson(
-            '[{"color":"red",	"value":"#f00"}]', ['{color: red, value: #f00}']);
+          '[{"color":"red",	"value":"#f00"}]',
+          ['{color: red, value: #f00}'],
+        );
       });
     });
 
     group('combineUnique', () {
       void testCombineUnique(
-          List<String> input1, input2, List<String> expectedOutput) {
+        List<String> input1,
+        input2,
+        List<String> expectedOutput,
+      ) {
         input1.combineUnique(input2);
-        expect(input1, expectedOutput,
-            reason: 'input ${input1.toString()},  ${input2.toString()}');
+        expect(
+          input1,
+          expectedOutput,
+          reason: 'input ${input1.toString()},  ${input2.toString()}',
+        );
       }
 
       // Combining a list with an empty list results in the original list.
@@ -138,16 +147,25 @@ void main() {
         testCombineUnique(['a', 'b', 'c'], [], ['a', 'b', 'c']);
         testCombineUnique([], ['a', 'b', 'c'], ['a', 'b', 'c']);
         testCombineUnique(
-            ['a', 'b', 'c'], ['d', 'e', 'f'], ['a', 'b', 'c', 'd', 'e', 'f']);
+          ['a', 'b', 'c'],
+          ['d', 'e', 'f'],
+          ['a', 'b', 'c', 'd', 'e', 'f'],
+        );
       });
       // Combining lists, with differnt datatypes results in all elements being present.
       test('multiple elements different datatypes', () {
         testCombineUnique(['a', 'b', 'c'], [1], ['a', 'b', 'c', '1']);
         testCombineUnique([], [1, 2, 3], ['1', '2', '3']);
         testCombineUnique(
-            ['a', 'b', 'c'], [1, 2, 3], ['a', 'b', 'c', '1', '2', '3']);
+          ['a', 'b', 'c'],
+          [1, 2, 3],
+          ['a', 'b', 'c', '1', '2', '3'],
+        );
         testCombineUnique(
-            ['a', 'b', 'c'], {'A': '1', 'B': '2'}, ['a', 'b', 'c', '1', '2']);
+          ['a', 'b', 'c'],
+          {'A': '1', 'B': '2'},
+          ['a', 'b', 'c', '1', '2'],
+        );
       });
       // Combining lists, with duplicate elements results in all elements being present once only.
       test('deduplication', () {

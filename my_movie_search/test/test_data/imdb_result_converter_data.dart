@@ -28,7 +28,7 @@ final expectedDTOStream = streamMovieResultDTOFromJsonMap([
   }
 ]);
 
-final String htmlSampleInner = r'''
+const String htmlSampleInner = r'''
 <script type="application/ld+json">{
   "@context": "http://schema.org",
   "@type": "Movie",
@@ -91,5 +91,5 @@ final String htmlSampleInner = r'''
   }
 }</script>
 ''';
-final String htmlSampleOuter = '<html> $htmlSampleInner </html>>';
-final String htmlSampleFull = '$htmlSampleOuter';
+const String htmlSampleOuter = '<html> $htmlSampleInner </html>>';
+const String htmlSampleFull = htmlSampleOuter;

@@ -78,6 +78,7 @@ Uri constructURI(String searchText) {
         'destination=${Uri.encodeQueryComponent(url)}';
   }
 
+  // ignore: avoid_print
   print('fetching redirected details $url');
   return Uri.parse(url);
 }
@@ -95,13 +96,16 @@ Future<Stream<String>> _onlineSearch(dynamic criteria) async {
   try {
     response = await request;
   } catch (error, stackTrace) {
+    // ignore: avoid_print
     print('Error in web_fetch read: $error\n${stackTrace.toString()}');
     rethrow;
   }
   // Check for successful HTTP status before transforming (avoid HTTP 404)
   if (200 != response.statusCode) {
+    // ignore: avoid_print
     print(
-        'Error in http read, HTTP status code : ${response.statusCode} for address');
+      'Error in http read, HTTP status code : ${response.statusCode} for address',
+    );
     return _offlineSearch(criteria);
   }
   return response.transform(utf8.decoder);

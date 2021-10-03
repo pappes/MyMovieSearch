@@ -16,8 +16,9 @@ import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb
 //i = image with dimentions)
 
 Stream<MovieResultDTO> streamFromInnerJsonMap(
-    Iterable<Map<dynamic, dynamic>> records) async* {
-  for (Map record in records) {
+  Iterable<Map<dynamic, dynamic>> records,
+) async* {
+  for (final record in records) {
     yield ImdbSuggestionConverter.dtoFromMap(record);
   }
 }
@@ -187,7 +188,7 @@ final expectedDTOStream = streamFromInnerJsonMap([
   }
 ]);
 
-final String imdbJsonSampleInner = r'''
+const String imdbJsonSampleInner = '''
   {"l":"Wonder Woman 1984","id":"tt7126948","s":"Gal Gadot, Chris Pine","y":2020,"q":"feature","vt":35
       ,"i":["https://m.media-amazon.com/images/M/MV5B...Q3MTUy._V1_.jpg",2764,4096]
       ,"v":
@@ -219,12 +220,12 @@ final String imdbJsonSampleInner = r'''
   {"l":"Jennifer Wenger","id":"nm2628854","s":"Actress, Jimmy Kimmel Live! (2006-2007)"
       ,"i":["https://m.media-amazon.com/images/M/MV5B...cxNQ@@._V1_.jpg",640,428]}
 ''';
-final String imdbJsonPFunction = r'imdb$wonder_woman';
-final String imdbCustomKeyName = 'Cust';
-final String imdbCustomKeyVal = 'jsonpPTest';
-final String imdbJsonSampleOuter =
+const String imdbJsonPFunction = r'imdb$wonder_woman';
+const String imdbCustomKeyName = 'Cust';
+const String imdbCustomKeyVal = 'jsonpPTest';
+const String imdbJsonSampleOuter =
     '{"v":1,"q":"wonder_woman","d":[ $imdbJsonSampleInner ],"$imdbCustomKeyName":"$imdbCustomKeyVal"}';
-final String imdbJsonPSampleFull = '$imdbJsonPFunction($imdbJsonSampleOuter)';
+const String imdbJsonPSampleFull = '$imdbJsonPFunction($imdbJsonSampleOuter)';
 
 Stream<String> emitImdbJsonSample(dynamic dummy) async* {
   yield imdbJsonPSampleFull;

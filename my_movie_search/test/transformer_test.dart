@@ -34,8 +34,11 @@ void main() {
       for (final line in lines) {
         actualOutput.write(decoder.convert(line));
       }
-      expect(actualOutput.toString(), expectedOutput,
-          reason: 'input:$lines decoder:${decoder.toString()}');
+      expect(
+        actualOutput.toString(),
+        expectedOutput,
+        reason: 'input:$lines decoder:${decoder.toString()}',
+      );
     }
 
     /// Confirm removal is prefix and suffix fior a single line of input.
@@ -163,7 +166,9 @@ void main() {
         if (output != '') {
           emittedString += output;
           expect(
-              emittedString, expectedString.substring(0, emittedString.length));
+            emittedString,
+            expectedString.substring(0, emittedString.length),
+          );
         }
       }, count: imdbJsonPSampleFull.length, max: imdbJsonPSampleFull.length);
 

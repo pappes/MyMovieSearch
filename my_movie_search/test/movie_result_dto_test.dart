@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'test_helper.dart';
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
+
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'test_helper.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Helper functions
 ////////////////////////////////////////////////////////////////////////////////
 // Class to assist with Restorable tests
 class RestorationTestParent extends State with RestorationMixin {
-  RestorationTestParent(this.uniqueId) {}
+  RestorationTestParent(this.uniqueId);
   String uniqueId;
-  var movie = RestorableMovie();
-  var list = RestorableMovieList();
+  final movie = RestorableMovie();
+  final list = RestorableMovieList();
 
   @override
   // The restoration bucket id for this page.
@@ -22,12 +22,13 @@ class RestorationTestParent extends State with RestorationMixin {
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     // Register our property to be saved every time it changes,
     // and to be restored every time our app is killed by the OS!
-    registerForRestoration(movie, uniqueId + 'movie');
-    registerForRestoration(list, uniqueId + 'list');
+    registerForRestoration(movie, '${uniqueId}movie');
+    registerForRestoration(list, '${uniqueId}list');
   }
 
+  @override
   Widget build(BuildContext context) {
-    return Text('');
+    return const Text('');
   }
 }
 
@@ -39,8 +40,8 @@ void main() {
   group('DTOCompare', () {
     // Categorise dto based on popularity from userRatingCount.
     test('userRatingCategory', () {
-      testUserRatingCategory(int input, expectedOutput) {
-        var testInput = MovieResultDTO();
+      void testUserRatingCategory(int input, expectedOutput) {
+        final testInput = MovieResultDTO();
         testInput.userRatingCount = input;
         expect(testInput.userRatingCategory(), expectedOutput);
       }
@@ -54,8 +55,8 @@ void main() {
     });
     // Categorise dto based on title type from MovieContentType.
     test('userContentCategory', () {
-      testUserContentCategory(MovieContentType input, expectedOutput) {
-        var testInput = MovieResultDTO();
+      void testUserContentCategory(MovieContentType input, expectedOutput) {
+        final testInput = MovieResultDTO();
         testInput.type = input;
         expect(testInput.titleContentCategory(), expectedOutput);
       }
@@ -71,12 +72,11 @@ void main() {
     // A rating of 2/5 is better than a rating of less than 2/5.
     // A movie after 2000 is better than a movie before 2000.
     test('popularityCategory', () {
-      testPopularityCategory(MovieResultDTO input, expectedOutput) {
+      void testPopularityCategory(MovieResultDTO input, expectedOutput) {
         expect(input.popularityCategory(), expectedOutput);
       }
 
-      var testInput = MovieResultDTO();
-      testInput = MovieResultDTO();
+      final testInput = MovieResultDTO();
       // Any movie with a super low rating is probably bad.
       testInput.userRating = 1.99;
       testPopularityCategory(testInput, 0);
@@ -98,17 +98,17 @@ void main() {
     // Categorise dto based on Year of release.
     // Where a definative year is not know use the last known year.
     test('yearCompare', () {
-      testYearCompare(
+      void testYearCompare(
         int inputYear,
         String inputYR,
         int otherYear,
         String otherYR,
         int expectedOutput,
       ) {
-        var testInput = MovieResultDTO();
+        final testInput = MovieResultDTO();
         testInput.year = inputYear;
         testInput.yearRange = inputYR;
-        var testOther = MovieResultDTO();
+        final testOther = MovieResultDTO();
         testOther.year = otherYear;
         testOther.yearRange = otherYR;
         expect(testInput.yearCompare(testOther), expectedOutput);
@@ -140,15 +140,15 @@ void main() {
       testYearCompare(2011, '1980-2000', 0, '1999-2012', -1);
       testYearCompare(0, '1980-2011', 2012, '1999-2000', -1);
 
-      MovieResultDTO tmpYear = MovieResultDTO();
+      final tmpYear = MovieResultDTO();
       expect(tmpYear.yearCompare(null), 0);
       tmpYear.year = 2000;
       expect(tmpYear.yearCompare(null), 1);
     });
     // Determine definative year based on text based year range
     test('yearRangeAsNumber', () {
-      testYearCompare(String inputYR, expectedOutput) {
-        var testInput = MovieResultDTO();
+      void testYearCompare(String inputYR, expectedOutput) {
+        final testInput = MovieResultDTO();
         testInput.yearRange = inputYR;
         expect(testInput.yearRangeAsNumber(), expectedOutput);
       }
@@ -163,28 +163,32 @@ void main() {
 
   group('toMap_toMovieResultDTO', () {
     // Compare a dto to a map equivialent of the dto.
-    test_toMovieResultDTO(MovieResultDTO expected, Map<String, String> map) {
+    void testToMovieResultDTO(
+      MovieResultDTO expected,
+      Map<String, String> map,
+    ) {
+      // ignore: avoid_print
       print(map.toString());
 
-      var actual = map.toMovieResultDTO();
+      final actual = map.toMovieResultDTO();
 
       expect(expected, MovieResultDTOMatcher(actual));
     }
 
     // Convert a dto to a map.
     test('single_DTO', () {
-      var dto = makeDTO('abc');
+      final dto = makeDTO('abc');
 
-      var map = dto.toMap(excludeCopywritedData: false);
+      final map = dto.toMap(excludeCopywritedData: false);
 
-      test_toMovieResultDTO(dto, map);
+      testToMovieResultDTO(dto, map);
     });
 
     // Convert a dto to a map excluding copywrited content.
     test('copywrite_DTO', () {
-      var dto = makeDTO('abc');
+      final dto = makeDTO('abc');
 
-      var map = dto.toMap();
+      final map = dto.toMap();
       dto.description = '';
       dto.imageUrl = '';
       dto.userRating = 0;
@@ -192,19 +196,19 @@ void main() {
       dto.languages.clear();
       dto.genres.clear();
 
-      test_toMovieResultDTO(dto, map);
+      testToMovieResultDTO(dto, map);
     });
 
     // Convert a list of dtos to a JSON and then convert the JSON back to a list.
     test('multiple_DTO', () {
-      List<MovieResultDTO> list = [];
+      final List<MovieResultDTO> list = [];
       list.add(makeDTO('abc'));
       list.add(makeDTO('def'));
       list.add(makeDTO('ghi'));
-      var encoded = list.encodeList();
+      final encoded = list.encodeList();
 
-      List<MovieResultDTO> emptylist = [];
-      var decoded = emptylist.decodeList(encoded);
+      final List<MovieResultDTO> emptylist = [];
+      final decoded = emptylist.decodeList(encoded);
 
       expect(list[0], MovieResultDTOMatcher(decoded[0]));
       expect(list[1], MovieResultDTOMatcher(decoded[1]));
@@ -212,29 +216,29 @@ void main() {
     });
     // Convert a restorable dto to JSON and then convert the JSON to a restorable dto.
     test('RestorableMovie', () {
-      var movie = makeDTO('abcd');
-      var rtp = RestorationTestParent(movie.uniqueId);
+      final movie = makeDTO('abcd');
+      final rtp = RestorationTestParent(movie.uniqueId);
       rtp.restoreState(null, true);
 
-      var encoded = rtp.movie.dtoToPrimitives(movie);
+      final encoded = rtp.movie.dtoToPrimitives(movie);
       rtp.movie.initWithValue(rtp.movie.fromPrimitives(encoded));
-      var encoded2 = rtp.movie.toPrimitives();
+      final encoded2 = rtp.movie.toPrimitives();
 
       expect(movie, MovieResultDTOMatcher(rtp.movie.value));
       expect(encoded, encoded2);
     });
     // Convert a restorable dto list to JSON and then convert the JSON to a restorable dto list.
     test('RestorableMovieList', () {
-      List<MovieResultDTO> list = [];
+      final List<MovieResultDTO> list = [];
       list.add(makeDTO('abc'));
       list.add(makeDTO('def'));
       list.add(makeDTO('ghi'));
-      var rtp = RestorationTestParent(list[1].uniqueId);
+      final rtp = RestorationTestParent(list[1].uniqueId);
       rtp.restoreState(null, true);
 
-      var encoded = rtp.list.listToPrimitives(list);
+      final encoded = rtp.list.listToPrimitives(list);
       rtp.list.initWithValue(rtp.list.fromPrimitives(encoded));
-      var encoded2 = rtp.list.toPrimitives();
+      final encoded2 = rtp.list.toPrimitives();
 
       expect(list, MovieResultDTOListMatcher(rtp.list.value));
       expect(encoded, encoded2);

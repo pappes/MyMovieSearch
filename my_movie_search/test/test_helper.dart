@@ -25,8 +25,12 @@ class MovieResultDTOMatcher extends Matcher {
 
   @override
   // Tell test framework what difference was found.
-  Description describeMismatch(dynamic item, Description mismatchDescription,
-      Map<dynamic, dynamic> matchState, bool verbose) {
+  Description describeMismatch(
+    dynamic item,
+    Description mismatchDescription,
+    Map<dynamic, dynamic> matchState,
+    bool verbose,
+  ) {
     return mismatchDescription.add(
       'has actual emitted MovieResultDTO = \n${_actual.toPrintableString()}',
     );
@@ -60,8 +64,12 @@ class MovieResultDTOListMatcher extends Matcher {
 
   @override
   // Tell test framework what difference was found.
-  Description describeMismatch(dynamic item, Description mismatchDescription,
-      Map<dynamic, dynamic> matchState, bool verbose) {
+  Description describeMismatch(
+    dynamic item,
+    Description mismatchDescription,
+    Map<dynamic, dynamic> matchState,
+    bool verbose,
+  ) {
     return mismatchDescription.add('has actual ${_actual.toPrintableString()}');
   }
 
