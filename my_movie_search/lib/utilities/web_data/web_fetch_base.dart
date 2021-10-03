@@ -3,7 +3,6 @@ library pappes.utilites;
 import 'dart:async' show StreamController, FutureOr;
 import 'dart:convert' show json, utf8;
 
-import 'package:logger/logger.dart';
 import 'package:universal_io/io.dart'
     show
         HttpClient,
@@ -12,10 +11,10 @@ import 'package:universal_io/io.dart'
 
 import 'online_offline_search.dart';
 
-typedef FutureOr<Stream<String>> DataSourceFn(dynamic s);
-typedef List TransformFn(Map? map);
+typedef DataSourceFn = FutureOr<Stream<String>> Function(dynamic s);
+typedef TransformFn = List Function(Map? map);
 
-const _DEFAULT_SEARCH_RESULTS_LIMIT = 100;
+const _defaultSearchResultsLimit = 100;
 
 /// Extend [WebFetchBase] to provide a dynamically switchable stream of <[OUTPUT_TYPE]>
 /// from online and offline sources.
@@ -29,14 +28,13 @@ const _DEFAULT_SEARCH_RESULTS_LIMIT = 100;
 ///   Json(Map) -> Objects of type [OUTPUT_TYPE] via [myTransformMapToOutput]
 ///   Exception handling via [myYieldError]
 abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
-  INPUT_TYPE? _criteria;
-  int? _searchResultsLimit;
+  INPUT_TYPE? criteria;
+  int? searchResultsLimit;
   int _searchResultsreturned = 0;
 
-  void baseTestSetCriteria(INPUT_TYPE criteria) => _criteria = criteria;
-  void setSearchResultsLimit(int limit) => _searchResultsLimit = limit;
-  int? get getSearchResultsLimit => _searchResultsLimit;
-  String? get getCriteriaText => myFormatInputAsText(_criteria);
+  //void baseTestSetCriteria(INPUT_TYPE criteria) => _criteria = criteria;
+
+  String? get getCriteriaText => myFormatInputAsText(criteria);
   String? get _getFetchContext =>
       '${myDataSourceName()} with criteria $getCriteriaText';
 
@@ -44,14 +42,21 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Optionally inject [source] as an alternate datasource for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
-  void populateStream(StreamController<OUTPUT_TYPE> sc, INPUT_TYPE criteria,
-      {DataSourceFn? source,
-      int? limit = _DEFAULT_SEARCH_RESULTS_LIMIT}) async {
-    var errorHandler = (error, stackTrace) =>
-        print('Error in WebFetch populate: $error\n${stackTrace.toString()}');
+  void populateStream(
+    StreamController<OUTPUT_TYPE> sc,
+    INPUT_TYPE criteria, {
+    DataSourceFn? source,
+    int? limit = _defaultSearchResultsLimit,
+  }) {
+    void errorHandler(error, stackTrace) {
+      logger.e(
+        'Error in WebFetch populate: $error\n${stackTrace.toString()}',
+      );
+    }
+
     baseYieldWebText(
       source: source,
-      criteria: criteria,
+      newCriteria: criteria,
       resultSize: limit,
     ).pipe(sc).onError(errorHandler);
   }
@@ -60,36 +65,41 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Optionally inject [source] as an alternate datasource for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
-  Future<List<OUTPUT_TYPE>> readList(INPUT_TYPE criteria,
-      {DataSourceFn? source,
-      int? limit = _DEFAULT_SEARCH_RESULTS_LIMIT}) async {
+  Future<List<OUTPUT_TYPE>> readList(
+    INPUT_TYPE criteria, {
+    DataSourceFn? source,
+    int? limit = _defaultSearchResultsLimit,
+  }) async {
     return baseYieldWebText(
       source: source,
-      criteria: criteria,
+      newCriteria: criteria,
       resultSize: limit,
     ).toList();
   }
 
-  /// Create a stream with data matching [criteria].
+  /// Create a stream with data matching [newCriteria].
   Stream<OUTPUT_TYPE> baseYieldWebText({
-    required INPUT_TYPE criteria,
+    required INPUT_TYPE newCriteria,
     required int? resultSize,
     DataSourceFn? source,
   }) async* {
     // if cached yield from cache
-    if (myIsResultCached(criteria)) {
-      yield* myFetchResultFromCache(criteria);
+    if (myIsResultCached(newCriteria)) {
+      yield* myFetchResultFromCache(newCriteria);
     }
     // if not cached or cache is stale retrieve fresh data
-    if (!myIsResultCached(criteria) || myIsCacheStale(criteria)) {
+    if (!myIsResultCached(newCriteria) || myIsCacheStale(newCriteria)) {
       _searchResultsreturned = 0;
-      _criteria = criteria;
-      _searchResultsLimit = resultSize;
+      this.criteria = newCriteria;
+      searchResultsLimit = resultSize;
       final selecter = OnlineOfflineSelector<DataSourceFn>();
 
-      source = selecter.select(source ?? baseFetchWebText, myOfflineData());
+      final newSource = selecter.select(
+        source ?? baseFetchWebText,
+        myOfflineData(),
+      );
       // Need to await completion of future before we can transform it.
-      var result = source(_criteria);
+      final result = newSource(newCriteria);
       final Stream<String> data = await result;
 
       // Emit each element from the list as a seperate element.
@@ -195,28 +205,32 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     int remaining = double.maxFinite.toInt(); // Default to unlimited results.
-    if (_searchResultsLimit != null) {
-      remaining = _searchResultsLimit! - _searchResultsreturned;
+    if (searchResultsLimit != null) {
+      remaining = searchResultsLimit! - _searchResultsreturned;
     }
 
     // Construct resultset with a subset of results
     if (remaining > 1) {
       try {
-        var list = myTransformMapToOutput(resultMap);
+        final list = myTransformMapToOutput(resultMap);
         _searchResultsreturned += list.length;
-        list.forEach((element) {
+        for (final element in list) {
           myAddResultToCache(element);
-        });
+        }
         retval = list.take(remaining).toList();
       } catch (exception, stacktrace) {
         logger.e(
-            'Exception raised during myTransformMapToOutput for _getFetchContext, '
-            'constructing error for data ${resultMap.toString()}\n '
-            '${exception.toString()}.');
-        logger.i('${this.runtimeType}.myTransformMapToOutput stacktrace: '
-            '${stacktrace.toString()}');
-        var error = myYieldError(
-            'Could not interpret response ' '${resultMap.toString()}');
+          'Exception raised during myTransformMapToOutput for _getFetchContext, '
+          'constructing error for data ${resultMap.toString()}\n '
+          '${exception.toString()}.',
+        );
+        logger.i(
+          '$runtimeType .myTransformMapToOutput stacktrace: '
+          '${stacktrace.toString()}',
+        );
+        final error = myYieldError(
+          'Could not interpret response ' '${resultMap.toString()}',
+        );
         retval = [error];
       }
     }
@@ -233,9 +247,14 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should call [baseTransformMapToOutputHandler]
   ///     to wrap [myTransformMapToOutput] in exception handling.
   Stream<OUTPUT_TYPE> baseTransformTextStreamToOutput(
-      Stream<String> str) async* {
-    var fnFromMapToListOfOutputType = (decodedMap) =>
-        baseTransformMapToOutputHandler(decodedMap as Map<dynamic, dynamic>?);
+    Stream<String> str,
+  ) async* {
+    List<OUTPUT_TYPE> fnFromMapToListOfOutputType(decodedMap) {
+      return baseTransformMapToOutputHandler(
+        decodedMap as Map<dynamic, dynamic>?,
+      );
+    }
+
     yield* str
         .transform(json.decoder)
         .map(fnFromMapToListOfOutputType)
@@ -249,7 +268,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should not be overridden by child classes.
   Future<Stream<String>> baseFetchWebText(dynamic criteria) async {
     final encoded = Uri.encodeQueryComponent(
-        myFormatInputAsText(criteria as INPUT_TYPE) ?? '');
+      myFormatInputAsText(criteria as INPUT_TYPE) ?? '',
+    );
     final address = myConstructURI(encoded);
 
     final client = await HttpClient().getUrl(address);
@@ -260,15 +280,19 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     try {
       response = await request;
     } catch (error, stackTrace) {
-      print('Error in $_getFetchContext fetching web text:'
-          ' $error\n${stackTrace.toString()}');
+      logger.e(
+        'Error in $_getFetchContext fetching web text:'
+        ' $error\n${stackTrace.toString()}',
+      );
       rethrow;
     }
     // Check for successful HTTP status before transforming (avoid HTTP 404)
     if (200 != response.statusCode) {
-      print(
-          'Error in http read, HTTP status code : ${response.statusCode} for $address');
-      var offlineFunction = myOfflineData();
+      logger.e(
+        'Error in http read, '
+        'HTTP status code : ${response.statusCode} for $address',
+      );
+      final offlineFunction = myOfflineData();
       return offlineFunction(criteria);
     }
     return response.transform(utf8.decoder);

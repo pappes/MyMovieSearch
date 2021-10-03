@@ -42,7 +42,7 @@ void main() {
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = 'tt7602562';
       final imdbResult = QueryIMDBTitleDetails();
-      imdbResult.baseTestSetCriteria(criteria);
+      imdbResult.criteria = criteria;
       final testInput = htmlSampleFull;
       final str = emitByteStream(testInput).transform(utf8.decoder);
 

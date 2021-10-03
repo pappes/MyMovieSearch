@@ -1,8 +1,9 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 import 'package:logger/logger.dart';
 import '../secret.dart';
 
-/// Read in application settings for the operating system environment.
+// ignore: avoid_classes_with_only_static_members
+/// Read in application settings for the operating system en
 ///
 /// Used for settings that vary between production/development environments
 /// and for secrets tah cannot be stored in version control.
@@ -10,10 +11,11 @@ class EnvironmentVars {
   /// Read setting from the environment into in memory structures.
   ///
   /// To be called once during application initialisation before accessing values.
+
   static Future<Map<String, String>> init({Logger? logger}) async {
     // Load variable from operating system environmnt or from .env file
-    final _logger = logger ?? Logger();
-    await DotEnv.testLoad(fileInput: 'OFFLINE=false');
+    //final _logger = logger ?? Logger();
+    await dotenv.testLoad(fileInput: 'OFFLINE=false');
     /*try {
       await DotEnv.load(fileName: '.env');
       await DotEnv.load(mergeWith: Platform.environment);
@@ -23,8 +25,8 @@ class EnvironmentVars {
             'on non-web platform using dart:io : $e');
       }
     }*/
-    secret.forEach((key, value) => DotEnv.env[key] = value);
+    secret.forEach((key, value) => dotenv.env[key] = value);
 
-    return DotEnv.env;
+    return dotenv.env;
   }
 }

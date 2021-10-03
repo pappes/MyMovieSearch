@@ -9,7 +9,7 @@ import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
 import 'package:my_movie_search/movies/screens/popup.dart';
 
-void _launchURL(String url, BuildContext context) async {
+Future<void> _launchURL(String url, BuildContext context) async {
   try {
     await launch(
       url,
@@ -49,10 +49,12 @@ MaterialPageRoute<dynamic> getRoute(
 ) {
   if (movie.uniqueId.startsWith('nm')) {
     return MaterialPageRoute(
-        builder: (context) => PersonDetailsPage(person: movie));
+      builder: (context) => PersonDetailsPage(person: movie),
+    );
   } else {
     return MaterialPageRoute(
-        builder: (context) => MovieDetailsPage(movie: movie));
+      builder: (context) => MovieDetailsPage(movie: movie),
+    );
   }
 }
 
@@ -66,13 +68,14 @@ void searchForRelated(
   if (movies.length == 1) {
     Navigator.push(context, getRoute(context, movies[0]));
   } else {
-    var criteria = SearchCriteriaDTO();
+    final criteria = SearchCriteriaDTO();
     criteria.criteriaList.addAll(movies);
     criteria.criteriaTitle = description;
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => MovieSearchResultsNewPage(criteria: criteria)),
+        builder: (context) => MovieSearchResultsNewPage(criteria: criteria),
+      ),
     );
   }
 }

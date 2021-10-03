@@ -2,7 +2,7 @@
 // but should be available to the application.
 
 // Save this file as secret.dart after a clean checkout, then supply your own values.
-var secret = {
+const secret = {
   'OMDB_KEY': 'xxxxxxxx',
   'TMDB_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
   'GOOGLE_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',

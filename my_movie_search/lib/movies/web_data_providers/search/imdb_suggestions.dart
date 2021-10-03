@@ -35,10 +35,14 @@ class QueryIMDBSuggestions
   @override
   Stream<MovieResultDTO> baseTransformTextStreamToOutput(
       Stream<String> str) async* {
-    var fnFromMapToListOfOutputType = (decodedMap) =>
-        baseTransformMapToOutputHandler(decodedMap as Map<dynamic, dynamic>?);
-    if (getSearchResultsLimit == null)
-      setSearchResultsLimit(_DEFAULT_SEARCH_RESULTS_LIMIT);
+    List<MovieResultDTO> fnFromMapToListOfOutputType(decodedMap) {
+      return baseTransformMapToOutputHandler(
+        decodedMap as Map<dynamic, dynamic>?,
+      );
+    }
+
+    searchResultsLimit ??= _DEFAULT_SEARCH_RESULTS_LIMIT;
+
     yield* str
         .transform(JsonPDecoder())
         .transform(json.decoder)

@@ -1,15 +1,16 @@
 library pappes.utilites;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_dotenv/flutter_dotenv.dart' as DotEnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart' as dotnv;
 
+// ignore: avoid_classes_with_only_static_members
 /// Isolate web requests from cross origin vunerabilities.
 ///
 /// Tunnels browser requests through an intermediate server to strip headers.
 class WebRedirect {
   //TODO make origin URL optional
-  static final originURL = 'https://www.imdb.com';
-  static final tunnelBaseURL = DotEnv.env['TUNNEL_ADDRESS'];
+  static const originURL = 'https://www.imdb.com';
+  static final tunnelBaseURL = dotnv.env['TUNNEL_ADDRESS'];
 
   /// Determine if we need to invoke CORS security circumventions
   ///
@@ -25,10 +26,11 @@ class WebRedirect {
 
   // Redirect call via CORSTunnel if running in a browser.
   static Uri constructURI(String url) {
+    var newUrl = url;
     if (tunnelRequests()) {
-      url = 'destination=${Uri.encodeQueryComponent(url)}';
-      url = '$tunnelBaseURL?origin=$originURL&referer=$originURL/&$url';
+      newUrl = 'destination=${Uri.encodeQueryComponent(newUrl)}';
+      newUrl = '$tunnelBaseURL?origin=$originURL&referer=$originURL/&$newUrl';
     }
-    return Uri.parse(url);
+    return Uri.parse(newUrl);
   }
 }

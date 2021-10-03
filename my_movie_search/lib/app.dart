@@ -11,7 +11,6 @@ import 'package:flutter/material.dart'
         StatefulWidget,
         StatelessWidget,
         ThemeData,
-        ThemeMode,
         Widget;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -54,7 +53,7 @@ class AppView extends StatefulWidget {
 class _AppViewState extends State<AppView> {
   final _navigatorKey = GlobalKey<NavigatorState>();
 
-  NavigatorState get _navigator => _navigatorKey.currentState!;
+  //NavigatorState get _navigator => _navigatorKey.currentState!;
 
   /// Initialise the Material app with app specific settings.
   ///
@@ -71,7 +70,7 @@ class _AppViewState extends State<AppView> {
         fontFamily: 'Lato',
       ),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      themeMode: ThemeMode.system, //dark or light or system
+      //themeMode: ThemeMode.system, //dark or light or system
       /*builder: (context, child) {
         return BlocListener<SearchBloc, SearchState>(
           listener: (context, state) {

@@ -23,21 +23,22 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  
+  bloc: ^7.2.1
+  equatable: ^2.0.0                     # Simplify object comparisons.
   flutter_bloc: ^7.0.0                  # Assist with the BLoC design pattern.
-  html: ^0.15.0                         # Dart dom and html utilities.
-  ####http: ^0.12.2                     # Make calls to web URLs and stream the results.
-  sqflite: ^2.0.0+3                     # Database storage for persisting state across sessions.
-  path_provider: ^2.0.1                 # Device filesystem access for accessing database files.
+  flutter_custom_tabs: ^1.0.2           # replace webview with andorid chrome browser
   flutter_dotenv: ^4.0.0-nullsafety.0   # Read secrests and settings from .env file.
+  html: ^0.15.0                         # Dart dom and html utilities.
+  html_unescape: ^2.0.0                 # decode &apos;
+  intl: ^0.17.0                         # internationalisation including number and data formatting.
   logger: ^1.0.0                        # Log trace messages to console.
+  path_provider: ^2.0.1                 # Device filesystem access for accessing database files.
+  sqflite: ^2.0.0+3                     # Database storage for persisting state across sessions.
   ####logger_flutter: ^0.7.1            # Shake device to see trace messages.
   universal_io: ^2.0.4                  # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
-  intl: ^0.17.0                         # internationalisation including number and data formatting.
-  equatable: ^2.0.0                     # Simplify object comparisons.
   url_launcher: ^6.0.0                  # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
   webview_flutter: ^2.0.9               # Show web page
-  flutter_custom_tabs: ^1.0.2           # replace webview with andorid chrome browser
-  html_unescape: ^2.0.0                 # decode &apos;
 
   #firebase_core: ^1.0.3                # Firebase initialisation
   firebase_auth: ^3.0.1                 # Authenticate users against Firebase

@@ -4,22 +4,25 @@ import 'dart:convert' show Converter;
 
 class JsonPState {
   JsonPState();
-  var activated = false; // true if stream has encounted [, { or (
-  var buffering = false; // true if stream stripped a JSONP prefix.
-  var buffer = ""; // Stream content that has not been released.
+  bool activated = false; // true if stream has encounted [, { or (
+  bool buffering = false; // true if stream stripped a JSONP prefix.
+  String buffer = ''; // Stream content that has not been released.
 
+  @override
   String toString() {
     return "activated=$activated buffering=$buffering buffer=$buffer";
   }
 }
 
 class JsonPConversionSink extends Sink<String> {
-  final _sink;
-  final _jsonPDecoder;
+  final Sink<Object> _sink;
+  final JsonPDecoder _jsonPDecoder;
 
   JsonPConversionSink(this._sink, this._jsonPDecoder);
-  add(x) => _sink.add(_jsonPDecoder.convert(x));
-  close() => _sink.close();
+  @override
+  void add(String x) => _sink.add(_jsonPDecoder.convert(x));
+  @override
+  void close() => _sink.close();
 }
 
 /// This class parses JSONP string streams and builds the json string stream.
@@ -33,12 +36,14 @@ class JsonPDecoder extends Converter<String, String> {
   JsonPDecoder();
 
   /// Converts the given JSONP-string [input] to its corresponding json.
+  @override
   String convert(String input) {
-    var output = "";
-    if (_state.activated)
+    var output = '';
+    if (_state.activated) {
       output = input;
-    else
+    } else {
       output = stripPrefix(input);
+    }
     if (_state.buffering) output = bufferSuffix(output);
     return output;
   }
@@ -89,7 +94,7 @@ class JsonPDecoder extends Converter<String, String> {
       final firstSquare = input.indexOf("[");
       String output = "";
 
-      if (_state.buffer.length > 0) {
+      if (_state.buffer.isNotEmpty) {
         if (firstRound > -1 ||
             firstCurly > -1 ||
             firstSquare > -1 ||
@@ -121,6 +126,7 @@ class JsonPDecoder extends Converter<String, String> {
   }
 
   // Helper function to see inside the decoder state.
+  @override
   String toString() {
     return _state.toString();
   }
@@ -128,6 +134,7 @@ class JsonPDecoder extends Converter<String, String> {
   /// Starts a conversion from a chunked JSONP string to its corresponding JSON string.
   ///
   /// The output [sink] receives one string element per input element through `add`.
+  @override
   Sink<String> startChunkedConversion(Sink<Object> sink) {
     return JsonPConversionSink(sink, this);
   }
