@@ -7,11 +7,11 @@ extension DoubleHelper on double {
   static double? fromText(
     dynamic formattedText, {
     double? nullValueSubstitute,
-    double? zeroValueSubstitute: 0,
+    double? zeroValueSubstitute = 0,
   }) {
     double? count;
     if (formattedText != null) {
-      var text = formattedText.toString().replaceAll(',', '');
+      final text = formattedText.toString().replaceAll(',', '');
       count = double.tryParse(text);
     }
     if (count == 0) return zeroValueSubstitute;
@@ -28,9 +28,9 @@ extension IntHelper on int {
   static int? fromText(
     dynamic formattedText, {
     int? nullValueSubstitute,
-    int? zeroValueSubstitute: 0,
+    int? zeroValueSubstitute = 0,
   }) {
-    var number = DoubleHelper.fromText(
+    final number = DoubleHelper.fromText(
       formattedText,
       zeroValueSubstitute: zeroValueSubstitute?.toDouble(),
       nullValueSubstitute: nullValueSubstitute?.toDouble(),
@@ -48,7 +48,7 @@ int? getYear(String? yeartext) {
   if (null != yeartext) {
     if (4 == yeartext.length) {
       // 1995
-      return DateTime.tryParse('${yeartext}-01-01')?.year;
+      return DateTime.tryParse('$yeartext-01-01')?.year;
     } else if (9 == yeartext.length) {
       // 1995-1999
       return DateTime.tryParse('${yeartext.substring(5)}-01-01')?.year;

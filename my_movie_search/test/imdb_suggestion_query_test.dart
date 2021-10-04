@@ -16,7 +16,7 @@ void main() {
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = await expectedDTOList;
-      final List<MovieResultDTO> queryResult = [];
+      final queryResult = <MovieResultDTO>[];
       final _imdbSuggestions = QueryIMDBSuggestions();
 
       // Invoke the functionality.

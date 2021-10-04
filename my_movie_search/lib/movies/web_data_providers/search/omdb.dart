@@ -4,13 +4,13 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' show env;
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
-import 'offline/omdb.dart';
 import 'converters/omdb.dart';
+import 'offline/omdb.dart';
 
 /// Implements [WebFetchBase] for searching the Open Movie Database.
 /// The OMDb API is a free web service to obtain movie information.
 class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final baseURL = 'https://www.omdbapi.com/?apikey=';
+  static const _baseURL = 'https://www.omdbapi.com/?apikey=';
 
   /// Describe where the data is comming from.
   @override
@@ -40,8 +40,9 @@ class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) {
-    var error = MovieResultDTO();
-    error.title = "[${this.runtimeType}] $message";
+    final error = MovieResultDTO();
+    // ignore: no_runtimetype_tostring
+    error.title = '[$runtimeType] $message';
     error.type = MovieContentType.custom;
     error.source = DataSourceType.omdb;
     return error;
@@ -52,7 +53,8 @@ class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     final omdbKey =
         env["OMDB_KEY"]; // From the file assets/.env (not source controlled)
-    return Uri.parse('$baseURL$omdbKey&s=$searchCriteria'
-        '&page=$pageNumber');
+    return Uri.parse(
+      '$_baseURL$omdbKey&s=$searchCriteria&page=$pageNumber',
+    );
   }
 }

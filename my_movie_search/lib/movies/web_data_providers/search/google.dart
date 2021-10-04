@@ -4,16 +4,16 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' show env;
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
-import 'offline/google.dart';
 import 'converters/google.dart';
+import 'offline/google.dart';
 
-const GOOGLE_RESULTS_PER_PAGE = 10; // More than 10 results in an error!
+const _googleResultsPerPage = 10; // More than 10 results in an error!
 
 /// Implements [WebFetchBase] for searching the Open Movie Database.
 /// The Google API is a free web service to obtain movie information.
 class QueryGoogleMovies
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final baseURL =
+  static const _baseURL =
       'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
 
   /// Describe where the data is comming from.
@@ -45,8 +45,9 @@ class QueryGoogleMovies
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) {
-    var error = MovieResultDTO().error();
-    error.title = '[${this.runtimeType}] $message';
+    final error = MovieResultDTO().error();
+    // ignore: no_runtimetype_tostring
+    error.title = '[$runtimeType] $message';
     error.type = MovieContentType.custom;
     error.source = DataSourceType.google;
     return error;
@@ -57,10 +58,10 @@ class QueryGoogleMovies
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     final googleKey =
         env['GOOGLE_KEY']; // From the file assets/.env (not source controlled)
-    final startRecord = (pageNumber - 1) * GOOGLE_RESULTS_PER_PAGE;
-    final url = '$baseURL$googleKey'
+    final startRecord = (pageNumber - 1) * _googleResultsPerPage;
+    final url = '$_baseURL$googleKey'
         '&q=$searchCriteria&start=$startRecord&'
-        'num=$GOOGLE_RESULTS_PER_PAGE';
+        'num=$_googleResultsPerPage';
     return Uri.parse(url);
   }
 }

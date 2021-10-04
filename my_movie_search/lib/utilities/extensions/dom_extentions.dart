@@ -2,7 +2,7 @@ import 'package:html/dom.dart' show Element, Node;
 
 enum ElementType { anchor, image, text, table, row }
 
-const Map<ElementType, String> _HTMLTAGS = {
+const Map<ElementType, String> _htmlTags = {
   ElementType.anchor: 'a',
   ElementType.image: 'img',
   ElementType.text: 'text',
@@ -11,7 +11,7 @@ const Map<ElementType, String> _HTMLTAGS = {
 };
 enum AttributeType { address, source, elementClass }
 
-const Map<AttributeType, String> _ATTRIBUTENAMES = {
+const Map<AttributeType, String> _attributeNames = {
   AttributeType.address: 'href',
   AttributeType.source: 'src',
   AttributeType.elementClass: 'class',
@@ -24,14 +24,14 @@ extension NodeHelper on Node {
   ///
   /// e.g. ElementType.image is converted to 'img'
   String element(ElementType et) {
-    return _HTMLTAGS[et]!;
+    return _htmlTags[et]!;
   }
 
   /// Convert [AttributeType] element tag to html attribute tag.
   ///
   /// e.g. AttributeType.address is converted to 'href'
   String attribute(AttributeType at) {
-    return _ATTRIBUTENAMES[at]!;
+    return _attributeNames[at]!;
   }
 }
 
@@ -41,10 +41,10 @@ extension ElementHelper on Element {
   /// Search the DOM for child elements of type [etype].
   ///
   List<Element> getElementsByType(ElementType etype) =>
-      this.getElementsByTagName(_HTMLTAGS[etype]!);
+      getElementsByTagName(_htmlTags[etype]!);
 
   /// Extract HTML attribute [atype] from a HTML element.
   ///
   String? getAttribute(AttributeType atype) =>
-      this.attributes[_ATTRIBUTENAMES[atype]!];
+      attributes[_attributeNames[atype]!];
 }

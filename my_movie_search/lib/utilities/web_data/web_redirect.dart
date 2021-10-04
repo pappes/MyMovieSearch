@@ -1,9 +1,9 @@
+// ignore_for_file: avoid_classes_with_only_static_members
 library pappes.utilites;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dotnv;
 
-// ignore: avoid_classes_with_only_static_members
 /// Isolate web requests from cross origin vunerabilities.
 ///
 /// Tunnels browser requests through an intermediate server to strip headers.

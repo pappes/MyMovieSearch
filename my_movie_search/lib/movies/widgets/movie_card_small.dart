@@ -10,8 +10,8 @@ import 'package:flutter/material.dart'
         Image,
         NetworkImage;
 
-import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
@@ -36,33 +36,30 @@ class MovieTile extends ListTile {
   }
 
   static Widget _getDescription(MovieResultDTO movie) {
-    var rating = (movie.censorRating != CensorRatingType.none)
+    final rating = (movie.censorRating != CensorRatingType.none)
         ? '${describeEnum(movie.censorRating)} '
         : '';
-    var content = (movie.type != MovieContentType.none)
+    final content = (movie.type != MovieContentType.none)
         ? '${describeEnum(movie.type)}    '
         : '';
-    var ratingCount = (movie.userRatingCount > 0)
+    final alternateTitle =
+        (movie.alternateTitle.isEmpty) ? '' : '${movie.alternateTitle} ';
+    final ratingCount = (movie.userRatingCount > 0)
         ? '${movie.userRating} (${formatter.format(movie.userRatingCount)})'
         : '';
-    var runtime =
-        (movie.runTime > Duration()) ? movie.runTime.toFormattedTime() : '';
-    var seperator =
-        (runtime.length > 0 && ratingCount.length > 0) ? ' - ' : ' ';
+    final runtime = (movie.runTime.inMinutes > 0)
+        ? movie.runTime.toFormattedTime() + (ratingCount.isEmpty ? ' ' : ' - ')
+        : '';
     return Text(
-      rating +
-          content +
-          '${movie.alternateTitle} ' +
-          runtime +
-          seperator +
-          ratingCount,
+      '$rating$content$alternateTitle$runtime$ratingCount',
       textScaleFactor: 1.0,
     );
   }
 
   static Widget _getImage(String url) {
-    if (url == '' || !url.startsWith('http'))
-      return CircularProgressIndicator();
+    if (url == '' || !url.startsWith('http')) {
+      return const CircularProgressIndicator();
+    }
     return Image(image: NetworkImage(url));
   }
 }

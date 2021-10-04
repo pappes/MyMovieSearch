@@ -3,19 +3,19 @@ import 'package:flutter/foundation.dart' show describeEnum;
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
-import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
-import 'offline/imdb_suggestions.dart';
 import 'converters/imdb_suggestion.dart';
+import 'offline/imdb_suggestions.dart';
 
-const _DEFAULT_SEARCH_RESULTS_LIMIT = 10;
+const _defaultSearchResultsLimit = 10;
 
 /// Implements [WebFetchBase] for the IMDB search suggestions API.
 /// Search suggestions are used by the lookup bar in the IMDB web page.
 class QueryIMDBSuggestions
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final baseURL = 'https://sg.media-imdb.com/suggests';
+  static const _baseURL = 'https://sg.media-imdb.com/suggests';
 
   /// Describe where the data is comming from.
   @override
@@ -34,14 +34,15 @@ class QueryIMDBSuggestions
   /// Limit results to 10 most relevant by default.
   @override
   Stream<MovieResultDTO> baseTransformTextStreamToOutput(
-      Stream<String> str) async* {
+    Stream<String> str,
+  ) async* {
     List<MovieResultDTO> fnFromMapToListOfOutputType(decodedMap) {
       return baseTransformMapToOutputHandler(
         decodedMap as Map<dynamic, dynamic>?,
       );
     }
 
-    searchResultsLimit ??= _DEFAULT_SEARCH_RESULTS_LIMIT;
+    searchResultsLimit ??= _defaultSearchResultsLimit;
 
     yield* str
         .transform(JsonPDecoder())
@@ -65,8 +66,9 @@ class QueryIMDBSuggestions
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) {
-    var error = MovieResultDTO();
-    error.title = "[${this.runtimeType}] $message";
+    final error = MovieResultDTO();
+    // ignore: no_runtimetype_tostring
+    error.title = '[$runtimeType] $message';
     error.type = MovieContentType.custom;
     error.source = DataSourceType.imdbSuggestions;
     return error;
@@ -75,9 +77,9 @@ class QueryIMDBSuggestions
   /// API call to IMDB search returning the top matching results for [searchText].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    var prefix =
-        searchCriteria.length > 0 ? searchCriteria.substring(0, 1) : 'U';
-    var url = '$baseURL/$prefix/$searchCriteria.json';
+    final prefix =
+        searchCriteria.isEmpty ? 'U' : searchCriteria.substring(0, 1);
+    final url = '$_baseURL/$prefix/$searchCriteria.json';
     return WebRedirect.constructURI(url);
   }
 }

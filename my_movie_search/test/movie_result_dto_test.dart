@@ -201,13 +201,13 @@ void main() {
 
     // Convert a list of dtos to a JSON and then convert the JSON back to a list.
     test('multiple_DTO', () {
-      final List<MovieResultDTO> list = [];
+      final list = <MovieResultDTO>[];
       list.add(makeDTO('abc'));
       list.add(makeDTO('def'));
       list.add(makeDTO('ghi'));
       final encoded = list.encodeList();
 
-      final List<MovieResultDTO> emptylist = [];
+      final emptylist = <MovieResultDTO>[];
       final decoded = emptylist.decodeList(encoded);
 
       expect(list[0], MovieResultDTOMatcher(decoded[0]));
@@ -229,7 +229,7 @@ void main() {
     });
     // Convert a restorable dto list to JSON and then convert the JSON to a restorable dto list.
     test('RestorableMovieList', () {
-      final List<MovieResultDTO> list = [];
+      final list = <MovieResultDTO>[];
       list.add(makeDTO('abc'));
       list.add(makeDTO('def'));
       list.add(makeDTO('ghi'));

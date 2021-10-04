@@ -4,9 +4,9 @@ extension DurationHelper on Duration {
   /// Format [Duration] as H:MM:SS
   String toFormattedTime() {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
-    String twoDigitMinutes = twoDigits(this.inMinutes.remainder(60));
-    String twoDigitSeconds = twoDigits(this.inSeconds.remainder(60));
-    return '${twoDigits(this.inHours)}:$twoDigitMinutes:$twoDigitSeconds';
+    final twoDigitMinutes = twoDigits(inMinutes.remainder(60));
+    final twoDigitSeconds = twoDigits(inSeconds.remainder(60));
+    return '${twoDigits(inHours)}:$twoDigitMinutes:$twoDigitSeconds';
   }
 
   /// Convert ISO 8601 [String] e.g. PT1H46M to Dart [Duration]
@@ -51,7 +51,7 @@ extension DurationHelper on Duration {
       return 0;
     }
     final timeString = timeMatch.group(0)!;
-    var numbers = timeString.substring(0, timeString.length - 1);
+    final numbers = timeString.substring(0, timeString.length - 1);
     return int.tryParse(numbers) ?? 0;
   }
 }

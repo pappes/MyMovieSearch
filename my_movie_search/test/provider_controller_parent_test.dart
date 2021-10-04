@@ -16,7 +16,7 @@ import 'test_helper.dart';
 
 /// Make dummy dto results for offline queries.
 List<MovieResultDTO> _makeExpectedResults(int qty) {
-  final List<MovieResultDTO> results = [];
+  final results = <MovieResultDTO>[];
   for (int i = 0; i < qty; i++) {
     final uniqueId = 1000 + i;
     results.add(
@@ -56,7 +56,7 @@ Future<Stream<String>> _offlineSearch(dynamic criteria) async {
 
 /// Create a string list with [qty] unique criteria values.
 List<String> _makeQueries(int qty) {
-  final List<String> results = [];
+  final results = <String>[];
   for (int i = 0; i < qty; i++) {
     results.add((1000 + i).toString());
   }
@@ -146,7 +146,7 @@ void main() {
       final futures = _queueDetailSearch(criteria, online);
 
       // Collect the result of all the IMDB queries.
-      final List<MovieResultDTO> queryResult = [];
+      final queryResult = <MovieResultDTO>[];
       for (final future in futures) {
         future.then((value) => queryResult.addAll(value));
       }

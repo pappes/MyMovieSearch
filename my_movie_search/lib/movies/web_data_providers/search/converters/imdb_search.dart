@@ -1,11 +1,13 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
-const inner_element_identity_element = 'AnchorAddress';
-const inner_element_title_element = 'Title';
-const inner_element_image_element = 'Image';
-const inner_element_info_element = 'Info';
+const innerElementIdentity = 'AnchorAddress';
+const innerElementTitle = 'Title';
+const innerElementImage = 'Image';
+const innerElementInfo = 'Info';
 
 class ImdbSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
@@ -13,18 +15,15 @@ class ImdbSearchConverter {
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
-    var movie = MovieResultDTO();
+    final movie = MovieResultDTO();
     movie.source = DataSourceType.imdbSearch;
-    movie.uniqueId =
-        getID(map[inner_element_identity_element]) ?? movie.uniqueId;
-    movie.title = map[inner_element_info_element]?.toString() ?? movie.title;
-    movie.imageUrl =
-        map[inner_element_image_element]?.toString() ?? movie.imageUrl;
-    movie.yearRange =
-        getYearRange(map[inner_element_info_element]) ?? movie.yearRange;
+    movie.uniqueId = getID(map[innerElementIdentity]) ?? movie.uniqueId;
+    movie.title = map[innerElementInfo]?.toString() ?? movie.title;
+    movie.imageUrl = map[innerElementImage]?.toString() ?? movie.imageUrl;
+    movie.yearRange = getYearRange(map[innerElementInfo]) ?? movie.yearRange;
     movie.year = movie.maxYear();
     movie.type = getImdbMovieContentType(
-          map[inner_element_info_element],
+          map[innerElementInfo],
           movie.runTime.inMinutes,
           movie.uniqueId,
         ) ??
@@ -35,7 +34,7 @@ class ImdbSearchConverter {
   // Determine unique ID from '/title/tt13722802/?ref_=fn_tt_tt_6'
   static String? getID(Object? identifier) {
     if (identifier == null) return null;
-    var id = identifier.toString();
+    final id = identifier.toString();
     final lastSlash = id.lastIndexOf('/');
     if (lastSlash == -1) return null;
     final secondLastSlash = id.lastIndexOf('/', lastSlash - 1);
@@ -49,14 +48,14 @@ class ImdbSearchConverter {
     final String title = info.toString();
     final lastClose = title.lastIndexOf(')');
     if (lastClose == -1) return null;
-    final dates = title.lastIndexOf(RegExp(r'[0-9]'), lastClose);
+    final dates = title.lastIndexOf(RegExp('[0-9]'), lastClose);
     if (dates == -1) return null;
     final yearOpen = title.lastIndexOf('(', dates);
     final yearClose = title.indexOf(')', dates);
     if (yearOpen == -1 || yearClose == -1) return null;
 
     final yearRange = title.substring(yearOpen + 1, yearClose);
-    final filter = RegExp(r'[0-9].*[0-9]');
+    final filter = RegExp('[0-9].*[0-9]');
     final numerics = filter.stringMatch(yearRange);
     return numerics;
   }

@@ -519,7 +519,7 @@ extension StringMovieResultDTOHelpers on String {
   /// Decode a json encoded representation of a [List]<[MovieResultDTO]>.
   ///
   List<MovieResultDTO> jsonToList() {
-    final List<MovieResultDTO> dtos = [];
+    final dtos = <MovieResultDTO>[];
     final listContents = jsonDecode(this);
     if (listContents is List) {
       for (final json in listContents) {

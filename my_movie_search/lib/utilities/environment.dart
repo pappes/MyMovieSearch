@@ -1,8 +1,8 @@
+// ignore_for_file: avoid_classes_with_only_static_members
 import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
 import 'package:logger/logger.dart';
 import '../secret.dart';
 
-// ignore: avoid_classes_with_only_static_members
 /// Read in application settings for the operating system en
 ///
 /// Used for settings that vary between production/development environments

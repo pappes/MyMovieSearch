@@ -110,7 +110,7 @@ Stream<List<int>> emitByteStream(String str) async* {
 ///
 /// Emits all bytes at the same time.
 Stream<List<int>> emitConsolidatedByteStream(String str) async* {
-  final List<int> lst = [];
+  final lst = <int>[];
 
   for (final rune in str.runes.toList()) {
     lst.add(rune);
@@ -122,7 +122,7 @@ Stream<List<int>> emitConsolidatedByteStream(String str) async* {
 Stream<MovieResultDTO> streamMovieResultDTOFromJsonMap(
   Iterable<Map<String, String>> records,
 ) async* {
-  for (final Map<String, String> record in records) {
+  for (final record in records) {
     yield record.toMovieResultDTO();
   }
 }

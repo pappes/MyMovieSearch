@@ -1,3 +1,4 @@
+// ignore_for_file: avoid_classes_with_only_static_members
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
@@ -23,29 +24,29 @@ import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 //original_language = language spoken during the movie e.g. en
 //original_title = previous title assigned to the movie
 //overview = synopsis of the movie plot
-//popularity = raking to indcate how popular the movie is e.g. "280.151",
+//popularity = raking to indicate how popular the movie is e.g. "280.151",
 
-const outer_element_results_collection = 'results';
-const outer_element_search_success = 'total_results';
-const outer_element_failure_reason = 'status_message';
-const inner_element_identity_element = 'id';
-const inner_element_title_element = 'title';
-const inner_element_image_element = 'logo_path';
-const inner_element_year_element = 'release_date';
-const inner_element_type_element = 'video';
+const outerElementResultsCollection = 'results';
+const outerElementSearchSuccess = 'total_results';
+const outerElementFailureReason = 'status_message';
+const innerElementIdentity = 'id';
+const innerElementTitle = 'title';
+const innerElementImage = 'logo_path';
+const innerElementYear = 'release_date';
+const innerElementType = 'video';
 
 class TmdbMovieSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     // deserialise outer json from map then iterate inner json
-    List<MovieResultDTO> searchResults = [];
+    final searchResults = <MovieResultDTO>[];
 
-    final int resultsMatched = map[outer_element_search_success] as int? ?? 0;
+    final int resultsMatched = map[outerElementSearchSuccess] as int? ?? 0;
     if (resultsMatched > 0) {
-      map[outer_element_results_collection]
+      map[outerElementResultsCollection]
           .forEach((movie) => searchResults.add(dtoFromMap(movie as Map)));
     } else {
       final error = MovieResultDTO();
-      error.title = map[outer_element_failure_reason]?.toString() ??
+      error.title = map[outerElementFailureReason]?.toString() ??
           'No failure reason provided in results ${map.toString()}';
       searchResults.add(error);
     }
@@ -55,17 +56,15 @@ class TmdbMovieSearchConverter {
   static MovieResultDTO dtoFromMap(Map map) {
     final movie = MovieResultDTO();
     movie.source = DataSourceType.tmdb;
-    movie.uniqueId = '${map[inner_element_identity_element]}';
-    movie.title = map[inner_element_title_element]?.toString() ?? movie.title;
-    movie.imageUrl =
-        map[inner_element_image_element]?.toString() ?? movie.imageUrl;
+    movie.uniqueId = '${map[innerElementIdentity]}';
+    movie.title = map[innerElementTitle]?.toString() ?? movie.title;
+    movie.imageUrl = map[innerElementImage]?.toString() ?? movie.imageUrl;
 
-    var year = getYear(map[inner_element_year_element]?.toString());
+    final year = getYear(map[innerElementYear]?.toString());
     if (null != year) {
       movie.year = year;
     } else {
-      movie.yearRange =
-          map[inner_element_year_element]?.toString() ?? movie.yearRange;
+      movie.yearRange = map[innerElementYear]?.toString() ?? movie.yearRange;
     }
 
     return movie;

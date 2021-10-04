@@ -8,7 +8,7 @@ class TieredCache<T> {
 
   /// Put a data item into the cache if it is not already there.
   ///
-  add(dynamic key, dynamic item) async {
+  Future<void> add(dynamic key, dynamic item) async {
     if (null == item || item is! T || memoryCache.containsKey(key)) return;
     memoryCache[key] = item;
     //TODO: queue for adding to disk and cloud caches

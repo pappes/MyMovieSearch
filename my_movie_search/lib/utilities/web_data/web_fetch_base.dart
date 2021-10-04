@@ -90,7 +90,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     // if not cached or cache is stale retrieve fresh data
     if (!myIsResultCached(newCriteria) || myIsCacheStale(newCriteria)) {
       _searchResultsreturned = 0;
-      this.criteria = newCriteria;
+      criteria = newCriteria;
       searchResultsLimit = resultSize;
       final selecter = OnlineOfflineSelector<DataSourceFn>();
 

@@ -215,7 +215,7 @@ void main() {
           // Stream the results collection from within the map.
           .map(
             (outerMap) =>
-                (outerMap! as Map)[outer_element_results_collection] as List,
+                (outerMap! as Map)[outerElementResultsCollection] as List,
           )
           // Emit each member of the list as a seperate stream event.
           .expand((listMember) => listMember)

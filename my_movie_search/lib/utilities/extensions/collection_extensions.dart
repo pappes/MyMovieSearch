@@ -8,9 +8,9 @@ extension ListHelper on List<String> {
   /// Convert scalar value to a List with a single value
   /// Convert map to a List (return values, discard keys)
   static List<String> fromJson(String? jsonText) {
-    List<String> unique = [];
+    final unique = <String>[];
     if (null == jsonText || jsonText.isEmpty) return unique;
-    var contents = json.decode(jsonText);
+    final contents = json.decode(jsonText);
     unique.combineUnique(contents);
     return unique;
   }
@@ -20,22 +20,25 @@ extension ListHelper on List<String> {
   ///
   /// Removes any duplicate values.
   /// Converts map to a List (adds values, discard keys)
-  combineUnique(dynamic additions) {
-    if (null == additions) return [];
+  void combineUnique(dynamic additions) {
+    if (null == additions) return;
     List<String> itemList = [];
-    if (additions is List<String>)
+    if (additions is List<String>) {
       itemList = additions;
-    else if (additions is Iterable)
-      for (var addition in additions) itemList.add(addition.toString());
-    else if (additions is Map)
+    } else if (additions is Iterable) {
+      for (final addition in additions) {
+        itemList.add(addition.toString());
+      }
+    } else if (additions is Map) {
       itemList.combineUnique(additions.values);
-    else
+    } else {
       itemList = [additions.toString()];
+    }
 
-    Set<String> unique = {};
+    final Set<String> unique = {};
     unique.addAll(this);
     unique.addAll(itemList);
-    this.clear();
-    this.addAll(unique);
+    clear();
+    addAll(unique);
   }
 }
