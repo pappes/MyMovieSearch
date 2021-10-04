@@ -50,13 +50,13 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
   @override
   SearchCriteriaDTO fromPrimitives(Object? data) {
     if (data != null) {
-      return (getDTO(data as Map<String, String>));
+      return getDTO(data as Map<String, String>);
     }
     return SearchCriteriaDTO();
   }
 
   SearchCriteriaDTO getDTO(Map<String, String> map) {
-    var retVal = SearchCriteriaDTO();
+    final retVal = SearchCriteriaDTO();
     retVal.searchId = map['searchId'] ?? retVal.searchId;
     retVal.criteriaTitle = map['criteriaTitle'] ?? retVal.criteriaTitle;
     retVal.criteriaSource = getEnumValue<SearchCriteriaSource>(
@@ -70,7 +70,7 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
 
   @override
   Object toPrimitives() {
-    Map<String, String> map = {
+    final map = <String, String>{
       'searchId': value.searchId,
       'criteriaTitle': value.criteriaTitle,
       'criteriaSource': value.criteriaSource.toString(),
