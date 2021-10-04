@@ -1,37 +1,39 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'package:html_unescape/html_unescape_small.dart';
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
-import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
-import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
-const outer_element_identity_element = 'id';
+const outerElementIdentity = 'id';
 
-const outer_element_official_title = 'name';
-const outer_element_common_title = 'alternateName';
-const outer_element_description = 'description';
-const outer_element_keywords = 'keywords';
-const outer_element_genre = 'genre';
-const outer_element_year = 'datePublished';
-const outer_element_duration = 'duration';
-const outer_element_censor_rating = 'contentRating';
-const outer_element_rating = 'aggregateRating';
-const inner_element_rating_value = 'ratingValue';
-const inner_element_rating_count = 'ratingCount';
-const outer_element_type = '@type';
-const outer_element_image = 'image';
-const outer_element_language = 'language';
-const outer_element_languages = 'languages';
-const outer_element_related = 'related';
-const outer_element_actors = 'actor';
-const outer_element_director = 'director';
-const outer_element_link = 'url';
+const outerElementOfficialTitle = 'name';
+const outerElementCommonTitle = 'alternateName';
+const outerElementDescription = 'description';
+const outerElementKeywords = 'keywords';
+const outerElementGenre = 'genre';
+const outerElementYear = 'datePublished';
+const outerElementDuration = 'duration';
+const outerElementCensorRating = 'contentRating';
+const outerElementRating = 'aggregateRating';
+const innerElementRatingValue = 'ratingValue';
+const innerElementRatingCount = 'ratingCount';
+const outerElementType = '@type';
+const outerElementImage = 'image';
+const outerElementLanguage = 'language';
+const outerElementLanguages = 'languages';
+const outerElementRelated = 'related';
+const outerElementActors = 'actor';
+const outerElementDirector = 'director';
+const outerElementLink = 'url';
 
-const related_movies_label = 'Suggestions';
-const related_actors_label = 'Cast:';
-const related_directors_label = 'Directed by:';
+const relatedMoviesLabel = 'Suggestions';
+const relatedActorsLabel = 'Cast:';
+const relatedDirectorsLabel = 'Directed by:';
 
 class ImdbMoviePageConverter {
   static final htmlDecode = HtmlUnescape();
@@ -41,77 +43,76 @@ class ImdbMoviePageConverter {
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
-    var movie = MovieResultDTO();
+    final movie = MovieResultDTO();
     movie.source = DataSourceType.imdb;
-    movie.uniqueId =
-        map[outer_element_identity_element]?.toString() ?? movie.uniqueId;
-    movie.title = map[outer_element_official_title]?.toString() ?? movie.title;
+    movie.uniqueId = map[outerElementIdentity]?.toString() ?? movie.uniqueId;
+    movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
     movie.alternateTitle =
-        map[outer_element_common_title]?.toString() ?? movie.alternateTitle;
-    movie.description =
-        map[outer_element_description]?.toString() ?? movie.title;
-    movie.description += '\nKeywords: ${map[outer_element_keywords]}';
-    movie.imageUrl = map[outer_element_image]?.toString() ?? movie.imageUrl;
-    final language = map[outer_element_language];
+        map[outerElementCommonTitle]?.toString() ?? movie.alternateTitle;
+    movie.description = map[outerElementDescription]?.toString() ?? movie.title;
+    movie.description += '\nKeywords: ${map[outerElementKeywords]}';
+    movie.imageUrl = map[outerElementImage]?.toString() ?? movie.imageUrl;
+    final language = map[outerElementLanguage];
     if (language is LanguageType) {
       movie.language = language;
     }
-    movie.languages.combineUnique(map[outer_element_languages]);
-    movie.genres.combineUnique(map[outer_element_genre]);
+    movie.languages.combineUnique(map[outerElementLanguages]);
+    movie.genres.combineUnique(map[outerElementGenre]);
     movie.censorRating = getImdbCensorRating(
-          map[outer_element_censor_rating]?.toString(),
+          map[outerElementCensorRating]?.toString(),
         ) ??
         movie.censorRating;
 
     movie.userRating = DoubleHelper.fromText(
-      map[outer_element_rating]?[inner_element_rating_value],
+      map[outerElementRating]?[innerElementRatingValue],
       nullValueSubstitute: movie.userRating,
     )!;
     movie.userRatingCount = IntHelper.fromText(
-      map[outer_element_rating]?[inner_element_rating_count],
+      map[outerElementRating]?[innerElementRatingCount],
       nullValueSubstitute: movie.userRatingCount,
     )!;
 
-    var year = getYear(map[outer_element_year]?.toString());
+    final year = getYear(map[outerElementYear]?.toString());
     if (null != year) {
       movie.year = year;
     } else {
-      movie.yearRange = map[outer_element_year]?.toString() ?? movie.yearRange;
+      movie.yearRange = map[outerElementYear]?.toString() ?? movie.yearRange;
     }
     try {
-      movie.runTime = Duration().fromIso8601(map[outer_element_duration]);
+      movie.runTime = Duration.zero.fromIso8601(map[outerElementDuration]);
     } catch (e) {
-      movie.runTime = Duration(hours: 0, minutes: 0, seconds: 0);
+      movie.runTime = Duration.zero;
     }
     movie.type = getImdbMovieContentType(
-          map[outer_element_type],
+          map[outerElementType],
           movie.runTime.inMinutes,
           movie.uniqueId,
         ) ??
         movie.type;
 
-    _getRelated(movie, map[outer_element_related]);
-    _getPeople(movie, map[outer_element_actors], related_actors_label);
-    _getPeople(movie, map[outer_element_director], related_directors_label);
+    _getRelated(movie, map[outerElementRelated]);
+    _getPeople(movie, map[outerElementActors], relatedActorsLabel);
+    _getPeople(movie, map[outerElementDirector], relatedDirectorsLabel);
 
+    // Remove any html escape sequences from inner text.
     movie.title = htmlDecode.convert(movie.title);
     movie.alternateTitle = htmlDecode.convert(movie.alternateTitle);
     movie.description = htmlDecode.convert(movie.description);
     return movie;
   }
 
-  static _getRelated(MovieResultDTO movie, dynamic suggestions) {
+  static void _getRelated(MovieResultDTO movie, dynamic suggestions) {
     if (null != suggestions && suggestions is Iterable) {
-      for (var relatedMap in suggestions) {
+      for (final relatedMap in suggestions) {
         if (relatedMap is Map) {
-          MovieResultDTO dto = dtoFromMap(relatedMap);
-          movie.addRelated(related_movies_label, dto);
+          final dto = dtoFromMap(relatedMap);
+          movie.addRelated(relatedMoviesLabel, dto);
         }
       }
     }
   }
 
-  static _getPeople(MovieResultDTO movie, dynamic people, String label) {
+  static void _getPeople(MovieResultDTO movie, dynamic people, String label) {
     if (null != people) {
       Iterable peopleList;
       if (people is Iterable) {
@@ -121,9 +122,9 @@ class ImdbMoviePageConverter {
       } else {
         return;
       }
-      for (var relatedMap in peopleList) {
+      for (final relatedMap in peopleList) {
         if (relatedMap is Map) {
-          MovieResultDTO? dto = _dtoFromPersonMap(relatedMap);
+          final dto = _dtoFromPersonMap(relatedMap);
           if (null != dto) {
             movie.addRelated(label, dto);
           }
@@ -133,14 +134,14 @@ class ImdbMoviePageConverter {
   }
 
   static MovieResultDTO? _dtoFromPersonMap(Map map) {
-    var id = getIdFromIMDBLink(map[outer_element_link]?.toString());
-    if (map[outer_element_type] != 'Person' || id == '') {
+    final id = getIdFromIMDBLink(map[outerElementLink]?.toString());
+    if (map[outerElementType] != 'Person' || id == '') {
       return null;
     }
-    var movie = MovieResultDTO();
+    final movie = MovieResultDTO();
     movie.source = DataSourceType.imdbSuggestions;
     movie.uniqueId = id;
-    movie.title = map[outer_element_official_title]?.toString() ?? movie.title;
+    movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
 
     return movie;
   }

@@ -100,12 +100,12 @@ class BaseMovieRepository {
       detailCriteria.criteriaTitle = dto.uniqueId;
       _requestedDetails[dto.uniqueId] = null;
 
-      if (dto.uniqueId.startsWith(IMDB_TITLE_PREFIX)) {
+      if (dto.uniqueId.startsWith(imdbTitlePrefix)) {
         final imdbDetails =
             QueryIMDBTitleDetails(); //Seperate instance per search (async)
         imdbDetails.readList(detailCriteria).then((searchResults) =>
             _addImdbMovieDetails(originalSearchUID, searchResults));
-      } else if (dto.uniqueId.startsWith(IMDB_PERSON_PREFIX)) {
+      } else if (dto.uniqueId.startsWith(imdbPersonPrefix)) {
         final imdbDetails =
             //QueryIMDBNameDetails(); // Cant pull back details at this point because it is very slow and CPU intensive
             QueryIMDBSuggestions(); //Seperate instance per search (async)
@@ -124,8 +124,8 @@ class BaseMovieRepository {
   void _addTmdbDetails(int originalSearchUID, List<MovieResultDTO> values) {
     if (!searchInterrupted(originalSearchUID)) {
       for (var dto in values) {
-        if (dto.alternateId.startsWith(IMDB_TITLE_PREFIX) ||
-            dto.alternateId.startsWith(IMDB_PERSON_PREFIX)) {
+        if (dto.alternateId.startsWith(imdbTitlePrefix) ||
+            dto.alternateId.startsWith(imdbPersonPrefix)) {
           var imdbDetails = MovieResultDTO();
           imdbDetails.uniqueId = dto.alternateId;
           _getDetails(originalSearchUID, imdbDetails);

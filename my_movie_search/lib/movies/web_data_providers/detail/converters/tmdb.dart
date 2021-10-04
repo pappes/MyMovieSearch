@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_classes_with_only_static_members
+
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
@@ -23,37 +25,37 @@ import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 //vote_average = User rating
 //vote_count =  Count of users that have rated
 
-const outer_element_failure_indicator = 'success';
-const outer_element_failure_reason = 'status_message';
-const inner_element_identity = 'id';
-const inner_element_imdb_id = 'imdb_id';
-const inner_element_image = 'logo_path';
-const inner_element_year = 'release_date';
-const inner_element_type = 'video';
-const inner_element_adult = 'adult';
-const inner_element_genres = 'genres';
-const inner_element_common_title = 'title';
-const inner_element_original_title = 'original_title';
-const inner_element_overview = 'overview';
-const inner_element_poster_path = 'poster_path';
-const inner_element_release_date = 'release_date';
-const inner_element_runtime = 'runtime';
-const inner_element_original_language = 'original_language';
-const inner_element_spoken_languages = 'spoken_languages';
-const inner_element_vote_count = 'vote_count';
-const inner_element_vote_average = 'vote_average';
+const outerElementFailureIndicator = 'success';
+const outerElementFailureReason = 'status_message';
+const innerElementIdentity = 'id';
+const innerElementImdbId = 'imdb_id';
+const innerElementImage = 'logo_path';
+const innerElementYear = 'release_date';
+const innerElementType = 'video';
+const innerElementAdult = 'adult';
+const innerElementGenres = 'genres';
+const innerElementCommonTitle = 'title';
+const innerElementOriginalTitle = 'original_title';
+const innerElementOverview = 'overview';
+const innerElementPosterPath = 'poster_path';
+const innerElementReleaseDate = 'release_date';
+const innerElementRuntime = 'runtime';
+const innerElementOriginalLanguage = 'original_language';
+const innerElementSpokenLanguages = 'spoken_languages';
+const innerElementVoteCount = 'vote_count';
+const innerElementVoteAverage = 'vote_average';
 
 class TmdbMovieDetailConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     // deserialise outer json from map then iterate inner json
-    List<MovieResultDTO> searchResults = [];
+    final searchResults = <MovieResultDTO>[];
 
-    var failureIndicator = map[outer_element_failure_indicator];
+    final failureIndicator = map[outerElementFailureIndicator];
     if (null == failureIndicator) {
       searchResults.add(dtoFromMap(map));
     } else {
       final error = MovieResultDTO();
-      error.title = map[outer_element_failure_reason]?.toString() ??
+      error.title = map[outerElementFailureReason]?.toString() ??
           'No failure reason provided in results ${map.toString()}';
       searchResults.add(error);
     }
@@ -63,53 +65,52 @@ class TmdbMovieDetailConverter {
   static MovieResultDTO dtoFromMap(Map map) {
     final movie = MovieResultDTO();
     movie.source = DataSourceType.tmdb;
-    movie.uniqueId = '${map[inner_element_identity]}';
+    movie.uniqueId = '${map[innerElementIdentity]}';
     movie.alternateId =
-        map[inner_element_imdb_id]?.toString() ?? movie.alternateId;
-    if (null != map[inner_element_common_title] &&
-        null != map[inner_element_original_title]) {
-      movie.title = '${map[inner_element_original_title]} '
-          '(${map[inner_element_common_title]}';
+        map[innerElementImdbId]?.toString() ?? movie.alternateId;
+    if (null != map[innerElementCommonTitle] &&
+        null != map[innerElementOriginalTitle]) {
+      movie.title = '${map[innerElementOriginalTitle]} '
+          '(${map[innerElementCommonTitle]}';
     } else {
-      movie.imageUrl = map[inner_element_image]?.toString() ??
-          map[inner_element_common_title]?.toString() ??
+      movie.imageUrl = map[innerElementImage]?.toString() ??
+          map[innerElementCommonTitle]?.toString() ??
           movie.imageUrl;
     }
 
-    var year =
-        DateTime.tryParse(map[inner_element_year]?.toString() ?? '')?.year;
+    final year =
+        DateTime.tryParse(map[innerElementYear]?.toString() ?? '')?.year;
     if (null != year) {
       movie.year = year;
     } else {
-      movie.yearRange = map[inner_element_year]?.toString() ?? movie.yearRange;
+      movie.yearRange = map[innerElementYear]?.toString() ?? movie.yearRange;
     }
 
-    movie.imageUrl =
-        map[inner_element_poster_path]?.toString() ?? movie.imageUrl;
-    if ('true' == map[inner_element_type]) {
+    movie.imageUrl = map[innerElementPosterPath]?.toString() ?? movie.imageUrl;
+    if ('true' == map[innerElementType]) {
       movie.type = MovieContentType.short;
     }
-    if ('true' == map[inner_element_adult]) {
+    if ('true' == map[innerElementAdult]) {
       movie.censorRating = CensorRatingType.adult;
     }
     movie.description =
-        map[inner_element_overview]?.toString() ?? movie.description;
+        map[innerElementOverview]?.toString() ?? movie.description;
 
     movie.userRating = DoubleHelper.fromText(
-      map[inner_element_vote_average],
+      map[innerElementVoteAverage],
       nullValueSubstitute: movie.userRating,
     )!;
     movie.userRatingCount = IntHelper.fromText(
-      map[inner_element_vote_count],
+      map[innerElementVoteCount],
       nullValueSubstitute: movie.userRatingCount,
     )!;
 
-    int? mins = IntHelper.fromText(map[inner_element_runtime]);
+    final mins = IntHelper.fromText(map[innerElementRuntime]);
     movie.runTime = _getDuration(mins) ?? movie.runTime;
 
-    movie.languages.combineUnique(map[inner_element_original_language]);
-    movie.languages.combineUnique(map[inner_element_spoken_languages]);
-    for (Map genre in map[inner_element_genres]) {
+    movie.languages.combineUnique(map[innerElementOriginalLanguage]);
+    movie.languages.combineUnique(map[innerElementSpokenLanguages]);
+    for (final Map genre in map[innerElementGenres]) {
       movie.genres.combineUnique(genre['name'] as String);
     }
     /*TODO

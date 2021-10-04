@@ -1,6 +1,6 @@
 //query string https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=wonder%20woman
 
-final imdbHtmlSampleInner = r'''
+const imdbHtmlSampleInner = '''
 <tr class="findResult odd">
   <td class="primary_photo"> <a href="/title/tt0451279/?ref_=fn_tt_tt_1"><img src="https://m.media-amazon.com/images/M/MV5BMTYzODQzYjQtNTczNC00MzZhLTg1ZWYtZDUxYmQ3ZTY4NzA1XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_UX32_CR0,0,32,44_AL_.jpg"></a> </td> 
   <td class="result_text"> <a href="/title/tt0451279/?ref_=fn_tt_tt_1">Wonder Woman</a> (2017) </td> 
@@ -27,7 +27,7 @@ final imdbHtmlSampleInner = r'''
 </tr>
 ''';
 
-final imdbHtmlSampleFull = '''
+const imdbHtmlSampleFull = '''
 <!DOCTYPE html>
 <html
     xmlns:snip=true>

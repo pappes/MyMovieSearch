@@ -15,7 +15,7 @@
 //overview = synopsis of the movie plot
 //popularity = raking to indcate how popular the movie is e.g. "280.151",
 
-final tmdbJsonSearchInner = r'''
+const tmdbJsonSearchInner = '''
   {"adult":false,"backdrop_path":"/8XiTPUQJf.jpg","genre_ids":[28,12,878],"id":429617,"original_language":"en",
    "original_title":"Spider-Man: Far from Home","overview":"Peter Parker and his friends go on... continent.",
    "popularity":36.5,"poster_path":"/4q2NyXl.jpg","release_date":"2019-06-28",
@@ -34,11 +34,11 @@ final tmdbJsonSearchInner = r'''
    "title":"Home Invasion","video":false,"vote_average":5.2,"vote_count":105}
 ''';
 
-final tmdbJsonSearchFull =
+const tmdbJsonSearchFull =
     ' { "page": 1, "results": [ $tmdbJsonSearchInner ], "total_pages": 12, "total_results": 340 } ';
-final tmdbJsonSearchEmpty =
+const tmdbJsonSearchEmpty =
     '{ "status_message": "The resource you requested could not be found.", "status_code": 34 }';
-final tmdbJsonSearchError =
+const tmdbJsonSearchError =
     '{ "status_message": "Invalid API key: You must be granted a valid key.", "success": false, "status_code": 7 }';
 
 Stream<String> streamTmdbJsonOfflineData(dynamic dummy) {

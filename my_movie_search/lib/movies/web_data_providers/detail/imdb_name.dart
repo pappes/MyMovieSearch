@@ -5,6 +5,7 @@ import 'package:html/parser.dart' show parse;
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 import 'converters/imdb_name.dart';
@@ -13,8 +14,8 @@ import 'offline/imdb_name.dart';
 /// Implements [WebFetchBase] for retrieving person details from IMDB.
 class QueryIMDBNameDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final baseURL = 'https://www.imdb.com/name/';
-  static var cache = TieredCache();
+  static const _baseURL = 'https://www.imdb.com/name/';
+  static final _cache = TieredCache();
 
   /// Describe where the data is comming from.
   @override
@@ -32,14 +33,17 @@ class QueryIMDBNameDetails
   /// Scrape movie data from rows in the html table named findList.
   @override
   Stream<MovieResultDTO> baseTransformTextStreamToOutput(
-      Stream<String> str) async* {
+    Stream<String> str,
+  ) async* {
     // Combine all HTTP chunks together for HTML parsing.
     final content = await str.reduce((value, element) => '$value$element');
 
-    var movieData = scrapeWebPage(content);
-    if (movieData[outer_element_description] == null) {
-      yield myYieldError('imdb webscraper data not detected '
-          'for criteria $getCriteriaText');
+    final movieData = _scrapeWebPage(content);
+    if (movieData[outerElementDescription] == null) {
+      yield myYieldError(
+        'imdb webscraper data not detected '
+        'for criteria $getCriteriaText',
+      );
     }
     yield* Stream.fromIterable(baseTransformMapToOutputHandler(movieData));
   }
@@ -54,7 +58,7 @@ class QueryIMDBNameDetails
   /// API call to IMDB person details for person id.
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    var url = '$baseURL$searchCriteria';
+    final url = '$_baseURL$searchCriteria';
     return WebRedirect.constructURI(url);
   }
 
@@ -66,8 +70,9 @@ class QueryIMDBNameDetails
   /// Include entire map in the movie Name when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) {
-    var error = MovieResultDTO().error();
-    error.title = '[${this.runtimeType}] $message';
+    final error = MovieResultDTO().error();
+    // ignore: no_runtimetype_tostring
+    error.title = '[$runtimeType] $message';
     error.type = MovieContentType.custom;
     error.source = DataSourceType.imdb;
     return error;
@@ -76,39 +81,41 @@ class QueryIMDBNameDetails
   /// Check cache to see if data has already been fetched.
   @override
   bool myIsResultCached(SearchCriteriaDTO criteria) {
-    return cache.isCached(criteria.criteriaTitle);
+    return _cache.isCached(criteria.criteriaTitle);
   }
 
   /// Check cache to see if data in cache should be refreshed.
   @override
   bool myIsCacheStale(SearchCriteriaDTO criteria) {
     return false;
-    return cache.isCached(criteria.criteriaTitle);
+    //return _cache.isCached(criteria.criteriaTitle);
   }
 
   /// Insert transformed data into cache.
   @override
   void myAddResultToCache(MovieResultDTO fetchedResult) {
-    cache.add(fetchedResult.uniqueId, fetchedResult);
+    _cache.add(fetchedResult.uniqueId, fetchedResult);
   }
 
   /// Retrieve cached result.
   @override
   Stream<MovieResultDTO> myFetchResultFromCache(
-      SearchCriteriaDTO criteria) async* {
-    var value = await cache.get(criteria.criteriaTitle);
+    SearchCriteriaDTO criteria,
+  ) async* {
+    final value = await _cache.get(criteria.criteriaTitle);
     if (value is MovieResultDTO) {
       yield value;
     }
   }
 
   /// Collect JSON and webpage text to construct a map of the movie data.
-  Map scrapeWebPage(String content) {
+  Map _scrapeWebPage(String content) {
     // Extract embedded JSON.
-    var document = parse(content);
-    var movieData = json.decode(getMovieJson(document)) as Map;
-    scrapeName(document, movieData);
-    scrapeRelated(document, movieData);
+    final document = parse(content);
+    final movieData = json.decode(_getMovieJson(document)) as Map;
+    _scrapeName(document, movieData);
+    _scrapePoster(document, movieData);
+    _scrapeRelated(document, movieData);
 
     movieData['id'] = getCriteriaText ?? movieData['id'];
     return movieData;
@@ -116,44 +123,42 @@ class QueryIMDBNameDetails
 
   /// Use CSS selector to find the JSON script on the page
   /// and extract values from the JSON.
-  String getMovieJson(Document document) {
-    var scriptElement =
+  String _getMovieJson(Document document) {
+    final scriptElement =
         document.querySelector('script[type="application/ld+json"]');
-    if (scriptElement == null || scriptElement.innerHtml.length == 0) {
-      print('no JSON details found for Name $getCriteriaText');
+    if (scriptElement == null || scriptElement.innerHtml.isEmpty) {
+      logger.e('no JSON details found for Name $getCriteriaText');
       return '{}';
     }
     return scriptElement.innerHtml;
   }
 
   /// Extract Official name of person from web page.
-  scrapeName(Document document, Map movieData) {
-    var oldName = movieData[outer_element_official_title];
-    movieData[outer_element_official_title] = '';
+  void _scrapeName(Document document, Map movieData) {
+    final oldName = movieData[outerElementOfficialTitle];
+    movieData[outerElementOfficialTitle] = '';
     var section = document.querySelector('h1[data-testid="hero-Name-block"]');
-    if (null == section) {
-      section =
-          document.querySelector('td[class*="name-overview-widget__section"]');
-    }
-    var spans = section?.querySelector('h1')?.querySelectorAll('span');
+    section ??=
+        document.querySelector('td[class*="name-overview-widget__section"]');
+    final spans = section?.querySelector('h1')?.querySelectorAll('span');
     if (null != spans) {
-      for (var span in spans) {
-        movieData[outer_element_official_title] += span.text;
+      for (final span in spans) {
+        movieData[outerElementOfficialTitle] += span.text;
       }
     }
-    if ('' == movieData[outer_element_official_title]) {
-      movieData[outer_element_official_title] = oldName;
+    if ('' == movieData[outerElementOfficialTitle]) {
+      movieData[outerElementOfficialTitle] = oldName;
     }
   }
 
   /// Search for movie poster.
-  scrapePoster(Document document, Map movieData) {
-    var posterBlock =
+  void _scrapePoster(Document document, Map movieData) {
+    final posterBlock =
         document.querySelector('div[class="poster-hero-container"]');
     if (null != posterBlock && posterBlock.hasChildNodes()) {
-      for (var poster in posterBlock.querySelectorAll('img')) {
+      for (final poster in posterBlock.querySelectorAll('img')) {
         if (null != poster.attributes['src']) {
-          movieData[outer_element_image] = poster.attributes['src'];
+          movieData[outerElementImage] = poster.attributes['src'];
           break;
         }
       }
@@ -161,30 +166,30 @@ class QueryIMDBNameDetails
   }
 
   /// Extract the movies for the current person.
-  void scrapeRelated(Document document, Map movieData) {
-    movieData[outer_element_related] = [];
-    var filmography = document.querySelector('#filmography');
+  void _scrapeRelated(Document document, Map movieData) {
+    movieData[outerElementRelated] = [];
+    final filmography = document.querySelector('#filmography');
     if (null != filmography) {
       var headerText = '';
-      for (var child in filmography.children) {
+      for (final child in filmography.children) {
         if (!child.classes.contains('filmo-category-section')) {
           headerText = child.attributes['data-category'] ?? '?';
         } else {
-          var movieList = getMovieList(child.children);
-          movieData[outer_element_related].add({headerText: movieList});
+          final movieList = _getMovieList(child.children);
+          movieData[outerElementRelated].add({headerText: movieList});
         }
       }
     }
   }
 
-  List<Map> getMovieList(List<Element> rows) {
-    List<Map> movies = [];
-    for (var child in rows) {
-      var link = child.querySelector('a');
+  List<Map> _getMovieList(List<Element> rows) {
+    final movies = <Map>[];
+    for (final child in rows) {
+      final link = child.querySelector('a');
       if (null != link) {
-        Map movie = {};
-        movie[outer_element_official_title] = link.text;
-        movie[outer_element_link] = link.attributes['href'];
+        final movie = {};
+        movie[outerElementOfficialTitle] = link.text;
+        movie[outerElementLink] = link.attributes['href'];
         movies.add(movie);
       }
     }

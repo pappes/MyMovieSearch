@@ -1,6 +1,6 @@
+import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
-import 'package:flutter/foundation.dart' show describeEnum;
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -13,9 +13,9 @@ import 'offline/imdb_title.dart';
 /// Implements [WebFetchBase] for retrieving cast and crew information from IMDB.
 class QueryIMDBCastDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final baseURL = 'https://www.imdb.com/title/';
-  static final baseURLsuffix = '/fullcredits/';
-  static var cache = TieredCache();
+  static const _baseURL = 'https://www.imdb.com/title/';
+  static const _baseURLsuffix = '/fullcredits/';
+  static final _cache = TieredCache();
 
   /// Describe where the data is comming from.
   @override
@@ -33,11 +33,12 @@ class QueryIMDBCastDetails
   /// Scrape cast data from rows in the html div named fullcredits_content.
   @override
   Stream<MovieResultDTO> baseTransformTextStreamToOutput(
-      Stream<String> str) async* {
+    Stream<String> str,
+  ) async* {
     // Combine all HTTP chunks together for HTML parsing.
     final content = await str.reduce((value, element) => '$value$element');
 
-    var movieData = scrapeWebPage(content);
+    final movieData = _scrapeWebPage(content);
     yield* Stream.fromIterable(baseTransformMapToOutputHandler(movieData));
   }
 
@@ -51,7 +52,7 @@ class QueryIMDBCastDetails
   /// API call to IMDB search returning the top matching results for [searchText].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    var url = '$baseURL$searchCriteria$baseURLsuffix';
+    final url = '$_baseURL$searchCriteria$_baseURLsuffix';
     return WebRedirect.constructURI(url);
   }
 
@@ -63,8 +64,9 @@ class QueryIMDBCastDetails
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) {
-    var error = MovieResultDTO().error();
-    error.title = '[${this.runtimeType}] $message';
+    final error = MovieResultDTO().error();
+    // ignore: no_runtimetype_tostring
+    error.title = '[$runtimeType] $message';
     error.type = MovieContentType.custom;
     error.source = DataSourceType.imdb;
     return error;
@@ -73,52 +75,53 @@ class QueryIMDBCastDetails
   /// Check cache to see if data has already been fetched.
   @override
   bool myIsResultCached(SearchCriteriaDTO criteria) {
-    return cache.isCached(criteria.criteriaTitle);
+    return _cache.isCached(criteria.criteriaTitle);
   }
 
   /// Check cache to see if data in cache should be refreshed.
   @override
   bool myIsCacheStale(SearchCriteriaDTO criteria) {
     return false;
-    return cache.isCached(criteria.criteriaTitle);
+    //return _cache.isCached(criteria.criteriaTitle);
   }
 
   /// Insert transformed data into cache.
   @override
   void myAddResultToCache(MovieResultDTO fetchedResult) {
-    cache.add(fetchedResult.uniqueId, fetchedResult);
+    _cache.add(fetchedResult.uniqueId, fetchedResult);
   }
 
   /// Retrieve cached result.
   @override
   Stream<MovieResultDTO> myFetchResultFromCache(
-      SearchCriteriaDTO criteria) async* {
-    var value = await cache.get(criteria.criteriaTitle);
+    SearchCriteriaDTO criteria,
+  ) async* {
+    final value = await _cache.get(criteria.criteriaTitle);
     if (value is MovieResultDTO) {
       yield value;
     }
   }
 
   /// Collect webpage text to construct a map of the movie data.
-  Map scrapeWebPage(String content) {
+  Map _scrapeWebPage(String content) {
     // Extract embedded JSON.
-    var document = parse(content);
-    Map movieData = {};
+    final document = parse(content);
+    final movieData = {};
 
-    scrapeRelated(document, movieData);
+    _scrapeRelated(document, movieData);
 
     movieData['id'] = getCriteriaText ?? movieData['id'];
     return movieData;
   }
 
   /// Extract the cast for the current movie.
-  void scrapeRelated(Document document, Map movieData) {
+  void _scrapeRelated(Document document, Map movieData) {
     String? roleText;
     final children = document.querySelector('#fullcredits_content')?.children;
     if (null != children) {
-      for (var credits in children) {
+      for (final credits in children) {
         roleText = _getRole(credits) ?? roleText;
-        var cast = _getCast(credits);
+        final cast = _getCast(credits);
         _addCast(movieData, roleText ?? '?', cast);
       }
     }
@@ -130,11 +133,12 @@ class QueryIMDBCastDetails
       if (text.isEmpty) {
         text = credits.attributes['id'] ?? credits.attributes['name'] ?? '?';
       }
-      return text.trim().split('\n').first + ':';
+      final firstLine = text.trim().split('\n').first;
+      return '$firstLine:';
     }
   }
 
-  _addCast(Map movieData, String role, dynamic cast) {
+  void _addCast(Map movieData, String role, dynamic cast) {
     if (!movieData.containsKey(role)) {
       movieData[role] = [];
     }
@@ -142,20 +146,22 @@ class QueryIMDBCastDetails
   }
 
   List<Map> _getCast(Element table) {
-    List<Map> movies = [];
-    for (var row in table.querySelectorAll('tr')) {
-      var title = '';
+    final movies = <Map>[];
+    for (final row in table.querySelectorAll('tr')) {
+      final title = StringBuffer();
       var linkURL = '';
-      for (var link in row.querySelectorAll('a[href*="/name/nm"]')) {
-        title += link.text.trim().split('\n').first;
+      for (final link in row.querySelectorAll('a[href*="/name/nm"]')) {
+        title.write(link.text.trim().split('\n').first);
         linkURL = link.attributes['href'] ?? '';
       }
       if (title.isNotEmpty) {
-        Map<String, String> person = {outer_element_official_title: title};
-        person[outer_element_link] = linkURL;
-        var charactor = row.querySelector('a[href*="/title/tt"]')?.text;
+        final person = <String, String>{};
+        person[outerElementOfficialTitle] = title.toString();
+        person[outerElementLink] = linkURL;
+        final charactor = row.querySelector('a[href*="/title/tt"]')?.text;
         if (null != charactor) {
-          person[outer_element_alternate_title] = charactor;
+          // Include name of character played by actor for display in search results.
+          person[outerElementAlternatetitle] = charactor;
         }
         movies.add(person);
       }

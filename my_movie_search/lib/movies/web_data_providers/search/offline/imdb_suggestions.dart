@@ -8,7 +8,7 @@
 //q = title type
 //i = image with dimentions
 
-final imdbJsonSampleInner = r'''
+const imdbJsonSampleInner = '''
   {"l":"Wonder Woman 1984","id":"tt7126948","s":"Gal Gadot, Chris Pine","y":2020,"q":"feature","vt":35
       ,"i":["https://m.media-amazon.com/images/M/MV5BNWY2NWE0NWEtZGUwMC00NWMwLTkyNzUtNmIxMmIyYzA0MjNiXkEyXkFqcGdeQXVyMTA2OTQ3MTUy._V1_.jpg",2764,4096]
       ,"v":
@@ -40,10 +40,10 @@ final imdbJsonSampleInner = r'''
   {"l":"Jennifer Wenger","id":"nm2628854","s":"Actress, Jimmy Kimmel Live! (2006-2007)"
       ,"i":["https://m.media-amazon.com/images/M/MV5BMjk0MTRlNmUtNGNmNy00OTA2LTg0MWEtMWE2M2M5YmUyMDJkL2ltYWdlXkEyXkFqcGdeQXVyNjY1ODcxNQ@@._V1_.jpg",640,428]}
 ''';
-final imdbJsonPFunction = r'imdb$wonder_woman';
-final imdbJsonSampleFull =
+const imdbJsonPFunction = r'imdb$wonder_woman';
+const imdbJsonSampleFull =
     ' {"v":1,"q":"wonder_woman","d":[ $imdbJsonSampleInner ]}';
-final imdbJsonPSampleFull = '''
+const imdbJsonPSampleFull = '''
   $imdbJsonPFunction(
     $imdbJsonSampleFull
   ) ''';

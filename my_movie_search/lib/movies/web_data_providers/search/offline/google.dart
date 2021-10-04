@@ -8,7 +8,7 @@
 //pagemap.aggregaterating.ratingvalue = userRating
 //pagemap.aggregaterating.ratingcount = userRatingCount
 
-final googleMoviesJsonSearchInner = r'''
+const googleMoviesJsonSearchInner = r'''
     {
       "kind": "customsearch#result",
       "title": "Wonder (2017) - IMDb",
@@ -522,7 +522,7 @@ final googleMoviesJsonSearchInner = r'''
       }
     }
 ''';
-final googleMoviesJsonSearchPrefix = r'''
+const googleMoviesJsonSearchPrefix = '''
     {
   "kind": "customsearch#search",
   "url": {
@@ -568,11 +568,11 @@ final googleMoviesJsonSearchPrefix = r'''
   },
   "items": [
     ''';
-final googleMoviesJsonSearchSuffix = r'''
+const googleMoviesJsonSearchSuffix = '''
   ]
 }
 ''';
-final googleMoviesJsonSearchEmpty = r'''
+const googleMoviesJsonSearchEmpty = r'''
 {
   "kind": "customsearch#search",
   "url": {
@@ -605,7 +605,7 @@ final googleMoviesJsonSearchEmpty = r'''
   }
 }
 ''';
-final googleMoviesJsonSearchError = r'''
+const googleMoviesJsonSearchError = '''
 {
   "error": {
     "code": 400,
@@ -622,7 +622,7 @@ final googleMoviesJsonSearchError = r'''
 }
 ''';
 
-final googleMoviesJsonSearchFull =
+const googleMoviesJsonSearchFull =
     ' $googleMoviesJsonSearchPrefix $googleMoviesJsonSearchInner $googleMoviesJsonSearchSuffix';
 
 Stream<String> streamGoogleMoviesJsonOfflineData(dynamic dummy) {

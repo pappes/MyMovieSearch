@@ -15,7 +15,7 @@
 //overview = synopsis of the movie plot
 //popularity = raking to indcate how popular the movie is e.g. "280.151",
 
-final tmdbJsonSearchInner = r'''
+const tmdbJsonSearchInner = '''
   {"adult":false,
   "backdrop_path":null,
   "belongs_to_collection":null,
@@ -73,11 +73,11 @@ final tmdbJsonSearchInner = r'''
   "vote_count":1537}
 ''';
 
-final tmdbJsonSearchFull =
+const tmdbJsonSearchFull =
     ' { "page": 1, "results": [ $tmdbJsonSearchInner ], "total_pages": 12, "total_results": 340 } ';
-final tmdbJsonSearchEmpty =
+const tmdbJsonSearchEmpty =
     '{"success":false,"status_code":34,"status_message":"The resource you requested could not be found."}';
-final tmdbJsonSearchError =
+const tmdbJsonSearchError =
     '{"status_code":7,"status_message":"Invalid API key: You must be granted a valid key.","success":false}';
 
 Stream<String> streamTmdbJsonOfflineData(dynamic dummy) {

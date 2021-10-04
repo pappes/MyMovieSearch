@@ -1,17 +1,16 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
-const IMDB_TITLE_PREFIX = 'tt';
-const IMDB_PERSON_PREFIX = 'nm';
-const IMDB_TITLE_PATH = '/title/';
-const IMDB_PERSON_PATH = '/name/';
+const imdbTitlePrefix = 'tt';
+const imdbPersonPrefix = 'nm';
+const imdbTitlePath = '/title/';
+const imdbPersonPath = '/name/';
 
-const IMDB_BASE_URL = 'https://www.imdb.com';
-const IMDB_MOBILE_URL = 'https://m.imdb.com';
-const IMDB_TITLE_URL = '/title/';
-const IMDB_PERSON_URL = '/name/';
-const IMDB_SUFFIX_URL = '?ref_=nv_sr_srsg_0';
-const IMDB_PHOTOS_SUFFIX = 'mediaindex';
-const IMDB_PARENTAL_SUFFIX = 'parentalguide';
+const imdbBaseURL = 'https://www.imdb.com';
+const imdbMobileURL = 'https://m.imdb.com';
+const imdbSuffixURL = '?ref_=nv_sr_srsg_0';
+const imdbPhotosPath = 'mediaindex';
+const imdbParentalPath = 'parentalguide';
 
 String makeImdbUrl(
   String key, {
@@ -20,45 +19,47 @@ String makeImdbUrl(
   bool photos = false,
   bool parentalGuide = false,
 }) {
-  var url = mobile ? IMDB_MOBILE_URL : IMDB_BASE_URL;
-  if (key.startsWith(IMDB_TITLE_PREFIX)) {
-    url += IMDB_TITLE_URL;
+  final url = StringBuffer();
+  url.write(mobile ? imdbMobileURL : imdbBaseURL);
+  if (key.startsWith(imdbTitlePrefix)) {
+    url.write(imdbTitlePath);
   }
-  if (key.startsWith(IMDB_PERSON_PREFIX)) {
-    url += IMDB_PERSON_URL;
+  if (key.startsWith(imdbPersonPrefix)) {
+    url.write(imdbPersonPath);
   }
   if (photos) {
-    path += IMDB_PHOTOS_SUFFIX;
+    url.write(imdbPhotosPath);
   }
   if (parentalGuide) {
-    path += IMDB_PARENTAL_SUFFIX;
+    url.write(imdbParentalPath);
   }
-  return url + key + path + IMDB_SUFFIX_URL;
+  url.write(key + path + imdbSuffixURL);
+  return url.toString();
 }
 
 String getIdFromIMDBLink(String? link) {
-  const START_STRING = '^';
-  const MULTIPLE_NON_SLASH = '[^/]*';
-  const MULTIPLE_ANYTHING = '.*';
-  const END_STRING = r'$';
-
-  String? getGroup2(String formula) {
-    var match = RegExp(formula).firstMatch(link ?? '');
-    if (null != match) {
-      if (null != match.group(2)) {
-        return match.group(2)!;
-      }
-    }
+  if (null == link || link.isEmpty) {
+    return '';
   }
 
+  const regexStartString = '^';
+  const regexMultipleNonSlash = '[^/]*';
+  const regexMultipleAnything = '.*';
+  const regexEndString = r'$';
+
   // Convert /title/tt0145681/?ref_=nm_sims_nm_t_9 to tt0145681
-  var titleRegexpFormula = '$START_STRING($IMDB_TITLE_PATH)'
-      '($MULTIPLE_NON_SLASH)(/$MULTIPLE_ANYTHING)$END_STRING';
+  const titleRegexpFormula = '$regexStartString$imdbTitlePath'
+      '($regexMultipleNonSlash)'
+      '/$regexMultipleAnything$regexEndString';
   // Convert /name/nm0145681/?ref_=nm_sims_nm_t_9 to nm0145681
-  var nameRegexpFormula = '$START_STRING($IMDB_PERSON_PATH)'
-      '($MULTIPLE_NON_SLASH)(/$MULTIPLE_ANYTHING)$END_STRING';
-  // (group1)(group2)(group3) - only care about group 2 - MULTIPLE_NON_SLASH
-  return getGroup2(titleRegexpFormula) ?? getGroup2(nameRegexpFormula) ?? '';
+  const nameRegexpFormula = '$regexStartString$imdbPersonPath'
+      '($regexMultipleNonSlash)'
+      '/$regexMultipleAnything$regexEndString';
+
+  // stuff(group1)stuff - only care about group 1 - regexMultipleNonSlash
+  return _getRegexGroupInBrakets(link, titleRegexpFormula) ??
+      _getRegexGroupInBrakets(link, nameRegexpFormula) ??
+      '';
 }
 
 MovieContentType? getImdbMovieContentType(
@@ -66,27 +67,29 @@ MovieContentType? getImdbMovieContentType(
   int? duration,
   String id,
 ) {
-  if (id.startsWith(IMDB_PERSON_PREFIX)) return MovieContentType.person;
+  if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
   if (info == null) {
-    if (duration != null && duration < 50 && duration > 0)
+    if (duration != null && duration < 50 && duration > 0) {
       return MovieContentType.short;
+    }
     return null;
   }
   final String title = info.toString().toLowerCase();
   if (title.lastIndexOf('game') > -1) return MovieContentType.custom;
   if (title.lastIndexOf('creativework') > -1) return MovieContentType.custom;
-  if (title.lastIndexOf('mini') > -1) // includes TV Mini-series
-    return MovieContentType.miniseries;
+  // mini includes TV Mini-series
+  if (title.lastIndexOf('mini') > -1) return MovieContentType.miniseries;
   if (title.lastIndexOf('episode') > -1) return MovieContentType.episode;
   if (title.lastIndexOf('series') > -1) return MovieContentType.series;
   if (title.lastIndexOf('special') > -1) return MovieContentType.series;
   if (title.lastIndexOf('short') > -1) return MovieContentType.short;
-  if (duration != null && duration < 50 && duration > 0)
+  if (duration != null && duration < 50 && duration > 0) {
     return MovieContentType.short;
+  }
   if (title.lastIndexOf('movie') > -1) return MovieContentType.movie;
   if (title.lastIndexOf('video') > -1) return MovieContentType.movie;
   if (title.lastIndexOf('feature') > -1) return MovieContentType.movie;
-  print('Unknown Imdb MoveContentType $title');
+  logger.e('Unknown Imdb MoveContentType $title');
   return MovieContentType.movie;
 }
 
@@ -98,32 +101,32 @@ CensorRatingType? getImdbCensorRating(String? type) {
   if (type.lastIndexOf('R21') > -1) return CensorRatingType.adult;
 
   if (type.lastIndexOf('Z') > -1) return CensorRatingType.restriced;
-  if (type.lastIndexOf('R') > -1)
-    return CensorRatingType.restriced; //R, R(A), RP18
+  //R incudes R, R(A), RP18
+  if (type.lastIndexOf('R') > -1) return CensorRatingType.restriced;
   if (type.lastIndexOf('Unrated') > -1) return CensorRatingType.restriced;
   if (type.lastIndexOf('Mature') > -1) return CensorRatingType.restriced;
   if (type.lastIndexOf('Adult') > -1) return CensorRatingType.restriced;
   if (type.lastIndexOf('GA') > -1) return CensorRatingType.restriced;
-  if (type.lastIndexOf('18') > -1)
-    return CensorRatingType.restriced; //18, R18, M18, RP18, 18+, VM18
+  //18 includes 18, R18, M18, RP18, 18+, VM18
+  if (type.lastIndexOf('18') > -1) return CensorRatingType.restriced;
   if (type.lastIndexOf('17') > -1) return CensorRatingType.restriced; //NC-17
 
-  if (type.lastIndexOf('16') > -1)
-    return CensorRatingType.mature; // 16, NC16, R16, RP16, VM 16
-  if (type.lastIndexOf('15') > -1)
-    return CensorRatingType.mature; // 15+, B15, R15+, 15A, 15PG
+  // 16 includes 16, NC16, R16, RP16, VM 16
+  if (type.lastIndexOf('16') > -1) return CensorRatingType.mature;
+  // 15 includes 15+, B15, R15+, 15A, 15PG
+  if (type.lastIndexOf('15') > -1) return CensorRatingType.mature;
   if (type.lastIndexOf('14') > -1) return CensorRatingType.mature; // 14+, VM14
-  if (type.lastIndexOf('M') > -1)
-    return CensorRatingType.mature; // M, MA, TV-MA
+  // M includes M, MA, TV-MA
+  if (type.lastIndexOf('M') > -1) return CensorRatingType.mature;
   if (type.lastIndexOf('GY') > -1) return CensorRatingType.mature;
   if (type.lastIndexOf('D') > -1) return CensorRatingType.mature;
   if (type.lastIndexOf('LH') > -1) return CensorRatingType.mature;
 
   if (type.lastIndexOf('Approved') > -1) return CensorRatingType.family;
-  if (type.lastIndexOf('13') > -1)
-    return CensorRatingType.family; // PG-13, 13+, R13, RP13
-  if (type.lastIndexOf('12') > -1)
-    return CensorRatingType.family; // 12+, 12A, PG12, 12A, 12PG
+  // 13 includes PG-13, 13+, R13, RP13
+  if (type.lastIndexOf('13') > -1) return CensorRatingType.family;
+  // 12 includes 12+, 12A, PG12, 12A, 12PG
+  if (type.lastIndexOf('12') > -1) return CensorRatingType.family;
   if (type.lastIndexOf('11') > -1) return CensorRatingType.family; // 11
   if (type.lastIndexOf('10') > -1) return CensorRatingType.family; // 10
   if (type.lastIndexOf('9') > -1) return CensorRatingType.family; // 9+
@@ -132,8 +135,8 @@ CensorRatingType? getImdbCensorRating(String? type) {
   if (type.lastIndexOf('7') > -1) return CensorRatingType.family; // 7+
   if (type.lastIndexOf('6') > -1) return CensorRatingType.family; // 6+
   if (type.lastIndexOf('S') > -1) return CensorRatingType.family;
-  if (type.lastIndexOf('G') > -1)
-    return CensorRatingType.family; // G, PG, PG-13
+  // G includes G, PG, PG-13
+  if (type.lastIndexOf('G') > -1) return CensorRatingType.family;
 
   if (type.lastIndexOf('C') > -1) return CensorRatingType.kids;
   if (type.lastIndexOf('Y') > -1) return CensorRatingType.kids; //TV-Y
@@ -141,8 +144,8 @@ CensorRatingType? getImdbCensorRating(String? type) {
   if (type.lastIndexOf('Btl') > -1) return CensorRatingType.kids;
   if (type.lastIndexOf('TP') > -1) return CensorRatingType.kids;
   if (type.lastIndexOf('0') > -1) return CensorRatingType.kids; // 0+
-  if (type.lastIndexOf('A') > -1)
-    return CensorRatingType.kids; // A, All, AL, AA
+  // A includes A, All, AL, AA
+  if (type.lastIndexOf('A') > -1) return CensorRatingType.kids;
 
   if (type.lastIndexOf('T') > -1) return CensorRatingType.family; // T
   if (type.lastIndexOf('B') > -1) return CensorRatingType.family;
@@ -154,16 +157,33 @@ String getBigImage(String? smallImage) {
   // e.g.    https://m.media-amazon.com/images/M/MV5BODQxYWM2ODItYjE4ZC00YzAxLTljZDQtMjRjMmE0ZGMwYzZjXkEyXkFqcGdeQXVyODIyOTEyMzY@._V1_UY268_CR9,0,182,268_AL_.jpg
   // becomes https://m.media-amazon.com/images/M/MV5BODQxYWM2ODItYjE4ZC00YzAxLTljZDQtMjRjMmE0ZGMwYzZjXkEyXkFqcGdeQXVyODIyOTEyMzY@
   if (null != smallImage && smallImage.startsWith('http')) {
-    // http followed by zero or more of anything (http.*)
-    // followed by a period then multiple non periods (\.[^.]*)
-    // followed by .jpg (\.jpg)
-    var match = RegExp(r'^(http.*)(\.[^.]*)(\.jpg)$').firstMatch(smallImage);
-    if (null != match) {
-      if (null != match.group(1)) {
-        return match.group(1)! + '.jpg';
-      }
+    // http followed by zero or more of anything "(http.*)""
+    // followed by a period then multiple non periods "\.[^.]*""
+    // followed by file extesion including one more period "\.jpg"
+
+    const regexStartString = '^';
+    const regexBeforeLastFulStop = 'http.*';
+    const regexLastFulStopOnwards = r'\.[^.]*';
+    const regexFileExtension = r'\.jpg';
+    const regexEndString = r'$';
+
+    const imageRegexpFormula = '$regexStartString'
+        '($regexBeforeLastFulStop)'
+        '$regexLastFulStopOnwards$regexFileExtension$regexEndString';
+    final truncated = _getRegexGroupInBrakets(smallImage, imageRegexpFormula);
+    if (null != truncated) {
+      return '$truncated.jpg';
     }
     return smallImage;
   }
   return '';
+}
+
+String? _getRegexGroupInBrakets(String stringToSearch, String regexFormula) {
+  final match = RegExp(regexFormula).firstMatch(stringToSearch);
+  if (null != match) {
+    if (null != match.group(1)) {
+      return match.group(1);
+    }
+  }
 }

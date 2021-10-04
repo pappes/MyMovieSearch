@@ -20,7 +20,7 @@ class MovieResultDTO {
   double userRating = 0;
   int userRatingCount = 0;
   CensorRatingType censorRating = CensorRatingType.none;
-  Duration runTime = Duration(hours: 0, minutes: 0, seconds: 0);
+  Duration runTime = Duration.zero;
   String imageUrl = '';
   LanguageType language = LanguageType.none;
   List<String> languages = [];

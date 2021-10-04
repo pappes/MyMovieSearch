@@ -1,27 +1,28 @@
 import 'dart:convert' show json;
+import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
-import 'package:flutter/foundation.dart' show describeEnum;
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 import 'converters/imdb_title.dart';
 import 'offline/imdb_title.dart';
 
-const SEARCH_RESULTS_TABLE = 'findList';
-const COLUMN_MOVIE_TEXT = 'result_text';
-const COLUMN_MOVIE_POSTER = 'primary_photo';
+const searchResultsTable = 'findList';
+const columnMovieText = 'result_text';
+const columnMoviePoster = 'primary_photo';
 
 /// Implements [WebFetchBase] for retrieving movie details from IMDB.
 class QueryIMDBTitleDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final baseURL = 'https://www.imdb.com/title/';
-  static final baseURLsuffix = '/?ref_=fn_tt_tt_1';
-  static var cache = TieredCache();
+  static const _baseURL = 'https://www.imdb.com/title/';
+  static const _baseURLsuffix = '/?ref_=fn_tt_tt_1';
+  static final _cache = TieredCache();
 
   /// Describe where the data is comming from.
   @override
@@ -39,14 +40,17 @@ class QueryIMDBTitleDetails
   /// Scrape movie data from rows in the html table named findList.
   @override
   Stream<MovieResultDTO> baseTransformTextStreamToOutput(
-      Stream<String> str) async* {
+    Stream<String> str,
+  ) async* {
     // Combine all HTTP chunks together for HTML parsing.
     final content = await str.reduce((value, element) => '$value$element');
 
-    var movieData = _scrapeWebPage(content);
-    if (movieData[outer_element_description] == null) {
-      yield myYieldError('imdb webscraper data not detected '
-          'for criteria $getCriteriaText');
+    final movieData = _scrapeWebPage(content);
+    if (movieData[outerElementDescription] == null) {
+      yield myYieldError(
+        'imdb webscraper data not detected '
+        'for criteria $getCriteriaText',
+      );
     }
     yield* Stream.fromIterable(baseTransformMapToOutputHandler(movieData));
   }
@@ -61,7 +65,7 @@ class QueryIMDBTitleDetails
   /// API call to IMDB search returning the top matching results for [searchText].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    var url = '$baseURL$searchCriteria$baseURLsuffix';
+    final url = '$_baseURL$searchCriteria$_baseURLsuffix';
     return WebRedirect.constructURI(url);
   }
 
@@ -73,8 +77,9 @@ class QueryIMDBTitleDetails
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) {
-    var error = MovieResultDTO().error();
-    error.title = '[${this.runtimeType}] $message';
+    final error = MovieResultDTO().error();
+    // ignore: no_runtimetype_tostring
+    error.title = '[$runtimeType] $message';
     error.type = MovieContentType.custom;
     error.source = DataSourceType.imdb;
     return error;
@@ -83,27 +88,28 @@ class QueryIMDBTitleDetails
   /// Check cache to see if data has already been fetched.
   @override
   bool myIsResultCached(SearchCriteriaDTO criteria) {
-    return cache.isCached(criteria.criteriaTitle);
+    return _cache.isCached(criteria.criteriaTitle);
   }
 
   /// Check cache to see if data in cache should be refreshed.
   @override
   bool myIsCacheStale(SearchCriteriaDTO criteria) {
     return false;
-    return cache.isCached(criteria.criteriaTitle);
+    //return _cache.isCached(criteria.criteriaTitle);
   }
 
   /// Insert transformed data into cache.
   @override
   void myAddResultToCache(MovieResultDTO fetchedResult) {
-    cache.add(fetchedResult.uniqueId, fetchedResult);
+    _cache.add(fetchedResult.uniqueId, fetchedResult);
   }
 
   /// Retrieve cached result.
   @override
   Stream<MovieResultDTO> myFetchResultFromCache(
-      SearchCriteriaDTO criteria) async* {
-    var value = await cache.get(criteria.criteriaTitle);
+    SearchCriteriaDTO criteria,
+  ) async* {
+    final value = await _cache.get(criteria.criteriaTitle);
     if (value is MovieResultDTO) {
       yield value;
     }
@@ -112,22 +118,22 @@ class QueryIMDBTitleDetails
   /// Collect JSON and webpage text to construct a map of the movie data.
   Map _scrapeWebPage(String content) {
     // Extract embedded JSON.
-    var document = parse(content);
-    final movieData = json.decode(getMovieJson(document)) as Map;
+    final document = parse(content);
+    final movieData = json.decode(_getMovieJson(document)) as Map;
 
     if (movieData == {}) {
       _scrapeName(document, movieData);
       _scrapeType(document, movieData);
     }
-    // Get better details form the web page where possible.
+    // Get better details from the web page where possible.
     _scrapePoster(document, movieData);
     _scrapeDescription(document, movieData);
     _scrapeLanguageDetails(document, movieData);
 
     _getRecomendationList(movieData, document);
 
-    _getAttributeValue(movieData, document, inner_element_rating_count);
-    _getAttributeValue(movieData, document, inner_element_rating_value);
+    _getAttributeValue(movieData, document, innerElementRatingCount);
+    _getAttributeValue(movieData, document, innerElementRatingValue);
 
     movieData['id'] = getCriteriaText ?? movieData['id'];
     return movieData;
@@ -135,48 +141,47 @@ class QueryIMDBTitleDetails
 
   /// Use CSS selector to find the JSON script on the page
   /// and extract values from the JSON.
-  String getMovieJson(Document document) {
-    var scriptElement =
+  String _getMovieJson(Document document) {
+    final scriptElement =
         document.querySelector('script[type="application/ld+json"]');
-    if (scriptElement == null || scriptElement.innerHtml.length == 0) {
-      print('no JSON details found for title $getCriteriaText');
+    if (scriptElement == null || scriptElement.innerHtml.isEmpty) {
+      logger.e('no JSON details found for title $getCriteriaText');
       return '{}';
     }
     return scriptElement.innerHtml;
   }
 
   /// Extract movie type not found in JSON from HTML
-  _scrapeType(Document document, Map movieData) {
-    _getAttributeValue(movieData, document, outer_element_type);
-    if ("" == movieData[outer_element_type] &&
+  void _scrapeType(Document document, Map movieData) {
+    _getAttributeValue(movieData, document, outerElementType);
+    if ('' == movieData[outerElementType] &&
         null != document.querySelector('a[href*="genre=short"]')) {
-      movieData[outer_element_type] = "Short";
+      movieData[outerElementType] = "Short";
     }
   }
 
+/*
   /// Extract type, year, Censor Rating and duration from ul<TitleBlockMetaData>
-  scrapeTitleMetadataDetails(Document document, Map movieData) {
+  void _scrapeTitleMetadataDetails(Document document, Map movieData) {
     var titleMetaData =
         document.querySelector('ul[data-testid="hero-title-block__metadata"]');
-    if (null == titleMetaData) {
-      titleMetaData = document.querySelector('ul[class*="TitleBlockMetaData"]');
-    }
+      titleMetaData ??= document.querySelector('ul[class*="TitleBlockMetaData"]');
     if (null != titleMetaData && titleMetaData.hasChildNodes()) {
       for (var item in titleMetaData.children) {
         // See if this lineitem is the year
-        var year = item.querySelector('a[href*="releaseinfo"]')?.text;
+        final year = item.querySelector('a[href*="releaseinfo"]')?.text;
         if (null != year) {
           movieData[outer_element_year] = year;
           continue;
         }
         // See if this lineitem is the rating
-        var censorrating = item.querySelector('a[href*="parentalguide"]')?.text;
+        final censorrating = item.querySelector('a[href*="parentalguide"]')?.text;
         if (null != censorrating) {
           movieData[outer_element_censor_rating] = censorrating;
           continue;
         }
-        String otheritem = item.text;
-        if ("" != otheritem) {
+        final otheritem = item.text;
+        if (otheritem.isNotEmpty) {
           if (null == movieData[outer_element_type] &&
               null == movieData[outer_element_year] &&
               null == movieData[outer_element_censor_rating]) {
@@ -191,49 +196,42 @@ class QueryIMDBTitleDetails
   }
 
   /// Extract list of genres from from li<TitleBlockMetaData>
-  scrapeGenreDetails(Document document, Map movieData) {
+  void _scrapeGenreDetails(Document document, Map movieData) {
     document.querySelectorAll('a[href*="genre"]').forEach((genre) {
       if ("" != genre.text.length > 0)
         movieData[outer_element_genre].add(genre.text);
     });
   }
-
+*/
   /// Extract short description of movie from web page.
-  _scrapeDescription(Document document, Map movieData) {
-    var description =
-        document.querySelector('div[data-testid="storyline-plot-summary"]');
-    if (null == description) {
-      description = document.querySelector('span[data-testid*="plot"]');
-    }
+  void _scrapeDescription(Document document, Map movieData) {
+    final description =
+        document.querySelector('div[data-testid="storyline-plot-summary"]') ??
+            document.querySelector('span[data-testid*="plot"]');
     if (null != description?.text) {
-      movieData[outer_element_description] = description!.text;
+      movieData[outerElementDescription] = description!.text;
     }
   }
 
   /// Extract Official name of movie from web page.
-  _scrapeName(Document document, Map movieData) {
-    var description =
-        document.querySelector('h1[data-testid="hero-title-block"]');
-    if (null == description) {
-      description = document.querySelector('h1[class*="TitleHeader"]');
-    }
+  void _scrapeName(Document document, Map movieData) {
+    final description =
+        document.querySelector('h1[data-testid="hero-title-block"]') ??
+            document.querySelector('h1[class*="TitleHeader"]');
     if (null != description?.text) {
-      movieData[outer_element_official_title] = description!.text;
+      movieData[outerElementOfficialTitle] = description!.text;
     }
   }
 
   /// Search for movie poster.
-  _scrapePoster(Document document, Map movieData) {
-    var posterBlock =
-        document.querySelector('div[data-testid="hero-media__poster"]');
-    if (null == posterBlock) {
-      posterBlock =
-          document.querySelector('div[class="Media__PosterContainer"]');
-    }
+  void _scrapePoster(Document document, Map movieData) {
+    final posterBlock =
+        document.querySelector('div[data-testid="hero-media__poster"]') ??
+            document.querySelector('div[class="Media__PosterContainer"]');
     if (null != posterBlock && posterBlock.hasChildNodes()) {
-      for (var poster in posterBlock.querySelectorAll('img')) {
+      for (final poster in posterBlock.querySelectorAll('img')) {
         if (null != poster.attributes['src']) {
-          movieData[outer_element_image] = poster.attributes['src'];
+          movieData[outerElementImage] = poster.attributes['src'];
           break;
         }
       }
@@ -241,46 +239,49 @@ class QueryIMDBTitleDetails
   }
 
   /// Extract type, year, Censor Rating and duration from ul<TitleBlockMetaData>
-  _scrapeLanguageDetails(Document document, Map movieData) {
-    movieData[outer_element_language] = LanguageType.none;
-    var languageHtml =
-        document.querySelector('li[data-testid="title-details-languages"]');
-    if (null == languageHtml) {
-      languageHtml = document
-          .querySelector('a[href*="primary_language"]')
-          ?.parent // li - line item for the language.
-          ?.parent; // ul - list of languages.
-    }
+  void _scrapeLanguageDetails(Document document, Map movieData) {
+    movieData[outerElementLanguage] = LanguageType.none;
+    final languageHtml =
+        document.querySelector('li[data-testid="title-details-languages"]') ??
+            document
+                .querySelector('a[href*="primary_language"]')
+                ?.parent // li - line item for the language.
+                ?.parent; // ul - list of languages.
+
     if (null != languageHtml && languageHtml.hasChildNodes()) {
-      var silent = languageHtml.querySelector('a[href*="language=zxx"]');
+      final silent = languageHtml.querySelector('a[href*="language=zxx"]');
       if (null != silent) {
-        movieData[outer_element_language] = LanguageType.silent;
+        movieData[outerElementLanguage] = LanguageType.silent;
         return;
       }
-      movieData[outer_element_languages] = [];
-      for (var item in languageHtml.querySelectorAll('a[href*="language="]')) {
-        movieData[outer_element_languages].add(item.text);
+
+      movieData[outerElementLanguages] = [];
+      for (final item
+          in languageHtml.querySelectorAll('a[href*="language="]')) {
+        movieData[outerElementLanguages].add(item.text);
       }
-      for (var item in languageHtml.querySelectorAll('a[href*="language="]')) {
+
+      for (final String languageText in movieData[outerElementLanguages]) {
         // Loop through all languages in order to see how dominant English is.
-        String link = item.attributes['href']!;
-        if (link.contains('language=en')) {
-          if (LanguageType.none == movieData[outer_element_language] ||
-              LanguageType.allEnglish == movieData[outer_element_language]) {
+        if (languageText.toUpperCase().contains('ENGLISH')) {
+          if (LanguageType.none == movieData[outerElementLanguage] ||
+              LanguageType.allEnglish == movieData[outerElementLanguage]) {
             // First items found are English, assume all English until other languages found.
-            movieData[outer_element_language] = LanguageType.allEnglish;
+            movieData[outerElementLanguage] = LanguageType.allEnglish;
             continue;
           } else {
-            movieData[outer_element_language] = LanguageType.someEnglish;
+            // English is not the first langauge listed.
+            movieData[outerElementLanguage] = LanguageType.someEnglish;
             return;
           }
         }
-        if (LanguageType.allEnglish == movieData[outer_element_language]) {
-          movieData[outer_element_language] = LanguageType.mostlyEnglish;
+        if (LanguageType.allEnglish == movieData[outerElementLanguage]) {
+          // English was the first langauge listed but found another language.
+          movieData[outerElementLanguage] = LanguageType.mostlyEnglish;
           return;
         } else {
           // First item found is foreign, assume all foreign until other languages found.
-          movieData[outer_element_language] = LanguageType.foreign;
+          movieData[outerElementLanguage] = LanguageType.foreign;
           continue;
         }
       }
@@ -291,10 +292,10 @@ class QueryIMDBTitleDetails
   /// and extract values from the page.
   void _getAttributeValue(Map moviedata, Document document, String attribute) {
     if (moviedata[attribute] != null) return;
-    var elements = document.querySelectorAll('span[itemprop="$attribute"]');
-    for (var element in elements) {
+    final elements = document.querySelectorAll('span[itemprop="$attribute"]');
+    for (final element in elements) {
       if (element.text.length > 1) {
-        var webPageText = element.text;
+        final webPageText = element.text;
         moviedata[attribute] = webPageText;
       }
     }
@@ -302,63 +303,59 @@ class QueryIMDBTitleDetails
 
   /// Extract the movie recommendations from the current movie.
   void _getRecomendationList(Map movieData, Document document) {
-    movieData[outer_element_related] = [];
-    List<Element> recommendations =
-        document.querySelectorAll('div.rec_overview');
-    if (0 != recommendations.length) {
-      recommendations
-          .forEach((element) => getRecomendationOld(movieData, element));
+    movieData[outerElementRelated] = [];
+    for (final element in document.querySelectorAll('div.rec_overview')) {
+      _getRecomendationOld(movieData, element);
     }
-    recommendations = document.querySelectorAll('div.ipc-poster-card--base');
-    if (0 != recommendations.length) {
-      recommendations
-          .forEach((element) => getRecomendationNew(movieData, element));
+    for (final element
+        in document.querySelectorAll('div.ipc-poster-card--base')) {
+      _getRecomendationNew(movieData, element);
     }
   }
 
-  void getRecomendationNew(Map movieData, Element recommendation) {
-    Map attributes = {};
-    //"/title/tt0145681/?ref_=tt_sims_tt_t_9"
-    var link =
+  void _getRecomendationNew(Map movieData, Element recommendation) {
+    final attributes = {};
+    // href will be in the form "/title/tt0145681/?ref_=tt_sims_tt_t_9"
+    final link =
         recommendation.querySelector('a[href*="title/tt"]')?.attributes['href'];
-    attributes[outer_element_identity_element] = getIdFromIMDBLink(link);
-    attributes[outer_element_official_title] = recommendation
-        .querySelector('span[data-testid="title"]')
-        ?.text; //The Book of Eli
-    attributes[outer_element_image] =
+    attributes[outerElementIdentity] = getIdFromIMDBLink(link);
+
+    attributes[outerElementOfficialTitle] =
+        recommendation.querySelector('span[data-testid="title"]')?.text;
+    attributes[outerElementImage] =
         recommendation.querySelector('img')?.attributes['src'];
-    attributes[inner_element_rating_value] =
+    attributes[innerElementRatingValue] =
         recommendation.querySelector('span.ipc-rating-star--imdb')?.text; //6.9
-    movieData[outer_element_related].add(attributes);
+    movieData[outerElementRelated].add(attributes);
   }
 
-  getRecomendationOld(Map movieData, Element recommendation) {
-    Map attributes = {};
-    attributes[outer_element_identity_element] = recommendation
+  void _getRecomendationOld(Map movieData, Element recommendation) {
+    final attributes = {};
+    attributes[outerElementIdentity] = recommendation
         .querySelector('div[data-tconst]')
         ?.attributes['data-tconst']; //tt1037705
-    attributes[outer_element_official_title] = recommendation
+    attributes[outerElementOfficialTitle] = recommendation
         .querySelector('div.rec-title')
         ?.querySelector('b')
         ?.innerHtml; //The Book of Eli
-    attributes[outer_element_year] = recommendation
+    attributes[outerElementYear] = recommendation
         .querySelector('div.rec-title')
         ?.querySelector('span')
         ?.innerHtml; //(2010)
-    attributes[outer_element_image] =
+    attributes[outerElementImage] =
         recommendation.querySelector('img')?.attributes['src'];
-    attributes[inner_element_rating_value] = recommendation
+    attributes[innerElementRatingValue] = recommendation
         .querySelector('span.rating-rating')
         ?.querySelector('span.value')
         ?.innerHtml; //6.9
-    attributes[inner_element_rating_count] = recommendation
+    attributes[innerElementRatingCount] = recommendation
             .querySelector('span.rating-list')
             ?.attributes[
         'title']; //"Users rated this 6.9/10 (297,550 votes) - click stars to rate"
-    attributes[outer_element_description] = recommendation
+    attributes[outerElementDescription] = recommendation
         .querySelector('div.rec-outline')
         ?.querySelector('p')
         ?.innerHtml; //A post-apocalyptic tale... saving humankind.
-    movieData[outer_element_related].add(attributes);
+    movieData[outerElementRelated].add(attributes);
   }
 }
