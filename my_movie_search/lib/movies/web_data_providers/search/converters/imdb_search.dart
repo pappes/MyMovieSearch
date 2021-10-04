@@ -18,12 +18,13 @@ class ImdbSearchConverter {
     final movie = MovieResultDTO();
     movie.source = DataSourceType.imdbSearch;
     movie.uniqueId = getID(map[innerElementIdentity]) ?? movie.uniqueId;
-    movie.title = map[innerElementInfo]?.toString() ?? movie.title;
+    movie.title = map[innerElementTitle]?.toString() ?? movie.title;
     movie.imageUrl = map[innerElementImage]?.toString() ?? movie.imageUrl;
     movie.yearRange = getYearRange(map[innerElementInfo]) ?? movie.yearRange;
     movie.year = movie.maxYear();
-    movie.type = getImdbMovieContentType(
-          map[innerElementInfo],
+    movie.type = findImdbMovieContentTypeFromTitle(
+          map[innerElementInfo]?.toString() ?? '',
+          movie.title,
           movie.runTime.inMinutes,
           movie.uniqueId,
         ) ??

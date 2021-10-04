@@ -46,8 +46,7 @@ class QueryGoogleMovies
   @override
   MovieResultDTO myYieldError(String message) {
     final error = MovieResultDTO().error();
-    // ignore: no_runtimetype_tostring
-    error.title = '[$runtimeType] $message';
+    error.title = '[QueryGoogleMovies] $message';
     error.type = MovieContentType.custom;
     error.source = DataSourceType.google;
     return error;

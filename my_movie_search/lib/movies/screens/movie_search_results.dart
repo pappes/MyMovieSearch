@@ -7,7 +7,6 @@ import 'package:flutter/material.dart'
         Key,
         ListTile,
         ListView,
-        Navigator,
         RestorableString,
         RestorationBucket,
         RestorationMixin,
@@ -17,42 +16,38 @@ import 'package:flutter/material.dart'
         StatefulWidget,
         Text,
         Widget;
-import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider, BlocBuilder;
-import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
 
+import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
+import 'package:my_movie_search/movies/blocs/search_bloc.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/widgets/movie_card_small.dart';
-import 'package:my_movie_search/movies/blocs/search_bloc.dart';
-import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieSearchResultsNewPage extends StatefulWidget {
-  MovieSearchResultsNewPage({Key? key, required SearchCriteriaDTO criteria})
-      : criteria = criteria,
-        super(key: key);
+  const MovieSearchResultsNewPage({Key? key, required this.criteria})
+      : super(key: key);
   final SearchCriteriaDTO criteria;
 
   @override
-  _MovieSearchResultsPageState createState() =>
-      _MovieSearchResultsPageState(criteria);
+  _MovieSearchResultsPageState createState() => _MovieSearchResultsPageState();
 }
 
 class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     with RestorationMixin {
   SearchBloc? _searchBloc;
   List<MovieResultDTO> _sortedList = [];
-  var _searchId = '';
-  var _restorableList = RestorableMovieList();
+  late String _searchId;
+  final _restorableList = RestorableMovieList();
   var _restorableId = RestorableString('');
   var _title = 'Results';
 
-  _MovieSearchResultsPageState(SearchCriteriaDTO criteria) {
-    _title = criteria.criteriaTitle;
-  }
+  _MovieSearchResultsPageState();
 
   @override
   void initState() {
     super.initState();
+    _title = widget.criteria.criteriaTitle;
     _searchId = widget.criteria.searchId;
     //TODO: use a factory in inject search bloc instances _searchBloc = BlocProvider.of<SearchBloc>(context);
     _searchBloc = SearchBloc(movieRepository: MovieSearchRepository());
@@ -61,7 +56,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
 
   @override
   // The restoration bucket id for this page.
-  String get restorationId => runtimeType.toString() + _searchId;
+  String get restorationId => 'MovieSearchResults$_searchId';
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
@@ -79,6 +74,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     // Save state for restoration in case app is put to sleep.
     _restorableList.value = _sortedList;
@@ -102,7 +98,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
         return Scrollbar(
           isAlwaysShown: true,
           child: ListView.builder(
-            padding: EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(16.0),
             itemCount: _sortedList.length,
             itemBuilder: _movieListBuilder,
           ),
@@ -113,8 +109,9 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
 
   Widget _movieListBuilder(BuildContext context, int listIndex) {
     if (listIndex >= _sortedList.length) {
-      return ListTile(
-          title: Text("More widgets than available data to populate them!"));
+      return const ListTile(
+        title: Text("More widgets than available data to populate them!"),
+      );
     }
     return MovieTile(context, _sortedList[listIndex]);
   }

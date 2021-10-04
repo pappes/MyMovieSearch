@@ -78,8 +78,7 @@ class QueryIMDBTitleDetails
   @override
   MovieResultDTO myYieldError(String message) {
     final error = MovieResultDTO().error();
-    // ignore: no_runtimetype_tostring
-    error.title = '[$runtimeType] $message';
+    error.title = '[QueryIMDBTitleDetails] $message';
     error.type = MovieContentType.custom;
     error.source = DataSourceType.imdb;
     return error;

@@ -30,33 +30,36 @@ import 'styles.dart';
 class MovieSearchCriteriaPage extends StatefulWidget {
   const MovieSearchCriteriaPage({Key? key}) : super(key: key);
 
-  final String title = "Movie Search Criteria";
+  static const String title = "Movie Search Criteria";
 
   @override
   _MovieSearchCriteriaPageState createState() =>
       _MovieSearchCriteriaPageState();
 
   static Route route() {
-    return MaterialPageRoute<void>(builder: (_) => MovieSearchCriteriaPage());
+    return MaterialPageRoute<void>(
+      builder: (_) => const MovieSearchCriteriaPage(),
+    );
   }
 }
 
 class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     with RestorationMixin {
-  var _criteria = SearchCriteriaDTO();
-  var _restorableCriteria = RestorableSearchCriteria();
+  final _criteria = SearchCriteriaDTO();
+  final _restorableCriteria = RestorableSearchCriteria();
   void searchForMovie() {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => MovieSearchResultsNewPage(criteria: _criteria)),
+        builder: (context) => MovieSearchResultsNewPage(criteria: _criteria),
+      ),
     );
   }
 
   @override
   // The restoration bucket id for this page.
   String get restorationId =>
-      runtimeType.toString(); //+ _criteria.value.criteriaTitle;
+      'MovieSearchCriteria'; //+ _criteria.value.criteriaTitle;
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
@@ -79,7 +82,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     return Scaffold(
       appBar: AppBar(
         // Get title from the StatefulWidget MovieSearchCriteriaPage.
-        title: Text(widget.title),
+        title: const Text(MovieSearchCriteriaPage.title),
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -90,7 +93,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
       floatingActionButton: FloatingActionButton(
         onPressed: searchForMovie,
         tooltip: 'Search',
-        child: Icon(Icons.search),
+        child: const Icon(Icons.search),
       ),
     );
   }
@@ -102,10 +105,9 @@ class _CriteriaInput extends Center {
           child: TextField(
             textInputAction: TextInputAction.search,
             autofocus: true,
-            autocorrect: true,
-            autofillHints: [AutofillHints.sublocality],
+            autofillHints: const [AutofillHints.sublocality],
             style: hugeFont,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: "Movie",
               hintText: "Enter movie or tv series to search for",
             ),

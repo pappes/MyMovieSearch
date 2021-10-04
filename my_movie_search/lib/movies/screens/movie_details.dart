@@ -1,51 +1,55 @@
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 import 'package:my_movie_search/movies/widgets/controls.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieDetailsPage extends StatefulWidget {
-  MovieDetailsPage({Key? key, required MovieResultDTO movie})
-      : _movie = movie,
-        super(key: key);
+  const MovieDetailsPage({Key? key, required this.movie}) : super(key: key);
 
-  final MovieResultDTO _movie;
+  final MovieResultDTO movie;
 
   @override
-  _MovieDetailsPageState createState() => _MovieDetailsPageState(_movie);
+  _MovieDetailsPageState createState() => _MovieDetailsPageState();
 }
 
 class _MovieDetailsPageState extends State<MovieDetailsPage>
     with RestorationMixin {
-  var _movie = MovieResultDTO();
-  var _restorableMovie = RestorableMovie();
+  late MovieResultDTO _movie;
+  final _restorableMovie = RestorableMovie();
   var _mobileLayout = true;
 
-  _MovieDetailsPageState(MovieResultDTO movie) {
-    this._movie = movie;
-    var detailCriteria = SearchCriteriaDTO();
+  _MovieDetailsPageState();
+
+  @override
+  void initState() {
+    super.initState();
+    _movie = widget.movie;
+    final detailCriteria = SearchCriteriaDTO();
     detailCriteria.criteriaTitle = _movie.uniqueId;
     // Pull back details at this point because it is very slow and CPU intensive
     final imdbDetails = QueryIMDBCastDetails();
     imdbDetails.readList(detailCriteria).then((searchResults) {
       // Call setSetState to update page when data is ready.
-      setState(() => mergeDetails(searchResults));
+      setState(() => _mergeDetails(searchResults));
     });
   }
 
-  mergeDetails(List<MovieResultDTO> details) {
-    details.forEach((dto) => _movie.merge(dto));
+  void _mergeDetails(List<MovieResultDTO> details) {
+    for (final dto in details) {
+      _movie.merge(dto);
+    }
   }
 
   @override
   // The restoration bucket id for this page.
-  String get restorationId => runtimeType.toString() + _movie.uniqueId;
+  String get restorationId => 'MovieDetails${_movie.uniqueId}';
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
@@ -61,6 +65,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     _restorableMovie.value = _movie;
     _mobileLayout = useMobileLayout(context);
@@ -85,28 +90,30 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
   Column bodySection() {
     return Column(
-      children: [
+      children: <Widget>[
         SelectableText(_movie.title, style: hugeFont),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _movie.yearRange != ''
-                ? Text('Year Range: ${_movie.yearRange}')
-                : Text('Year: ${_movie.year.toString()}'),
+          children: <Widget>[
+            if (_movie.yearRange.isEmpty)
+              Text('Year: ${_movie.year.toString()}')
+            else
+              Text('Year Range: ${_movie.yearRange}'),
             Align(
-                alignment: Alignment.centerRight,
-                child: Text('Run Time: ${_movie.runTime.toFormattedTime()}')),
+              alignment: Alignment.centerRight,
+              child: Text('Run Time: ${_movie.runTime.toFormattedTime()}'),
+            ),
           ],
         ),
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-                  ExpandedColumn(children: [leftColumn()])
-                ] +
-                (_mobileLayout // Only show right column on tablet
-                    ? []
-                    : [ExpandedColumn(children: posterSection())]),
+            children: <Widget>[
+              ExpandedColumn(children: <Widget>[leftColumn()]),
+
+              // Only show right column on tablet
+              if (!_mobileLayout) ExpandedColumn(children: [posterSection()]),
+            ],
           ),
         ),
       ],
@@ -116,9 +123,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   Widget leftColumn() {
     return Wrap(
       children: leftHeader() +
-          // Only show poster in left column on mobile
-          (_mobileLayout ? posterSection() : []) +
           [
+            // Only show poster in left column on mobile
+            if (_mobileLayout) posterSection(),
+
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: description() + related(),
@@ -127,9 +135,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     );
   }
 
-  List<Widget> posterSection() {
-    return [
-      Row(children: [
+  Widget posterSection() {
+    return Row(
+      children: <Widget>[
         ExpandedColumn(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: poster(
@@ -140,23 +148,26 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
             ),
           ),
         ),
-      ]),
-    ];
+      ],
+    );
   }
 
   List<Widget> leftHeader() {
     return [
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           Text('Type: ${describeEnum(_movie.type)}'),
-          Text('User Rating: ${_movie.userRating.toString()} '
-              '(${formatter.format(_movie.userRatingCount)})'),
+          Text(
+            'User Rating: ${_movie.userRating.toString()} '
+            '(${formatter.format(_movie.userRatingCount)})',
+          ),
           Wrap(
-            children: [
+            children: <Widget>[
               GestureDetector(
                 child: Text(
-                    'Censor Rating: ${describeEnum(_movie.censorRating)}     '),
+                  'Censor Rating: ${describeEnum(_movie.censorRating)}     ',
+                ),
                 onTap: () => viewWebPage(
                   makeImdbUrl(
                     _movie.uniqueId,
@@ -172,7 +183,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         ],
       ),
       Wrap(
-        children: [
+        children: <Widget>[
               Text('Source: ${describeEnum(_movie.source)}      '),
               Text('UniqueId: ${_movie.uniqueId}'),
               ElevatedButton(
@@ -183,7 +194,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
                   ),
                   context,
                 ),
-                child: Text('IMDB'),
+                child: const Text('IMDB'),
               ),
             ] +
             externalSearch(),
@@ -204,10 +215,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   }
 
   List<Widget> related() {
-    List<Widget> categories = [];
-    for (var category in _movie.related.entries) {
-      var map = category.value;
-      String description = map.toShortString();
+    final categories = <Widget>[];
+    for (final category in _movie.related.entries) {
+      final map = category.value;
+      final description = map.toShortString();
       categories.add(BoldLabel(category.key));
       categories.add(
         Center(
@@ -229,7 +240,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   }
 
   List<Widget> externalSearch() {
-    List<Widget> buttons = [
+    final buttons = <Widget>[
       ElevatedButton(
         onPressed: () => viewWebPage(
           'https://tpb.party/search/${_movie.title} ${_movie.year}',
@@ -238,7 +249,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         child: Text(_movie.title),
       ),
     ];
-    if (_movie.alternateTitle.length > 0)
+    if (_movie.alternateTitle.isNotEmpty) {
       buttons.add(
         ElevatedButton(
           onPressed: () => viewWebPage(
@@ -248,6 +259,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           child: Text(_movie.alternateTitle),
         ),
       );
+    }
     return buttons;
   }
 }

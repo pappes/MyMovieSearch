@@ -1,33 +1,36 @@
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/widgets/controls.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class PersonDetailsPage extends StatefulWidget {
-  PersonDetailsPage({Key? key, required MovieResultDTO person})
-      : _person = person,
-        super(key: key);
+  const PersonDetailsPage({Key? key, required this.person}) : super(key: key);
 
-  final MovieResultDTO _person;
+  final MovieResultDTO person;
 
   @override
-  _PersonDetailsPageState createState() => _PersonDetailsPageState(_person);
+  _PersonDetailsPageState createState() => _PersonDetailsPageState();
 }
 
 class _PersonDetailsPageState extends State<PersonDetailsPage>
     with RestorationMixin {
-  var _person = MovieResultDTO();
-  var _restorablePerson = RestorableMovie();
+  late MovieResultDTO _person;
+  final _restorablePerson = RestorableMovie();
   var _mobileLayout = true;
 
-  _PersonDetailsPageState(this._person) {
-    var detailCriteria = SearchCriteriaDTO();
+  _PersonDetailsPageState();
+
+  @override
+  void initState() {
+    super.initState();
+    _person = widget.person;
+    final detailCriteria = SearchCriteriaDTO();
     detailCriteria.criteriaTitle = _person.uniqueId;
     // Pull back details at this point because it is very slow and CPU intensive
     final imdbDetails = QueryIMDBNameDetails();
@@ -35,13 +38,16 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       setState(() => mergeDetails(searchResults));
     });
   }
-  mergeDetails(List<MovieResultDTO> details) {
-    details.forEach((dto) => _person.merge(dto));
+
+  void mergeDetails(List<MovieResultDTO> details) {
+    for (final dto in details) {
+      _person.merge(dto);
+    }
   }
 
   @override
   // The restoration bucket id for this page.
-  String get restorationId => runtimeType.toString() + _person.uniqueId;
+  String get restorationId => 'PersonDetails${_person.uniqueId}';
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
@@ -57,6 +63,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     super.dispose();
   }
 
+  @override
   Widget build(BuildContext context) {
     _mobileLayout = useMobileLayout(context);
     _restorablePerson.value = _person;
@@ -82,25 +89,26 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
   Column bodySection() {
     return Column(
-      children: [
+      children: <Widget>[
         SelectableText(_person.title, style: hugeFont),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _person.yearRange == ''
-                ? Text('Born: ${_person.year.toString()}')
-                : Text('Lifespan: ${_person.yearRange}'),
+          children: <Widget>[
+            if (_person.yearRange.isEmpty)
+              Text('Born: ${_person.year.toString()}')
+            else
+              Text('Lifespan: ${_person.yearRange}'),
           ],
         ),
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-                  ExpandedColumn(children: [leftColumn()])
-                ] +
-                (_mobileLayout // Only show right column on tablet
-                    ? []
-                    : [ExpandedColumn(children: posterSection())]),
+            children: <Widget>[
+              ExpandedColumn(children: <Widget>[leftColumn()]),
+
+              // Only show right column on tablet
+              if (!_mobileLayout) ExpandedColumn(children: [posterSection()])
+            ],
           ),
         ),
       ],
@@ -109,7 +117,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
   Widget leftColumn() {
     return Wrap(
-      children: [
+      children: <Widget>[
             Text('Source: ${describeEnum(_person.source)}      '),
             Text('UniqueId: ${_person.uniqueId}'),
             ElevatedButton(
@@ -120,12 +128,12 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
                 ),
                 context,
               ),
-              child: Text('IMDB'),
+              child: const Text('IMDB'),
             ),
-          ] +
-          // Only show poster in left column on mobile
-          (_mobileLayout ? posterSection() : []) +
-          [
+
+            // Only show poster in left column on mobile
+            if (_mobileLayout) posterSection(),
+
             Text(
               '\nDescription: \n${_person.description} ',
               style: biggerFont,
@@ -135,37 +143,37 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     );
   }
 
-  List<Widget> posterSection() {
-    return [
-      Row(
-        children: [
-          ExpandedColumn(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: poster(
-              _person.imageUrl,
-              onTap: () => viewWebPage(
-                makeImdbUrl(_person.uniqueId, photos: true, mobile: true),
-                context,
-              ),
+  Widget posterSection() {
+    return Row(
+      children: <Widget>[
+        ExpandedColumn(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: poster(
+            _person.imageUrl,
+            onTap: () => viewWebPage(
+              makeImdbUrl(_person.uniqueId, photos: true, mobile: true),
+              context,
             ),
-          )
-        ],
-      ),
-    ];
+          ),
+        )
+      ],
+    );
   }
 
   List<Widget> related() {
-    List<Widget> categories = [];
-    for (var category in _person.related.entries) {
-      var map = category.value;
-      String description = map.toShortString();
-      categories.add(BoldLabel('${category.key}:'));
+    final categories = <Widget>[];
+    for (final category in _person.related.entries) {
+      final rolesMap = category.value;
+      final rolesLabel = category.key;
+      final description = rolesMap.toShortString(); // Get a list of movie roles
+      categories.add(BoldLabel('$rolesLabel:'));
       categories.add(
         Center(
           child: GestureDetector(
             onTap: () => searchForRelated(
-              '${category.key}: ${_person.title}',
-              category.value.values.toList(),
+              // Open search details when tapped.
+              '$rolesLabel: ${_person.title}',
+              rolesMap.values.toList(),
               context,
             ),
             child: Text(

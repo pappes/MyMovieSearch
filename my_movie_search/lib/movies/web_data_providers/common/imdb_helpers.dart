@@ -62,19 +62,14 @@ String getIdFromIMDBLink(String? link) {
       '';
 }
 
-MovieContentType? getImdbMovieContentType(
-  Object? info,
+/// Look at inforamtion provided to see if title type can be determined.
+MovieContentType? _lookupImdbMovieContentType(
+  String info,
   int? duration,
   String id,
 ) {
   if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
-  if (info == null) {
-    if (duration != null && duration < 50 && duration > 0) {
-      return MovieContentType.short;
-    }
-    return null;
-  }
-  final String title = info.toString().toLowerCase();
+  final String title = info.toLowerCase();
   if (title.lastIndexOf('game') > -1) return MovieContentType.custom;
   if (title.lastIndexOf('creativework') > -1) return MovieContentType.custom;
   // mini includes TV Mini-series
@@ -89,7 +84,38 @@ MovieContentType? getImdbMovieContentType(
   if (title.lastIndexOf('movie') > -1) return MovieContentType.movie;
   if (title.lastIndexOf('video') > -1) return MovieContentType.movie;
   if (title.lastIndexOf('feature') > -1) return MovieContentType.movie;
-  logger.e('Unknown Imdb MoveContentType $title');
+}
+
+/// Look at movie to see if title type (is in brakets)).
+///
+/// Takes [info] which includes the title and other information
+/// and [title] which does not include the other information
+MovieContentType? findImdbMovieContentTypeFromTitle(
+  String info,
+  String title,
+  int? duration,
+  String id,
+) {
+  final startInfo = title.length + 1;
+  if (info.length > startInfo) {
+    return _lookupImdbMovieContentType(
+      info.substring(startInfo), // Throw away the start of info.
+      duration,
+      id,
+    );
+  }
+}
+
+/// Use movie type string to lookup movie type.
+MovieContentType? getImdbMovieContentType(
+  Object? info,
+  int? duration,
+  String id,
+) {
+  final string = info?.toString() ?? '';
+  final type = _lookupImdbMovieContentType(string, duration, id);
+  if (null != type || null == info) return type;
+  logger.e('Unknown Imdb MoveContentType ${info.toString()}');
   return MovieContentType.movie;
 }
 

@@ -43,8 +43,7 @@ class QueryTMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   @override
   MovieResultDTO myYieldError(String message) {
     final error = MovieResultDTO();
-    // ignore: no_runtimetype_tostring
-    error.title = '[$runtimeType] $message';
+    error.title = '[QueryTMDBDetails] $message';
     error.type = MovieContentType.custom;
     error.source = DataSourceType.tmdb;
     return error;
