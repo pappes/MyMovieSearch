@@ -162,15 +162,19 @@ void main() {
       var emittedString = '';
 
       // Compare the stream output to the expected output.
-      final expectFn = expectAsync1<void, String>((output) {
-        if (output != '') {
-          emittedString += output;
-          expect(
-            emittedString,
-            expectedString.substring(0, emittedString.length),
-          );
-        }
-      }, count: imdbJsonPSampleFull.length, max: imdbJsonPSampleFull.length);
+      final expectFn = expectAsync1<void, String>(
+        (output) {
+          if (output != '') {
+            emittedString += output;
+            expect(
+              emittedString,
+              expectedString.substring(0, emittedString.length),
+            );
+          }
+        },
+        count: imdbJsonPSampleFull.length,
+        max: imdbJsonPSampleFull.length,
+      );
 
       void doneFn() {
         expect(emittedString, expectedString);

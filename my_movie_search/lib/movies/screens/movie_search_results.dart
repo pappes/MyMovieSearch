@@ -81,13 +81,14 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     _restorableId = _restorableId;
 
     return Scaffold(
-        appBar: AppBar(
-          // Use the search criteria to set our appbar title.
-          title: Text(_title),
-        ),
-        body: Center(
-          child: _buildMovieResults(),
-        ));
+      appBar: AppBar(
+        // Use the search criteria to set our appbar title.
+        title: Text(_title),
+      ),
+      body: Center(
+        child: _buildMovieResults(),
+      ),
+    );
   }
 
   Widget _buildMovieResults() {

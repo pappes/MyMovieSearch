@@ -1,6 +1,6 @@
 import 'dart:async' show StreamSubscription;
 
-import 'package:bloc/bloc.dart' show SearchBloc, Bloc;
+import 'package:bloc/bloc.dart' show Bloc;
 import 'package:equatable/equatable.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -23,7 +23,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   final MovieSearchRepository movieRepository;
   StreamSubscription<MovieResultDTO>? _searchStatusSubscription;
-  Map<String, MovieResultDTO> _allResults = {};
+  final _allResults = <String, MovieResultDTO>{};
   List<MovieResultDTO> sortedResults = [];
   double _searchProgress = 0.0; // Value representing the search progress.
 
@@ -34,7 +34,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     if (event is SearchCompleted || event is SearchDataReceived) {
       yield SearchState.displayingResults(_searchProgress);
     } else if (event is SearchCancelled) {
-      yield SearchState.awaitingInput();
+      yield const SearchState.awaitingInput();
     } else if (event is SearchRequested) {
       yield SearchState.searching(SearchRequest(event.criteria.criteriaTitle));
       _initiateSearch(event.criteria);
@@ -57,7 +57,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     _searchStatusSubscription = movieRepository
         .search(criteria)
         .listen((dto) => _receiveDTO(dto))
-      ..onDone(() => add(SearchCompleted()));
+      ..onDone(() => add(const SearchCompleted()));
   }
 
   /// Maintain map of fetched movie snippets and details.
@@ -95,8 +95,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   /// to account for progressive population of movie details.
   void _updateProgress() {
     _searchProgress = sortedResults.length.toDouble();
-    sortedResults.forEach((element) {
+    for (final element in sortedResults) {
       _searchProgress += element.userRating;
-    });
+    }
   }
 }

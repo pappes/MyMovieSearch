@@ -1,10 +1,11 @@
 import 'dart:convert' show json;
+
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
 import 'package:sqflite/sqflite.dart' show Database, openDatabase;
-
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 // database table and column names
 const _tableMovie = 'Movie';
@@ -93,8 +94,8 @@ class DatabaseHelper {
   // Database helper methods:
 
   Future<int> insert(MovieModel movie) async {
-    Database db = await database;
-    int id = await db.insert(_tableMovie, movie.toMap());
+    final Database db = await database;
+    final id = await db.insert(_tableMovie, movie.toMap());
     return id;
   }
 

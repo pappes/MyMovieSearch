@@ -3,10 +3,10 @@ import 'dart:async' show StreamController;
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 /// BlockRepository to consolidate data retrieval from multiple search
 /// and detail providers using the WebFetch framework.
@@ -29,7 +29,7 @@ class BaseMovieRepository {
   /// and need to be merged with the partial results.
   Stream<MovieResultDTO> search(SearchCriteriaDTO criteria) async* {
     ++_searchUID;
-    var feedback = MovieResultDTO();
+    final feedback = MovieResultDTO();
     feedback.title = 'Searching ...';
     yield feedback;
 
@@ -43,10 +43,10 @@ class BaseMovieRepository {
 
   /// Cancels or completes an in progress search.
   void close() {
-    var feedback = MovieResultDTO();
+    final feedback = MovieResultDTO();
     feedback.title = 'Search completed ...';
     yieldResult(feedback);
-    print('closing stream');
+    logger.v('closing stream');
     _movieStreamController?.close();
     _movieStreamController = null;
   }
@@ -85,8 +85,10 @@ class BaseMovieRepository {
   void addResults(int originalSearchUID, List<MovieResultDTO> results) {
     if (!searchInterrupted(originalSearchUID)) {
       // Ensure a new search has not been started.
-      results.forEach((dto) => yieldResult(dto));
-      results.forEach((dto) => _getDetails(originalSearchUID, dto));
+      results.forEach(yieldResult);
+      for (final dto in results) {
+        _getDetails(originalSearchUID, dto);
+      }
     }
   }
 
@@ -96,26 +98,32 @@ class BaseMovieRepository {
     if ("null" != dto.uniqueId &&
         !_requestedDetails.containsKey(dto.uniqueId) &&
         !dto.uniqueId.startsWith(movieResultDTOMessagePrefix)) {
-      var detailCriteria = SearchCriteriaDTO();
+      final detailCriteria = SearchCriteriaDTO();
       detailCriteria.criteriaTitle = dto.uniqueId;
       _requestedDetails[dto.uniqueId] = null;
 
       if (dto.uniqueId.startsWith(imdbTitlePrefix)) {
         final imdbDetails =
             QueryIMDBTitleDetails(); //Seperate instance per search (async)
-        imdbDetails.readList(detailCriteria).then((searchResults) =>
-            _addImdbMovieDetails(originalSearchUID, searchResults));
+        imdbDetails.readList(detailCriteria).then(
+              (searchResults) =>
+                  _addImdbMovieDetails(originalSearchUID, searchResults),
+            );
       } else if (dto.uniqueId.startsWith(imdbPersonPrefix)) {
         final imdbDetails =
             //QueryIMDBNameDetails(); // Cant pull back details at this point because it is very slow and CPU intensive
             QueryIMDBSuggestions(); //Seperate instance per search (async)
-        imdbDetails.readList(detailCriteria).then((searchResults) =>
-            _addImdbMovieDetails(originalSearchUID, searchResults));
+        imdbDetails.readList(detailCriteria).then(
+              (searchResults) =>
+                  _addImdbMovieDetails(originalSearchUID, searchResults),
+            );
       } else {
         final tmdbDetails =
             QueryTMDBDetails(); //Seperate instance per search (async)
-        tmdbDetails.readList(detailCriteria).then((searchResults) =>
-            _addTmdbDetails(originalSearchUID, searchResults));
+        tmdbDetails.readList(detailCriteria).then(
+              (searchResults) =>
+                  _addTmdbDetails(originalSearchUID, searchResults),
+            );
       }
     }
   }
@@ -123,10 +131,10 @@ class BaseMovieRepository {
   /// Add fetched tmbd movie details into the stream and search imdb.
   void _addTmdbDetails(int originalSearchUID, List<MovieResultDTO> values) {
     if (!searchInterrupted(originalSearchUID)) {
-      for (var dto in values) {
+      for (final dto in values) {
         if (dto.alternateId.startsWith(imdbTitlePrefix) ||
             dto.alternateId.startsWith(imdbPersonPrefix)) {
-          var imdbDetails = MovieResultDTO();
+          final imdbDetails = MovieResultDTO();
           imdbDetails.uniqueId = dto.alternateId;
           _getDetails(originalSearchUID, imdbDetails);
         }
@@ -137,9 +145,11 @@ class BaseMovieRepository {
 
   /// Add fetched movie details into the stream.
   void _addImdbMovieDetails(
-      int originalSearchUID, List<MovieResultDTO> values) {
+    int originalSearchUID,
+    List<MovieResultDTO> values,
+  ) {
     if (!searchInterrupted(originalSearchUID)) {
-      values.forEach((dto) => _finishDetails(dto));
+      values.forEach(_finishDetails);
     }
   }
 
