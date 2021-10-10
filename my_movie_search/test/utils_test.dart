@@ -2,12 +2,123 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+import 'package:my_movie_search/utilities/thread.dart';
 
+// ignore: avoid_classes_with_only_static_members
+class ThreadTest {
+  static var _counter = 0;
+  static Future<int> accumulate(int value) async => _counter += value;
+}
+
+int localCounter = 0;
+int globalFnAccumulateSync(int value) => localCounter += value;
+Future<int> globalFnAccumulateAsync(int value) async => localCounter += value;
+Future<int> globalFnAccumulateSlow(int value) async {
+  return Future.delayed(
+    const Duration(seconds: 2),
+    () => localCounter += value,
+  );
+}
 ////////////////////////////////////////////////////////////////////////////////
 /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-void main() {
+Future main() async {
+  group('SlowThread', () {
+    // Perform processing on another thread
+    // then later check the results of that processing.
+    test('run global async function', () async {
+      final threader = SlowThread();
+
+      final res1 = threader.run<int>(globalFnAccumulateAsync, 0); // expect 0
+      final res2 = threader.run<int>(globalFnAccumulateAsync, 1); // expect 1
+      final res3 = threader.run<int>(globalFnAccumulateAsync, 1); // expect 2
+      final res4 = threader.run<int>(globalFnAccumulateAsync, 8); // expect 10
+      expect(await res1, 0); // 0+0
+      expect(await res2, 1); // 0+1
+      expect(await res3, 2); // 1+1
+      expect(await res4, 10); // 2+8
+    });
+    test('run global async function untyped', () async {
+      final threader = SlowThread();
+
+      final res1 = threader.run(globalFnAccumulateAsync, 0); // expect 0
+      final res2 = threader.run(globalFnAccumulateAsync, 1); // expect 1
+      final res3 = threader.run(globalFnAccumulateAsync, 1); // expect 2
+      final res4 = threader.run(globalFnAccumulateAsync, 8); // expect 10
+      expect(await res1, 0); // 0+0
+      expect(await res2, 1); // 0+1
+      expect(await res3, 2); // 1+1
+      expect(await res4, 10); // 2+8
+    });
+    test('run global synchronous function', () async {
+      final threader = SlowThread();
+
+      final res1 = threader.run(globalFnAccumulateSync, 0); // expect 0
+      final res2 = threader.run(globalFnAccumulateSync, 1); // expect 1
+      final res3 = threader.run(globalFnAccumulateSync, 1); // expect 2
+      final res4 = threader.run(globalFnAccumulateSync, 8); // expect 10
+      expect(await res1, 0); // 0+0
+      expect(await res2, 1); // 0+1
+      expect(await res3, 2); // 1+1
+      expect(await res4, 10); // 2+8
+    });
+    test('run a fast static class function maintaining state', () async {
+      final threader = SlowThread();
+
+      final res1 = threader.run<int>(ThreadTest.accumulate, 0); // expect 0
+      final res2 = threader.run<int>(ThreadTest.accumulate, 1); // expect 1
+      final res3 = threader.run<int>(ThreadTest.accumulate, 1); // expect 2
+      final res4 = threader.run<int>(ThreadTest.accumulate, 8); // expect 10
+      expect(await res1, 0); // 0+0
+      expect(await res2, 1); // 0+1
+      expect(await res3, 2); // 1+1
+      expect(await res4, 10); // 2+8
+    });
+    test('run throwaway thread', () async {
+      final res1 = SlowThread().run(globalFnAccumulateSync, 0); // expect 0
+      final res2 = SlowThread().run(globalFnAccumulateSync, 1); // expect 1
+      final res3 = SlowThread().run(globalFnAccumulateSync, 1); // expect 1
+      final res4 = SlowThread().run(globalFnAccumulateSync, 8); // expect 8
+      expect(await res1, 0);
+      expect(await res2, 1);
+      expect(await res3, 1);
+      expect(await res4, 8);
+    });
+    test('run one named thread', () async {
+      final res1 = SlowThread.namedThread('a').run(globalFnAccumulateSync, 0);
+      final res2 = SlowThread.namedThread('a').run(globalFnAccumulateSync, 1);
+      final res3 = SlowThread.namedThread('a').run(globalFnAccumulateSync, 1);
+      final res4 = SlowThread.namedThread('a').run(globalFnAccumulateSync, 8);
+      expect(await res1, 0); // 0+0
+      expect(await res2, 1); // 0+1
+      expect(await res3, 2); // 1+1
+      expect(await res4, 10); // 2+8
+    });
+    test('run a slow function on multiple named threads', () async {
+      final res1 = SlowThread.namedThread('a').run(globalFnAccumulateSlow, 0);
+      final res2 = SlowThread.namedThread('b').run(globalFnAccumulateSlow, 1);
+      final res3 = SlowThread.namedThread('c').run(globalFnAccumulateSlow, 1);
+      final res4 = SlowThread.namedThread('d').run(globalFnAccumulateSlow, 8);
+      expect(await res1, 0);
+      expect(await res2, 1);
+      expect(await res3, 1);
+      expect(await res4, 8);
+    });
+    test('run a slow local function on a single thread', () async {
+      final threader = SlowThread();
+      await threader.initialised;
+
+      final res1 = threader.run(globalFnAccumulateSlow, 0); // expect 0
+      final res2 = threader.run(globalFnAccumulateSlow, 1); // expect 1
+      final res3 = threader.run(globalFnAccumulateSlow, 1); // expect 2
+      final res4 = threader.run(globalFnAccumulateSlow, 8); // expect 10
+      expect(await res1, 0); // 0+0
+      expect(await res2, 1); // 0+1
+      expect(await res3, 2); // 1+1
+      expect(await res4, 10); // 2+8
+    });
+  });
   group('StringHelper', () {
     // Convert a string to a number, stripping comma seperators and
     // ignoring non numeric input.

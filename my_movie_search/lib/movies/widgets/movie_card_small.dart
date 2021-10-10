@@ -58,7 +58,7 @@ class MovieTile extends ListTile {
 
   static Widget _getImage(String url) {
     if (url == '' || !url.startsWith('http')) {
-      return const CircularProgressIndicator();
+      return const Text('NoImage');
     }
     return Image(image: NetworkImage(url));
   }
