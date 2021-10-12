@@ -3,10 +3,17 @@ import 'dart:async' show StreamController;
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
+import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+
+typedef SearchFunction = Future<List<MovieResultDTO>> Function(
+  SearchCriteriaDTO criteria,
+);
 
 /// BlockRepository to consolidate data retrieval from multiple search
 /// and detail providers using the WebFetch framework.
@@ -101,35 +108,65 @@ class BaseMovieRepository {
       final detailCriteria = SearchCriteriaDTO();
       detailCriteria.criteriaTitle = dto.uniqueId;
       _requestedDetails[dto.uniqueId] = null;
+      SearchFunction? fastSearch;
+      SearchFunction? slowSearch;
 
       if (dto.uniqueId.startsWith(imdbTitlePrefix)) {
-        final imdbDetails =
-            QueryIMDBTitleDetails(); //Seperate instance per search (async)
-        imdbDetails.readList(detailCriteria).then(
-              (searchResults) =>
-                  _addImdbMovieDetails(originalSearchUID, searchResults),
-            );
+        fastSearch = _getIMDBMovieDetailsFast;
+        //slowSearch = _getIMDBMovieDetailsSlow;
       } else if (dto.uniqueId.startsWith(imdbPersonPrefix)) {
-        final imdbDetails =
-            //QueryIMDBNameDetails(); // Cant pull back details at this point because it is very slow and CPU intensive
-            QueryIMDBSuggestions(); //Seperate instance per search (async)
-        imdbDetails.readList(detailCriteria).then(
-              (searchResults) =>
-                  _addImdbMovieDetails(originalSearchUID, searchResults),
-            );
+        fastSearch = _getIMDBPersonDetailsFast;
+        //slowSearch = _getIMDBPersonDetailsSlow;
       } else {
-        final tmdbDetails =
-            QueryTMDBDetails(); //Seperate instance per search (async)
-        tmdbDetails.readList(detailCriteria).then(
-              (searchResults) =>
-                  _addTmdbDetails(originalSearchUID, searchResults),
-            );
+        fastSearch = _getTMDBMovieDetailsFast;
+      }
+      print('Temp-BaseMovieRepository._getDetails: loading fast details');
+      // Load fast results into list for display on screen
+      fastSearch(detailCriteria).then(
+        (searchResults) => _addDetails(originalSearchUID, searchResults),
+      );
+      // Load slow results into cache for access on details screen in a seperate thread
+      print('Temp-BaseMovieRepository._getDetails: loaded fast details');
+      if (null != slowSearch) {
+        print('Temp-BaseMovieRepository._getDetails: loading slow details');
+        SlowThread.namedThread('SlowThread').run(slowSearch, detailCriteria);
+        print('Temp-BaseMovieRepository._getDetails: loaded slow details');
       }
     }
   }
 
+  /// Add fetch partial person details from imdb.
+  static Future<List<MovieResultDTO>> _getIMDBPersonDetailsFast(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryIMDBSuggestions().readList(criteria);
+
+  /// Add fetch full person details from imdb.
+  static Future<List<MovieResultDTO>> _getIMDBPersonDetailsSlow(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryIMDBNameDetails().readList(criteria);
+
+  /// Add fetch partial movie details from imdb.
+  static Future<List<MovieResultDTO>> _getIMDBMovieDetailsFast(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryIMDBTitleDetails().readList(criteria);
+
+  /// Add fetch full movie details from imdb.
+  static Future<List<MovieResultDTO>> _getIMDBMovieDetailsSlow(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryIMDBCastDetails().readList(criteria);
+
+  /// Add fetch full movie details from tmdb.
+  static Future<List<MovieResultDTO>> _getTMDBMovieDetailsFast(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryTMDBDetails().readList(criteria);
+
   /// Add fetched tmbd movie details into the stream and search imdb.
-  void _addTmdbDetails(int originalSearchUID, List<MovieResultDTO> values) {
+  void _addDetails(int originalSearchUID, List<MovieResultDTO> values) {
     if (!searchInterrupted(originalSearchUID)) {
       for (final dto in values) {
         if (dto.alternateId.startsWith(imdbTitlePrefix) ||
@@ -140,16 +177,6 @@ class BaseMovieRepository {
         }
         _finishDetails(dto);
       }
-    }
-  }
-
-  /// Add fetched movie details into the stream.
-  void _addImdbMovieDetails(
-    int originalSearchUID,
-    List<MovieResultDTO> values,
-  ) {
-    if (!searchInterrupted(originalSearchUID)) {
-      values.forEach(_finishDetails);
     }
   }
 

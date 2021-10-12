@@ -91,8 +91,13 @@ class ImdbMoviePageConverter {
         movie.type;
 
     _getRelated(movie, map[outerElementRelated]);
-    _getPeople(movie, map[outerElementActors], relatedActorsLabel);
-    _getPeople(movie, map[outerElementDirector], relatedDirectorsLabel);
+
+    for (final person in getPeopleFromJson(map[outerElementActors])) {
+      movie.addRelated(relatedActorsLabel, person);
+    }
+    for (final person in getPeopleFromJson(map[outerElementDirector])) {
+      movie.addRelated(relatedDirectorsLabel, person);
+    }
 
     // Remove any html escape sequences from inner text.
     movie.title = htmlDecode.convert(movie.title);
@@ -112,7 +117,8 @@ class ImdbMoviePageConverter {
     }
   }
 
-  static void _getPeople(MovieResultDTO movie, dynamic people, String label) {
+  static List<MovieResultDTO> getPeopleFromJson(dynamic people) {
+    final retval = <MovieResultDTO>[];
     if (null != people) {
       Iterable peopleList;
       if (people is Iterable) {
@@ -120,17 +126,18 @@ class ImdbMoviePageConverter {
       } else if (people is Map) {
         peopleList = [people];
       } else {
-        return;
+        return retval;
       }
       for (final relatedMap in peopleList) {
         if (relatedMap is Map) {
           final dto = _dtoFromPersonMap(relatedMap);
           if (null != dto) {
-            movie.addRelated(label, dto);
+            retval.add(dto);
           }
         }
       }
     }
+    return retval;
   }
 
   static MovieResultDTO? _dtoFromPersonMap(Map map) {

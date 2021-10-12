@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert' show json;
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:html/dom.dart' show Document, Element;
@@ -6,7 +7,9 @@ import 'package:html/parser.dart' show parse;
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
+import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
@@ -120,7 +123,12 @@ class QueryIMDBTitleDetails
     final document = parse(content);
     final movieData = json.decode(_getMovieJson(document)) as Map;
 
-    if (movieData == {}) {
+    if (movieData.isNotEmpty) {
+      print('Temp-QueryIMDBTitleDetails._scrapeWebPage: fetching cast details');
+      unawaited(_fetchAdditionalPersonDetails(movieData[outerElementActors]));
+      unawaited(_fetchAdditionalPersonDetails(movieData[outerElementDirector]));
+      print('Temp-QueryIMDBTitleDetails._scrapeWebPage: fetched cast details');
+    } else {
       _scrapeName(document, movieData);
       _scrapeType(document, movieData);
     }
@@ -159,49 +167,6 @@ class QueryIMDBTitleDetails
     }
   }
 
-/*
-  /// Extract type, year, Censor Rating and duration from ul<TitleBlockMetaData>
-  void _scrapeTitleMetadataDetails(Document document, Map movieData) {
-    var titleMetaData =
-        document.querySelector('ul[data-testid="hero-title-block__metadata"]');
-      titleMetaData ??= document.querySelector('ul[class*="TitleBlockMetaData"]');
-    if (null != titleMetaData && titleMetaData.hasChildNodes()) {
-      for (var item in titleMetaData.children) {
-        // See if this lineitem is the year
-        final year = item.querySelector('a[href*="releaseinfo"]')?.text;
-        if (null != year) {
-          movieData[outer_element_year] = year;
-          continue;
-        }
-        // See if this lineitem is the rating
-        final censorrating = item.querySelector('a[href*="parentalguide"]')?.text;
-        if (null != censorrating) {
-          movieData[outer_element_censor_rating] = censorrating;
-          continue;
-        }
-        final otheritem = item.text;
-        if (otheritem.isNotEmpty) {
-          if (null == movieData[outer_element_type] &&
-              null == movieData[outer_element_year] &&
-              null == movieData[outer_element_censor_rating]) {
-            // Assume first unknown Item is movie type
-            movieData[outer_element_type] = otheritem;
-          }
-          // Assume last unknown Item is duration
-          movieData[outer_element_duration] = otheritem;
-        }
-      }
-    }
-  }
-
-  /// Extract list of genres from from li<TitleBlockMetaData>
-  void _scrapeGenreDetails(Document document, Map movieData) {
-    document.querySelectorAll('a[href*="genre"]').forEach((genre) {
-      if ("" != genre.text.length > 0)
-        movieData[outer_element_genre].add(genre.text);
-    });
-  }
-*/
   /// Extract short description of movie from web page.
   void _scrapeDescription(Document document, Map movieData) {
     final description =
@@ -357,4 +322,23 @@ class QueryIMDBTitleDetails
         ?.innerHtml; //A post-apocalyptic tale... saving humankind.
     movieData[outerElementRelated].add(attributes);
   }
+
+  Future _fetchAdditionalPersonDetails(dynamic people) async {
+    final cast = ImdbMoviePageConverter.getPeopleFromJson(people);
+    for (final people in cast) {
+      final detailCriteria = SearchCriteriaDTO();
+      detailCriteria.criteriaTitle = people.uniqueId;
+
+      /*SlowThread.namedThread('SlowThread').run(
+        _getIMDBPersonDetailsSlow,
+        detailCriteria,
+      );*/
+    }
+  }
+
+  /// Add fetch full person details from imdb.
+  static Future<List<MovieResultDTO>> _getIMDBPersonDetailsSlow(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryIMDBNameDetails().readList(criteria);
 }

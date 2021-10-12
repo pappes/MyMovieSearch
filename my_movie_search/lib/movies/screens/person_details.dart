@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/widgets/controls.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
+import 'package:my_movie_search/utilities/thread.dart';
 
 class PersonDetailsPage extends StatefulWidget {
   const PersonDetailsPage({Key? key, required this.person}) : super(key: key);
@@ -32,12 +33,40 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     _person = widget.person;
     final detailCriteria = SearchCriteriaDTO();
     detailCriteria.criteriaTitle = _person.uniqueId;
-    // Pull back details at this point because it is very slow and CPU intensive
-    final imdbDetails = QueryIMDBNameDetails();
-    imdbDetails.readList(detailCriteria).then((searchResults) {
-      setState(() => mergeDetails(searchResults));
-    });
+    _getDetails(detailCriteria);
   }
+
+  /// Fetch full person details from cache or imdb.
+  Future _getDetails(
+    SearchCriteriaDTO criteria,
+  ) async {
+    final thread = SlowThread.namedThread('SlowThread');
+    print(
+        'Temp-_PersonDetailsPageState._getDetails: checking cache for $criteria');
+    final fastResults = await thread.run(_getCachedDetails, criteria);
+
+    if (fastResults is List<MovieResultDTO> && fastResults.isNotEmpty) {
+      print(
+          'Temp-_PersonDetailsPageState._getDetails: got cache merging details');
+      setState(() => mergeDetails(fastResults));
+    } else {
+      print('Temp-_PersonDetailsPageState._getDetails: uncached, getting slow');
+      final slowResults = await _getIMDBPersonDetails(criteria);
+      setState(() => mergeDetails(slowResults));
+    }
+  }
+
+  /// Fetch person details from imdb in current thread.
+  Future<List<MovieResultDTO>> _getIMDBPersonDetails(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryIMDBNameDetails().readList(criteria);
+
+  /// Fetch person details from cache maintained by a seperate thread.
+  static Future<List<MovieResultDTO>> _getCachedDetails(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryIMDBNameDetails().readCachedList(criteria);
 
   void mergeDetails(List<MovieResultDTO> details) {
     for (final dto in details) {

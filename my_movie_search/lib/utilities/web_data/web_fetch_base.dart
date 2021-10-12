@@ -70,11 +70,39 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     DataSourceFn? source,
     int? limit = _defaultSearchResultsLimit,
   }) async {
-    return baseYieldWebText(
+    print(
+        'Temp-WebFetchBase.readList: retrieving ${myFormatInputAsText(criteria)} for ${myDataSourceName()}');
+    final list = baseYieldWebText(
       source: source,
       newCriteria: criteria,
       resultSize: limit,
     ).toList();
+    print(
+        'Temp-WebFetchBase.readList: retrieving ${myFormatInputAsText(criteria)} for ${myDataSourceName()}');
+    return list;
+  }
+
+  /// Return a list with data matching [criteria].
+  ///
+  /// Optionally inject [source] as an alternate datasource for mocking/testing.
+  /// Optionally [limit] the quantity of results returned from the query.
+  Future<List<OUTPUT_TYPE>> readCachedList(
+    INPUT_TYPE criteria, {
+    DataSourceFn? source,
+    int? limit = _defaultSearchResultsLimit,
+  }) async {
+    print('Temp-WebFetchBase.readCachedList: checking cache for $criteria');
+
+    if (myIsResultCached(criteria)) {
+      print('Temp-WebFetchBase.readCachedList: found cached result');
+      return baseYieldWebText(
+        source: source,
+        newCriteria: criteria,
+        resultSize: limit,
+      ).toList();
+    }
+    print('Temp-WebFetchBase.readCachedList: retruning empty handed');
+    return <OUTPUT_TYPE>[];
   }
 
   /// Create a stream with data matching [newCriteria].
