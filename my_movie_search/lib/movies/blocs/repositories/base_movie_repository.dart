@@ -129,7 +129,7 @@ class BaseMovieRepository {
       print('Temp-BaseMovieRepository._getDetails: loaded fast details');
       if (null != slowSearch) {
         print('Temp-BaseMovieRepository._getDetails: loading slow details');
-        SlowThread.namedThread('SlowThread').run(slowSearch, detailCriteria);
+        ThreadRunner.namedThread('SlowThread').run(slowSearch, detailCriteria);
         print('Temp-BaseMovieRepository._getDetails: loaded slow details');
       }
     }

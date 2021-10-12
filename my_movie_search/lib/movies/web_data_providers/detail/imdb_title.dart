@@ -9,7 +9,6 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
-import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
@@ -90,7 +89,8 @@ class QueryIMDBTitleDetails
   /// Check cache to see if data has already been fetched.
   @override
   bool myIsResultCached(SearchCriteriaDTO criteria) {
-    return _cache.isCached(criteria.criteriaTitle);
+    final key = '${myDataSourceName()}${criteria.criteriaTitle}';
+    return _cache.isCached(key);
   }
 
   /// Check cache to see if data in cache should be refreshed.
@@ -103,7 +103,8 @@ class QueryIMDBTitleDetails
   /// Insert transformed data into cache.
   @override
   void myAddResultToCache(MovieResultDTO fetchedResult) {
-    _cache.add(fetchedResult.uniqueId, fetchedResult);
+    final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
+    _cache.add(key, fetchedResult);
   }
 
   /// Retrieve cached result.

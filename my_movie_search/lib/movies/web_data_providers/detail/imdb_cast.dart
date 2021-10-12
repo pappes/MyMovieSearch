@@ -20,7 +20,7 @@ class QueryIMDBCastDetails
   /// Describe where the data is comming from.
   @override
   String myDataSourceName() {
-    return describeEnum(DataSourceType.imdb);
+    return 'imdb_cast';
   }
 
   /// Static snapshot of data for offline operation.
@@ -74,20 +74,21 @@ class QueryIMDBCastDetails
   /// Check cache to see if data has already been fetched.
   @override
   bool myIsResultCached(SearchCriteriaDTO criteria) {
-    return _cache.isCached(criteria.criteriaTitle);
+    final key = '${myDataSourceName()}${criteria.criteriaTitle}';
+    return _cache.isCached(key);
   }
 
   /// Check cache to see if data in cache should be refreshed.
   @override
   bool myIsCacheStale(SearchCriteriaDTO criteria) {
     return false;
-    //return _cache.isCached(criteria.criteriaTitle);
   }
 
   /// Insert transformed data into cache.
   @override
   void myAddResultToCache(MovieResultDTO fetchedResult) {
-    _cache.add(fetchedResult.uniqueId, fetchedResult);
+    final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
+    _cache.add(key, fetchedResult);
   }
 
   /// Retrieve cached result.

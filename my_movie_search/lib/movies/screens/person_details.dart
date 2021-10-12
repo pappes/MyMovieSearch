@@ -40,7 +40,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   Future _getDetails(
     SearchCriteriaDTO criteria,
   ) async {
-    final thread = SlowThread.namedThread('SlowThread');
+    final thread = ThreadRunner.namedThread('SlowThread');
     print(
         'Temp-_PersonDetailsPageState._getDetails: checking cache for $criteria');
     final fastResults = await thread.run(_getCachedDetails, criteria);
