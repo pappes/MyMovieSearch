@@ -37,14 +37,10 @@ class QueryIMDBNameDetails
     int? limit = _defaultSearchResultsLimit,
   }) async {
     var retval = <MovieResultDTO>[];
-    print(
-        '${ThreadRunner.currentThreadName}-QueryIMDBNameDetails.readPrioritisedCachedList: checking cache for $criteria');
 
     // if cached yield from cache if cache is not stale
-    if (myIsResultCached(criteria) && !myIsCacheStale(criteria)) {
-      print(
-          '${ThreadRunner.currentThreadName}-QueryIMDBNameDetails.readPrioritisedCachedList: found cached result');
-      return myFetchResultFromCache(criteria).toList();
+    if (_isResultCached(criteria) && !_isCacheStale(criteria)) {
+      return _fetchResultFromCache(criteria).toList();
     }
     retval = await ThreadRunner.namedThread(priority).run(
       runReadList,
@@ -54,10 +50,8 @@ class QueryIMDBNameDetails
         'limit': limit,
       },
     ) as List<MovieResultDTO>;
-    retval.forEach(myAddResultToCache);
+    retval.forEach(_addResultToCache);
 
-    print(
-        '${ThreadRunner.currentThreadName}-QueryIMDBNameDetails.readPrioritisedCachedList: ${retval.toPrintableString()}');
     return retval;
   }
 
@@ -68,6 +62,35 @@ class QueryIMDBNameDetails
       source: input['source'] as DataSourceFn?,
       limit: input['limit'] as int?,
     );
+  }
+
+  /// Check cache to see if data has already been fetched.
+  bool _isResultCached(SearchCriteriaDTO criteria) {
+    final key = '${myDataSourceName()}${criteria.criteriaTitle}';
+    return _cache.isCached(key);
+  }
+
+  /// Check cache to see if data in cache should be refreshed.
+  bool _isCacheStale(SearchCriteriaDTO criteria) {
+    return false;
+    //return _cache.isCached(criteria.criteriaTitle);
+  }
+
+  /// Insert transformed data into cache.
+  void _addResultToCache(MovieResultDTO fetchedResult) {
+    final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
+    _cache.add(key, fetchedResult);
+  }
+
+  /// Retrieve cached result.
+  Stream<MovieResultDTO> _fetchResultFromCache(
+    SearchCriteriaDTO criteria,
+  ) async* {
+    final value =
+        await _cache.get('${myDataSourceName()}${criteria.criteriaTitle}');
+    if (value is MovieResultDTO) {
+      yield value;
+    }
   }
 
   /// Static snapshot of data for offline operation.
@@ -122,41 +145,6 @@ class QueryIMDBNameDetails
     error.type = MovieContentType.custom;
     error.source = DataSourceType.imdb;
     return error;
-  }
-
-  /// Check cache to see if data has already been fetched.
-  @override
-  bool myIsResultCached(SearchCriteriaDTO criteria) {
-    final key = '${myDataSourceName()}${criteria.criteriaTitle}';
-    return _cache.isCached(key);
-  }
-
-  /// Check cache to see if data in cache should be refreshed.
-  @override
-  bool myIsCacheStale(SearchCriteriaDTO criteria) {
-    return false;
-    //return _cache.isCached(criteria.criteriaTitle);
-  }
-
-  /// Insert transformed data into cache.
-  @override
-  void myAddResultToCache(MovieResultDTO fetchedResult) {
-    final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
-    print(
-        '${ThreadRunner.currentThreadName}-QueryIMDBNameDetails.myAddResultToCache: key: ${fetchedResult.toPrintableString()}');
-    _cache.add(key, fetchedResult);
-  }
-
-  /// Retrieve cached result.
-  @override
-  Stream<MovieResultDTO> myFetchResultFromCache(
-    SearchCriteriaDTO criteria,
-  ) async* {
-    final value =
-        await _cache.get('${myDataSourceName()}${criteria.criteriaTitle}');
-    if (value is MovieResultDTO) {
-      yield value;
-    }
   }
 
   /// Collect JSON and webpage text to construct a map of the movie data.

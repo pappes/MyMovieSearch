@@ -9,6 +9,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart'
 import 'package:my_movie_search/movies/widgets/controls.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
+import 'package:my_movie_search/utilities/thread.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   const MovieDetailsPage({Key? key, required this.movie}) : super(key: key);
@@ -33,12 +34,22 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     _movie = widget.movie;
     final detailCriteria = SearchCriteriaDTO();
     detailCriteria.criteriaTitle = _movie.uniqueId;
-    // Pull back details at this point because it is very slow and CPU intensive
-    final imdbDetails = QueryIMDBCastDetails();
-    imdbDetails.readList(detailCriteria).then((searchResults) {
-      // Call setSetState to update page when data is ready.
-      setState(() => _mergeDetails(searchResults));
-    });
+    _getDetails(detailCriteria);
+  }
+
+  /// Fetch full person details from imdb.
+  Future _getDetails(
+    SearchCriteriaDTO criteria,
+  ) async {
+    /// Fetch person details from cache using a seperate thread.
+    final fastResults = await QueryIMDBCastDetails().readPrioritisedCachedList(
+      criteria,
+      priority: ThreadRunner.fast,
+    );
+
+    if (fastResults is List<MovieResultDTO> && fastResults.isNotEmpty) {
+      setState(() => _mergeDetails(fastResults));
+    }
   }
 
   void _mergeDetails(List<MovieResultDTO> details) {

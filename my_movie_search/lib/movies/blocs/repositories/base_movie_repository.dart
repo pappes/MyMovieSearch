@@ -113,28 +113,20 @@ class BaseMovieRepository {
 
       if (dto.uniqueId.startsWith(imdbTitlePrefix)) {
         fastSearch = _getIMDBMovieDetailsFast;
-        //slowSearch = _getIMDBMovieDetailsSlow;
+        slowSearch = _getIMDBMovieDetailsSlow;
       } else if (dto.uniqueId.startsWith(imdbPersonPrefix)) {
         fastSearch = _getIMDBPersonDetailsFast;
         slowSearch = _getIMDBPersonDetailsSlow;
       } else {
         fastSearch = _getTMDBMovieDetailsFast;
       }
-      print(
-          '${ThreadRunner.currentThreadName}-BaseMovieRepository._getDetails: loading fast details');
       // Load fast results into list for display on screen
       fastSearch(detailCriteria).then(
         (searchResults) => _addDetails(originalSearchUID, searchResults),
       );
       // Load slow results into cache for access on details screen in a seperate thread
-      print(
-          '${ThreadRunner.currentThreadName}-BaseMovieRepository._getDetails: loaded fast details');
       if (null != slowSearch) {
-        print(
-            '${ThreadRunner.currentThreadName}-BaseMovieRepository._getDetails: loading slow details');
         slowSearch(detailCriteria);
-        print(
-            '${ThreadRunner.currentThreadName}-BaseMovieRepository._getDetails: loaded slow details');
       }
     }
   }
@@ -164,7 +156,10 @@ class BaseMovieRepository {
   static Future<List<MovieResultDTO>> _getIMDBMovieDetailsSlow(
     SearchCriteriaDTO criteria,
   ) =>
-      QueryIMDBCastDetails().readList(criteria);
+      QueryIMDBCastDetails().readPrioritisedCachedList(
+        criteria,
+        priority: ThreadRunner.verySlow,
+      );
 
   /// Add fetch full movie details from tmdb.
   static Future<List<MovieResultDTO>> _getTMDBMovieDetailsFast(

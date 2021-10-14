@@ -36,42 +36,22 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     _getDetails(detailCriteria);
   }
 
-  /// Fetch full person details from cache or imdb.
+  /// Fetch full person details from imdb.
   Future _getDetails(
     SearchCriteriaDTO criteria,
   ) async {
-    final thread = ThreadRunner.namedThread('SlowThread');
-    print(
-        'Temp-_PersonDetailsPageState._getDetails: checking cache for $criteria');
-    final fastResults = await _getCachedDetails(criteria);
+    /// Fetch person details from cache using a seperate thread.
+    final fastResults = await QueryIMDBNameDetails().readPrioritisedCachedList(
+      criteria,
+      priority: ThreadRunner.fast,
+    );
 
     if (fastResults is List<MovieResultDTO> && fastResults.isNotEmpty) {
-      print(
-          'Temp-_PersonDetailsPageState._getDetails: got cache merging details');
-      setState(() => mergeDetails(fastResults));
-    } else {
-      print('Temp-_PersonDetailsPageState._getDetails: uncached, getting slow');
-      final slowResults = await _getIMDBPersonDetails(criteria);
-      setState(() => mergeDetails(slowResults));
+      setState(() => _mergeDetails(fastResults));
     }
   }
 
-  /// Fetch person details from imdb in current thread.
-  Future<List<MovieResultDTO>> _getIMDBPersonDetails(
-    SearchCriteriaDTO criteria,
-  ) =>
-      QueryIMDBNameDetails().readList(criteria);
-
-  /// Fetch person details from cache maintained by a seperate thread.
-  static Future<List<MovieResultDTO>> _getCachedDetails(
-    SearchCriteriaDTO criteria,
-  ) =>
-      QueryIMDBNameDetails().readPrioritisedCachedList(
-        criteria,
-        priority: ThreadRunner.fast,
-      );
-
-  void mergeDetails(List<MovieResultDTO> details) {
+  void _mergeDetails(List<MovieResultDTO> details) {
     for (final dto in details) {
       _person.merge(dto);
     }

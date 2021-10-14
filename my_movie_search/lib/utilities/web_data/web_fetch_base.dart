@@ -71,15 +71,11 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     DataSourceFn? source,
     int? limit = _defaultSearchResultsLimit,
   }) async {
-    print(
-        '${ThreadRunner.currentThreadName}-WebFetchBase.readList: retrieving ${myFormatInputAsText(criteria)} for ${myDataSourceName()}');
     final list = baseYieldWebText(
       source: source,
       newCriteria: criteria,
       resultSize: limit,
     ).toList();
-    print(
-        '${ThreadRunner.currentThreadName}-WebFetchBase.readList: retrieving ${myFormatInputAsText(criteria)} for ${myDataSourceName()}');
     return list;
   }
 
@@ -92,20 +88,13 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     DataSourceFn? source,
     int? limit = _defaultSearchResultsLimit,
   }) async {
-    print(
-        '${ThreadRunner.currentThreadName}-WebFetchBase.readCachedList: checking cache for $criteria');
-
     if (myIsResultCached(criteria)) {
-      print(
-          '${ThreadRunner.currentThreadName}-WebFetchBase.readCachedList: found cached result');
       return baseYieldWebText(
         source: source,
         newCriteria: criteria,
         resultSize: limit,
       ).toList();
     }
-    print(
-        '${ThreadRunner.currentThreadName}-WebFetchBase.readCachedList: retruning empty handed');
     return <OUTPUT_TYPE>[];
   }
 

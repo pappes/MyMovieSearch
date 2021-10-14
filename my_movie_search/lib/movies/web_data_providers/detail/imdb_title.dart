@@ -113,7 +113,8 @@ class QueryIMDBTitleDetails
   Stream<MovieResultDTO> myFetchResultFromCache(
     SearchCriteriaDTO criteria,
   ) async* {
-    final value = await _cache.get(criteria.criteriaTitle);
+    final value =
+        await _cache.get('${myDataSourceName()}${criteria.criteriaTitle}');
     if (value is MovieResultDTO) {
       yield value;
     }
@@ -126,12 +127,8 @@ class QueryIMDBTitleDetails
     final movieData = json.decode(_getMovieJson(document)) as Map;
 
     if (movieData.isNotEmpty) {
-      print(
-          '${ThreadRunner.currentThreadName}-QueryIMDBTitleDetails._scrapeWebPage: fetching cast details');
       unawaited(_fetchAdditionalPersonDetails(movieData[outerElementActors]));
       unawaited(_fetchAdditionalPersonDetails(movieData[outerElementDirector]));
-      print(
-          '${ThreadRunner.currentThreadName}-QueryIMDBTitleDetails._scrapeWebPage: fetched cast details');
     } else {
       _scrapeName(document, movieData);
       _scrapeType(document, movieData);
@@ -333,7 +330,10 @@ class QueryIMDBTitleDetails
       final detailCriteria = SearchCriteriaDTO();
       detailCriteria.criteriaTitle = people.uniqueId;
 
-      /*SlowThread.namedThread('SlowThread').run(
+      //TODO decide if we want to prefetch cast details
+      //     when pulling back the movie details
+      //     before the user has drilled down to the list.
+      /*ThreadRunner.namedThread('SlowThread').run(
         _getIMDBPersonDetailsSlow,
         detailCriteria,
       );*/

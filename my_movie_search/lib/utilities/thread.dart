@@ -6,16 +6,16 @@ import 'dart:isolate';
 /// and return computation results.
 ///
 /// Sample usage maintianing state in other thread:
-///   final threader = SlowThread();
+///   final threader = ThreadRunner();
 ///   final val = await threader.runAsync(myFunction, input1);
 ///   final val = await threader.runAsync(myFunction, input2);
 ///
 /// Sample usage(stateless):
-///   final val = await SlowThread().runAsync(myFunction, input);
+///   final val = await ThreadRunner().runAsync(myFunction, input);
 ///
 /// Sample usage using factory constructor:
-///   final val = await SlowThread('VerySlow').runAsync(myFunction, input1);
-///   final val = await SlowThread('VerySlow').runAsync(myFunction, input2);
+///   final val = await ThreadRunner(ThreadRunner.slow).runAsync(myFunction, input1);
+///   final val = await ThreadRunner(ThreadRunner.verySlow).runAsync(myFunction, input2);
 class ThreadRunner {
   late SendPort _mainThreadOutboundPort;
   static const String fast = 'Fast Thread';
