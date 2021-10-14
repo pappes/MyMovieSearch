@@ -48,6 +48,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     );
 
     if (fastResults is List<MovieResultDTO> && fastResults.isNotEmpty) {
+      // Check the user has not naviated away
+      if (!mounted) return;
+
       setState(() => _mergeDetails(fastResults));
     }
   }
