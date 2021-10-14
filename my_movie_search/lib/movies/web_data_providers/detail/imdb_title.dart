@@ -9,6 +9,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
+import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
@@ -125,10 +126,12 @@ class QueryIMDBTitleDetails
     final movieData = json.decode(_getMovieJson(document)) as Map;
 
     if (movieData.isNotEmpty) {
-      print('Temp-QueryIMDBTitleDetails._scrapeWebPage: fetching cast details');
+      print(
+          '${ThreadRunner.currentThreadName}-QueryIMDBTitleDetails._scrapeWebPage: fetching cast details');
       unawaited(_fetchAdditionalPersonDetails(movieData[outerElementActors]));
       unawaited(_fetchAdditionalPersonDetails(movieData[outerElementDirector]));
-      print('Temp-QueryIMDBTitleDetails._scrapeWebPage: fetched cast details');
+      print(
+          '${ThreadRunner.currentThreadName}-QueryIMDBTitleDetails._scrapeWebPage: fetched cast details');
     } else {
       _scrapeName(document, movieData);
       _scrapeType(document, movieData);
@@ -341,5 +344,8 @@ class QueryIMDBTitleDetails
   static Future<List<MovieResultDTO>> _getIMDBPersonDetailsSlow(
     SearchCriteriaDTO criteria,
   ) =>
-      QueryIMDBNameDetails().readList(criteria);
+      QueryIMDBNameDetails().readPrioritisedCachedList(
+        criteria,
+        priority: ThreadRunner.verySlow,
+      );
 }

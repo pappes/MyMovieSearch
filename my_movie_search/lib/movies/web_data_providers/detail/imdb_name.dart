@@ -5,6 +5,7 @@ import 'package:html/parser.dart' show parse;
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
+import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
@@ -16,11 +17,57 @@ class QueryIMDBNameDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static const _baseURL = 'https://www.imdb.com/name/';
   static final _cache = TieredCache();
+  static const _defaultSearchResultsLimit = 100;
 
   /// Describe where the data is comming from.
   @override
   String myDataSourceName() {
     return 'imdb_person';
+  }
+
+  /// Return a list with data matching [criteria].
+  ///
+  /// Optionally override the [priority] to push slow operations to another thread.
+  /// Optionally inject [source] as an alternate datasource for mocking/testing.
+  /// Optionally [limit] the quantity of results returned from the query.
+  Future<List<MovieResultDTO>> readPrioritisedCachedList(
+    SearchCriteriaDTO criteria, {
+    String priority = ThreadRunner.slow,
+    DataSourceFn? source,
+    int? limit = _defaultSearchResultsLimit,
+  }) async {
+    var retval = <MovieResultDTO>[];
+    print(
+        '${ThreadRunner.currentThreadName}-QueryIMDBNameDetails.readPrioritisedCachedList: checking cache for $criteria');
+
+    // if cached yield from cache if cache is not stale
+    if (myIsResultCached(criteria) && !myIsCacheStale(criteria)) {
+      print(
+          '${ThreadRunner.currentThreadName}-QueryIMDBNameDetails.readPrioritisedCachedList: found cached result');
+      return myFetchResultFromCache(criteria).toList();
+    }
+    retval = await ThreadRunner.namedThread(priority).run(
+      runReadList,
+      {
+        'criteria': criteria,
+        'source': source,
+        'limit': limit,
+      },
+    ) as List<MovieResultDTO>;
+    retval.forEach(myAddResultToCache);
+
+    print(
+        '${ThreadRunner.currentThreadName}-QueryIMDBNameDetails.readPrioritisedCachedList: ${retval.toPrintableString()}');
+    return retval;
+  }
+
+  /// static wrapper to readList() for compatability with ThreadRunner.
+  static Future<List<MovieResultDTO>> runReadList(Map input) {
+    return QueryIMDBNameDetails().readList(
+      input['criteria'] as SearchCriteriaDTO,
+      source: input['source'] as DataSourceFn?,
+      limit: input['limit'] as int?,
+    );
   }
 
   /// Static snapshot of data for offline operation.
@@ -95,6 +142,8 @@ class QueryIMDBNameDetails
   @override
   void myAddResultToCache(MovieResultDTO fetchedResult) {
     final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
+    print(
+        '${ThreadRunner.currentThreadName}-QueryIMDBNameDetails.myAddResultToCache: key: ${fetchedResult.toPrintableString()}');
     _cache.add(key, fetchedResult);
   }
 
@@ -103,7 +152,8 @@ class QueryIMDBNameDetails
   Stream<MovieResultDTO> myFetchResultFromCache(
     SearchCriteriaDTO criteria,
   ) async* {
-    final value = await _cache.get(criteria.criteriaTitle);
+    final value =
+        await _cache.get('${myDataSourceName()}${criteria.criteriaTitle}');
     if (value is MovieResultDTO) {
       yield value;
     }

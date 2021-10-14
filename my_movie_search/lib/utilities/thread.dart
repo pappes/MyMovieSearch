@@ -16,24 +16,31 @@ import 'dart:isolate';
 /// Sample usage using factory constructor:
 ///   final val = await SlowThread('VerySlow').runAsync(myFunction, input1);
 ///   final val = await SlowThread('VerySlow').runAsync(myFunction, input2);
-class SlowThread {
+class ThreadRunner {
   late SendPort _mainThreadOutboundPort;
+  static const String fast = 'Fast Thread';
+  static const String slow = 'Slow Thread';
+  static const String verySlow = 'Very Slow Thread';
+  static String? latestThreadName;
+  static String? currentThreadName = 'Default Thread';
 
   bool ready = false;
   late Future<bool> initialised;
   final _completer = Completer<bool>();
 
-  static final Map<String, SlowThread> _namedThreads = {};
+  static final Map<String, ThreadRunner> _namedThreads = {};
 
-  SlowThread() {
+  ThreadRunner() {
     initialised = _completer.future;
-    _init();
+    _init(latestThreadName ?? 'Unnamed Thread');
   }
 
   /// Convenience constructor to keep track of threads.
-  factory SlowThread.namedThread(String name) {
+  factory ThreadRunner.namedThread(String name) {
     if (_namedThreads.containsKey(name)) return _namedThreads[name]!;
-    final thread = SlowThread();
+    latestThreadName = name;
+    final thread = ThreadRunner();
+    latestThreadName = null;
     _namedThreads[name] = thread;
     return thread;
   }
@@ -61,18 +68,24 @@ class SlowThread {
   }
 
   /// Spawn another thread and capture port to send future requests to.
-  Future _init() async {
+  Future _init(String threadName) async {
     final receivePort = ReceivePort();
 
     // Spawn another thread and wait to recieve a port for the main thread to talk on.
-    await Isolate.spawn(_runOnOtherThread, receivePort.sendPort);
+    await Isolate.spawn(_runOnOtherThread, {
+      'port': receivePort.sendPort,
+      'threadName': threadName,
+    });
     _mainThreadOutboundPort = await receivePort.first as SendPort;
     ready = true;
     _completer.complete(ready);
   }
 
   /// Function to process any incomming requests.
-  static Future<void> _runOnOtherThread(SendPort initialOutboundPort) async {
+  static Future<void> _runOnOtherThread(Map params) async {
+    final initialOutboundPort = params['port'] as SendPort;
+
+    currentThreadName = params['threadName'] as String;
     final inboundPort = ReceivePort();
 
     // Notify caller which port they can use to send compute requests on.

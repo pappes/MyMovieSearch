@@ -43,7 +43,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     final thread = ThreadRunner.namedThread('SlowThread');
     print(
         'Temp-_PersonDetailsPageState._getDetails: checking cache for $criteria');
-    final fastResults = await thread.run(_getCachedDetails, criteria);
+    final fastResults = await _getCachedDetails(criteria);
 
     if (fastResults is List<MovieResultDTO> && fastResults.isNotEmpty) {
       print(
@@ -66,7 +66,10 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   static Future<List<MovieResultDTO>> _getCachedDetails(
     SearchCriteriaDTO criteria,
   ) =>
-      QueryIMDBNameDetails().readCachedList(criteria);
+      QueryIMDBNameDetails().readPrioritisedCachedList(
+        criteria,
+        priority: ThreadRunner.fast,
+      );
 
   void mergeDetails(List<MovieResultDTO> details) {
     for (final dto in details) {

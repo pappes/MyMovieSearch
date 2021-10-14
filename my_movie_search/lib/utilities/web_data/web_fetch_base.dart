@@ -3,6 +3,7 @@ library pappes.utilites;
 import 'dart:async' show StreamController, FutureOr;
 import 'dart:convert' show json, utf8;
 
+import 'package:my_movie_search/utilities/thread.dart';
 import 'package:universal_io/io.dart'
     show
         HttpClient,
@@ -71,14 +72,14 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     int? limit = _defaultSearchResultsLimit,
   }) async {
     print(
-        'Temp-WebFetchBase.readList: retrieving ${myFormatInputAsText(criteria)} for ${myDataSourceName()}');
+        '${ThreadRunner.currentThreadName}-WebFetchBase.readList: retrieving ${myFormatInputAsText(criteria)} for ${myDataSourceName()}');
     final list = baseYieldWebText(
       source: source,
       newCriteria: criteria,
       resultSize: limit,
     ).toList();
     print(
-        'Temp-WebFetchBase.readList: retrieving ${myFormatInputAsText(criteria)} for ${myDataSourceName()}');
+        '${ThreadRunner.currentThreadName}-WebFetchBase.readList: retrieving ${myFormatInputAsText(criteria)} for ${myDataSourceName()}');
     return list;
   }
 
@@ -91,17 +92,20 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     DataSourceFn? source,
     int? limit = _defaultSearchResultsLimit,
   }) async {
-    print('Temp-WebFetchBase.readCachedList: checking cache for $criteria');
+    print(
+        '${ThreadRunner.currentThreadName}-WebFetchBase.readCachedList: checking cache for $criteria');
 
     if (myIsResultCached(criteria)) {
-      print('Temp-WebFetchBase.readCachedList: found cached result');
+      print(
+          '${ThreadRunner.currentThreadName}-WebFetchBase.readCachedList: found cached result');
       return baseYieldWebText(
         source: source,
         newCriteria: criteria,
         resultSize: limit,
       ).toList();
     }
-    print('Temp-WebFetchBase.readCachedList: retruning empty handed');
+    print(
+        '${ThreadRunner.currentThreadName}-WebFetchBase.readCachedList: retruning empty handed');
     return <OUTPUT_TYPE>[];
   }
 

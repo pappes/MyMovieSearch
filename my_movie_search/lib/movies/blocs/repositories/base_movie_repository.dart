@@ -116,21 +116,25 @@ class BaseMovieRepository {
         //slowSearch = _getIMDBMovieDetailsSlow;
       } else if (dto.uniqueId.startsWith(imdbPersonPrefix)) {
         fastSearch = _getIMDBPersonDetailsFast;
-        //slowSearch = _getIMDBPersonDetailsSlow;
+        slowSearch = _getIMDBPersonDetailsSlow;
       } else {
         fastSearch = _getTMDBMovieDetailsFast;
       }
-      print('Temp-BaseMovieRepository._getDetails: loading fast details');
+      print(
+          '${ThreadRunner.currentThreadName}-BaseMovieRepository._getDetails: loading fast details');
       // Load fast results into list for display on screen
       fastSearch(detailCriteria).then(
         (searchResults) => _addDetails(originalSearchUID, searchResults),
       );
       // Load slow results into cache for access on details screen in a seperate thread
-      print('Temp-BaseMovieRepository._getDetails: loaded fast details');
+      print(
+          '${ThreadRunner.currentThreadName}-BaseMovieRepository._getDetails: loaded fast details');
       if (null != slowSearch) {
-        print('Temp-BaseMovieRepository._getDetails: loading slow details');
-        ThreadRunner.namedThread('SlowThread').run(slowSearch, detailCriteria);
-        print('Temp-BaseMovieRepository._getDetails: loaded slow details');
+        print(
+            '${ThreadRunner.currentThreadName}-BaseMovieRepository._getDetails: loading slow details');
+        slowSearch(detailCriteria);
+        print(
+            '${ThreadRunner.currentThreadName}-BaseMovieRepository._getDetails: loaded slow details');
       }
     }
   }
@@ -145,7 +149,10 @@ class BaseMovieRepository {
   static Future<List<MovieResultDTO>> _getIMDBPersonDetailsSlow(
     SearchCriteriaDTO criteria,
   ) =>
-      QueryIMDBNameDetails().readList(criteria);
+      QueryIMDBNameDetails().readPrioritisedCachedList(
+        criteria,
+        priority: ThreadRunner.verySlow,
+      );
 
   /// Add fetch partial movie details from imdb.
   static Future<List<MovieResultDTO>> _getIMDBMovieDetailsFast(
