@@ -22,6 +22,12 @@ class TieredCache<T> {
     return false;
   }
 
+  /// Check the cache to see if the item is present.
+  ///
+  int cachedSize() {
+    return memoryCache.length;
+  }
+
   /// Get data from the cache.
   ///
   /// If data is not in any cache, executes [callback] to construct the value.

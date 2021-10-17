@@ -18,6 +18,8 @@ class QueryIMDBNameDetails
   static const _baseURL = 'https://www.imdb.com/name/';
   static final _cache = TieredCache();
   static const _defaultSearchResultsLimit = 100;
+  static List<SearchCriteriaDTO> _normalQueue = [];
+  static List<SearchCriteriaDTO> _verySlowQueue = [];
 
   /// Describe where the data is comming from.
   @override
@@ -38,11 +40,24 @@ class QueryIMDBNameDetails
   }) async {
     var retval = <MovieResultDTO>[];
 
-    // if cached yield from cache if cache is not stale
+    // if cached and not stale yield from cache
     if (_isResultCached(criteria) && !_isCacheStale(criteria)) {
+      print(
+          '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
+          'value was precached ${myFormatInputAsText(criteria)}');
       return _fetchResultFromCache(criteria).toList();
     }
-    retval = await ThreadRunner.namedThread(priority).run(
+
+    var newPriority = _enqueRequest(criteria, priority);
+    if (null == newPriority) {
+      print('${ThreadRunner.currentThreadName}($priority) '
+          'discarded ${myFormatInputAsText(criteria)}');
+      return [];
+    }
+    print('${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
+        'requesting ${myFormatInputAsText(criteria)}');
+
+    retval = await ThreadRunner.namedThread(newPriority).run(
       runReadList,
       {
         'criteria': criteria,
@@ -52,6 +67,8 @@ class QueryIMDBNameDetails
     ) as List<MovieResultDTO>;
     retval.forEach(_addResultToCache);
 
+    _normalQueue.remove(criteria);
+    _verySlowQueue.remove(criteria);
     return retval;
   }
 
@@ -79,6 +96,13 @@ class QueryIMDBNameDetails
   /// Insert transformed data into cache.
   void _addResultToCache(MovieResultDTO fetchedResult) {
     final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
+    print(
+        '${ThreadRunner.currentThreadName} cache add ${fetchedResult.uniqueId} size:${_cache.cachedSize()}');
+
+    if (fetchedResult.uniqueId == 'nm0000243') {
+      print(
+          '${ThreadRunner.currentThreadName} breakpoint cache add ${fetchedResult.uniqueId} size:${_cache.cachedSize()}');
+    }
     _cache.add(key, fetchedResult);
   }
 
@@ -233,5 +257,27 @@ class QueryIMDBNameDetails
       }
     }
     return movies;
+  }
+
+  String? _enqueRequest(SearchCriteriaDTO criteria, String priority) {
+    // Track and throttle low priority requests
+    if (ThreadRunner.slow == priority || ThreadRunner.verySlow == priority) {
+      if (_normalQueue.contains(criteria) ||
+          _verySlowQueue.contains(criteria)) {
+        return null;
+      }
+      if (criteria.criteriaTitle == 'nm0000243') {
+        print(
+            '${ThreadRunner.currentThreadName}cache miss ${criteria.criteriaTitle}');
+      }
+
+      if (_normalQueue.length < 10 && ThreadRunner.verySlow != priority) {
+        _normalQueue.add(criteria);
+      } else {
+        _verySlowQueue.add(criteria);
+        return ThreadRunner.verySlow;
+      }
+    }
+    return priority;
   }
 }

@@ -198,9 +198,9 @@ String getBigImage(String? smallImage) {
         '$regexLastFulStopOnwards$regexFileExtension$regexEndString';
     final truncated = _getRegexGroupInBrakets(smallImage, imageRegexpFormula);
     if (null != truncated) {
-      return '$truncated.jpg';
+      return Uri.decodeFull('$truncated.jpg');
     }
-    return smallImage;
+    return Uri.decodeFull(smallImage);
   }
   return '';
 }
