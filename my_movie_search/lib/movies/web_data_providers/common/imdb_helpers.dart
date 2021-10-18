@@ -27,13 +27,15 @@ String makeImdbUrl(
   if (key.startsWith(imdbPersonPrefix)) {
     url.write(imdbPersonPath);
   }
+  url.write(key + path);
   if (photos) {
     url.write(imdbPhotosPath);
   }
   if (parentalGuide) {
     url.write(imdbParentalPath);
   }
-  url.write(key + path + imdbSuffixURL);
+  url.write(imdbSuffixURL);
+  print('manufatured url = $url');
   return url.toString();
 }
 
@@ -196,11 +198,13 @@ String getBigImage(String? smallImage) {
     const imageRegexpFormula = '$regexStartString'
         '($regexBeforeLastFulStop)'
         '$regexLastFulStopOnwards$regexFileExtension$regexEndString';
-    final truncated = _getRegexGroupInBrakets(smallImage, imageRegexpFormula);
+    var truncated = _getRegexGroupInBrakets(smallImage, imageRegexpFormula);
     if (null != truncated) {
-      return Uri.decodeFull('$truncated.jpg');
+      truncated = '$truncated.jpg';
     }
-    return Uri.decodeFull(smallImage);
+    final retval = Uri.decodeFull(truncated ?? smallImage);
+    print('image $smallImage became $retval');
+    return retval;
   }
   return '';
 }
