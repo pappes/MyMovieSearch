@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' show env;
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 import 'package:universal_io/io.dart' show HttpHeaders;
