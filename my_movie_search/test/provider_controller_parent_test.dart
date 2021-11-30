@@ -23,9 +23,7 @@ List<MovieResultDTO> _makeExpectedResults(int qty) {
       {
         'source': DataSourceType.imdb.toString(),
         'uniqueId': '$uniqueId',
-        'description': '''
-$uniqueId.
-Keywords: null''',
+        'description': '$uniqueId.',
       }.toMovieResultDTO(),
     );
   }

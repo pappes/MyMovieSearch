@@ -218,6 +218,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       ),
       Text('Languages: ${_movie.languages.toString()}'),
       Text('Genres: ${_movie.genres.toString()}'),
+      Text('Keywords: ${_movie.keywords.toString()}'),
     ];
   }
 

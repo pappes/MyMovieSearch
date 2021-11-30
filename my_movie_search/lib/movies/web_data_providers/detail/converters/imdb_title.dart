@@ -50,7 +50,6 @@ class ImdbMoviePageConverter {
     movie.alternateTitle =
         map[outerElementCommonTitle]?.toString() ?? movie.alternateTitle;
     movie.description = map[outerElementDescription]?.toString() ?? movie.title;
-    movie.description += '\nKeywords: ${map[outerElementKeywords]}';
     movie.imageUrl = map[outerElementImage]?.toString() ?? movie.imageUrl;
     final language = map[outerElementLanguage];
     if (language is LanguageType) {
@@ -58,6 +57,7 @@ class ImdbMoviePageConverter {
     }
     movie.languages.combineUnique(map[outerElementLanguages]);
     movie.genres.combineUnique(map[outerElementGenre]);
+    movie.keywords.combineUnique(map[outerElementKeywords]);
     movie.censorRating = getImdbCensorRating(
           map[outerElementCensorRating]?.toString(),
         ) ??

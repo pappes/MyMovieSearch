@@ -25,6 +25,7 @@ class MovieResultDTO {
   LanguageType language = LanguageType.none;
   List<String> languages = [];
   List<String> genres = [];
+  List<String> keywords = [];
   // Related DTOs are in a category, then keyed by uniqueId
   Map<String, Map<String, MovieResultDTO>> related = {};
 }
@@ -76,6 +77,7 @@ const String movieResultDTOImageUrl = 'imageUrl';
 const String movieResultDTOLanguage = 'language';
 const String movieResultDTOLanguages = 'languages';
 const String movieResultDTOGenres = 'genres';
+const String movieResultDTOKeywords = 'keywords';
 const String movieResultDTORelated = 'related';
 const String movieResultDTOUninitialised = '-1';
 const String movieResultDTOMessagePrefix = '-';
@@ -227,6 +229,11 @@ extension MapDTOConversion on Map {
         this[movieResultDTOGenres],
       ),
     );
+    dto.keywords = ListHelper.fromJson(
+      _getString(
+        this[movieResultDTOKeywords],
+      ),
+    );
     //TODO related
     return dto;
   }
@@ -281,6 +288,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       }
       if (genres != defaultVals.genres) {
         map[movieResultDTOGenres] = json.encode(genres);
+      }
+      if (keywords != defaultVals.keywords) {
+        map[movieResultDTOKeywords] = json.encode(keywords);
       }
       if (description != defaultVals.description) {
         map[movieResultDTODescription] = description;
@@ -347,6 +357,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       language = bestval(newValue.language, language);
       languages = bestList(newValue.languages, languages);
       genres = bestList(newValue.genres, genres);
+      keywords = bestList(newValue.keywords, keywords);
       userRating = bestUserRating(
         newValue.userRating,
         newValue.userRatingCount,
@@ -486,6 +497,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     dto.language = language;
     dto.languages = languages;
     dto.genres = genres;
+    dto.keywords = keywords;
     dto.related = related;
     return dto;
   }
@@ -511,6 +523,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         language == other.language &&
         languages.toString() == other.languages.toString() &&
         genres.toString() == other.genres.toString() &&
+        keywords.toString() == other.keywords.toString() &&
         imageUrl == other.imageUrl;
     // TODO reinstate when toMovieResultDTO can convert text to related.
     // this.related.toPrintableString() == other.related.toPrintableString();

@@ -195,6 +195,7 @@ void main() {
       dto.censorRating = CensorRatingType.none;
       dto.languages.clear();
       dto.genres.clear();
+      dto.keywords.clear();
 
       testToMovieResultDTO(dto, map);
     });
