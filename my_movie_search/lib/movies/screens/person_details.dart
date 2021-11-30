@@ -47,7 +47,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     );
 
     if (fastResults is List<MovieResultDTO> && fastResults.isNotEmpty) {
-      // Check the user has not naviated away
+      // Check the user has not navigated away
       if (!mounted) return;
 
       setState(() => _mergeDetails(fastResults));
@@ -89,21 +89,13 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       ),
       body: Scrollbar(
         isAlwaysShown: true,
-        child: ListView(
-          children: <Widget>[
-            Container(
-              height:
-                  9000, //TODO: work out how to set the container to have variable height in a list view
-              child: Center(child: bodySection()),
-            )
-          ],
-        ),
+        child: bodySection(),
       ),
     );
   }
 
-  Column bodySection() {
-    return Column(
+  ScrollView bodySection() {
+    return ListView(
       children: <Widget>[
         SelectableText(_person.title, style: hugeFont),
         Row(
@@ -118,6 +110,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         Expanded(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               ExpandedColumn(children: <Widget>[leftColumn()]),
 
