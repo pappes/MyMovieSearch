@@ -1,6 +1,5 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
@@ -19,8 +18,6 @@ const outerElementRelated = 'related';
 const outerElementLink = 'url';
 
 class ImdbNamePageConverter {
-  static final htmlDecode = HtmlUnescape();
-
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     return [_dtoFromMap(map)];
   }
@@ -40,11 +37,6 @@ class ImdbNamePageConverter {
         getYear(map[outerElementDied]?.toString())?.toString() ?? '';
     movie.yearRange = '${movie.year}-$deathDate';
     movie.type = MovieContentType.person;
-
-    // Remove any html escape sequences from inner text.
-    movie.title = htmlDecode.convert(movie.title);
-    movie.alternateTitle = htmlDecode.convert(movie.alternateTitle);
-    movie.description = htmlDecode.convert(movie.description);
 
     for (final category in map[outerElementRelated]) {
       if (category is Map) {

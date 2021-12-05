@@ -3,6 +3,7 @@ import 'dart:convert' show json;
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
+import 'package:html_unescape/html_unescape_small.dart';
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -10,6 +11,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
+import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -27,6 +29,7 @@ class QueryIMDBTitleDetails
   static const _baseURL = 'https://www.imdb.com/title/';
   static const _baseURLsuffix = '/?ref_=fn_tt_tt_1';
   static final _cache = TieredCache();
+  static final htmlDecode = HtmlUnescape();
 
   /// Describe where the data is comming from.
   @override
@@ -130,6 +133,7 @@ class QueryIMDBTitleDetails
     if (movieData.isNotEmpty) {
       unawaited(_fetchAdditionalPersonDetails(movieData[outerElementActors]));
       unawaited(_fetchAdditionalPersonDetails(movieData[outerElementDirector]));
+      _decodeList(movieData, outerElementKeywords);
     } else {
       _scrapeName(document, movieData);
       _scrapeType(document, movieData);
@@ -175,7 +179,8 @@ class QueryIMDBTitleDetails
         document.querySelector('div[data-testid="storyline-plot-summary"]') ??
             document.querySelector('span[data-testid*="plot"]');
     if (null != description?.text) {
-      movieData[outerElementDescription] = description!.text;
+      movieData[outerElementDescription] =
+          htmlDecode.convert(description!.text);
     }
   }
 
@@ -185,7 +190,8 @@ class QueryIMDBTitleDetails
         document.querySelector('h1[data-testid="hero-title-block"]') ??
             document.querySelector('h1[class*="TitleHeader"]');
     if (null != description?.text) {
-      movieData[outerElementOfficialTitle] = description!.text;
+      movieData[outerElementOfficialTitle] =
+          htmlDecode.convert(description!.text);
     }
   }
 
@@ -292,6 +298,8 @@ class QueryIMDBTitleDetails
         recommendation.querySelector('img')?.attributes['src'];
     attributes[innerElementRatingValue] =
         recommendation.querySelector('span.ipc-rating-star--imdb')?.text; //6.9
+    attributes[outerElementOfficialTitle] =
+        htmlDecode.convert(attributes[outerElementOfficialTitle].toString());
     movieData[outerElementRelated].add(attributes);
   }
 
@@ -322,6 +330,10 @@ class QueryIMDBTitleDetails
         .querySelector('div.rec-outline')
         ?.querySelector('p')
         ?.innerHtml; //A post-apocalyptic tale... saving humankind.
+    attributes[outerElementOfficialTitle] =
+        htmlDecode.convert(attributes[outerElementOfficialTitle].toString());
+    attributes[outerElementDescription] =
+        htmlDecode.convert(attributes[outerElementDescription].toString());
     movieData[outerElementRelated].add(attributes);
   }
 
@@ -349,4 +361,19 @@ class QueryIMDBTitleDetails
         criteria,
         priority: ThreadRunner.verySlow,
       );
+
+  /// Remove any html encoding from a list of strings
+  void _decodeList(Map movieData, String key) {
+    if (movieData.containsKey(key)) {
+      var tempList = <String>[];
+      if (movieData[key] is List) {
+        for (final keyword in movieData[key]) {
+          tempList.add(htmlDecode.convert(keyword.toString()));
+        }
+      } else {
+        tempList = movieData[key].toString().split(',');
+      }
+      movieData[key] = tempList;
+    }
+  }
 }

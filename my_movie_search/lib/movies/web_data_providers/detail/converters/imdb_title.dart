@@ -1,7 +1,5 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:html_unescape/html_unescape_small.dart';
-
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
@@ -36,8 +34,6 @@ const relatedActorsLabel = 'Cast:';
 const relatedDirectorsLabel = 'Directed by:';
 
 class ImdbMoviePageConverter {
-  static final htmlDecode = HtmlUnescape();
-
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     return [dtoFromMap(map)];
   }
@@ -100,9 +96,6 @@ class ImdbMoviePageConverter {
     }
 
     // Remove any html escape sequences from inner text.
-    movie.title = htmlDecode.convert(movie.title);
-    movie.alternateTitle = htmlDecode.convert(movie.alternateTitle);
-    movie.description = htmlDecode.convert(movie.description);
     return movie;
   }
 

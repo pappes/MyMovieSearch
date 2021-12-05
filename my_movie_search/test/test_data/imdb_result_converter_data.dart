@@ -17,7 +17,7 @@ final expectedDTOStream = streamMovieResultDTOFromJsonMap([
     movieResultDTODescription: '1234 is a movie ... terror in the country.',
     movieResultDTOLanguages: 'null',
     movieResultDTOGenres: '"Drama"',
-    movieResultDTOKeywords: '"terror"',
+    movieResultDTOKeywords: '["terror","T&A"]',
 // movieResultDTOYearRange = 'yearRange';
     movieResultDTOType: MovieContentType.movie.toString(),
     movieResultDTOUserRating: '6.5',
@@ -69,7 +69,7 @@ const String htmlSampleInner = r'''
     "@type": "Organization",
     "url": "/company/co0813120/"
   },
-  "keywords": "terror",
+  "keywords": ["terror","T&amp;A"],
   "aggregateRating": {
     "@type": "AggregateRating",
     "ratingCount": 10,

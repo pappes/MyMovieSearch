@@ -168,6 +168,12 @@ extension MapDTOConversion on Map {
     return '';
   }
 
+  List<String> _getStringList(dynamic val) {
+    if (val is String) return ListHelper.fromJson(val);
+    if (val is List<String>) return val;
+    return [];
+  }
+
   int _getInt(dynamic val) {
     if (val is int) return val;
     if (val is String) return int.tryParse(val) ?? 0;
@@ -219,21 +225,10 @@ extension MapDTOConversion on Map {
           LanguageType.values,
         ) ??
         dto.language;
-    dto.languages = ListHelper.fromJson(
-      _getString(
-        this[movieResultDTOLanguages],
-      ),
-    );
-    dto.genres = ListHelper.fromJson(
-      _getString(
-        this[movieResultDTOGenres],
-      ),
-    );
-    dto.keywords = ListHelper.fromJson(
-      _getString(
-        this[movieResultDTOKeywords],
-      ),
-    );
+
+    dto.languages = _getStringList(this[movieResultDTOLanguages]);
+    dto.genres = _getStringList(this[movieResultDTOGenres]);
+    dto.keywords = _getStringList(this[movieResultDTOKeywords]);
     //TODO related
     return dto;
   }

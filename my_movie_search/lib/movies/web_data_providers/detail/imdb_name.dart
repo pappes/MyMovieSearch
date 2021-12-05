@@ -1,6 +1,7 @@
 import 'dart:convert' show json;
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
+import 'package:html_unescape/html_unescape_small.dart';
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -21,6 +22,7 @@ class QueryIMDBNameDetails
   static const _defaultSearchResultsLimit = 100;
   static List<SearchCriteriaDTO> _normalQueue = [];
   static List<SearchCriteriaDTO> _verySlowQueue = [];
+  static final htmlDecode = HtmlUnescape();
 
   /// Describe where the data is comming from.
   @override
@@ -213,6 +215,8 @@ class QueryIMDBNameDetails
     if ('' == movieData[outerElementOfficialTitle]) {
       movieData[outerElementOfficialTitle] = oldName;
     }
+    movieData[outerElementOfficialTitle] =
+        htmlDecode.convert(movieData[outerElementOfficialTitle].toString());
   }
 
   /// Search for movie poster.
@@ -254,6 +258,8 @@ class QueryIMDBNameDetails
         final movie = {};
         movie[outerElementOfficialTitle] = link.text;
         movie[outerElementLink] = link.attributes['href'];
+        movie[outerElementOfficialTitle] =
+            htmlDecode.convert(movie[outerElementOfficialTitle].toString());
         movies.add(movie);
       }
     }
