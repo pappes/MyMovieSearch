@@ -20,8 +20,8 @@ class QueryIMDBNameDetails
   static const _baseURL = 'https://www.imdb.com/name/';
   static final _cache = TieredCache();
   static const _defaultSearchResultsLimit = 100;
-  static List<SearchCriteriaDTO> _normalQueue = [];
-  static List<SearchCriteriaDTO> _verySlowQueue = [];
+  static final List<SearchCriteriaDTO> _normalQueue = [];
+  static final List<SearchCriteriaDTO> _verySlowQueue = [];
   static final htmlDecode = HtmlUnescape();
 
   /// Describe where the data is comming from.
@@ -46,19 +46,24 @@ class QueryIMDBNameDetails
     // if cached and not stale yield from cache
     if (_isResultCached(criteria) && !_isCacheStale(criteria)) {
       print(
-          '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
-          'value was precached ${myFormatInputAsText(criteria)}');
+        '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
+        'value was precached ${myFormatInputAsText(criteria)}',
+      );
       return _fetchResultFromCache(criteria).toList();
     }
 
-    var newPriority = _enqueRequest(criteria, priority);
+    final newPriority = _enqueRequest(criteria, priority);
     if (null == newPriority) {
-      print('${ThreadRunner.currentThreadName}($priority) '
-          'discarded ${myFormatInputAsText(criteria)}');
+      print(
+        '${ThreadRunner.currentThreadName}($priority) '
+        'discarded ${myFormatInputAsText(criteria)}',
+      );
       return [];
     }
-    print('${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
-        'requesting ${myFormatInputAsText(criteria)}');
+    print(
+      '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
+      'requesting ${myFormatInputAsText(criteria)}',
+    );
 
     retval = await ThreadRunner.namedThread(newPriority).run(
       runReadList,
@@ -100,11 +105,15 @@ class QueryIMDBNameDetails
   void _addResultToCache(MovieResultDTO fetchedResult) {
     final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
     print(
-        '${ThreadRunner.currentThreadName} cache add ${fetchedResult.uniqueId} size:${_cache.cachedSize()}');
+      '${ThreadRunner.currentThreadName} cache add '
+      '${fetchedResult.uniqueId} size:${_cache.cachedSize()}',
+    );
 
     if (fetchedResult.uniqueId == 'nm0000243') {
       print(
-          '${ThreadRunner.currentThreadName} breakpoint cache add ${fetchedResult.uniqueId} size:${_cache.cachedSize()}');
+        '${ThreadRunner.currentThreadName} breakpoint cache add '
+        '${fetchedResult.uniqueId} size:${_cache.cachedSize()}',
+      );
     }
     _cache.add(key, fetchedResult);
   }
@@ -275,7 +284,9 @@ class QueryIMDBNameDetails
       }
       if (criteria.criteriaTitle == 'nm0000243') {
         print(
-            '${ThreadRunner.currentThreadName}cache miss ${criteria.criteriaTitle}');
+          '${ThreadRunner.currentThreadName}cache miss '
+          '${criteria.criteriaTitle}',
+        );
       }
 
       if (_normalQueue.length < 10 && ThreadRunner.verySlow != priority) {

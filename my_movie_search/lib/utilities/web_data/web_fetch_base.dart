@@ -106,18 +106,24 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   }) async* {
     // if cached yield from cache
     if (myIsResultCached(newCriteria)) {
-      print('base ${ThreadRunner.currentThreadName} '
-          'value was cached ${myFormatInputAsText(newCriteria)}');
+      print(
+        'base ${ThreadRunner.currentThreadName} '
+        'value was cached ${myFormatInputAsText(newCriteria)}',
+      );
       yield* myFetchResultFromCache(newCriteria);
     }
     // if not cached or cache is stale retrieve fresh data
     if (!myIsResultCached(newCriteria) || myIsCacheStale(newCriteria)) {
-      print('base ${ThreadRunner.currentThreadName} ${myDataSourceName()} '
-          'uncached ${myFormatInputAsText(newCriteria)}');
+      print(
+        'base ${ThreadRunner.currentThreadName} ${myDataSourceName()} '
+        'uncached ${myFormatInputAsText(newCriteria)}',
+      );
 
       if (myFormatInputAsText(newCriteria) == 'nm0000243') {
         print(
-            'base ${ThreadRunner.currentThreadName} base uncached ${myFormatInputAsText(newCriteria)} ');
+          'base ${ThreadRunner.currentThreadName} base uncached '
+          '${myFormatInputAsText(newCriteria)} ',
+        );
       }
       _searchResultsreturned = 0;
       criteria = newCriteria;

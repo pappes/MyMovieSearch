@@ -7,7 +7,7 @@ bool useMobileLayout(BuildContext context) {
   return MediaQuery.of(context).size.width < 600;
 }
 
-List<Widget> poster_old(String url, {void Function()? onTap}) {
+List<Widget> posterOld(String url, {void Function()? onTap}) {
   final retval = <Widget>[];
   if (!url.startsWith('http')) {
     retval.add(const Text('NoImage'));
@@ -54,12 +54,6 @@ Widget showImage(String location) {
     ), //Image.network(getBigImage(location)),
     zoomedBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
     hideStatusBarWhileZooming: true,
-    onZoomStart: () {
-      print('Zoom started');
-    },
-    onZoomEnd: () {
-      print('Zoom finished');
-    },
   );
 }
 

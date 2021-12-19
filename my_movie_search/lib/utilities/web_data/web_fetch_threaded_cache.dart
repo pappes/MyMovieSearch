@@ -22,8 +22,10 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
 
     // if cached yield from cache if cache is not stale
     if (_isResultCached(criteria) && !_isCacheStale(criteria)) {
-      print('${ThreadRunner.currentThreadName} '
-          'value was precached ${myFormatInputAsText(criteria)}');
+      print(
+        '${ThreadRunner.currentThreadName} '
+        'value was precached ${myFormatInputAsText(criteria)}',
+      );
       return _fetchResultFromCache(criteria).toList();
     }
     retval = await ThreadRunner.namedThread(priority).run(

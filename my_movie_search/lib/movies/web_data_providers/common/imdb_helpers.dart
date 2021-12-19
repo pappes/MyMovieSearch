@@ -35,7 +35,6 @@ String makeImdbUrl(
     url.write(imdbParentalPath);
   }
   url.write(imdbSuffixURL);
-  print('manufatured url = $url');
   return url.toString();
 }
 
@@ -203,7 +202,6 @@ String getBigImage(String? smallImage) {
       truncated = '$truncated.jpg';
     }
     final retval = Uri.decodeFull(truncated ?? smallImage);
-    print('image $smallImage became $retval');
     return retval;
   }
   return '';

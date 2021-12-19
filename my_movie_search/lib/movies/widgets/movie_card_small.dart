@@ -1,14 +1,6 @@
 import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart'
-    show
-        Widget,
-        Text,
-        ListTile,
-        BuildContext,
-        Navigator,
-        CircularProgressIndicator,
-        Image,
-        NetworkImage;
+    show Widget, Text, ListTile, BuildContext, Navigator, Image, NetworkImage;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
