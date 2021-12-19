@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'collection_extensions.dart';
 
 /// Extend datatype "dynamic" to provide convenience functions.
@@ -9,7 +7,16 @@ extension DynamicHelper on dynamic {
   ///
   /// Sets the value to empty string if it is not currently a string
   ///
-  String dynamicToString(dynamic val) {
+  /// Static verison of the function supplied
+  /// for calling from other static functions e.g.
+  /// x = DynamicHelper.dynamicToString_(y);
+  ///
+  /// Non-static verison of the function supplied
+  /// for simpler call syntax e.g.
+  /// x = dynamicToString(y);
+  ///
+  String dynamicToString(dynamic val) => DynamicHelper.dynamicToString_(val);
+  static String dynamicToString_(dynamic val) {
     if (val is String) {
       return val;
     }
@@ -22,7 +29,16 @@ extension DynamicHelper on dynamic {
   ///     a List<String>
   ///     a json encoded List<String>
   ///
-  List<String> dynamicToStringList(dynamic val) {
+  /// Static verison of the function supplied
+  /// for calling from other static functions e.g.
+  /// x = DynamicHelper.dynamicToStringList_(y);
+  ///
+  /// Non-static verison of the function supplied
+  /// for simpler call syntax e.g.
+  /// x = dynamicToStringList(y);
+  ///
+  List<String> dynamicToStringList(dynamic val) => dynamicToStringList_(val);
+  static List<String> dynamicToStringList_(dynamic val) {
     if (val is String) return ListHelper.fromJson(val);
     if (val is List<String>) return val;
     return [];
@@ -34,7 +50,16 @@ extension DynamicHelper on dynamic {
   ///     a number
   ///     a a string representation of a number
   ///
-  int dynamicToInt(dynamic val) {
+  /// Static verison of the function supplied
+  /// for calling from other static functions e.g.
+  /// x = DynamicHelper.dynamicToInt_(y);
+  ///
+  /// Non-static verison of the function supplied
+  /// for simpler call syntax e.g.
+  /// x = dynamicToInt(y);
+  ///
+  int dynamicToInt(dynamic val) => dynamicToInt_(val);
+  static int dynamicToInt_(dynamic val) {
     if (val is int) return val;
     if (val is String) return int.tryParse(val) ?? 0;
     if (val == null) return 0;
@@ -47,7 +72,16 @@ extension DynamicHelper on dynamic {
   ///     a number
   ///     a a string representation of a number
   ///
-  double dynamicToDouble(dynamic val) {
+  /// Static verison of the function supplied
+  /// for calling from other static functions e.g.
+  /// x = DynamicHelper.dynamicToDouble_(y);
+  ///
+  /// Non-static verison of the function supplied
+  /// for simpler call syntax e.g.
+  /// x = dynamicToDouble(y);
+  ///
+  double dynamicToDouble(dynamic val) => dynamicToDouble_(val);
+  static double dynamicToDouble_(dynamic val) {
     if (val is double) return val;
     if (val is String) return double.tryParse(val) ?? 0;
     if (val == null) return 0;

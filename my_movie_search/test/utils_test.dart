@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/thread.dart';
@@ -23,6 +24,24 @@ Future<int> globalFnAccumulateSlow(int value) async {
 Future<String?> globalFnThreadName(int value) async {
   return ThreadRunner.currentThreadName;
 }
+
+class DynamicHelperTest {
+  String callToString(dynamic val) => dynamicToString(val);
+  static String callToString_(dynamic val) =>
+      DynamicHelper.dynamicToString_(val);
+
+  List<String> callToStringList(dynamic val) => dynamicToStringList(val);
+  static List<String> callToStringList_(dynamic val) =>
+      DynamicHelper.dynamicToStringList_(val);
+
+  int callToInt(dynamic val) => dynamicToInt(val);
+  static int callToInt_(dynamic val) => DynamicHelper.dynamicToInt_(val);
+
+  double callToDouble(dynamic val) => dynamicToDouble(val);
+  static double callToDouble_(dynamic val) =>
+      DynamicHelper.dynamicToDouble_(val);
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -135,10 +154,88 @@ Future main() async {
       expect(await res4, 'Unnamed Thread');
     });
   });
-  group('StringHelper', () {
+
+  group('DynamicHelper', () {
+    // Convert a value to a string - non static version.
+    test('dynamicToString()', () {
+      void testToString(input, expectedOutput) {
+        final text = DynamicHelperTest().callToString(input);
+        expect(text, expectedOutput);
+      }
+
+      testToString('9', '9');
+      testToString(1, '');
+      testToString(1.1, '');
+      testToString(null, '');
+    });
+    // Convert a value to a string - static version.
+    test('dynamicToString_()', () {
+      void testToString(input, expectedOutput) {
+        final text = DynamicHelperTest.callToString_(input);
+        expect(text, expectedOutput);
+      }
+
+      testToString('9', '9');
+      testToString(1, '');
+      testToString(1.1, '');
+      testToString(null, '');
+    });
+
+    // Convert a value to a int - non static version.
+    test('dynamicToInt()', () {
+      void testToInt(input, expectedOutput) {
+        final text = DynamicHelperTest().callToInt(input);
+        expect(text, expectedOutput);
+      }
+
+      testToInt('9', 9);
+      testToInt(1, 1);
+      testToInt(1.1, 0);
+      testToInt(null, 0);
+    });
+    // Convert a value to a int - static version.
+    test('dynamicToInt_()', () {
+      void testToInt(input, expectedOutput) {
+        final text = DynamicHelperTest.callToInt_(input);
+        expect(text, expectedOutput);
+      }
+
+      testToInt('9', 9);
+      testToInt(1, 1);
+      testToInt(1.1, 0);
+      testToInt(null, 0);
+    });
+
+    // Convert a value to a double - non static version.
+    test('dynamicToDouble()', () {
+      void testToDouble(input, expectedOutput) {
+        final text = DynamicHelperTest().callToDouble(input);
+        expect(text, expectedOutput);
+      }
+
+      testToDouble('9', 9);
+      testToDouble(1, 1);
+      testToDouble(1.1, 1.1);
+      testToDouble(null, 0);
+    });
+    // Convert a value to a double - static version.
+    test('dynamicToDouble_()', () {
+      void testToDouble(input, expectedOutput) {
+        final text = DynamicHelperTest.callToDouble_(input);
+        expect(text, expectedOutput);
+      }
+
+      testToDouble('9', 9);
+      testToDouble(1, 1);
+      testToDouble(1.1, 1.1);
+      testToDouble(null, 0);
+    });
+  });
+
+  group('DoubleHelper', () {
     // Convert a string to a number, stripping comma seperators and
     // ignoring non numeric input.
-    test('toNumber double', () {
+    test('fromText()', () {
       void testToNumber(input, expectedOutput) {
         final number = DoubleHelper.fromText(input);
         expect(number, expectedOutput);
@@ -151,10 +248,8 @@ Future main() async {
       testToNumber('9,999.99', 9999.99);
       testToNumber('number', null);
     });
-  });
-  group('StringHelper', () {
     // Convert a string to a number, substituting num values where required.
-    test('toNumber null substitution', () {
+    test('fromText() null substitution', () {
       void testToNumber(input, expectedOutput) {
         final number = DoubleHelper.fromText(input, nullValueSubstitute: -1);
         expect(number, expectedOutput);
@@ -168,7 +263,7 @@ Future main() async {
       testToNumber('number', -1);
     });
     // Convert a string to a number, substituting 0 values where required.
-    test('toNumber zero substitution', () {
+    test('fromText() zero substitution', () {
       void testToNumber(input, expectedOutput) {
         final number = DoubleHelper.fromText(input, zeroValueSubstitute: null);
         expect(number, expectedOutput);
@@ -181,7 +276,7 @@ Future main() async {
       testToNumber('0', null);
     });
     // Convert a string to a number, rounding decimal values where required.
-    test('toNumber int', () {
+    test('fromText() int', () {
       void testToNumber(input, expectedOutput) {
         final number = DoubleHelper.fromText(input)?.round();
         expect(number, expectedOutput);
@@ -196,7 +291,7 @@ Future main() async {
     });
   });
 
-  group('ListStringHelper', () {
+  group('ListHelper', () {
     group('fromJson', () {
       /// Convert JSON [input] to a [List] of [String] and compare to [expectedOutput]
       void testFromJson(String? input, List<String> expectedOutput) {

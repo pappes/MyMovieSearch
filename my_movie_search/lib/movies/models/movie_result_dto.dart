@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:math' show max;
 
 import 'package:flutter/material.dart';
-import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 
@@ -95,8 +94,9 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   }
 
   @override
-  MovieResultDTO fromPrimitives(Object? data) {
-    if (data != null && data is String) {
+  MovieResultDTO fromPrimitives(Object? data) => dtoFromPrimitives(data);
+  MovieResultDTO dtoFromPrimitives(Object? data) {
+    if (data is String) {
       final decoded = jsonDecode(data);
       if (decoded is Map) {
         return decoded.toMovieResultDTO();
@@ -124,11 +124,12 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
   }
 
   @override
-  List<MovieResultDTO> fromPrimitives(Object? data) {
-    if (data != null && data is String) {
+  List<MovieResultDTO> fromPrimitives(Object? data) => dtoFromPrimitives(data);
+  List<MovieResultDTO> dtoFromPrimitives(Object? data) {
+    if (data is String) {
       final decoded = jsonDecode(data);
       if (decoded is List) {
-        return value.decodeList(decoded);
+        return ListDTOConversion.decodeList(decoded);
       }
     }
     return [];
@@ -143,7 +144,7 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
 extension ListDTOConversion on Iterable<MovieResultDTO> {
   /// Convert a [List] of json encoded [String]s into a [List] of [MovieResultDTO] objects
   ///
-  List<MovieResultDTO> decodeList(Iterable<dynamic> encoded) {
+  static List<MovieResultDTO> decodeList(Iterable<dynamic> encoded) {
     final retval = <MovieResultDTO>[];
     for (final json in encoded) {
       final decoded = jsonDecode(json.toString());
@@ -163,7 +164,7 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   }
 }
 
-extension MapDTOConversion on Map {
+extension MapResultDTOConversion on Map {
   /// Convert a [Map] into a [MovieResultDTO] object
   ///
   MovieResultDTO toMovieResultDTO() {

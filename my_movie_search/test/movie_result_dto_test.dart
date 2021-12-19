@@ -177,7 +177,7 @@ void main() {
 
     // Convert a dto to a map.
     test('single_DTO', () {
-      final dto = makeDTO('abc');
+      final dto = makeResultDTO('abc');
 
       final map = dto.toMap(excludeCopywritedData: false);
 
@@ -186,7 +186,7 @@ void main() {
 
     // Convert a dto to a map excluding copywrited content.
     test('copywrite_DTO', () {
-      final dto = makeDTO('abc');
+      final dto = makeResultDTO('abc');
 
       final map = dto.toMap();
       dto.description = '';
@@ -203,13 +203,12 @@ void main() {
     // Convert a list of dtos to a JSON and then convert the JSON back to a list.
     test('multiple_DTO', () {
       final list = <MovieResultDTO>[];
-      list.add(makeDTO('abc'));
-      list.add(makeDTO('def'));
-      list.add(makeDTO('ghi'));
+      list.add(makeResultDTO('abc'));
+      list.add(makeResultDTO('def'));
+      list.add(makeResultDTO('ghi'));
       final encoded = list.encodeList();
 
-      final emptylist = <MovieResultDTO>[];
-      final decoded = emptylist.decodeList(encoded);
+      final decoded = ListDTOConversion.decodeList(encoded);
 
       expect(list[0], MovieResultDTOMatcher(decoded[0]));
       expect(list[1], MovieResultDTOMatcher(decoded[1]));
@@ -217,7 +216,7 @@ void main() {
     });
     // Convert a restorable dto to JSON and then convert the JSON to a restorable dto.
     test('RestorableMovie', () {
-      final movie = makeDTO('abcd');
+      final movie = makeResultDTO('abcd');
       final rtp = RestorationTestParent(movie.uniqueId);
       rtp.restoreState(null, true);
 
@@ -231,9 +230,9 @@ void main() {
     // Convert a restorable dto list to JSON and then convert the JSON to a restorable dto list.
     test('RestorableMovieList', () {
       final list = <MovieResultDTO>[];
-      list.add(makeDTO('abc'));
-      list.add(makeDTO('def'));
-      list.add(makeDTO('ghi'));
+      list.add(makeResultDTO('abc'));
+      list.add(makeResultDTO('def'));
+      list.add(makeResultDTO('ghi'));
       final rtp = RestorationTestParent(list[1].uniqueId);
       rtp.restoreState(null, true);
 

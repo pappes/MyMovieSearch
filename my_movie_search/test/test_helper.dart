@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Helper functions
@@ -128,7 +129,7 @@ Stream<MovieResultDTO> streamMovieResultDTOFromJsonMap(
 }
 
 /// Helper function to make a unique dto containing unique values.
-MovieResultDTO makeDTO(String sample) {
+MovieResultDTO makeResultDTO(String sample) {
   final dto = MovieResultDTO();
 
   dto.source = DataSourceType.wiki;
@@ -148,5 +149,20 @@ MovieResultDTO makeDTO(String sample) {
   dto.language = LanguageType.mostlyEnglish;
   dto.languages = ['${sample}_language1', '${sample}_language2'];
   dto.genres = ['${sample}_genre1', '${sample}_genre2'];
+  dto.keywords = ['${sample}_keyword1', '${sample}_keyword2'];
+  return dto;
+}
+
+/// Helper function to make a unique dto containing unique values.
+SearchCriteriaDTO makeCriteriaDTO(String sample) {
+  final dto = SearchCriteriaDTO();
+
+  dto.criteriaSource = SearchCriteriaSource.google;
+  dto.criteriaTitle = '${sample}_criteriaTitle';
+  dto.searchId = '${sample}_searchId';
+  dto.criteriaList = [
+    makeResultDTO('first'),
+    makeResultDTO('second'),
+  ];
   return dto;
 }
