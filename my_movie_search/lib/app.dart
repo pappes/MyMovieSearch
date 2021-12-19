@@ -64,6 +64,8 @@ class _AppViewState extends State<AppView> {
       navigatorKey: _navigatorKey,
       //home: const MovieSearchCriteriaPage(movieRepository),
       //   home: MovieHomePage(),
+      home: const MovieSearchCriteriaPage(),
+      //onGenerateRoute: (_) => MovieSearchCriteriaPage.route(),
       title: 'My Movie Search',
       theme: ThemeData(
         //brightness: Brightness.light,
@@ -94,7 +96,6 @@ class _AppViewState extends State<AppView> {
           child: child,
         );
       },*/
-      onGenerateRoute: (_) => MovieSearchCriteriaPage.route(),
     );
   }
 }

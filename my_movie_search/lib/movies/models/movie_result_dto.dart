@@ -3,6 +3,7 @@ import 'dart:math' show max;
 
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 
 import 'metadata_dto.dart';
@@ -163,47 +164,22 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
 }
 
 extension MapDTOConversion on Map {
-  String _getString(dynamic val) {
-    if (val is String) return val;
-    return '';
-  }
-
-  List<String> _getStringList(dynamic val) {
-    if (val is String) return ListHelper.fromJson(val);
-    if (val is List<String>) return val;
-    return [];
-  }
-
-  int _getInt(dynamic val) {
-    if (val is int) return val;
-    if (val is String) return int.tryParse(val) ?? 0;
-    if (val == null) return 0;
-    return int.tryParse(val.toString()) ?? 0;
-  }
-
-  double _getDouble(dynamic val) {
-    if (val is double) return val;
-    if (val is String) return double.tryParse(val) ?? 0;
-    if (val == null) return 0;
-    return 0;
-  }
-
   /// Convert a [Map] into a [MovieResultDTO] object
   ///
   MovieResultDTO toMovieResultDTO() {
     final dto = MovieResultDTO();
-    dto.uniqueId = _getString(this[movieResultDTOUniqueId]);
-    dto.alternateId = _getString(this[movieResultDTOAlternateId]);
-    dto.title = _getString(this[movieResultDTOTitle]);
-    dto.alternateTitle = _getString(this[movieResultDTOAlternateTitle]);
+    dto.uniqueId = dynamicToString(this[movieResultDTOUniqueId]);
+    dto.alternateId = dynamicToString(this[movieResultDTOAlternateId]);
+    dto.title = dynamicToString(this[movieResultDTOTitle]);
+    dto.alternateTitle = dynamicToString(this[movieResultDTOAlternateTitle]);
 
-    dto.description = _getString(this[movieResultDTODescription]);
-    dto.year = _getInt(this[movieResultDTOYear]);
-    dto.yearRange = _getString(this[movieResultDTOYearRange]);
-    dto.userRating = _getDouble(this[movieResultDTOUserRating]);
-    dto.userRatingCount = _getInt(this[movieResultDTOUserRatingCount]);
-    dto.runTime = Duration(seconds: _getInt(this[movieResultDTORunTime]));
-    dto.imageUrl = _getString(this[movieResultDTOImageUrl]);
+    dto.description = dynamicToString(this[movieResultDTODescription]);
+    dto.year = dynamicToInt(this[movieResultDTOYear]);
+    dto.yearRange = dynamicToString(this[movieResultDTOYearRange]);
+    dto.userRating = dynamicToDouble(this[movieResultDTOUserRating]);
+    dto.userRatingCount = dynamicToInt(this[movieResultDTOUserRatingCount]);
+    dto.runTime = Duration(seconds: dynamicToInt(this[movieResultDTORunTime]));
+    dto.imageUrl = dynamicToString(this[movieResultDTOImageUrl]);
 
     dto.source = getEnumValue<DataSourceType>(
           this[movieResultDTOSource],
@@ -226,9 +202,9 @@ extension MapDTOConversion on Map {
         ) ??
         dto.language;
 
-    dto.languages = _getStringList(this[movieResultDTOLanguages]);
-    dto.genres = _getStringList(this[movieResultDTOGenres]);
-    dto.keywords = _getStringList(this[movieResultDTOKeywords]);
+    dto.languages = dynamicToStringList(this[movieResultDTOLanguages]);
+    dto.genres = dynamicToStringList(this[movieResultDTOGenres]);
+    dto.keywords = dynamicToStringList(this[movieResultDTOKeywords]);
     //TODO related
     return dto;
   }
