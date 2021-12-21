@@ -181,6 +181,37 @@ Future main() async {
       testToString(null, '');
     });
 
+    // Convert a value to List<string> - non static version.
+    test('dynamicToString()', () {
+      void testToStringList(input, expectedOutput) {
+        final text = DynamicHelperTest().callToStringList(input);
+        expect(text, expectedOutput);
+      }
+
+      testToStringList(['9'], ['9']);
+      testToStringList(['9', '8'], ['9', '8']);
+      testToStringList('[9,8]', ['9', '8']);
+      testToStringList(1, []);
+      testToStringList(1.1, []);
+      testToStringList(null, []);
+    });
+    // Convert a value to List<string> - static version.
+    test('dynamicToString_()', () {
+      void testToStringList(input, expectedOutput) {
+        final text = DynamicHelperTest.callToStringList_(input);
+        expect(text, expectedOutput);
+      }
+
+      testToStringList(['9'], ['9']);
+      testToStringList(['9', '8'], ['9', '8']);
+      testToStringList('[9,8]', ['9', '8']);
+      testToStringList(1, []);
+      testToStringList(1.1, []);
+      testToStringList(null, []);
+    });
+
+    //TODO: test string list
+
     // Convert a value to a int - non static version.
     test('dynamicToInt()', () {
       void testToInt(input, expectedOutput) {
