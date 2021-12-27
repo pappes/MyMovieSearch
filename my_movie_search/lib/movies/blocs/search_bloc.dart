@@ -69,7 +69,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   /// Clean up the results of any previous search and submit the new search criteria.
   void _initiateSearch(SearchCriteriaDTO criteria, Emitter<SearchState> emit) {
-    isClosed ? null : emit(const SearchState.awaitingInput());
+    if (!isClosed) {
+      emit(const SearchState.awaitingInput());
+    }
     movieRepository.close();
     _allResults.clear();
     sortedResults.clear();
