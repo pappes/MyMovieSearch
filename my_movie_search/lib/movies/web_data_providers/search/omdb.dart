@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart' show describeEnum;
-import 'package:flutter_dotenv/flutter_dotenv.dart' show env;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -51,8 +51,8 @@ class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// API call to OMDB returning the top 10 matching results for [searchText].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final omdbKey =
-        env["OMDB_KEY"]; // From the file assets/.env (not source controlled)
+    final omdbKey = dotenv
+        .env["OMDB_KEY"]; // From the file assets/.env (not source controlled)
     return Uri.parse(
       '$_baseURL$omdbKey&s=$searchCriteria&page=$pageNumber',
     );

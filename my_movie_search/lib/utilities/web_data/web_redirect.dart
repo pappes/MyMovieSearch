@@ -2,7 +2,7 @@
 library pappes.utilites;
 
 import 'package:flutter/foundation.dart' show kIsWeb;
-import 'package:flutter_dotenv/flutter_dotenv.dart' as dotnv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 /// Isolate web requests from cross origin vunerabilities.
 ///
@@ -10,7 +10,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart' as dotnv;
 class WebRedirect {
   //TODO make origin URL optional
   static const originURL = 'https://www.imdb.com';
-  static final tunnelBaseURL = dotnv.env['TUNNEL_ADDRESS'];
+  static final tunnelBaseURL = dotenv.env['TUNNEL_ADDRESS'];
 
   /// Determine if we need to invoke CORS security circumventions
   ///

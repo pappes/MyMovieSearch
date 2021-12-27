@@ -1,5 +1,5 @@
 // ignore_for_file: avoid_classes_with_only_static_members
-import 'package:flutter_dotenv/flutter_dotenv.dart' as dotenv;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 import '../secret.dart';
 
@@ -15,10 +15,10 @@ class EnvironmentVars {
   static Future<Map<String, String>> init({Logger? logger}) async {
     // Load variable from operating system environmnt or from .env file
     //final _logger = logger ?? Logger();
-    await dotenv.testLoad(fileInput: 'OFFLINE=false');
+    dotenv.testLoad(fileInput: 'OFFLINE=false');
     /*try {
-      await DotEnv.load(fileName: '.env');
-      await DotEnv.load(mergeWith: Platform.environment);
+      await dotenv.load(fileName: '.env');
+      await dotenv.load(mergeWith: Platform.environment);
     } catch (e) {
       if (!kIsWeb) {
         _logger.e('Unexpect Platform.environment lookup error '
