@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart' show Bloc;
+import 'package:bloc/bloc.dart' show BlocOverrides;
 import 'package:flutter/material.dart' show runApp;
 
 import 'package:my_movie_search/app.dart' show MMSearchApp;
@@ -14,9 +14,12 @@ Future main() async {
     (env) => OnlineOfflineSelector.init(env["OFFLINE"]),
   );
 
-  Bloc.observer = MMSearchObserver();
-
-  runApp(
-    MMSearchApp(movieRepository: MovieSearchRepository()),
+  BlocOverrides.runZoned(
+    () {
+      runApp(
+        MMSearchApp(movieRepository: MovieSearchRepository()),
+      );
+    },
+    blocObserver: MMSearchObserver(),
   );
 }

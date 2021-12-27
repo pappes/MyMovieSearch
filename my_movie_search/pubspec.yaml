@@ -24,9 +24,9 @@ dependencies:
   flutter:
     sdk: flutter
   
-  bloc: ^7.2.1
+  bloc: ^8.0.0
   equatable: ^2.0.0                     # Simplify object comparisons.
-  flutter_bloc: ^7.0.0                  # Assist with the BLoC design pattern.
+  flutter_bloc: ^8.0.0                  # Assist with the BLoC design pattern.
   flutter_custom_tabs: ^1.0.2           # replace webview with andorid chrome browser
   flutter_dotenv: ^4.0.0-nullsafety.0   # Read secrests and settings from .env file.
   html: ^0.15.0                         # Dart dom and html utilities.
