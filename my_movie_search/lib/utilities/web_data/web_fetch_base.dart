@@ -4,13 +4,12 @@ import 'dart:async' show StreamController, FutureOr;
 import 'dart:convert' show json, utf8;
 
 import 'package:my_movie_search/utilities/thread.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:universal_io/io.dart'
     show
         HttpClient,
         HttpClientResponse,
         HttpHeaders; // limit inclusions to reduce size
-
-import 'online_offline_search.dart';
 
 typedef DataSourceFn = FutureOr<Stream<String>> Function(dynamic s);
 typedef TransformFn = List Function(Map? map);

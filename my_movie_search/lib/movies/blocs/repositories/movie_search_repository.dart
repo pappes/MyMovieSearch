@@ -1,10 +1,10 @@
+import 'package:my_movie_search/movies/blocs/repositories/base_movie_repository.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/google.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
-import 'base_movie_repository.dart';
 
 /// BlockRepository to consolidate data retrieval from multiple search
 /// and detail providers using the WebFetch framework.

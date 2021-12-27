@@ -1,7 +1,7 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
-import '../secret.dart';
+import 'package:my_movie_search/secret.dart';
 
 /// Read in application settings for the operating system en
 ///

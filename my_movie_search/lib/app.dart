@@ -14,9 +14,9 @@ import 'package:flutter/material.dart'
         Widget;
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import 'movies/blocs/repositories/movie_search_repository.dart';
-import 'movies/blocs/search_bloc.dart';
-import 'movies/screens/movie_search_criteria.dart';
+import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
+import 'package:my_movie_search/movies/blocs/search_bloc.dart';
+import 'package:my_movie_search/movies/screens/movie_search_criteria.dart';
 
 /// {@template mmsearch_app}
 /// A [MaterialApp] which sets the `home` to [MovieSearchCriteriaPage].

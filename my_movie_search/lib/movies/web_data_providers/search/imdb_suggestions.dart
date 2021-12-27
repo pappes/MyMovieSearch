@@ -4,11 +4,11 @@ import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_suggestion.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_suggestions.dart';
 import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
-import 'converters/imdb_suggestion.dart';
-import 'offline/imdb_suggestions.dart';
 
 const _defaultSearchResultsLimit = 10;
 
