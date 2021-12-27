@@ -2,9 +2,11 @@ import 'dart:async' show StreamSubscription;
 
 import 'package:bloc/bloc.dart' show Bloc, Emitter;
 import 'package:equatable/equatable.dart';
+
+import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
+
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'repositories/movie_search_repository.dart';
 
 part 'bloc_parts/search_event.dart';
 part 'bloc_parts/search_state.dart';

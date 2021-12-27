@@ -59,14 +59,17 @@ class ImdbMoviePageConverter {
         ) ??
         movie.censorRating;
 
-    movie.userRating = DoubleHelper.fromText(
-      map[outerElementRating]?[innerElementRatingValue],
-      nullValueSubstitute: movie.userRating,
-    )!;
-    movie.userRatingCount = IntHelper.fromText(
-      map[outerElementRating]?[innerElementRatingCount],
-      nullValueSubstitute: movie.userRatingCount,
-    )!;
+    if (map.containsKey(outerElementRating) && map[outerElementRating] is Map) {
+      final ratingMap = map[outerElementRating] as Map;
+      movie.userRating = DoubleHelper.fromText(
+        ratingMap[innerElementRatingValue],
+        nullValueSubstitute: movie.userRating,
+      )!;
+      movie.userRatingCount = IntHelper.fromText(
+        ratingMap[innerElementRatingCount],
+        nullValueSubstitute: movie.userRatingCount,
+      )!;
+    }
 
     final year = getYear(map[outerElementYear]?.toString());
     if (null != year) {

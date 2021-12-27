@@ -6,13 +6,13 @@ import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_name.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_name.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
-import 'converters/imdb_name.dart';
-import 'offline/imdb_name.dart';
 
 /// Implements [WebFetchBase] for retrieving person details from IMDB.
 class QueryIMDBNameDetails
@@ -210,22 +210,20 @@ class QueryIMDBNameDetails
 
   /// Extract Official name of person from web page.
   void _scrapeName(Document document, Map movieData) {
-    final oldName = movieData[outerElementOfficialTitle];
-    movieData[outerElementOfficialTitle] = '';
+    final title = StringBuffer();
     var section = document.querySelector('h1[data-testid="hero-Name-block"]');
     section ??=
         document.querySelector('td[class*="name-overview-widget__section"]');
     final spans = section?.querySelector('h1')?.querySelectorAll('span');
     if (null != spans) {
       for (final span in spans) {
-        movieData[outerElementOfficialTitle] += span.text;
+        title.write(span.text);
       }
     }
-    if ('' == movieData[outerElementOfficialTitle]) {
-      movieData[outerElementOfficialTitle] = oldName;
+    if (title.isEmpty) {
+      title.write(movieData[outerElementOfficialTitle]);
     }
-    movieData[outerElementOfficialTitle] =
-        htmlDecode.convert(movieData[outerElementOfficialTitle].toString());
+    movieData[outerElementOfficialTitle] = htmlDecode.convert(title.toString());
   }
 
   /// Search for movie poster.
@@ -244,7 +242,7 @@ class QueryIMDBNameDetails
 
   /// Extract the movies for the current person.
   void _scrapeRelated(Document document, Map movieData) {
-    movieData[outerElementRelated] = [];
+    final related = [];
     final filmography = document.querySelector('#filmography');
     if (null != filmography) {
       var headerText = '';
@@ -253,10 +251,11 @@ class QueryIMDBNameDetails
           headerText = child.attributes['data-category'] ?? '?';
         } else {
           final movieList = _getMovieList(child.children);
-          movieData[outerElementRelated].add({headerText: movieList});
+          related.add({headerText: movieList});
         }
       }
     }
+    (movieData[outerElementRelated] as List).addAll(related);
   }
 
   List<Map> _getMovieList(List<Element> rows) {
