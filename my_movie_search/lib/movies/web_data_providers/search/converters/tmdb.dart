@@ -41,13 +41,9 @@ class TmdbMovieSearchConverter {
     final searchResults = <MovieResultDTO>[];
 
     final int resultsMatched = map[outerElementSearchSuccess] as int? ?? 0;
-
-    if (resultsMatched > 0 &&
-        map.containsKey(outerElementResultsCollection) &&
-        map[outerElementResultsCollection] is List) {
-      for (final movie in map[outerElementResultsCollection]) {
-        searchResults.add(dtoFromMap(movie as Map));
-      }
+    if (resultsMatched > 0) {
+      map[outerElementResultsCollection]
+          .forEach((movie) => searchResults.add(dtoFromMap(movie as Map)));
     } else {
       final error = MovieResultDTO();
       error.title = map[outerElementFailureReason]?.toString() ??

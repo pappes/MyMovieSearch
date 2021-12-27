@@ -24,9 +24,8 @@ import 'package:flutter/material.dart'
         TextInputAction,
         Widget;
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/screens/movie_search_results.dart'
-    show MovieSearchResultsNewPage;
-import 'package:my_movie_search/movies/screens/styles.dart';
+import 'movie_search_results.dart' show MovieSearchResultsNewPage;
+import 'styles.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
   const MovieSearchCriteriaPage({Key? key}) : super(key: key);

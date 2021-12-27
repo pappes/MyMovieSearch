@@ -1,4 +1,4 @@
-import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
+import 'collection_extensions.dart';
 
 /// Extend datatype "dynamic" to provide convenience functions.
 ///

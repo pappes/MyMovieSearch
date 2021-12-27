@@ -9,14 +9,14 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
+import 'converters/imdb_title.dart';
+import 'offline/imdb_title.dart';
 
 const searchResultsTable = 'findList';
 const columnMovieText = 'result_text';
@@ -229,7 +229,7 @@ class QueryIMDBTitleDetails
       movieData[outerElementLanguages] = [];
       for (final item
           in languageHtml.querySelectorAll('a[href*="language="]')) {
-        (movieData[outerElementLanguages] as List).add(item.text);
+        movieData[outerElementLanguages].add(item.text);
       }
 
       for (final String languageText in movieData[outerElementLanguages]) {
@@ -299,7 +299,7 @@ class QueryIMDBTitleDetails
         recommendation.querySelector('span.ipc-rating-star--imdb')?.text; //6.9
     attributes[outerElementOfficialTitle] =
         htmlDecode.convert(attributes[outerElementOfficialTitle].toString());
-    (movieData[outerElementRelated] as List).add(attributes);
+    movieData[outerElementRelated].add(attributes);
   }
 
   void _getRecomendationOld(Map movieData, Element recommendation) {
@@ -333,7 +333,7 @@ class QueryIMDBTitleDetails
         htmlDecode.convert(attributes[outerElementOfficialTitle].toString());
     attributes[outerElementDescription] =
         htmlDecode.convert(attributes[outerElementDescription].toString());
-    (movieData[outerElementRelated] as List).add(attributes);
+    movieData[outerElementRelated].add(attributes);
   }
 
   Future _fetchAdditionalPersonDetails(dynamic people) async {

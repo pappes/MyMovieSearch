@@ -93,12 +93,10 @@ class ThreadRunner {
 
     // Execute requests as they are received.
     await for (final request in inboundPort) {
-      request as List;
       final incommingMessage = request[0] as Map;
       final msgOutboundPort = request[1] as SendPort;
       final fn = incommingMessage['fn'] as Function;
       final parameter = incommingMessage['param'];
-      // ignore: avoid_dynamic_calls
       final result = await fn(parameter);
       msgOutboundPort.send(result);
     }

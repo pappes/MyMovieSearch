@@ -2,9 +2,10 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart' show Equatable;
 import 'package:flutter/material.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
+
+import 'movie_result_dto.dart';
 
 class SearchRequest extends Equatable {
   const SearchRequest(this.title);

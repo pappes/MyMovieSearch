@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'dart:math' show max;
 
 import 'package:flutter/material.dart';
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
+
+import 'metadata_dto.dart';
 
 class MovieResultDTO {
   DataSourceType source = DataSourceType.none;
