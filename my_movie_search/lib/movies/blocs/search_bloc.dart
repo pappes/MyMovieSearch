@@ -1,6 +1,6 @@
 import 'dart:async' show StreamSubscription;
 
-import 'package:bloc/bloc.dart' show Bloc;
+import 'package:bloc/bloc.dart' show Bloc, Emitter;
 import 'package:equatable/equatable.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -19,7 +19,21 @@ part 'bloc_parts/search_state.dart';
 /// In progress search results can be accessed from [SearchBloc].[sortedResults].
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc({required this.movieRepository})
-      : super(const SearchState.awaitingInput());
+      : super(const SearchState.awaitingInput()) {
+    on<SearchCompleted>(
+      (event, emit) => emit(SearchState.displayingResults(_searchProgress)),
+    );
+    on<SearchDataReceived>(
+      (event, emit) => emit(SearchState.displayingResults(_searchProgress)),
+    );
+    on<SearchCancelled>(
+      (event, emit) => emit(const SearchState.awaitingInput()),
+    );
+    on<SearchRequested>((event, emit) {
+      emit(const SearchState.awaitingInput());
+      _initiateSearch(event.criteria, emit);
+    });
+  }
 
   final MovieSearchRepository movieRepository;
   StreamSubscription<MovieResultDTO>? _searchStatusSubscription;
@@ -27,19 +41,19 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   List<MovieResultDTO> sortedResults = [];
   double _searchProgress = 0.0; // Value representing the search progress.
 
-  @override
+  /*@override
   Stream<SearchState> mapEventToState(
     SearchEvent event,
   ) async* {
-    if (event is SearchCompleted || event is SearchDataReceived) {
+    if (event is SearchCompleted) {
       yield SearchState.displayingResults(_searchProgress);
     } else if (event is SearchCancelled) {
       yield const SearchState.awaitingInput();
     } else if (event is SearchRequested) {
       yield SearchState.searching(SearchRequest(event.criteria.criteriaTitle));
-      _initiateSearch(event.criteria);
+      //_initiateSearch(event.criteria);
     }
-  }
+  }*/
 
   @override
   // Clean up all open objects.
@@ -50,7 +64,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   /// Clean up the results of any previous search and submit the new search criteria.
-  void _initiateSearch(SearchCriteriaDTO criteria) {
+  void _initiateSearch(SearchCriteriaDTO criteria, Emitter<SearchState> emit) {
+    emit(const SearchState.awaitingInput());
     movieRepository.close();
     _allResults.clear();
     sortedResults.clear();
