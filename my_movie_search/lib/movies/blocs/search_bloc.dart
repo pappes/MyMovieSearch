@@ -21,16 +21,20 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc({required this.movieRepository})
       : super(const SearchState.awaitingInput()) {
     on<SearchCompleted>(
-      (event, emit) => emit(SearchState.displayingResults(_searchProgress)),
+      (event, emit) => isClosed
+          ? null
+          : emit(SearchState.displayingResults(_searchProgress)),
     );
     on<SearchDataReceived>(
-      (event, emit) => emit(SearchState.displayingResults(_searchProgress)),
+      (event, emit) => isClosed
+          ? null
+          : emit(SearchState.displayingResults(_searchProgress)),
     );
     on<SearchCancelled>(
-      (event, emit) => emit(const SearchState.awaitingInput()),
+      (event, emit) =>
+          isClosed ? null : emit(const SearchState.awaitingInput()),
     );
     on<SearchRequested>((event, emit) {
-      emit(const SearchState.awaitingInput());
       _initiateSearch(event.criteria, emit);
     });
   }
@@ -65,7 +69,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   /// Clean up the results of any previous search and submit the new search criteria.
   void _initiateSearch(SearchCriteriaDTO criteria, Emitter<SearchState> emit) {
-    emit(const SearchState.awaitingInput());
+    isClosed ? null : emit(const SearchState.awaitingInput());
     movieRepository.close();
     _allResults.clear();
     sortedResults.clear();
