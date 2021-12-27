@@ -51,7 +51,9 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     _searchId = widget.criteria.searchId;
     //TODO: use a factory in inject search bloc instances _searchBloc = BlocProvider.of<SearchBloc>(context);
     _searchBloc = SearchBloc(movieRepository: MovieSearchRepository());
-    _searchBloc!.add(SearchRequested(widget.criteria));
+    if (_searchBloc != null && !_searchBloc!.isClosed) {
+      _searchBloc!.add(SearchRequested(widget.criteria));
+    }
   }
 
   @override

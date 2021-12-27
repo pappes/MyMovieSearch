@@ -72,7 +72,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     _searchStatusSubscription = movieRepository
         .search(criteria)
         .listen((dto) => _receiveDTO(dto))
-      ..onDone(() => add(const SearchCompleted()));
+      ..onDone(() => isClosed ? null : add(const SearchCompleted()));
   }
 
   /// Maintain map of fetched movie snippets and details.
@@ -102,7 +102,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     sortedResults.sort((a, b) => b.compareTo(a));
     _updateProgress();
 
-    add(SearchDataReceived(sortedResults));
+    if (!isClosed) {
+      add(SearchDataReceived(sortedResults));
+    }
   }
 
   /// Calculate a value representing the search progress.
