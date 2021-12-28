@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   
+  # Note: use "dart pub outdated" to find libraries that should be upgraded
   bloc: ^8.0.1
   equatable: ^2.0.3                     # Simplify object comparisons.
   flutter_bloc: ^8.0.0                  # Assist with the BLoC design pattern.

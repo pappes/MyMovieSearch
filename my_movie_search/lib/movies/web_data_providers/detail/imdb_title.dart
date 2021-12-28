@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert' show json;
-import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
 import 'package:html_unescape/html_unescape_small.dart';
@@ -33,7 +32,7 @@ class QueryIMDBTitleDetails
   /// Describe where the data is comming from.
   @override
   String myDataSourceName() {
-    return describeEnum(DataSourceType.imdb);
+    return DataSourceType.imdb.name;
   }
 
   /// Static snapshot of data for offline operation.

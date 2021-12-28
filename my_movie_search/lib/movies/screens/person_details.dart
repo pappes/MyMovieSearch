@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -126,7 +125,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   Widget leftColumn() {
     return Wrap(
       children: <Widget>[
-        Text('Source: ${describeEnum(_person.source)}      '),
+        Text('Source: ${_person.source.name}      '),
         Text('UniqueId: ${_person.uniqueId}'),
         ElevatedButton(
           onPressed: () => viewWebPage(

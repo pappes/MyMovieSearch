@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart' show describeEnum;
-
 import 'package:html/dom.dart' show Element;
 import 'package:html/parser.dart' show parse;
 
@@ -23,7 +21,7 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Describe where the data is comming from.
   @override
   String myDataSourceName() {
-    return describeEnum(DataSourceType.imdbSearch);
+    return DataSourceType.imdbSearch.name;
   }
 
   /// Static snapshot of data for offline operation.

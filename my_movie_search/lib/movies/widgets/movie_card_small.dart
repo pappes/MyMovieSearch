@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart'
     show Widget, Text, ListTile, BuildContext, Navigator, Image, NetworkImage;
 
@@ -22,18 +21,17 @@ class MovieTile extends ListTile {
   static Widget _getTitle(MovieResultDTO movie) {
     return Text(
       '${movie.title}(${movie.yearRange == '' ? movie.year : movie.yearRange}, '
-      '${describeEnum(movie.source)}), ${describeEnum(movie.language)})',
+      '${movie.source.name}), ${movie.language.name})',
       textScaleFactor: 1.0,
     );
   }
 
   static Widget _getDescription(MovieResultDTO movie) {
     final rating = (movie.censorRating != CensorRatingType.none)
-        ? '${describeEnum(movie.censorRating)} '
+        ? '${movie.censorRating.name} '
         : '';
-    final content = (movie.type != MovieContentType.none)
-        ? '${describeEnum(movie.type)}    '
-        : '';
+    final content =
+        (movie.type != MovieContentType.none) ? '${movie.type.name}    ' : '';
     final alternateTitle =
         (movie.alternateTitle.isEmpty) ? '' : '${movie.alternateTitle} ';
     final ratingCount = (movie.userRatingCount > 0)

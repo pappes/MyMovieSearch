@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart' show describeEnum;
 import 'package:flutter/material.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -165,7 +164,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Type: ${describeEnum(_movie.type)}'),
+          Text('Type: ${_movie.type.name}'),
           Text(
             'User Rating: ${_movie.userRating.toString()} '
             '(${formatter.format(_movie.userRatingCount)})',
@@ -174,7 +173,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
             children: <Widget>[
               GestureDetector(
                 child: Text(
-                  'Censor Rating: ${describeEnum(_movie.censorRating)}     ',
+                  'Censor Rating: ${_movie.censorRating.name}     ',
                 ),
                 onTap: () => viewWebPage(
                   makeImdbUrl(
@@ -185,14 +184,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
                   context,
                 ),
               ),
-              Text('Language: ${describeEnum(_movie.language)}'),
+              Text('Language: ${_movie.language.name}'),
             ],
           ),
         ],
       ),
       Wrap(
         children: <Widget>[
-          Text('Source: ${describeEnum(_movie.source)}      '),
+          Text('Source: ${_movie.source.name}      '),
           Text('UniqueId: ${_movie.uniqueId}'),
           ElevatedButton(
             onPressed: () => viewWebPage(

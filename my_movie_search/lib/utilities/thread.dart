@@ -49,6 +49,8 @@ class ThreadRunner {
   ///
   /// Function must take exactly one parameter.
   /// Function can be async or synchronous.
+  ///
+  /// DART V2.14 and prior had the following restrictions:
   /// Function must not be a closure, unnamed function or non-static member function.
   /// Function must be a static class member or global function to avoid the runtime exception
   ///     Invalid argument(s): Illegal argument in isolate message :

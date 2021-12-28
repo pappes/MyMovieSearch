@@ -1,5 +1,4 @@
 import 'dart:convert' show json;
-import 'package:flutter/foundation.dart' show describeEnum;
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -21,7 +20,7 @@ class QueryIMDBSuggestions
   /// Describe where the data is comming from.
   @override
   String myDataSourceName() {
-    return describeEnum(DataSourceType.imdbSuggestions);
+    return DataSourceType.imdbSuggestions.name;
   }
 
   /// Static snapshot of data for offline operation.
