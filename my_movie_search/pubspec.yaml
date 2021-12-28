@@ -24,7 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   
-  bloc: ^8.0.0
+  bloc: ^8.0.1
   equatable: ^2.0.3                     # Simplify object comparisons.
   flutter_bloc: ^8.0.0                  # Assist with the BLoC design pattern.
   flutter_custom_tabs: ^1.0.3           # replace webview with andorid chrome browser
