@@ -38,9 +38,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   }
 
   /// Fetch full person details from imdb.
-  Future _getDetails(
-    SearchCriteriaDTO criteria,
-  ) async {
+  Future _getDetails(SearchCriteriaDTO criteria) async {
     /// Fetch person details from cache using a seperate thread.
     final fastResults = await QueryIMDBCastDetails().readPrioritisedCachedList(
       criteria,
@@ -129,16 +127,19 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
   Widget leftColumn() {
     return Wrap(
-      children: leftHeader() +
-          [
-            // Only show poster in left column on mobile
-            if (_mobileLayout) posterSection(),
+      children: [
+        ...leftHeader(),
+        // Only show poster in left column on mobile
+        if (_mobileLayout) posterSection(),
 
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: description() + related(),
-            ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ...description(),
+            ...related(),
           ],
+        ),
+      ],
     );
   }
 
@@ -191,20 +192,20 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       ),
       Wrap(
         children: <Widget>[
-              Text('Source: ${describeEnum(_movie.source)}      '),
-              Text('UniqueId: ${_movie.uniqueId}'),
-              ElevatedButton(
-                onPressed: () => viewWebPage(
-                  makeImdbUrl(
-                    _movie.uniqueId,
-                    mobile: true,
-                  ),
-                  context,
-                ),
-                child: const Text('IMDB'),
+          Text('Source: ${describeEnum(_movie.source)}      '),
+          Text('UniqueId: ${_movie.uniqueId}'),
+          ElevatedButton(
+            onPressed: () => viewWebPage(
+              makeImdbUrl(
+                _movie.uniqueId,
+                mobile: true,
               ),
-            ] +
-            externalSearch(),
+              context,
+            ),
+            child: const Text('IMDB'),
+          ),
+          ...externalSearch(),
+        ],
       ),
     ];
   }
@@ -248,7 +249,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   }
 
   List<Widget> externalSearch() {
-    final buttons = <Widget>[
+    return <Widget>[
       ElevatedButton(
         onPressed: () => viewWebPage(
           'https://tpb.party/search/${_movie.title} ${_movie.year}',
@@ -256,9 +257,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         ),
         child: Text(_movie.title),
       ),
-    ];
-    if (_movie.alternateTitle.isNotEmpty) {
-      buttons.add(
+      if (_movie.alternateTitle.isNotEmpty)
         ElevatedButton(
           onPressed: () => viewWebPage(
             'https://tpb.party/search/${_movie.alternateTitle} ${_movie.year}',
@@ -266,8 +265,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           ),
           child: Text(_movie.alternateTitle),
         ),
-      );
-    }
-    return buttons;
+    ];
   }
 }

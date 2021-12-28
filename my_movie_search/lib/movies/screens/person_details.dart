@@ -126,28 +126,28 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   Widget leftColumn() {
     return Wrap(
       children: <Widget>[
-            Text('Source: ${describeEnum(_person.source)}      '),
-            Text('UniqueId: ${_person.uniqueId}'),
-            ElevatedButton(
-              onPressed: () => viewWebPage(
-                makeImdbUrl(
-                  _person.uniqueId,
-                  mobile: true,
-                ),
-                context,
-              ),
-              child: const Text('IMDB'),
+        Text('Source: ${describeEnum(_person.source)}      '),
+        Text('UniqueId: ${_person.uniqueId}'),
+        ElevatedButton(
+          onPressed: () => viewWebPage(
+            makeImdbUrl(
+              _person.uniqueId,
+              mobile: true,
             ),
+            context,
+          ),
+          child: const Text('IMDB'),
+        ),
 
-            // Only show poster in left column on mobile
-            if (_mobileLayout) posterSection(),
+        // Only show poster in left column on mobile
+        if (_mobileLayout) posterSection(),
 
-            Text(
-              '\nDescription: \n${_person.description} ',
-              style: biggerFont,
-            ),
-          ] +
-          related(),
+        Text(
+          '\nDescription: \n${_person.description} ',
+          style: biggerFont,
+        ),
+        ...related(),
+      ],
     );
   }
 
