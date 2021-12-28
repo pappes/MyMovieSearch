@@ -9,6 +9,8 @@ import 'package:my_movie_search/utilities/thread.dart';
 class ThreadTest {
   static var _counter = 0;
   static Future<int> accumulate(int value) async => _counter += value;
+  var _instanceCounter = 0;
+  Future<int> instanceAccumulate(int value) async => _instanceCounter += value;
 }
 
 int localCounter = 0;
@@ -97,6 +99,24 @@ Future main() async {
       expect(await res2, 1); // 0+1
       expect(await res3, 2); // 1+1
       expect(await res4, 10); // 2+8
+    });
+    test('run a fast instance class function maintaining state', () async {
+      final threader = ThreadRunner();
+
+      final instance = ThreadTest();
+
+      final res1 =
+          threader.run<int>(instance.instanceAccumulate, 0); // expect 0
+      final res2 =
+          threader.run<int>(instance.instanceAccumulate, 1); // expect 1
+      final res3 =
+          threader.run<int>(instance.instanceAccumulate, 1); // expect 1
+      final res4 =
+          threader.run<int>(instance.instanceAccumulate, 8); // expect 8
+      expect(await res1, 0); // 0+0
+      expect(await res2, 1); // 0+1
+      expect(await res3, 1); // 0+1
+      expect(await res4, 8); // 0+8
     });
     test('run throwaway thread', () async {
       final res1 = ThreadRunner().run(globalFnAccumulateSync, 0); // expect 0
