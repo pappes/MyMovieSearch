@@ -225,15 +225,18 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   List<Widget> related() {
     final categories = <Widget>[];
     for (final category in _movie.related.entries) {
-      final map = category.value;
-      final description = map.toShortString();
-      categories.add(BoldLabel(category.key));
+      final rolesMap = category.value;
+      final rolesLabel = category.key;
+      //inal map = category.value;
+      final description = rolesMap.toShortString();
+      categories.add(BoldLabel('$rolesLabel (${rolesMap.length})'));
+
       categories.add(
         Center(
           child: GestureDetector(
             onTap: () => searchForRelated(
-              '${category.key}: ${_movie.title}',
-              category.value.values.toList(),
+              '$rolesLabel ${_movie.title}',
+              rolesMap.values.toList(),
               context,
             ),
             child: Text(

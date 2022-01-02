@@ -173,7 +173,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       final rolesMap = category.value;
       final rolesLabel = category.key;
       final description = rolesMap.toShortString(); // Get a list of movie roles
-      categories.add(BoldLabel('$rolesLabel:'));
+      categories.add(BoldLabel('$rolesLabel: (${rolesMap.length})'));
       categories.add(
         Center(
           child: GestureDetector(
