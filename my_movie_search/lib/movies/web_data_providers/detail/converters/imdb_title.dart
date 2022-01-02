@@ -29,7 +29,7 @@ const outerElementActors = 'actor';
 const outerElementDirector = 'director';
 const outerElementLink = 'url';
 
-const relatedMoviesLabel = 'Suggestions';
+const _relatedMoviesLabel = 'Suggestions:';
 const relatedActorsLabel = 'Cast:';
 const relatedDirectorsLabel = 'Directed by:';
 
@@ -86,25 +86,25 @@ class ImdbMoviePageConverter {
         ) ??
         movie.type;
 
-    _getRelated(movie, map[outerElementRelated]);
-
-    for (final person in getPeopleFromJson(map[outerElementActors])) {
-      movie.addRelated(relatedActorsLabel, person);
-    }
     for (final person in getPeopleFromJson(map[outerElementDirector])) {
       movie.addRelated(relatedDirectorsLabel, person);
     }
+    for (final person in getPeopleFromJson(map[outerElementActors])) {
+      movie.addRelated(relatedActorsLabel, person);
+    }
+    _getRelated(movie, map[outerElementActors], relatedActorsLabel);
+    _getRelated(movie, map[outerElementRelated], _relatedMoviesLabel);
 
     // Remove any html escape sequences from inner text.
     return movie;
   }
 
-  static void _getRelated(MovieResultDTO movie, dynamic suggestions) {
-    if (null != suggestions && suggestions is Iterable) {
-      for (final relatedMap in suggestions) {
+  static void _getRelated(MovieResultDTO movie, dynamic list, String label) {
+    if (null != list && list is Iterable) {
+      for (final relatedMap in list) {
         if (relatedMap is Map) {
           final dto = dtoFromMap(relatedMap);
-          movie.addRelated(relatedMoviesLabel, dto);
+          movie.addRelated(label, dto);
         }
       }
     }
@@ -114,6 +114,8 @@ class ImdbMoviePageConverter {
     final retval = <MovieResultDTO>[];
     if (null != people) {
       Iterable peopleList;
+      // Massage the data to ensure the results are a list of people
+      // (or a single person in a list)
       if (people is Iterable) {
         peopleList = people;
       } else if (people is Map) {

@@ -44,18 +44,20 @@ String getIdFromIMDBLink(String? link) {
   }
 
   const regexStartString = '^';
-  const regexMultipleNonSlash = '[^/]*';
+  const regexMultipleAlpahNumericUnderscore = '[a-zA-Z0-9_]*';
   const regexMultipleAnything = '.*';
   const regexEndString = r'$';
 
   // Convert /title/tt0145681/?ref_=nm_sims_nm_t_9 to tt0145681
+  // Or      /title/tt0145681?ref_=nm_sims_nm_t_9 to tt0145681
   const titleRegexpFormula = '$regexStartString$imdbTitlePath'
-      '($regexMultipleNonSlash)'
-      '/$regexMultipleAnything$regexEndString';
+      '($regexMultipleAlpahNumericUnderscore)'
+      '$regexMultipleAnything$regexEndString';
   // Convert /name/nm0145681/?ref_=nm_sims_nm_t_9 to nm0145681
+  // Or      /name/nm0145681?ref_=nm_sims_nm_t_9 to nm0145681
   const nameRegexpFormula = '$regexStartString$imdbPersonPath'
-      '($regexMultipleNonSlash)'
-      '/$regexMultipleAnything$regexEndString';
+      '($regexMultipleAlpahNumericUnderscore)'
+      '$regexMultipleAnything$regexEndString';
 
   // stuff(group1)stuff - only care about group 1 - regexMultipleNonSlash
   return _getRegexGroupInBrakets(link, titleRegexpFormula) ??

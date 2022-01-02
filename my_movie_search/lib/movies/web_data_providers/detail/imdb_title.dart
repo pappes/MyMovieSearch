@@ -7,7 +7,6 @@ import 'package:my_movie_search/movies/web_data_providers/detail/cache/imdb_titl
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/webscrapers/imdb_title.dart';
-import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 

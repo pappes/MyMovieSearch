@@ -9,6 +9,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -60,6 +61,7 @@ mixin ScrapeIMDBTitleDetails
     _scrapeLanguageDetails(document, movieData);
 
     _getRecomendationList(movieData, document);
+    _getCastDetailsList(movieData, document);
 
     _getAttributeValue(movieData, document, innerElementRatingCount);
     _getAttributeValue(movieData, document, innerElementRatingValue);
@@ -189,6 +191,29 @@ mixin ScrapeIMDBTitleDetails
     }
   }
 
+  /// Extract displayed information about actors and actresses.
+  void _getCastDetailsList(Map movieData, Document document) {
+    for (final element
+        in document.querySelectorAll('div[data-testid="title-cast-item"]')) {
+      _getCastImage(movieData, element);
+    }
+  }
+
+  void _getCastImage(Map movieData, Element recommendation) {
+    final attributes = {};
+    // href will be in the form "/name/nm0145681?ref_=tt_sims_tt_t_9"
+    final link =
+        recommendation.querySelector('a[data-testid="title-cast-item__actor"]');
+    attributes[outerElementOfficialTitle] = link?.text;
+
+    final href = link?.attributes['href'];
+    attributes[outerElementIdentity] = getIdFromIMDBLink(href);
+
+    final img = recommendation.querySelector('img');
+    attributes[outerElementImage] = img?.attributes['src'];
+    movieData[outerElementActors].add(attributes);
+  }
+
   /// Extract the movie recommendations from the current movie.
   void _getRecomendationList(Map movieData, Document document) {
     movieData[outerElementRelated] = [];
@@ -263,11 +288,24 @@ mixin ScrapeIMDBTitleDetails
       //     when pulling back the movie details
       //     before the user has drilled down to the list.
       /*ThreadRunner.namedThread('SlowThread').run(
+        _getIMDBPersonDetailsFast,
+        detailCriteria,
+      );*/
+      /*ThreadRunner.namedThread('SlowThread').run(
         _getIMDBPersonDetailsSlow,
         detailCriteria,
       );*/
     }
   }
+
+  /// Add fetch summary person details from imdb.
+  static Future<List<MovieResultDTO>> _getIMDBPersonDetailsFast(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryIMDBSuggestions().readPrioritisedCachedList(
+        criteria,
+        priority: ThreadRunner.verySlow,
+      );
 
   /// Add fetch full person details from imdb.
   static Future<List<MovieResultDTO>> _getIMDBPersonDetailsSlow(

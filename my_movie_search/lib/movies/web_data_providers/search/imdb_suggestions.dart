@@ -3,19 +3,20 @@ import 'dart:convert' show json;
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/cache/imdb_suggestion.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_suggestion.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_suggestions.dart';
 import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 
-const _defaultSearchResultsLimit = 10;
-
 /// Implements [WebFetchBase] for the IMDB search suggestions API.
 /// Search suggestions are used by the lookup bar in the IMDB web page.
 class QueryIMDBSuggestions
-    extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
+    extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
+    with ThreadedCacheIMDBSuggestions {
   static const _baseURL = 'https://sg.media-imdb.com/suggests';
+  static const defaultSearchResultsLimit = 10;
 
   /// Describe where the data is comming from.
   @override
@@ -42,7 +43,7 @@ class QueryIMDBSuggestions
       );
     }
 
-    searchResultsLimit ??= _defaultSearchResultsLimit;
+    searchResultsLimit ??= defaultSearchResultsLimit;
 
     yield* str
         .transform(JsonPDecoder())

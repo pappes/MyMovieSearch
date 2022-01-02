@@ -1,12 +1,12 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [WebFetchBase] for retrieving person details from IMDB.
-mixin ThreadedCacheIMDBNameDetails
+mixin ThreadedCacheIMDBSuggestions
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final _cache = TieredCache();
   static final List<SearchCriteriaDTO> _normalQueue = [];
@@ -21,7 +21,7 @@ mixin ThreadedCacheIMDBNameDetails
     SearchCriteriaDTO criteria, {
     String priority = ThreadRunner.slow,
     DataSourceFn? source,
-    int? limit = QueryIMDBNameDetails.defaultSearchResultsLimit,
+    int? limit = QueryIMDBSuggestions.defaultSearchResultsLimit,
   }) async {
     var retval = <MovieResultDTO>[];
 
@@ -64,7 +64,7 @@ mixin ThreadedCacheIMDBNameDetails
 
   /// static wrapper to readList() for compatability with ThreadRunner.
   static Future<List<MovieResultDTO>> runReadList(Map input) {
-    return QueryIMDBNameDetails().readList(
+    return QueryIMDBSuggestions().readList(
       input['criteria'] as SearchCriteriaDTO,
       source: input['source'] as DataSourceFn?,
       limit: input['limit'] as int?,
@@ -91,12 +91,6 @@ mixin ThreadedCacheIMDBNameDetails
       '${fetchedResult.uniqueId} size:${_cache.cachedSize()}',
     );
 
-    if (fetchedResult.uniqueId == 'nm0000243') {
-      print(
-        '${ThreadRunner.currentThreadName} breakpoint cache add '
-        '${fetchedResult.uniqueId} size:${_cache.cachedSize()}',
-      );
-    }
     _cache.add(key, fetchedResult);
   }
 
@@ -117,12 +111,6 @@ mixin ThreadedCacheIMDBNameDetails
       if (_normalQueue.contains(criteria) ||
           _verySlowQueue.contains(criteria)) {
         return null;
-      }
-      if (criteria.criteriaTitle == 'nm0000243') {
-        print(
-          '${ThreadRunner.currentThreadName}cache miss '
-          '${criteria.criteriaTitle}',
-        );
       }
 
       if (_normalQueue.length < 10 && ThreadRunner.verySlow != priority) {

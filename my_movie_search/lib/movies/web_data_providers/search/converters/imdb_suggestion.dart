@@ -48,10 +48,12 @@ class ImdbSuggestionConverter {
           movie.uniqueId,
         ) ??
         movie.type;
+
+    print('URL for ${movie.uniqueId} is ${movie.imageUrl}');
     return movie;
   }
 
   static String? _getImage(imageData) {
-    if (imageData is List<String>) return imageData.first;
+    if (imageData is List) return imageData.first as String;
   }
 }
