@@ -1,12 +1,14 @@
 import 'dart:async' show StreamController;
 
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/tmdb.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_detail.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_finder.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -109,14 +111,25 @@ class BaseMovieRepository {
       detailCriteria.criteriaTitle = dto.uniqueId;
       _requestedDetails[dto.uniqueId] = null;
       SearchFunction? fastSearch;
+      SearchFunction? supplementarySearch;
       SearchFunction? slowSearch;
 
       if (dto.uniqueId.startsWith(imdbTitlePrefix)) {
         fastSearch = _getIMDBMovieDetailsFast;
         slowSearch = _getIMDBMovieDetailsSlow;
+        if (DataSourceType.imdbSuggestions == dto.source ||
+            DataSourceType.imdbSearch == dto.source) {
+          // restrict supplementary source to prevent recursive infinite loop
+          supplementarySearch = _getTMDBExtraDetails;
+        }
       } else if (dto.uniqueId.startsWith(imdbPersonPrefix)) {
         fastSearch = _getIMDBPersonDetailsFast;
         slowSearch = _getIMDBPersonDetailsSlow;
+        if (DataSourceType.imdbSuggestions == dto.source ||
+            DataSourceType.imdbSearch == dto.source) {
+          // restrict supplementary source to prevent recursive infinite loop
+          supplementarySearch = _getTMDBExtraDetails;
+        }
       } else {
         fastSearch = _getTMDBMovieDetailsFast;
       }
@@ -124,6 +137,12 @@ class BaseMovieRepository {
       fastSearch(detailCriteria).then(
         (searchResults) => _addDetails(originalSearchUID, searchResults),
       );
+      // Load slow results into cache for access on details screen in a seperate thread
+      if (null != supplementarySearch) {
+        supplementarySearch(detailCriteria).then(
+          (searchResults) => _addDetails(originalSearchUID, searchResults),
+        );
+      }
       // Load slow results into cache for access on details screen in a seperate thread
       if (null != slowSearch) {
         slowSearch(detailCriteria);
@@ -167,7 +186,13 @@ class BaseMovieRepository {
   static Future<List<MovieResultDTO>> _getTMDBMovieDetailsFast(
     SearchCriteriaDTO criteria,
   ) =>
-      QueryTMDBDetails().readList(criteria);
+      QueryTMDBMovieDetails().readList(criteria);
+
+  /// Add fetch full movie details from tmdb.
+  static Future<List<MovieResultDTO>> _getTMDBExtraDetails(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryTMDBFinder().readList(criteria);
 
   /// Add fetched tmbd movie details into the stream and search imdb.
   void _addDetails(int originalSearchUID, List<MovieResultDTO> values) {

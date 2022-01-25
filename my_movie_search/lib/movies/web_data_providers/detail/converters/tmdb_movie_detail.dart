@@ -73,9 +73,9 @@ class TmdbMovieDetailConverter {
       movie.title = '${map[innerElementOriginalTitle]} '
           '(${map[innerElementCommonTitle]}';
     } else {
-      movie.imageUrl = map[innerElementImage]?.toString() ??
+      movie.title = map[innerElementOriginalTitle]?.toString() ??
           map[innerElementCommonTitle]?.toString() ??
-          movie.imageUrl;
+          movie.title;
     }
 
     final year =
@@ -86,7 +86,8 @@ class TmdbMovieDetailConverter {
       movie.yearRange = map[innerElementYear]?.toString() ?? movie.yearRange;
     }
 
-    movie.imageUrl = map[innerElementPosterPath]?.toString() ?? movie.imageUrl;
+    // TODO expand partial URL to full url
+    // movie.imageUrl = map[innerElementPosterPath]?.toString() ?? movie.imageUrl;
     if ('true' == map[innerElementType]) {
       movie.type = MovieContentType.short;
     }

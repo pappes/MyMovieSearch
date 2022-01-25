@@ -3,15 +3,16 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_movie_detail.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_movie_detail.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 import 'package:universal_io/io.dart' show HttpHeaders;
 
-/// Implements [WebFetchBase] for searching the The Movie Database (TMDB).
-/// The OMDb API is a free web service to obtain movie information.
-class QueryTMDBDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
+/// Implements [WebFetchBase] for searching The Movie Database (TMDB).
+/// The TMDb API is a free web service to obtain movie information.
+class QueryTMDBMovieDetails
+    extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static const _baseURL = 'https://api.themoviedb.org/3/movie/';
   static const _midURL = '?api_key=';
 
