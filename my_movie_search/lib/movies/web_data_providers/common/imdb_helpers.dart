@@ -72,6 +72,7 @@ MovieContentType? _lookupImdbMovieContentType(
   String id,
 ) {
   if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
+  if (id == "-1") return MovieContentType.custom;
   final String title = info.toLowerCase();
   if (title.lastIndexOf('game') > -1) return MovieContentType.custom;
   if (title.lastIndexOf('creativework') > -1) return MovieContentType.custom;
@@ -118,7 +119,7 @@ MovieContentType? getImdbMovieContentType(
   final string = info?.toString() ?? '';
   final type = _lookupImdbMovieContentType(string, duration, id);
   if (null != type || null == info) return type;
-  logger.e('Unknown Imdb MoveContentType ${info.toString()}');
+  logger.e('Unknown Imdb MoveContentType ${info.toString()} for id $id');
   return MovieContentType.movie;
 }
 

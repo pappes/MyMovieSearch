@@ -211,7 +211,11 @@ mixin ScrapeIMDBTitleDetails
 
     final img = recommendation.querySelector('img');
     attributes[outerElementImage] = img?.attributes['src'];
-    movieData[outerElementActors].add(attributes);
+    if (movieData[outerElementActors] == null) {
+      movieData[outerElementActors] = [attributes];
+    } else {
+      movieData[outerElementActors].add(attributes);
+    }
   }
 
   /// Extract the movie recommendations from the current movie.
