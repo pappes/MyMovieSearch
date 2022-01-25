@@ -106,18 +106,24 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
               Text('Lifespan: ${_person.yearRange}'),
           ],
         ),
-        Expanded(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              ExpandedColumn(children: <Widget>[leftColumn()]),
+        Flex(
+          direction: Axis.horizontal,
+          children: [
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  ExpandedColumn(children: <Widget>[leftColumn()]),
 
-              // Only show right column on tablet
-              if (!_mobileLayout) ExpandedColumn(children: [posterSection()])
-            ],
-          ),
-        ),
+                  // Only show right column on tablet
+                  if (!_mobileLayout)
+                    ExpandedColumn(children: [posterSection()])
+                ],
+              ),
+            ),
+          ],
+        )
       ],
     );
   }
