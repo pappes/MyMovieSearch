@@ -12,7 +12,7 @@ import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 /// Implements [WebFetchBase] for retrieving cast and crew information from IMDB.
 class QueryIMDBCastDetails
     extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> {
-  static const _baseURL = 'xhttps://www.imdb.com/title/';
+  static const _baseURL = 'https://www.imdb.com/title/';
   static const _baseURLsuffix = '/fullcredits/';
 
   /// Describe where the data is comming from.

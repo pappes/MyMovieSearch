@@ -5,6 +5,7 @@ import 'package:equatable/equatable.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 part 'bloc_parts/search_event.dart';
 part 'bloc_parts/search_state.dart';
@@ -84,17 +85,22 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   /// Maintain map of fetched movie snippets and details.
   /// Update bloc state to indicate that new data is available.
   void _receiveDTO(MovieResultDTO newValue) {
-    if ('' != newValue.alternateId) {
-      //replace placeholder with new record
-      _allResults.remove(newValue.uniqueId);
-      newValue.uniqueId = newValue.alternateId;
-    }
-
     if (newValue.uniqueId.startsWith(movieResultDTOMessagePrefix) ||
         !_allResults.containsKey(newValue.uniqueId)) {
       _allResults[newValue.uniqueId] = newValue;
     } else {
+      newValue.mergeDtoList(_allResults, {newValue.uniqueId: newValue});
       _allResults[newValue.uniqueId]!.merge(newValue);
+    }
+    if ('' != newValue.alternateId) {
+      // Delete TMDB record from collection
+      // and merge combined TMDB data with IMDB record
+      final old = _allResults[newValue.uniqueId]!;
+      _allResults.remove(newValue.uniqueId);
+
+      old.uniqueId = old.alternateId;
+      old.alternateId = '';
+      newValue.mergeDtoList(_allResults, {old.uniqueId: old});
     }
     _sortResults();
   }

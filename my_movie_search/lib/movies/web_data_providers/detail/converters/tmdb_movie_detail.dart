@@ -64,7 +64,7 @@ class TmdbMovieDetailConverter {
 
   static MovieResultDTO dtoFromMap(Map map) {
     final movie = MovieResultDTO();
-    movie.source = DataSourceType.tmdb;
+    movie.source = DataSourceType.tmdbMovie;
     movie.uniqueId = '${map[innerElementIdentity]}';
     movie.alternateId =
         map[innerElementImdbId]?.toString() ?? movie.alternateId;

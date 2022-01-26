@@ -77,10 +77,10 @@ class TmdbFinderConverter {
 
   static MovieResultDTO dtoFromMovieMap(Map map) {
     final movie = MovieResultDTO();
-    movie.source = DataSourceType.tmdb;
-    movie.uniqueId = 'ToBeDefined'; // Overridden in QueryTMDBFinder
-    movie.alternateId =
-        map[movieElementTMDBIdentity]?.toString() ?? movie.alternateId;
+    movie.source = DataSourceType.tmdbFinder;
+    movie.uniqueId =
+        map[movieElementTMDBIdentity]?.toString() ?? movie.uniqueId;
+    movie.alternateId = 'ToBeDefined'; // Overridden in QueryTMDBFinder
     if (null != map[movieElementCommonTitle] &&
         null != map[movieElementOriginalTitle]) {
       movie.title = '${map[movieElementOriginalTitle]} '
@@ -126,10 +126,10 @@ class TmdbFinderConverter {
 
   static MovieResultDTO dtoFromPersonMap(Map map) {
     final person = MovieResultDTO();
-    person.source = DataSourceType.tmdb;
-    person.uniqueId = 'ToBeDefined'; // Overridden in QueryTMDBFinder
-    person.alternateId =
-        map[movieElementTMDBIdentity]?.toString() ?? person.alternateId;
+    person.source = DataSourceType.tmdbFinder;
+    person.uniqueId =
+        map[movieElementTMDBIdentity]?.toString() ?? person.uniqueId;
+    person.alternateId = 'ToBeDefined'; // Overridden in QueryTMDBFinder
     person.title = map[personElementCommonTitle]?.toString() ?? person.title;
 
     // TODO expand partial URL to full url

@@ -22,9 +22,12 @@ class QueryTMDBFinder extends QueryTMDBMovieDetails {
   /// Convert TMDB map to MovieResultDTO records.
   @override
   List<MovieResultDTO> myTransformMapToOutput(Map map) {
-    final rawResults = TmdbFinderConverter.dtoFromCompleteJsonMap(map);
-    rawResults.map((e) => e.uniqueId = _originalID);
-    return rawResults;
+    final results = <MovieResultDTO>[];
+    for (final movie in TmdbFinderConverter.dtoFromCompleteJsonMap(map)) {
+      movie.alternateId = _originalID;
+      results.add(movie);
+    }
+    return results;
   }
 
   /// API call to TMDB returning the movie details for [searchText].

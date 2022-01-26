@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
+import 'package:my_movie_search/movies/screens/widgets/controls.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
-import 'package:my_movie_search/movies/widgets/controls.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 
@@ -132,7 +132,8 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     return Wrap(
       children: <Widget>[
         Text('Source: ${_person.source.name}      '),
-        Text('UniqueId: ${_person.uniqueId}'),
+        Text('UniqueId: ${_person.uniqueId}      '),
+        Text('Popularity: ${_person.userRatingCount}'),
         ElevatedButton(
           onPressed: () => viewWebPage(
             makeImdbUrl(

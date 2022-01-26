@@ -17,7 +17,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Describe where the data is comming from.
   @override
   String myDataSourceName() {
-    return DataSourceType.tmdb.name;
+    return DataSourceType.tmdbMovie.name;
   }
 
   /// Static snapshot of data for offline operation.
@@ -43,7 +43,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     final error = MovieResultDTO();
     error.title = '[QueryTMDBMovies] $message';
     error.type = MovieContentType.custom;
-    error.source = DataSourceType.tmdb;
+    error.source = DataSourceType.tmdbMovie;
     return error;
   }
 

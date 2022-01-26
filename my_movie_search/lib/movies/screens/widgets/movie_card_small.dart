@@ -34,7 +34,7 @@ class MovieTile extends ListTile {
         (movie.type != MovieContentType.none) ? '${movie.type.name}    ' : '';
     final alternateTitle =
         (movie.alternateTitle.isEmpty) ? '' : '${movie.alternateTitle} ';
-    final ratingCount = (movie.userRatingCount > 0)
+    final ratingCount = (movie.userRatingCount > 0 || movie.userRating > 0)
         ? '${movie.userRating} (${formatter.format(movie.userRatingCount)})'
         : '';
     final runtime = (movie.runTime.inMinutes > 0)

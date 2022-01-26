@@ -9,8 +9,8 @@ import 'package:my_movie_search/utilities/extensions/enum.dart';
 
 class MovieResultDTO {
   DataSourceType source = DataSourceType.none;
-  String uniqueId = movieResultDTOUninitialised;
-  String alternateId = '';
+  String uniqueId = movieResultDTOUninitialised; // ID in current datasource
+  String alternateId = ''; // ID in another data sourece e.g. from TMDB to IMDB
   String title = '';
   String alternateTitle = '';
   String description = '';
@@ -626,6 +626,10 @@ extension DTOCompare on MovieResultDTO {
     if (contentCategory() != other.contentCategory()) {
       return contentCategory().compareTo(other.contentCategory());
     }
+    // For people sort by popularity
+    if (MovieContentType.person == type) {
+      return personPopulartyCompare(other);
+    }
     // See how many people have rated this movie.
     if (userRatingCategory() != other.userRatingCategory()) {
       return userRatingCategory().compareTo(other.userRatingCategory());
@@ -706,6 +710,13 @@ extension DTOCompare on MovieResultDTO {
     final thisYear = maxYear();
     final otherYear = other?.maxYear() ?? 0;
     return thisYear.compareTo(otherYear);
+  }
+
+  /// Rank movies based on raw popularity.
+  ///
+  int personPopulartyCompare(MovieResultDTO? other) {
+    final otherCount = other?.userRatingCount ?? 0;
+    return userRatingCount.compareTo(otherCount);
   }
 
   /// Extract year release or year of most recent episode.

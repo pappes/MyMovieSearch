@@ -19,7 +19,7 @@ class QueryTMDBMovieDetails
   /// Describe where the data is comming from.
   @override
   String myDataSourceName() {
-    return DataSourceType.tmdb.name;
+    return DataSourceType.tmdbMovie.name;
   }
 
   /// Static snapshot of data for offline operation.
@@ -45,7 +45,7 @@ class QueryTMDBMovieDetails
     final error = MovieResultDTO();
     error.title = '[QueryTMDBDetails] $message';
     error.type = MovieContentType.custom;
-    error.source = DataSourceType.tmdb;
+    error.source = DataSourceType.tmdbMovie;
     return error;
   }
 

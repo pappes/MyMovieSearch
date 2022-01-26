@@ -7,8 +7,8 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_finder.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -196,10 +196,15 @@ class BaseMovieRepository {
 
   /// Add fetched tmbd movie details into the stream and search imdb.
   void _addDetails(int originalSearchUID, List<MovieResultDTO> values) {
+    for (final dto in values) {
+      if (DataSourceType.tmdbFinder == dto.source &&
+          dto.alternateId.startsWith(imdbPersonPrefix)) {}
+    }
     if (!searchInterrupted(originalSearchUID)) {
       for (final dto in values) {
-        if (dto.alternateId.startsWith(imdbTitlePrefix) ||
-            dto.alternateId.startsWith(imdbPersonPrefix)) {
+        if (DataSourceType.tmdbMovie == dto.source &&
+            (dto.alternateId.startsWith(imdbTitlePrefix) ||
+                dto.alternateId.startsWith(imdbPersonPrefix))) {
           final imdbDetails = MovieResultDTO();
           imdbDetails.uniqueId = dto.alternateId;
           _getDetails(originalSearchUID, imdbDetails);
@@ -214,12 +219,21 @@ class BaseMovieRepository {
     return _requestedDetails.values.contains(null);
   }
 
-  /// Yield movie details to the results stream
-  /// and update map to inidicate detail fetch is no longer in progress.
+  /// Yield movie details to the results stream.
   /// Close the stream if all WebFetch operations have completed.
   void _finishDetails(MovieResultDTO dto) {
     yieldResult(dto);
-    _requestedDetails[dto.uniqueId] = dto.title;
-    if (_awaitingProviders == 0 && !_awaitingDetails) close();
+    _recordResult(dto);
+    //if (_awaitingProviders == 0 && !_awaitingDetails) close();
+  }
+
+  /// Update map to inidicate detail fetch is no longer in progress.
+  /// If result comes from IMDB or if id is not an IMDB id.
+  void _recordResult(MovieResultDTO dto) {
+    if (DataSourceType.imdb == dto.source ||
+        (!dto.uniqueId.startsWith(imdbTitlePrefix) &&
+            !dto.uniqueId.startsWith(imdbPersonPrefix))) {
+      _requestedDetails[dto.uniqueId] = dto.title;
+    }
   }
 }
