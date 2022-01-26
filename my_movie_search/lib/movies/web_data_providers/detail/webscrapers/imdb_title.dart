@@ -97,8 +97,7 @@ mixin ScrapeIMDBTitleDetails
         document.querySelector('div[data-testid="storyline-plot-summary"]') ??
             document.querySelector('span[data-testid*="plot"]');
     if (null != description?.text) {
-      movieData[outerElementDescription] =
-          htmlDecode.convert(description!.text);
+      movieData[outerElementDescription] = description!.text;
     }
   }
 
@@ -108,8 +107,7 @@ mixin ScrapeIMDBTitleDetails
         document.querySelector('h1[data-testid="hero-title-block"]') ??
             document.querySelector('h1[class*="TitleHeader"]');
     if (null != description?.text) {
-      movieData[outerElementOfficialTitle] =
-          htmlDecode.convert(description!.text);
+      movieData[outerElementOfficialTitle] = description!.text;
     }
   }
 
@@ -244,7 +242,7 @@ mixin ScrapeIMDBTitleDetails
     attributes[innerElementRatingValue] =
         recommendation.querySelector('span.ipc-rating-star--imdb')?.text; //6.9
     attributes[outerElementOfficialTitle] =
-        htmlDecode.convert(attributes[outerElementOfficialTitle].toString());
+        attributes[outerElementOfficialTitle].toString();
     movieData[outerElementRelated].add(attributes);
   }
 
@@ -276,9 +274,9 @@ mixin ScrapeIMDBTitleDetails
         ?.querySelector('p')
         ?.innerHtml; //A post-apocalyptic tale... saving humankind.
     attributes[outerElementOfficialTitle] =
-        htmlDecode.convert(attributes[outerElementOfficialTitle].toString());
+        attributes[outerElementOfficialTitle].toString();
     attributes[outerElementDescription] =
-        htmlDecode.convert(attributes[outerElementDescription].toString());
+        attributes[outerElementDescription].toString();
     movieData[outerElementRelated].add(attributes);
   }
 
@@ -320,18 +318,20 @@ mixin ScrapeIMDBTitleDetails
         priority: ThreadRunner.verySlow,
       );
 
-  /// Remove any html encoding from a list of strings
+  /// Remove any html encoding from a list of strings or comma delimited string
   void _decodeList(Map movieData, String key) {
     if (movieData.containsKey(key)) {
-      var tempList = <String>[];
       if (movieData[key] is List) {
+        final tempList = <String>[];
         for (final keyword in movieData[key]) {
           tempList.add(htmlDecode.convert(keyword.toString()));
         }
+        movieData[key] = tempList;
       } else {
-        tempList = movieData[key].toString().split(',');
+        final tempList = movieData[key].toString().split(',');
+        movieData[key] = tempList;
+        _decodeList(movieData, key);
       }
-      movieData[key] = tempList;
     }
   }
 }

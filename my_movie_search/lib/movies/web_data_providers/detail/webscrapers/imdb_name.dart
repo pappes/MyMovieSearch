@@ -1,7 +1,6 @@
 import 'dart:convert' show json;
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
-import 'package:html_unescape/html_unescape_small.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -11,8 +10,6 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [WebFetchBase] for retrieving person details from IMDB.
 mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final htmlDecode = HtmlUnescape();
-
   /// Scrape movie data from rows in the html table named findList.
   @override
   Stream<MovieResultDTO> baseTransformTextStreamToOutput(
@@ -73,7 +70,7 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       movieData[outerElementOfficialTitle] = oldName;
     }
     movieData[outerElementOfficialTitle] =
-        htmlDecode.convert(movieData[outerElementOfficialTitle].toString());
+        movieData[outerElementOfficialTitle].toString();
   }
 
   /// Search for movie poster.
@@ -116,7 +113,7 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         movie[outerElementOfficialTitle] = link.text;
         movie[outerElementLink] = link.attributes['href'];
         movie[outerElementOfficialTitle] =
-            htmlDecode.convert(movie[outerElementOfficialTitle].toString());
+            movie[outerElementOfficialTitle].toString();
         movies.add(movie);
       }
     }

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math' show max;
 
 import 'package:flutter/material.dart';
+import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
@@ -211,6 +212,7 @@ extension MapResultDTOConversion on Map {
 }
 
 extension MovieResultDTOHelpers on MovieResultDTO {
+  static final _htmlDecode = HtmlUnescape();
   static int _lastError = -1;
   MovieResultDTO error() {
     _lastError = _lastError - 1;
@@ -311,7 +313,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         DataSourceType.imdb == newValue.source) {
       source = bestval(newValue.source, source);
       if (DataSourceType.imdb == newValue.source && "" != newValue.title) {
-        title = newValue.title;
+        title = _htmlDecode.convert(newValue.title);
       } else {
         title = bestval(newValue.title, title);
       }
@@ -380,6 +382,12 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (a is LanguageType && b is LanguageType) bestLanguage(a, b);
     if (a is num && b is num && a < b) return b;
     if (a is Duration && b is Duration && a < b) return b;
+    if (a is String && b is String) {
+      final aStr = _htmlDecode.convert(a);
+      final bStr = _htmlDecode.convert(b);
+      if (aStr.length < bStr.length) return bStr as T;
+      return aStr as T;
+    }
     if (a.toString().length < b.toString().length) return b;
     if (lastNumberFromString(a.toString()) <
         lastNumberFromString(b.toString())) {

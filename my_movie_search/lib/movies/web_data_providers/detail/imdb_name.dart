@@ -1,5 +1,3 @@
-import 'package:html_unescape/html_unescape_small.dart';
-
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -14,9 +12,8 @@ import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 class QueryIMDBNameDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBNameDetails, ThreadedCacheIMDBNameDetails {
-  static const _baseURL = 'xhttps://www.imdb.com/name/';
+  static const _baseURL = 'https://www.imdb.com/name/';
   static const defaultSearchResultsLimit = 100;
-  static final htmlDecode = HtmlUnescape();
 
   /// Describe where the data is comming from.
   @override
