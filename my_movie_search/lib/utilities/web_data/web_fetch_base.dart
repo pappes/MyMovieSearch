@@ -2,8 +2,10 @@ library pappes.utilites;
 
 import 'dart:async' show StreamController, FutureOr;
 import 'dart:convert' show json, utf8;
+import 'dart:math';
 
 import 'package:my_movie_search/utilities/thread.dart';
+import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:universal_io/io.dart'
     show
@@ -20,17 +22,24 @@ const _defaultSearchResultsLimit = 100;
 /// from online and offline sources.
 ///
 /// Classes extending WebFetchBase can be interchanged
-/// making it easy to switch datasource
-/// without changing the rest of the application.
+/// making it easy to switch data source
+/// without changing the rest of the application
+/// e.g. switching data source from from IMDB to TMDB.
 ///
 /// Workflow delegated to child class:
-///   web/file -> Json via [offlineData] or [myConstructURI]
-///   Json(Map) -> Objects of type [OUTPUT_TYPE] via [myTransformMapToOutput]
+///   JSON, JSONP or HTML from web/file -> Map<Object?> via [offlineData] or [myConstructURI]
+///   Map<Object?> -> Objects of type [OUTPUT_TYPE] via [myTransformMapToOutput]
 ///   Exception handling via [myYieldError]
+///
+/// Naming convention for internal methods in this class:
+///   myMethodName - should be overridden by child class
+///   baseMethodName - should not need to be overridden by base class
+/// Methods without these prefixes are intended for external use and should not be overridden
 abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   INPUT_TYPE? criteria;
   int? searchResultsLimit;
   int _searchResultsreturned = 0;
+  bool transformJsonP = false;
 
   //void baseTestSetCriteria(INPUT_TYPE criteria) => _criteria = criteria;
 
@@ -126,19 +135,24 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       }
       _searchResultsreturned = 0;
       criteria = newCriteria;
-      searchResultsLimit = resultSize;
-      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      // apply the lowest supplied result size limit
+      if (null == searchResultsLimit || null == resultSize) {
+        searchResultsLimit = searchResultsLimit ?? resultSize;
+      } else {
+        searchResultsLimit = min(searchResultsLimit!, resultSize);
+      }
 
-      final newSource = selecter.select(
+      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      final selectedSource = selecter.select(
         source ?? baseFetchWebText,
         myOfflineData(),
       );
       // Need to await completion of future before we can transform it.
-      final result = newSource(newCriteria);
+      final result = selectedSource(newCriteria);
       final Stream<String> data = await result;
 
       // Emit each element from the list as a seperate element.
-      yield* baseTransformTextStreamToOutput(data);
+      yield* myTransformTextStreamToOutputObject(data);
     }
   }
 
@@ -223,6 +237,40 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///     as a wrapper to myTransformMapToOutput.
   List<OUTPUT_TYPE> myTransformMapToOutput(Map map);
 
+  /// Convert a HTML, JSON or JSONP [Stream] of [String]
+  /// to a [Stream] of <OUTPUT_TYPE> objects.
+  ///
+  /// Used for both online and offline operation.
+  /// For online operation [webStream] is utf8 decoded before being passed to
+  ///     [baseTransformMapToOutputHandler].
+  ///
+  /// Can be overridden by child classes to scrape web pages.
+  /// Should call [baseTransformMapToOutputHandler]
+  ///     to wrap [myTransformMapToOutput] in exception handling.
+  Stream<OUTPUT_TYPE> myTransformTextStreamToOutputObject(
+    Stream<String> webStream,
+  ) async* {
+    // Private function to simplify stream transformation.
+    List<OUTPUT_TYPE> fnFromMapToListOfOutputType(decodedMap) {
+      return baseTransformMapToOutputHandler(
+        decodedMap as Map<dynamic, dynamic>?,
+      );
+    }
+
+    // Strip JSONP if required
+    final Stream<String> jsonStream;
+    if (transformJsonP) {
+      jsonStream = webStream.transform(JsonPDecoder());
+    } else {
+      jsonStream = webStream;
+    }
+
+    yield* jsonStream
+        .transform(json.decoder) // JSON text to Map<Object?>
+        .map(fnFromMapToListOfOutputType) // Map<Object?> to List<OUTPUT_TYPE>
+        .expand((element) => element); // List<TYPE> to Stream<TYPE)
+  }
+
   /// Convert a map of the response to a [List] of <OUTPUT_TYPE>.
   ///
   /// Used for both online and offline operation.
@@ -272,30 +320,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     return retval;
   }
 
-  /// Convert [Stream] of [String] to a [Stream]of <OUTPUT_TYPE>.
-  ///
-  /// Used for both online and offline operation.
-  /// For online operation [str] is utf8 decoded before being passed to
-  ///     transformStream.
-  ///
-  /// Can be overridden by child classes.
-  /// Should call [baseTransformMapToOutputHandler]
-  ///     to wrap [myTransformMapToOutput] in exception handling.
-  Stream<OUTPUT_TYPE> baseTransformTextStreamToOutput(
-    Stream<String> str,
-  ) async* {
-    List<OUTPUT_TYPE> fnFromMapToListOfOutputType(decodedMap) {
-      return baseTransformMapToOutputHandler(
-        decodedMap as Map<dynamic, dynamic>?,
-      );
-    }
-
-    yield* str
-        .transform(json.decoder)
-        .map(fnFromMapToListOfOutputType)
-        .expand((element) => element);
-  }
-
   /// Fetches and [utf8] decodes online data matching [criteria].
   ///
   /// The criteria does not need to be Uri encoded for safe searching.
@@ -307,7 +331,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     );
     final address = myConstructURI(encoded);
 
-    final client = await HttpClient().getUrl(address);
+    final client = await myGetHttpClient().getUrl(address);
     myConstructHeaders(client.headers);
     final request = client.close();
 
@@ -331,5 +355,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return offlineFunction(criteria);
     }
     return response.transform(utf8.decoder);
+  }
+
+  /// Returns a new [HttpClient] instance to allow mocking in tests.
+  ///
+  /// Can be overridden by child classes.
+  HttpClient myGetHttpClient() {
+    return HttpClient();
   }
 }

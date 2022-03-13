@@ -33,7 +33,7 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Scrape movie data from html table(s) named findList.
   @override
-  Stream<MovieResultDTO> baseTransformTextStreamToOutput(
+  Stream<MovieResultDTO> myTransformTextStreamToOutputObject(
     Stream<String> str,
   ) async* {
     // Combine all HTTP chunks together for HTML parsing

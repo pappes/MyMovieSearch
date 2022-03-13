@@ -35,7 +35,7 @@ class QueryIMDBCastDetails
 
   /// Scrape cast data from rows in the html div named fullcredits_content.
   @override
-  Stream<MovieResultDTO> baseTransformTextStreamToOutput(
+  Stream<MovieResultDTO> myTransformTextStreamToOutputObject(
     Stream<String> str,
   ) async* {
     // Combine all HTTP chunks together for HTML parsing.

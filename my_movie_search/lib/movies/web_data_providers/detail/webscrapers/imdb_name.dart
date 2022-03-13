@@ -12,7 +12,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Scrape movie data from rows in the html table named findList.
   @override
-  Stream<MovieResultDTO> baseTransformTextStreamToOutput(
+  Stream<MovieResultDTO> myTransformTextStreamToOutputObject(
     Stream<String> str,
   ) async* {
     // Combine all HTTP chunks together for HTML parsing.

@@ -25,13 +25,13 @@ mixin ScrapeIMDBTitleDetails
 
   // Convert HTML web page to Stream of OUTPUT_TYPE.
   @override
-  Stream<MovieResultDTO> baseTransformTextStreamToOutput(
+  Stream<MovieResultDTO> myTransformTextStreamToOutputObject(
     Stream<String> str,
   ) async* {
     // Combine all HTTP chunks together for HTML parsing.
     final content = await str.reduce((value, element) => '$value$element');
 
-    final movieData = scrapeWebPage(content);
+    final movieData = _scrapeWebPage(content);
     if (movieData[outerElementDescription] == null) {
       yield myYieldError(
         'imdb webscraper data not detected '
@@ -42,7 +42,7 @@ mixin ScrapeIMDBTitleDetails
   }
 
   /// Collect JSON and webpage text to construct a map of the movie data.
-  Map scrapeWebPage(String content) {
+  Map _scrapeWebPage(String content) {
     // Extract embedded JSON.
     final document = parse(content);
     final movieData = json.decode(_getMovieJson(document)) as Map;

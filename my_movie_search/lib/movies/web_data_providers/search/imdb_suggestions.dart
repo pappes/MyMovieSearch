@@ -1,12 +1,9 @@
-import 'dart:convert' show json;
-
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/cache/imdb_suggestion.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_suggestion.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_suggestions.dart';
-import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 
@@ -18,51 +15,25 @@ class QueryIMDBSuggestions
   static const _baseURL = 'https://sg.media-imdb.com/suggests';
   static const defaultSearchResultsLimit = 10;
 
+  /// Limit results to 10 most relevant by default.
+  QueryIMDBSuggestions() {
+    searchResultsLimit = defaultSearchResultsLimit;
+    transformJsonP = true;
+  }
+
   /// Describe where the data is comming from.
   @override
-  String myDataSourceName() {
-    return DataSourceType.imdbSuggestions.name;
-  }
+  String myDataSourceName() => DataSourceType.imdbSuggestions.name;
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
-  DataSourceFn myOfflineData() {
-    return streamImdbJsonPOfflineData;
-  }
-
-  /// Remove JsonP from API response and convert to a map of MovieResultDTO.
-  /// Limit results to 10 most relevant by default.
-  @override
-  Stream<MovieResultDTO> baseTransformTextStreamToOutput(
-    Stream<String> str,
-  ) async* {
-    List<MovieResultDTO> fnFromMapToListOfOutputType(decodedMap) {
-      return baseTransformMapToOutputHandler(
-        decodedMap as Map<dynamic, dynamic>?,
-      );
-    }
-
-    searchResultsLimit ??= defaultSearchResultsLimit;
-
-    yield* str
-        .transform(JsonPDecoder())
-        .transform(json.decoder)
-        .map(fnFromMapToListOfOutputType)
-        .expand((element) => element);
-  }
+  DataSourceFn myOfflineData() => streamImdbJsonPOfflineData;
 
   /// Convert IMDB map to MovieResultDTO records.
   @override
   List<MovieResultDTO> myTransformMapToOutput(Map map) =>
       ImdbSuggestionConverter.dtoFromCompleteJsonMap(map);
-
-  /// converts <INPUT_TYPE> to a string representation.
-  @override
-  String myFormatInputAsText(dynamic contents) {
-    final criteria = contents as SearchCriteriaDTO;
-    return criteria.criteriaTitle;
-  }
 
   /// Include entire map in the movie title when an error occurs.
   @override
@@ -77,8 +48,7 @@ class QueryIMDBSuggestions
   /// API call to IMDB search returning the top matching results for [searchText].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final prefix =
-        searchCriteria.isEmpty ? 'U' : searchCriteria.substring(0, 1);
+    final prefix = searchCriteria.isEmpty ? '' : searchCriteria.substring(0, 1);
     final url = '$_baseURL/$prefix/$searchCriteria.json';
     return WebRedirect.constructURI(url);
   }

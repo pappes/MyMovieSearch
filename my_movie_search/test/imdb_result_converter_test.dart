@@ -47,7 +47,7 @@ void main() {
       final str = emitByteStream(testInput).transform(utf8.decoder);
 
       // Invoke the search.
-      final stream = imdbResult.baseTransformTextStreamToOutput(str);
+      final stream = imdbResult.myTransformTextStreamToOutputObject(str);
 
       // Test the results.
       stream.listen(expectFn);
