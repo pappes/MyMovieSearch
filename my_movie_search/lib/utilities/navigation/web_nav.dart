@@ -1,19 +1,20 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_tabs/flutter_custom_tabs.dart';
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as tabs;
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/movie_details.dart';
 import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
 import 'package:my_movie_search/movies/screens/popup.dart';
+import 'package:url_launcher/url_launcher.dart' as launcher;
 
-Future<void> _launchURL(String url, BuildContext context) async {
+Future<void> _invokeChromeCustomeTabs(String url, BuildContext context) async {
   try {
-    await launch(
+    await tabs.launch(
       url,
-      customTabsOption: CustomTabsOption(
+      customTabsOption: tabs.CustomTabsOption(
         toolbarColor: Theme.of(context).primaryColor,
         enableDefaultShare: true,
         enableUrlBarHiding: true,
@@ -23,6 +24,13 @@ Future<void> _launchURL(String url, BuildContext context) async {
   } catch (e) {
     // An exception is thrown if browser app is not installed on Android device.
     debugPrint(e.toString());
+    showPopup(context, url);
+  }
+}
+
+Future<void> _openBrowser(String url, BuildContext context) async {
+  if (!await launcher.launch(url)) {
+    showPopup(context, url);
   }
 }
 
@@ -31,12 +39,9 @@ Future<void> _launchURL(String url, BuildContext context) async {
 /// For platforms that don't support CustomTabs, the URL is displayed to the user.
 void viewWebPage(String url, BuildContext context) {
   if (Platform.isAndroid) {
-    _launchURL(
-      url,
-      context,
-    );
+    _invokeChromeCustomeTabs(url, context);
   } else {
-    showPopup(context, url);
+    _openBrowser(url, context);
   }
 }
 
