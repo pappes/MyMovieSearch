@@ -159,15 +159,12 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
   Widget posterSection() {
     return Row(
-      children: <Widget>[
-        ExpandedColumn(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: poster(
-            _person.imageUrl,
-            onTap: () => viewWebPage(
-              makeImdbUrl(_person.uniqueId, photos: true, mobile: true),
-              context,
-            ),
+      children: [
+        Poster(
+          url: _person.imageUrl,
+          onTap: () => viewWebPage(
+            makeImdbUrl(_person.uniqueId, photos: true, mobile: true),
+            context,
           ),
         )
       ],

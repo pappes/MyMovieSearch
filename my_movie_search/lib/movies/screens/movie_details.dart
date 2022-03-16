@@ -150,17 +150,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
   Widget posterSection() {
     return Row(
-      children: <Widget>[
-        ExpandedColumn(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: poster(
-            _movie.imageUrl,
-            onTap: () => viewWebPage(
-              makeImdbUrl(_movie.uniqueId, photos: true, mobile: true),
-              context,
-            ),
+      children: [
+        Poster(
+          url: _movie.imageUrl,
+          onTap: () => viewWebPage(
+            makeImdbUrl(_movie.uniqueId, photos: true, mobile: true),
+            context,
           ),
-        ),
+        )
       ],
     );
   }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
@@ -165,4 +166,32 @@ SearchCriteriaDTO makeCriteriaDTO(String sample) {
     makeResultDTO('second'),
   ];
   return dto;
+}
+
+class TestApp extends StatelessWidget {
+  TestApp({
+    Key? key,
+    required this.children,
+  }) : super(key: key);
+  const TestApp.con({
+    Key? key,
+    required this.children,
+  }) : super(key: key);
+
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Testing',
+      home: Scaffold(
+        body: Center(
+          child: Flex(
+            direction: Axis.vertical,
+            children: children,
+          ),
+        ),
+      ),
+    );
+  }
 }
