@@ -99,7 +99,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
       builder: (context, state) {
         _sortedList = _searchBloc!.sortedResults;
         return Scrollbar(
-          isAlwaysShown: true,
+          thumbVisibility: true,
           child: ListView.builder(
             padding: const EdgeInsets.all(16.0),
             itemCount: _sortedList.length,

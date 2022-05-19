@@ -55,22 +55,19 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Extract Official name of person from web page.
   void _scrapeName(Document document, Map movieData) {
-    final oldName = movieData[outerElementOfficialTitle];
-    movieData[outerElementOfficialTitle] = '';
+    final newName = StringBuffer();
     var section = document.querySelector('h1[data-testid="hero-Name-block"]');
     section ??=
         document.querySelector('td[class*="name-overview-widget__section"]');
     final spans = section?.querySelector('h1')?.querySelectorAll('span');
     if (null != spans) {
       for (final span in spans) {
-        movieData[outerElementOfficialTitle] += span.text;
+        newName.write(span.text);
       }
     }
-    if ('' == movieData[outerElementOfficialTitle]) {
-      movieData[outerElementOfficialTitle] = oldName;
+    if (newName.isNotEmpty) {
+      movieData[outerElementOfficialTitle] = newName.toString();
     }
-    movieData[outerElementOfficialTitle] =
-        movieData[outerElementOfficialTitle].toString();
   }
 
   /// Search for movie poster.
@@ -89,7 +86,7 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Extract the movies for the current person.
   void _scrapeRelated(Document document, Map movieData) {
-    movieData[outerElementRelated] = [];
+    final Map related = {};
     final filmography = document.querySelector('#filmography');
     if (null != filmography) {
       var headerText = '';
@@ -98,10 +95,11 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
           headerText = child.attributes['data-category'] ?? '?';
         } else {
           final movieList = _getMovieList(child.children);
-          movieData[outerElementRelated].add({headerText: movieList});
+          related[headerText] = movieList;
         }
       }
     }
+    movieData[outerElementRelated] = related;
   }
 
   List<Map> _getMovieList(List<Element> rows) {

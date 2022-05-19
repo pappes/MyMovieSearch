@@ -30,6 +30,13 @@ class QueryIMDBSuggestions
   @override
   DataSourceFn myOfflineData() => streamImdbJsonPOfflineData;
 
+  /// converts <INPUT_TYPE> to a string representation.
+  @override
+  String myFormatInputAsText(dynamic contents) {
+    final criteria = contents as SearchCriteriaDTO;
+    return criteria.criteriaTitle;
+  }
+
   /// Convert IMDB map to MovieResultDTO records.
   @override
   List<MovieResultDTO> myTransformMapToOutput(Map map) =>

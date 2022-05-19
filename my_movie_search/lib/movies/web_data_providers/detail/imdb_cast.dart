@@ -108,13 +108,14 @@ class QueryIMDBCastDetails
       final firstLine = text.trim().split('\n').first;
       return '$firstLine:';
     }
+    return null;
   }
 
   void _addCast(Map movieData, String role, dynamic cast) {
     if (!movieData.containsKey(role)) {
       movieData[role] = [];
     }
-    movieData[role].addAll(cast);
+    (movieData[role] as List).addAll(cast as List);
   }
 
   List<Map> _getCast(Element table) {

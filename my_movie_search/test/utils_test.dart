@@ -60,11 +60,17 @@ Future main() async {
       }
 
       testGetIdFromIMDBLink(
-          '/title/tt0145681/?ref_=nm_sims_nm_t_9', 'tt0145681');
+        '/title/tt0145681/?ref_=nm_sims_nm_t_9',
+        'tt0145681',
+      );
       testGetIdFromIMDBLink(
-          '/title/tt0145682?ref_=nm_sims_nm_t_9', 'tt0145682');
+        '/title/tt0145682?ref_=nm_sims_nm_t_9',
+        'tt0145682',
+      );
       testGetIdFromIMDBLink(
-          '/name/nm0145683/?ref_=nm_sims_nm_t_9', 'nm0145683');
+        '/name/nm0145683/?ref_=nm_sims_nm_t_9',
+        'nm0145683',
+      );
       testGetIdFromIMDBLink('/name/nm0145684?ref_=nm_sims_nm_t_9', 'nm0145684');
     });
   });

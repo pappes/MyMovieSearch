@@ -157,8 +157,8 @@ void main() {
   group('stream test', () {
     test('transformer', () async {
       // Set up the test data.
-      final testInput = imdbJsonPSampleFull;
-      final expectedString = imdbJsonSampleOuter;
+      const testInput = imdbJsonPSampleFull;
+      const expectedString = imdbJsonSampleOuter;
       var emittedString = '';
 
       // Compare the stream output to the expected output.

@@ -65,7 +65,7 @@ void main() {
     // Observe UTF8 decoding of the byte stream.
     test('UTF8 decoder test', () {
       // Set up the test data.
-      final testInput = '$imdbJsonPFunction(a)';
+      const testInput = '$imdbJsonPFunction(a)';
 
       int currentChar = 0;
       // Compare the stream output to the expected output.
@@ -95,7 +95,7 @@ void main() {
     // Observe JSON decoding of the byte stream into a Map.
     test('json decoder test', () {
       // Set up the test data.
-      final testInput = imdbJsonSampleOuter;
+      const testInput = imdbJsonSampleOuter;
 
       // Compare the stream output to the expected output.
       void checkOutput(Object? streamOutput) {
@@ -123,7 +123,7 @@ void main() {
     // Preceeding tests are simpler examples to see how this test was built.
     test('jsonp transformer test', () {
       // Set up the test data.
-      final testInput = imdbJsonPSampleFull;
+      const testInput = imdbJsonPSampleFull;
 
       // Compare the stream output to the expected output.
       void checkOutput(Object? streamOutput) {
@@ -150,7 +150,7 @@ void main() {
 
     test('extract value from map test', () {
       // Set up the test data.
-      final testInput = imdbJsonSampleOuter;
+      const testInput = imdbJsonSampleOuter;
 
       // Compare the stream output to the expected output.
       void checkOutput(Object? streamOutput) {
@@ -183,7 +183,7 @@ void main() {
     // Convert IMDB suggestions from JSON to dto.
     test('convert Json to DTO', () async {
       // Set up the test data.
-      final testInput = imdbJsonPSampleFull;
+      const testInput = imdbJsonPSampleFull;
       final expectedDTO = await expectedDTOList;
 
       // Compare the stream output to the expected output.

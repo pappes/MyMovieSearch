@@ -39,8 +39,8 @@ class GoogleMovieSearchConverter {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
     try {
-      final resultCount =
-          map[outerElementSearchInformation][innerElementSearchInfoCount];
+      final resultCount = (map[outerElementSearchInformation]
+          as Map)[innerElementSearchInfoCount];
       if ((int.tryParse(resultCount.toString()) ?? 0) == 0) {
         return _searchError(map);
       }
@@ -63,6 +63,7 @@ class GoogleMovieSearchConverter {
     final error = MovieResultDTO();
     final resultsError = map[outerElementErrorFailure];
     if (resultsError != null) {
+      // ignore: avoid_dynamic_calls
       error.title = resultsError[innerElementErrorFailureReason]?.toString() ??
           'No failure reason provided in results';
     } else {

@@ -88,6 +88,7 @@ MovieContentType? _lookupImdbMovieContentType(
   if (title.lastIndexOf('movie') > -1) return MovieContentType.movie;
   if (title.lastIndexOf('video') > -1) return MovieContentType.movie;
   if (title.lastIndexOf('feature') > -1) return MovieContentType.movie;
+  return null;
 }
 
 /// Look at movie to see if title type (is in brakets)).
@@ -108,6 +109,7 @@ MovieContentType? findImdbMovieContentTypeFromTitle(
       id,
     );
   }
+  return null;
 }
 
 /// Use movie type string to lookup movie type.
@@ -217,4 +219,5 @@ String? _getRegexGroupInBrakets(String stringToSearch, String regexFormula) {
       return match.group(1);
     }
   }
+  return null;
 }

@@ -30,11 +30,12 @@ class MovieModel {
     };
   }
 
-  MovieResultDTO? xtoMovieResultDTO() {
+  MovieResultDTO? toMovieResultDTO() {
     final decoded = json.decode(dtoJson);
     if (decoded is Map) {
       return decoded.toMovieResultDTO();
     }
+    return null;
   }
 }
 

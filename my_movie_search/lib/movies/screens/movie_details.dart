@@ -44,7 +44,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       priority: ThreadRunner.fast,
     );
 
-    if (fastResults is List<MovieResultDTO> && fastResults.isNotEmpty) {
+    if (fastResults.isNotEmpty) {
       // Check the user has not navigated away
       if (!mounted) return;
 
@@ -85,7 +85,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         title: Text(_movie.title),
       ),
       body: Scrollbar(
-        isAlwaysShown: true,
+        thumbVisibility: true,
         child: bodySection(),
       ),
     );

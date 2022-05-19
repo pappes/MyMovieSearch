@@ -60,11 +60,11 @@ class ImdbMoviePageConverter {
         movie.censorRating;
 
     movie.userRating = DoubleHelper.fromText(
-      map[outerElementRating]?[innerElementRatingValue],
+      (map[outerElementRating] as Map?)?[innerElementRatingValue],
       nullValueSubstitute: movie.userRating,
     )!;
     movie.userRatingCount = IntHelper.fromText(
-      map[outerElementRating]?[innerElementRatingCount],
+      (map[outerElementRating] as Map?)?[innerElementRatingCount],
       nullValueSubstitute: movie.userRatingCount,
     )!;
 

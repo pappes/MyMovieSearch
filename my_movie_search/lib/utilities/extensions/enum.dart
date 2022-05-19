@@ -9,4 +9,5 @@ T? getEnumValue<T extends Enum>(dynamic stringValue, List<T> enumClass) {
     }
     return enumClass.byName(fullString);
   }
+  return null;
 }

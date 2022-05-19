@@ -12,9 +12,11 @@ void main() {
       (tst.WidgetTester tester) async {
     // Create the widget by telling the tester to build it.
     await tester.pumpWidget(
-      TestApp(children: [
-        Poster(url: 'stuff'),
-      ]),
+      TestApp(
+        children: [
+          Poster(url: 'stuff'),
+        ],
+      ),
     );
 
     // Create the Finders.

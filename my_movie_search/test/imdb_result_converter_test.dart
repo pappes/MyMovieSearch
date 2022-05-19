@@ -43,7 +43,7 @@ void main() {
       criteria.criteriaTitle = 'tt7602562';
       final imdbResult = QueryIMDBTitleDetails();
       imdbResult.criteria = criteria;
-      final testInput = htmlSampleFull;
+      const testInput = htmlSampleFull;
       final str = emitByteStream(testInput).transform(utf8.decoder);
 
       // Invoke the search.

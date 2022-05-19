@@ -169,7 +169,7 @@ SearchCriteriaDTO makeCriteriaDTO(String sample) {
 }
 
 class TestApp extends StatelessWidget {
-  TestApp({
+  const TestApp({
     Key? key,
     required this.children,
   }) : super(key: key);

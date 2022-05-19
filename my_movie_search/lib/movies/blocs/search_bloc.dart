@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 part 'bloc_parts/search_event.dart';
 part 'bloc_parts/search_state.dart';
@@ -45,20 +44,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final _allResults = <String, MovieResultDTO>{};
   List<MovieResultDTO> sortedResults = [];
   double _searchProgress = 0.0; // Value representing the search progress.
-
-  /*@override
-  Stream<SearchState> mapEventToState(
-    SearchEvent event,
-  ) async* {
-    if (event is SearchCompleted) {
-      yield SearchState.displayingResults(_searchProgress);
-    } else if (event is SearchCancelled) {
-      yield const SearchState.awaitingInput();
-    } else if (event is SearchRequested) {
-      yield SearchState.searching(SearchRequest(event.criteria.criteriaTitle));
-      //_initiateSearch(event.criteria);
-    }
-  }*/
 
   @override
   // Clean up all open objects.

@@ -8,9 +8,6 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
-import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -82,7 +79,7 @@ mixin ScrapeIMDBTitleDetails
     return scriptElement.innerHtml;
   }
 
-  /// Extract movie type not found in JSON from HTML
+  /// Extract movie type if not previously found in JSON from HTML
   void _scrapeType(Document document, Map movieData) {
     _getAttributeValue(movieData, document, outerElementType);
     if ('' == movieData[outerElementType] &&
@@ -143,11 +140,12 @@ mixin ScrapeIMDBTitleDetails
         return;
       }
 
-      movieData[outerElementLanguages] = [];
+      final languages = [];
       for (final item
           in languageHtml.querySelectorAll('a[href*="language="]')) {
-        movieData[outerElementLanguages].add(item.text);
+        languages.add(item.text);
       }
+      movieData[outerElementLanguages] = languages;
 
       for (final String languageText in movieData[outerElementLanguages]) {
         // Loop through all languages in order to see how dominant English is.
@@ -212,7 +210,7 @@ mixin ScrapeIMDBTitleDetails
     if (movieData[outerElementActors] == null) {
       movieData[outerElementActors] = [attributes];
     } else {
-      movieData[outerElementActors].add(attributes);
+      (movieData[outerElementActors] as List).add(attributes);
     }
   }
 
@@ -243,7 +241,7 @@ mixin ScrapeIMDBTitleDetails
         recommendation.querySelector('span.ipc-rating-star--imdb')?.text; //6.9
     attributes[outerElementOfficialTitle] =
         attributes[outerElementOfficialTitle].toString();
-    movieData[outerElementRelated].add(attributes);
+    (movieData[outerElementRelated] as List).add(attributes);
   }
 
   void _getRecomendationOld(Map movieData, Element recommendation) {
@@ -277,7 +275,7 @@ mixin ScrapeIMDBTitleDetails
         attributes[outerElementOfficialTitle].toString();
     attributes[outerElementDescription] =
         attributes[outerElementDescription].toString();
-    movieData[outerElementRelated].add(attributes);
+    (movieData[outerElementRelated] as List).add(attributes);
   }
 
   Future _fetchAdditionalPersonDetails(dynamic people) async {
@@ -285,38 +283,8 @@ mixin ScrapeIMDBTitleDetails
     for (final people in cast) {
       final detailCriteria = SearchCriteriaDTO();
       detailCriteria.criteriaTitle = people.uniqueId;
-
-      //TODO decide if we want to prefetch cast details
-      //     when pulling back the movie details
-      //     before the user has drilled down to the list.
-      /*ThreadRunner.namedThread('SlowThread').run(
-        _getIMDBPersonDetailsFast,
-        detailCriteria,
-      );*/
-      /*ThreadRunner.namedThread('SlowThread').run(
-        _getIMDBPersonDetailsSlow,
-        detailCriteria,
-      );*/
     }
   }
-
-  /// Add fetch summary person details from imdb.
-  static Future<List<MovieResultDTO>> _getIMDBPersonDetailsFast(
-    SearchCriteriaDTO criteria,
-  ) =>
-      QueryIMDBSuggestions().readPrioritisedCachedList(
-        criteria,
-        priority: ThreadRunner.verySlow,
-      );
-
-  /// Add fetch full person details from imdb.
-  static Future<List<MovieResultDTO>> _getIMDBPersonDetailsSlow(
-    SearchCriteriaDTO criteria,
-  ) =>
-      QueryIMDBNameDetails().readPrioritisedCachedList(
-        criteria,
-        priority: ThreadRunner.verySlow,
-      );
 
   /// Remove any html encoding from a list of strings or comma delimited string
   void _decodeList(Map movieData, String key) {
