@@ -55,6 +55,7 @@ class ImdbSuggestionConverter {
 
   static String? _getImage(imageData) {
     if (imageData is List) return imageData.first as String;
+    if (imageData is String) return imageData;
     return null;
   }
 }
