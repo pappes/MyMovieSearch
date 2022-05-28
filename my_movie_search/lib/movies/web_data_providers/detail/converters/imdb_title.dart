@@ -99,9 +99,13 @@ class ImdbMoviePageConverter {
     return movie;
   }
 
-  static void _getRelated(MovieResultDTO movie, dynamic list, String label) {
-    if (null != list && list is Iterable) {
-      for (final relatedMap in list) {
+  static void _getRelated(MovieResultDTO movie, related, String label) {
+    // Do nothing if related is null
+    if (related is Map) {
+      final dto = dtoFromMap(related);
+      movie.addRelated(label, dto);
+    } else if (related is Iterable) {
+      for (final relatedMap in related) {
         if (relatedMap is Map) {
           final dto = dtoFromMap(relatedMap);
           movie.addRelated(label, dto);
