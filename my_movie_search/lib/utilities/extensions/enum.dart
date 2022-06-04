@@ -1,4 +1,4 @@
-/// String representation of an Enum to Enum representation.
+/// Convert a String representation of an Enum to an Enum representation.
 ///
 T? getEnumValue<T extends Enum>(dynamic stringValue, List<T> enumClass) {
   if (stringValue != null) {

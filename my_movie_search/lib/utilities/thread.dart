@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:isolate';
 
+/// Move processing off the main thread into separate long lived threads.
+///
 /// Implement 'isolate' functionality so that 'compute' requests
 /// processed in a seperate thread can remember data
 /// and return computation results.

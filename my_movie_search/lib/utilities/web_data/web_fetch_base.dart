@@ -18,6 +18,8 @@ typedef TransformFn = List Function(Map? map);
 
 const _defaultSearchResultsLimit = 100;
 
+/// Fetch data from web sources (web services or web pages).
+///
 /// Extend [WebFetchBase] to provide a dynamically switchable stream of <[OUTPUT_TYPE]>
 /// from online and offline sources.
 ///

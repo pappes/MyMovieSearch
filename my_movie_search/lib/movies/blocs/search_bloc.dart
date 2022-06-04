@@ -9,7 +9,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 part 'bloc_parts/search_event.dart';
 part 'bloc_parts/search_state.dart';
 
-/// Moview search business logic wrapper
+/// Moview search business logic wrapper.
 ///
 /// Provides a [Bloc] compliant business logic layer to
 /// manage fetching movie data

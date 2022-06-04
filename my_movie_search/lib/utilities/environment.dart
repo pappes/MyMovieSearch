@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:logger/logger.dart';
 import 'package:my_movie_search/secret.dart';
 
-/// Read in application settings for the operating system en
+/// Read in application settings from the operating system environment.
 ///
 /// Used for settings that vary between production/development environments
 /// and for secrets tah cannot be stored in version control.

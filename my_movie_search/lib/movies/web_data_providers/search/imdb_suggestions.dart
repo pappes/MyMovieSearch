@@ -8,6 +8,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 
 /// Implements [WebFetchBase] for the IMDB search suggestions API.
+///
 /// Search suggestions are used by the lookup bar in the IMDB web page.
 class QueryIMDBSuggestions
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>

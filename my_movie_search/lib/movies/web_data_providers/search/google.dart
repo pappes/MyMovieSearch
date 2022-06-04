@@ -9,8 +9,11 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const _googleResultsPerPage = 10; // More than 10 results in an error!
 
-/// Implements [WebFetchBase] for searching the Open Movie Database.
-/// The Google API is a free web service to obtain movie information.
+/// Implements [WebFetchBase] for searching using google.
+///
+/// The Google API is allows 10000 free requests per day to
+/// programmablesearchengine.goggle.com
+/// This custom search filters to imdb.com/title with safesearch turned off.
 class QueryGoogleMovies
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static const _baseURL =

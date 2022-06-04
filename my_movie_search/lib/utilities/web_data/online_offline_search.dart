@@ -5,7 +5,9 @@ import 'package:logger/logger.dart' show Logger;
 final logger = Logger();
 const defaultToOffline = false;
 
-/// This class allow for dynamic change of behaviour
+/// Perform alternate logic if network connections are being avoided.
+///
+/// [OnlineOfflineSelector] allows for dynamic change of behaviour
 /// if the developer wants to test in offline mode.
 class OnlineOfflineSelector<T> {
   static var _offline = false;

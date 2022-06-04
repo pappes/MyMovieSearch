@@ -25,7 +25,7 @@ class JsonPConversionSink extends Sink<String> {
   void close() => _sink.close();
 }
 
-/// This class parses JSONP string streams and builds the json string stream.
+/// Parses JSONP string streams and builds the json string stream.
 ///
 /// When used as a [StreamTransformer], the input stream may emit
 /// multiple strings. Where necesary streamed input will be buffered.

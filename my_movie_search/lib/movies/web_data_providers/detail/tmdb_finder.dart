@@ -6,8 +6,8 @@ import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_fi
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_detail.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-/// Implements [WebFetchBase] for using IMDB IDs searching
-/// The Movie Database (TMDB).
+/// Implements [WebFetchBase] for using IMDB IDs searching The Movie Database (TMDB).
+///
 /// The TMDb API is a free web service to obtain movie information.
 class QueryTMDBFinder extends QueryTMDBMovieDetails {
   static const _baseURL = 'https://api.themoviedb.org/3/find/';

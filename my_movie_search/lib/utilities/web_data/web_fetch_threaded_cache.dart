@@ -2,7 +2,7 @@ import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-/// Implements [WebFetchBase] for retrieving cast and crew information from IMDB.
+/// Execute [WebFetchBase] requests in another thread and request output.
 abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     extends WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   static final _cache = TieredCache();

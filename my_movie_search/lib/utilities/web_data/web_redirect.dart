@@ -4,7 +4,7 @@ library pappes.utilites;
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-/// Isolate web requests from cross origin vunerabilities.
+/// Exempt web requests from cross origin protections.
 ///
 /// Tunnels browser requests through an intermediate server to strip headers.
 class WebRedirect {

@@ -17,6 +17,8 @@ typedef SearchFunction = Future<List<MovieResultDTO>> Function(
   SearchCriteriaDTO criteria,
 );
 
+/// Retrieve for movie data from multiple online sources.
+///
 /// BlockRepository to consolidate data retrieval from multiple search
 /// and detail providers using the WebFetch framework.
 ///

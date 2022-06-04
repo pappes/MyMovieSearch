@@ -6,6 +6,8 @@ import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestion
 import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
 
+/// Search for movie data from multiple online sources.
+///
 /// BlockRepository to consolidate data retrieval from multiple search
 /// and detail providers using the WebFetch framework.
 ///

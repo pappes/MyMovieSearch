@@ -8,12 +8,13 @@ bool useMobileLayout(BuildContext context) {
   return MediaQuery.of(context).size.width < 600;
 }
 
-/// A [Widget] that diplasy a network image with a footnote diplaying the image address.
+/// A [Widget] that displays a network image and image address.
+///
 /// if no valid network address is supplied, a placeholder text is shown instead.
 ///
 /// Diplayed image has pinch to zoom enabled.
 ///
-/// and [onTap] handler can be supplied to allow drilldown on the image.
+/// An [onTap] handler can be supplied to allow drilldown on the image.
 ///
 class Poster extends Widget {
   Poster({

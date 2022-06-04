@@ -8,7 +8,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-/// Implements [WebFetchBase] for retrieving person details from IMDB.
+/// Implements [WebScraper] for retrieving person details from IMDB.
 mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Scrape movie data from rows in the html table named findList.
   @override

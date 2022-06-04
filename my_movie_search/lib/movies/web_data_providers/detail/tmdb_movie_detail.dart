@@ -10,6 +10,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:universal_io/io.dart' show HttpHeaders;
 
 /// Implements [WebFetchBase] for searching The Movie Database (TMDB).
+///
 /// The TMDb API is a free web service to obtain movie information.
 class QueryTMDBMovieDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
