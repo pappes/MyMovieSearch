@@ -1,5 +1,8 @@
 /// Convert a String representation of an Enum to an Enum representation.
 ///
+/// ```dart
+/// getEnumValue<SpokenLanguage>('English',SpokenLanguage.values);
+/// ```
 T? getEnumValue<T extends Enum>(dynamic stringValue, List<T> enumClass) {
   if (stringValue != null) {
     final fullString = stringValue.toString();

@@ -9,6 +9,7 @@ const Map<ElementType, String> _htmlTags = {
   ElementType.table: 'table',
   ElementType.row: 'tr',
 };
+
 enum AttributeType { address, source, elementClass }
 
 const Map<AttributeType, String> _attributeNames = {
@@ -22,14 +23,18 @@ const Map<AttributeType, String> _attributeNames = {
 extension NodeHelper on Node {
   /// Convert [ElementType] element tag to html string element tag.
   ///
-  /// e.g. ElementType.image is converted to 'img'
+  /// ```dart
+  /// ElementType.image;  // returns 'img'
+  /// ```
   String element(ElementType et) {
     return _htmlTags[et]!;
   }
 
   /// Convert [AttributeType] element tag to html attribute tag.
   ///
-  /// e.g. AttributeType.address is converted to 'href'
+  /// ```dart
+  /// AttributeType.address; // returns 'href'
+  /// ```
   String attribute(AttributeType at) {
     return _attributeNames[at]!;
   }
@@ -40,11 +45,17 @@ extension NodeHelper on Node {
 extension ElementHelper on Element {
   /// Search the DOM for child elements of type [etype].
   ///
+  /// ```dart
+  /// getElementsByType(ElementType.row);
+  /// ```
   List<Element> getElementsByType(ElementType etype) =>
       getElementsByTagName(_htmlTags[etype]!);
 
   /// Extract HTML attribute [atype] from a HTML element.
   ///
+  /// ```dart
+  /// getAttribute(AttributeType.source);
+  /// ```
   String? getAttribute(AttributeType atype) =>
       attributes[_attributeNames[atype]!];
 }

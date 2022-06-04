@@ -4,6 +4,10 @@ extension DoubleHelper on double {
   /// Convert an [formattedText] to decimal representation ignoring thousand seperators
   ///
   /// Allows substitution of null values and zero values
+  ///
+  /// ```dart
+  /// final number = DoubleHelper.fromText('9,999.99');
+  /// ```
   static double? fromText(
     dynamic formattedText, {
     double? nullValueSubstitute,
@@ -25,6 +29,10 @@ extension IntHelper on int {
   /// Convert an [formattedText] to int representation ignoring thousand seperators
   ///
   /// Allows substitution of null values and zero values
+  ///
+  /// ```dart
+  /// final number = IntHelper.fromText('9,999');
+  /// ```
   static int? fromText(
     dynamic formattedText, {
     int? nullValueSubstitute,
@@ -43,7 +51,10 @@ extension IntHelper on int {
 /// Extract last numeric year value from a text date representation.
 ///
 /// Supports [yeartext] values in the format 'YYYY', 'yyyy-YYYY' and 'YYYY-'
-/// e.g. '2005-2009' will return 2009
+///
+/// ```dart
+/// final number = IntHelper.getYear('2005-2009'); // returns 2009
+/// ```
 int? getYear(String? yeartext) {
   if (null != yeartext) {
     if (4 == yeartext.length) {

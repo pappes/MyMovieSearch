@@ -2,7 +2,14 @@ import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-/// Execute [WebFetchBase] requests in another thread and request output.
+/// Execute [WebFetchBase] requests in another thread and cache output.
+///
+/// ```dart
+/// TC().readPrioritisedCachedList(
+///   criteria,
+///   priority: ThreadRunner.verySlow,
+/// );
+/// ```
 abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     extends WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   static final _cache = TieredCache();
@@ -20,7 +27,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   }) async {
     var retval = <OUTPUT_TYPE>[];
 
-    // if cached yield from cache if cache is not stale
+    // yield from cache if cache is not stale
     if (_isResultCached(criteria) && !_isCacheStale(criteria)) {
       print(
         '${ThreadRunner.currentThreadName} '

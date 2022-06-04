@@ -8,16 +8,22 @@ import 'dart:isolate';
 /// and return computation results.
 ///
 /// Sample usage maintianing state in other thread:
-///   final threader = ThreadRunner();
-///   final val = await threader.runAsync(myFunction, input1);
-///   final val = await threader.runAsync(myFunction, input2);
+/// ```dart
+/// final threader = ThreadRunner();
+/// final val = await threader.runAsync(myFunction, input1);
+/// final val = await threader.runAsync(myFunction, input2);
+/// ```
 ///
 /// Sample usage(stateless):
-///   final val = await ThreadRunner().runAsync(myFunction, input);
+/// ```dart
+/// final val = await ThreadRunner().runAsync(myFunction, input);
+/// ```
 ///
-/// Sample usage using factory constructor:
-///   final val = await ThreadRunner(ThreadRunner.slow).runAsync(myFunction, input1);
-///   final val = await ThreadRunner(ThreadRunner.verySlow).runAsync(myFunction, input2);
+/// Sample usage using a named thread:
+/// ```dart
+/// final val = await ThreadRunner(ThreadRunner.slow).runAsync(myFunction, input1);
+/// final val = await ThreadRunner(ThreadRunner.verySlow).runAsync(myFunction, input2);
+/// ```
 class ThreadRunner {
   late SendPort _mainThreadOutboundPort;
   static const String fast = 'Fast Thread';
@@ -51,6 +57,13 @@ class ThreadRunner {
   ///
   /// Function must take exactly one parameter.
   /// Function can be async or synchronous.
+  ///
+  /// ```dart
+  /// // explicit parameter typecast
+  /// final res1 = ThreadRunner().run<int>(myFunction, 0);
+  /// // implicit parameter type
+  /// final res2 = ThreadRunner().run(myFunction, 0);
+  /// ````
   ///
   /// DART V2.14 and prior had the following restrictions:
   /// Function must not be a closure, unnamed function or non-static member function.

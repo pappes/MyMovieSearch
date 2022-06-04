@@ -7,6 +7,12 @@ extension ListHelper on List<String> {
   ///
   /// Convert scalar value to a List with a single value
   /// Convert map to a List (return values, discard keys)
+  ///
+  /// '''dart
+  /// ListHelper.fromJson('[1,2,3]'); // returns  ['1', '2', '3']
+  /// ListHelper.fromJson('[[1,2,3],[4,5,6]]'); // returns  ['[1, 2, 3]', '[4, 5, 6]']
+  /// ListHelper.fromJson('{"first":1, "second":2 }'); // returns  ['1', '2']
+  /// '''
   static List<String> fromJson(String? jsonText) {
     final unique = <String>[];
     if (null == jsonText || jsonText.isEmpty) return unique;
@@ -20,6 +26,11 @@ extension ListHelper on List<String> {
   ///
   /// Removes any duplicate values.
   /// Converts map to a List (adds values, discard keys)
+  ///
+  /// ```dart
+  /// ['a', 'b', 'b'].combineUnique(['b', 'b', 'c']); // returns ['a', 'b', 'c']
+  /// ['a', 'b', 'c'].combineUnique({'A': '1', 'B': '2'}); // returns ['a', 'b', 'c', '1', '2']
+  /// ```
   void combineUnique(dynamic additions) {
     if (null == additions) return;
     List<String> itemList = [];

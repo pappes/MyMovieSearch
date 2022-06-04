@@ -7,13 +7,16 @@ extension DynamicHelper on dynamic {
   ///
   /// Sets the value to empty string if it is not currently a string
   ///
-  /// Static verison of the function supplied
-  /// for calling from other static functions e.g.
-  /// x = DynamicHelper.dynamicToString_(y);
+  /// Static verison of the function supplied for calling from other static functions
+  /// ```dart
+  /// x = DynamicHelper.dynamicToString(y);
+  /// ```
   ///
   /// Non-static verison of the function supplied
-  /// for simpler call syntax e.g.
+  /// for simpler call syntax
+  /// ```dart
   /// x = dynamicToString(y);
+  /// ```
   ///
   String dynamicToString(dynamic val) => DynamicHelper.dynamicToString_(val);
   static String dynamicToString_(dynamic val) {
@@ -26,16 +29,18 @@ extension DynamicHelper on dynamic {
   /// Convert datatype of a value to a non nullablle List<String>
   ///
   /// Sets the value to empty list if it is not currently
-  ///     a List<String>
-  ///     a json encoded List<String>
+  /// *   a List<String>
+  /// *   a json encoded List<String>
   ///
-  /// Static verison of the function supplied
-  /// for calling from other static functions e.g.
+  /// Static verison of the function supplied for calling from other static functions
+  /// ```dart
   /// x = DynamicHelper.dynamicToStringList_(y);
+  /// ```
   ///
-  /// Non-static verison of the function supplied
-  /// for simpler call syntax e.g.
+  /// Non-static verison of the function supplied for simpler call syntax
+  /// ```dart
   /// x = dynamicToStringList(y);
+  /// ```
   ///
   List<String> dynamicToStringList(dynamic val) => dynamicToStringList_(val);
   static List<String> dynamicToStringList_(dynamic val) {
@@ -47,16 +52,18 @@ extension DynamicHelper on dynamic {
   /// Convert datatype of a value to a non nullablle int
   ///
   /// Sets the value to 0 if it is not currently
-  ///     a number
-  ///     a a string representation of a number
+  /// *   a number
+  /// *   a string representation of a number
   ///
-  /// Static verison of the function supplied
-  /// for calling from other static functions e.g.
+  /// Static verison of the function supplied for calling from other static functions
+  /// ```dart
   /// x = DynamicHelper.dynamicToInt_(y);
+  /// ```
   ///
-  /// Non-static verison of the function supplied
-  /// for simpler call syntax e.g.
+  /// Non-static verison of the function supplied for simpler call syntax
+  /// ```dart
   /// x = dynamicToInt(y);
+  /// ```
   ///
   int dynamicToInt(dynamic val) => dynamicToInt_(val);
   static int dynamicToInt_(dynamic val) {
@@ -69,16 +76,18 @@ extension DynamicHelper on dynamic {
   /// Convert datatype of a value to a non nullablle double
   ///
   /// Sets the value to 0 if it is not currently
-  ///     a number
-  ///     a a string representation of a number
+  /// *   a number
+  /// *   a string representation of a number
   ///
-  /// Static verison of the function supplied
-  /// for calling from other static functions e.g.
+  /// Static verison of the function supplied  for calling from other static functions
+  /// ```dart
   /// x = DynamicHelper.dynamicToDouble_(y);
+  /// ```
   ///
-  /// Non-static verison of the function supplied
-  /// for simpler call syntax e.g.
+  /// Non-static verison of the function supplied for simpler call syntax
+  /// ```dart
   /// x = dynamicToDouble(y);
+  /// ```
   ///
   double dynamicToDouble(dynamic val) => dynamicToDouble_(val);
   static double dynamicToDouble_(dynamic val) {

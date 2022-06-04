@@ -9,7 +9,10 @@ extension DurationHelper on Duration {
     return '${twoDigits(inHours)}:$twoDigitMinutes:$twoDigitSeconds';
   }
 
-  /// Convert ISO 8601 [String] e.g. PT1H46M to Dart [Duration]
+  /// Convert ISO 8601 [String] to Dart [Duration]
+  /// ```dart
+  /// fromIso8601('PT1H46M'); // Returns hours=1, minutes=46
+  /// ```
   Duration fromIso8601(dynamic val) {
     final isoString = val?.toString() ?? '';
     //logic adapted from https://dev.to/ashishrawat2911/parse-iso8601-duration-string-to-duration-object-in-dart-flutter-1gc1

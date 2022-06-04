@@ -29,6 +29,16 @@ class JsonPConversionSink extends Sink<String> {
 ///
 /// When used as a [StreamTransformer], the input stream may emit
 /// multiple strings. Where necesary streamed input will be buffered.
+///
+/// ```dart
+/// // Strip JSONP if required
+/// final Stream<String> jsonStream;
+/// if (transformJsonP) {
+///   jsonStream = httpClientStream.transform(JsonPDecoder());
+/// } else {
+///   jsonStream = httpClientStream;
+/// }
+/// ```
 class JsonPDecoder extends Converter<String, String> {
   final _state = JsonPState();
 
