@@ -14,6 +14,10 @@ const _googleResultsPerPage = 10; // More than 10 results in an error!
 /// The Google API is allows 10000 free requests per day to
 /// programmablesearchengine.goggle.com
 /// This custom search filters to imdb.com/title with safesearch turned off.
+///
+/// ```dart
+/// QueryGoogleMovies().readList(criteria, limit: 10)
+/// ```
 class QueryGoogleMovies
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static const _baseURL =

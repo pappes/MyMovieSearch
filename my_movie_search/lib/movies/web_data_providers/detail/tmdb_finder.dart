@@ -9,6 +9,10 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// Implements [WebFetchBase] for using IMDB IDs searching The Movie Database (TMDB).
 ///
 /// The TMDb API is a free web service to obtain movie information.
+///
+/// ```dart
+/// QueryTMDBFinder().readList(criteria);
+/// ```
 class QueryTMDBFinder extends QueryTMDBMovieDetails {
   static const _baseURL = 'https://api.themoviedb.org/3/find/';
   static const _midURL = '?language=en-US&external_source=imdb_id&api_key=';
@@ -30,7 +34,7 @@ class QueryTMDBFinder extends QueryTMDBMovieDetails {
     return results;
   }
 
-  /// API call to TMDB returning the movie details for [searchText].
+  /// API call to TMDB returning the movie details for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     _originalID = searchCriteria;

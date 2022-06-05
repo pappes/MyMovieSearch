@@ -15,6 +15,10 @@ const _columnMovieText = 'result_text';
 const _columnMoviePoster = 'primary_photo';
 
 /// Implements [WebFetchBase] for the IMDB search html webscraper.
+///
+/// ```dart
+/// QueryIMDBSearch().readList(criteria, limit: 10)
+/// ```
 class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static const _baseURL = 'https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=';
 

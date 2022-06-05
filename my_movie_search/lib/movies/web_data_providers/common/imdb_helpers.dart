@@ -12,6 +12,12 @@ const imdbSuffixURL = '?ref_=nv_sr_srsg_0';
 const imdbPhotosPath = 'mediaindex';
 const imdbParentalPath = 'parentalguide';
 
+/// Create a URL from the IMDB identifier.
+///
+/// ```dart
+/// getIdFromIMDBLink('tt0145681');
+/// //returns 'https://www.imdb.com/title/tt0145681/?ref_=nm_sims_nm_t_9'
+/// ```
 String makeImdbUrl(
   String key, {
   String path = '/',
@@ -37,6 +43,13 @@ String makeImdbUrl(
   url.write(imdbSuffixURL);
   return url.toString();
 }
+
+/// Extract the IMDB identifier from a URL.
+///
+/// ```dart
+/// getIdFromIMDBLink('https://www.imdb.com/title/tt0145681/?ref_=nm_sims_nm_t_9');
+/// //returns 'tt0145681'
+/// ```
 
 String getIdFromIMDBLink(String? link) {
   if (null == link || link.isEmpty) {
@@ -65,7 +78,7 @@ String getIdFromIMDBLink(String? link) {
       '';
 }
 
-/// Look at inforamtion provided to see if title type can be determined.
+/// Look at information provided to see if [MovieContentType] can be determined.
 MovieContentType? _lookupImdbMovieContentType(
   String info,
   int? duration,
@@ -91,7 +104,7 @@ MovieContentType? _lookupImdbMovieContentType(
   return null;
 }
 
-/// Look at movie to see if title type (is in brakets)).
+/// Look at movie to see if title type (is in brakets).
 ///
 /// Takes [info] which includes the title and other information
 /// and [title] which does not include the other information
@@ -112,7 +125,7 @@ MovieContentType? findImdbMovieContentTypeFromTitle(
   return null;
 }
 
-/// Use movie type string to lookup movie type.
+/// Use movie type string to lookup [MovieContentType] movie type.
 MovieContentType? getImdbMovieContentType(
   Object? info,
   int? duration,
@@ -125,6 +138,7 @@ MovieContentType? getImdbMovieContentType(
   return MovieContentType.movie;
 }
 
+/// Converts human readable censor ratings to [CensorRatingType] rating categories.
 CensorRatingType? getImdbCensorRating(String? type) {
   // Details available at https://help.imdb.com/article/contribution/titles/certificates/GU757M8ZJ9ZPXB39
   if (type == null) return null;
@@ -184,10 +198,14 @@ CensorRatingType? getImdbCensorRating(String? type) {
   return CensorRatingType.none;
 }
 
-/// Strip image size information from an imdb url
+/// Strip image size information from an imdb url.
+///
+/// ```dart
+/// getBigImage('https://m.media-amazon.com/images/M/MV5BODQxYWM2ODItYjE4ZC00YzAxLTljZDQtMjRjMmE0ZGMwYzZjXkEyXkFqcGdeQXVyODIyOTEyMzY@._V1_UY268_CR9,0,182,268_AL_.jpg');
+/// // strips out '._V1_UY268_CR9,0,182,268_AL_'
+/// // returns https://m.media-amazon.com/images/M/MV5BODQxYWM2ODItYjE4ZC00YzAxLTljZDQtMjRjMmE0ZGMwYzZjXkEyXkFqcGdeQXVyODIyOTEyMzY@.jpg
+/// ```
 String getBigImage(String? smallImage) {
-  // e.g.    https://m.media-amazon.com/images/M/MV5BODQxYWM2ODItYjE4ZC00YzAxLTljZDQtMjRjMmE0ZGMwYzZjXkEyXkFqcGdeQXVyODIyOTEyMzY@._V1_UY268_CR9,0,182,268_AL_.jpg
-  // becomes https://m.media-amazon.com/images/M/MV5BODQxYWM2ODItYjE4ZC00YzAxLTljZDQtMjRjMmE0ZGMwYzZjXkEyXkFqcGdeQXVyODIyOTEyMzY@
   if (null != smallImage && smallImage.startsWith('http')) {
     // http followed by zero or more of anything "(http.*)""
     // followed by a period then multiple non periods "\.[^.]*""

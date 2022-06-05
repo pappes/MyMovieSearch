@@ -10,6 +10,10 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 
 /// Implements [WebFetchBase] for retrieving cast and crew information from IMDB.
+///
+/// ```dart
+/// QueryIMDBCastDetails().readList(criteria);
+/// ```
 class QueryIMDBCastDetails
     extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> {
   static const _baseURL = 'https://www.imdb.com/title/';

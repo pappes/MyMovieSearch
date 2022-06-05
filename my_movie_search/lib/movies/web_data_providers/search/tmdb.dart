@@ -12,6 +12,10 @@ import 'package:universal_io/io.dart' show HttpHeaders;
 /// Implements [WebFetchBase] for searching the The Movie Database (TMDB).
 ///
 /// The OMDb API is a free web service to obtain movie information.
+///
+/// ```dart
+/// QueryTMDBMovies().readList(criteria, limit: 10)
+/// ```
 class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static const _baseURL = 'https://api.themoviedb.org/3/search/movie?api_key=';
 

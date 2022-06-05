@@ -9,6 +9,10 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 
 /// Implements [WebFetchBase] for retrieving movie details from IMDB.
+///
+/// ```dart
+/// QueryIMDBTitleDetails().readList(criteria);
+/// ```
 class QueryIMDBTitleDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBTitleDetails, ThreadedCacheIMDBTitleDetails {
