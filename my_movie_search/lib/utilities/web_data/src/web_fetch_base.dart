@@ -27,9 +27,16 @@ typedef TransformFn = List Function(Map? map);
 /// e.g. switching data source from from IMDB to TMDB.
 ///
 /// Workflow delegated to child class:
-///   JSON, JSONP or HTML from web/file -> Map<Object?> via [offlineData] or [myConstructURI]
-///   Map<Object?> -> Objects of type [OUTPUT_TYPE] via [myTransformMapToOutput]
-///   Exception handling via [myYieldError]
+/// * criteria
+///   *  is converted to [Stream<Text>]
+///   *  via [offlineData] or [myConstructURI]
+/// * JSON, JSONP or HTML is converted to
+///   *  is converted to [Map<Object?>]
+///   *  via [offlineData] or [myConstructURI]
+/// * [Map<Object?>]
+///   *  is converted to Objects of type [OUTPUT_TYPE]
+///   *  via [myTransformMapToOutput]
+/// * Exception handling via [myYieldError]
 ///
 /// Naming convention for internal methods in this class:
 ///   myMethodName - should be overridden by child class
@@ -239,14 +246,24 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Can be overridden by child classes to scrape web pages.
   /// Should call [baseTransformMapToOutputHandler]
   ///     to wrap [myTransformMapToOutput] in exception handling.
+  /// ```dart
+  ///@override
+  ///Stream<MovieResultDTO> myTransformTextStreamToOutputObject(
+  ///  Stream<String> str,
+  ///) async* {
+  ///  // Combine all HTTP chunks together for HTML parsing.
+  ///  final content = await str.reduce((value, element) => '$value$element');
+  ///  final document = parse(content);
+  ///  final movieData = _scrapeWebPage(document);
+  ///  yield* Stream.fromIterable(baseTransformMapToOutputHandler(movieData));
+  ///}
+  /// ```
   Stream<OUTPUT_TYPE> myTransformTextStreamToOutputObject(
     Stream<String> webStream,
   ) async* {
     // Private function to simplify stream transformation.
     List<OUTPUT_TYPE> fnFromMapToListOfOutputType(decodedMap) {
-      return baseTransformMapToOutputHandler(
-        decodedMap as Map<dynamic, dynamic>?,
-      );
+      return baseTransformMapToOutputHandler(decodedMap as Map?);
     }
 
     // Strip JSONP if required
@@ -260,7 +277,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     yield* jsonStream
         .transform(json.decoder) // JSON text to Map<Object?>
         .map(fnFromMapToListOfOutputType) // Map<Object?> to List<OUTPUT_TYPE>
-        .expand((element) => element); // List<TYPE> to Stream<TYPE)
+        .expand(
+            (element) => element); // List<OUTPUT_TYPE> to Stream<OUTPUT_TYPE>)
   }
 
   /// Convert a map of the response to a [List] of <OUTPUT_TYPE>.
