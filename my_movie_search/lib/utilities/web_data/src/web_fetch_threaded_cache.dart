@@ -1,3 +1,5 @@
+library web_fetch;
+
 import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';

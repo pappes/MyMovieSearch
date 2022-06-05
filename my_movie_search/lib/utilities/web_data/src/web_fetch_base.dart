@@ -1,4 +1,4 @@
-library pappes.utilites;
+library web_fetch;
 
 import 'dart:async' show StreamController, FutureOr;
 import 'dart:convert' show json, utf8;
