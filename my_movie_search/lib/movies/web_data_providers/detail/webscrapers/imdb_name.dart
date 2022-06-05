@@ -17,8 +17,9 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   ) async* {
     // Combine all HTTP chunks together for HTML parsing.
     final content = await str.reduce((value, element) => '$value$element');
+    final document = parse(content);
 
-    final movieData = _scrapeWebPage(content);
+    final movieData = _scrapeWebPage(document);
     if (movieData[outerElementDescription] == null) {
       yield myYieldError(
         'imdb webscraper data not detected '
@@ -29,9 +30,8 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   }
 
   /// Collect JSON and webpage text to construct a map of the movie data.
-  Map _scrapeWebPage(String content) {
+  Map _scrapeWebPage(Document document) {
     // Extract embedded JSON.
-    final document = parse(content);
     final movieData = json.decode(_getMovieJson(document)) as Map;
     _scrapeName(document, movieData);
     _scrapePoster(document, movieData);
