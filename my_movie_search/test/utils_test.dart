@@ -51,8 +51,7 @@ class DynamicHelperTest {
 
 Future main() async {
   group('getIdFromIMDBLink', () {
-    // Perform processing on another thread
-    // then later check the results of that processing.
+    // Ensure conversion between IMDB and URL yields correct results.
     test('check sample urls', () {
       void testGetIdFromIMDBLink(String input, expectedOutput) {
         final text = getIdFromIMDBLink(input);

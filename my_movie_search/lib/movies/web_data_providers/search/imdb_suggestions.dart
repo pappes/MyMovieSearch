@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/cache/imdb_suggestion.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_suggestion.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_suggestions.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 
@@ -22,7 +23,7 @@ class QueryIMDBSuggestions
 
   /// Limit results to 10 most relevant by default.
   QueryIMDBSuggestions() {
-    searchResultsLimit = defaultSearchResultsLimit;
+    searchResultsLimit = WebFetchLimiter(defaultSearchResultsLimit);
     transformJsonP = true;
   }
 

@@ -2,11 +2,11 @@ library pappes.utilites;
 
 import 'dart:async' show StreamController, FutureOr;
 import 'dart:convert' show json, utf8;
-import 'dart:math';
 
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart';
 import 'package:universal_io/io.dart'
     show
         HttpClient,
@@ -15,8 +15,6 @@ import 'package:universal_io/io.dart'
 
 typedef DataSourceFn = FutureOr<Stream<String>> Function(dynamic s);
 typedef TransformFn = List Function(Map? map);
-
-const _defaultSearchResultsLimit = 100;
 
 /// Fetch data from web sources (web services or web pages).
 ///
@@ -39,8 +37,7 @@ const _defaultSearchResultsLimit = 100;
 /// Methods without these prefixes are intended for external use and should not be overridden
 abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   INPUT_TYPE? criteria;
-  int? searchResultsLimit;
-  int _searchResultsreturned = 0;
+  WebFetchLimiter searchResultsLimit = WebFetchLimiter();
   bool transformJsonP = false;
 
   //void baseTestSetCriteria(INPUT_TYPE criteria) => _criteria = criteria;
@@ -57,7 +54,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     StreamController<OUTPUT_TYPE> sc,
     INPUT_TYPE criteria, {
     DataSourceFn? source,
-    int? limit = _defaultSearchResultsLimit,
+    int? limit,
   }) {
     void errorHandler(error, stackTrace) {
       logger.e(
@@ -65,10 +62,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       );
     }
 
+    searchResultsLimit.limit = limit;
     baseYieldWebText(
       source: source,
       newCriteria: criteria,
-      resultSize: limit,
     ).pipe(sc).onError(errorHandler);
   }
 
@@ -79,12 +76,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   Future<List<OUTPUT_TYPE>> readList(
     INPUT_TYPE criteria, {
     DataSourceFn? source,
-    int? limit = _defaultSearchResultsLimit,
+    int? limit,
   }) async {
+    searchResultsLimit.limit = limit;
     final list = baseYieldWebText(
       source: source,
       newCriteria: criteria,
-      resultSize: limit,
     ).toList();
     return list;
   }
@@ -96,13 +93,13 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   Future<List<OUTPUT_TYPE>> readCachedList(
     INPUT_TYPE criteria, {
     DataSourceFn? source,
-    int? limit = _defaultSearchResultsLimit,
+    int? limit,
   }) async {
+    searchResultsLimit.limit = limit;
     if (myIsResultCached(criteria)) {
       return baseYieldWebText(
         source: source,
         newCriteria: criteria,
-        resultSize: limit,
       ).toList();
     }
     return <OUTPUT_TYPE>[];
@@ -111,7 +108,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Create a stream with data matching [newCriteria].
   Stream<OUTPUT_TYPE> baseYieldWebText({
     required INPUT_TYPE newCriteria,
-    required int? resultSize,
     DataSourceFn? source,
   }) async* {
     // if cached yield from cache
@@ -135,14 +131,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
           '${myFormatInputAsText(newCriteria)} ',
         );
       }
-      _searchResultsreturned = 0;
+      searchResultsLimit.reset();
       criteria = newCriteria;
-      // apply the lowest supplied result size limit
-      if (null == searchResultsLimit || null == resultSize) {
-        searchResultsLimit = searchResultsLimit ?? resultSize;
-      } else {
-        searchResultsLimit = min(searchResultsLimit!, resultSize);
-      }
 
       final selecter = OnlineOfflineSelector<DataSourceFn>();
       final selectedSource = selecter.select(
@@ -289,20 +279,15 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return retval;
     }
 
-    int remaining = double.maxFinite.toInt(); // Default to unlimited results.
-    if (searchResultsLimit != null) {
-      remaining = searchResultsLimit! - _searchResultsreturned;
-    }
-
     // Construct resultset with a subset of results
-    if (remaining > 1) {
+    if (!searchResultsLimit.limitExceeded) {
       try {
         final list = myTransformMapToOutput(resultMap);
-        _searchResultsreturned += list.length;
+        final capacity = searchResultsLimit.consume(list.length);
         for (final element in list) {
           myAddResultToCache(element);
         }
-        retval = list.take(remaining).toList();
+        retval = list.take(capacity).toList();
       } catch (exception, stacktrace) {
         logger.e(
           'Exception raised during myTransformMapToOutput for _getFetchContext, '
