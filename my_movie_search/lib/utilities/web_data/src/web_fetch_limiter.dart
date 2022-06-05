@@ -19,6 +19,7 @@ class WebFetchLimiter {
     currentUsage += quantity;
     if (limit >= currentUsage) return quantity;
     final excess = currentUsage - limit;
+    currentUsage = limit;
     return quantity - excess;
   }
 
