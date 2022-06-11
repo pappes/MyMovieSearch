@@ -46,6 +46,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   INPUT_TYPE? criteria;
   WebFetchLimiter searchResultsLimit = WebFetchLimiter();
   bool transformJsonP = false;
+  DataSourceFn?
+      _selectedDataSource; // Online data souce or offline data source.
 
   //void baseTestSetCriteria(INPUT_TYPE criteria) => _criteria = criteria;
 
@@ -110,6 +112,55 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       ).toList();
     }
     return <OUTPUT_TYPE>[];
+  }
+
+  /// Fetch text from the web source.
+  ///
+  /// Can be overridden by child classes.
+  /// Default implementation pulls back and UTF8 decodes HTML or Json or JsonP.
+  /// Datasource can be offline or online data source as requested by calling function.
+  /// online data fetches from the web URL defined by [myConstructURI].
+  Future<Stream<String>> myConvertCriteriaToWebText(INPUT_TYPE criteria) async {
+    final webStream = _selectedDataSource!(criteria);
+    final controller = StreamController<String>();
+
+    // Strip JSONP if required
+    void _stripFutureJsonP(Future<Stream<String>> future) {
+      // Need completion of future before we can transform it.
+      future.then((jsonp) {
+        final json = jsonp.transform(JsonPDecoder());
+        controller.addStream(json);
+      });
+    }
+
+    if (transformJsonP) {
+      if (webStream is Future) {
+        _stripFutureJsonP(webStream as Future<Stream<String>>);
+        return controller.stream;
+      } else {
+        return webStream.transform(JsonPDecoder());
+      }
+    } else {
+      return webStream;
+    }
+  }
+
+  /// Convert webtext to a traversable tree of [Map] data.
+  ///
+  /// Must be overridden by child classes.
+  /// resulting Map(s) are returned in a list to allow for web sources that
+  /// return multiple chucks of results.
+  Future<List<Map>> myConvertWebTextToMap(String webText) async {
+    return [];
+  }
+
+  /// Convert dart [Map] to [OUTPUT_TYPE] object data.
+  ///
+  /// Must be overridden by child classes.
+  /// resulting Map(s) are returned in a list to allow for Maps that
+  /// contain multiple records.
+  Future<List<OUTPUT_TYPE>> myConvertMapToOutputType(Map map) async {
+    return [];
   }
 
   /// Describe where the data is comming from.
@@ -193,6 +244,50 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///     as a wrapper to myTransformMapToOutput.
   List<OUTPUT_TYPE> myTransformMapToOutput(Map map);
 
+  /// Convert a map of the response to a [List] of <OUTPUT_TYPE>.
+  ///
+  /// Used for both online and offline operation.
+  /// Wraps [myTransformMapToOutput] in exception handling.
+  ///
+  /// Limits the number of returned results to
+  /// the limit requested by read() or populate().
+  ///
+  /// Should not be overridden by child classes.
+  List<OUTPUT_TYPE> baseTransformMapToOutputHandler(Map? resultMap) {
+    List<OUTPUT_TYPE> retval = [];
+    if (resultMap == null) {
+      logger.i('0 results returned from query for $_getFetchContext');
+      return retval;
+    }
+
+    // Construct resultset with a subset of results
+    if (!searchResultsLimit.limitExceeded) {
+      try {
+        final list = myTransformMapToOutput(resultMap);
+        final capacity = searchResultsLimit.consume(list.length);
+        for (final element in list) {
+          myAddResultToCache(element);
+        }
+        retval = list.take(capacity).toList();
+      } catch (exception, stacktrace) {
+        logger.e(
+          'Exception raised during myTransformMapToOutput for _getFetchContext, '
+          'constructing error for data ${resultMap.toString()}\n '
+          '${exception.toString()}.',
+        );
+        logger.i(
+          '$runtimeType .myTransformMapToOutput stacktrace: '
+          '${stacktrace.toString()}',
+        );
+        final error = myYieldError(
+          'Could not interpret response ' '${resultMap.toString()}',
+        );
+        retval = [error];
+      }
+    }
+    return retval;
+  }
+
   /// Convert a HTML, JSON or JSONP [Stream] of [String]
   /// to a [Stream] of <OUTPUT_TYPE> objects.
   ///
@@ -238,48 +333,102 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
             (element) => element); // List<OUTPUT_TYPE> to Stream<OUTPUT_TYPE>)
   }
 
-  /// Convert a map of the response to a [List] of <OUTPUT_TYPE>.
+  /// Fetch text from the web source with exception handling.
   ///
-  /// Used for both online and offline operation.
-  /// Wraps [myTransformMapToOutput] in exception handling.
+  /// Calls child class [myConvertCriteriaToWebText]
+  /// Converts Future<Stream<String>> to Stream<String>
   ///
-  /// Limits the number of returned results to
-  /// the limit requested by read() or populate().
-  ///
-  /// Should not be overridden by child classes.
-  List<OUTPUT_TYPE> baseTransformMapToOutputHandler(Map? resultMap) {
-    List<OUTPUT_TYPE> retval = [];
-    if (resultMap == null) {
-      logger.i('0 results returned from query for $_getFetchContext');
-      return retval;
+  Stream<String> baseConvertCriteriaToWebText(
+    INPUT_TYPE criteria,
+  ) async* {
+    final controller = StreamController<String>();
+
+    void _logError(error, stackTrace) {
+      logger.e(
+        'Error in $_getFetchContext fetching web text'
+        ' $error\n${stackTrace.toString()}',
+      );
     }
 
-    // Construct resultset with a subset of results
-    if (!searchResultsLimit.limitExceeded) {
-      try {
-        final list = myTransformMapToOutput(resultMap);
-        final capacity = searchResultsLimit.consume(list.length);
-        for (final element in list) {
-          myAddResultToCache(element);
-        }
-        retval = list.take(capacity).toList();
-      } catch (exception, stacktrace) {
-        logger.e(
-          'Exception raised during myTransformMapToOutput for _getFetchContext, '
-          'constructing error for data ${resultMap.toString()}\n '
-          '${exception.toString()}.',
-        );
-        logger.i(
-          '$runtimeType .myTransformMapToOutput stacktrace: '
-          '${stacktrace.toString()}',
-        );
-        final error = myYieldError(
-          'Could not interpret response ' '${resultMap.toString()}',
-        );
-        retval = [error];
+    void _yieldStream(Stream<String> text) {
+      controller.addStream(text);
+    }
+
+    myConvertCriteriaToWebText(criteria).then(_yieldStream, onError: _logError);
+
+    yield* controller.stream;
+
+    // return const Stream.empty();
+    // Note to self: alternate longform syntax would be return Stream<String>.fromIterable([]);
+  }
+
+  /// Convert webtext to a traversable tree of [Map] data with exception handling.
+  ///
+  /// Calls child class [myConvertWebTextToMap]
+  /// Converts incomming Stream<String> to a single String to make it simpler for child class
+  /// Converts Future<List<Map>> to Stream<Map>
+  ///
+  Stream<Map> baseConvertWebTextToMap(Stream<String> webStream) async* {
+    final controller = StreamController<Map>();
+
+    void _addListToStream(List<Map> values) {
+      values.forEach(controller.add);
+    }
+
+    void _logError(error, stackTrace) {
+      logger.e(
+        'Error in $_getFetchContext intepreting web text as a map:'
+        ' $error\n${stackTrace.toString()}',
+      );
+    }
+
+    // Combine all HTTP chunks together for HTML parsing.
+    // Use a StringBuffer to speed up reduce() processing time.
+    final content = StringBuffer();
+    String _concatenate(String value, String text) {
+      content.write(text);
+      return '';
+    }
+
+    void _wrapChildFunction(_) {
+      myConvertWebTextToMap(content.toString())
+          .then(_addListToStream, onError: _logError);
+    }
+
+    webStream.reduce(_concatenate).then(_wrapChildFunction);
+
+    yield* controller.stream;
+  }
+
+  /// Convert dart [Map] to [OUTPUT_TYPE] object data with exception handling.
+  ///
+  /// Calls child class [myConvertMapToOutputType]
+  /// Converts incommoing Stream<Map> to Map to make it simpler for child class
+  /// Converts Future<List<OUTPUT_TYPE>> to Stream<OUTPUT_TYPE>
+  ///
+  Stream<OUTPUT_TYPE> baseConvertMapToOutputType(Stream<Map> pageMap) async* {
+    final controller = StreamController<OUTPUT_TYPE>();
+
+    void _logError(error, stackTrace) {
+      logger.e(
+        'Error in $_getFetchContext translating pagemap to objects:'
+        ' $error\n${stackTrace.toString()}',
+      );
+    }
+
+    void _yieldList(List<OUTPUT_TYPE> objects) {
+      for (final obj in objects) {
+        controller.add(obj);
       }
     }
-    return retval;
+
+    void _wrapChildFunction(Map map) {
+      myConvertMapToOutputType(map).then(_yieldList, onError: _logError);
+    }
+
+    pageMap.listen(_wrapChildFunction);
+
+    yield* controller.stream;
   }
 
   /// Create a stream with data matching [newCriteria].
@@ -315,12 +464,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       criteria = newCriteria;
 
       final selecter = OnlineOfflineSelector<DataSourceFn>();
-      final selectedSource = selecter.select(
+      _selectedDataSource = selecter.select(
         source ?? baseFetchWebText,
         myOfflineData(),
       );
       // Need to await completion of future before we can transform it.
-      final result = selectedSource(newCriteria);
+      final result = _selectedDataSource!(newCriteria);
       final Stream<String> data = await result;
 
       // Emit each element from the list as a seperate element.
