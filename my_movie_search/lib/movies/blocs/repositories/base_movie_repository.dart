@@ -1,5 +1,6 @@
 import 'dart:async' show StreamController;
 
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -146,7 +147,7 @@ class BaseMovieRepository {
         );
       }
       // Load slow results into cache for access on details screen in a seperate thread
-      if (null != slowSearch) {
+      if (dotenv.env['PREFETCH'] == 'true' && null != slowSearch) {
         slowSearch(detailCriteria);
       }
     }
