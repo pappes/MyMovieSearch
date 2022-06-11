@@ -53,7 +53,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   String? get _getFetchContext =>
       '${myDataSourceName()} with criteria $getCriteriaText';
 
-  /// Populate [StreamController] with data matching [criteria].
+  /// Populate [StreamController] with [OUTPUT_TYPE] objects matching [criteria].
   ///
   /// Optionally inject [source] as an alternate datasource for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
@@ -76,7 +76,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     ).pipe(sc).onError(errorHandler);
   }
 
-  /// Return a list with data matching [criteria].
+  /// Return a list of [OUTPUT_TYPE] objects matching [criteria].
   ///
   /// Optionally inject [source] as an alternate datasource for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
@@ -93,7 +93,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     return list;
   }
 
-  /// Return a list with data matching [criteria].
+  /// Return a cached list of [OUTPUT_TYPE] objects matching [criteria].
   ///
   /// Optionally inject [source] as an alternate datasource for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
@@ -110,49 +110,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       ).toList();
     }
     return <OUTPUT_TYPE>[];
-  }
-
-  /// Create a stream with data matching [newCriteria].
-  Stream<OUTPUT_TYPE> baseYieldWebText({
-    required INPUT_TYPE newCriteria,
-    DataSourceFn? source,
-  }) async* {
-    // if cached yield from cache
-    if (myIsResultCached(newCriteria)) {
-      print(
-        'base ${ThreadRunner.currentThreadName} '
-        'value was cached ${myFormatInputAsText(newCriteria)}',
-      );
-      yield* myFetchResultFromCache(newCriteria);
-    }
-    // if not cached or cache is stale retrieve fresh data
-    if (!myIsResultCached(newCriteria) || myIsCacheStale(newCriteria)) {
-      print(
-        'base ${ThreadRunner.currentThreadName} ${myDataSourceName()} '
-        'uncached ${myFormatInputAsText(newCriteria)}',
-      );
-
-      if (myFormatInputAsText(newCriteria) == 'nm0000243') {
-        print(
-          'base ${ThreadRunner.currentThreadName} base uncached '
-          '${myFormatInputAsText(newCriteria)} ',
-        );
-      }
-      searchResultsLimit.reset();
-      criteria = newCriteria;
-
-      final selecter = OnlineOfflineSelector<DataSourceFn>();
-      final selectedSource = selecter.select(
-        source ?? baseFetchWebText,
-        myOfflineData(),
-      );
-      // Need to await completion of future before we can transform it.
-      final result = selectedSource(newCriteria);
-      final Stream<String> data = await result;
-
-      // Emit each element from the list as a seperate element.
-      yield* myTransformTextStreamToOutputObject(data);
-    }
   }
 
   /// Describe where the data is comming from.
@@ -231,7 +188,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Used for both online and offline operation.
   ///
   /// Should be overridden by child classes.
-  /// Should not be called directly by child classes,
+  /// Should not be called directly by child classes.
   /// Child classes can call [baseTransformMapToOutputHandler]
   ///     as a wrapper to myTransformMapToOutput.
   List<OUTPUT_TYPE> myTransformMapToOutput(Map map);
@@ -323,6 +280,52 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       }
     }
     return retval;
+  }
+
+  /// Create a stream with data matching [newCriteria].
+  ///
+  /// Should be overridden by child classes.
+  /// Should not be called directly by child classes.
+  Stream<OUTPUT_TYPE> baseYieldWebText({
+    required INPUT_TYPE newCriteria,
+    DataSourceFn? source,
+  }) async* {
+    // if cached yield from cache
+    if (myIsResultCached(newCriteria)) {
+      print(
+        'base ${ThreadRunner.currentThreadName} '
+        'value was cached ${myFormatInputAsText(newCriteria)}',
+      );
+      yield* myFetchResultFromCache(newCriteria);
+    }
+    // if not cached or cache is stale retrieve fresh data
+    if (!myIsResultCached(newCriteria) || myIsCacheStale(newCriteria)) {
+      print(
+        'base ${ThreadRunner.currentThreadName} ${myDataSourceName()} '
+        'uncached ${myFormatInputAsText(newCriteria)}',
+      );
+
+      if (myFormatInputAsText(newCriteria) == 'nm0000243') {
+        print(
+          'base ${ThreadRunner.currentThreadName} base uncached '
+          '${myFormatInputAsText(newCriteria)} ',
+        );
+      }
+      searchResultsLimit.reset();
+      criteria = newCriteria;
+
+      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      final selectedSource = selecter.select(
+        source ?? baseFetchWebText,
+        myOfflineData(),
+      );
+      // Need to await completion of future before we can transform it.
+      final result = selectedSource(newCriteria);
+      final Stream<String> data = await result;
+
+      // Emit each element from the list as a seperate element.
+      yield* myTransformTextStreamToOutputObject(data);
+    }
   }
 
   /// Fetches and [utf8] decodes online data matching [criteria].
