@@ -145,21 +145,22 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
   }
 
-  /// Convert webtext to a traversable tree of [Map] data.
+  /// Convert webtext to a traversable tree of [List] or [Map] data.
   ///
   /// Must be overridden by child classes.
-  /// resulting Map(s) are returned in a list to allow for web sources that
+  /// resulting Tree(s) are returned in a list to allow for web sources that
   /// return multiple chucks of results.
-  Future<List<Map>> myConvertWebTextToMap(String webText) async {
+  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+      String webText) async {
     return [];
   }
 
-  /// Convert dart [Map] to [OUTPUT_TYPE] object data.
+  /// Convert dart [List] or [Map] to [OUTPUT_TYPE] object data.
   ///
   /// Must be overridden by child classes.
-  /// resulting Map(s) are returned in a list to allow for Maps that
+  /// resulting Object(s) are returned in a list to allow for Maps that
   /// contain multiple records.
-  Future<List<OUTPUT_TYPE>> myConvertMapToOutputType(Map map) async {
+  Future<List<OUTPUT_TYPE>> myConvertTreeToOutputType(Map map) async {
     return [];
   }
 
@@ -362,16 +363,18 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     // Note to self: alternate longform syntax would be return Stream<String>.fromIterable([]);
   }
 
-  /// Convert webtext to a traversable tree of [Map] data with exception handling.
+  /// Convert webtext to a traversable tree of [List] or [Map] data with exception handling.
   ///
-  /// Calls child class [myConvertWebTextToMap]
+  /// Calls child class [myConvertWebTextToTraversableTree]
   /// Converts incomming Stream<String> to a single String to make it simpler for child class
   /// Converts Future<List<Map>> to Stream<Map>
   ///
-  Stream<Map> baseConvertWebTextToMap(Stream<String> webStream) async* {
-    final controller = StreamController<Map>();
+  Stream<dynamic> baseConvertWebTextToTraversableTree(
+    Stream<String> webStream,
+  ) async* {
+    final controller = StreamController<dynamic>();
 
-    void _addListToStream(List<Map> values) {
+    void _addListToStream(List<dynamic> values) {
       values.forEach(controller.add);
     }
 
@@ -390,10 +393,20 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return '';
     }
 
-    void _wrapChildFunction(_) {
-      myConvertWebTextToMap(content.toString())
-          .then(_addListToStream, onError: _logError);
+    void _wrapChildFunction(String ignoredInput) {
+      print('should be empty  $ignoredInput');
+      if ('' == ignoredInput) {
+        myConvertWebTextToTraversableTree(content.toString())
+          ..then(_addListToStream, onError: _logError)
+          ..whenComplete(controller.close);
+      } else {
+        myConvertWebTextToTraversableTree(ignoredInput)
+          ..then(_addListToStream, onError: _logError)
+          ..whenComplete(controller.close);
+      }
     }
+
+    //print((await webStream.toList()).toString());
 
     webStream.reduce(_concatenate).then(_wrapChildFunction);
 
@@ -402,11 +415,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
   /// Convert dart [Map] to [OUTPUT_TYPE] object data with exception handling.
   ///
-  /// Calls child class [myConvertMapToOutputType]
+  /// Calls child class [myConvertTreeToOutputType]
   /// Converts incommoing Stream<Map> to Map to make it simpler for child class
   /// Converts Future<List<OUTPUT_TYPE>> to Stream<OUTPUT_TYPE>
   ///
-  Stream<OUTPUT_TYPE> baseConvertMapToOutputType(Stream<Map> pageMap) async* {
+  Stream<OUTPUT_TYPE> baseConvertTreeToOutputType(
+      Stream<dynamic> pageMap) async* {
     final controller = StreamController<OUTPUT_TYPE>();
 
     void _logError(error, stackTrace) {
@@ -422,8 +436,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       }
     }
 
-    void _wrapChildFunction(Map map) {
-      myConvertMapToOutputType(map).then(_yieldList, onError: _logError);
+    void _wrapChildFunction(dynamic map) {
+      myConvertTreeToOutputType(map as Map)
+        ..then(_yieldList, onError: _logError)
+        ..whenComplete(controller.close);
     }
 
     pageMap.listen(_wrapChildFunction);

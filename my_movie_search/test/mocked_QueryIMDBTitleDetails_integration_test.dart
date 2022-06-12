@@ -52,27 +52,6 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
 
     return client;
   }
-
-  /// Convert webtext to a traversable tree of [Map] data.
-  @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
-    String webText,
-  ) async {
-    final tree = jsonDecode(webText);
-
-    return [tree];
-  }
-
-  /// Convert dart [Map] to [OUTPUT_TYPE] object data.
-  @override
-  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
-    map as Map;
-    final result = MovieResultDTO();
-    result.source = DataSourceType.imdb;
-    result.uniqueId = map[outerElementIdentity]?.toString() ?? '';
-    result.description = map[outerElementDescription]?.toString() ?? '';
-    return [result];
-  }
 }
 
 /// Make dummy dto results for offline queries.
@@ -86,21 +65,6 @@ List<MovieResultDTO> _makeDTOs(int qty) {
         'uniqueId': '$uniqueId',
         'description': '$uniqueId.',
       }.toMovieResultDTO(),
-    );
-  }
-  return results;
-}
-
-/// Make dummy dto results for offline queries.
-List<Map> _makeMaps(int qty) {
-  final results = <Map>[];
-  for (int i = 0; i < qty; i++) {
-    final uniqueId = 1000 + i;
-    results.add(
-      {
-        outerElementIdentity: '$uniqueId',
-        outerElementDescription: '$uniqueId.',
-      },
     );
   }
   return results;
@@ -120,18 +84,6 @@ Stream<String> _getOfflineHTML(String id) async* {
     </body>
 </html>
 ''';
-}
-
-/// Make dummy josn results for offline queries.
-String _makeJson(int qty) {
-  final results = StringBuffer();
-  results.write('[');
-  for (int i = 0; i < qty; i++) {
-    if (i > 0) results.write(', \n  ');
-    results.write('{"id": "${1000 + i}","description": "${1000 + i}."}');
-  }
-  results.write(']');
-  return results.toString();
 }
 
 /// Make dummy html results for offline queries.
@@ -219,96 +171,6 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(
 }
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
-  /// Non Mocked Unit tests
-////////////////////////////////////////////////////////////////////////////////
-
-  group('WebFetchBase baseConvertMapToOutputType', () {
-    Future<void> testConvert(
-      List<Map> input,
-      List<MovieResultDTO>? expectedValue, [
-      String? expectedError,
-    ]) async {
-      final pageMap = Stream.fromIterable(input);
-      final actualOutput =
-          QueryIMDBTitleDetailsMocked().baseConvertTreeToOutputType(pageMap);
-      if (null != expectedValue) {
-        final expectedMatchers =
-            expectedValue.map((e) => MovieResultDTOMatcher(e));
-        expectLater(actualOutput, emitsInOrder(expectedMatchers));
-      }
-    }
-
-    // Convert 0 maps into dtos.
-    test('empty input', () async {
-      final input = [<String, dynamic>{}];
-      final output = <MovieResultDTO>[];
-      await testConvert(input, output);
-    });
-    // Convert 1 map into a dto.
-    test(
-      'single map input',
-      () async {
-        final input = _makeMaps(1);
-        final output = _makeDTOs(1);
-        await testConvert(input, output);
-      },
-      timeout: const Timeout(Duration(seconds: 5)),
-    );
-    // Convert multiple maps into dtos.
-    test(
-      'multiple map input',
-      () async {
-        final input = _makeMaps(100);
-        final output = _makeDTOs(100);
-        await testConvert(input, output);
-      },
-      timeout: const Timeout(Duration(seconds: 5)),
-    );
-  });
-
-  group('WebFetchBase baseConvertWebTextToMap', () {
-    Future<void> testConvert(
-      String input,
-      List<dynamic>? expectedValue, [
-      String? expectedError,
-    ]) async {
-      final jsonStream = Stream.value(input);
-      final actualOutput = QueryIMDBTitleDetailsMocked()
-          .baseConvertWebTextToTraversableTree(jsonStream);
-      if (null != expectedValue) {
-        expectLater(actualOutput, emitsInOrder(expectedValue));
-      }
-    }
-
-    // Convert 0 json maps into a trees.
-    test('empty input', () async {
-      final input = _makeJson(0);
-      final output = _makeMaps(0);
-      await testConvert(input, [output]);
-    });
-    // Convert 1 json map into a tree.
-    test(
-      'single map input',
-      () async {
-        final input = _makeJson(1);
-        final output = _makeMaps(1);
-        await testConvert(input, [output]);
-      },
-      timeout: const Timeout(Duration(seconds: 5)),
-    );
-    // Convert multiple json maps into a trees.
-    test(
-      'multiple map input',
-      () async {
-        final input = _makeJson(10);
-        final output = _makeMaps(10);
-        await testConvert(input, [output]);
-      },
-      timeout: const Timeout(Duration(seconds: 5)),
-    );
-  });
-
 ////////////////////////////////////////////////////////////////////////////////
   /// Mocked Unit(integration) tests
 ////////////////////////////////////////////////////////////////////////////////
