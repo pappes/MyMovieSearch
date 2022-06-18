@@ -23,18 +23,18 @@ const omdbJsonSearchFull =
 const omdbJsonSearchEmpty = '{"Response":"False","Error":"Movie not found!"}';
 const omdbJsonSearchError = '{"Response":"False","Error":"Invalid API key!"}';
 
-Stream<String> streamOmdbJsonOfflineData(dynamic dummy) {
-  return emitOmdbJsonOfflineData(dummy);
+Future<Stream<String>> streamOmdbJsonOfflineData(dynamic dummy) {
+  return Future.value(emitOmdbJsonOfflineData(dummy));
 }
 
-Stream<String> emitOmdbJsonOfflineData(dynamic dummy) async* {
+Stream<String> emitOmdbJsonOfflineData(_) async* {
   yield omdbJsonSearchFull;
 }
 
-Stream<String> emitOmdbJsonEmpty(dynamic dummy) async* {
+Stream<String> emitOmdbJsonEmpty(_) async* {
   yield omdbJsonSearchEmpty;
 }
 
-Stream<String> emitOmdbJsonError(dynamic dummy) async* {
+Stream<String> emitOmdbJsonError(_) async* {
   yield omdbJsonSearchError;
 }

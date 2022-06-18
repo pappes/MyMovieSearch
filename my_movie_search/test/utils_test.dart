@@ -1,10 +1,13 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
-
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
 import 'package:my_movie_search/utilities/thread.dart';
+
+import 'test_helper.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class ThreadTest {
@@ -50,6 +53,36 @@ class DynamicHelperTest {
 ////////////////////////////////////////////////////////////////////////////////
 
 Future main() async {
+  group('SteamHelper printStream', () {
+    Future<void> testPrint(
+      String input,
+      String expectedValue, [
+      String? expectedError,
+    ]) async {
+      final actualOutput = emitStringChars(input);
+      final doublePrint =
+          actualOutput.printStream('print1:').printStream('print2:');
+      final completedStream = await doublePrint.toList();
+      final revivedStream = Stream.fromIterable(completedStream);
+
+      await expectLater(
+        revivedStream,
+        emitsInOrder(expectedValue.characters.toList()),
+      );
+    }
+
+    // Ensure that stream can be observed multiple times and not cause issues.
+    test(
+      'printStream outputs the same stream',
+      () async {
+        const input = 'abc';
+        const output = 'abc';
+        await testPrint(input, output);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+  });
+
   group('getIdFromIMDBLink', () {
     // Ensure conversion between IMDB and URL yields correct results.
     test('check sample urls', () {

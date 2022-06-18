@@ -56,10 +56,10 @@ $imdbHtmlSampleInner
 </html>
 ''';
 
-Stream<String> streamImdbHtmlOfflineData(dynamic dummy) {
-  return emitImdbHtmlSample(dummy);
+Future<Stream<String>> streamImdbHtmlOfflineData(dynamic dummy) {
+  return Future.value(emitImdbHtmlSample(dummy));
 }
 
-Stream<String> emitImdbHtmlSample(dynamic dummy) async* {
+Stream<String> emitImdbHtmlSample(_) async* {
   yield imdbHtmlSampleFull;
 }

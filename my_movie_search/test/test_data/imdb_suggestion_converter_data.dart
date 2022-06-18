@@ -227,6 +227,6 @@ const String imdbJsonSampleOuter =
     '{"v":1,"q":"wonder_woman","d":[ $imdbJsonSampleInner ],"$imdbCustomKeyName":"$imdbCustomKeyVal"}';
 const String imdbJsonPSampleFull = '$imdbJsonPFunction($imdbJsonSampleOuter)';
 
-Stream<String> emitImdbJsonSample(dynamic dummy) async* {
-  yield imdbJsonPSampleFull;
+Future<Stream<String>> emitImdbJsonSample(dynamic dummy) {
+  return Future.value(Stream.value(imdbJsonPSampleFull));
 }

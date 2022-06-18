@@ -1,6 +1,6 @@
 library web_fetch;
 
-import 'dart:async' show StreamController, FutureOr;
+import 'dart:async' show StreamController;
 import 'dart:convert' show json, utf8;
 
 import 'package:my_movie_search/utilities/thread.dart';
@@ -13,7 +13,7 @@ import 'package:universal_io/io.dart'
         HttpClientResponse,
         HttpHeaders; // limit inclusions to reduce size
 
-typedef DataSourceFn = FutureOr<Stream<String>> Function(dynamic s);
+typedef DataSourceFn = Future<Stream<String>> Function(dynamic s);
 typedef TransformFn = List Function(Map? map);
 
 /// Fetch data from web sources (web services or web pages).
@@ -46,8 +46,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   INPUT_TYPE? criteria;
   WebFetchLimiter searchResultsLimit = WebFetchLimiter();
   bool transformJsonP = false;
-  DataSourceFn?
-      _selectedDataSource; // Online data souce or offline data source.
+  late DataSourceFn
+      _selectedDataSource; // Online data source or offline data source.
 
   //void baseTestSetCriteria(INPUT_TYPE criteria) => _criteria = criteria;
 
@@ -121,25 +121,30 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Datasource can be offline or online data source as requested by calling function.
   /// online data fetches from the web URL defined by [myConstructURI].
   Future<Stream<String>> myConvertCriteriaToWebText(INPUT_TYPE criteria) async {
-    final webStream = _selectedDataSource!(criteria);
+    final selecter = OnlineOfflineSelector<DataSourceFn>();
+    final selectedDataSource = selecter.select(
+      baseFetchWebText,
+      myOfflineData(),
+    );
+    final webStream = selectedDataSource(criteria);
+
     final controller = StreamController<String>();
 
-    // Strip JSONP if required
+    // Strip JSONP when future completes
     void _stripFutureJsonP(Future<Stream<String>> future) {
-      // Need completion of future before we can transform it.
-      future.then((jsonp) {
-        final json = jsonp.transform(JsonPDecoder());
-        controller.addStream(json);
-      });
+      void streamJson(Stream<String> jsonp) {
+        controller.addStream(jsonp.transform(JsonPDecoder()));
+      }
+
+      future
+        ..then(streamJson)
+        ..whenComplete(() => baseCloseController(controller));
     }
 
     if (transformJsonP) {
-      if (webStream is Future) {
-        _stripFutureJsonP(webStream as Future<Stream<String>>);
-        return controller.stream;
-      } else {
-        return webStream.transform(JsonPDecoder());
-      }
+      // Need completion of future before we can transform it.
+      _stripFutureJsonP(webStream);
+      return controller.stream;
     } else {
       return webStream;
     }
@@ -151,7 +156,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// resulting Tree(s) are returned in a list to allow for web sources that
   /// return multiple chucks of results.
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
-      String webText) async {
+    String webText,
+  ) async {
     return [];
   }
 
@@ -330,8 +336,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     yield* jsonStream
         .transform(json.decoder) // JSON text to Map<Object?>
         .map(fnFromMapToListOfOutputType) // Map<Object?> to List<OUTPUT_TYPE>
-        .expand(
-            (element) => element); // List<OUTPUT_TYPE> to Stream<OUTPUT_TYPE>)
+        .expand((element) => element); // [<OUTPUT_TYPE>] to Stream<OUTPUT_TYPE>
   }
 
   /// Fetch text from the web source with exception handling.
@@ -349,13 +354,16 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         'Error in $_getFetchContext fetching web text'
         ' $error\n${stackTrace.toString()}',
       );
+      baseCloseController(controller);
     }
 
     void _yieldStream(Stream<String> text) {
       controller.addStream(text);
     }
 
-    myConvertCriteriaToWebText(criteria).then(_yieldStream, onError: _logError);
+    myConvertCriteriaToWebText(criteria)
+      ..then(_yieldStream, onError: _logError)
+      ..whenComplete(() => baseCloseController(controller));
 
     yield* controller.stream;
 
@@ -383,6 +391,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         'Error in $_getFetchContext intepreting web text as a map:'
         ' $error\n${stackTrace.toString()}',
       );
+      baseCloseController(controller);
     }
 
     // Combine all HTTP chunks together for HTML parsing.
@@ -398,11 +407,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       if ('' == ignoredInput) {
         myConvertWebTextToTraversableTree(content.toString())
           ..then(_addListToStream, onError: _logError)
-          ..whenComplete(controller.close);
+          ..whenComplete(() => baseCloseController(controller));
       } else {
+        // TODO: determine why _concatenate is not being called.
         myConvertWebTextToTraversableTree(ignoredInput)
           ..then(_addListToStream, onError: _logError)
-          ..whenComplete(controller.close);
+          ..whenComplete(() => baseCloseController(controller));
       }
     }
 
@@ -420,7 +430,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Converts Future<List<OUTPUT_TYPE>> to Stream<OUTPUT_TYPE>
   ///
   Stream<OUTPUT_TYPE> baseConvertTreeToOutputType(
-      Stream<dynamic> pageMap) async* {
+    Stream<dynamic> pageMap,
+  ) async* {
     final controller = StreamController<OUTPUT_TYPE>();
 
     void _logError(error, stackTrace) {
@@ -439,7 +450,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     void _wrapChildFunction(dynamic map) {
       myConvertTreeToOutputType(map as Map)
         ..then(_yieldList, onError: _logError)
-        ..whenComplete(controller.close);
+        ..whenComplete(() => baseCloseController(controller));
     }
 
     pageMap.listen(_wrapChildFunction);
@@ -485,7 +496,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         myOfflineData(),
       );
       // Need to await completion of future before we can transform it.
-      final result = _selectedDataSource!(newCriteria);
+      final result = _selectedDataSource(newCriteria);
       final Stream<String> data = await result;
 
       // Emit each element from the list as a seperate element.
@@ -528,6 +539,15 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return offlineFunction(criteria);
     }
     return response.transform(utf8.decoder);
+  }
+
+  /// Allow queued async tasks to finish, then close the stream.
+  ///
+  /// Can be overridden by child classes.
+  Future<void> baseCloseController(StreamController controller) async {
+    //
+    await Future.delayed(const Duration(seconds: 2));
+    controller.close();
   }
 
   /// Returns a new [HttpClient] instance to allow mocking in tests.

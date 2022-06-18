@@ -11,9 +11,11 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
+import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
+import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 import 'package:universal_io/io.dart'
-    show HttpClient, HttpClientRequest, HttpClientResponse;
+    show HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders;
 
 import 'test_helper.dart';
 import 'web_fetch_unit_test.mocks.dart';
@@ -22,14 +24,16 @@ import 'web_fetch_unit_test.mocks.dart';
 /// Mock http.Client
 ////////////////////////////////////////////////////////////////////////////////
 
-// To regenertate mocks run flutter pub run build_runner build
-@GenerateMocks([HttpClient, HttpClientRequest, HttpClientResponse])
+// To regenertate mocks run the following command
+// flutter pub run build_runner build --delete-conflicting-outputs
+@GenerateMocks([HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders])
 String _currentCriteria = '';
 
 //HttpClient.getUrl(Uri) = Future<HttpClientRequest>
 //HttpClientRequest.close() = HttpClientResponse
 //HttpClientResponse.statusCode = 200
 //HttpClientResponse.transform(utf8.decoder) = stream<String>
+//myConstructHeaders(client.headers);
 class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
   /// Returns a new [HttpClient] instance to allow mocking in tests.
   @override
@@ -37,8 +41,7 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
     final client = MockHttpClient();
     final clientRequest = MockHttpClientRequest();
     final clientResponse = MockHttpClientResponse();
-    final expectedUri =
-        Uri.parse('https://www.imdb.com/title/tt0000001/?ref_=fn_tt_tt_1');
+    final headers = MockHttpHeaders();
 
     // Use Mockito to return a successful response when it calls the
     // provided HttpClient.
@@ -48,7 +51,8 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
 
     when(clientRequest.close()).thenAnswer((_) async => clientResponse);
 
-    when(client.getUrl(expectedUri)).thenAnswer((_) async => clientRequest);
+    when(client.getUrl(any)).thenAnswer((_) async => clientRequest);
+    when(clientRequest.headers).thenAnswer((_) => headers);
 
     return client;
   }
@@ -107,10 +111,12 @@ List<Map> _makeMaps(int qty) {
 }
 
 /// Make dummy html results for offline queries.
-Stream<String> _getOfflineHTML(String id) async* {
-  yield '''
+Stream<String> _getOfflineHTML(String id) {
+  if (id == '') return Stream.value('');
+  return Stream.value(
+    '''
 <!DOCTYPE html>
-<html
+<html>
     <head>
       <script type="application/ld+json">{
         "description": "$id." }
@@ -119,7 +125,8 @@ Stream<String> _getOfflineHTML(String id) async* {
     <body>
     </body>
 </html>
-''';
+''',
+  );
 }
 
 /// Make dummy josn results for offline queries.
@@ -223,7 +230,7 @@ void main() {
   /// Non Mocked Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('WebFetchBase baseConvertMapToOutputType', () {
+  group('WebFetchBase baseConvertTreeToOutputType', () {
     Future<void> testConvert(
       List<Map> input,
       List<MovieResultDTO>? expectedValue, [
@@ -267,7 +274,7 @@ void main() {
     );
   });
 
-  group('WebFetchBase baseConvertWebTextToMap', () {
+  group('WebFetchBase baseConvertWebTextToTraversableTree', () {
     Future<void> testConvert(
       String input,
       List<dynamic>? expectedValue, [
@@ -304,6 +311,132 @@ void main() {
         final input = _makeJson(10);
         final output = _makeMaps(10);
         await testConvert(input, [output]);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+  });
+
+  group('WebFetchBase baseFetchWebText', () {
+    Future<void> testConvert(
+      String input,
+      String expectedValue, [
+      String? expectedError,
+    ]) async {
+      final criteria = SearchCriteriaDTO();
+      criteria.criteriaTitle = input;
+      _currentCriteria = input;
+      final testClass = QueryIMDBTitleDetailsMocked();
+
+      final actualOutput = await testClass.baseFetchWebText(criteria);
+      await expectLater(
+        actualOutput.printStream(input),
+        emitsInOrder([
+          containsSubstring(
+            expectedValue,
+            startsWith: '<!DOCTYPE html>\n<html>',
+          )
+        ]),
+      );
+    }
+
+    // Convert empty input to empty output.
+    test('empty input', () async {
+      const input = '';
+      const output = '';
+      await testConvert(input, output);
+    });
+    // Convert 1 json map into a tree.
+    test(
+      'mocked http call',
+      () async {
+        const input = '1234';
+        const output = '1234.';
+        await testConvert(input, output);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+  });
+
+  group('WebFetchBase myConvertCriteriaToWebText', () {
+    Future<void> testConvert(
+      String input,
+      String expectedValue, [
+      String? expectedError,
+    ]) async {
+      final criteria = SearchCriteriaDTO();
+      criteria.criteriaTitle = input;
+      _currentCriteria = input;
+      final testClass = QueryIMDBTitleDetailsMocked();
+
+      final actualOutput = await testClass.myConvertCriteriaToWebText(criteria);
+      /*final expectedStream2 = emitStringChars(expectedValue).printStream();
+      final expectedStream = expectedStream2.printStream();
+      final expectedList = await expectedStream.toList();*/
+      await expectLater(
+        actualOutput,
+        emitsInOrder([
+          containsSubstring(
+            expectedValue,
+            startsWith: input == '' ? '' : '<!DOCTYPE html>\n<html>',
+          )
+        ]),
+      );
+    }
+
+    // Convert empty input to empty output.
+    test('empty input', () async {
+      const input = '';
+      const output = '';
+      await testConvert(input, output);
+    });
+    // Convert 1 json map into a tree.
+    test(
+      'mocked http call',
+      () async {
+        const input = '1234';
+        const output = '1234.';
+        await testConvert(input, output);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+  });
+  group('WebFetchBase baseConvertCriteriaToWebText', () {
+    Future<void> testConvert(
+      String input,
+      String expectedValue, [
+      String? expectedError,
+    ]) async {
+      final criteria = SearchCriteriaDTO();
+      criteria.criteriaTitle = input;
+      _currentCriteria = input;
+      final testClass = QueryIMDBTitleDetailsMocked();
+      final actualOutput = testClass
+          .baseConvertCriteriaToWebText(criteria)
+          .printStream('testConvert1:');
+      await expectLater(
+        actualOutput,
+        emitsInOrder([
+          containsSubstring(
+            expectedValue,
+            startsWith: input == '' ? '' : '<!DOCTYPE html>\n<html>',
+          ),
+        ]),
+      );
+    }
+
+    // Convert empty input to empty output.
+    test('empty input', () async {
+      const input = '';
+      const output = '';
+      await testConvert(input, output);
+    });
+    // Convert 1 json map into a tree.
+    test(
+      'mocked http call',
+      () async {
+        const input = '1234';
+        const output = '1234.';
+        await testConvert(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );

@@ -9,6 +9,17 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 ////////////////////////////////////////////////////////////////////////////////
 /// Helper functions
 ////////////////////////////////////////////////////////////////////////////////
+Matcher containsSubstring(String substring, {String startsWith = ''}) {
+  bool testFunction(String actual) {
+    if (actual.startsWith(startsWith) &&
+        actual.contains(RegExp(substring, caseSensitive: false))) {
+      return true;
+    }
+    return false;
+  }
+
+  return predicate(testFunction);
+}
 
 /// Expectation matcher for test framework to compare DTOs
 class MovieResultDTOMatcher extends Matcher {
@@ -97,6 +108,13 @@ class MovieResultDTOListMatcher extends Matcher {
 /// Converts a [str] to a stream.
 Stream<String> emitString(String str) async* {
   yield str;
+}
+
+/// Converts a [str] to a stream.
+Stream<String> emitStringChars(String str) async* {
+  for (final chr in str.characters.toList()) {
+    yield chr;
+  }
 }
 
 /// Converts a [str] to a stream of bytes.
