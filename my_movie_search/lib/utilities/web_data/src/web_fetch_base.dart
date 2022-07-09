@@ -320,7 +320,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   Stream<OUTPUT_TYPE> myTransformTextStreamToOutputObject(
     Stream<String> webStream,
   ) async* {
-    // Private function to simplify stream transformation.
+    // Private function to encapsulate stream transformation.
+    // This single line of logic could be embedded in the below code
+    // but would make the below code more cryptic.
     List<OUTPUT_TYPE> fnFromMapToListOfOutputType(decodedMap) {
       return baseTransformMapToOutputHandler(decodedMap as Map?);
     }
@@ -366,15 +368,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       ..whenComplete(() => baseCloseController(controller));
 
     yield* controller.stream;
-
-    // return const Stream.empty();
-    // Note to self: alternate longform syntax would be return Stream<String>.fromIterable([]);
   }
 
   /// Convert webtext to a traversable tree of [List] or [Map] data with exception handling.
   ///
   /// Calls child class [myConvertWebTextToTraversableTree]
-  /// Converts incomming Stream<String> to a single String to make it simpler for child class
+  /// Unpacks Stream<String> to a single String to make child class logic simpler
   /// Converts Future<List<Map>> to Stream<Map>
   ///
   Stream<dynamic> baseConvertWebTextToTraversableTree(
@@ -416,8 +415,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       }
     }
 
-    //print((await webStream.toList()).toString());
-
     webStream.reduce(_concatenate).then(_wrapChildFunction);
 
     yield* controller.stream;
@@ -426,7 +423,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Convert dart [Map] to [OUTPUT_TYPE] object data with exception handling.
   ///
   /// Calls child class [myConvertTreeToOutputType]
-  /// Converts incommoing Stream<Map> to Map to make it simpler for child class
+  /// Unpacks Stream<Map> to Map to make child class logic simpler
   /// Converts Future<List<OUTPUT_TYPE>> to Stream<OUTPUT_TYPE>
   ///
   Stream<OUTPUT_TYPE> baseConvertTreeToOutputType(
@@ -535,6 +532,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         'Error in http read, '
         'HTTP status code : ${response.statusCode} for $address',
       );
+      //TODO: do not fall back to offline data on unsucessful web fetch
       final offlineFunction = myOfflineData();
       return offlineFunction(criteria);
     }

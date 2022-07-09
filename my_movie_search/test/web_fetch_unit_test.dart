@@ -333,7 +333,7 @@ void main() {
         emitsInOrder([
           containsSubstring(
             expectedValue,
-            startsWith: '<!DOCTYPE html>\n<html>',
+            startsWith: input == '' ? '' : '<!DOCTYPE html>\n<html>',
           )
         ]),
       );
@@ -369,9 +369,6 @@ void main() {
       final testClass = QueryIMDBTitleDetailsMocked();
 
       final actualOutput = await testClass.myConvertCriteriaToWebText(criteria);
-      /*final expectedStream2 = emitStringChars(expectedValue).printStream();
-      final expectedStream = expectedStream2.printStream();
-      final expectedList = await expectedStream.toList();*/
       await expectLater(
         actualOutput,
         emitsInOrder([
