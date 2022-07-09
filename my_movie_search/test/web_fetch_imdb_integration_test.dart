@@ -8,7 +8,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
-/// Mock provider
+/// Read from real IMDB endpoint!
 ////////////////////////////////////////////////////////////////////////////////
 
 /// Create a string list with [qty] unique criteria values.

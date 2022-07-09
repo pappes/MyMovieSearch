@@ -14,6 +14,13 @@ class TieredCache<T> {
     //TODO: queue for adding to disk and cloud caches
   }
 
+  /// Remove all items from the cache.
+  ///
+  Future<void> clear() async {
+    memoryCache.clear();
+    //TODO: flush disk and cloud caches
+  }
+
   /// Check the cache to see if the item is present.
   ///
   bool isCached(dynamic key) {

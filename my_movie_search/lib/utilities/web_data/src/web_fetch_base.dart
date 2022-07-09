@@ -236,6 +236,11 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Can be overridden by child classes if required.
   void myAddResultToCache(OUTPUT_TYPE fetchedResult) {}
 
+  /// Flush all data from the cache.
+  ///
+  /// Can be overridden by child classes if required.
+  void myClearCache() {}
+
   /// Retrieve cached result.
   ///
   /// Can be overridden by child classes if required.
@@ -478,12 +483,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         'uncached ${myFormatInputAsText(newCriteria)}',
       );
 
-      if (myFormatInputAsText(newCriteria) == 'nm0000243') {
-        print(
-          'base ${ThreadRunner.currentThreadName} base uncached '
-          '${myFormatInputAsText(newCriteria)} ',
-        );
-      }
       searchResultsLimit.reset();
       criteria = newCriteria;
 
@@ -494,10 +493,14 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       );
       // Need to await completion of future before we can transform it.
       final result = _selectedDataSource(newCriteria);
-      final Stream<String> data = await result;
+      try {
+        final Stream<String> data = await result;
+        yield* myTransformTextStreamToOutputObject(data);
+      } catch (error, stacktrace) {
+        yield myYieldError(error.toString());
+      }
 
       // Emit each element from the list as a seperate element.
-      yield* myTransformTextStreamToOutputObject(data);
     }
   }
 
@@ -528,13 +531,15 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
     // Check for successful HTTP status before transforming (avoid HTTP 404)
     if (200 != response.statusCode) {
+      final errorMsg = 'Error in http read, '
+          'HTTP status code : ${response.statusCode} for $address';
       logger.e(
-        'Error in http read, '
-        'HTTP status code : ${response.statusCode} for $address',
+        errorMsg,
       );
-      //TODO: do not fall back to offline data on unsucessful web fetch
-      final offlineFunction = myOfflineData();
-      return offlineFunction(criteria);
+      // Rely upon child class to detect non conformant response and wrap it in an error.
+      // TODO: throw
+      throw errorMsg;
+      //return Stream.value(errorMsg);
     }
     return response.transform(utf8.decoder);
   }

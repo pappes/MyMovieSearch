@@ -42,4 +42,10 @@ mixin ThreadedCacheIMDBTitleDetails
       yield value;
     }
   }
+
+  /// Flush all data from the cache.
+  @override
+  void myClearCache() {
+    _cache.clear();
+  }
 }

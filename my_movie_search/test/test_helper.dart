@@ -96,7 +96,7 @@ class MovieResultDTOListMatcher extends Matcher {
     }
     matchState['actual'] = _actual;
     if (_actual.length != expected.length) return false;
-    for (var i = 0; i < _actual.length - 1; i++) {
+    for (var i = 0; i < _actual.length; i++) {
       if (!_actual[i].matches(expected[i])) {
         return false;
       }

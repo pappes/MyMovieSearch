@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mockito/annotations.dart';
@@ -9,11 +8,10 @@ import 'package:mockito/mockito.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 
 import 'package:universal_io/io.dart'
-    show HttpClient, HttpClientRequest, HttpClientResponse;
+    show HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders;
 
 import 'test_helper.dart';
 import 'web_fetch_unit_test.mocks.dart';
@@ -22,9 +20,9 @@ import 'web_fetch_unit_test.mocks.dart';
 /// Mock http.Client
 ////////////////////////////////////////////////////////////////////////////////
 
-// To regenertate mocks run flutter pub run build_runner build
-@GenerateMocks([HttpClient, HttpClientRequest, HttpClientResponse])
-String _currentCriteria = '';
+// To regenertate mocks run the following command
+// flutter pub run build_runner build --delete-conflicting-outputs
+@GenerateMocks([HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders])
 
 //HttpClient.getUrl(Uri) = Future<HttpClientRequest>
 //HttpClientRequest.close() = HttpClientResponse
@@ -32,33 +30,49 @@ String _currentCriteria = '';
 //HttpClientResponse.transform(utf8.decoder) = stream<String>
 class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
   /// Returns a new [HttpClient] instance to allow mocking in tests.
+  late int httpStatus;
+  String? expectedCriteria;
+  QueryIMDBTitleDetailsMocked(this.expectedCriteria, {this.httpStatus = 200});
+
   @override
   HttpClient myGetHttpClient() {
     final client = MockHttpClient();
     final clientRequest = MockHttpClientRequest();
     final clientResponse = MockHttpClientResponse();
-    final expectedUri =
-        Uri.parse('https://www.imdb.com/title/tt0000001/?ref_=fn_tt_tt_1');
+    final headers = MockHttpHeaders();
+    final expectedUri = Uri.parse(
+        'https://www.imdb.com/title/$expectedCriteria/?ref_=fn_tt_tt_1');
+
+    Future<MockHttpClientResponse> getClientResponse(_) async {
+      return clientResponse;
+    }
 
     // Use Mockito to return a successful response when it calls the
     // provided HttpClient.
-    when(clientResponse.statusCode).thenAnswer((_) => 200);
+    when(clientResponse.statusCode).thenAnswer(getHttpStatus);
+    //when(clientResponse.statusCode).thenAnswer((_) => httpStatus);
     when(clientResponse.transform(utf8.decoder))
-        .thenAnswer((_) => _getOfflineHTML(_currentCriteria));
+        .thenAnswer((_) => _getOfflineHTML('$expectedCriteria'));
 
-    when(clientRequest.close()).thenAnswer((_) async => clientResponse);
+    //when(clientRequest.close()).thenAnswer((_) async => clientResponse);
+    when(clientRequest.close()).thenAnswer(getClientResponse);
 
     when(client.getUrl(expectedUri)).thenAnswer((_) async => clientRequest);
+    when(clientRequest.headers).thenAnswer((_) => headers);
 
     return client;
+  }
+
+  int getHttpStatus(_) {
+    return httpStatus;
   }
 }
 
 /// Make dummy dto results for offline queries.
-List<MovieResultDTO> _makeDTOs(int qty) {
+List<MovieResultDTO> _makeDTOs(int startid, int qty) {
   final results = <MovieResultDTO>[];
+  var uniqueId = startid;
   for (int i = 0; i < qty; i++) {
-    final uniqueId = 1000 + i;
     results.add(
       {
         'source': DataSourceType.imdb.toString(),
@@ -66,6 +80,18 @@ List<MovieResultDTO> _makeDTOs(int qty) {
         'description': '$uniqueId.',
       }.toMovieResultDTO(),
     );
+    uniqueId++;
+  }
+  return results;
+}
+
+/// Create a string list with [qty] unique criteria values.
+List<String> _makeQueries(int startId, int qty) {
+  final results = <String>[];
+  var uniqueId = startId;
+  for (int i = 0; i < qty; i++) {
+    results.add((uniqueId).toString());
+    uniqueId++;
   }
   return results;
 }
@@ -92,79 +118,32 @@ Future<Stream<String>> _offlineSearch(dynamic criteria) async {
   return _getOfflineHTML(criteria.criteriaTitle);
 }
 
-/// Create a string list with [qty] unique criteria values.
-List<String> _makeQueries(int qty) {
-  final results = <String>[];
-  for (int i = 0; i < qty; i++) {
-    results.add((1000 + i).toString());
-  }
-  return results;
-}
-
-/// Build a live IMDB url and route Javascript requests through a HTTP tunnel.
-Uri constructURI(String searchText) {
-  _currentCriteria = searchText;
-  const baseURL = 'https://www.imdb.com/title/';
-  const baseURLsuffix = '/?ref_=fn_tt_tt_1';
-  final titleId = searchText.padLeft(7, '0');
-  var url = '${baseURL}tt$titleId$baseURLsuffix';
-
-  // Route web requests through a tunnel if using the Javascript
-  // XMLHttpRequest http client library.
-  if (kIsWeb) {
-    url = 'http://localhost:8080?origin=https://www.imdb.com&'
-        'referer=https://www.imdb.com/&'
-        'destination=${Uri.encodeQueryComponent(url)}';
-  }
-
-  // ignore: avoid_print
-  print('fetching redirected details $url');
-  return Uri.parse(url);
-}
-
-/// Retrieve HTML from IMDB.
-Future<Stream<String>> _onlineSearch(dynamic criteria) async {
-  final SearchCriteriaDTO criteriaText = criteria as SearchCriteriaDTO;
-  final encoded = Uri.encodeQueryComponent(criteriaText.criteriaTitle);
-  final address = constructURI(encoded);
-
-  final client = await HttpClient().getUrl(address);
-  final request = client.close();
-
-  HttpClientResponse response;
-  try {
-    response = await request;
-  } catch (error, stackTrace) {
-    // ignore: avoid_print
-    print('Error in web_fetch read: $error\n${stackTrace.toString()}');
-    rethrow;
-  }
-  // Check for successful HTTP status before transforming (avoid HTTP 404)
-  if (200 != response.statusCode) {
-    // ignore: avoid_print
-    print(
-      'Error in http read, HTTP status code : ${response.statusCode} for address',
-    );
-    return _offlineSearch(criteria);
-  }
-  return response.transform(utf8.decoder);
-}
-
 /// Call IMDB for each criteria in the list.
 List<Future<List<MovieResultDTO>>> _queueDetailSearch(
   List<String> queries,
   bool online,
+  bool simulateHTTP404,
 ) {
   final List<Future<List<MovieResultDTO>>> futures = [];
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO();
-    final imdbDetails =
-        QueryIMDBTitleDetailsMocked(); //Seperate instance per search (async)
+    final imdbDetails = simulateHTTP404
+        ? QueryIMDBTitleDetailsMocked(queryKey, httpStatus: 404)
+        : QueryIMDBTitleDetailsMocked(
+            queryKey); //Seperate instance per search (async)
     criteria.criteriaTitle = queryKey;
-    final future = imdbDetails.readList(
-      criteria,
-      source: online ? _onlineSearch : _offlineSearch,
-    );
+
+    Future<List<MovieResultDTO>> future;
+    if (online) {
+      future = imdbDetails.readList(
+        criteria,
+      );
+    } else {
+      future = imdbDetails.readList(
+        criteria,
+        source: _offlineSearch,
+      );
+    }
     futures.add(future);
   }
   return futures;
@@ -173,6 +152,8 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Mocked Unit(integration) tests
+  /// test readList including data transformation
+  /// but mocks out http calls by replacing myGetHttpClient with _onlineSearch
 ////////////////////////////////////////////////////////////////////////////////
 
   group('WebFetchBase ReadList', () {
@@ -180,9 +161,12 @@ void main() {
       List<String> criteria,
       List<MovieResultDTO> expectedValue, {
       bool online = true,
+      bool forceError = false,
     }) async {
+      // Clear any prior test results from the cache
+      QueryIMDBTitleDetailsMocked('').myClearCache();
       // Call IMDB for each criteria in the list.
-      final futures = _queueDetailSearch(criteria, online);
+      final futures = _queueDetailSearch(criteria, online, forceError);
 
       // Collect the result of all the IMDB queries.
       final queryResult = <MovieResultDTO>[];
@@ -194,34 +178,43 @@ void main() {
       }
 
       // Compare IMDB results to expectations.
-      if (!online) {
-        expect(
-          queryResult,
-          MovieResultDTOListMatcher(expectedValue),
-          reason: 'Emmitted DTO list ${queryResult.toString()} '
-              'needs to match expected DTO list ${expectedValue.toString()}',
-        );
-      }
+      expect(
+        queryResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emmitted DTO list ${queryResult.toString()} '
+            'needs to match expected DTO list ${expectedValue.toString()}',
+      );
     }
 
     // Convert 1 sample offline page into a dto.
     test('Run read 1 offline page', () async {
-      final queries = _makeQueries(1);
-      final queryResult = _makeDTOs(queries.length);
+      const startId = 1000;
+      final queries = _makeQueries(startId, 1);
+      final queryResult = _makeDTOs(startId, queries.length);
       await testRead(queries, queryResult, online: false);
     });
 
     // Convert 300 sample offline pages into dtos.
     test('Run read 300 offline pages', () async {
-      final queries = _makeQueries(300);
-      final queryResult = _makeDTOs(queries.length);
+      const startId = 2000;
+      final queries = _makeQueries(startId, 300);
+      final queryResult = _makeDTOs(startId, queries.length);
       await testRead(queries, queryResult, online: false);
+    });
+
+    // Convert 1 IMDB pages into dtos.
+    test('Run read 1 pages from mocked IMDB', () async {
+      const startId = 3000;
+      final queries = _makeQueries(startId, 1);
+      final queryResult = _makeDTOs(startId, queries.length);
+      await testRead(queries, queryResult);
     });
 
     // Convert 3 IMDB pages into dtos.
     test('Run read 3 pages from mocked IMDB', () async {
-      final queries = _makeQueries(3);
-      final queryResult = _makeDTOs(queries.length);
+      const startId = 4000;
+      final queries = _makeQueries(startId, 3);
+      final queryResult = _makeDTOs(startId, queries.length);
       await testRead(queries, queryResult);
     });
 
@@ -229,11 +222,25 @@ void main() {
     test(
       'Run read 300 pages from mocked IMDB',
       () async {
-        final queries = _makeQueries(300);
-        final queryResult = _makeDTOs(queries.length);
+        const startId = 5000;
+        final queries = _makeQueries(startId, 300);
+        final queryResult = _makeDTOs(startId, queries.length);
         await testRead(queries, queryResult);
       },
       timeout: const Timeout(Duration(seconds: 40)),
     );
+
+    // Test HTTP exception handling
+    test('Test HTTP 404', () async {
+      const startId = 5000;
+      final queries = _makeQueries(startId, 1);
+      final errorMessage = MovieResultDTO();
+      errorMessage.title =
+          '[QueryIMDBTitleDetails] Error in http read, HTTP status code : 404 for https://www.imdb.com/title/$startId/?ref_=fn_tt_tt_1';
+      errorMessage.uniqueId = '-2';
+      errorMessage.source = DataSourceType.imdb;
+      errorMessage.type = MovieContentType.custom;
+      await testRead(queries, [errorMessage], forceError: true);
+    });
   });
 }
