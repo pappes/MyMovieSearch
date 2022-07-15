@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extentions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -115,8 +116,9 @@ mixin ScrapeIMDBTitleDetails
             document.querySelector('div[class="Media__PosterContainer"]');
     if (null != posterBlock && posterBlock.hasChildNodes()) {
       for (final poster in posterBlock.querySelectorAll('img')) {
-        if (null != poster.attributes['src']) {
-          movieData[outerElementImage] = poster.attributes['src'];
+        final url = poster.getAttribute(AttributeType.source);
+        if (null != url) {
+          movieData[outerElementImage] = url;
           break;
         }
       }
@@ -196,21 +198,26 @@ mixin ScrapeIMDBTitleDetails
   }
 
   void _getCastImage(Map movieData, Element recommendation) {
-    final attributes = {};
+    final castMemeber = {};
     // href will be in the form "/name/nm0145681?ref_=tt_sims_tt_t_9"
     final link =
         recommendation.querySelector('a[data-testid="title-cast-item__actor"]');
-    attributes[outerElementOfficialTitle] = link?.text;
+    if (null != link) {
+      castMemeber[outerElementOfficialTitle] = link.text;
+      castMemeber[outerElementIdentity] = getIdFromIMDBLink(
+        link.getAttribute(
+          AttributeType.address,
+        ),
+      );
+      castMemeber[outerElementImage] = recommendation
+          .querySelector('img')
+          ?.getAttribute(AttributeType.source);
 
-    final href = link?.attributes['href'];
-    attributes[outerElementIdentity] = getIdFromIMDBLink(href);
-
-    final img = recommendation.querySelector('img');
-    attributes[outerElementImage] = img?.attributes['src'];
-    if (movieData[outerElementActors] == null) {
-      movieData[outerElementActors] = [attributes];
-    } else {
-      (movieData[outerElementActors] as List).add(attributes);
+      if (movieData[outerElementActors] == null) {
+        movieData[outerElementActors] = [castMemeber];
+      } else {
+        (movieData[outerElementActors] as List).add(castMemeber);
+      }
     }
   }
 
@@ -236,7 +243,7 @@ mixin ScrapeIMDBTitleDetails
     attributes[outerElementOfficialTitle] =
         recommendation.querySelector('span[data-testid="title"]')?.text;
     attributes[outerElementImage] =
-        recommendation.querySelector('img')?.attributes['src'];
+        recommendation.querySelector('img')?.getAttribute(AttributeType.source);
     attributes[innerElementRatingValue] =
         recommendation.querySelector('span.ipc-rating-star--imdb')?.text; //6.9
     attributes[outerElementOfficialTitle] =
@@ -258,7 +265,7 @@ mixin ScrapeIMDBTitleDetails
         ?.querySelector('span')
         ?.innerHtml; //(2010)
     attributes[outerElementImage] =
-        recommendation.querySelector('img')?.attributes['src'];
+        recommendation.querySelector('img')?.getAttribute(AttributeType.source);
     attributes[innerElementRatingValue] = recommendation
         .querySelector('span.rating-rating')
         ?.querySelector('span.value')

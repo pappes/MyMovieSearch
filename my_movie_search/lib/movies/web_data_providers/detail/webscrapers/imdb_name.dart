@@ -5,6 +5,7 @@ import 'package:html/parser.dart' show parse;
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_name.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extentions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -76,9 +77,10 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         document.querySelector('div[class="poster-hero-container"]');
     if (null != posterBlock && posterBlock.hasChildNodes()) {
       for (final poster in posterBlock.querySelectorAll('img')) {
-        if (null != poster.attributes['src']) {
-          movieData[outerElementImage] = poster.attributes['src'];
-          break;
+        final img = poster.getAttribute(AttributeType.source);
+        if (null != img) {
+          movieData[outerElementImage] = img;
+          return;
         }
       }
     }
@@ -109,7 +111,7 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       if (null != link) {
         final movie = {};
         movie[outerElementOfficialTitle] = link.text;
-        movie[outerElementLink] = link.attributes['href'];
+        movie[outerElementLink] = link.getAttribute(AttributeType.source);
         movie[outerElementOfficialTitle] =
             movie[outerElementOfficialTitle].toString();
         movies.add(movie);
