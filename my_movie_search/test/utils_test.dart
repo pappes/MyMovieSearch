@@ -6,11 +6,15 @@ import 'package:my_movie_search/utilities/extensions/collection_extensions.dart'
 import 'package:my_movie_search/utilities/extensions/dom_extentions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
 import 'package:my_movie_search/utilities/thread.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 import 'test_helper.dart';
+
+typedef DataSourceFn = String Function();
 
 // ignore: avoid_classes_with_only_static_members
 class ThreadTest {
@@ -111,6 +115,25 @@ Future main() async {
     );
   });
 
+  group('enum extensions', () {
+    // dom componenets can be referenced by enum.
+    test(
+      'getEnumValue converts a string to an enumeration',
+      () async {
+        final enumeration =
+            getEnumValue<ElementType>('anchor', ElementType.values);
+        expect(enumeration, ElementType.anchor);
+      },
+    );
+    test(
+      'getEnumValue accepts null',
+      () async {
+        final enumeration = getEnumValue<ElementType>(null, ElementType.values);
+        expect(enumeration, null);
+      },
+    );
+  });
+
   group('SteamHelper printStream', () {
     Future<void> testPrint(
       String input,
@@ -121,6 +144,40 @@ Future main() async {
       final doublePrint =
           actualOutput.printStream('print1:').printStream('print2:');
       final completedStream = await doublePrint.toList();
+      final revivedStream = Stream.fromIterable(completedStream);
+
+      await expectLater(
+        revivedStream,
+        emitsInOrder(expectedValue.characters.toList()),
+      );
+    }
+
+    // Ensure that stream can be observed multiple times and not cause issues.
+    test(
+      'printStream outputs the same stream',
+      () async {
+        const input = 'abc';
+        const output = 'abc';
+        await testPrint(input, output);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+  });
+
+  group('SteamHelper printFutureStream', () {
+    Future<void> testPrint(
+      String input,
+      String expectedValue, [
+      String? expectedError,
+    ]) async {
+      final actualOutput = Future.delayed(
+        const Duration(seconds: 1),
+        () => emitStringChars(input),
+      );
+      final doublePrint = actualOutput.then((x) => x
+          .printStreamFuture('print1:')
+          .then((x) => x.printStreamFuture('print2:')));
+      final completedStream = await (await doublePrint).toList();
       final revivedStream = Stream.fromIterable(completedStream);
 
       await expectLater(
@@ -162,6 +219,42 @@ Future main() async {
         'nm0145683',
       );
       testGetIdFromIMDBLink('/name/nm0145684?ref_=nm_sims_nm_t_9', 'nm0145684');
+    });
+  });
+
+  group('OnlineOfflineSelector', () {
+    // Ensure correct function is selected.
+    String fnOnline() => 'online';
+    String fnOffline() => 'offline';
+    test('default select to online', () {
+      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      final fn = selecter.select(fnOnline, fnOffline);
+      expect(fn(), 'online');
+    });
+    test('default init(null) to  select to online', () {
+      OnlineOfflineSelector.init(null);
+      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      final fn = selecter.select(fnOnline, fnOffline);
+      expect(fn(), 'online');
+    });
+    test('override select to offline', () {
+      OnlineOfflineSelector.init('true');
+      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      final fn = selecter.select(fnOnline, fnOffline);
+      expect(fn(), 'offline');
+    });
+    test('override select to online', () {
+      OnlineOfflineSelector.init('true');
+      OnlineOfflineSelector.init('false');
+      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      final fn = selecter.select(fnOnline, fnOffline);
+      expect(fn(), 'online');
+    });
+    test('override select to offline uppercase', () {
+      OnlineOfflineSelector.init('TRUE');
+      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      final fn = selecter.select(fnOnline, fnOffline);
+      expect(fn(), 'offline');
     });
   });
 
@@ -399,6 +492,25 @@ Future main() async {
     });
   });
 
+  group('IntHelper', () {
+    // Convert a string to a number, stripping comma seperators,
+    // rounding decimals and ignoring non numeric input.
+    test('fromText()', () {
+      void testToNumber(input, expectedOutput) {
+        final number = IntHelper.fromText(input);
+        expect(number, expectedOutput);
+      }
+
+      testToNumber('0', 0);
+      testToNumber('1', 1);
+      testToNumber('9,999', 9999);
+      testToNumber('1.0', 1);
+      testToNumber('9,999.99', 10000);
+      testToNumber('number', null);
+      testToNumber(null, null);
+    });
+  });
+
   group('DoubleHelper', () {
     // Convert a string to a number, stripping comma seperators and
     // ignoring non numeric input.
@@ -414,6 +526,7 @@ Future main() async {
       testToNumber('1.0', 1.0);
       testToNumber('9,999.99', 9999.99);
       testToNumber('number', null);
+      testToNumber(null, null);
     });
     // Convert a string to a number, substituting num values where required.
     test('fromText() null substitution', () {
@@ -455,6 +568,25 @@ Future main() async {
       testToNumber('1.0', 1);
       testToNumber('9,999.99', 10000);
       testToNumber('number', null);
+    });
+  });
+
+  group('NumHelper', () {
+    // Convert a string to a numeric year, stripping comma seperators and
+    // ignoring non numeric input.
+    test('getYear()', () {
+      void testToNumber(String? input, expectedOutput) {
+        final number = getYear(input);
+        expect(number, expectedOutput);
+      }
+
+      testToNumber('0000', 0);
+      testToNumber('0001', 1);
+      testToNumber('2010', 2010);
+      testToNumber('2011-2014', 2014);
+      testToNumber('2015-', 2015);
+      testToNumber('number', null);
+      testToNumber(null, null);
     });
   });
 

@@ -11,6 +11,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
+import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 import 'package:universal_io/io.dart'
     show HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders;
@@ -142,6 +143,44 @@ String _makeJson(int qty) {
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Non Mocked Unit tests
+////////////////////////////////////////////////////////////////////////////////
+
+  group('WebFetchBase simple unit tests', () {
+    final testClass = QueryIMDBTitleDetailsMocked();
+
+    // Default data source name.
+    test('myDataSourceName()', () {
+      expect(testClass.myDataSourceName(), 'imdb');
+    });
+    // Simple criteria text.
+    test('myFormatInputAsText()', () {
+      final input = SearchCriteriaDTO();
+      input.criteriaTitle = 'criteria';
+      expect(testClass.myFormatInputAsText(input), 'criteria');
+    });
+    // Default not cached.
+    test('myIsResultCached()', () {
+      final input = SearchCriteriaDTO();
+      input.criteriaTitle = 'criteria';
+      expect(testClass.myIsResultCached(input), false);
+    });
+    // Default not stale cache.
+    test('myIsCacheStale()', () {
+      final input = SearchCriteriaDTO();
+      input.criteriaTitle = 'criteria';
+      expect(testClass.myIsCacheStale(input), false);
+    });
+    // Default no cacheing.
+    test('myIsResultCached()', () {
+      final input = SearchCriteriaDTO();
+      input.criteriaTitle = 'criteria';
+      //testClass.myAddResultToCache(input);
+      expect(testClass.myIsResultCached(input), false);
+    });
+  });
+
+////////////////////////////////////////////////////////////////////////////////
+  /// Mocked Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
   group('WebFetchBase baseConvertTreeToOutputType', () {
