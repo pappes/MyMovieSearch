@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:html/parser.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extentions.dart';
+import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
@@ -53,6 +56,61 @@ class DynamicHelperTest {
 ////////////////////////////////////////////////////////////////////////////////
 
 Future main() async {
+  group('DurationHelper', () {
+    // Formatted time includes the correct values.
+    test(
+      'toFormattedTime converts duration to string',
+      () async {
+        const input = Duration(
+          days: 10,
+          hours: 20,
+          minutes: 30,
+          seconds: 40,
+          milliseconds: 50,
+          microseconds: 60,
+        );
+        const expectedOutput = '260:30:40';
+        expect(input.toFormattedTime(), expectedOutput);
+      },
+    );
+    // All ISO duration components can be encoded except year and month.
+    test(
+      'fromIso8601 values from a string',
+      () async {
+        const input = 'P1W3DT20H30M40S';
+        const expectedOutput = Duration(
+          days: 10,
+          hours: 20,
+          minutes: 30,
+          seconds: 40,
+        );
+        expect(Duration.zero.fromIso8601(input), expectedOutput);
+      },
+    );
+  });
+
+  group('dom extensions', () {
+    // dom componenets can be referenced by enum.
+    final dom = parse(
+      '''
+<html>
+ <body>
+  <a href=https://stuff.com>this is a alink </a>
+</html>
+''',
+    );
+    test(
+      'getAttribute uses the enum to identify the attribute to extract',
+      () async {
+        const expectedOutput = 'https://stuff.com';
+        final anchors = dom.body!.getElementsByType(ElementType.anchor);
+        final anchorElement = anchors.first;
+        final url = anchorElement.getAttribute(AttributeType.address);
+        expect(url, expectedOutput);
+      },
+    );
+  });
+
   group('SteamHelper printStream', () {
     Future<void> testPrint(
       String input,

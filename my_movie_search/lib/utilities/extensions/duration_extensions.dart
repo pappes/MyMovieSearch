@@ -11,7 +11,7 @@ extension DurationHelper on Duration {
 
   /// Convert ISO 8601 [String] to Dart [Duration]
   /// ```dart
-  /// fromIso8601('PT1H46M'); // Returns hours=1, minutes=46
+  ///   ; // Returns hours=1, minutes=46
   /// ```
   Duration fromIso8601(dynamic val) {
     final isoString = val?.toString() ?? '';
