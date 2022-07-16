@@ -16,7 +16,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:universal_io/io.dart'
     show HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders;
 
-import 'test_helper.dart';
+import '../test_helper.dart';
 import 'web_fetch_unit_test.mocks.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
