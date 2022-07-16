@@ -56,16 +56,6 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
     return client;
   }
 
-  /// Convert webtext to a traversable tree of [Map] data.
-  @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
-    String webText,
-  ) async {
-    final tree = jsonDecode(webText);
-
-    return [tree];
-  }
-
   /// Convert dart [Map] to [OUTPUT_TYPE] object data.
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {

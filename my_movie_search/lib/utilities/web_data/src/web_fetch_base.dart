@@ -1,8 +1,9 @@
 library web_fetch;
 
 import 'dart:async' show StreamController;
-import 'dart:convert' show json, utf8;
+import 'dart:convert' show json, jsonDecode, utf8;
 
+import 'package:html/parser.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -72,7 +73,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     searchResultsLimit.limit = limit;
-    baseYieldWebText(
+    baseYieldFetchedObjects(
       source: source,
       newCriteria: criteria,
     ).pipe(sc).onError(errorHandler);
@@ -88,7 +89,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     int? limit,
   }) async {
     searchResultsLimit.limit = limit;
-    final list = baseYieldWebText(
+    final list = baseYieldFetchedObjects(
       source: source,
       newCriteria: criteria,
     ).toList();
@@ -106,12 +107,52 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   }) async {
     searchResultsLimit.limit = limit;
     if (myIsResultCached(criteria)) {
-      return baseYieldWebText(
+      return baseYieldFetchedObjects(
         source: source,
         newCriteria: criteria,
       ).toList();
     }
     return <OUTPUT_TYPE>[];
+  }
+
+  /// Convert dart [List] or [Map] to [OUTPUT_TYPE] object data.
+  ///
+  /// Must be overridden by child classes.
+  /// resulting Object(s) are returned in a list to allow for Maps that
+  /// contain multiple records.
+  Future<List<OUTPUT_TYPE>> myConvertTreeToOutputType(Map map) async {
+    return [];
+  }
+
+  /// Convert webtext to a traversable tree of [List] or [Map] data.
+  ///
+  /// Can be overridden by child classes.
+  /// Default implementation is a simple JSON decode or html parse.
+  ///
+  /// For HTML text it is stongly recommended to override
+  /// the default implementation skipping the json decode
+  /// and extract the required html elements into a map
+  /// (decode and extract content from the dom).
+  ///
+  /// Resulting Tree(s) are returned in a list to allow for web sources that
+  /// return multiple chucks of results.
+  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+    String webText,
+  ) async {
+    try {
+      // Assume text is json encoded.
+      final tree = jsonDecode(webText);
+      return [tree];
+    } catch (jsonException) {
+      try {
+        // Allow text to be HTML encoded if not json enecoded
+        final tree = parse(webText);
+        return [tree];
+      } catch (_) {
+        // If text is not valid json and not valid html then show the json error
+        throw jsonException;
+      }
+    }
   }
 
   /// Fetch text from the web source.
@@ -148,26 +189,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     } else {
       return webStream;
     }
-  }
-
-  /// Convert webtext to a traversable tree of [List] or [Map] data.
-  ///
-  /// Must be overridden by child classes.
-  /// resulting Tree(s) are returned in a list to allow for web sources that
-  /// return multiple chucks of results.
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
-    String webText,
-  ) async {
-    return [];
-  }
-
-  /// Convert dart [List] or [Map] to [OUTPUT_TYPE] object data.
-  ///
-  /// Must be overridden by child classes.
-  /// resulting Object(s) are returned in a list to allow for Maps that
-  /// contain multiple records.
-  Future<List<OUTPUT_TYPE>> myConvertTreeToOutputType(Map map) async {
-    return [];
   }
 
   /// Describe where the data is comming from.
@@ -300,19 +321,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     return retval;
   }
 
-  /// Convert a HTML, JSON or JSONP [Stream] of [String]
-  /// to a [Stream] of <OUTPUT_TYPE> objects.
-  ///
-  /// Used for both online and offline operation.
-  /// For online operation [webStream] is utf8 decoded before being passed to
-  ///     [baseTransformMapToOutputHandler].
-  ///
   /// Can be overridden by child classes to scrape web pages.
   /// Should call [baseTransformMapToOutputHandler]
   ///     to wrap [myTransformMapToOutput] in exception handling.
   /// ```dart
   ///@override
-  ///Stream<MovieResultDTO> myTransformTextStreamToOutputObject(
+  ///Stream<MovieResultDTO> baseTransform(
   ///  Stream<String> str,
   ///) async* {
   ///  // Combine all HTTP chunks together for HTML parsing.
@@ -322,7 +336,21 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///  yield* Stream.fromIterable(baseTransformMapToOutputHandler(movieData));
   ///}
   /// ```
+  ///
   Stream<OUTPUT_TYPE> myTransformTextStreamToOutputObject(
+    Stream<String> webStream,
+  ) async* {
+    yield* baseTransform(webStream);
+  }
+
+  /// Convert a HTML, JSON or JSONP [Stream] of [String]
+  /// to a [Stream] of <OUTPUT_TYPE> objects.
+  ///
+  /// Used for both online and offline operation.
+  /// For online operation [webStream] is utf8 decoded before being passed to
+  ///     [baseTransformMapToOutputHandler].
+  ///
+  Stream<OUTPUT_TYPE> baseTransform(
     Stream<String> webStream,
   ) async* {
     // Private function to encapsulate stream transformation.
@@ -462,9 +490,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
   /// Create a stream with data matching [newCriteria].
   ///
-  /// Should be overridden by child classes.
+  /// Should not be overridden by child classes.
   /// Should not be called directly by child classes.
-  Stream<OUTPUT_TYPE> baseYieldWebText({
+  Stream<OUTPUT_TYPE> baseYieldFetchedObjects({
     required INPUT_TYPE newCriteria,
     DataSourceFn? source,
   }) async* {
@@ -495,7 +523,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       final result = _selectedDataSource(newCriteria);
       try {
         final Stream<String> data = await result;
-        yield* myTransformTextStreamToOutputObject(data);
+        yield* baseTransform(data);
       } catch (error, stacktrace) {
         yield myYieldError(error.toString());
       }
