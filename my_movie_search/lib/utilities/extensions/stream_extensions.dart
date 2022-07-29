@@ -17,23 +17,23 @@ extension StreamHelper<T> on Stream<T> {
   }
 }
 
-extension FutureStreamHelper<T> on Future<T?> {
+extension FutureStreamHelper<T> on Future<Stream<T>?> {
   /// Consumes values from a future stream and prints them out
   /// then puts them on a new future stream.
   ///
   /// For debugging purposes only.
-  Future<T?> printStreamFuture([String prefix = '']) async {
+  Future<Stream<T>?> printStreamFuture([String prefix = '']) async {
     try {
-      final T? awaited = await this;
-      if (awaited is Stream) {
+      final Stream<T>? awaited = await this;
+      if (awaited is Stream && awaited != null) {
         final newStream = awaited.printStream(prefix);
-        return newStream as T;
+        return newStream;
       }
-      String datatype =
+      final datatype =
           (awaited == null) ? 'null' : awaited.runtimeType.toString();
       print('$prefix Unexpected data type: $datatype');
       return null;
-    } catch (error, stackTrace) {
+    } catch (error) {
       print('$prefix EXCEPTION: ${error.toString()}');
       rethrow;
     }
