@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:html/parser.dart';
 
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
@@ -65,6 +66,33 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
     result.uniqueId = map[outerElementIdentity]?.toString() ?? '';
     result.description = map[outerElementDescription]?.toString() ?? '';
     return [result];
+  }
+}
+
+typedef TransformMapToOutputFn = List<String> Function(Map m);
+
+class WebFetchBasic extends WebFetchBase<String, String> {
+  WebFetchBasic() {
+    selectedDataSource = loopBackDataSource;
+  }
+  Future<Stream<String>> loopBackDataSource(dynamic s) async =>
+      Stream.value(s.toString());
+
+  TransformMapToOutputFn overriddenMyTransformMapToOutput =
+      (Map map) => [map.toString()];
+
+  @override
+  DataSourceFn myOfflineData() => loopBackDataSource;
+  @override
+  Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) => Uri();
+  @override
+  List<String> myTransformMapToOutput(Map map) =>
+      overriddenMyTransformMapToOutput(map);
+  @override
+  String myYieldError(String contents) => contents;
+
+  void setMyTransformMapToOutput(TransformMapToOutputFn fn) {
+    overriddenMyTransformMapToOutput = fn;
   }
 }
 
@@ -166,6 +194,122 @@ void main() {
       input.criteriaTitle = 'criteria';
       //testClass.myAddResultToCache(input);
       expect(testClass.myIsResultCached(input), false);
+    });
+  });
+
+  group('WebFetchBase myConvertWebTextToTraversableTree unit tests', () {
+    final testClass = WebFetchBasic();
+
+    // Default html.
+    test('empty string', () async {
+      final actualResult =
+          await testClass.myConvertWebTextToTraversableTree('');
+      expect(
+        actualResult.first.outerHtml,
+        '<html><head></head><body></body></html>',
+      );
+    });
+    test('html doc', () async {
+      final html = await _getOfflineHTML('123').toList();
+      final actualResult =
+          await testClass.myConvertWebTextToTraversableTree(html.first);
+      const expectedResult = '''
+<!DOCTYPE html><html><head>
+      <script type="application/ld+json">{
+        "description": "123." }
+      </script>
+    </head>
+    <body>
+    
+
+</body></html>''';
+
+      ///final test = parse(expectedResult);
+      //test.outerHtml
+      expect(actualResult.first.outerHtml, expectedResult);
+    });
+    test('json doc', () async {
+      final actualResult =
+          await testClass.myConvertWebTextToTraversableTree('[{"key":"val"}]');
+      expect(actualResult.toString(), '[[{key: val}]]');
+    });
+    test('invalid string', () async {
+      final actualResult = await testClass
+          .myConvertWebTextToTraversableTree('<html>this is junk</ht>');
+      expect(actualResult.toString(), '[#document]');
+    });
+  });
+
+  group('WebFetchBase myConvertCriteriaToWebText unit tests', () {
+    final testClass = WebFetchBasic();
+
+    test('empty string', () async {
+      final streamResult = await testClass.myConvertCriteriaToWebText('');
+      final listResult = await streamResult.toList();
+      final textResult = listResult.first;
+      expect(textResult, '');
+    });
+
+    test('without jsonp tranformation', () async {
+      final streamResult =
+          await testClass.myConvertCriteriaToWebText('JsonP([{"key":"val"}])');
+      final listResult = await streamResult.toList();
+      final textResult = listResult.first;
+      expect(textResult, 'JsonP([{"key":"val"}])');
+    });
+
+    test('with jsonp tranformation', () async {
+      testClass.transformJsonP = true;
+      final streamResult =
+          await testClass.myConvertCriteriaToWebText('JsonP([{"key":"val"}])');
+      final listResult = await streamResult.toList();
+      final textResult = listResult.first;
+      expect(textResult, '[{"key":"val"}]');
+    });
+
+    test('exception handler', () async {
+      Future<Stream<String>> myError(dynamic s) async => throw s.toString();
+      testClass.selectedDataSource = myError;
+      final streamResult =
+          await testClass.myConvertCriteriaToWebText('JsonP([{"key":"val"}])');
+      String actualResult = '';
+      try {
+        final listResult = await streamResult.toList();
+      } catch (error) {
+        actualResult = error.toString();
+      }
+      expect(actualResult,
+          'Error in unknown with criteria null fetching web text :JsonP([{"key":"val"}])');
+    });
+  });
+
+  group('WebFetchBase baseTransformMapToOutputHandler unit tests', () {
+    final testClass = WebFetchBasic();
+
+    test('empty map', () {
+      final map = <String, String>{};
+      final actualResult = testClass.baseTransformMapToOutputHandler(map);
+      final expectedResult = ['{}'];
+      expect(actualResult, expectedResult);
+    });
+
+    test('simple value', () async {
+      final map = <String, String>{"Hello": "World"};
+      final actualResult = testClass.baseTransformMapToOutputHandler(map);
+      final expectedResult = ['{Hello: World}'];
+      expect(actualResult, expectedResult);
+    });
+
+    test('exception handler', () async {
+      testClass.setMyTransformMapToOutput(
+          (_) => throw "This is a test error message");
+
+      final map = <String, String>{"Hello": "World"};
+      final actualResult = testClass.baseTransformMapToOutputHandler(map);
+      final expectedResult = [
+        'Error in unknown with criteria null transform map {Hello: World} to List<String> :This is a test error message',
+      ];
+      expect(actualResult, expectedResult);
     });
   });
 

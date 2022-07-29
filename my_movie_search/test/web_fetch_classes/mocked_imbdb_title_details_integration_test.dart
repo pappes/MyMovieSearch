@@ -231,16 +231,20 @@ void main() {
     );
 
     // Test HTTP exception handling
-    test('Test HTTP 404', () async {
-      const startId = 5000;
-      final queries = _makeQueries(startId, 1);
-      final errorMessage = MovieResultDTO();
-      errorMessage.title =
-          '[QueryIMDBTitleDetails] Error in http read, HTTP status code : 404 for https://www.imdb.com/title/$startId/?ref_=fn_tt_tt_1';
-      errorMessage.uniqueId = '-2';
-      errorMessage.source = DataSourceType.imdb;
-      errorMessage.type = MovieContentType.custom;
-      await testRead(queries, [errorMessage], forceError: true);
-    });
+    test(
+      'Test HTTP 404',
+      () async {
+        const startId = 5000;
+        final queries = _makeQueries(startId, 1);
+        final errorMessage = MovieResultDTO();
+        errorMessage.title =
+            '[QueryIMDBTitleDetails] Error in imdb with criteria 5000 fetching web text :Error in http read, HTTP status code : 404 for https://www.imdb.com/title/$startId/?ref_=fn_tt_tt_1';
+        errorMessage.uniqueId = '-2';
+        errorMessage.source = DataSourceType.imdb;
+        errorMessage.type = MovieContentType.custom;
+        await testRead(queries, [errorMessage], forceError: true);
+      },
+      timeout: const Timeout(Duration(seconds: 30)),
+    );
   });
 }

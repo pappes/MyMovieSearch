@@ -164,7 +164,7 @@ Future main() async {
     );
   });
 
-  group('SteamHelper printFutureStream', () {
+  group('SteamHelper printStreamFuture', () {
     Future<void> testPrint(
       String input,
       String expectedValue, [
@@ -174,10 +174,10 @@ Future main() async {
         const Duration(seconds: 1),
         () => emitStringChars(input),
       );
-      final doublePrint = actualOutput.then((x) => x
+      final doublePrint = actualOutput
           .printStreamFuture('print1:')
-          .then((x) => x.printStreamFuture('print2:')));
-      final completedStream = await (await doublePrint).toList();
+          .printStreamFuture('print2:');
+      final completedStream = await (await doublePrint)!.toList();
       final revivedStream = Stream.fromIterable(completedStream);
 
       await expectLater(
