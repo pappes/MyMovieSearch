@@ -48,12 +48,11 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   INPUT_TYPE? criteria;
   WebFetchLimiter searchResultsLimit = WebFetchLimiter();
   bool transformJsonP = false;
-  late DataSourceFn
-      selectedDataSource; // Online data source or offline data source.
+  late DataSourceFn selectedDataSource =
+      baseFetchWebText; // Online data source or offline data source.
 
-  //void baseTestSetCriteria(INPUT_TYPE criteria) => _criteria = criteria;
-
-  String? get getCriteriaText => myFormatInputAsText(criteria);
+  String? get getCriteriaText =>
+      null == criteria ? 'NullCriteria' : myFormatInputAsText(criteria);
   String? get _getFetchContext =>
       '${myDataSourceName()} with criteria $getCriteriaText';
 
@@ -168,16 +167,17 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Datasource can be offline or online data source as requested by calling function.
   /// online data fetches from the web URL defined by [myConstructURI].
   Future<Stream<String>> myConvertCriteriaToWebText(INPUT_TYPE criteria) async {
-    // Use a controller to allow callback functions to populate the stream.
+    // Use a controller to allow the onError callback to populate the stream.
     final controller = StreamController<String>();
     bool returningError = false;
 
     Stream<String> _logError(error, stackTrace) {
       returningError = true;
       controller.addError(
-        baseConstructErrorMessage('fetching web text', error.toString()),
+        baseConstructErrorMessage('fetching web text', error),
       );
-      return Stream.value('');
+      baseCloseController(controller);
+      return const Stream.empty();
     }
 
     final Future<Stream<String>> webData = selectedDataSource(criteria);
@@ -305,7 +305,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       } catch (exception, stacktrace) {
         final errorMessage = baseConstructErrorMessage(
           'transform map ${resultMap.toString()} to ${retval.runtimeType}',
-          exception.toString(),
+          exception,
         );
 
         retval = [myYieldError(errorMessage)];
@@ -328,7 +328,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     } catch (error) {
       final errorMessage = baseConstructErrorMessage(
         'transform ${criteria.toString()} to resulting object',
-        error.toString(),
+        error,
       );
       yield myYieldError(errorMessage);
     }
@@ -399,23 +399,19 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
     Stream<String> _logError(error, stackTrace) {
       controller.addError(
-        baseConstructErrorMessage('fetching web text', error.toString()),
+        baseConstructErrorMessage('fetching web text', error),
       );
-      baseCloseController(controller);
       return const Stream<String>.empty();
     }
 
     Future<void> _yieldStream(Stream<String> text) async {
       await controller.addStream(text);
-      baseCloseController(controller);
     }
 
     myConvertCriteriaToWebText(criteria)
         .timeout(Duration(seconds: 24)) // TODO: allow timeout to be passed in
-      ..then(_yieldStream).onError(_logError) // Stream errors.
-      ..onError(_logError) // Errors form completing the future.
+      ..then(_yieldStream).onError(_logError)
       ..whenComplete(() => baseCloseController(controller));
-    //TODO can we remove whenComplete baseCloseController?
     yield* controller.stream;
   }
 
@@ -430,52 +426,40 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     // Use a controller to allow callback functions to populate the stream.
     final controller = StreamController<dynamic>();
 
-    void _addListToStream(List<dynamic> values) {
-      values.forEach(controller.add);
-      baseCloseController(controller);
-    }
+    void _addListToStream(List<dynamic> values) =>
+        values.forEach(controller.add);
 
     List<dynamic> _logError(error, stackTrace) {
       controller.addError(
-        baseConstructErrorMessage(
-          'intepreting web text as a map',
-          error.toString(),
-        ),
+        baseConstructErrorMessage('intepreting web text as a map', error),
       );
-      baseCloseController(controller);
       return [];
     }
 
     // Combine all HTTP chunks together for HTML parsing.
     // Use a StringBuffer to speed up reduce() processing time.
+    // This is only called if the stream has multiple events!
     final content = StringBuffer();
     String _concatenate(String value, String text) {
-      print('does control get here2? NO');
+      //Value will be blank after the first call
+      if ('' != value) content.write(value);
       content.write(text);
       return '';
     }
 
-    void _wrapChildFunction(String ignoredInput) {
-      print('should be empty  $ignoredInput');
-      if ('' == ignoredInput) {
-        myConvertWebTextToTraversableTree(content.toString())
-          ..then(_addListToStream, onError: _logError)
-          ..whenComplete(() => baseCloseController(controller));
-        //TODO can we remove whenComplete baseCloseController?
-      } else {
-        // TODO: determine why _concatenate is not being called.
-        myConvertWebTextToTraversableTree(ignoredInput)
-          ..then(_addListToStream, onError: _logError)
-          ..whenComplete(() => baseCloseController(controller));
-        //TODO can we remove whenComplete baseCloseController?
-      }
+    void _wrapChildFunction(String reduceResult) {
+      // reduceResult will be empty if the stream had multiple events.
+      final webText = ('' == reduceResult) ? content.toString() : reduceResult;
+      print(webText);
+      myConvertWebTextToTraversableTree(webText)
+          .then(_addListToStream, onError: _logError);
     }
 
     webStream
         .timeout(Duration(seconds: 25)) // TODO: allow timeout to be passed in
         .reduce(_concatenate)
-        .then(_wrapChildFunction);
-//        .onError(_logError); //TODO: ensure correct outputs
+        .then(_wrapChildFunction)
+        .whenComplete(() => baseCloseController(controller));
 
     yield* controller.stream;
   }
@@ -493,14 +477,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     final controller = StreamController<OUTPUT_TYPE>();
 
     List<OUTPUT_TYPE> _logError(error, stackTrace) {
-      final errorObject = myYieldError(
-        baseConstructErrorMessage(
-          'translating pagemap to objects',
-          error.toString(),
-        ),
-      );
+      final errorMessage =
+          baseConstructErrorMessage('translating pagemap to objects', error);
+      final errorObject = myYieldError(errorMessage);
       controller.add(errorObject);
-      baseCloseController(controller);
       return [];
     }
 
@@ -508,23 +488,17 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       for (final obj in objects) {
         controller.add(obj);
       }
-      baseCloseController(controller);
     }
 
     void _wrapChildFunction(dynamic map) {
-      myConvertTreeToOutputType(map as Map)
-        ..then(_yieldList).onError(_logError)
-        ..whenComplete(() => baseCloseController(controller));
-      //TODO can we remove whenComplete baseCloseController?
+      myConvertTreeToOutputType(map as Map).then(_yieldList).onError(_logError);
     }
 
     pageMap
         .timeout(Duration(seconds: 26)) // TODO: allow timeout to be passed in
         .listen(
           _wrapChildFunction,
-          onError: _logError,
-          //onDone: () => baseCloseController(controller),
-          //TODO can we remove whenComplete baseCloseController?
+          onDone: () => baseCloseController(controller),
         );
 
     yield* controller.stream;
@@ -538,6 +512,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     required INPUT_TYPE newCriteria,
     DataSourceFn? source,
   }) async* {
+    criteria = newCriteria;
     // if cached yield from cache
     if (myIsResultCached(newCriteria)) {
       print(
@@ -554,7 +529,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       );
 
       searchResultsLimit.reset();
-      criteria = newCriteria;
 
       final selecter = OnlineOfflineSelector<DataSourceFn>();
       selectedDataSource = selecter.select(
@@ -576,24 +550,25 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Should not be overridden by child classes.
   Future<Stream<String>> baseFetchWebText(dynamic criteria) async {
-    final encoded = Uri.encodeQueryComponent(
-      myFormatInputAsText(criteria as INPUT_TYPE) ?? '',
-    );
-    final address = myConstructURI(encoded);
-
-    final client = await myGetHttpClient().getUrl(address);
-    myConstructHeaders(client.headers);
-    final request = client.close();
-
+    Uri address;
     HttpClientResponse response;
+
     try {
+      final encoded = Uri.encodeQueryComponent(
+        myFormatInputAsText(criteria as INPUT_TYPE) ?? '',
+      );
+      address = myConstructURI(encoded);
+      final client = await myGetHttpClient().getUrl(address);
+      myConstructHeaders(client.headers);
+      final request = client.close();
+
       response = await request;
     } catch (error, stackTrace) {
-      logger.e(
-        'Error in $_getFetchContext fetching web text:'
-        ' $error\n${stackTrace.toString()}',
+      final errorMessge = baseConstructErrorMessage(
+        'fetching web text:',
+        error,
       );
-      rethrow;
+      return Stream.error(errorMessge);
     }
     // Check for successful HTTP status before transforming (avoid HTTP 404)
     if (200 != response.statusCode) {
@@ -602,7 +577,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       logger.e(
         errorMsg,
       );
-      throw errorMsg;
+      return Stream.error(errorMsg);
     }
     return response.transform(utf8.decoder);
   }
@@ -612,17 +587,18 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Keeps existing error message if it is already wrapped in web_fetch context
   ///
   /// Should not be be overridden by child classes.
-  String baseConstructErrorMessage(String context, String error) {
+  String baseConstructErrorMessage(String context, dynamic error) {
     final boilerplate = 'Error in $_getFetchContext';
-    if (error.startsWith(boilerplate)) return error;
-    return '$boilerplate $context :$error';
+    final errorText = error.toString();
+    if (errorText.startsWith(boilerplate)) return errorText;
+    return '$boilerplate $context :$errorText';
   }
 
   /// Allow queued async tasks to finish, then close the stream.
   ///
   /// Can be overridden by child classes.
   Future<void> baseCloseController(StreamController controller) async {
-    await Future.delayed(const Duration(seconds: 2));
+    await Future.delayed(const Duration(seconds: 0));
     controller.close();
   }
 
