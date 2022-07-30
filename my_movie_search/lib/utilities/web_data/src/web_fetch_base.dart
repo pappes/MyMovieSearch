@@ -120,14 +120,15 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     return <OUTPUT_TYPE>[];
   }
 
-  /// Convert dart [List] or [Map] to [OUTPUT_TYPE] object data.
+  /// Convert dart [List] or [Map] or [document] to [OUTPUT_TYPE] object data.
   ///
   /// Must be overridden by child classes.
-  /// resulting Object(s) are returned in a list to allow for Maps that
-  /// contain multiple records.
-  Future<List<OUTPUT_TYPE>> myConvertTreeToOutputType(Map map) async {
-    return [];
-  }
+  /// resulting Object(s) are returned in a list
+  /// to allow for Maps that contain multiple records.
+  Future<List<OUTPUT_TYPE>> myConvertTreeToOutputType(
+    dynamic listOrMapOrDocument,
+  ) async =>
+      <OUTPUT_TYPE>[];
 
   /// Convert webtext to a traversable tree of [List] or [Map] data.
   ///
@@ -144,19 +145,19 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
+    if ('' == webText) throw 'No content returned from web call';
     try {
       // Assume text is json encoded.
       final tree = jsonDecode(webText);
       return [tree];
     } catch (jsonException) {
-      try {
-        // Allow text to be HTML encoded if not json enecoded
-        final tree = parse(webText);
-        return [tree];
-      } catch (_) {
+      // Allow text to be HTML encoded if not json enecoded
+      final tree = parse(webText);
+      if (tree.outerHtml == '<html><head></head><body>$webText</body></html>') {
         // If text is not valid json and not valid html then show the json error
-        throw jsonException;
+        rethrow;
       }
+      return [tree];
     }
   }
 
@@ -401,17 +402,19 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       controller.addError(
         baseConstructErrorMessage('fetching web text', error),
       );
+      baseCloseController(controller);
       return const Stream<String>.empty();
     }
 
     Future<void> _yieldStream(Stream<String> text) async {
       await controller.addStream(text);
+      baseCloseController(controller);
     }
 
     myConvertCriteriaToWebText(criteria)
         .timeout(Duration(seconds: 24)) // TODO: allow timeout to be passed in
-      ..then(_yieldStream).onError(_logError)
-      ..whenComplete(() => baseCloseController(controller));
+        .then(_yieldStream)
+        .onError(_logError);
     yield* controller.stream;
   }
 
@@ -430,9 +433,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         values.forEach(controller.add);
 
     List<dynamic> _logError(error, stackTrace) {
-      controller.addError(
-        baseConstructErrorMessage('intepreting web text as a map', error),
-      );
+      final msg =
+          baseConstructErrorMessage('intepreting web text as a map', error);
+      controller.addError(msg);
+      baseCloseController(controller);
       return [];
     }
 
@@ -458,8 +462,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     webStream
         .timeout(Duration(seconds: 25)) // TODO: allow timeout to be passed in
         .reduce(_concatenate)
-        .then(_wrapChildFunction)
-        .whenComplete(() => baseCloseController(controller));
+        .then(_wrapChildFunction);
 
     yield* controller.stream;
   }
@@ -491,7 +494,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     void _wrapChildFunction(dynamic map) {
-      myConvertTreeToOutputType(map as Map).then(_yieldList).onError(_logError);
+      myConvertTreeToOutputType(map).then(_yieldList).onError(_logError);
     }
 
     pageMap
@@ -596,9 +599,11 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
   /// Allow queued async tasks to finish, then close the stream.
   ///
+  /// Only required if using WhenComplete to close the stream and
+  /// //using OnError to call child classes that can delay adding error
   /// Can be overridden by child classes.
   Future<void> baseCloseController(StreamController controller) async {
-    await Future.delayed(const Duration(seconds: 0));
+    await Future.delayed(const Duration(seconds: 1));
     controller.close();
   }
 

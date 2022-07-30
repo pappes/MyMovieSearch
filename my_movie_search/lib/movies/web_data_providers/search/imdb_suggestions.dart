@@ -48,6 +48,15 @@ class QueryIMDBSuggestions
   List<MovieResultDTO> myTransformMapToOutput(Map map) =>
       ImdbSuggestionConverter.dtoFromCompleteJsonMap(map);
 
+  /// Convert IMDB map to MovieResultDTO records.
+  @override
+  Future<List<MovieResultDTO>> myConvertTreeToOutputType(
+    dynamic listOrMapOrDocument,
+  ) async =>
+      ImdbSuggestionConverter.dtoFromCompleteJsonMap(
+        listOrMapOrDocument as Map,
+      );
+
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) {

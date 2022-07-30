@@ -121,7 +121,6 @@ FormatException: Unexpected character (at character 2)
           .readList(SearchCriteriaDTO(), source: emitInvalidJsonPSample)
           .then((values) => queryResult.addAll(values))
           .onError(
-        // ignore: avoid_print
         (error, stackTrace) {
           actualException = error.toString();
         },

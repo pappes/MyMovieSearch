@@ -124,6 +124,11 @@ class WebFetchBasic extends WebFetchBase<String, String> {
   }
 }
 
+Future<void> _delayedException(Object errorMessage) async {
+  await Future.delayed(Duration(seconds: 1));
+  throw errorMessage;
+}
+
 /// Make dummy dto results for offline queries.
 List<MovieResultDTO> _makeDTOs(int qty) {
   final results = <MovieResultDTO>[];
@@ -230,11 +235,10 @@ void main() {
 
     // Default html.
     test('empty string', () async {
-      final actualResult =
-          await testClass.myConvertWebTextToTraversableTree('');
-      expect(
-        actualResult.first.outerHtml,
-        '<html><head></head><body></body></html>',
+      final actualResult = testClass.myConvertWebTextToTraversableTree('');
+      await expectLater(
+        actualResult,
+        throwsA('No content returned from web call'),
       );
     });
     test('html doc', () async {
@@ -252,8 +256,6 @@ void main() {
 
 </body></html>''';
 
-      ///final test = parse(expectedResult);
-      //test.outerHtml
       expect(actualResult.first.outerHtml, expectedResult);
     });
     test('json doc', () async {
@@ -345,7 +347,7 @@ void main() {
   /// Mocked Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('WebFetchBase baseConvertTreeToOutputType', () {
+  group('WebFetchBase mocked baseConvertTreeToOutputType', () {
     Future<void> testConvert(
       List<Map> input,
       List<MovieResultDTO>? expectedValue, [
@@ -357,7 +359,7 @@ void main() {
       if (null != expectedValue) {
         final expectedMatchers =
             expectedValue.map((e) => MovieResultDTOMatcher(e));
-        expectLater(actualOutput, emitsInOrder(expectedMatchers));
+        await expectLater(actualOutput, emitsInOrder(expectedMatchers));
       }
     }
 
@@ -417,7 +419,7 @@ void main() {
     );
   });
 
-  group('WebFetchBase baseConvertWebTextToTraversableTree', () {
+  group('WebFetchBase mocked baseConvertWebTextToTraversableTree', () {
     Future<void> testConvert(
       String input,
       List<dynamic>? expectedValue, [
@@ -427,7 +429,7 @@ void main() {
       final actualOutput = QueryIMDBTitleDetailsMocked()
           .baseConvertWebTextToTraversableTree(jsonStream);
       if (null != expectedValue) {
-        expectLater(actualOutput, emitsInOrder(expectedValue));
+        await expectLater(actualOutput, emitsInOrder(expectedValue));
       }
     }
 
@@ -502,7 +504,7 @@ void main() {
     );
   });
 
-  group('WebFetchBase baseFetchWebText', () {
+  group('WebFetchBase mocked baseFetchWebText', () {
     Future<void> testConvert(
       String input,
       String expectedValue, [
@@ -542,7 +544,7 @@ void main() {
     );
   });
 
-  group('WebFetchBase myConvertCriteriaToWebText', () {
+  group('WebFetchBase mocked myConvertCriteriaToWebText', () {
     Future<void> testConvert(
       String input,
       String expectedValue, [
@@ -581,7 +583,7 @@ void main() {
       timeout: const Timeout(Duration(seconds: 5)),
     );
   });
-  group('WebFetchBase baseConvertCriteriaToWebText', () {
+  group('WebFetchBase mocked baseConvertCriteriaToWebText', () {
     Future<void> testConvert(
       String input,
       String expectedValue, [
@@ -624,14 +626,14 @@ void main() {
       'exception handling',
       () async {
         final testClass = QueryIMDBTitleDetailsMocked();
-        testClass.selectedDataSource = (_) => throw 'Search Failed';
+        testClass.selectedDataSource = (_) => throw 'Convert Failed';
         final actualOutput =
             testClass.baseConvertCriteriaToWebText(SearchCriteriaDTO());
         await expectLater(
           actualOutput,
           emitsError(
             'Error in imdb with criteria NullCriteria '
-            'fetching web text :Search Failed',
+            'fetching web text :Convert Failed',
           ),
         );
       },
@@ -639,7 +641,7 @@ void main() {
     );
   });
 
-  group('WebFetchBase baseFetchWebText unit tests', () {
+  group('WebFetchBase mocked baseFetchWebText unit tests', () {
     final testClass = QueryIMDBTitleDetailsMocked();
 
     test('fetch sucessful', () async {
