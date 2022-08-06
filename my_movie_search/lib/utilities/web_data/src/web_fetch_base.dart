@@ -127,8 +127,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// to allow for Maps that contain multiple records.
   Future<List<OUTPUT_TYPE>> myConvertTreeToOutputType(
     dynamic listOrMapOrDocument,
-  ) async =>
-      <OUTPUT_TYPE>[];
+  );
 
   /// Convert webtext to a traversable tree of [List] or [Map] data.
   ///
@@ -256,7 +255,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Insert transformed data into cache.
   ///
   /// Can be overridden by child classes if required.
-  void myAddResultToCache(OUTPUT_TYPE fetchedResult) {}
+  void myAddResultToCache(INPUT_TYPE criteria, OUTPUT_TYPE fetchedResult) {}
 
   /// Flush all data from the cache.
   ///
@@ -278,7 +277,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     try {
       final tree = baseConvertCriteriaToWebText(criteria);
       final map = baseConvertWebTextToTraversableTree(tree);
-      yield* baseConvertTreeToOutputType(map);
+      yield* baseConvertTreeToOutputType(criteria, map);
     } catch (error) {
       final errorMessage = baseConstructErrorMessage(
         'transform ${criteria.toString()} to resulting object',
@@ -380,6 +379,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should not be overridden by child classes.
 
   Stream<OUTPUT_TYPE> baseConvertTreeToOutputType(
+    INPUT_TYPE criteria,
     Stream<dynamic> pageMap,
   ) async* {
     // Use a controller to allow callback functions to populate the stream.
@@ -395,7 +395,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
     List<OUTPUT_TYPE> _yieldList(List<OUTPUT_TYPE> objects) {
       for (final object in objects) {
-        myAddResultToCache(object);
+        myAddResultToCache(criteria, object);
       }
       // Construct resultset with a subset of results.
       final capacity = searchResultsLimit.consume(objects.length);
@@ -453,11 +453,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         myOfflineData(),
       );
 
-      try {
-        yield* baseTransform(newCriteria);
-      } catch (error) {
-        yield myYieldError(error.toString());
-      }
+      yield* baseTransform(newCriteria);
     }
   }
 

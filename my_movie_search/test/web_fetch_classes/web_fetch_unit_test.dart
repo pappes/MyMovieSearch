@@ -359,7 +359,10 @@ void main() {
     ]) async {
       final pageMap = Stream.fromIterable(input);
       final actualOutput =
-          QueryUnknownSourceMocked().baseConvertTreeToOutputType(pageMap);
+          QueryUnknownSourceMocked().baseConvertTreeToOutputType(
+        SearchCriteriaDTO(),
+        pageMap,
+      );
       if (null != expectedValue) {
         final expectedMatchers =
             expectedValue.map((e) => MovieResultDTOMatcher(e));
@@ -412,6 +415,7 @@ void main() {
         testClass.overriddenConvertTreeToOutputType =
             (_) => throw 'Convertion Failed';
         final actualOutput = testClass.baseConvertTreeToOutputType(
+          SearchCriteriaDTO(),
           Stream.fromIterable(_makeMaps(2)),
         );
         final expectedOutput = testClass.myYieldError(
@@ -442,6 +446,7 @@ void main() {
             'NullCriteria translating pagemap '
             'to objects :more exception handling';
         final actualOutput = testClass.baseConvertTreeToOutputType(
+          SearchCriteriaDTO(),
           Stream.error('more exception handling'),
         );
         final dtoOutput = await actualOutput.toList();
