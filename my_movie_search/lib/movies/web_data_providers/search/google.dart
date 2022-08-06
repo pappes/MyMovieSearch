@@ -38,8 +38,10 @@ class QueryGoogleMovies
 
   /// Convert google map to MovieResultDTO records.
   @override
-  List<MovieResultDTO> myTransformMapToOutput(Map map) {
-    return GoogleMovieSearchConverter.dtoFromCompleteJsonMap(map);
+  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
+    if (map is Map)
+      return GoogleMovieSearchConverter.dtoFromCompleteJsonMap(map);
+    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
 
   /// converts <INPUT_TYPE> to a string representation.

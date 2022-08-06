@@ -34,8 +34,10 @@ class QueryTMDBMovieDetails
 
   /// Convert TMDB map to MovieResultDTO records.
   @override
-  List<MovieResultDTO> myTransformMapToOutput(Map map) =>
-      TmdbMovieDetailConverter.dtoFromCompleteJsonMap(map);
+  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
+    if (map is Map) return TmdbMovieDetailConverter.dtoFromCompleteJsonMap(map);
+    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+  }
 
   /// converts SearchCriteriaDTO to a string representation.
   @override

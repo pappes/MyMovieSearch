@@ -11,23 +11,17 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [WebScraper] for retrieving person details from IMDB.
 mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  /// Scrape movie data from rows in the html table named findList.
+  /// Convert webtext to a traversable tree of [List] or [Map] data.
   @override
-  Stream<MovieResultDTO> myTransformTextStreamToOutputObject(
-    Stream<String> str,
-  ) async* {
-    // Combine all HTTP chunks together for HTML parsing.
-    final content = await str.reduce((value, element) => '$value$element');
-    final document = parse(content);
-
+  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+    String webText,
+  ) async {
+    final document = parse(webText);
     final movieData = _scrapeWebPage(document);
     if (movieData[outerElementDescription] == null) {
-      yield myYieldError(
-        'imdb webscraper data not detected '
-        'for criteria $getCriteriaText',
-      );
+      throw 'imdb webscraper data not detected for criteria $getCriteriaText';
     }
-    yield* Stream.fromIterable(baseTransformMapToOutputHandler(movieData));
+    return [movieData];
   }
 
   /// Collect JSON and webpage text to construct a map of the movie data.

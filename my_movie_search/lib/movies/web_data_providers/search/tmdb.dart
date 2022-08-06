@@ -32,8 +32,10 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Convert TMDB map to MovieResultDTO records.
   @override
-  List<MovieResultDTO> myTransformMapToOutput(Map map) =>
-      TmdbMovieSearchConverter.dtoFromCompleteJsonMap(map);
+  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
+    if (map is Map) return TmdbMovieSearchConverter.dtoFromCompleteJsonMap(map);
+    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+  }
 
   /// converts <INPUT_TYPE> to a string representation.
   @override

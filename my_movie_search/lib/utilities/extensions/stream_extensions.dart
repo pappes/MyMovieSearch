@@ -10,6 +10,7 @@ extension StreamHelper<T> on Stream<T> {
         print('$prefix $value');
         yield value;
       }
+      print('$prefix done');
     } catch (error, stackTrace) {
       print('$prefix ERR: ${error.toString()}');
       yield* Stream.error(error, stackTrace);
@@ -22,7 +23,7 @@ extension FutureStreamHelper<T> on Future<Stream<T>?> {
   /// then puts them on a new future stream.
   ///
   /// For debugging purposes only.
-  Future<Stream<T>?> printStreamFuture([String prefix = '']) async {
+  Future<Stream<T>> printStreamFuture([String prefix = '']) async {
     try {
       final Stream<T>? awaited = await this;
       if (awaited is Stream && awaited != null) {
@@ -32,7 +33,7 @@ extension FutureStreamHelper<T> on Future<Stream<T>?> {
       final datatype =
           (awaited == null) ? 'null' : awaited.runtimeType.toString();
       print('$prefix Unexpected data type: $datatype');
-      return null;
+      return Stream<T>.empty();
     } catch (error) {
       print('$prefix EXCEPTION: ${error.toString()}');
       rethrow;

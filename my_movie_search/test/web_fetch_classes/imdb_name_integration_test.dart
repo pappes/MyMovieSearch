@@ -201,7 +201,7 @@ void main() {
     // e.g. nm0322164
     test('_SucessfulConversion', () async {
       final map = json.decode(_sampleMaincase) as Map;
-      final dtos = QueryIMDBNameDetails().myTransformMapToOutput(map);
+      final dtos = await QueryIMDBNameDetails().myConvertTreeToOutputType(map);
       final text = json.encode(dtos.encodeList());
       expect(text, _expectedMainCase);
     });
@@ -227,7 +227,7 @@ void main() {
     // e.g. nm0322164
     test('_SucessfulConversion', () async {
       final map = json.decode(_sampleMaincase) as Map;
-      final dtos = QueryIMDBNameDetails().baseTransformMapToOutputHandler(map);
+      final dtos = await QueryIMDBNameDetails().myConvertTreeToOutputType(map);
       final text = json.encode(dtos.encodeList());
       expect(text, _expectedMainCase);
     });

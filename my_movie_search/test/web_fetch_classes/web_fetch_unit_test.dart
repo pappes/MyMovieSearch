@@ -9,8 +9,6 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
-import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 import 'package:universal_io/io.dart'
@@ -36,9 +34,31 @@ typedef ConvertTreeToOutputType = Future<List<MovieResultDTO>> Function(
 //HttpClientResponse.statusCode = 200
 //HttpClientResponse.transform(utf8.decoder) = stream<String>
 //myConstructHeaders(client.headers);
-class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
+class QueryUnknownSourceMocked
+    extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   int httpReturnCode = 200;
   String currentCriteria = '';
+
+  static Future<List<MovieResultDTO>> treeToDto(dynamic tree) async {
+    if (tree is Map) return [mapToDto(tree)];
+    return listToDto(tree as List);
+  }
+
+  static MovieResultDTO mapToDto(Map map) {
+    final result = MovieResultDTO();
+    result.source = DataSourceType.custom;
+    result.uniqueId = map[outerElementIdentity]?.toString() ?? '';
+    result.description = map[outerElementDescription]?.toString() ?? '';
+    return result;
+  }
+
+  static List<MovieResultDTO> listToDto(List list) {
+    final List<MovieResultDTO> results = [];
+    for (final value in list) {
+      results.add(mapToDto(value as Map));
+    }
+    return results;
+  }
 
   /// Returns a new [HttpClient] instance to allow mocking in tests.
   @override
@@ -52,7 +72,7 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
     // provided HttpClient.
     when(clientResponse.statusCode).thenAnswer((_) => httpReturnCode);
     when(clientResponse.transform(utf8.decoder))
-        .thenAnswer((_) => _getOfflineHTML(currentCriteria));
+        .thenAnswer((_) => _getOfflineJson(currentCriteria));
 
     when(clientRequest.close()).thenAnswer((_) async {
       if (currentCriteria == 'EXCEPTION') throw 'go away!';
@@ -75,19 +95,12 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
   }
 
   // Default myConvertTreeToOutputType to
-  // convert dart [Map] to [OUTPUT_TYPE] object data
+  // convert dart [List] or [Map] to [OUTPUT_TYPE] object data
   // but allow it to be overridden
   @override
-  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async =>
-      overriddenConvertTreeToOutputType(map);
-  ConvertTreeToOutputType overriddenConvertTreeToOutputType = (map) async {
-    map as Map;
-    final result = MovieResultDTO();
-    result.source = DataSourceType.imdb;
-    result.uniqueId = map[outerElementIdentity]?.toString() ?? '';
-    result.description = map[outerElementDescription]?.toString() ?? '';
-    return [result];
-  };
+  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic tree) async =>
+      overriddenConvertTreeToOutputType(tree);
+  ConvertTreeToOutputType overriddenConvertTreeToOutputType = treeToDto;
 
   // Default myConvertWebTextToTraversableTree to jsonDecode but allow tests to alter it
   ConvertWebTextToTreeFn overriddenConvertWebTextToTraversableTree =
@@ -95,9 +108,29 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
   @override
   Future<List> myConvertWebTextToTraversableTree(String webText) async =>
       overriddenConvertWebTextToTraversableTree(webText);
+
+  /// Include entire error in the movie title when an error occurs.
+  @override
+  MovieResultDTO myYieldError(String message) {
+    final error = MovieResultDTO().error();
+    error.title = '[QueryIMDBTitleDetails] $message';
+    error.type = MovieContentType.custom;
+    error.source = DataSourceType.custom;
+    return error;
+  }
+
+  // Define myConstructURI to return an fake Uri
+  @override
+  Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) => Uri.parse(
+        'https://www.unknown.com/title/$searchCriteria/?ref_=fn_tt_tt_1',
+      );
+
+  // Define myOfflineData to return an empty stream
+  @override
+  DataSourceFn myOfflineData() => (_) async => const Stream<String>.empty();
 }
 
-typedef TransformMapToOutputFn = List<String> Function(Map m);
+typedef ConvertTreeToOutputTypeFn = Future<List<String>> Function(dynamic m);
 
 class WebFetchBasic extends WebFetchBase<String, String> {
   WebFetchBasic() {
@@ -106,27 +139,22 @@ class WebFetchBasic extends WebFetchBase<String, String> {
   Future<Stream<String>> loopBackDataSource(dynamic s) async =>
       Stream.value(s.toString());
 
-  TransformMapToOutputFn overriddenMyTransformMapToOutput =
-      (Map map) => [map.toString()];
+  ConvertTreeToOutputTypeFn overriddenMyConvertTreeToOutputType =
+      (dynamic map) async => [map.toString()];
 
   @override
   DataSourceFn myOfflineData() => loopBackDataSource;
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) => Uri();
   @override
-  List<String> myTransformMapToOutput(Map map) =>
-      overriddenMyTransformMapToOutput(map);
+  Future<List<String>> myConvertTreeToOutputType(dynamic map) async =>
+      overriddenMyConvertTreeToOutputType(map);
   @override
   String myYieldError(String contents) => contents;
 
-  void setMyTransformMapToOutput(TransformMapToOutputFn fn) {
-    overriddenMyTransformMapToOutput = fn;
+  void setMyConvertTreeToOutputType(ConvertTreeToOutputTypeFn fn) {
+    overriddenMyConvertTreeToOutputType = fn;
   }
-}
-
-Future<void> _delayedException(Object errorMessage) async {
-  await Future.delayed(Duration(seconds: 1));
-  throw errorMessage;
 }
 
 /// Make dummy dto results for offline queries.
@@ -136,7 +164,7 @@ List<MovieResultDTO> _makeDTOs(int qty) {
     final uniqueId = 1000 + i;
     results.add(
       {
-        'source': DataSourceType.imdb.toString(),
+        'source': DataSourceType.custom.toString(),
         'uniqueId': '$uniqueId',
         'description': '$uniqueId.',
       }.toMovieResultDTO(),
@@ -179,6 +207,12 @@ Stream<String> _getOfflineHTML(String id) {
   );
 }
 
+/// Make dummy json results for offline queries.
+Stream<String> _getOfflineJson(String id) {
+  if (id == '') return Stream.value('');
+  return Stream.value('[{"id": "$id","description": "$id."}]');
+}
+
 /// Make dummy josn results for offline queries.
 String _makeJson(int qty) {
   final results = StringBuffer();
@@ -197,11 +231,11 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('WebFetchBase simple unit tests', () {
-    final testClass = QueryIMDBTitleDetailsMocked();
+    final testClass = QueryUnknownSourceMocked();
 
     // Default data source name.
     test('myDataSourceName()', () {
-      expect(testClass.myDataSourceName(), 'imdb');
+      expect(testClass.myDataSourceName(), 'unknown');
     });
     // Simple criteria text.
     test('myFormatInputAsText()', () {
@@ -313,36 +347,6 @@ void main() {
     });
   });
 
-  group('WebFetchBase baseTransformMapToOutputHandler unit tests', () {
-    final testClass = WebFetchBasic();
-
-    test('empty map', () {
-      final map = <String, String>{};
-      final actualResult = testClass.baseTransformMapToOutputHandler(map);
-      final expectedResult = ['{}'];
-      expect(actualResult, expectedResult);
-    });
-
-    test('simple value', () async {
-      final map = <String, String>{"Hello": "World"};
-      final actualResult = testClass.baseTransformMapToOutputHandler(map);
-      final expectedResult = ['{Hello: World}'];
-      expect(actualResult, expectedResult);
-    });
-
-    test('exception handler', () async {
-      testClass.setMyTransformMapToOutput(
-          (_) => throw "This is a test error message");
-
-      final map = <String, String>{"Hello": "World"};
-      final actualResult = testClass.baseTransformMapToOutputHandler(map);
-      final expectedResult = [
-        'Error in unknown with criteria NullCriteria transform map {Hello: World} to List<String> :This is a test error message',
-      ];
-      expect(actualResult, expectedResult);
-    });
-  });
-
 ////////////////////////////////////////////////////////////////////////////////
   /// Mocked Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -355,7 +359,7 @@ void main() {
     ]) async {
       final pageMap = Stream.fromIterable(input);
       final actualOutput =
-          QueryIMDBTitleDetailsMocked().baseConvertTreeToOutputType(pageMap);
+          QueryUnknownSourceMocked().baseConvertTreeToOutputType(pageMap);
       if (null != expectedValue) {
         final expectedMatchers =
             expectedValue.map((e) => MovieResultDTOMatcher(e));
@@ -389,19 +393,29 @@ void main() {
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
+    // Limit number of DTOs returned.
+    test(
+      'limit output',
+      () async {
+        final input = _makeMaps(123);
+        final output = _makeDTOs(100);
+        await testConvert(input, output);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
 
     //overridde myConvertTreeToOutputType to throw an exception
     test(
       'exception handling',
       () async {
-        final testClass = QueryIMDBTitleDetailsMocked();
+        final testClass = QueryUnknownSourceMocked();
         testClass.overriddenConvertTreeToOutputType =
             (_) => throw 'Convertion Failed';
         final actualOutput = testClass.baseConvertTreeToOutputType(
           Stream.fromIterable(_makeMaps(2)),
         );
         final expectedOutput = testClass.myYieldError(
-          'Error in imdb with criteria '
+          'Error in unknown with criteria '
           'NullCriteria translating pagemap '
           'to objects :Convertion Failed',
         );
@@ -417,6 +431,24 @@ void main() {
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
+
+    //overridde myConvertWebTextToTraversableTree to encapsulate errors
+    test(
+      'stream exception handling',
+      () async {
+        final testClass = QueryUnknownSourceMocked();
+        const expectedError =
+            '[QueryIMDBTitleDetails] Error in unknown with criteria '
+            'NullCriteria translating pagemap '
+            'to objects :more exception handling';
+        final actualOutput = testClass.baseConvertTreeToOutputType(
+          Stream.error('more exception handling'),
+        );
+        final dtoOutput = await actualOutput.toList();
+        expect(dtoOutput.first.title, expectedError);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
   });
 
   group('WebFetchBase mocked baseConvertWebTextToTraversableTree', () {
@@ -426,7 +458,7 @@ void main() {
       String? expectedError,
     ]) async {
       final jsonStream = Stream.value(input);
-      final actualOutput = QueryIMDBTitleDetailsMocked()
+      final actualOutput = QueryUnknownSourceMocked()
           .baseConvertWebTextToTraversableTree(jsonStream);
       if (null != expectedValue) {
         await expectLater(actualOutput, emitsInOrder(expectedValue));
@@ -464,7 +496,7 @@ void main() {
     test(
       'stream with multiple results',
       () async {
-        final testClass = QueryIMDBTitleDetailsMocked();
+        final testClass = QueryUnknownSourceMocked();
         final streamOutput = testClass.baseConvertWebTextToTraversableTree(
           Stream.fromIterable([
             '[{"id": "1000","description": "1000."},',
@@ -481,11 +513,11 @@ void main() {
       timeout: const Timeout(Duration(seconds: 5)),
     );
 
-    //overridde myConvertWebTextToTraversableTree to throw an exception
+    //overridde myConvertWebTextToTraversableTree to encapsualte errors
     test(
-      'exception handling',
+      'child function exception handling',
       () async {
-        final testClass = QueryIMDBTitleDetailsMocked();
+        final testClass = QueryUnknownSourceMocked();
         testClass.overriddenConvertWebTextToTraversableTree =
             (_) => throw 'Search Failed';
         final actualOutput = testClass.baseConvertWebTextToTraversableTree(
@@ -495,8 +527,30 @@ void main() {
         await expectLater(
           actualOutput,
           emitsError(
-            'Error in imdb with criteria NullCriteria '
+            'Error in unknown with criteria NullCriteria '
             'intepreting web text as a map :Search Failed',
+          ),
+        );
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+
+    //overridde myConvertWebTextToTraversableTree to encapsualte errors
+    test(
+      'stream exception handling',
+      () async {
+        final testClass = QueryUnknownSourceMocked();
+        testClass.overriddenConvertWebTextToTraversableTree =
+            (_) => throw 'Search Failed';
+        final actualOutput = testClass.baseConvertWebTextToTraversableTree(
+          Stream.error('more exception handling'),
+        );
+
+        await expectLater(
+          actualOutput,
+          emitsError(
+            'Error in unknown with criteria NullCriteria '
+            'intepreting web text as a map :more exception handling',
           ),
         );
       },
@@ -512,15 +566,15 @@ void main() {
     ]) async {
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = input;
-      final testClass = QueryIMDBTitleDetailsMocked();
+      final testClass = QueryUnknownSourceMocked();
 
       final actualOutput = await testClass.baseFetchWebText(criteria);
       await expectLater(
-        actualOutput.printStream(input),
+        actualOutput, //.printStream(input),
         emitsInOrder([
           containsSubstring(
             expectedValue,
-            startsWith: input == '' ? '' : '<!DOCTYPE html>\n<html>',
+            startsWith: input == '' ? '' : '[{"id": "',
           )
         ]),
       );
@@ -552,7 +606,7 @@ void main() {
     ]) async {
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = input;
-      final testClass = QueryIMDBTitleDetailsMocked();
+      final testClass = QueryUnknownSourceMocked();
 
       final actualOutput = await testClass.myConvertCriteriaToWebText(criteria);
       await expectLater(
@@ -560,7 +614,7 @@ void main() {
         emitsInOrder([
           containsSubstring(
             expectedValue,
-            startsWith: input == '' ? '' : '<!DOCTYPE html>\n<html>',
+            startsWith: input == '' ? '' : '[{"id": "',
           )
         ]),
       );
@@ -591,16 +645,15 @@ void main() {
     ]) async {
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = input;
-      final testClass = QueryIMDBTitleDetailsMocked();
-      final actualOutput = testClass
-          .baseConvertCriteriaToWebText(criteria)
-          .printStream('testConvert1:');
+      final testClass = QueryUnknownSourceMocked();
+      final actualOutput = testClass.baseConvertCriteriaToWebText(criteria);
+      //.printStream('testConvert1:');
       await expectLater(
         actualOutput,
         emitsInOrder([
           containsSubstring(
             expectedValue,
-            startsWith: input == '' ? '' : '<!DOCTYPE html>\n<html>',
+            startsWith: input == '' ? '' : '[{"id": "',
           ),
         ]),
       );
@@ -625,14 +678,14 @@ void main() {
     test(
       'exception handling',
       () async {
-        final testClass = QueryIMDBTitleDetailsMocked();
+        final testClass = QueryUnknownSourceMocked();
         testClass.selectedDataSource = (_) => throw 'Convert Failed';
         final actualOutput =
             testClass.baseConvertCriteriaToWebText(SearchCriteriaDTO());
         await expectLater(
           actualOutput,
           emitsError(
-            'Error in imdb with criteria NullCriteria '
+            'Error in unknown with criteria NullCriteria '
             'fetching web text :Convert Failed',
           ),
         );
@@ -642,7 +695,7 @@ void main() {
   });
 
   group('WebFetchBase mocked baseFetchWebText unit tests', () {
-    final testClass = QueryIMDBTitleDetailsMocked();
+    final testClass = QueryUnknownSourceMocked();
 
     test('fetch sucessful', () async {
       final criteria = SearchCriteriaDTO();
@@ -651,7 +704,7 @@ void main() {
       final listResult = await streamResult.toList();
       final textResult = listResult.first;
       final expectedResult =
-          await _getOfflineHTML(criteria.criteriaTitle).toList();
+          await _getOfflineJson(criteria.criteriaTitle).toList();
       expect([textResult], expectedResult);
     });
 
@@ -659,7 +712,7 @@ void main() {
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = 'HTTP404';
       const expectedResult =
-          'Error in http read, HTTP status code : 404 for https://www.imdb.com/title/HTTP404/?ref_=fn_tt_tt_1';
+          'Error in http read, HTTP status code : 404 for https://www.unknown.com/title/HTTP404/?ref_=fn_tt_tt_1';
       final fetchResult = await testClass.baseFetchWebText(criteria);
       expect(fetchResult, emitsError(expectedResult));
     });
@@ -668,9 +721,67 @@ void main() {
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = 'EXCEPTION';
       const expectedResult =
-          'Error in imdb with criteria NullCriteria fetching web text: :go away!';
+          'Error in unknown with criteria NullCriteria fetching web text: :go away!';
       final fetchResult = await testClass.baseFetchWebText(criteria);
       expect(fetchResult, emitsError(expectedResult));
     });
+  });
+
+  group('WebFetchBase mocked baseTransform unit tests', () {
+    Future<void> testTransform(
+      String input,
+      List<MovieResultDTO>? expectedValue, [
+      String? expectedError,
+    ]) async {
+      final criteria = SearchCriteriaDTO();
+      criteria.criteriaTitle = input;
+      final actualOutput = QueryUnknownSourceMocked().baseTransform(criteria);
+      if (null != expectedValue) {
+        final expectedMatchers =
+            expectedValue.map((e) => MovieResultDTOMatcher(e));
+        await expectLater(actualOutput, emitsInOrder(expectedMatchers));
+      }
+      if (null != expectedError) {
+        final list = await actualOutput.toList();
+        expect(list.first.title, expectedError);
+      }
+    }
+
+    // Convert 0 maps into dtos.
+    test('empty input', () async {
+      const input = '';
+      final output = <MovieResultDTO>[];
+      await testTransform(input, output);
+    });
+    // Convert 1 map into a dto.
+    test(
+      'single map input',
+      () async {
+        const input = '1000';
+        final output = _makeDTOs(1);
+        await testTransform(input, output);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+    test(
+      'http error code 404',
+      () async {
+        const input = 'HTTP404';
+        const output =
+            '[QueryIMDBTitleDetails] Error in unknown with criteria NullCriteria intepreting web text as a map :Error in http read, HTTP status code : 404 for https://www.unknown.com/title/HTTP404/?ref_=fn_tt_tt_1';
+        await testTransform(input, null, output);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+    test(
+      'http EXCEPTION',
+      () async {
+        const input = 'EXCEPTION';
+        const output =
+            '[QueryIMDBTitleDetails] Error in unknown with criteria NullCriteria fetching web text: :go away!';
+        await testTransform(input, null, output);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
   });
 }

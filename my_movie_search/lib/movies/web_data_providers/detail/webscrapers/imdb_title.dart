@@ -20,25 +20,6 @@ const columnMoviePoster = 'primary_photo';
 mixin ScrapeIMDBTitleDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final htmlDecode = HtmlUnescape();
-/*
-  /// Convert HTML web page to Stream of MovieResultDTO.
-  @override
-  Stream<MovieResultDTO> myTransformTextStreamToOutputObject(
-    Stream<String> str,
-  ) async* {
-    // Combine all HTTP chunks together for HTML parsing.
-    final content = await str.reduce((value, element) => '$value$element');
-    final document = parse(content);
-
-    final movieData = _scrapeWebPage(document);
-    if (movieData[outerElementDescription] == null) {
-      yield myYieldError(
-        'imdb webscraper data not detected '
-        'for criteria $getCriteriaText',
-      );
-    }
-    yield* Stream.fromIterable(baseTransformMapToOutputHandler(movieData));
-  }*/
 
   /// Convert webtext to a traversable tree of [List] or [Map] data.
   @override
@@ -52,30 +33,6 @@ mixin ScrapeIMDBTitleDetails
     }
     return [movieData];
   }
-
-  /// Convert dart [List] or [Map] to [OUTPUT_TYPE] object data.
-  @override
-  Future<List<MovieResultDTO>> myConvertTreeToOutputType(Map map) async {
-    return baseTransformMapToOutputHandler(map);
-  }
-/*
-  Stream<MovieResultDTO> baseTransform(
-    Stream<String> str,
-  ) async* {
-    // Combine all HTTP chunks together for HTML parsing.
-    final content = await str.reduce((value, element) => '$value$element');
-    final document = parse(content);
-
-    final movieData = _scrapeWebPage(document);
-    if (movieData[outerElementDescription] == null) {
-      yield myYieldError(
-        'imdb webscraper data not detected '
-        'for criteria $getCriteriaText',
-      );
-    }
-    yield* Stream.fromIterable(baseTransformMapToOutputHandler(movieData));
-
-  }*/
 
   /// Collect JSON and webpage text to construct a map of the movie data.
   Map _scrapeWebPage(Document document) {

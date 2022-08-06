@@ -45,17 +45,10 @@ class QueryIMDBSuggestions
 
   /// Convert IMDB map to MovieResultDTO records.
   @override
-  List<MovieResultDTO> myTransformMapToOutput(Map map) =>
-      ImdbSuggestionConverter.dtoFromCompleteJsonMap(map);
-
-  /// Convert IMDB map to MovieResultDTO records.
-  @override
-  Future<List<MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic listOrMapOrDocument,
-  ) async =>
-      ImdbSuggestionConverter.dtoFromCompleteJsonMap(
-        listOrMapOrDocument as Map,
-      );
+  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
+    if (map is Map) return ImdbSuggestionConverter.dtoFromCompleteJsonMap(map);
+    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+  }
 
   /// Include entire map in the movie title when an error occurs.
   @override

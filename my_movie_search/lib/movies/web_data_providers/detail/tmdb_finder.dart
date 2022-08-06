@@ -25,9 +25,13 @@ class QueryTMDBFinder extends QueryTMDBMovieDetails {
 
   /// Convert TMDB map to MovieResultDTO records.
   @override
-  List<MovieResultDTO> myTransformMapToOutput(Map map) {
+  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
+    if (map is! Map) {
+      throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+    }
     final results = <MovieResultDTO>[];
     for (final movie in TmdbFinderConverter.dtoFromCompleteJsonMap(map)) {
+      // Save the original IMDB_ID in the resultant object.
       movie.alternateId = _originalID;
       results.add(movie);
     }

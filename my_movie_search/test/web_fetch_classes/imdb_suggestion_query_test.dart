@@ -66,8 +66,8 @@ void main() {
       final imdbSuggestions = QueryIMDBSuggestions();
 
       // Invoke the functionality and collect results.
-      final actualResult =
-          imdbSuggestions.myTransformMapToOutput({'d': expectedDTOMap});
+      final actualResult = await imdbSuggestions
+          .myConvertTreeToOutputType({'d': expectedDTOMap});
 
       // Check the results.
       expect(
@@ -106,12 +106,10 @@ void main() {
     // Read IMDB suggestions from a simulated bytestream and convert JSON to dtos.
     test('invalid jsonp', () async {
       // Set up the test data.
-      final expectedValue = <MovieResultDTO>[];
       final queryResult = <MovieResultDTO>[];
       final imdbSuggestions = QueryIMDBSuggestions();
-      late String actualException;
       const expectedException = '''
-FormatException: Unexpected character (at character 2)
+[QueryIMDBSuggestions] Error in imdbSuggestions with criteria  intepreting web text as a map :FormatException: Unexpected character (at character 2)
 {not valid json}
  ^
 ''';
@@ -119,51 +117,25 @@ FormatException: Unexpected character (at character 2)
       // Invoke the functionality.
       await imdbSuggestions
           .readList(SearchCriteriaDTO(), source: emitInvalidJsonPSample)
-          .then((values) => queryResult.addAll(values))
-          .onError(
-        (error, stackTrace) {
-          actualException = error.toString();
-        },
-      );
-      expect(actualException, expectedException);
-
-      // Check the results.
-      expect(
-        queryResult,
-        MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${queryResult.toString()} '
-            'needs to match expected DTO list ${expectedValue.toString()}',
-      );
+          .then((values) => queryResult.addAll(values));
+      expect(queryResult.first.title, expectedException);
     });
 
     // Read IMDB suggestions from a simulated bytestream and convert JSON to dtos.
     test('unexpected json contents', () async {
       // Set up the test data.
-      final expectedValue = <MovieResultDTO>[];
+      const expectedException =
+          '[QueryIMDBSuggestions] Error in imdbSuggestions with criteria  translating pagemap to objects :expected map got Null unable to interpret data null';
       final queryResult = <MovieResultDTO>[];
       final imdbSuggestions = QueryIMDBSuggestions();
-      late String actualException;
-      const expectedException = null;
 
       // Invoke the functionality.
       await imdbSuggestions
           .readList(SearchCriteriaDTO(), source: emitUnexpectedJsonPSample)
-          .then((values) => queryResult.addAll(values))
-          .onError(
-        // ignore: avoid_print
-        (error, stackTrace) {
-          actualException = error.toString();
-        },
-      );
-      expect(actualException, expectedException);
+          .then((values) => queryResult.addAll(values));
+      expect(queryResult.first.title, expectedException);
 
       // Check the results.
-      expect(
-        queryResult,
-        MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${queryResult.toString()} '
-            'needs to match expected DTO list ${expectedValue.toString()}',
-      );
     });
   });
 }

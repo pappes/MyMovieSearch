@@ -31,13 +31,13 @@ typedef TransformFn = List Function(Map? map);
 /// Workflow delegated to child class:
 /// * criteria
 ///   *  is converted to [Stream<Text>]
-///   *  via [offlineData] or [myConstructURI]
+///   *  via [offlineData] or [baseConvertCriteriaToWebText]
 /// * JSON, JSONP or HTML is converted to
 ///   *  is converted to [Map<Object?>]
-///   *  via [offlineData] or [myConstructURI]
+///   *  via [offlineData] or [baseConvertWebTextToTraversableTree]
 /// * [Map<Object?>]
 ///   *  is converted to Objects of type [OUTPUT_TYPE]
-///   *  via [myTransformMapToOutput]
+///   *  via [baseConvertTreeToOutputType]
 /// * Exception handling via [myYieldError]
 ///
 /// Naming convention for internal methods in this class:
@@ -215,7 +215,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Used for both online and offline operation.
   ///
   /// Should be overridden by child classes.
-  /// Called from [baseTransformMapToOutputHandler] when [myTransformMapToOutput] throws an exception.
+  /// Called when an error occures.
   OUTPUT_TYPE myYieldError(String contents);
 
   /// Define the [Uri] called to fetch online data for criteria [searchText].
@@ -268,53 +268,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Can be overridden by child classes if required.
   Stream<OUTPUT_TYPE> myFetchResultFromCache(INPUT_TYPE criteria) async* {}
 
-  /// Convert a [Map] representation of the response to a [List] of <OUTPUT_TYPE>.
-  ///
-  /// Used for both online and offline operation.
-  ///
-  /// Should be overridden by child classes.
-  /// Should not be called directly by child classes.
-  /// Child classes can call [baseTransformMapToOutputHandler]
-  ///     as a wrapper to myTransformMapToOutput.
-  List<OUTPUT_TYPE> myTransformMapToOutput(Map map);
-
-  /// Convert a map of the response to a [List] of <OUTPUT_TYPE>.
-  ///
-  /// Used for both online and offline operation.
-  /// Wraps [myTransformMapToOutput] in exception handling.
-  ///
-  /// Limits the number of returned results to
-  /// the limit requested by read() or populate().
-  ///
-  /// Should not be overridden by child classes.
-  List<OUTPUT_TYPE> baseTransformMapToOutputHandler(Map? resultMap) {
-    List<OUTPUT_TYPE> retval = [];
-    if (resultMap == null) {
-      logger.i('0 results returned from query for $_getFetchContext');
-      return retval;
-    }
-
-    // Construct resultset with a subset of results.
-    if (!searchResultsLimit.limitExceeded) {
-      try {
-        final list = myTransformMapToOutput(resultMap);
-        final capacity = searchResultsLimit.consume(list.length);
-        for (final element in list) {
-          myAddResultToCache(element);
-        }
-        retval = list.take(capacity).toList();
-      } catch (exception, stacktrace) {
-        final errorMessage = baseConstructErrorMessage(
-          'transform map ${resultMap.toString()} to ${retval.runtimeType}',
-          exception,
-        );
-
-        retval = [myYieldError(errorMessage)];
-      }
-    }
-    return retval;
-  }
-
   /// Convert a HTML, JSON or JSONP [Stream] of [String]
   /// to a [Stream] of <OUTPUT_TYPE> objects.
   ///
@@ -333,61 +286,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       );
       yield myYieldError(errorMessage);
     }
-  }
-
-  /// Can be overridden by child classes to scrape web pages.
-  /// Should call [baseTransformMapToOutputHandler]
-  ///     to wrap [myTransformMapToOutput] in exception handling.
-  /// ```dart
-  ///@override
-  ///Stream<MovieResultDTO> baseTransform(
-  ///  Stream<String> str,
-  ///) async* {
-  ///  // Combine all HTTP chunks together for HTML parsing.
-  ///  final content = await str.reduce((value, element) => '$value$element');
-  ///  final document = parse(content);
-  ///  final movieData = _scrapeWebPage(document);
-  ///  yield* Stream.fromIterable(baseTransformMapToOutputHandler(movieData));
-  ///}
-  /// ```
-  ///
-//TODO: delete this function
-  Stream<OUTPUT_TYPE> myTransformTextStreamToOutputObject(
-    Stream<String> webStream,
-  ) async* {
-    yield* baseTransformOld(webStream);
-  }
-
-  /// Convert a HTML, JSON or JSONP [Stream] of [String]
-  /// to a [Stream] of <OUTPUT_TYPE> objects.
-  ///
-  /// Used for both online and offline operation.
-  /// For online operation [webStream] is utf8 decoded before being passed to
-  ///     [baseTransformMapToOutputHandler].
-  ///
-//TODO: delete this function
-  Stream<OUTPUT_TYPE> baseTransformOld(
-    Stream<String> webStream,
-  ) async* {
-    // Private function to encapsulate stream transformation.
-    // This single line of logic could be embedded in the below code
-    // but would make the below code more cryptic.
-    List<OUTPUT_TYPE> fnFromMapToListOfOutputType(decodedMap) {
-      return baseTransformMapToOutputHandler(decodedMap as Map?);
-    }
-
-    // Strip JSONP if required
-    final Stream<String> jsonStream;
-    if (transformJsonP) {
-      jsonStream = webStream.transform(JsonPDecoder());
-    } else {
-      jsonStream = webStream;
-    }
-
-    yield* jsonStream
-        .transform(json.decoder) // JSON text to Map<Object?>
-        .map(fnFromMapToListOfOutputType) // Map<Object?> to List<OUTPUT_TYPE>
-        .expand((element) => element); // [<OUTPUT_TYPE>] to Stream<OUTPUT_TYPE>
   }
 
   /// Fetch text from the web source with exception handling.
@@ -451,18 +349,21 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return '';
     }
 
-    void _wrapChildFunction(String reduceResult) {
+    List<dynamic> _wrapChildFunction(String reduceResult) {
       // reduceResult will be empty if the stream had multiple events.
       final webText = ('' == reduceResult) ? content.toString() : reduceResult;
       print(webText);
       myConvertWebTextToTraversableTree(webText)
           .then(_addListToStream, onError: _logError);
+      return [];
     }
 
     webStream
         .timeout(Duration(seconds: 25)) // TODO: allow timeout to be passed in
         .reduce(_concatenate)
-        .then(_wrapChildFunction);
+        .then(_wrapChildFunction)
+        .onError(_logError)
+        .whenComplete(() => baseCloseController(controller));
 
     yield* controller.stream;
   }
@@ -473,6 +374,11 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Unpacks Stream<Map> to Map to make child class logic simpler
   /// Converts Future<List<OUTPUT_TYPE>> to Stream<OUTPUT_TYPE>
   ///
+  /// Limits the number of returned results to
+  /// the limit requested by read() or populate().
+  ///
+  /// Should not be overridden by child classes.
+
   Stream<OUTPUT_TYPE> baseConvertTreeToOutputType(
     Stream<dynamic> pageMap,
   ) async* {
@@ -487,10 +393,17 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return [];
     }
 
-    void _yieldList(List<OUTPUT_TYPE> objects) {
-      for (final obj in objects) {
-        controller.add(obj);
+    List<OUTPUT_TYPE> _yieldList(List<OUTPUT_TYPE> objects) {
+      for (final object in objects) {
+        myAddResultToCache(object);
       }
+      // Construct resultset with a subset of results.
+      final capacity = searchResultsLimit.consume(objects.length);
+      final subset = objects.take(capacity).toList();
+      for (final object in subset) {
+        controller.add(object);
+      }
+      return [];
     }
 
     void _wrapChildFunction(dynamic map) {
@@ -502,6 +415,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         .listen(
           _wrapChildFunction,
           onDone: () => baseCloseController(controller),
+          onError: _logError,
         );
 
     yield* controller.stream;
