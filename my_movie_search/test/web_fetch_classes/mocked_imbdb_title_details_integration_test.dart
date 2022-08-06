@@ -164,7 +164,7 @@ void main() {
       bool forceError = false,
     }) async {
       // Clear any prior test results from the cache
-      QueryIMDBTitleDetailsMocked('').myClearCache();
+      await QueryIMDBTitleDetailsMocked('').myClearCache();
       // Call IMDB for each criteria in the list.
       final futures = _queueDetailSearch(criteria, online, forceError);
 

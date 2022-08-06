@@ -26,7 +26,7 @@ mixin ThreadedCacheIMDBSuggestions
     var retval = <MovieResultDTO>[];
 
     // if cached and not stale yield from cache
-    if (_isResultCached(criteria) && !_isCacheStale(criteria)) {
+    if (await _isResultCached(criteria) && !await _isCacheStale(criteria)) {
       print(
         '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
         'value was precached ${myFormatInputAsText(criteria)}',
@@ -72,26 +72,26 @@ mixin ThreadedCacheIMDBSuggestions
   }
 
   /// Check cache to see if data has already been fetched.
-  bool _isResultCached(SearchCriteriaDTO criteria) {
+  Future<bool> _isResultCached(SearchCriteriaDTO criteria) async {
     final key = '${myDataSourceName()}${criteria.criteriaTitle}';
     return _cache.isCached(key);
   }
 
   /// Check cache to see if data in cache should be refreshed.
-  bool _isCacheStale(SearchCriteriaDTO criteria) {
+  Future<bool> _isCacheStale(SearchCriteriaDTO criteria) async {
     return false;
     //return _cache.isCached(criteria.criteriaTitle);
   }
 
   /// Insert transformed data into cache.
-  void _addResultToCache(MovieResultDTO fetchedResult) {
+  Future<void> _addResultToCache(MovieResultDTO fetchedResult) async {
     final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
     print(
       '${ThreadRunner.currentThreadName} cache add '
       '${fetchedResult.uniqueId} size:${_cache.cachedSize()}',
     );
 
-    _cache.add(key, fetchedResult);
+    return _cache.add(key, fetchedResult);
   }
 
   /// Retrieve cached result.

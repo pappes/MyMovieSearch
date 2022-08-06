@@ -1,3 +1,4 @@
+import 'dart:async' show StreamController;
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -38,27 +39,6 @@ class QueryUnknownSourceMocked
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   int httpReturnCode = 200;
   String currentCriteria = '';
-
-  static Future<List<MovieResultDTO>> treeToDto(dynamic tree) async {
-    if (tree is Map) return [mapToDto(tree)];
-    return listToDto(tree as List);
-  }
-
-  static MovieResultDTO mapToDto(Map map) {
-    final result = MovieResultDTO();
-    result.source = DataSourceType.custom;
-    result.uniqueId = map[outerElementIdentity]?.toString() ?? '';
-    result.description = map[outerElementDescription]?.toString() ?? '';
-    return result;
-  }
-
-  static List<MovieResultDTO> listToDto(List list) {
-    final List<MovieResultDTO> results = [];
-    for (final value in list) {
-      results.add(mapToDto(value as Map));
-    }
-    return results;
-  }
 
   /// Returns a new [HttpClient] instance to allow mocking in tests.
   @override
@@ -128,6 +108,27 @@ class QueryUnknownSourceMocked
   // Define myOfflineData to return an empty stream
   @override
   DataSourceFn myOfflineData() => (_) async => const Stream<String>.empty();
+
+  static Future<List<MovieResultDTO>> treeToDto(dynamic tree) async {
+    if (tree is Map) return [mapToDto(tree)];
+    return listToDto(tree as List);
+  }
+
+  static MovieResultDTO mapToDto(Map map) {
+    final result = MovieResultDTO();
+    result.source = DataSourceType.custom;
+    result.uniqueId = map[outerElementIdentity]?.toString() ?? '';
+    result.description = map[outerElementDescription]?.toString() ?? '';
+    return result;
+  }
+
+  static List<MovieResultDTO> listToDto(List list) {
+    final List<MovieResultDTO> results = [];
+    for (final value in list) {
+      results.add(mapToDto(value as Map));
+    }
+    return results;
+  }
 }
 
 typedef ConvertTreeToOutputTypeFn = Future<List<String>> Function(dynamic m);
@@ -154,6 +155,35 @@ class WebFetchBasic extends WebFetchBase<String, String> {
 
   void setMyConvertTreeToOutputType(ConvertTreeToOutputTypeFn fn) {
     overriddenMyConvertTreeToOutputType = fn;
+  }
+}
+
+class WebFetchCached extends WebFetchBasic {
+  String lastCriteria = '';
+  String lastResult = '';
+
+  @override
+  Future<bool> myIsResultCached(String criteria) async =>
+      criteria == lastCriteria;
+  @override
+  Future<bool> myIsCacheStale(String criteria) async => false;
+  @override
+  Future<void> myAddResultToCache(String criteria, String fetchedResult) async {
+    lastCriteria = criteria;
+    lastResult = fetchedResult;
+  }
+
+  @override
+  Stream<String> myFetchResultFromCache(String criteria) async* {
+    if (criteria == lastCriteria) {
+      yield* Stream.value(lastResult);
+    }
+  }
+
+  @override
+  Future<void> myClearCache() async {
+    lastCriteria = '';
+    lastResult = '';
   }
 }
 
@@ -244,23 +274,23 @@ void main() {
       expect(testClass.myFormatInputAsText(input), 'criteria');
     });
     // Default not cached.
-    test('myIsResultCached()', () {
+    test('myIsResultCached()', () async {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'criteria';
-      expect(testClass.myIsResultCached(input), false);
+      expect(await testClass.myIsResultCached(input), false);
     });
     // Default not stale cache.
-    test('myIsCacheStale()', () {
+    test('myIsCacheStale()', () async {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'criteria';
-      expect(testClass.myIsCacheStale(input), false);
+      expect(await testClass.myIsCacheStale(input), false);
     });
     // Default no cacheing.
-    test('myIsResultCached()', () {
+    test('myIsResultCached()', () async {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'criteria';
       //testClass.myAddResultToCache(input);
-      expect(testClass.myIsResultCached(input), false);
+      expect(await testClass.myIsResultCached(input), false);
     });
   });
 
@@ -344,6 +374,79 @@ void main() {
       }
       expect(actualResult,
           'Error in unknown with criteria NullCriteria fetching web text :JsonP([{"key":"val"}])');
+    });
+  });
+
+  group('WebFetchBase cache unit tests', () {
+    test('empty cache', () async {
+      final testClass = WebFetchCached();
+      final listResult = await testClass.readCachedList(
+        'Marco',
+        source: (_) async => Stream.value('Polo'),
+      );
+      expect(listResult, []);
+      final resultIsCached = await testClass.myIsResultCached('Marco');
+      expect(resultIsCached, false);
+      final resultIsStale = await testClass.myIsCacheStale('Marco');
+      expect(resultIsStale, false);
+    });
+
+    test('add to cache via populateStream', () async {
+      final testClass = WebFetchCached();
+      final sc = StreamController<String>();
+      testClass.populateStream(
+        sc,
+        'Marco',
+        source: (_) async => Stream.value('"Polo"'), // Stream a Json result
+      );
+      await sc.stream.drain();
+      final listResult = await testClass.readCachedList(
+        'Marco',
+        source: (_) async => Stream.value('Who Is Marco?'),
+      );
+      expect(listResult, ['Polo']);
+      final resultIsCached = await testClass.myIsResultCached('Marco');
+      expect(resultIsCached, true);
+      final resultIsStale = await testClass.myIsCacheStale('Marco');
+      expect(resultIsStale, false);
+    });
+
+    test('manually add to cache', () async {
+      final testClass = WebFetchCached();
+      await testClass.myAddResultToCache('Marco', 'Polo');
+      final listResult = await testClass.readCachedList(
+        'Marco',
+        source: (_) async => Stream.value('Polo'),
+      );
+      expect(listResult, ['Polo']);
+      final resultIsCached = await testClass.myIsResultCached('Marco');
+      expect(resultIsCached, true);
+      final resultIsStale = await testClass.myIsCacheStale('Marco');
+      expect(resultIsStale, false);
+    });
+
+    test('fetch result from cache', () async {
+      final testClass = WebFetchCached();
+      await testClass.myAddResultToCache('Marco', 'Polo');
+      final listResult =
+          await testClass.myFetchResultFromCache('Marco').toList();
+      expect(listResult, ['Polo']);
+      final resultIsCached = await testClass.myIsResultCached('Marco');
+      expect(resultIsCached, true);
+      final resultIsStale = await testClass.myIsCacheStale('Marco');
+      expect(resultIsStale, false);
+    });
+
+    test('clear cache', () async {
+      final testClass = WebFetchCached();
+      await testClass.myAddResultToCache('Marco', 'Polo');
+      await testClass.myClearCache();
+      final listResult = await testClass.readCachedList('Marco');
+      expect(listResult, []);
+      final resultIsCached = await testClass.myIsResultCached('Marco');
+      expect(resultIsCached, false);
+      final resultIsStale = await testClass.myIsCacheStale('Marco');
+      expect(resultIsStale, false);
     });
   });
 

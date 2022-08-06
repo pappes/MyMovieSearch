@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
 
@@ -12,11 +14,11 @@ Future<dynamic> nullCallback() async {
 /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-void main() {
+void main() async {
   group('Store In Memory', () {
-    test('String', () {
+    test('String', () async {
       /// Run a series of values through the cache and compare to expected output
-      void testCache(List<Map> input, Map expectedOutput) {
+      Future<void> testCache(List<Map> input, Map expectedOutput) async {
         final cache = TieredCache();
 
         void addMapContentsToCache(Map listitem) {
@@ -26,27 +28,26 @@ void main() {
         }
 
         input.forEach(addMapContentsToCache);
-
-        expectedOutput.forEach((key, value) {
-          expect(cache.isCached(key), true);
-          final actualOutput = cache.get(key, callback: nullCallback);
-          actualOutput.then((value) {
-            expect(value, expectedOutput[key]);
-          });
-
-          expect(actualOutput, completes);
-        });
+        for (final keyValuePair in expectedOutput.entries) {
+          final keyIsCached = await cache.isCached(keyValuePair.key);
+          expect(keyIsCached, true);
+          final actualOutput = await cache.get(
+            keyValuePair.key,
+            callback: nullCallback,
+          );
+          expect(actualOutput, expectedOutput[keyValuePair.key]);
+        }
       }
 
       /// Test one key:value pair in and the same key:value pair out
-      testCache([
+      await testCache([
         {'a': 'b'}
       ], {
         'a': 'b'
       });
 
       /// Test two distinct key:value pairs in and the same key:value pairs out
-      testCache([
+      await testCache([
         {'a': 'b', 'c': 'd'}
       ], {
         'a': 'b',
@@ -54,7 +55,7 @@ void main() {
       });
 
       /// Test duplicate keys in and single key:value pair out
-      testCache([
+      await testCache([
         {'a': 'b'},
         {'a': 'c'},
         {'a': 'd'}

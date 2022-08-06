@@ -111,7 +111,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     int? limit,
   }) async {
     searchResultsLimit.limit = limit;
-    if (myIsResultCached(criteria)) {
+    if (await myIsResultCached(criteria)) {
       return baseYieldFetchedObjects(
         source: source,
         newCriteria: criteria,
@@ -241,26 +241,29 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Check cache to see if data has already been fetched.
   ///
   /// Can be overridden by child classes if required.
-  bool myIsResultCached(INPUT_TYPE criteria) {
+  Future<bool> myIsResultCached(INPUT_TYPE criteria) async {
     return false;
   }
 
   /// Check cache to see if data in cache should be refreshed.
   ///
   /// Can be overridden by child classes if required.
-  bool myIsCacheStale(INPUT_TYPE criteria) {
+  Future<bool> myIsCacheStale(INPUT_TYPE criteria) async {
     return false;
   }
 
   /// Insert transformed data into cache.
   ///
   /// Can be overridden by child classes if required.
-  void myAddResultToCache(INPUT_TYPE criteria, OUTPUT_TYPE fetchedResult) {}
+  Future<void> myAddResultToCache(
+    INPUT_TYPE criteria,
+    OUTPUT_TYPE fetchedResult,
+  ) async {}
 
   /// Flush all data from the cache.
   ///
   /// Can be overridden by child classes if required.
-  void myClearCache() {}
+  Future<void> myClearCache() async {}
 
   /// Retrieve cached result.
   ///
@@ -351,7 +354,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     List<dynamic> _wrapChildFunction(String reduceResult) {
       // reduceResult will be empty if the stream had multiple events.
       final webText = ('' == reduceResult) ? content.toString() : reduceResult;
-      print(webText);
       myConvertWebTextToTraversableTree(webText)
           .then(_addListToStream, onError: _logError);
       return [];
@@ -431,7 +433,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   }) async* {
     criteria = newCriteria;
     // if cached yield from cache
-    if (myIsResultCached(newCriteria)) {
+    if (await myIsResultCached(newCriteria)) {
       print(
         'base ${ThreadRunner.currentThreadName} '
         'value was cached ${myFormatInputAsText(newCriteria)}',
@@ -439,7 +441,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       yield* myFetchResultFromCache(newCriteria);
     }
     // if not cached or cache is stale retrieve fresh data
-    if (!myIsResultCached(newCriteria) || myIsCacheStale(newCriteria)) {
+    if (!await myIsResultCached(newCriteria) ||
+        await myIsCacheStale(newCriteria)) {
       print(
         'base ${ThreadRunner.currentThreadName} ${myDataSourceName()} '
         'uncached ${myFormatInputAsText(newCriteria)}',

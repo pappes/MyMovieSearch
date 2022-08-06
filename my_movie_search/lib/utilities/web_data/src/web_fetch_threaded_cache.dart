@@ -30,7 +30,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     var retval = <OUTPUT_TYPE>[];
 
     // yield from cache if cache is not stale
-    if (_isResultCached(criteria) && !_isCacheStale(criteria)) {
+    if (await _isResultCached(criteria) && !await _isCacheStale(criteria)) {
       print(
         '${ThreadRunner.currentThreadName} '
         'value was precached ${myFormatInputAsText(criteria)}',
@@ -72,19 +72,20 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   }
 
   /// Check cache to see if data has already been fetched.
-  bool _isResultCached(INPUT_TYPE criteria) {
+  Future<bool> _isResultCached(INPUT_TYPE criteria) async {
     return _cache.isCached(_getCacheKey(criteria));
   }
 
   /// Check cache to see if data in cache should be refreshed.
-  bool _isCacheStale(INPUT_TYPE criteria) {
+  Future<bool> _isCacheStale(INPUT_TYPE criteria) async {
     return false;
     //return _cache.isCached(_getCacheKey(criteria));
   }
 
   /// Insert transformed data into cache.
-  void _addResultToCache(INPUT_TYPE criteria, OUTPUT_TYPE fetchedResult) {
-    _cache.add(_getCacheKey(criteria), fetchedResult);
+  Future<void> _addResultToCache(
+      INPUT_TYPE criteria, OUTPUT_TYPE fetchedResult) {
+    return _cache.add(_getCacheKey(criteria), fetchedResult);
   }
 
   /// Retrieve cached result.
