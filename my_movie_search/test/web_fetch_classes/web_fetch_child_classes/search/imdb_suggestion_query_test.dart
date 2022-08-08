@@ -6,11 +6,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestion
 import '../../../test_data/imdb_suggestion_converter_data.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> emitUnexpectedJsonPSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedJsonPSample(dynamic dummy) {
   return Future.value(Stream.value('imdbJsonPFunction(null)'));
 }
 
-Future<Stream<String>> emitInvalidJsonPSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidJsonPSample(dynamic dummy) {
   return Future.value(Stream.value('imdbJsonPFunction({not valid json})'));
 }
 
@@ -144,7 +144,7 @@ void main() {
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(SearchCriteriaDTO(), source: emitInvalidJsonPSample)
+          .readList(SearchCriteriaDTO(), source: _emitInvalidJsonPSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -159,7 +159,7 @@ void main() {
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(SearchCriteriaDTO(), source: emitUnexpectedJsonPSample)
+          .readList(SearchCriteriaDTO(), source: _emitUnexpectedJsonPSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

@@ -8,6 +8,26 @@
 //pagemap.aggregaterating.ratingvalue = userRating
 //pagemap.aggregaterating.ratingcount = userRatingCount
 
+import 'dart:convert';
+
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+
+final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+const expectedDtoJsonStringList = [
+  '{"source": "google", "uniqueId": "tt2543472", "title": "Wonder ", "type": "movie", "year": "2017", "yearRange": "2017", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BYjFhOWY0OTgtNDkzMC00YWJkLTk1NGEtYWUxNjhmMmQ5ZjYyXkEyXkFqcGdeQXVyMjMxOTE0ODA@._V1_UY1200_CR74,0,630,1200_AL_.jpg", "related": {}}',
+  '{"source": "google", "uniqueId": "tt0451279", "title": "Wonder Woman ", "type": "movie", "year": "2017", "yearRange": "2017", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BMTYzODQzYjQtNTczNC00MzZhLTg1ZWYtZDUxYmQ3ZTY4NzA1XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_UY1200_CR90,0,630,1200_AL_.jpg", "related": {}}',
+  '{"source": "google", "uniqueId": "tt7126948", "title": "Wonder Woman 1984 ", "type": "movie", "year": "2020", "yearRange": "2020", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BYTlhNzJjYzYtNGU3My00ZDI5LTgzZDUtYzllYjU1ZmU0YTgwXkEyXkFqcGdeQXVyMjQwMDg0Ng@@._V1_UY1200_CR90,0,630,1200_AL_.jpg", "related": {}}',
+  '{"source": "google", "uniqueId": "tt1595656", "title": "To the Wonder ", "type": "movie", "year": "2012", "yearRange": "2012", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BMTAwNzk1NjM2ODZeQTJeQWpwZ15BbWU3MDE1MjQwMjk@._V1_UY1200_CR90,0,630,1200_AL_.jpg", "related": {}}',
+  '{"source": "google", "uniqueId": "tt0094582", "title": "The Wonder Years ", "type": "series", "year": "1993", "yearRange": "1988–1993", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BMWRhYjZjOTQtOGNiNC00MTQ0LWE2MTYtMTQxYzEwNDE3NjYyXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_UY1200_CR114,0,630,1200_AL_.jpg", "related": {}}',
+  '{"source": "google", "uniqueId": "tt0185014", "title": "Wonder Boys ", "type": "movie", "year": "2000", "yearRange": "2000", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BZGFlZDI5OGMtMmVhMS00NTQxLTgzZmEtZDJlMGVjNWViZThmXkEyXkFqcGdeQXVyMTAwMzUyOTc@._V1_UY1200_CR91,0,630,1200_AL_.jpg", "related": {}}',
+  '{"source": "google", "uniqueId": "tt0074074", "title": "Wonder Woman ", "type": "series", "year": "1979", "yearRange": "1975–1979", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BZjAxYTcxMDUtZTRmMi00NTk3LThkZTItNGNlZTQ3NWRhMjY5XkEyXkFqcGdeQXVyNjExODE1MDc@._V1_UY1200_CR107,0,630,1200_AL_.jpg", "related": {}}',
+  '{"source": "google", "uniqueId": "tt7126948", "title": "Wonder Woman 1984 ", "type": "movie", "year": "2020", "yearRange": "2020", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BYTlhNzJjYzYtNGU3My00ZDI5LTgzZDUtYzllYjU1ZmU0YTgwXkEyXkFqcGdeQXVyMjQwMDg0Ng@@._V1_UY1200_CR90,0,630,1200_AL_.jpg", "related": {}}',
+  '{"source": "google", "uniqueId": "tt13276386", "title": "Shawn Mendes: In Wonder ", "type": "movie", "year": "2020", "yearRange": "2020", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BNDRkMGM5YTQtOGMzZS00ZGJiLTg5YWMtYjg4NTcyZTk0MzAzXkEyXkFqcGdeQXVyMTI0OTAwOTgy._V1_UY1200_CR90,0,630,1200_AL_.jpg", "related": {}}',
+  '{"source": "google", "uniqueId": "tt1740828", "title": "Wonder Woman ", "type": "movie", "year": "2011", "yearRange": "2011", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BMjA0MzYzNzY3OV5BMl5BanBnXkFtZTcwMzM4ODM4NA@@._V1_UX630_CR0,0,630,1200_AL_.jpg", "related": {}}',
+];
+
+final intermediateMapList = [jsonDecode(googleMoviesJsonSearchFull)];
+
 const googleMoviesJsonSearchInner = r'''
     {
       "kind": "customsearch#result",

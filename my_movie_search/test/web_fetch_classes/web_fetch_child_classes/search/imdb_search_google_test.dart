@@ -2,17 +2,18 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_search.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_search.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/google.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/google.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/google.dart';
+import 'package:my_movie_search/utilities/environment.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedHTMLSample(dynamic dummy) {
-  return Future.value(Stream.value('<html><body>stuff</body></html>'));
+Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
+  return Future.value(Stream.value('[{"hello":"world"}]'));
 }
 
-Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
-  return Future.value(Stream.value('not valid html'));
+Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
+  return Future.value(Stream.value('not valid json'));
 }
 
 void main() {
@@ -20,10 +21,10 @@ void main() {
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('imdb search unit tests', () {
+  group('google search unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () async {
-      expect(QueryIMDBSearch().myDataSourceName(), 'imdbSearch');
+      expect(QueryGoogleMovies().myDataSourceName(), 'google');
     });
 
     // Confirm criteria is displayed as expected.
@@ -31,53 +32,40 @@ void main() {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
-        QueryIMDBSearch().myFormatInputAsText(input),
+        QueryGoogleMovies().myFormatInputAsText(input),
         'testing',
       );
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList',
-        () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO();
       input.criteriaList = [
         MovieResultDTO().error('test1'),
         MovieResultDTO().error('test2'),
       ];
       expect(
-        QueryIMDBSearch().myFormatInputAsText(input),
+        QueryGoogleMovies().myFormatInputAsText(input),
         contains('test1'),
       );
       expect(
-        QueryIMDBSearch().myFormatInputAsText(input),
+        QueryGoogleMovies().myFormatInputAsText(input),
         contains('test2'),
       );
-    });
-
-    // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
-      const expectedResult =
-          'https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=new%20query';
-
-      // Invoke the functionality.
-      final actualResult =
-          QueryIMDBSearch().myConstructURI('new query').toString();
-
-      // Check the results.
-      expect(actualResult, expectedResult);
     });
 
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () async {
       const expectedResult = {
-        'source': 'DataSourceType.imdbSearch',
-        'title': '[QueryIMDBSearch] new query',
+        'source': 'DataSourceType.google',
+        'title': '[QueryGoogleMovies] new query',
         'type': 'MovieContentType.custom',
         'related': '{}'
       };
 
       // Invoke the functionality.
-      final actualResult = QueryIMDBSearch().myYieldError('new query').toMap();
+      final actualResult =
+          QueryGoogleMovies().myYieldError('new query').toMap();
       actualResult.remove('uniqueId');
 
       // Check the results.
@@ -85,18 +73,19 @@ void main() {
     });
   });
 
-  group('ScrapeIMDBSearchDetails unit tests', () {
-    // Confirm class description is constructed as expected.
+  group('QueryGoogleMovies unit tests', () {
+    // Confirm webtext is parsed  as expected.
     test('Run myDataSourceName()', () async {
       final expectedOutput = intermediateMapList;
       final actualOutput =
-          await QueryIMDBSearch().myConvertWebTextToTraversableTree(
-        imdbSearchHtmlSampleFull,
+          await QueryGoogleMovies().myConvertWebTextToTraversableTree(
+        googleMoviesJsonSearchFull,
       );
       expect(actualOutput, expectedOutput);
     });
   });
-  group('ImdbSearchConverter unit tests', () {
+
+  group('GoogleSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
       final expectedValue = expectedDTOList;
@@ -105,7 +94,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          ImdbSearchConverter.dtoFromCompleteJsonMap(map),
+          GoogleMovieSearchConverter.dtoFromCompleteJsonMap(map as Map),
         );
       }
 
@@ -119,20 +108,41 @@ void main() {
     });
   });
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using ImdbSearchConverter
+  /// Integration tests using env
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('ImdbSearchConverter integration tests', () {
+  group('QueryGoogleMovies integration tests', () {
+    // Confirm URL is constructed as expected.
+    test('Run myConstructURI()', () async {
+      await EnvironmentVars.init();
+      const expectedResult1 =
+          'https://customsearch.googleapis.com/customsearch/v1?cx=';
+      const expectedResult2 = '&q=new%20query&start=0&num=10';
+
+      // Invoke the functionality.
+      final actualResult =
+          QueryGoogleMovies().myConstructURI('new query').toString();
+
+      // Check the results.
+      expect(actualResult, startsWith(expectedResult1));
+      expect(actualResult, endsWith(expectedResult2));
+    });
+  });
+////////////////////////////////////////////////////////////////////////////////
+  /// Integration tests using GoogleSearchConverter
+////////////////////////////////////////////////////////////////////////////////
+
+  group('GoogleSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final expectedValue = expectedDTOList;
-      final imdbSearch = QueryIMDBSearch();
+      final testClass = QueryGoogleMovies();
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          await imdbSearch.myConvertTreeToOutputType(map),
+          await testClass.myConvertTreeToOutputType(map),
         );
       }
 
@@ -146,36 +156,40 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final imdbSearch = QueryIMDBSearch();
+      final testClass = QueryGoogleMovies();
 
       // Invoke the functionality and collect results.
-      final actualResult = imdbSearch.myConvertTreeToOutputType('map');
+      final actualResult = testClass.myConvertTreeToOutputType('wrongData');
 
       // Check the results.
       //NOTE: Using expect on an async result only works as the last line of the test!
       expect(
         actualResult,
-        throwsA('expected map got String unable to interpret data map'),
+        throwsA('expected map got String unable to interpret data wrongData'),
       );
     });
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and ScrapeIMDBSearchDetails and ImdbSearchConverter
+  /// Integration tests using WebFetchBase and env and GoogleSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('imdb search query', () {
-    // Read IMDB search results from a simulated bytestream and convert JSON to dtos.
+  group('google search query', () {
+    // Read google search results from a simulated bytestream and convert JSON to dtos.
     test('Run readList()', () async {
+      // Wait for api key to be initialised
+      await EnvironmentVars.init();
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final imdbSearch = QueryIMDBSearch();
+      final testClass = QueryGoogleMovies();
 
       // Invoke the functionality.
-      await imdbSearch
-          .readList(SearchCriteriaDTO(),
-              source: streamImdbSearchHtmlOfflineData)
+      await testClass
+          .readList(
+            SearchCriteriaDTO(),
+            source: streamGoogleMoviesJsonOfflineData,
+          )
           .then((values) => queryResult.addAll(values))
           .onError(
             // ignore: avoid_print
@@ -191,32 +205,35 @@ void main() {
       );
     });
 
-    // Read IMDB search results from a simulated bytestream and report error due to invalid html.
+    // Read google search results from a simulated bytestream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final imdbSearch = QueryIMDBSearch();
-      const expectedException =
-          '[QueryIMDBSearch] Error in imdbSearch with criteria  intepreting web text as a map :no search results found in not valid html';
+      final testClass = QueryGoogleMovies();
+      const expectedException = '''
+[QueryGoogleMovies] Error in google with criteria  intepreting web text as a map :FormatException: Unexpected character (at character 1)
+not valid json
+^
+''';
 
       // Invoke the functionality.
-      await imdbSearch
-          .readList(SearchCriteriaDTO(), source: _emitInvalidHtmlSample)
+      await testClass
+          .readList(SearchCriteriaDTO(), source: _emitInvalidJsonSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read IMDB search results from a simulated bytestream and report error due to unexpected html.
+    // Read google search results from a simulated bytestream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBSearch] Error in imdbSearch with criteria  intepreting web text as a map :no search results found in <html><body>stuff</body></html>';
+          '[QueryGoogleMovies] Error in google with criteria  translating pagemap to objects :expected map got List<dynamic> unable to interpret data [{hello: world}]';
       final queryResult = <MovieResultDTO>[];
-      final imdbSearch = QueryIMDBSearch();
+      final testClass = QueryGoogleMovies();
 
       // Invoke the functionality.
-      await imdbSearch
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedHTMLSample)
+      await testClass
+          .readList(SearchCriteriaDTO(), source: _emitUnexpectedJsonSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

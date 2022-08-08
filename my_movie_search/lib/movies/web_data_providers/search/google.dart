@@ -39,8 +39,10 @@ class QueryGoogleMovies
   /// Convert google map to MovieResultDTO records.
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
-    if (map is Map)
+    print(map);
+    if (map is Map) {
       return GoogleMovieSearchConverter.dtoFromCompleteJsonMap(map);
+    }
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
 
@@ -48,7 +50,7 @@ class QueryGoogleMovies
   @override
   String myFormatInputAsText(dynamic contents) {
     final criteria = contents as SearchCriteriaDTO;
-    return criteria.criteriaTitle;
+    return criteria.toPrintableString();
   }
 
   /// Include entire map in the movie title when an error occurs.
