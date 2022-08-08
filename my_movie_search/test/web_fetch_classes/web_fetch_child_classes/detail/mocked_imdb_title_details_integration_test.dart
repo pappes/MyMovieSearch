@@ -13,8 +13,8 @@ import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart
 import 'package:universal_io/io.dart'
     show HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders;
 
-import '../test_helper.dart';
-import 'web_fetch_unit_test.mocks.dart';
+import '../../../test_helper.dart';
+import '../../web_fetch_unit_test.mocks.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Mock http.Client

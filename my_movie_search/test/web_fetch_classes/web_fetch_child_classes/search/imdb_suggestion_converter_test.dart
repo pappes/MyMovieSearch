@@ -5,8 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_suggestion.dart';
 import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
-import '../test_data/imdb_suggestion_converter_data.dart';
-import '../test_helper.dart';
+import '../../../test_data/imdb_suggestion_converter_data.dart';
+import '../../../test_helper.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Conceptual testing
