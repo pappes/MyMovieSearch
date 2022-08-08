@@ -40,7 +40,7 @@ class QueryIMDBSuggestions
   @override
   String myFormatInputAsText(dynamic contents) {
     final criteria = contents as SearchCriteriaDTO;
-    return criteria.criteriaTitle;
+    return criteria.toPrintableString();
   }
 
   /// Convert IMDB map to MovieResultDTO records.

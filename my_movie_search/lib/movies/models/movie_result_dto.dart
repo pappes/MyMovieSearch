@@ -40,6 +40,7 @@ enum MovieContentType {
   episode, //    anything that is part of a series or mini-series
   custom,
 }
+
 enum CensorRatingType {
   none,
   kids, //      C G
@@ -49,6 +50,7 @@ enum CensorRatingType {
   restriced, // X, RC
   custom,
 }
+
 enum LanguageType {
   none,
   allEnglish,
@@ -213,10 +215,14 @@ extension MapResultDTOConversion on Map {
 
 extension MovieResultDTOHelpers on MovieResultDTO {
   static final _htmlDecode = HtmlUnescape();
+
+  /// Create a MovieResultDTO encapsulating an error.
+  ///
   static int _lastError = -1;
-  MovieResultDTO error() {
+  MovieResultDTO error([String errorText = '']) {
     _lastError = _lastError - 1;
     uniqueId = _lastError.toString();
+    title = errorText;
     return this;
   }
 

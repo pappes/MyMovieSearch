@@ -25,6 +25,52 @@ void main() {
       expect(QueryIMDBSuggestions().myDataSourceName(), 'imdbSuggestions');
     });
 
+    // Confirm criteria is displayed as expected.
+    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () async {
+      final input = SearchCriteriaDTO();
+      input.criteriaTitle = 'testing';
+      expect(
+        QueryIMDBSuggestions().myFormatInputAsText(input),
+        'testing',
+      );
+    });
+
+    // Confirm criteria is displayed as expected.
+    test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList',
+        () async {
+      final input = SearchCriteriaDTO();
+      input.criteriaList = [
+        MovieResultDTO().error('test1'),
+        MovieResultDTO().error('test2'),
+      ];
+      expect(
+        QueryIMDBSuggestions().myFormatInputAsText(input),
+        contains('test1'),
+      );
+      expect(
+        QueryIMDBSuggestions().myFormatInputAsText(input),
+        contains('test2'),
+      );
+    });
+
+    // Confirm map can be converted to DTO.
+    test('Run myTransformMapToOutput()', () async {
+      final expectedValue = await expectedDTOList;
+      final imdbSuggestions = QueryIMDBSuggestions();
+
+      // Invoke the functionality and collect results.
+      final actualResult = await imdbSuggestions
+          .myConvertTreeToOutputType({'d': expectedDTOMap});
+
+      // Check the results.
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emmitted DTO list ${actualResult.toString()} '
+            'needs to match expected DTO list ${expectedValue.toString()}',
+      );
+    });
+
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () async {
       const expectedResult =
@@ -60,24 +106,6 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb suggestion query', () {
-    // Confirm map can be converted to DTO.
-    test('Run myTransformMapToOutput()', () async {
-      final expectedValue = await expectedDTOList;
-      final imdbSuggestions = QueryIMDBSuggestions();
-
-      // Invoke the functionality and collect results.
-      final actualResult = await imdbSuggestions
-          .myConvertTreeToOutputType({'d': expectedDTOMap});
-
-      // Check the results.
-      expect(
-        actualResult,
-        MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${actualResult.toString()} '
-            'needs to match expected DTO list ${expectedValue.toString()}',
-      );
-    });
-
     // Read IMDB suggestions from a simulated bytestream and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.

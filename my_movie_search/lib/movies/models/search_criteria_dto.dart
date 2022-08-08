@@ -91,7 +91,13 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
 }
 
 extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
-  /// Convert a [Map] into a [SearchCriteriaDTO] object
+  /// Create a human readable version of SearchCriteriaDTO.
+  String toPrintableString() {
+    if (criteriaList.isEmpty) return criteriaTitle;
+    return criteriaList.toJson();
+  }
+
+  /// Convert a [Map] into a [SearchCriteriaDTO] object.
   ///
   Map<String, String> toMap() {
     return <String, String>{
@@ -110,7 +116,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
 }
 
 extension MapCriteriaDTOConversion on Map {
-  /// Convert a [Map] into a [SearchCriteriaDTO] object
+  /// Convert a [Map] into a [SearchCriteriaDTO] object.
   ///
   SearchCriteriaDTO toSearchCriteriaDTO() {
     final dto = SearchCriteriaDTO();
