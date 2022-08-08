@@ -16,41 +16,41 @@ const intermediateMapList = [
   {
     "Image":
         "https://m.media-amazon.com/images/M/MV5BMTYz...GdeQXVyODE5NzE3OTE@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "Info": "Search Woman (2017) ",
+    "Info": " Search Woman (2017) ",
     "AnchorAddress": "/title/tt0451279/?ref_=fn_tt_tt_1",
     "Title": "Search Woman"
   },
   {
     "Image":
         "https://m.media-amazon.com/images/M/MV5BZjA...XkFqcGdeQXVyNjExODE1MDc@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "Info": "Search Woman (1975) (TV Series) ",
+    "Info": " Search Woman (1975) (TV Series) ",
     "AnchorAddress": "/title/tt0074074/?ref_=fn_tt_tt_2",
     "Title": "Search Woman"
   },
   {
     "Image":
         "https://m.media-amazon.com/images/M/MV5B...zM4ODM4NA@@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "Info": "Search Woman (2011) (TV Movie) ",
+    "Info": " Search Woman (2011) (TV Movie) ",
     "AnchorAddress": "/title/tt1740828/?ref_=fn_tt_tt_3",
     "Title": "Search Woman"
   },
   {
     "Image":
         "https://m.media-amazon.com/images/M/MV5BYT...QXVyMjQwMDg0Ng@@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "Info": "Search Woman 1984 (2020) ",
+    "Info": " Search Woman 1984 (2020) ",
     "AnchorAddress": "/title/tt7126948/?ref_=fn_tt_tt_4",
     "Title": "Search Woman 1984"
   },
   {
     "Image":
         "https://m.media-amazon.com/images/M/MV5BZTkyNmMz...GdeQXVyNzU3NjUxMzE@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "Info": "Search Woman: Bloodlines (2019) ",
+    "Info": " Search Woman: Bloodlines (2019) ",
     "AnchorAddress": "/title/tt8752498/?ref_=fn_tt_tt_5",
     "Title": "Search Woman: Bloodlines"
   },
   {
     "Image": "https://m.media-amazon.com/images/S/sash/85lhIiFC....mSScRzu.png",
-    "Info": "Search Woman 3 ",
+    "Info": " Search Woman 3 ",
     "AnchorAddress": "/title/tt13722802/?ref_=fn_tt_tt_6",
     "Title": "Search Woman 3"
   },

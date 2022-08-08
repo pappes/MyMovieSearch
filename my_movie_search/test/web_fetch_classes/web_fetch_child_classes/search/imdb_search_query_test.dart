@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_search.dart';
 import '../../../test_helper.dart';
@@ -53,28 +54,6 @@ void main() {
       );
     });
 
-    // Confirm map can be converted to DTO.
-    test('Run myConvertTreeToOutputType()', () async {
-      final expectedValue = expectedDTOList;
-      final imdbSearch = QueryIMDBSearch();
-      final actualResult = <MovieResultDTO>[];
-
-      // Invoke the functionality and collect results.
-      for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await imdbSearch.myConvertTreeToOutputType(map),
-        );
-      }
-
-      // Check the results.
-      expect(
-        actualResult,
-        MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${actualResult.toString()} '
-            'needs to match expected DTO list ${expectedValue.toString()}',
-      );
-    });
-
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () async {
       const expectedResult =
@@ -105,8 +84,84 @@ void main() {
       expect(actualResult, expectedResult);
     });
   });
+
+  group('ScrapeIMDBSearchDetails unit tests', () {
+    // Confirm class description is constructed as expected.
+    test('Run myDataSourceName()', () async {
+      final expectedOutput = intermediateMapList;
+      final actualOutput =
+          await QueryIMDBSearch().myConvertWebTextToTraversableTree(
+        imdbSearchHtmlSampleFull,
+      );
+      expect(actualOutput, expectedOutput);
+    });
+  });
+  group('ImdbSearchConverter unit tests', () {
+    // Confirm map can be converted to DTO.
+    test('Run dtoFromCompleteJsonMap()', () async {
+      final expectedValue = expectedDTOList;
+      final actualResult = <MovieResultDTO>[];
+
+      // Invoke the functionality and collect results.
+      for (final map in intermediateMapList) {
+        actualResult.addAll(
+          ImdbSearchConverter.dtoFromCompleteJsonMap(map),
+        );
+      }
+
+      // Check the results.
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emmitted DTO list ${actualResult.toString()} '
+            'needs to match expected DTO list ${expectedValue.toString()}',
+      );
+    });
+  });
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests
+  /// Integration tests using ImdbSearchConverter
+////////////////////////////////////////////////////////////////////////////////
+
+  group('ImdbSearchConverter integration tests', () {
+    // Confirm map can be converted to DTO.
+    test('Run myConvertTreeToOutputType()', () async {
+      final expectedValue = expectedDTOList;
+      final imdbSearch = QueryIMDBSearch();
+      final actualResult = <MovieResultDTO>[];
+
+      // Invoke the functionality and collect results.
+      for (final map in intermediateMapList) {
+        actualResult.addAll(
+          await imdbSearch.myConvertTreeToOutputType(map),
+        );
+      }
+
+      // Check the results.
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emmitted DTO list ${actualResult.toString()} '
+            'needs to match expected DTO list ${expectedValue.toString()}',
+      );
+    });
+    // Test error detection.
+    test('myConvertTreeToOutputType() errors', () async {
+      final imdbSearch = QueryIMDBSearch();
+
+      // Invoke the functionality and collect results.
+      final actualResult = imdbSearch.myConvertTreeToOutputType('map');
+
+      // Check the results.
+      //NOTE: Using expect on an async result only works as ther last line of the test!
+      expect(
+        actualResult,
+        throwsA('expected map got String unable to interpret data map'),
+      );
+    });
+  });
+
+////////////////////////////////////////////////////////////////////////////////
+  /// Integration tests using WebFetchBase and ScrapeIMDBSearchDetails and ImdbSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search query', () {
