@@ -26,7 +26,7 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   /// Does not filter data based on criteria.
   @override
   DataSourceFn myOfflineData() {
-    return streamImdbHtmlOfflineData;
+    return streamImdbSearchHtmlOfflineData;
   }
 
   /// Convert IMDB map to MovieResultDTO records.
@@ -40,14 +40,13 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   @override
   String myFormatInputAsText(dynamic contents) {
     final criteria = contents as SearchCriteriaDTO;
-    return criteria.criteriaTitle;
+    return criteria.toPrintableString();
   }
 
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) {
-    final error = MovieResultDTO();
-    error.title = '[QueryIMDBSearch] $message';
+    final error = MovieResultDTO().error('[QueryIMDBSearch] $message');
     error.type = MovieContentType.custom;
     error.source = DataSourceType.imdbSearch;
     return error;

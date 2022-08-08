@@ -181,7 +181,7 @@ void main() {
 
   group('imdb suggestion converter', () {
     // Convert IMDB suggestions from JSON to dto.
-    test('convert Json to DTO', () async {
+    test('convert raw bytestream to map to DTO', () async {
       // Set up the test data.
       const testInput = imdbJsonPSampleFull;
       final expectedDTO = await expectedDTOList;

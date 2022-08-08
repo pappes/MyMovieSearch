@@ -26,7 +26,9 @@ mixin ScrapeIMDBSearchDetails
     final document = parse(webText);
     // Extract required tables from the dom (anything named findList).
     final tables = document.getElementsByClassName(_searchResultsTable);
-    return _extractRowsFromTables(tables);
+    final list = _extractRowsFromTables(tables);
+    if (list.isNotEmpty) return list;
+    throw 'no search results found in $webText';
   }
 
   /// Extract movie data from rows in html table(s).

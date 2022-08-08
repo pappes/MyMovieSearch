@@ -4,6 +4,7 @@ import 'dart:async' show StreamController;
 import 'dart:convert' show json, jsonDecode, utf8;
 
 import 'package:html/parser.dart';
+import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
 
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
