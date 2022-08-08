@@ -39,7 +39,6 @@ class QueryGoogleMovies
   /// Convert google map to MovieResultDTO records.
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
-    print(map);
     if (map is Map) {
       return GoogleMovieSearchConverter.dtoFromCompleteJsonMap(map);
     }
