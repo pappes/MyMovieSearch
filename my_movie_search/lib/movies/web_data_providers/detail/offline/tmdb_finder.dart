@@ -23,6 +23,21 @@
 //  adult = indicator of adult content (true/false)
 //  popularity = raking to indcate how popular the person is e.g. "280.151",
 
+import 'dart:convert';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+
+final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+const expectedDtoJsonStringList = [
+  '''
+{"source": "tmdbFinder", "uniqueId": "18487", "title": "The Taking of Pelham 1 2 3 (The Taking of Pelham 1 2 3", "year": "2009", 
+"languages": ["en"], "genres": [], "keywords": [], 
+"description": "Armed men hijack a New York City subway train, holding the passengers hostage in return for a ransom, and turning an ordinary day's work for dispatcher Walter Garber into a face-off with the mastermind behind the crime.", 
+"userRating": "6.3", "userRatingCount": "2494", "related": {}}
+'''
+];
+
+final intermediateMapList = [jsonDecode(tmdbJsonSearchFull)];
+
 const tmdbJsonSearchInner = '''
   {"adult":false,
   "backdrop_path":"/kBWPHSszi8jKLqW5tMaQV1bISB2.jpg",
