@@ -40,8 +40,8 @@ class TmdbMovieSearchConverter {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
 
-    final int resultsMatched = map[outerElementSearchSuccess] as int? ?? 0;
-    if (resultsMatched > 0) {
+    final resultsMatched = map[outerElementSearchSuccess];
+    if (IntHelper.fromText(resultsMatched, nullValueSubstitute: 0)! > 0) {
       for (final movie in map[outerElementResultsCollection] as Iterable) {
         searchResults.add(dtoFromMap(movie as Map));
       }

@@ -41,7 +41,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   @override
   String myFormatInputAsText(dynamic contents) {
     final criteria = contents as SearchCriteriaDTO;
-    return criteria.criteriaTitle;
+    return criteria.toPrintableString();
   }
 
   /// Include entire map in the movie title when an error occurs.

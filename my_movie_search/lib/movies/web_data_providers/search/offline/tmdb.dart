@@ -15,6 +15,20 @@
 //overview = synopsis of the movie plot
 //popularity = raking to indcate how popular the movie is e.g. "280.151",
 
+import 'dart:convert';
+
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+
+final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+const expectedDtoJsonStringList = [
+  '{"source": "tmdbMovie", "uniqueId": "429617", "title": "Spider-Man: Far from Home", "year": "2019", "languages": [], "genres": [], "keywords": [], "related": {}}',
+  '{"source": "tmdbMovie", "uniqueId": "228161", "title": "Home", "year": "2015", "languages": [], "genres": [], "keywords": [], "related": {}}',
+  '{"source": "tmdbMovie", "uniqueId": "521029", "title": "Annabelle Comes Home", "year": "2019", "languages": [], "genres": [], "keywords": [], "related": {}}',
+  '{"source": "tmdbMovie", "uniqueId": "380565", "title": "Home Invasion", "year": "2016", "languages": [], "genres": [], "keywords": [], "related": {}}',
+];
+
+final intermediateMapList = [jsonDecode(tmdbJsonSearchFull)];
+
 const tmdbJsonSearchInner = '''
   {"adult":false,"backdrop_path":"/8XiTPUQJf.jpg","genre_ids":[28,12,878],"id":429617,"original_language":"en",
    "original_title":"Spider-Man: Far from Home","overview":"Peter Parker and his friends go on... continent.",
