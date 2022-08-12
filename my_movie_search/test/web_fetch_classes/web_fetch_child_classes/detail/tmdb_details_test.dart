@@ -21,7 +21,7 @@ void main() {
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('tmdb search unit tests', () {
+  group('tmdb details unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () async {
       expect(QueryTMDBMovieDetails().myDataSourceName(), 'tmdbMovie');
@@ -71,9 +71,6 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
-  });
-
-  group('QueryTMDBMovieDetails unit tests', () {
     // Confirm webtext is parsed  as expected.
     test('Run myDataSourceName()', () async {
       final expectedOutput = intermediateMapList;
@@ -85,7 +82,7 @@ void main() {
     });
   });
 
-  group('GoogleSearchConverter unit tests', () {
+  group('TmdbMovieDetailConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
       final expectedValue = expectedDTOList;

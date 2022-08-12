@@ -3,8 +3,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/omdb.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/omdb.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
 import 'package:my_movie_search/utilities/environment.dart';
 import '../../../test_helper.dart';
 
@@ -70,9 +70,6 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
-  });
-
-  group('QueryOMDBMovies unit tests', () {
     // Confirm webtext is parsed  as expected.
     test('Run myDataSourceName()', () async {
       final expectedOutput = intermediateMapList;

@@ -71,9 +71,6 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
-  });
-
-  group('QueryGoogleMovies unit tests', () {
     // Confirm webtext is parsed  as expected.
     test('Run myDataSourceName()', () async {
       final expectedOutput = intermediateMapList;

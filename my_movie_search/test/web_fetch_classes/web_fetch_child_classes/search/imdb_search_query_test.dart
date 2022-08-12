@@ -83,9 +83,6 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
-  });
-
-  group('ScrapeIMDBSearchDetails unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () async {
       final expectedOutput = intermediateMapList;
