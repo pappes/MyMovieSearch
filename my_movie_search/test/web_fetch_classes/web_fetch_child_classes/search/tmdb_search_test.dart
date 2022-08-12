@@ -81,7 +81,7 @@ void main() {
     });
   });
 
-  group('GoogleSearchConverter unit tests', () {
+  group('TmdbMovieSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
       final expectedValue = expectedDTOList;
@@ -125,10 +125,10 @@ void main() {
     });
   });
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using GoogleSearchConverter
+  /// Integration tests using QueryTMDBMovies
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('GoogleSearchConverter integration tests', () {
+  group('QueryTMDBMovies integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final expectedValue = expectedDTOList;
@@ -167,7 +167,7 @@ void main() {
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and env and GoogleSearchConverter
+  /// Integration tests using WebFetchBase and env and QueryTMDBMovies
 ////////////////////////////////////////////////////////////////////////////////
 
   group('tmdb search query', () {

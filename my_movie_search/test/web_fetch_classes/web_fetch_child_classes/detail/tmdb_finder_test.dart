@@ -123,10 +123,10 @@ void main() {
     });
   });
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using GoogleSearchConverter
+  /// Integration tests using QueryTMDBFinder
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('GoogleSearchConverter integration tests', () {
+  group('QueryTMDBFinder integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final testClass = QueryTMDBFinder();
@@ -165,7 +165,7 @@ void main() {
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and env and GoogleSearchConverter
+  /// Integration tests using WebFetchBase and env and QueryTMDBFinder
 ////////////////////////////////////////////////////////////////////////////////
 
   group('tmdb search query', () {

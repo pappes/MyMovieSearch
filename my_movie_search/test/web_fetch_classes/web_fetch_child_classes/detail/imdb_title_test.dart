@@ -2,18 +2,18 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_movie_detail.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_movie_detail.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_detail.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
 import 'package:my_movie_search/utilities/environment.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
-  return Future.value(Stream.value('[{"hello":"world"}]'));
+Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
+  return Future.value(Stream.value('<html><body>stuff</body></html>'));
 }
 
-Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
-  return Future.value(Stream.value('not valid json'));
+Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
+  return Future.value(Stream.value('not valid html'));
 }
 
 void main() {
@@ -21,10 +21,10 @@ void main() {
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('tmdb details unit tests', () {
+  group('tmdb finder unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () async {
-      expect(QueryTMDBMovieDetails().myDataSourceName(), 'tmdbMovie');
+      expect(QueryIMDBTitleDetails().myDataSourceName(), 'imdb');
     });
 
     // Confirm criteria is displayed as expected.
@@ -32,7 +32,7 @@ void main() {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
-        QueryTMDBMovieDetails().myFormatInputAsText(input),
+        QueryIMDBTitleDetails().myFormatInputAsText(input),
         'testing',
       );
     });
@@ -45,11 +45,11 @@ void main() {
         MovieResultDTO().error('test2'),
       ];
       expect(
-        QueryTMDBMovieDetails().myFormatInputAsText(input),
+        QueryIMDBTitleDetails().myFormatInputAsText(input),
         contains('test1'),
       );
       expect(
-        QueryTMDBMovieDetails().myFormatInputAsText(input),
+        QueryIMDBTitleDetails().myFormatInputAsText(input),
         contains('test2'),
       );
     });
@@ -57,43 +57,49 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () async {
       const expectedResult = {
-        'source': 'DataSourceType.tmdbMovie',
-        'title': '[QueryTMDBDetails] new query',
+        'source': 'DataSourceType.imdb',
+        'title': '[QueryIMDBTitleDetails] new query',
         'type': 'MovieContentType.custom',
         'related': '{}'
       };
 
       // Invoke the functionality.
       final actualResult =
-          QueryTMDBMovieDetails().myYieldError('new query').toMap();
+          QueryIMDBTitleDetails().myYieldError('new query').toMap();
+      actualResult.remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
     });
     // Confirm webtext is parsed  as expected.
-    test('Run myDataSourceName()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       final expectedOutput = intermediateMapList;
-      final actualOutput =
-          await QueryTMDBMovieDetails().myConvertWebTextToTraversableTree(
-        tmdbJsonSearchFull,
+      final testClass = QueryIMDBTitleDetails();
+      final criteria = SearchCriteriaDTO();
+      criteria.criteriaTitle = 'tt7602562';
+      testClass.criteria = criteria;
+      final actualOutput = await testClass.myConvertWebTextToTraversableTree(
+        imdbHtmlSampleFull,
       );
       expect(actualOutput, expectedOutput);
     });
   });
 
-  group('TmdbMovieDetailConverter unit tests', () {
+  group('TmdbFinderConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
       final expectedValue = expectedDTOList;
+      expectedValue.first.uniqueId = 'tt7602562';
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          TmdbMovieDetailConverter.dtoFromCompleteJsonMap(map as Map),
+          ImdbTitleConverter.dtoFromCompleteJsonMap(map),
         );
       }
 
+      actualResult.first.alternateId = "";
       // Check the results.
       expect(
         actualResult,
@@ -107,29 +113,28 @@ void main() {
   /// Integration tests using env
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('QueryTMDBMovieDetails integration tests', () {
+  group('QueryIMDBTitleDetails integration tests', () {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () async {
       await EnvironmentVars.init();
-      final testClass = QueryTMDBMovieDetails();
-      await testClass.myClearCache();
-      const expected = 'https://api.themoviedb.org/3/movie/1234?api_key=';
+      const expected = 'https://www.imdb.com/title/1234/?ref_=fn_tt_tt_1';
 
       // Invoke the functionality.
-      final actualResult = testClass.myConstructURI('1234').toString();
+      final actualResult =
+          QueryIMDBTitleDetails().myConstructURI('1234').toString();
 
       // Check the results.
-      expect(actualResult, startsWith(expected));
+      expect(actualResult, expected);
     });
   });
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using QueryTMDBMovieDetails
+  /// Integration tests using QueryIMDBTitleDetails
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('QueryTMDBMovieDetails integration tests', () {
+  group('QueryIMDBTitleDetails integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final testClass = QueryTMDBMovieDetails();
+      final testClass = QueryIMDBTitleDetails();
       await testClass.myClearCache();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
@@ -151,7 +156,7 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final testClass = QueryTMDBMovieDetails();
+      final testClass = QueryIMDBTitleDetails();
       await testClass.myClearCache();
 
       // Invoke the functionality and collect results.
@@ -167,7 +172,7 @@ void main() {
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and env and QueryTMDBMovieDetails
+  /// Integration tests using WebFetchBase and env and QueryIMDBTitleDetails
 ////////////////////////////////////////////////////////////////////////////////
 
   group('tmdb search query', () {
@@ -178,16 +183,16 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBMovieDetails();
+      final testClass = QueryIMDBTitleDetails();
       await testClass.myClearCache();
       final criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = '104';
+      criteria.criteriaTitle = 'tt7602562';
 
       // Invoke the functionality.
       await testClass
           .readList(
-            SearchCriteriaDTO(),
-            source: streamTmdbJsonOfflineData,
+            criteria,
+            source: streamImdbHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
           .onError(
@@ -208,16 +213,14 @@ void main() {
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBMovieDetails();
-      const expectedException = '''
-[QueryTMDBDetails] Error in tmdbMovie with criteria  intepreting web text as a map :FormatException: Unexpected character (at character 1)
-not valid json
-^
-''';
+      final testClass = QueryIMDBTitleDetails();
+      await testClass.myClearCache();
+      const expectedException =
+          '[QueryIMDBTitleDetails] Error in imdb with criteria  intepreting web text as a map :imdb webscraper data not detected for criteria ';
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitInvalidJsonSample)
+          .readList(SearchCriteriaDTO(), source: _emitInvalidHtmlSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -226,13 +229,14 @@ not valid json
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryTMDBDetails] Error in tmdbMovie with criteria  translating pagemap to objects :expected map got List<dynamic> unable to interpret data [{hello: world}]';
+          '[QueryIMDBTitleDetails] Error in imdb with criteria  intepreting web text as a map :imdb webscraper data not detected for criteria ';
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBMovieDetails();
+      final testClass = QueryIMDBTitleDetails();
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedJsonSample)
+          .readList(SearchCriteriaDTO(), source: _emitUnexpectedHtmlSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

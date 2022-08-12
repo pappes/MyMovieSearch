@@ -280,7 +280,7 @@ mixin ScrapeIMDBTitleDetails
   }
 
   Future _fetchAdditionalPersonDetails(dynamic people) async {
-    final cast = ImdbMoviePageConverter.getPeopleFromJson(people);
+    final cast = ImdbTitleConverter.getPeopleFromJson(people);
     for (final people in cast) {
       final detailCriteria = SearchCriteriaDTO();
       detailCriteria.criteriaTitle = people.uniqueId;

@@ -7,7 +7,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dar
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_search.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedHTMLSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
   return Future.value(Stream.value('<html><body>stuff</body></html>'));
 }
 
@@ -213,7 +213,7 @@ void main() {
 
       // Invoke the functionality.
       await imdbSearch
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedHTMLSample)
+          .readList(SearchCriteriaDTO(), source: _emitUnexpectedHtmlSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

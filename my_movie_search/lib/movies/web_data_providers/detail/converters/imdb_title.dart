@@ -33,9 +33,10 @@ const _relatedMoviesLabel = 'Suggestions:';
 const relatedActorsLabel = 'Cast:';
 const relatedDirectorsLabel = 'Directed by:';
 
-class ImdbMoviePageConverter {
+class ImdbTitleConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
-    return [dtoFromMap(map)];
+    final dto = dtoFromMap(map);
+    return [dto];
   }
 
   static MovieResultDTO dtoFromMap(Map map) {

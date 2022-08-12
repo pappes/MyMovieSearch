@@ -81,7 +81,7 @@ void main() {
     });
   });
 
-  group('GoogleSearchConverter unit tests', () {
+  group('OmdbMovieSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
       final expectedValue = expectedDTOList;
@@ -124,10 +124,10 @@ void main() {
     });
   });
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using GoogleSearchConverter
+  /// Integration tests using QueryOMDBMovies
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('GoogleSearchConverter integration tests', () {
+  group('QueryOMDBMovies integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final expectedValue = expectedDTOList;
@@ -166,7 +166,7 @@ void main() {
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and env and GoogleSearchConverter
+  /// Integration tests using WebFetchBase and env and QueryOMDBMovies
 ////////////////////////////////////////////////////////////////////////////////
 
   group('omdb search query', () {

@@ -1,5 +1,82 @@
 //query string https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=wonder%20woman
 
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+
+final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+const expectedDtoJsonStringList = [
+  '''
+{"source": "imdb", "title": "1234", "type": "movie", "year": "2016", "language": "foreign",
+"languages": ["Marathi"], "genres": ["Drama"], "keywords": ["terror"], 
+"description": "1234 is a movie starring Abhijeet Chavhan, Kishore Chougule, and Tejaa Deokar. On India's Independence Day, a few people who are not related to each other try to evade four different incidents aimed to spread terror in the country.", 
+"userRating": "6.5", "userRatingCount": "10", "imageUrl": "https://m.media-amazon.com/images/M/MV5BMDMyODJhZmItOTg5Yy00ZTcyLWEzMGMtMmVkMjYyMDI5YzAxXkEyXkFqcGdeQXVyMTc4OTM4NjE@._V1_.jpg", "related": {}}
+
+'''
+];
+
+const intermediateMapList = [
+  {
+    '@context': 'http://schema.org',
+    '@type': 'Movie',
+    'url': '/title/tt7602562/',
+    'name': '1234',
+    'image':
+        'https://m.media-amazon.com/images/M/MV5BMDMyODJhZmItOTg5Yy00ZTcyLWEzMGMtMmVkMjYyMDI5YzAxXkEyXkFqcGdeQXVyMTc4OTM4NjE@._V1_.jpg',
+    'genre': 'Drama',
+    'actor': [
+      {
+        '@type': 'Person',
+        'url': '/name/nm2487587/',
+        'name': 'Abhijeet Chavhan'
+      },
+      {
+        '@type': 'Person',
+        'url': '/name/nm3874318/',
+        'name': 'Kishore Chougule'
+      },
+      {'@type': 'Person', 'url': '/name/nm5794167/', 'name': 'Tejaa Deokar'},
+      {'@type': 'Person', 'url': '/name/nm4391467/', 'name': 'Arun Kadam'}
+    ],
+    'director': {
+      '@type': 'Person',
+      'url': '/name/nm4940617/',
+      'name': 'Milind Arun Kavde'
+    },
+    'description':
+        "1234 is a movie starring Abhijeet Chavhan, Kishore Chougule, and Tejaa Deokar. On India's Independence Day, a few people who are not related to each other try to evade four different incidents aimed to spread terror in the country.",
+    'datePublished': '2016-08-05',
+    'creator': {'@type': 'Organization', 'url': '/company/co0813120/'},
+    'keywords': ['terror'],
+    'aggregateRating': {
+      '@type': 'AggregateRating',
+      'ratingCount': 10,
+      'bestRating': '10.0',
+      'worstRating': '1.0',
+      'ratingValue': '6.5'
+    },
+    'trailer': {
+      '@type': 'VideoObject',
+      'name': '1234 (2016) Trailer',
+      'embedUrl': '/video/imdb/vi962903577',
+      'thumbnail': {
+        '@type': 'ImageObject',
+        'contentUrl':
+            'https://m.media-amazon.com/images/M/MV5BYjgwNjBmZjgtYTdiOS00ZDM4LWIxY2YtOGJmYmQ4MzlhOWIyXkEyXkFqcGdeQXRyYW5zY29kZS13b3JrZmxvdw@@._V1_.jpg'
+      },
+      'thumbnailUrl':
+          'https://m.media-amazon.com/images/M/MV5BYjgwNjBmZjgtYTdiOS00ZDM4LWIxY2YtOGJmYmQ4MzlhOWIyXkEyXkFqcGdeQXRyYW5zY29kZS13b3JrZmxvdw@@._V1_.jpg',
+      'description':
+          "On India's Independence Day, a few people who are not related to each other try to evade four different incidents aimed to spread terror in the country.",
+      'uploadDate': '2020-07-31T09:13:47Z'
+    },
+    'language': LanguageType.foreign,
+    'languages': ['Marathi'],
+    'related': [],
+    'ratingCount': '10',
+    'ratingValue': '6.5',
+    'id': 'tt7602562'
+  }
+];
+
 const imdbHtmlSampleInner = '''
 <tr class="findResult odd">
   <td class="primary_photo"> <a href="/title/tt0451279/?ref_=fn_tt_tt_1"><img src="https://m.media-amazon.com/images/M/MV5BMTYzODQzYjQtNTczNC00MzZhLTg1ZWYtZDUxYmQ3ZTY4NzA1XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_UX32_CR0,0,32,44_AL_.jpg"></a> </td> 
