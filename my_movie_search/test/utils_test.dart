@@ -177,7 +177,7 @@ Future main() async {
       final doublePrint = actualOutput
           .printStreamFuture('print1:')
           .printStreamFuture('print2:');
-      final completedStream = await (await doublePrint)!.toList();
+      final completedStream = await (await doublePrint).toList();
       final revivedStream = Stream.fromIterable(completedStream);
 
       await expectLater(

@@ -110,8 +110,8 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${actualResult.toString()} '
-            'needs to match expected DTO list ${expectedValue.toString()}',
+        reason: 'Emmitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
   });
@@ -137,8 +137,8 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${actualResult.toString()} '
-            'needs to match expected DTO list ${expectedValue.toString()}',
+        reason: 'Emmitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
     // Test error detection.
@@ -183,8 +183,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${queryResult.toString()} '
-            'needs to match expected DTO list ${expectedValue.toString()}',
+        reason: 'Emmitted DTO list ${queryResult.toPrintableString()} '
+            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
 
