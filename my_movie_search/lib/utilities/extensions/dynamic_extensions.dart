@@ -46,7 +46,13 @@ extension DynamicHelper on dynamic {
   static List<String> dynamicToStringList_(dynamic val) {
     if (val is String) return ListHelper.fromJson(val);
     if (val is List<String>) return val;
-    return [];
+    final retval = <String>[];
+    if (val is List) {
+      for (final item in val) {
+        retval.add(item.toString());
+      }
+    }
+    return retval;
   }
 
   /// Convert datatype of a value to a non nullablle int

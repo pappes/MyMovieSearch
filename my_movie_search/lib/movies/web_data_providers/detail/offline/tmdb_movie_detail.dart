@@ -15,34 +15,24 @@
 //overview = synopsis of the movie plot
 //popularity = raking to indcate how popular the movie is e.g. "280.151",
 
-const tmdbJsonSearchInner = '''
-  {"adult":false,
-  "backdrop_path":null,
-  "belongs_to_collection":null,
-  "budget":0,
-  "genres":[{"id":16,"name":"Animation"}],
-  "homepage":"",
-  "id":284821,
-  "imdb_id":"tt2503234",
-  "original_language":"en",
-  "original_title":"Winnie the Pooh - 123's",
-  "overview":"Winnie the Pooh and friends teach counting.",
-  "popularity":2.164,
-  "poster_path":"/gj8pk74zOUJYZsGZJn8WY7V4PZR.jpg",
-  "production_companies":[{"id":3475,"logo_path":"/jTPNzDEn7eHmp3nEXEEtkHm6jLg.png",
-  "name":"Disney Television Animation","origin_country":"US"}],
-  "production_countries":[{"iso_3166_1":"US","name":"United States of America"}],
-  "release_date":"2004-10-12",
-  "revenue":0,
-  "runtime":30,
-  "spoken_languages":[],
-  "status":"Released",
-  "tagline":"",
-  "title":"Winnie the Pooh - 123's",
-  "video":true,
-  "vote_average":6.8,
-  "vote_count":10}
+import 'dart:convert';
 
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+
+final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+const expectedDtoJsonStringList = [
+  '''
+{"source": "tmdbMovie", "uniqueId": "104", "alternateId": "tt0130827", "title": "Lola rennt (Run Lola Run", "year": "1998", "runTime": "4860", 
+"languages": ["de","{english_name: German, iso_639_1: de, name: Deutsch}","{english_name: English, iso_639_1: en, name: English}","{english_name: Japanese, iso_639_1: ja, name: 日本語}"], 
+"genres": ["Action","Drama","Thriller"], "keywords": [], 
+"description": "Lola receives a phone call from her boyfriend Manni. He lost 100,000 DM in a subway train that belongs to a very bad guy. She has 20 minutes to raise this amount and meet Manni. Otherwise, he will rob a store to get the money. Three different alternatives may happen depending on some minor event along Lola's run.", 
+"userRating": "7.3", "userRatingCount": "1537", "related": {}}
+'''
+];
+
+final intermediateMapList = [jsonDecode(tmdbJsonSearchFull)];
+
+const tmdbJsonSearchInner = '''
 {"adult":false,
   "backdrop_path":"/lhsrT0SbPaqmBMHLd5N83j8XAFy.jpg",
   "belongs_to_collection":null,
@@ -73,8 +63,7 @@ const tmdbJsonSearchInner = '''
   "vote_count":1537}
 ''';
 
-const tmdbJsonSearchFull =
-    ' { "page": 1, "results": [ $tmdbJsonSearchInner ], "total_pages": 12, "total_results": 340 } ';
+const tmdbJsonSearchFull = tmdbJsonSearchInner;
 const tmdbJsonSearchEmpty =
     '{"success":false,"status_code":34,"status_message":"The resource you requested could not be found."}';
 const tmdbJsonSearchError =
