@@ -20,7 +20,6 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Collect webpage text to construct a map of the movie data.
   Map _scrapeWebPage(Document document) {
-    // Extract embedded JSON.
     final movieData = {};
 
     _scrapeRelated(document, movieData);
@@ -39,6 +38,8 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         final cast = _getCast(credits);
         _addCast(movieData, roleText ?? '?', cast);
       }
+    } else {
+      throw 'imdb cast data not detected for criteria $getCriteriaText';
     }
   }
 

@@ -40,7 +40,7 @@ class QueryIMDBCastDetails
   @override
   String myFormatInputAsText(dynamic contents) {
     final criteria = contents as SearchCriteriaDTO;
-    return criteria.criteriaTitle;
+    return criteria.toPrintableString();
   }
 
   /// API call to IMDB search returning the top matching results for [searchText].
