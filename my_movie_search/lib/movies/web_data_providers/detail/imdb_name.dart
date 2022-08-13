@@ -36,7 +36,7 @@ class QueryIMDBNameDetails
   @override
   String myFormatInputAsText(dynamic contents) {
     final criteria = contents as SearchCriteriaDTO;
-    return criteria.criteriaTitle;
+    return criteria.toPrintableString();
   }
 
   /// API call to IMDB person details for person id.
@@ -49,6 +49,7 @@ class QueryIMDBNameDetails
   /// Convert IMDB map to MovieResultDTO records.
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
+    print(map);
     if (map is Map) return ImdbNamePageConverter.dtoFromCompleteJsonMap(map);
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
