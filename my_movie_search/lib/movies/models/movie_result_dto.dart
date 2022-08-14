@@ -459,12 +459,25 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return toMap(excludeCopyrightedData: false).toString();
   }
 
-  String toJsonString() {
-    final buffer = StringBuffer();
-    for (final entry in toMap(excludeCopyrightedData: false).entries) {
-      buffer.write('"${entry.key}":"${entry.value}"');
+  String toJson() {
+    String encode(Object? dto) {
+      if (null != dto && dto is MovieResultDTO) {
+        final Map<String, dynamic> map = {};
+        map.addAll(dto.toMap(excludeCopyrightedData: false));
+        map["languages"] = dto.languages;
+        map["genres"] = dto.genres;
+        map["keywords"] = dto.keywords;
+        //map["related"] = dto.related;
+        return jsonEncode(
+          map,
+          toEncodable: encode,
+        );
+      } else {
+        return dto.toString();
+      }
     }
-    return buffer.toString();
+
+    return encode(this);
   }
 
   /// Create a placeholder for a value that can not be easily represented
@@ -529,8 +542,8 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
   String toPrintableString() {
     final listContents = StringBuffer();
     String separator = '';
-    for (final key in this) {
-      listContents.write('$separator${key.toPrintableString()}');
+    for (final entry in this) {
+      listContents.write('$separator${entry.toPrintableString()}');
       separator = ',\n';
     }
     return 'List<MovieResultDTO>($length)[\n$listContents\n]';
@@ -539,11 +552,11 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
   String toJsonString() {
     final listContents = StringBuffer();
     String separator = '';
-    for (final key in this) {
-      listContents.write('$separator${key.toJsonString()}');
+    for (final entry in this) {
+      listContents.write('$separator${entry.toJson()}');
       separator = ',\n';
     }
-    return "List<MovieResultDTO>($length)\nr'''\n[\n$listContents\n]'''";
+    return "List<MovieResultDTO>($length)\nr'''\n[\n$listContents\n]\n'''";
   }
 
   /// Create a json encoded representation of a [List]<[MovieResultDTO]>.

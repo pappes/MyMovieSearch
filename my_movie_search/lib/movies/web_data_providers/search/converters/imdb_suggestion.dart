@@ -49,7 +49,6 @@ class ImdbSuggestionConverter {
         ) ??
         movie.type;
 
-    print('URL for ${movie.uniqueId} is ${movie.imageUrl}');
     return movie;
   }
 

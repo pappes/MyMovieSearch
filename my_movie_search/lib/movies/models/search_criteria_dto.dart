@@ -101,10 +101,10 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   ///
   Map<String, String> toMap() {
     return <String, String>{
-      'searchId': searchId,
-      'criteriaTitle': criteriaTitle,
-      'criteriaSource': criteriaSource.toString(),
-      'criteriaList': criteriaList.toJson(),
+      movieCriteriaDTOSearchId: searchId,
+      movieCriteriaDTOCriteriaTitle: criteriaTitle,
+      movieCriteriaDTOCriteriaSource: criteriaSource.toString(),
+      movieCriteriaDTOCriteriaList: criteriaList.toJson(),
     };
   }
 
@@ -112,6 +112,12 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     final converter = RestorableMovieList();
     final stringList = DynamicHelper.dynamicToString_(inputString);
     return converter.dtoFromPrimitives(stringList);
+  }
+
+  SearchCriteriaDTO fromString(String criteria) {
+    final dto = SearchCriteriaDTO();
+    dto.criteriaTitle = criteria;
+    return dto;
   }
 }
 
