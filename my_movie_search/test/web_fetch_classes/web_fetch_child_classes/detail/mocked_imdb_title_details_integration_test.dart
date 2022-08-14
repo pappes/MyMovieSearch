@@ -20,7 +20,7 @@ import '../../web_fetch_unit_test.mocks.dart';
 /// Mock http.Client
 ////////////////////////////////////////////////////////////////////////////////
 
-// To regenertate mocks run the following command
+// To regenerate mocks run the following command
 // flutter pub run build_runner build --delete-conflicting-outputs
 @GenerateMocks([HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders])
 
@@ -41,7 +41,8 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
     final clientResponse = MockHttpClientResponse();
     final headers = MockHttpHeaders();
     final expectedUri = Uri.parse(
-        'https://www.imdb.com/title/$expectedCriteria/?ref_=fn_tt_tt_1');
+      'https://www.imdb.com/title/$expectedCriteria/?ref_=fn_tt_tt_1',
+    );
 
     Future<MockHttpClientResponse> getClientResponse(_) async {
       return clientResponse;
@@ -130,7 +131,8 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(
     final imdbDetails = simulateHTTP404
         ? QueryIMDBTitleDetailsMocked(queryKey, httpStatus: 404)
         : QueryIMDBTitleDetailsMocked(
-            queryKey); //Seperate instance per search (async)
+            queryKey,
+          ); //Separate instance per search (async)
     criteria.criteriaTitle = queryKey;
 
     Future<List<MovieResultDTO>> future;
@@ -181,7 +183,7 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${queryResult.toPrintableString()} '
+        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     }
@@ -238,7 +240,7 @@ void main() {
         final queries = _makeQueries(startId, 1);
         final errorMessage = MovieResultDTO();
         errorMessage.title =
-            '[QueryIMDBTitleDetails] Error in imdb with criteria 5000 intepreting web text as a map :Error in http read, HTTP status code : 404 for https://www.imdb.com/title/$startId/?ref_=fn_tt_tt_1';
+            '[QueryIMDBTitleDetails] Error in imdb with criteria 5000 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://www.imdb.com/title/$startId/?ref_=fn_tt_tt_1';
         errorMessage.uniqueId = '-2';
         errorMessage.source = DataSourceType.imdb;
         errorMessage.type = MovieContentType.custom;
