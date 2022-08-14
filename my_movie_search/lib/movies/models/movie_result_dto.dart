@@ -9,8 +9,8 @@ import 'package:my_movie_search/utilities/extensions/enum.dart';
 
 class MovieResultDTO {
   DataSourceType source = DataSourceType.none;
-  String uniqueId = movieResultDTOUninitialised; // ID in current datasource
-  String alternateId = ''; // ID in another data sourece e.g. from TMDB to IMDB
+  String uniqueId = movieResultDTOUninitialized; // ID in current data source
+  String alternateId = ''; // ID in another data source e.g. from TMDB to IMDB
   String title = '';
   String alternateTitle = '';
   String description = '';
@@ -47,7 +47,7 @@ enum CensorRatingType {
   family, //    PG
   mature, //    M
   adult, //     M15+, R
-  restriced, // X, RC
+  restricted, // X, RC
   custom,
 }
 
@@ -81,7 +81,7 @@ const String movieResultDTOLanguages = 'languages';
 const String movieResultDTOGenres = 'genres';
 const String movieResultDTOKeywords = 'keywords';
 const String movieResultDTORelated = 'related';
-const String movieResultDTOUninitialised = '-1';
+const String movieResultDTOUninitialized = '-1';
 const String movieResultDTOMessagePrefix = '-';
 
 class RestorableMovie extends RestorableValue<MovieResultDTO> {
@@ -110,7 +110,7 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   @override
   Object toPrimitives() => dtoToPrimitives(value);
   Object dtoToPrimitives(MovieResultDTO dto) =>
-      jsonEncode(dto.toMap(excludeCopywritedData: false));
+      jsonEncode(dto.toMap(excludeCopyrightedData: false));
 }
 
 class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
@@ -160,7 +160,7 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   List<String> encodeList() {
     final retval = <String>[];
     for (final dto in this) {
-      retval.add(jsonEncode(dto.toMap(excludeCopywritedData: false)));
+      retval.add(jsonEncode(dto.toMap(excludeCopyrightedData: false)));
     }
     return retval;
   }
@@ -228,69 +228,69 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Convert a [MovieResultDTO] object into a [Map].
   ///
-  Map<String, String> toMap({bool excludeCopywritedData = true}) {
+  Map<String, String> toMap({bool excludeCopyrightedData = true}) {
     final map = <String, String>{};
-    final defaultVals = MovieResultDTO();
-    if (source != defaultVals.source) {
+    final defaultValues = MovieResultDTO();
+    if (source != defaultValues.source) {
       map[movieResultDTOSource] = source.toString();
     }
-    if (uniqueId != defaultVals.uniqueId) {
+    if (uniqueId != defaultValues.uniqueId) {
       map[movieResultDTOUniqueId] = uniqueId;
     }
-    if (alternateId != defaultVals.alternateId) {
+    if (alternateId != defaultValues.alternateId) {
       map[movieResultDTOAlternateId] = alternateId;
     }
-    if (title != defaultVals.title) map[movieResultDTOTitle] = title;
-    if (alternateTitle != defaultVals.alternateTitle) {
+    if (title != defaultValues.title) map[movieResultDTOTitle] = title;
+    if (alternateTitle != defaultValues.alternateTitle) {
       map[movieResultDTOAlternateTitle] = alternateTitle;
     }
 
-    if (type != defaultVals.type) {
+    if (type != defaultValues.type) {
       map[movieResultDTOType] = type.toString();
     }
-    if (year != defaultVals.year) {
+    if (year != defaultValues.year) {
       map[movieResultDTOYear] = year.toString();
     }
-    if (yearRange != defaultVals.yearRange) {
+    if (yearRange != defaultValues.yearRange) {
       map[movieResultDTOYearRange] = yearRange;
     }
-    if (runTime != defaultVals.runTime) {
+    if (runTime != defaultValues.runTime) {
       map[movieResultDTORunTime] = runTime.inSeconds.toString();
     }
-    if (language != defaultVals.language) {
+    if (language != defaultValues.language) {
       map[movieResultDTOLanguage] = language.toString();
     }
 
-    if (!excludeCopywritedData) {
-      if (languages != defaultVals.languages) {
+    if (!excludeCopyrightedData) {
+      if (languages != defaultValues.languages) {
         map[movieResultDTOLanguages] = json.encode(languages);
       }
-      if (genres != defaultVals.genres) {
+      if (genres != defaultValues.genres) {
         map[movieResultDTOGenres] = json.encode(genres);
       }
-      if (keywords != defaultVals.keywords) {
+      if (keywords != defaultValues.keywords) {
         map[movieResultDTOKeywords] = json.encode(keywords);
       }
-      if (description != defaultVals.description) {
+      if (description != defaultValues.description) {
         map[movieResultDTODescription] = description;
       }
-      if (userRating != defaultVals.userRating) {
+      if (userRating != defaultValues.userRating) {
         map[movieResultDTOUserRating] = userRating.toString();
       }
-      if (userRatingCount != defaultVals.userRatingCount) {
+      if (userRatingCount != defaultValues.userRatingCount) {
         map[movieResultDTOUserRatingCount] = userRatingCount.toString();
       }
-      if (censorRating != defaultVals.censorRating) {
+      if (censorRating != defaultValues.censorRating) {
         map[movieResultDTOCensorRating] = censorRating.toString();
       }
-      if (imageUrl != defaultVals.imageUrl) {
+      if (imageUrl != defaultValues.imageUrl) {
         map[movieResultDTOImageUrl] = imageUrl;
       }
     }
     //TODO: related
     final relatedMap = <String, String>{};
     related.forEach(
-      (key, childMap) => // Get comma delimted uniqueIds
+      (key, childMap) => // Get comma delimited uniqueIds
           relatedMap[key] = childMap.keys.toString(),
     );
     map[movieResultDTORelated] = relatedMap.toString();
@@ -317,23 +317,23 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (newValue.userRatingCount > userRatingCount ||
         0 == userRatingCount ||
         DataSourceType.imdb == newValue.source) {
-      source = bestval(newValue.source, source);
+      source = bestValue(newValue.source, source);
       if (DataSourceType.imdb == newValue.source && "" != newValue.title) {
         title = _htmlDecode.convert(newValue.title);
       } else {
-        title = bestval(newValue.title, title);
+        title = bestValue(newValue.title, title);
       }
 
-      alternateTitle = bestval(newValue.alternateTitle, alternateTitle);
-      description = bestval(newValue.description, description);
-      type = bestval(newValue.type, type);
-      year = bestval(newValue.year, year);
-      yearRange = bestval(newValue.yearRange, yearRange);
-      runTime = bestval(newValue.runTime, runTime);
-      type = bestval(newValue.type, type);
-      censorRating = bestval(newValue.censorRating, censorRating);
-      imageUrl = bestval(newValue.imageUrl, imageUrl);
-      language = bestval(newValue.language, language);
+      alternateTitle = bestValue(newValue.alternateTitle, alternateTitle);
+      description = bestValue(newValue.description, description);
+      type = bestValue(newValue.type, type);
+      year = bestValue(newValue.year, year);
+      yearRange = bestValue(newValue.yearRange, yearRange);
+      runTime = bestValue(newValue.runTime, runTime);
+      type = bestValue(newValue.type, type);
+      censorRating = bestValue(newValue.censorRating, censorRating);
+      imageUrl = bestValue(newValue.imageUrl, imageUrl);
+      language = bestValue(newValue.language, language);
       languages = bestList(newValue.languages, languages);
       genres = bestList(newValue.genres, genres);
       keywords = bestList(newValue.keywords, keywords);
@@ -343,7 +343,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         userRating,
         userRatingCount,
       );
-      userRatingCount = bestval(newValue.userRatingCount, userRatingCount);
+      userRatingCount = bestValue(newValue.userRatingCount, userRatingCount);
       mergeDtoMapMap(related, newValue.related);
     }
   }
@@ -378,10 +378,10 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     }
   }
 
-  /// Compare [a] with [b] and return the most relevent value.
+  /// Compare [a] with [b] and return the most relevant value.
   ///
   /// [a] and [b] can be numbers, strings, durations, enums
-  T bestval<T>(T a, T b) {
+  T bestValue<T>(T a, T b) {
     if (a is MovieContentType && b is MovieContentType) bestType(a, b);
     if (a is CensorRatingType && b is CensorRatingType) bestCensorRating(a, b);
     if (a is DataSourceType && b is DataSourceType) bestSource(a, b);
@@ -412,7 +412,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return result.toList();
   }
 
-  /// Compare [rating1] with [rating2] and return the most relevent value.
+  /// Compare [rating1] with [rating2] and return the most relevant value.
   ///
   /// The rating with the highest count is the best rating.
   double bestUserRating(
@@ -425,28 +425,28 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return rating2;
   }
 
-  /// Compare [a] with [b] and return the most relevent value.
+  /// Compare [a] with [b] and return the most relevant value.
   ///
   MovieContentType bestType(MovieContentType a, MovieContentType b) {
     if (b.index > a.index) return b;
     return a;
   }
 
-  /// Compare [a] with [b] and return the most relevent value.
+  /// Compare [a] with [b] and return the most relevant value.
   ///
   CensorRatingType bestCensorRating(CensorRatingType a, CensorRatingType b) {
     if (b.index > a.index) return b;
     return a;
   }
 
-  /// Compare [a] with [b] and return the most relevent value.
+  /// Compare [a] with [b] and return the most relevant value.
   ///
   DataSourceType bestSource(DataSourceType a, DataSourceType b) {
     if (b == DataSourceType.imdb) return b;
     return a;
   }
 
-  /// Compare [a] with [b] and return the most relevent value.
+  /// Compare [a] with [b] and return the most relevant value.
   ///
   LanguageType bestLanguage(LanguageType a, LanguageType b) {
     if (b.index > a.index) return b;
@@ -456,7 +456,15 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Create a string representation of a [MovieResultDTO].
   ///
   String toPrintableString() {
-    return toMap(excludeCopywritedData: false).toString();
+    return toMap(excludeCopyrightedData: false).toString();
+  }
+
+  String toJsonString() {
+    final buffer = StringBuffer();
+    for (final entry in toMap(excludeCopyrightedData: false).entries) {
+      buffer.write('"${entry.key}":"${entry.value}"');
+    }
+    return buffer.toString();
   }
 
   /// Create a placeholder for a value that can not be easily represented
@@ -528,12 +536,22 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
     return 'List<MovieResultDTO>($length)[\n$listContents\n]';
   }
 
+  String toJsonString() {
+    final listContents = StringBuffer();
+    String separator = '';
+    for (final key in this) {
+      listContents.write('$separator${key.toJsonString()}');
+      separator = ',\n';
+    }
+    return "List<MovieResultDTO>($length)\nr'''\n[\n$listContents\n]'''";
+  }
+
   /// Create a json encoded representation of a [List]<[MovieResultDTO]>.
   ///
   String toJson() {
     final listContents = <String>[];
     for (final key in this) {
-      listContents.add(jsonEncode(key.toMap(excludeCopywritedData: false)));
+      listContents.add(jsonEncode(key.toMap(excludeCopyrightedData: false)));
     }
     return jsonEncode(listContents);
   }
@@ -624,17 +642,17 @@ extension DTOCompare on MovieResultDTO {
   ///
   int compareTo(MovieResultDTO other) {
     // Treat null and negative numbers as lower than any other value
-    if (uniqueId == movieResultDTOUninitialised &&
-        other.uniqueId != movieResultDTOUninitialised) return -1;
-    if (uniqueId != movieResultDTOUninitialised &&
-        other.uniqueId == movieResultDTOUninitialised) return 1;
+    if (uniqueId == movieResultDTOUninitialized &&
+        other.uniqueId != movieResultDTOUninitialized) return -1;
+    if (uniqueId != movieResultDTOUninitialized &&
+        other.uniqueId == movieResultDTOUninitialized) return 1;
     // Preference people > movies.
     if (contentCategory() != other.contentCategory()) {
       return contentCategory().compareTo(other.contentCategory());
     }
     // For people sort by popularity
     if (MovieContentType.person == type) {
-      return personPopulartyCompare(other);
+      return personPopularityCompare(other);
     }
     // See how many people have rated this movie.
     if (userRatingCategory() != other.userRatingCategory()) {
@@ -720,7 +738,7 @@ extension DTOCompare on MovieResultDTO {
 
   /// Rank movies based on raw popularity.
   ///
-  int personPopulartyCompare(MovieResultDTO? other) {
+  int personPopularityCompare(MovieResultDTO? other) {
     final otherCount = other?.userRatingCount ?? 0;
     return userRatingCount.compareTo(otherCount);
   }

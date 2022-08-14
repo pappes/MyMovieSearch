@@ -243,7 +243,7 @@ Stream<String> _getOfflineJson(String id) {
   return Stream.value('[{"id": "$id","description": "$id."}]');
 }
 
-/// Make dummy josn results for offline queries.
+/// Make dummy json results for offline queries.
 String _makeJson(int qty) {
   final results = StringBuffer();
   results.write('[');
@@ -368,7 +368,7 @@ void main() {
           await testClass.myConvertCriteriaToWebText('JsonP([{"key":"val"}])');
       String actualResult = '';
       try {
-        final listResult = await streamResult.toList();
+        await streamResult.toList();
       } catch (error) {
         actualResult = error.toString();
       }

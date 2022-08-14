@@ -61,7 +61,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   /// To ensure thread safety, must not return "this".
   WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> myClone();
 
-  /// static wrapper to readList() for compatability with ThreadRunner.
+  /// static wrapper to readList() for compatibility with ThreadRunner.
   static Future<List> runReadList(Map input) {
     final instance = input['newInstance'] as WebFetchBase;
     return instance.readList(
@@ -84,7 +84,9 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
 
   /// Insert transformed data into cache.
   Future<void> _addResultToCache(
-      INPUT_TYPE criteria, OUTPUT_TYPE fetchedResult) {
+    INPUT_TYPE criteria,
+    OUTPUT_TYPE fetchedResult,
+  ) {
     return _cache.add(_getCacheKey(criteria), fetchedResult);
   }
 

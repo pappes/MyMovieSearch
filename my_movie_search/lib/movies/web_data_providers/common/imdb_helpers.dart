@@ -57,24 +57,24 @@ String getIdFromIMDBLink(String? link) {
   }
 
   const regexStartString = '^';
-  const regexMultipleAlpahNumericUnderscore = '[a-zA-Z0-9_]*';
+  const regexMultipleAlphaNumericUnderscore = '[a-zA-Z0-9_]*';
   const regexMultipleAnything = '.*';
   const regexEndString = r'$';
 
   // Convert /title/tt0145681/?ref_=nm_sims_nm_t_9 to tt0145681
   // Or      /title/tt0145681?ref_=nm_sims_nm_t_9 to tt0145681
   const titleRegexpFormula = '$regexStartString$imdbTitlePath'
-      '($regexMultipleAlpahNumericUnderscore)'
+      '($regexMultipleAlphaNumericUnderscore)'
       '$regexMultipleAnything$regexEndString';
   // Convert /name/nm0145681/?ref_=nm_sims_nm_t_9 to nm0145681
   // Or      /name/nm0145681?ref_=nm_sims_nm_t_9 to nm0145681
   const nameRegexpFormula = '$regexStartString$imdbPersonPath'
-      '($regexMultipleAlpahNumericUnderscore)'
+      '($regexMultipleAlphaNumericUnderscore)'
       '$regexMultipleAnything$regexEndString';
 
   // stuff(group1)stuff - only care about group 1 - regexMultipleNonSlash
-  return _getRegexGroupInBrakets(link, titleRegexpFormula) ??
-      _getRegexGroupInBrakets(link, nameRegexpFormula) ??
+  return _getRegexGroupInBrackets(link, titleRegexpFormula) ??
+      _getRegexGroupInBrackets(link, nameRegexpFormula) ??
       '';
 }
 
@@ -104,7 +104,7 @@ MovieContentType? _lookupImdbMovieContentType(
   return null;
 }
 
-/// Look at movie to see if title type (is in brakets).
+/// Look at movie to see if title type (is in brackets).
 ///
 /// Takes [info] which includes the title and other information
 /// and [title] which does not include the other information
@@ -146,16 +146,16 @@ CensorRatingType? getImdbCensorRating(String? type) {
   if (type.lastIndexOf('X') > -1) return CensorRatingType.adult;
   if (type.lastIndexOf('R21') > -1) return CensorRatingType.adult;
 
-  if (type.lastIndexOf('Z') > -1) return CensorRatingType.restriced;
+  if (type.lastIndexOf('Z') > -1) return CensorRatingType.restricted;
   //R includes R, R(A), RP18
-  if (type.lastIndexOf('R') > -1) return CensorRatingType.restriced;
+  if (type.lastIndexOf('R') > -1) return CensorRatingType.restricted;
   //if (type.lastIndexOf('Unrated') > -1) return CensorRatingType.restriced;
-  if (type.lastIndexOf('Mature') > -1) return CensorRatingType.restriced;
-  if (type.lastIndexOf('Adult') > -1) return CensorRatingType.restriced;
-  if (type.lastIndexOf('GA') > -1) return CensorRatingType.restriced;
+  if (type.lastIndexOf('Mature') > -1) return CensorRatingType.restricted;
+  if (type.lastIndexOf('Adult') > -1) return CensorRatingType.restricted;
+  if (type.lastIndexOf('GA') > -1) return CensorRatingType.restricted;
   //18 includes 18, R18, M18, RP18, 18+, VM18
-  if (type.lastIndexOf('18') > -1) return CensorRatingType.restriced;
-  if (type.lastIndexOf('17') > -1) return CensorRatingType.restriced; //NC-17
+  if (type.lastIndexOf('18') > -1) return CensorRatingType.restricted;
+  if (type.lastIndexOf('17') > -1) return CensorRatingType.restricted; //NC-17
 
   // 16 includes 16, NC16, R16, RP16, VM 16
   if (type.lastIndexOf('16') > -1) return CensorRatingType.mature;
@@ -209,7 +209,7 @@ String getBigImage(String? smallImage) {
   if (null != smallImage && smallImage.startsWith('http')) {
     // http followed by zero or more of anything "(http.*)""
     // followed by a period then multiple non periods "\.[^.]*""
-    // followed by file extesion including one more period "\.jpg"
+    // followed by file extension including one more period "\.jpg"
 
     const regexStartString = '^';
     const regexBeforeLastFulStop = 'http.*';
@@ -220,7 +220,7 @@ String getBigImage(String? smallImage) {
     const imageRegexpFormula = '$regexStartString'
         '($regexBeforeLastFulStop)'
         '$regexLastFulStopOnwards$regexFileExtension$regexEndString';
-    var truncated = _getRegexGroupInBrakets(smallImage, imageRegexpFormula);
+    var truncated = _getRegexGroupInBrackets(smallImage, imageRegexpFormula);
     if (null != truncated) {
       truncated = '$truncated.jpg';
     }
@@ -230,7 +230,7 @@ String getBigImage(String? smallImage) {
   return '';
 }
 
-String? _getRegexGroupInBrakets(String stringToSearch, String regexFormula) {
+String? _getRegexGroupInBrackets(String stringToSearch, String regexFormula) {
   final match = RegExp(regexFormula).firstMatch(stringToSearch);
   if (null != match) {
     if (null != match.group(1)) {

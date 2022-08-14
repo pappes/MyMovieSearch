@@ -1,7 +1,7 @@
 library web_fetch;
 
 import 'dart:async' show StreamController;
-import 'dart:convert' show json, jsonDecode, utf8;
+import 'dart:convert' show jsonDecode, utf8;
 
 import 'package:html/parser.dart';
 import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
@@ -135,7 +135,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Can be overridden by child classes.
   /// Default implementation is a simple JSON decode or html parse.
   ///
-  /// For HTML text it is stongly recommended to override
+  /// For HTML text it is strongly recommended to override
   /// the default implementation skipping the json decode
   /// and extract the required html elements into a map
   /// (decode and extract content from the dom).
@@ -151,7 +151,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       final tree = jsonDecode(webText);
       return [tree];
     } catch (jsonException) {
-      // Allow text to be HTML encoded if not json enecoded
+      // Allow text to be HTML encoded if not json encoded
       final tree = parse(webText);
       if (tree.outerHtml == '<html><head></head><body>$webText</body></html>') {
         // If text is not valid json and not valid html then show the json error
@@ -192,7 +192,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
   }
 
-  /// Describe where the data is comming from.
+  /// Describe where the data is coming from.
   ///
   /// Should be overridden by child classes.
   String myDataSourceName() {
@@ -203,7 +203,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Implements return a function [DataSourceFn] which
   ///    accepts a [String] criteria and
-  ///    asynchronosly returns a [String] stream.
+  ///    asynchronously returns a [String] stream.
   ///
   /// Only called if [OnlineOffline] operation is enabled.
   ///
@@ -215,7 +215,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Used for both online and offline operation.
   ///
   /// Should be overridden by child classes.
-  /// Called when an error occures.
+  /// Called when an error occurs.
   OUTPUT_TYPE myYieldError(String contents);
 
   /// Define the [Uri] called to fetch online data for criteria [searchText].
@@ -335,7 +335,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
     List<dynamic> _logError(error, stackTrace) {
       final msg =
-          baseConstructErrorMessage('intepreting web text as a map', error);
+          baseConstructErrorMessage('interpreting web text as a map', error);
       controller.addError(msg);
       baseCloseController(controller);
       return [];
@@ -451,8 +451,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
       searchResultsLimit.reset();
 
-      final selecter = OnlineOfflineSelector<DataSourceFn>();
-      selectedDataSource = selecter.select(
+      final selector = OnlineOfflineSelector<DataSourceFn>();
+      selectedDataSource = selector.select(
         source ?? baseFetchWebText,
         myOfflineData(),
       );
@@ -481,11 +481,11 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
       response = await request;
     } catch (error, stackTrace) {
-      final errorMessge = baseConstructErrorMessage(
+      final errorMessage = baseConstructErrorMessage(
         'fetching web text:',
         error,
       );
-      return Stream.error(errorMessge);
+      return Stream.error(errorMessage);
     }
     // Check for successful HTTP status before transforming (avoid HTTP 404)
     if (200 != response.statusCode) {

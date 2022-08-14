@@ -113,7 +113,7 @@ class GoogleMovieSearchConverter {
   static String getID(Map map) {
     return map[innerElementIdentity]?.toString() ??
         map[innerElementPageconst]?.toString() ??
-        movieResultDTOUninitialised;
+        movieResultDTOUninitialized;
   }
 
   static String getYearRange(Map map) {

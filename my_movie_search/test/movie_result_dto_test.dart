@@ -179,7 +179,7 @@ void main() {
     test('single_DTO', () {
       final dto = makeResultDTO('abc');
 
-      final map = dto.toMap(excludeCopywritedData: false);
+      final map = dto.toMap(excludeCopyrightedData: false);
 
       testToMovieResultDTO(dto, map);
     });
