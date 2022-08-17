@@ -636,7 +636,7 @@ void main() {
           actualOutput,
           emitsError(
             'Error in unknown with criteria NullCriteria '
-            'intepreting web text as a map :Search Failed',
+            'interpreting web text as a map :Search Failed',
           ),
         );
       },
@@ -658,7 +658,7 @@ void main() {
           actualOutput,
           emitsError(
             'Error in unknown with criteria NullCriteria '
-            'intepreting web text as a map :more exception handling',
+            'interpreting web text as a map :more exception handling',
           ),
         );
       },
@@ -876,7 +876,7 @@ void main() {
       () async {
         const input = 'HTTP404';
         const output =
-            '[QueryIMDBTitleDetails] Error in unknown with criteria NullCriteria intepreting web text as a map :Error in http read, HTTP status code : 404 for https://www.unknown.com/title/HTTP404/?ref_=fn_tt_tt_1';
+            '[QueryIMDBTitleDetails] Error in unknown with criteria NullCriteria interpreting web text as a map :Error in http read, HTTP status code : 404 for https://www.unknown.com/title/HTTP404/?ref_=fn_tt_tt_1';
         await testTransform(input, null, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),

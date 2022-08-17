@@ -6,6 +6,9 @@ import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [TieredCache] for retrieving person details from IMDB.
+///
+/// Caches results in default thread but moves data retrieval to
+/// a different thread.  Runs lower priority requests on a slower thread.
 mixin ThreadedCacheIMDBNameDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final _cache = TieredCache();
@@ -15,7 +18,7 @@ mixin ThreadedCacheIMDBNameDetails
   /// Return a list with data matching [criteria].
   ///
   /// Optionally override the [priority] to push slow operations to another thread.
-  /// Optionally inject [source] as an alternate datasource for mocking/testing.
+  /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
   Future<List<MovieResultDTO>> readPrioritisedCachedList(
     SearchCriteriaDTO criteria, {
@@ -26,15 +29,16 @@ mixin ThreadedCacheIMDBNameDetails
     var retval = <MovieResultDTO>[];
 
     // if cached and not stale yield from cache
-    if (await _isResultCached(criteria) && !await _isCacheStale(criteria)) {
+    if (await isThreadedResultCached(criteria) &&
+        !await isThreadedCacheStale(criteria)) {
       print(
         '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
-        'value was precached ${myFormatInputAsText(criteria)}',
+        'value was pre-cached ${myFormatInputAsText(criteria)}',
       );
-      return _fetchResultFromCache(criteria).toList();
+      return fetchResultFromThreadedCache(criteria).toList();
     }
 
-    final newPriority = _enqueRequest(criteria, priority);
+    final newPriority = _enqueueRequest(criteria, priority);
     if (null == newPriority) {
       print(
         '${ThreadRunner.currentThreadName}($priority) '
@@ -62,7 +66,7 @@ mixin ThreadedCacheIMDBNameDetails
     return retval;
   }
 
-  /// static wrapper to readList() for compatability with ThreadRunner.
+  /// static wrapper to readList() for compatibility with ThreadRunner.
   static Future<List<MovieResultDTO>> runReadList(Map input) {
     return QueryIMDBNameDetails().readList(
       input['criteria'] as SearchCriteriaDTO,
@@ -71,14 +75,16 @@ mixin ThreadedCacheIMDBNameDetails
     );
   }
 
+  Future<void> clearThreadedCache() => _cache.clear();
+
   /// Check cache to see if data has already been fetched.
-  Future<bool> _isResultCached(SearchCriteriaDTO criteria) async {
+  Future<bool> isThreadedResultCached(SearchCriteriaDTO criteria) async {
     final key = '${myDataSourceName()}${criteria.criteriaTitle}';
     return _cache.isCached(key);
   }
 
   /// Check cache to see if data in cache should be refreshed.
-  Future<bool> _isCacheStale(SearchCriteriaDTO criteria) async {
+  Future<bool> isThreadedCacheStale(SearchCriteriaDTO criteria) async {
     return false;
     //return _cache.isCached(criteria.criteriaTitle);
   }
@@ -101,7 +107,7 @@ mixin ThreadedCacheIMDBNameDetails
   }
 
   /// Retrieve cached result.
-  Stream<MovieResultDTO> _fetchResultFromCache(
+  Stream<MovieResultDTO> fetchResultFromThreadedCache(
     SearchCriteriaDTO criteria,
   ) async* {
     final value =
@@ -111,7 +117,7 @@ mixin ThreadedCacheIMDBNameDetails
     }
   }
 
-  String? _enqueRequest(SearchCriteriaDTO criteria, String priority) {
+  String? _enqueueRequest(SearchCriteriaDTO criteria, String priority) {
     // Track and throttle low priority requests
     if (ThreadRunner.slow == priority || ThreadRunner.verySlow == priority) {
       if (_normalQueue.contains(criteria) ||

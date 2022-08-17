@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -109,6 +111,117 @@ void main() {
       );
     });
   });
+
+  group('ThreadedCacheIMDBTitleDetails unit tests', () {
+    test('empty cache', () async {
+      final testClass = QueryIMDBTitleDetails();
+      final criteria = SearchCriteriaDTO().fromString('Marco');
+      final listResult = await testClass.readCachedList(
+        criteria,
+        source: (_) async => Stream.value('Polo'),
+      );
+      expect(listResult, []);
+      final resultIsCached = await testClass.myIsResultCached(criteria);
+      expect(resultIsCached, false);
+      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('manually add to cache', () async {
+      final testClass = QueryIMDBTitleDetails();
+      final criteria = SearchCriteriaDTO().fromString('Marco');
+      final dto = MovieResultDTO().testDto('Polo');
+      await testClass.myAddResultToCache(criteria, dto);
+      final listResult = await testClass.readCachedList(
+        criteria,
+        source: (_) async => Stream.value('Polo'),
+      );
+      expect(listResult, [dto]);
+      final resultIsCached = await testClass.myIsResultCached(criteria);
+      expect(resultIsCached, true);
+      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('clear cache', () async {
+      final testClass = QueryIMDBTitleDetails();
+      final criteria = SearchCriteriaDTO().fromString('Marco');
+      final dto = MovieResultDTO().testDto('Polo');
+      await testClass.myAddResultToCache(criteria, dto);
+      await testClass.myClearCache();
+      final resultIsCached = await testClass.myIsResultCached(criteria);
+      expect(resultIsCached, false);
+      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('read empty cache via readCachedList', () async {
+      final testClass = QueryIMDBTitleDetails();
+      await testClass.myClearCache();
+      final criteria = SearchCriteriaDTO().fromString('Marco');
+      final listResult = await testClass.readCachedList(
+        criteria,
+        source: (_) async => Stream.value('Who Is Marco?'),
+      );
+      expect(listResult, MovieResultDTOListMatcher([]));
+      final resultIsCached = await testClass.myIsResultCached(criteria);
+      expect(resultIsCached, false);
+      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('read populated cache via readCachedList', () async {
+      final testClass = QueryIMDBTitleDetails();
+      await testClass.myClearCache();
+      final criteria = SearchCriteriaDTO().fromString('Marco');
+      final dto = MovieResultDTO().testDto('Polo');
+      await testClass.myAddResultToCache(criteria, dto);
+      final listResult = await testClass.readCachedList(
+        criteria,
+        source: (_) async => Stream.value('Who Is Marco?'),
+      );
+      expect(listResult, MovieResultDTOListMatcher([dto]));
+      final resultIsCached = await testClass.myIsResultCached(criteria);
+      expect(resultIsCached, true);
+      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('read populated cache via readList', () async {
+      final testClass = QueryIMDBTitleDetails();
+      await testClass.myClearCache();
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      await testClass.readList(
+        criteria,
+        source: streamImdbHtmlOfflineData,
+      );
+      final listResult = await testClass.readList(
+        criteria,
+        source: (_) async => Stream.value('"Dummy HTML"'),
+      );
+      expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
+      final resultIsCached = await testClass.myIsResultCached(criteria);
+      expect(resultIsCached, true);
+      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('fetch result from cache', () async {
+      final testClass = QueryIMDBTitleDetails();
+      await testClass.myClearCache();
+      final criteria = SearchCriteriaDTO().fromString('Marco');
+      final dto = MovieResultDTO().testDto('Polo');
+      await testClass.myAddResultToCache(criteria, dto);
+      final listResult =
+          await testClass.myFetchResultFromCache(criteria).toList();
+      expect(listResult, MovieResultDTOListMatcher([dto]));
+      final resultIsCached = await testClass.myIsResultCached(criteria);
+      expect(resultIsCached, true);
+      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+  });
+
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
 ////////////////////////////////////////////////////////////////////////////////
@@ -216,7 +329,7 @@ void main() {
       final testClass = QueryIMDBTitleDetails();
       await testClass.myClearCache();
       const expectedException =
-          '[QueryIMDBTitleDetails] Error in imdb with criteria  intepreting web text as a map :imdb webscraper data not detected for criteria ';
+          '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb webscraper data not detected for criteria ';
 
       // Invoke the functionality.
       await testClass
@@ -229,7 +342,7 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBTitleDetails] Error in imdb with criteria  intepreting web text as a map :imdb webscraper data not detected for criteria ';
+          '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb webscraper data not detected for criteria ';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails();
       await testClass.myClearCache();

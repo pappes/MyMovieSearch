@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -14,6 +16,11 @@ Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
 
 Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
   return Future.value(Stream.value('not valid html'));
+}
+
+// ignore: avoid_classes_with_only_static_members
+class StaticJsonGenerator {
+  static Future<Stream<String>> stuff(_) async => Stream.value('"stuff"');
 }
 
 void main() {
@@ -85,7 +92,7 @@ void main() {
     });
   });
 
-  group('TmdbFinderConverter unit tests', () {
+  group('ImdbNamePageConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
       final expectedValue = expectedDTOList;
@@ -104,11 +111,82 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${actualResult.toPrintableString()} '
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
   });
+
+  group('ThreadedCacheIMDBNameDetails unit tests', () {
+    test('empty cache', () async {
+      final testClass = QueryIMDBNameDetails();
+      final criteria = SearchCriteriaDTO().fromString('Marco');
+      final listResult = await testClass.readCachedList(
+        criteria,
+        source: (_) async => Stream.value('Polo'),
+      );
+      expect(listResult, []);
+      final resultIsCached = await testClass.isThreadedResultCached(criteria);
+      expect(resultIsCached, false);
+      final resultIsStale = await testClass.isThreadedCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('add to cache via readPrioritisedCachedList', () async {
+      final testClass = QueryIMDBNameDetails();
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      await testClass.readPrioritisedCachedList(
+        criteria,
+        source: streamImdbHtmlOfflineData,
+      );
+      final listResult = await testClass.readPrioritisedCachedList(
+        criteria,
+        source: StaticJsonGenerator
+            .stuff, // Return some random junk that will not get used do to caching
+      );
+      expect(
+        listResult,
+        MovieResultDTOListMatcher(expectedDTOList),
+        reason: 'Emitted DTO list ${listResult.toPrintableString()} '
+            'needs to match expected DTO List${expectedDTOList.toPrintableString()}',
+      );
+      final resultIsCached = await testClass.isThreadedResultCached(criteria);
+      expect(resultIsCached, true);
+      final resultIsStale = await testClass.isThreadedCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('fetch result from cache', () async {
+      final testClass = QueryIMDBNameDetails();
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      await testClass.readPrioritisedCachedList(
+        criteria,
+        source: streamImdbHtmlOfflineData,
+      );
+      final listResult =
+          await testClass.fetchResultFromThreadedCache(criteria).toList();
+      expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
+      final resultIsCached = await testClass.isThreadedResultCached(criteria);
+      expect(resultIsCached, true);
+      final resultIsStale = await testClass.isThreadedCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('clear cache', () async {
+      final testClass = QueryIMDBNameDetails();
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      await testClass.readPrioritisedCachedList(
+        criteria,
+        source: streamImdbHtmlOfflineData,
+      );
+      await testClass.clearThreadedCache();
+      final resultIsCached = await testClass.isThreadedResultCached(criteria);
+      expect(resultIsCached, false);
+      final resultIsStale = await testClass.isThreadedCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+  });
+
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
 ////////////////////////////////////////////////////////////////////////////////
@@ -185,8 +263,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBNameDetails();
       await testClass.myClearCache();
-      final criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = 'tt7602562';
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
 
       // Invoke the functionality.
       await testClass
@@ -216,7 +293,7 @@ void main() {
       final testClass = QueryIMDBNameDetails();
       await testClass.myClearCache();
       const expectedException =
-          '[QueryIMDBNameDetails] Error in imdb_person with criteria  intepreting web text as a map :imdb webscraper data not detected for criteria ';
+          '[QueryIMDBNameDetails] Error in imdb_person with criteria  interpreting web text as a map :imdb webscraper data not detected for criteria ';
 
       // Invoke the functionality.
       await testClass
@@ -229,7 +306,7 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBNameDetails] Error in imdb_person with criteria  intepreting web text as a map :imdb webscraper data not detected for criteria ';
+          '[QueryIMDBNameDetails] Error in imdb_person with criteria  interpreting web text as a map :imdb webscraper data not detected for criteria ';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBNameDetails();
       await testClass.myClearCache();

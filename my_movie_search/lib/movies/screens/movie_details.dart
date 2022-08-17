@@ -38,7 +38,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
   /// Fetch full person details from imdb.
   Future _getDetails(SearchCriteriaDTO criteria) async {
-    /// Fetch person details from cache using a seperate thread.
+    /// Fetch person details from cache using a separate thread.
     final fastResults = await QueryIMDBCastDetails().readPrioritisedCachedList(
       criteria,
       priority: ThreadRunner.fast,
@@ -71,7 +71,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
   @override
   void dispose() {
-    // Restorables must be disposed when no longer used.
+    // Restorable must be disposed when no longer used.
     _restorableMovie.dispose();
     super.dispose();
   }

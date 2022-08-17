@@ -227,7 +227,7 @@ void main() {
       final testClass = QueryIMDBCastDetails();
       await testClass.myClearCache();
       const expectedException =
-          '[QueryIMDBCastDetails] Error in imdb_cast with criteria  intepreting web text as a map :imdb cast data not detected for criteria ';
+          '[QueryIMDBCastDetails] Error in imdb_cast with criteria  interpreting web text as a map :imdb cast data not detected for criteria ';
 
       // Invoke the functionality.
       await testClass
@@ -240,7 +240,7 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBCastDetails] Error in imdb_cast with criteria  intepreting web text as a map :imdb cast data not detected for criteria ';
+          '[QueryIMDBCastDetails] Error in imdb_cast with criteria  interpreting web text as a map :imdb cast data not detected for criteria ';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBCastDetails();
       await testClass.myClearCache();

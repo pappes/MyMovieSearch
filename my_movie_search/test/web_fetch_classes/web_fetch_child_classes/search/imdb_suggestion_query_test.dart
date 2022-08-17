@@ -137,7 +137,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final imdbSuggestions = QueryIMDBSuggestions();
       const expectedException = '''
-[QueryIMDBSuggestions] Error in imdbSuggestions with criteria  intepreting web text as a map :FormatException: Unexpected character (at character 2)
+[QueryIMDBSuggestions] Error in imdbSuggestions with criteria  interpreting web text as a map :FormatException: Unexpected character (at character 2)
 {not valid json}
  ^
 ''';

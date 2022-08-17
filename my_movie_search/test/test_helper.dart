@@ -105,6 +105,56 @@ class MovieResultDTOListMatcher extends Matcher {
   }
 }
 
+/// Expectation matcher for test framework to compare DTO lists
+class MovieResultDTOListFuzzyMatcher extends Matcher {
+  List<MovieResultDTO> expected;
+  int matchQuantity;
+  late List<MovieResultDTO> _actual;
+
+  MovieResultDTOListFuzzyMatcher(this.expected, this.matchQuantity);
+
+  @override
+  // Tell test framework what content was expected.
+  Description describe(Description description) {
+    return description.add('has expected ${expected.toPrintableString()}');
+  }
+
+  @override
+  // Tell test framework what difference was found.
+  Description describeMismatch(
+    dynamic item,
+    Description mismatchDescription,
+    Map<dynamic, dynamic> matchState,
+    bool verbose,
+  ) {
+    return mismatchDescription.add('has actual ${_actual.toPrintableString()}');
+  }
+
+  @override
+  // Compare expected with actual.
+  bool matches(dynamic actual, Map matchState) {
+    if (actual is List<MovieResultDTO>) {
+      _actual = actual;
+    } else {
+      _actual = [MovieResultDTO().toUnknown()];
+    }
+    matchState['actual'] = _actual;
+
+    for (final actualDto in _actual) {
+      for (final expectedDto in expected) {
+        if (actualDto.matches(expectedDto)) {
+          matchQuantity--;
+          if (0 == matchQuantity) {
+            // There have been enough matches to declare victory!
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+}
+
 /// Converts a [str] to a stream.
 Stream<String> emitString(String str) async* {
   yield str;

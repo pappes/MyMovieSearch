@@ -208,7 +208,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryGoogleMovies();
       const expectedException = '''
-[QueryGoogleMovies] Error in google with criteria  intepreting web text as a map :FormatException: Unexpected character (at character 1)
+[QueryGoogleMovies] Error in google with criteria  interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
 ^
 ''';

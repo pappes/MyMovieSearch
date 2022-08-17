@@ -206,7 +206,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryOMDBMovies();
       const expectedException = '''
-[QueryOMDBMovies] Error in omdb with criteria  intepreting web text as a map :FormatException: Unexpected character (at character 1)
+[QueryOMDBMovies] Error in omdb with criteria  interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
 ^
 ''';

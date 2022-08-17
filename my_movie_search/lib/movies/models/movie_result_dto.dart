@@ -226,6 +226,11 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return this;
   }
 
+  MovieResultDTO testDto(String testText) {
+    title = testText;
+    return this;
+  }
+
   /// Convert a [MovieResultDTO] object into a [Map].
   ///
   Map<String, String> toMap({bool excludeCopyrightedData = true}) {

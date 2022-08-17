@@ -35,14 +35,19 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('rize');
       final actualOutput =
           await QueryOMDBMovies().readList(criteria, limit: 10);
-      print(actualOutput.toJsonString());
+      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+      final expectedOutput = expectedDTOList;
+      expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(expectedDTOList),
+        MovieResultDTOListFuzzyMatcher(
+          expectedOutput,
+          expectedOutput.length - 2,
+        ),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
-            'needs to match expected DTO list ${expectedDTOList.toPrintableString()}',
+            'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
       );
     });
   });

@@ -207,7 +207,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBMovies();
       const expectedException = '''
-[QueryTMDBMovies] Error in tmdbMovie with criteria  intepreting web text as a map :FormatException: Unexpected character (at character 1)
+[QueryTMDBMovies] Error in tmdbMovie with criteria  interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
 ^
 ''';
