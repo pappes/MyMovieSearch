@@ -117,9 +117,14 @@ void main() {
     });
   });
 
+////////////////////////////////////////////////////////////////////////////////
+  /// Integration tests using ThreadedCacheIMDBNameDetails
+////////////////////////////////////////////////////////////////////////////////
+
   group('ThreadedCacheIMDBNameDetails unit tests', () {
     test('empty cache', () async {
       final testClass = QueryIMDBNameDetails();
+      await testClass.clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final listResult = await testClass.readCachedList(
         criteria,
@@ -134,6 +139,7 @@ void main() {
 
     test('add to cache via readPrioritisedCachedList', () async {
       final testClass = QueryIMDBNameDetails();
+      await testClass.clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       await testClass.readPrioritisedCachedList(
         criteria,
@@ -158,6 +164,7 @@ void main() {
 
     test('fetch result from cache', () async {
       final testClass = QueryIMDBNameDetails();
+      await testClass.clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       await testClass.readPrioritisedCachedList(
         criteria,
@@ -174,6 +181,7 @@ void main() {
 
     test('clear cache', () async {
       final testClass = QueryIMDBNameDetails();
+      await testClass.clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       await testClass.readPrioritisedCachedList(
         criteria,

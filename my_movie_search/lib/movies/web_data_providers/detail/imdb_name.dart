@@ -14,7 +14,7 @@ import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 /// QueryIMDBNameDetails().readList(criteria);
 /// ```
 class QueryIMDBNameDetails
-    extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
+    extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBNameDetails, ThreadedCacheIMDBNameDetails {
   static const _baseURL = 'https://www.imdb.com/name/';
   static const defaultSearchResultsLimit = 100;

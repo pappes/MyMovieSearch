@@ -16,6 +16,11 @@ Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
   return Future.value(Stream.value('not valid html'));
 }
 
+// ignore: avoid_classes_with_only_static_members
+class StaticJsonGenerator {
+  static Future<Stream<String>> stuff(_) async => Stream.value('"stuff"');
+}
+
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
@@ -109,6 +114,85 @@ void main() {
       );
     });
   });
+
+////////////////////////////////////////////////////////////////////////////////
+  /// Integration tests using WebFetchThreadedCache
+////////////////////////////////////////////////////////////////////////////////
+
+  group('ThreadedCacheIMDBNameDetails unit tests', () {
+    test('empty cache', () async {
+      final testClass = QueryIMDBCastDetails();
+      await testClass.clearThreadedCache();
+      final criteria = SearchCriteriaDTO().fromString('Marco');
+      final listResult = await testClass.readCachedList(
+        criteria,
+        source: (_) async => Stream.value('Polo'),
+      );
+      expect(listResult, []);
+      final resultIsCached = await testClass.isThreadedResultCached(criteria);
+      expect(resultIsCached, false);
+      final resultIsStale = await testClass.isThreadedCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('add to cache via readPrioritisedCachedList', () async {
+      final testClass = QueryIMDBCastDetails();
+      await testClass.clearThreadedCache();
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      await testClass.readPrioritisedCachedList(
+        criteria,
+        source: streamImdbHtmlOfflineData,
+      );
+      final listResult = await testClass.readPrioritisedCachedList(
+        criteria,
+        source: StaticJsonGenerator
+            .stuff, // Return some random junk that will not get used do to caching
+      );
+      expect(
+        listResult,
+        MovieResultDTOListMatcher(expectedDTOList),
+        reason: 'Emitted DTO list ${listResult.toPrintableString()} '
+            'needs to match expected DTO List${expectedDTOList.toPrintableString()}',
+      );
+      final resultIsCached = await testClass.isThreadedResultCached(criteria);
+      expect(resultIsCached, true);
+      final resultIsStale = await testClass.isThreadedCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('fetch result from cache', () async {
+      final testClass = QueryIMDBCastDetails();
+      await testClass.clearThreadedCache();
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      await testClass.readPrioritisedCachedList(
+        criteria,
+        source: streamImdbHtmlOfflineData,
+      );
+      final listResult =
+          await testClass.fetchResultFromThreadedCache(criteria).toList();
+      expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
+      final resultIsCached = await testClass.isThreadedResultCached(criteria);
+      expect(resultIsCached, true);
+      final resultIsStale = await testClass.isThreadedCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('clear cache', () async {
+      final testClass = QueryIMDBCastDetails();
+      await testClass.clearThreadedCache();
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      await testClass.readPrioritisedCachedList(
+        criteria,
+        source: streamImdbHtmlOfflineData,
+      );
+      await testClass.clearThreadedCache();
+      final resultIsCached = await testClass.isThreadedResultCached(criteria);
+      expect(resultIsCached, false);
+      final resultIsStale = await testClass.isThreadedCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+  });
+
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
 ////////////////////////////////////////////////////////////////////////////////

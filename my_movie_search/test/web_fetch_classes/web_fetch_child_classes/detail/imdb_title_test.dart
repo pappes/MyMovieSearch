@@ -112,6 +112,10 @@ void main() {
     });
   });
 
+////////////////////////////////////////////////////////////////////////////////
+  /// Integration tests using ThreadedCacheIMDBTitleDetails
+////////////////////////////////////////////////////////////////////////////////
+
   group('ThreadedCacheIMDBTitleDetails unit tests', () {
     test('empty cache', () async {
       final testClass = QueryIMDBTitleDetails();
