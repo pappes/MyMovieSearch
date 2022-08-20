@@ -73,7 +73,7 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
-    // Confirm webtext is parsed  as expected.
+    // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () async {
       final expectedOutput = intermediateMapList;
       final testClass = QueryIMDBTitleDetails();
@@ -106,7 +106,7 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${actualResult.toPrintableString()} '
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
@@ -267,7 +267,7 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${actualResult.toPrintableString()} '
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
@@ -293,7 +293,7 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('tmdb search query', () {
-    // Read tmdb search results from a simulated bytestream and convert JSON to dtos.
+    // Read tmdb search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Wait for api key to be initialised
       await EnvironmentVars.init();
@@ -321,19 +321,19 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${queryResult.toPrintableString()} '
+        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
 
-    // Read tmdb search results from a simulated bytestream and report error due to invalid html.
+    // Read tmdb search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails();
       await testClass.myClearCache();
       const expectedException =
-          '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb webscraper data not detected for criteria ';
+          '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria ';
 
       // Invoke the functionality.
       await testClass
@@ -342,11 +342,11 @@ void main() {
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read tmdb search results from a simulated bytestream and report error due to unexpected html.
+    // Read tmdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb webscraper data not detected for criteria ';
+          '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria ';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails();
       await testClass.myClearCache();

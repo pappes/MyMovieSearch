@@ -15,7 +15,7 @@ mixin ThreadedCacheIMDBSuggestions
   /// Return a list with data matching [criteria].
   ///
   /// Optionally override the [priority] to push slow operations to another thread.
-  /// Optionally inject [source] as an alternate datasource for mocking/testing.
+  /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
   Future<List<MovieResultDTO>> readPrioritisedCachedList(
     SearchCriteriaDTO criteria, {
@@ -23,18 +23,18 @@ mixin ThreadedCacheIMDBSuggestions
     DataSourceFn? source,
     int? limit = QueryIMDBSuggestions.defaultSearchResultsLimit,
   }) async {
-    var retval = <MovieResultDTO>[];
+    var result = <MovieResultDTO>[];
 
     // if cached and not stale yield from cache
     if (await _isResultCached(criteria) && !await _isCacheStale(criteria)) {
       print(
         '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
-        'value was precached ${myFormatInputAsText(criteria)}',
+        'value was pre cached ${myFormatInputAsText(criteria)}',
       );
       return _fetchResultFromCache(criteria).toList();
     }
 
-    final newPriority = _enqueRequest(criteria, priority);
+    final newPriority = _enqueueRequest(criteria, priority);
     if (null == newPriority) {
       print(
         '${ThreadRunner.currentThreadName}($priority) '
@@ -47,7 +47,7 @@ mixin ThreadedCacheIMDBSuggestions
       'requesting ${myFormatInputAsText(criteria)}',
     );
 
-    retval = await ThreadRunner.namedThread(newPriority).run(
+    result = await ThreadRunner.namedThread(newPriority).run(
       runReadList,
       {
         'criteria': criteria,
@@ -55,11 +55,11 @@ mixin ThreadedCacheIMDBSuggestions
         'limit': limit,
       },
     ) as List<MovieResultDTO>;
-    retval.forEach(_addResultToCache);
+    result.forEach(_addResultToCache);
 
     _normalQueue.remove(criteria);
     _verySlowQueue.remove(criteria);
-    return retval;
+    return result;
   }
 
   /// static wrapper to readList() for compatability with ThreadRunner.
@@ -105,7 +105,7 @@ mixin ThreadedCacheIMDBSuggestions
     }
   }
 
-  String? _enqueRequest(SearchCriteriaDTO criteria, String priority) {
+  String? _enqueueRequest(SearchCriteriaDTO criteria, String priority) {
     // Track and throttle low priority requests
     if (ThreadRunner.slow == priority || ThreadRunner.verySlow == priority) {
       if (_normalQueue.contains(criteria) ||

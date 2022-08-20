@@ -11,7 +11,7 @@ const _searchResultsTable = 'findList';
 const _columnMovieText = 'result_text';
 const _columnMoviePoster = 'primary_photo';
 
-/// Implements [WebFetchBase] for the IMDB search html webscraper.
+/// Implements [WebFetchBase] for the IMDB search html web scraper.
 ///
 /// ```dart
 /// QueryIMDBSearch().readList(criteria, limit: 10)

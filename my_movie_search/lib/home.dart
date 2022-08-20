@@ -18,7 +18,7 @@ search history
 TorSearch (repository of sites)
 TorSearch (select site)
 db for offline details
-isolate for webscraper
+done isolate for web scraper
 isolate for db save
 isolate for db read
 restore state on resume*/

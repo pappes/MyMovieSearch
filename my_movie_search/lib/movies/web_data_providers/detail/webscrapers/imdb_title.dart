@@ -21,7 +21,7 @@ mixin ScrapeIMDBTitleDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final htmlDecode = HtmlUnescape();
 
-  /// Convert webtext to a traversable tree of [List] or [Map] data.
+  /// Convert web text to a traversable tree of [List] or [Map] data.
   @override
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
@@ -29,7 +29,7 @@ mixin ScrapeIMDBTitleDetails
     final document = parse(webText);
     final movieData = _scrapeWebPage(document);
     if (movieData[outerElementDescription] == null) {
-      throw 'imdb webscraper data not detected for criteria $getCriteriaText';
+      throw 'imdb web scraper data not detected for criteria $getCriteriaText';
     }
     return [movieData];
   }

@@ -1,7 +1,7 @@
 /// Store items for faster access.
 ///
-/// Combines in memeory caache with on device and web stored cache
-/// to balance access speed with memeory usage.
+/// Combines in memory cache with on device and web stored cache
+/// to balance access speed with memory usage.
 ///
 class TieredCache<T> {
   Map memoryCache = {};

@@ -70,7 +70,7 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
-    // Confirm webtext is parsed  as expected.
+    // Confirm web text is parsed  as expected.
     test('Run myDataSourceName()', () async {
       final expectedOutput = intermediateMapList;
       final actualOutput =
@@ -98,7 +98,7 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${actualResult.toPrintableString()} '
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
@@ -145,7 +145,7 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${actualResult.toPrintableString()} '
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
@@ -170,7 +170,7 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('omdb search query', () {
-    // Read omdb search results from a simulated bytestream and convert JSON to dtos.
+    // Read omdb search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Wait for api key to be initialised
       await EnvironmentVars.init();
@@ -195,12 +195,12 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${queryResult.toPrintableString()} '
+        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
 
-    // Read omdb search results from a simulated bytestream and report error due to invalid html.
+    // Read omdb search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
@@ -218,11 +218,11 @@ not valid json
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read omdb search results from a simulated bytestream and report error due to unexpected html.
+    // Read omdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryOMDBMovies] Error in omdb with criteria  translating pagemap to objects :expected map got List<dynamic> unable to interpret data [{hello: world}]';
+          '[QueryOMDBMovies] Error in omdb with criteria  translating page map to objects :expected map got List<dynamic> unable to interpret data [{hello: world}]';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryOMDBMovies();
 

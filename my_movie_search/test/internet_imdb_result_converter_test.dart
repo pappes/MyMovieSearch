@@ -25,7 +25,7 @@ void main() {
         expect(
           streamOutput,
           isExpectedValue,
-          reason: 'Emmitted DTO ${streamOutput.toPrintableString()} '
+          reason: 'Emitted DTO ${streamOutput.toPrintableString()} '
               'needs to match expected DTO ${expectedValue.toPrintableString()}',
         );
         currentExpectedValueIndex++;

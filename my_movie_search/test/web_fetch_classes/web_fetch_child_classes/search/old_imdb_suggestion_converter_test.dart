@@ -54,7 +54,7 @@ void main() {
           expect(
             currentRune,
             testInput.length,
-            reason: 'emmitted rune count needs to equal expected runes',
+            reason: 'Emitted rune count needs to equal expected runes',
           );
           // ignore: avoid_print
           print('stream done, all $currentRune elements consumed');
@@ -74,7 +74,7 @@ void main() {
         expect(
           streamOutput,
           expected,
-          reason: 'Emmitted string $streamOutput '
+          reason: 'Emitted string $streamOutput '
               'needs to match input string $expected',
         );
         currentChar++;
@@ -103,7 +103,7 @@ void main() {
         expect(
           decodedOutput[imdbCustomKeyName],
           imdbCustomKeyVal,
-          reason: 'Emmitted map key ${decodedOutput[imdbCustomKeyName]} '
+          reason: 'Emitted map key ${decodedOutput[imdbCustomKeyName]} '
               'needs to contain expected value $imdbCustomKeyVal',
         );
       }
@@ -131,7 +131,7 @@ void main() {
         expect(
           decodedOutput[imdbCustomKeyName],
           imdbCustomKeyVal,
-          reason: 'Emmitted map key ${decodedOutput[imdbCustomKeyName]}} '
+          reason: 'Emitted map key ${decodedOutput[imdbCustomKeyName]}} '
               'needs to contain expected value $imdbCustomKeyVal',
         );
       }
@@ -157,7 +157,7 @@ void main() {
         expect(
           streamOutput,
           imdbCustomKeyVal,
-          reason: 'Emmitted value $streamOutput} '
+          reason: 'Emitted value $streamOutput} '
               'needs to match expected value $imdbCustomKeyVal',
         );
       }
@@ -196,7 +196,7 @@ void main() {
         expect(
           streamOutput,
           isExpectedValue,
-          reason: 'Emmitted DTO $streamOutput needs to match expected '
+          reason: 'Emitted DTO $streamOutput needs to match expected '
               'DTO[$currentExpected] ${expectedDTO[currentExpected]}',
         );
       }

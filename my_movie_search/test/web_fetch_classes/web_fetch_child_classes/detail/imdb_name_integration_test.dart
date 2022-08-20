@@ -5,9 +5,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/webscrapers/imdb_name.dart';
 
-const String _sampleMaincase = '''
+const String _sampleMainCase = '''
 {"@context": "http://schema.org", 
   "@type": "Person",
   "url": "/name/nm12345/",
@@ -148,19 +147,19 @@ void main() {
   /// Integration tests (uses DTO and DTO extension methods)
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('ImdbNamePageConverter dtoFromCompleteJsonMap edgecase', () {
+  group('ImdbNamePageConverter dtoFromCompleteJsonMap edge case', () {
     // Convert 1 sample JSON Map into a dto.
     // e.g. nm0322164
-    test('_SucessfulConversion', () async {
-      final map = json.decode(_sampleMaincase) as Map;
+    test('_SuccessfulConversion', () async {
+      final map = json.decode(_sampleMainCase) as Map;
       final dtos = ImdbNamePageConverter.dtoFromCompleteJsonMap(map);
       final text = json.encode(dtos.encodeList());
       expect(text, _expectedMainCase);
     });
     // Convert 1 sample JSON Map into a dto.
-    // Orginal error: on imdb data nm4240546 was
+    // Original error: on imdb data nm4240546 was
     //   _InternalLinkedHashMap<dynamic, dynamic>' is not a subtype of type of 'Iterable<dynamic>'
-    test('_getRelated has Iterablecategories', () async {
+    test('_getRelated has Iterable categories', () async {
       final map = json.decode(_sampleGetRelatedIterable) as Map;
       final dtos = ImdbNamePageConverter.dtoFromCompleteJsonMap(map);
       final text = json.encode(dtos.encodeList());
@@ -183,7 +182,7 @@ void main() {
       expect(text, _expectedMainCase);
     });
     // Convert 1 sample JSON Map into a dto.
-    // Handle no nrelated records gracefully
+    // Handle no related records gracefully
     test('person has no related movies', () async {
       final map = json.decode(_sampleNoRelated) as Map;
       final dtos = ImdbNamePageConverter.dtoFromCompleteJsonMap(map);
@@ -196,11 +195,11 @@ void main() {
   /// Integration tests (testing wrapper on ImdbNamePageConverter.dtoFromCompleteJsonMap)
   /// using QueryIMDBNameDetails.myTransformMapToOutput()
 ////////////////////////////////////////////////////////////////////////////////
-  group('ImdbNamePageConverter dtoFromCompleteJsonMap edgecase', () {
+  group('ImdbNamePageConverter dtoFromCompleteJsonMap edge case', () {
     // Convert 1 sample JSON Map into a dto.
     // e.g. nm0322164
-    test('_SucessfulConversion', () async {
-      final map = json.decode(_sampleMaincase) as Map;
+    test('_SuccessfulConversion', () async {
+      final map = json.decode(_sampleMainCase) as Map;
       final dtos = await QueryIMDBNameDetails().myConvertTreeToOutputType(map);
       final text = json.encode(dtos.encodeList());
       expect(text, _expectedMainCase);
@@ -209,7 +208,7 @@ void main() {
     // Orginal error: on imdb data nm4240546 was
     //   _InternalLinkedHashMap<dynamic, dynamic>' is not a subtype of type of 'Iterable<dynamic>'
     /*test('_InternalLinkedHashMap', () async {
-      final map = json.decode(_internalLinkedHashMapEdgecase) as Map;
+      final map = json.decode(_internalLinkedHashMapEdgeCase) as Map;
       final dtos = QueryIMDBNameDetails().myTransformMapToOutput(map);
       final text = json.encode(dtos.encodeList());
       expect(text, _expectedInternalLinkedHashMap);
@@ -222,20 +221,20 @@ void main() {
   /// via ScrapeIMDBNameDetails
   /// via QueryIMDBNameDetails
 ////////////////////////////////////////////////////////////////////////////////
-  group('ImdbNamePageConverter dtoFromCompleteJsonMap edgecase', () {
+  group('ImdbNamePageConverter dtoFromCompleteJsonMap edge case', () {
     // Convert 1 sample JSON Map into a dto.
     // e.g. nm0322164
-    test('_SucessfulConversion', () async {
-      final map = json.decode(_sampleMaincase) as Map;
+    test('_SuccessfulConversion', () async {
+      final map = json.decode(_sampleMainCase) as Map;
       final dtos = await QueryIMDBNameDetails().myConvertTreeToOutputType(map);
       final text = json.encode(dtos.encodeList());
       expect(text, _expectedMainCase);
     });
     // Convert 1 sample JSON Map into a dto.
-    // Orginal error: on imdb data nm4240546 was
+    // Original error: on imdb data nm4240546 was
     //   _InternalLinkedHashMap<dynamic, dynamic>' is not a subtype of type of 'Iterable<dynamic>'
     /*test('_InternalLinkedHashMap', () async {
-      final map = json.decode(_internalLinkedHashMapEdgecase) as Map;
+      final map = json.decode(_internalLinkedHashMapEdgeCase) as Map;
       final dtos = QueryIMDBNameDetails().baseTransformMapToOutputHandler(map);
       final text = json.encode(dtos.encodeList());
       expect(text, _expectedInternalLinkedHashMap);

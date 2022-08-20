@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
 
@@ -21,8 +19,8 @@ void main() async {
       Future<void> testCache(List<Map> input, Map expectedOutput) async {
         final cache = TieredCache();
 
-        void addMapContentsToCache(Map listitem) {
-          listitem.forEach((key, value) {
+        void addMapContentsToCache(Map listItem) {
+          listItem.forEach((key, value) {
             cache.add(key, value);
           });
         }

@@ -116,7 +116,7 @@ class ImdbTitleConverter {
   }
 
   static List<MovieResultDTO> getPeopleFromJson(dynamic people) {
-    final retval = <MovieResultDTO>[];
+    final result = <MovieResultDTO>[];
     if (null != people) {
       Iterable peopleList;
       // Massage the data to ensure the results are a list of people
@@ -126,18 +126,18 @@ class ImdbTitleConverter {
       } else if (people is Map) {
         peopleList = [people];
       } else {
-        return retval;
+        return result;
       }
       for (final relatedMap in peopleList) {
         if (relatedMap is Map) {
           final dto = _dtoFromPersonMap(relatedMap);
           if (null != dto) {
-            retval.add(dto);
+            result.add(dto);
           }
         }
       }
     }
-    return retval;
+    return result;
   }
 
   static MovieResultDTO? _dtoFromPersonMap(Map map) {

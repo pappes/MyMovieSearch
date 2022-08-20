@@ -66,7 +66,7 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${actualResult.toPrintableString()} '
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
@@ -106,7 +106,7 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb suggestion query', () {
-    // Read IMDB suggestions from a simulated bytestream and convert JSON to dtos.
+    // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = await expectedDTOList;
@@ -126,12 +126,12 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emmitted DTO list ${queryResult.toPrintableString()} '
+        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
 
-    // Read IMDB suggestions from a simulated bytestream and convert JSON to dtos.
+    // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
     test('invalid jsonp', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
@@ -149,11 +149,11 @@ void main() {
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read IMDB suggestions from a simulated bytestream and convert JSON to dtos.
+    // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
     test('unexpected json contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBSuggestions] Error in imdbSuggestions with criteria  translating pagemap to objects :expected map got Null unable to interpret data null';
+          '[QueryIMDBSuggestions] Error in imdbSuggestions with criteria  translating page map to objects :expected map got Null unable to interpret data null';
       final queryResult = <MovieResultDTO>[];
       final imdbSuggestions = QueryIMDBSuggestions();
 

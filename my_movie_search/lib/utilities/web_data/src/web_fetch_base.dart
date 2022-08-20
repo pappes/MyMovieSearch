@@ -4,7 +4,6 @@ import 'dart:async' show StreamController;
 import 'dart:convert' show jsonDecode, utf8;
 
 import 'package:html/parser.dart';
-import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
 
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
@@ -59,7 +58,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
   /// Populate [StreamController] with [OUTPUT_TYPE] objects matching [criteria].
   ///
-  /// Optionally inject [source] as an alternate datasource for mocking/testing.
+  /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
   void populateStream(
     StreamController<OUTPUT_TYPE> sc,
@@ -87,7 +86,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
   /// Return a list of [OUTPUT_TYPE] objects matching [criteria].
   ///
-  /// Optionally inject [source] as an alternate datasource for mocking/testing.
+  /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
   Future<List<OUTPUT_TYPE>> readList(
     INPUT_TYPE criteria, {
@@ -104,7 +103,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
   /// Return a cached list of [OUTPUT_TYPE] objects matching [criteria].
   ///
-  /// Optionally inject [source] as an alternate datasource for mocking/testing.
+  /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
   Future<List<OUTPUT_TYPE>> readCachedList(
     INPUT_TYPE criteria, {
@@ -130,7 +129,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     dynamic listOrMapOrDocument,
   );
 
-  /// Convert webtext to a traversable tree of [List] or [Map] data.
+  /// Convert web text to a traversable tree of [List] or [Map] data.
   ///
   /// Can be overridden by child classes.
   /// Default implementation is a simple JSON decode or html parse.
@@ -165,7 +164,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Can be overridden by child classes.
   /// Default implementation pulls back and UTF8 decodes HTML or Json or JsonP.
-  /// Datasource can be offline or online data source as requested by calling function.
+  /// Data source can be offline or online data source as requested by calling function.
   /// online data fetches from the web URL defined by [myConstructURI].
   Future<Stream<String>> myConvertCriteriaToWebText(INPUT_TYPE criteria) async {
     // Use a controller to allow the onError callback to populate the stream.
@@ -319,7 +318,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     yield* controller.stream;
   }
 
-  /// Convert webtext to a traversable tree of [List] or [Map] data with exception handling.
+  /// Convert web text to a traversable tree of [List] or [Map] data with exception handling.
   ///
   /// Calls child class [myConvertWebTextToTraversableTree]
   /// Unpacks Stream<String> to a single String to make child class logic simpler
@@ -390,7 +389,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
     List<OUTPUT_TYPE> _logError(error, stackTrace) {
       final errorMessage =
-          baseConstructErrorMessage('translating pagemap to objects', error);
+          baseConstructErrorMessage('translating page map to objects', error);
       final errorObject = myYieldError(errorMessage);
       controller.add(errorObject);
       return [];
@@ -400,7 +399,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       for (final object in objects) {
         myAddResultToCache(criteria, object);
       }
-      // Construct resultset with a subset of results.
+      // Construct result set with a subset of results.
       final capacity = searchResultsLimit.consume(objects.length);
       final subset = objects.take(capacity).toList();
       for (final object in subset) {
@@ -480,7 +479,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       final request = client.close();
 
       response = await request;
-    } catch (error, stackTrace) {
+    } catch (error) {
       final errorMessage = baseConstructErrorMessage(
         'fetching web text:',
         error,

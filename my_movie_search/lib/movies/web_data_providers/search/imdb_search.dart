@@ -7,7 +7,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imd
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 
-/// Implements [WebFetchBase] for the IMDB search html webscraper.
+/// Implements [WebFetchBase] for the IMDB search html web scraper.
 ///
 /// ```dart
 /// QueryIMDBSearch().readList(criteria, limit: 10)

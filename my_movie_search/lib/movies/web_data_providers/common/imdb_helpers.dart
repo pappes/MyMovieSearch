@@ -224,8 +224,8 @@ String getBigImage(String? smallImage) {
     if (null != truncated) {
       truncated = '$truncated.jpg';
     }
-    final retval = Uri.decodeFull(truncated ?? smallImage);
-    return retval;
+    final result = Uri.decodeFull(truncated ?? smallImage);
+    return result;
   }
   return '';
 }

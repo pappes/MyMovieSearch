@@ -22,7 +22,7 @@ import 'web_fetch_unit_test.mocks.dart';
 /// Mock http.Client
 ////////////////////////////////////////////////////////////////////////////////
 
-// To regenertate mocks run the following command
+// To regenerate mocks run the following command
 // flutter pub run build_runner build --delete-conflicting-outputs
 @GenerateMocks([HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders])
 typedef ConvertWebTextToTreeFn = Future<List> Function(String t);
@@ -285,7 +285,7 @@ void main() {
       input.criteriaTitle = 'criteria';
       expect(await testClass.myIsCacheStale(input), false);
     });
-    // Default no cacheing.
+    // Default no caching.
     test('myIsResultCached()', () async {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'criteria';
@@ -344,7 +344,7 @@ void main() {
       expect(textResult, '');
     });
 
-    test('without jsonp tranformation', () async {
+    test('without jsonp transformation', () async {
       final streamResult =
           await testClass.myConvertCriteriaToWebText('JsonP([{"key":"val"}])');
       final listResult = await streamResult.toList();
@@ -352,7 +352,7 @@ void main() {
       expect(textResult, 'JsonP([{"key":"val"}])');
     });
 
-    test('with jsonp tranformation', () async {
+    test('with jsonp transformation', () async {
       testClass.transformJsonP = true;
       final streamResult =
           await testClass.myConvertCriteriaToWebText('JsonP([{"key":"val"}])');
@@ -510,21 +510,21 @@ void main() {
       timeout: const Timeout(Duration(seconds: 5)),
     );
 
-    //overridde myConvertTreeToOutputType to throw an exception
+    //override myConvertTreeToOutputType to throw an exception
     test(
       'exception handling',
       () async {
         final testClass = QueryUnknownSourceMocked();
         testClass.overriddenConvertTreeToOutputType =
-            (_) => throw 'Convertion Failed';
+            (_) => throw 'Conversion Failed';
         final actualOutput = testClass.baseConvertTreeToOutputType(
           SearchCriteriaDTO(),
           Stream.fromIterable(_makeMaps(2)),
         );
         final expectedOutput = testClass.myYieldError(
           'Error in unknown with criteria '
-          'NullCriteria translating pagemap '
-          'to objects :Convertion Failed',
+          'NullCriteria translating page map '
+          'to objects :Conversion Failed',
         );
         final newId = int.parse(expectedOutput.uniqueId) - 1;
         expectedOutput.uniqueId = newId.toString();
@@ -539,14 +539,14 @@ void main() {
       timeout: const Timeout(Duration(seconds: 5)),
     );
 
-    //overridde myConvertWebTextToTraversableTree to encapsulate errors
+    //override myConvertWebTextToTraversableTree to encapsulate errors
     test(
       'stream exception handling',
       () async {
         final testClass = QueryUnknownSourceMocked();
         const expectedError =
             '[QueryIMDBTitleDetails] Error in unknown with criteria '
-            'NullCriteria translating pagemap '
+            'NullCriteria translating page map '
             'to objects :more exception handling';
         final actualOutput = testClass.baseConvertTreeToOutputType(
           SearchCriteriaDTO(),
@@ -600,7 +600,7 @@ void main() {
       timeout: const Timeout(Duration(seconds: 5)),
     );
 
-    //overridde myConvertWebTextToTraversableTree to provide a multi-part stream
+    //override myConvertWebTextToTraversableTree to provide a multi-part stream
     test(
       'stream with multiple results',
       () async {
@@ -621,7 +621,7 @@ void main() {
       timeout: const Timeout(Duration(seconds: 5)),
     );
 
-    //overridde myConvertWebTextToTraversableTree to encapsualte errors
+    //override myConvertWebTextToTraversableTree to encapsulate errors
     test(
       'child function exception handling',
       () async {
@@ -643,7 +643,7 @@ void main() {
       timeout: const Timeout(Duration(seconds: 5)),
     );
 
-    //overridde myConvertWebTextToTraversableTree to encapsualte errors
+    //override myConvertWebTextToTraversableTree to encapsulate errors
     test(
       'stream exception handling',
       () async {
@@ -805,7 +805,7 @@ void main() {
   group('WebFetchBase mocked baseFetchWebText unit tests', () {
     final testClass = QueryUnknownSourceMocked();
 
-    test('fetch sucessful', () async {
+    test('fetch successful', () async {
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = '123';
       final streamResult = await testClass.baseFetchWebText(criteria);

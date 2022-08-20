@@ -1,6 +1,5 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_suggestion.dart';
-import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Test Data
@@ -10,11 +9,11 @@ import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
 //json format
 //1 = title/name
 //id = unique  key (tt=tile/nm=name/vi=video)
-//s = supplimentary info (biography, actors or trailer duration
+//s = supplementary info (biography, actors or trailer duration
 //y = year
 //yr = year range for series
 //q = title type
-//i = image with dimentions)
+//i = image with dimensions)
 
 Stream<MovieResultDTO> streamFromInnerJsonMap(
   Iterable<Map<dynamic, dynamic>> records,

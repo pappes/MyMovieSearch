@@ -68,21 +68,21 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
   }
 
   SearchCriteriaDTO getDTO(Map<String, String> map) {
-    final retVal = SearchCriteriaDTO();
-    retVal.searchId = map[movieCriteriaDTOSearchId] ?? retVal.searchId;
-    retVal.criteriaTitle =
-        map[movieCriteriaDTOCriteriaTitle] ?? retVal.criteriaTitle;
+    final result = SearchCriteriaDTO();
+    result.searchId = map[movieCriteriaDTOSearchId] ?? result.searchId;
+    result.criteriaTitle =
+        map[movieCriteriaDTOCriteriaTitle] ?? result.criteriaTitle;
 
-    retVal.criteriaSource = getEnumValue<SearchCriteriaSource>(
+    result.criteriaSource = getEnumValue<SearchCriteriaSource>(
           map[movieCriteriaDTOCriteriaSource],
           SearchCriteriaSource.values,
         ) ??
-        retVal.criteriaSource;
+        result.criteriaSource;
 
-    retVal.criteriaList = SearchCriteriaDTOHelpers.getMovieList(
+    result.criteriaList = SearchCriteriaDTOHelpers.getMovieList(
       map[movieCriteriaDTOCriteriaList],
     );
-    return retVal;
+    return result;
   }
 
   @override

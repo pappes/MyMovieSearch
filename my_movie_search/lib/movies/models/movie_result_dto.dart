@@ -147,22 +147,22 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   /// Convert a [List] of json encoded [String]s into a [List] of [MovieResultDTO] objects
   ///
   static List<MovieResultDTO> decodeList(Iterable<dynamic> encoded) {
-    final retval = <MovieResultDTO>[];
+    final result = <MovieResultDTO>[];
     for (final json in encoded) {
       final decoded = jsonDecode(json.toString());
-      if (decoded is Map) retval.add(decoded.toMovieResultDTO());
+      if (decoded is Map) result.add(decoded.toMovieResultDTO());
     }
-    return retval;
+    return result;
   }
 
   /// Convert a [List] of [MovieResultDTO] objects into a [List] of json encoded [String]s
   ///
   List<String> encodeList() {
-    final retval = <String>[];
+    final result = <String>[];
     for (final dto in this) {
-      retval.add(jsonEncode(dto.toMap(excludeCopyrightedData: false)));
+      result.add(jsonEncode(dto.toMap(excludeCopyrightedData: false)));
     }
-    return retval;
+    return result;
   }
 }
 
