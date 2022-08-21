@@ -119,7 +119,7 @@ void main() {
   /// Integration tests using WebFetchThreadedCache
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('ThreadedCacheIMDBNameDetails unit tests', () {
+  group('WebFetchThreadedCache unit tests', () {
     test('empty cache', () async {
       final testClass = QueryIMDBCastDetails();
       await testClass.clearThreadedCache();

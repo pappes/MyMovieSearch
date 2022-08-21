@@ -11,8 +11,8 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// a different thread.  Runs lower priority requests on a slower thread.
 mixin ThreadedCacheIMDBNameDetails
     on WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> {
-  static final normalQueue = [];
-  static final verySlowQueue = [];
+  static final normalQueue = <String>{};
+  static final verySlowQueue = <String>{};
 
   /// Adds criteria to a collection of currently processing requests.
   ///
@@ -26,13 +26,14 @@ mixin ThreadedCacheIMDBNameDetails
   ) {
     // Track and throttle low priority requests
     if (ThreadRunner.slow == priority || ThreadRunner.verySlow == priority) {
-      if (normalQueue.contains(criteria) || verySlowQueue.contains(criteria)) {
+      final text = criteria.toPrintableString();
+      if (normalQueue.contains(text) || verySlowQueue.contains(text)) {
         return null; // Already requested.
       }
 
-      // If there are more that 5 requests in process,
+      // If there are more than 4 requests already in progress,
       // run the request on the lowest priority thread
-      if (normalQueue.length > 5) {
+      if (normalQueue.length > 4) {
         return ThreadRunner.verySlow;
       }
     }
@@ -47,10 +48,11 @@ mixin ThreadedCacheIMDBNameDetails
     int? limit,
   ) {
     // Track and throttle low priority requests
+    final text = criteria.toPrintableString();
     if (ThreadRunner.verySlow == priority) {
-      verySlowQueue.add(criteria);
+      verySlowQueue.add(text);
     } else {
-      normalQueue.add(criteria);
+      normalQueue.add(text);
     }
     // ignore: parameter_assignments
     limit ??= QueryIMDBNameDetails.defaultSearchResultsLimit;
@@ -59,8 +61,9 @@ mixin ThreadedCacheIMDBNameDetails
   /// Perform any class specific request tracking.
   @override
   void completeThreadCacheRequest(SearchCriteriaDTO criteria, String priority) {
-    normalQueue.remove(criteria);
-    verySlowQueue.remove(criteria);
+    final text = criteria.toPrintableString();
+    normalQueue.remove(text);
+    verySlowQueue.remove(text);
   }
 
   /// Returns new instance of the child class.

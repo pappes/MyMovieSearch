@@ -4,10 +4,12 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/cache/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_name.dart';
 import 'package:my_movie_search/utilities/environment.dart';
+import 'package:my_movie_search/utilities/thread.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
@@ -21,6 +23,12 @@ Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
 // ignore: avoid_classes_with_only_static_members
 class StaticJsonGenerator {
   static Future<Stream<String>> stuff(_) async => Stream.value('"stuff"');
+
+  static Future<Stream<String>> stuffDelayed(dynamic criteria) async {
+    // Insert artificial delay to allow tests to observe prior processing.
+    Future.delayed(const Duration(milliseconds: 300));
+    return stuff(criteria);
+  }
 }
 
 void main() {
@@ -122,6 +130,44 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('ThreadedCacheIMDBNameDetails unit tests', () {
+    test('cache queueing', () async {
+      final testClass = QueryIMDBNameDetails();
+      await testClass.clearThreadedCache();
+      expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 0);
+      expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
+      for (var iteration = 0; iteration < 100; iteration++) {
+        final criteria = SearchCriteriaDTO().fromString(iteration.toString());
+        // Enqueue requests but do not wait for result.
+        testClass.initialiseThreadCacheRequest(
+          criteria,
+          ThreadRunner.slow,
+          null,
+        );
+      }
+      expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 100);
+      expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
+      for (var iteration = 0; iteration < 10; iteration++) {
+        final criteria = SearchCriteriaDTO().fromString(iteration.toString());
+        // Enqueue requests but do not wait for result.
+        testClass.initialiseThreadCacheRequest(
+          criteria,
+          ThreadRunner.slow,
+          null,
+        );
+      }
+      expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 100);
+      expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
+      for (var iteration = 0; iteration < 10; iteration++) {
+        final criteria = SearchCriteriaDTO().fromString(iteration.toString());
+        // Enqueue requests but do not wait for result.
+        testClass.completeThreadCacheRequest(
+          criteria,
+          ThreadRunner.slow,
+        );
+      }
+      expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 90);
+      expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
+    });
     test('empty cache', () async {
       final testClass = QueryIMDBNameDetails();
       await testClass.clearThreadedCache();
@@ -145,10 +191,10 @@ void main() {
         criteria,
         source: streamImdbHtmlOfflineData,
       );
+      // Return some random junk that will not get used do to caching
       final listResult = await testClass.readPrioritisedCachedList(
         criteria,
-        source: StaticJsonGenerator
-            .stuff, // Return some random junk that will not get used do to caching
+        source: StaticJsonGenerator.stuff,
       );
       expect(
         listResult,
@@ -192,6 +238,23 @@ void main() {
       expect(resultIsCached, false);
       final resultIsStale = await testClass.isThreadedCacheStale(criteria);
       expect(resultIsStale, false);
+    });
+
+    test('cache prioitisation', () async {
+      final testClass = QueryIMDBNameDetails();
+      await testClass.clearThreadedCache();
+      for (var iteration = 0; iteration < 100; iteration++) {
+        final criteria = SearchCriteriaDTO().fromString(iteration.toString());
+        // Enqueue requests but do not wait for result.
+        testClass.readPrioritisedCachedList(
+          criteria,
+          source: StaticJsonGenerator.stuffDelayed,
+        );
+      }
+      // Wait for queued requests to be intitialised but not completed.
+      await Future.delayed(const Duration(milliseconds: 100));
+      expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 5);
+      expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 95);
     });
   });
 
