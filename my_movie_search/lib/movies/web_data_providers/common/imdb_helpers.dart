@@ -114,7 +114,7 @@ MovieContentType? findImdbMovieContentTypeFromTitle(
   int? duration,
   String id,
 ) {
-  final startInfo = title.length + 1;
+  final startInfo = title.length;
   if (info.length > startInfo) {
     return _lookupImdbMovieContentType(
       info.substring(startInfo), // Throw away the start of info.
@@ -149,7 +149,7 @@ CensorRatingType? getImdbCensorRating(String? type) {
   if (type.lastIndexOf('Z') > -1) return CensorRatingType.restricted;
   //R includes R, R(A), RP18
   if (type.lastIndexOf('R') > -1) return CensorRatingType.restricted;
-  //if (type.lastIndexOf('Unrated') > -1) return CensorRatingType.restriced;
+  //if (type.lastIndexOf('Unrated') > -1) return CensorRatingType.restricted;
   if (type.lastIndexOf('Mature') > -1) return CensorRatingType.restricted;
   if (type.lastIndexOf('Adult') > -1) return CensorRatingType.restricted;
   if (type.lastIndexOf('GA') > -1) return CensorRatingType.restricted;
