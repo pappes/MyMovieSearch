@@ -1,10 +1,14 @@
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_name.dart'
+    as person_data;
+import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart'
+    as title_data;
 import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_search.dart';
+
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
@@ -84,7 +88,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm class description is constructed as expected.
-    test('Run myDataSourceName()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           await QueryIMDBSearch().myConvertWebTextToTraversableTree(
@@ -222,4 +226,65 @@ void main() {
       // Check the results.
     });
   });
+
+////////////////////////////////////////////////////////////////////////////////
+  /// Integration redirect tests
+////////////////////////////////////////////////////////////////////////////////
+/*
+  group('imdb search redirect', () {
+    // Read IMDB search results from a simulated byte stream and convert JSON to dtos.
+    test('Run readList() for a specific movie', () async {
+      // Set up the test data.
+      final expectedValue = title_data.expectedDTOList;
+      final queryResult = <MovieResultDTO>[];
+      final imdbSearch = QueryIMDBSearch();
+
+      // Invoke the functionality.
+      await imdbSearch
+          .readList(
+            SearchCriteriaDTO().fromString('tt12345678'),
+            source: title_data.streamImdbHtmlOfflineData,
+          )
+          .then((values) => queryResult.addAll(values))
+          .onError(
+            // ignore: avoid_print
+            (error, stackTrace) => print('$error, ${stackTrace.toString()}'),
+          );
+
+      // Check the results.
+      expect(
+        queryResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+      );
+    });
+    // Read IMDB search results from a simulated byte stream and convert JSON to dtos.
+    test('Run readList()for a specific person', () async {
+      // Set up the test data.
+      final expectedValue = person_data.expectedDTOList;
+      final queryResult = <MovieResultDTO>[];
+      final imdbSearch = QueryIMDBSearch();
+
+      // Invoke the functionality.
+      await imdbSearch
+          .readList(
+            SearchCriteriaDTO().fromString('nm12345678'),
+            source: person_data.streamImdbHtmlOfflineData,
+          )
+          .then((values) => queryResult.addAll(values))
+          .onError(
+            // ignore: avoid_print
+            (error, stackTrace) => print('$error, ${stackTrace.toString()}'),
+          );
+
+      // Check the results.
+      expect(
+        queryResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+      );
+    });
+  });*/
 }

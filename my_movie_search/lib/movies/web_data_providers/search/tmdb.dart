@@ -19,7 +19,7 @@ import 'package:universal_io/io.dart' show HttpHeaders;
 class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static const _baseURL = 'https://api.themoviedb.org/3/search/movie?api_key=';
 
-  /// Describe where the data is comming from.
+  /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
     return DataSourceType.tmdbMovie.name;

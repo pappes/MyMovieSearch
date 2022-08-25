@@ -19,7 +19,7 @@ class QueryIMDBNameDetails
   static const _baseURL = 'https://www.imdb.com/name/';
   static const defaultSearchResultsLimit = 100;
 
-  /// Describe where the data is comming from.
+  /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
     return 'imdb_person';

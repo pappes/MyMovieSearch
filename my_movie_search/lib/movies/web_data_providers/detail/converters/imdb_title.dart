@@ -7,28 +7,6 @@ import 'package:my_movie_search/utilities/extensions/collection_extensions.dart'
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
-const outerElementIdentity = 'id';
-
-const outerElementOfficialTitle = 'name';
-const outerElementCommonTitle = 'alternateName';
-const outerElementDescription = 'description';
-const outerElementKeywords = 'keywords';
-const outerElementGenre = 'genre';
-const outerElementYear = 'datePublished';
-const outerElementDuration = 'duration';
-const outerElementCensorRating = 'contentRating';
-const outerElementRating = 'aggregateRating';
-const innerElementRatingValue = 'ratingValue';
-const innerElementRatingCount = 'ratingCount';
-const outerElementType = '@type';
-const outerElementImage = 'image';
-const outerElementLanguage = 'language';
-const outerElementLanguages = 'languages';
-const outerElementRelated = 'related';
-const outerElementActors = 'actor';
-const outerElementDirector = 'director';
-const outerElementLink = 'url';
-
 const _relatedMoviesLabel = 'Suggestions:';
 const relatedActorsLabel = 'Cast:';
 const relatedDirectorsLabel = 'Directed by:';
@@ -45,7 +23,7 @@ class ImdbTitleConverter {
     movie.uniqueId = map[outerElementIdentity]?.toString() ?? movie.uniqueId;
     movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
     movie.alternateTitle =
-        map[outerElementCommonTitle]?.toString() ?? movie.alternateTitle;
+        map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;
     movie.description = map[outerElementDescription]?.toString() ?? movie.title;
     movie.imageUrl = map[outerElementImage]?.toString() ?? movie.imageUrl;
     final language = map[outerElementLanguage];

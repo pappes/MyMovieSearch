@@ -16,7 +16,7 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBSearchDetails {
   static const _baseURL = 'https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=';
 
-  /// Describe where the data is comming from.
+  /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
     return DataSourceType.imdbSearch.name;
@@ -32,6 +32,7 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   /// Convert IMDB map to MovieResultDTO records.
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
+    print(map);
     if (map is Map) return ImdbSearchConverter.dtoFromCompleteJsonMap(map);
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }

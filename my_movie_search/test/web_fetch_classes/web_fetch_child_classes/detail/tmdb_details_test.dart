@@ -71,7 +71,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myDataSourceName()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           await QueryTMDBMovieDetails().myConvertWebTextToTraversableTree(

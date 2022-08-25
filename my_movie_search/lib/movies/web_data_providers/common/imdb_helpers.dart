@@ -1,6 +1,31 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
+const outerElementIdentity = 'id';
+
+const outerElementOfficialTitle = 'name';
+const outerElementAlternateTitle = 'alternateTitle';
+const outerElementDescription = 'description';
+const outerElementKeywords = 'keywords';
+const outerElementGenre = 'genre';
+const outerElementYear = 'datePublished';
+const outerElementDuration = 'duration';
+const outerElementCensorRating = 'contentRating';
+const outerElementRating = 'aggregateRating';
+const innerElementRatingValue = 'ratingValue';
+const innerElementRatingCount = 'ratingCount';
+const outerElementType = '@type';
+const outerElementImage = 'image';
+const outerElementLanguage = 'language';
+const outerElementLanguages = 'languages';
+const outerElementRelated = 'related';
+const outerElementActors = 'actor';
+const outerElementDirector = 'director';
+const outerElementLink = 'url';
+
+const outerElementBorn = 'birthDate';
+const outerElementDied = 'deathDate';
+
 const imdbTitlePrefix = 'tt';
 const imdbPersonPrefix = 'nm';
 const imdbTitlePath = '/title/';
@@ -79,6 +104,8 @@ String getIdFromIMDBLink(String? link) {
 }
 
 /// Look at information provided to see if [MovieContentType] can be determined.
+///
+/// info is in the form  ' (1988–1993) (TV Series)'
 MovieContentType? _lookupImdbMovieContentType(
   String info,
   int? duration,
@@ -107,6 +134,7 @@ MovieContentType? _lookupImdbMovieContentType(
 /// Look at movie to see if title type (is in brackets).
 ///
 /// Takes [info] which includes the title and other information
+/// in the form 'title 123 (1988–1993) (TV Series)'
 /// and [title] which does not include the other information
 MovieContentType? findImdbMovieContentTypeFromTitle(
   String info,

@@ -21,7 +21,7 @@ class QueryTMDBMovieDetails
   static const _baseURL = 'https://api.themoviedb.org/3/movie/';
   static const _midURL = '?api_key=';
 
-  /// Describe where the data is comming from.
+  /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
     return DataSourceType.tmdbMovie.name;

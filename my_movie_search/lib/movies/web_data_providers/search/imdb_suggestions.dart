@@ -27,7 +27,7 @@ class QueryIMDBSuggestions
     transformJsonP = true;
   }
 
-  /// Describe where the data is comming from.
+  /// Describe where the data is coming from.
   @override
   String myDataSourceName() => DataSourceType.imdbSuggestions.name;
 

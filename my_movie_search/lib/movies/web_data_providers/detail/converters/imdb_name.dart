@@ -8,18 +8,6 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
-const outerElementIdentity = 'id';
-
-const outerElementType = '@type';
-const outerElementOfficialTitle = 'name';
-const outerElementImage = 'image';
-const outerElementDescription = 'description';
-const outerElementBorn = 'birthDate';
-const outerElementDied = 'deathDate';
-const outerElementCommonTitle = 'alternateName';
-const outerElementRelated = 'related';
-const outerElementLink = 'url';
-
 class ImdbNamePageConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     logger.i(
@@ -34,7 +22,7 @@ class ImdbNamePageConverter {
     movie.uniqueId = map[outerElementIdentity]?.toString() ?? movie.uniqueId;
     movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
     movie.alternateTitle =
-        map[outerElementCommonTitle]?.toString() ?? movie.alternateTitle;
+        map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;
     movie.description = map[outerElementDescription]?.toString() ?? movie.title;
     movie.imageUrl = map[outerElementImage]?.toString() ?? movie.imageUrl;
 

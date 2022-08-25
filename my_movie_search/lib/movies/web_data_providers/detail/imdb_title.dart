@@ -19,7 +19,7 @@ class QueryIMDBTitleDetails
   static const _baseURL = 'https://www.imdb.com/title/';
   static const _baseURLsuffix = '/?ref_=fn_tt_tt_1';
 
-  /// Describe where the data is comming from.
+  /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
     return DataSourceType.imdb.name;

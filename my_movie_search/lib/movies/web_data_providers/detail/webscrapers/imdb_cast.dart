@@ -3,6 +3,7 @@ import 'package:html/parser.dart' show parse;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_cast.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -78,7 +79,7 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         final charactor = row.querySelector('a[href*="/title/tt"]')?.text;
         if (null != charactor) {
           // Include name of character played by actor for display in search results.
-          person[outerElementAlternatetitle] = charactor;
+          person[outerElementAlternateTitle] = charactor;
         }
         movies.add(person);
       }

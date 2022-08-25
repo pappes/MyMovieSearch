@@ -4,13 +4,6 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
-const outerElementIdentity = 'id';
-const outerElementOfficialTitle = 'name';
-const outerElementAlternatetitle = 'alternateTitle';
-
-const outerElementRelated = 'related';
-const outerElementLink = 'url';
-
 class ImdbCastConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     return [_dtoFromMap(map)];
@@ -55,7 +48,7 @@ class ImdbCastConverter {
     movie.uniqueId = id;
     movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
     movie.alternateTitle =
-        map[outerElementAlternatetitle]?.toString() ?? movie.alternateTitle;
+        map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;
 
     return movie;
   }

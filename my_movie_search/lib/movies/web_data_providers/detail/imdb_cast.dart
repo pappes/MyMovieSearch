@@ -18,7 +18,7 @@ class QueryIMDBCastDetails
   static const _baseURL = 'https://www.imdb.com/title/';
   static const _baseURLsuffix = '/fullcredits/';
 
-  /// Describe where the data is comming from.
+  /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
     return 'imdb_cast';

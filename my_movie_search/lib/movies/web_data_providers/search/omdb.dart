@@ -17,7 +17,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static const _baseURL = 'https://www.omdbapi.com/?apikey=';
 
-  /// Describe where the data is comming from.
+  /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
     return DataSourceType.omdb.name;
