@@ -323,7 +323,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         0 == userRatingCount ||
         DataSourceType.imdb == newValue.source) {
       source = bestValue(newValue.source, source);
-      if (DataSourceType.imdb == newValue.source && "" != newValue.title) {
+      if (DataSourceType.imdb == newValue.source && '' != newValue.title) {
         title = _htmlDecode.convert(newValue.title);
       } else {
         title = bestValue(newValue.title, title);

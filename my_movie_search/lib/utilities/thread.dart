@@ -88,7 +88,7 @@ class ThreadRunner {
   Future _init(String threadName) async {
     final receivePort = ReceivePort();
 
-    // Spawn another thread and wait to recieve a port for the main thread to talk on.
+    // Spawn another thread and wait to receive a port for the main thread to talk on.
     await Isolate.spawn(_runOnOtherThread, {
       'port': receivePort.sendPort,
       'threadName': threadName,
@@ -98,7 +98,7 @@ class ThreadRunner {
     _completer.complete(ready);
   }
 
-  /// Function to process any incomming requests.
+  /// Function to process any incoming requests.
   static Future<void> _runOnOtherThread(Map params) async {
     final initialOutboundPort = params['port'] as SendPort;
 
@@ -111,11 +111,11 @@ class ThreadRunner {
     // Execute requests as they are received.
     await for (final request in inboundPort) {
       // ignore: avoid_dynamic_calls
-      final incommingMessage = request[0] as Map;
+      final incomingMessage = request[0] as Map;
       // ignore: avoid_dynamic_calls
       final msgOutboundPort = request[1] as SendPort;
-      final fn = incommingMessage['fn'] as Function;
-      final parameter = incommingMessage['param'];
+      final fn = incomingMessage['fn'] as Function;
+      final parameter = incomingMessage['param'];
       // ignore: avoid_dynamic_calls
       final result = await fn(parameter);
       msgOutboundPort.send(result);
