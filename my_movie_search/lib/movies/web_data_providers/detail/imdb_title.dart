@@ -6,7 +6,6 @@ import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/webscrapers/imdb_title.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
-import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 
 /// Implements [WebFetchBase] for retrieving movie details from IMDB.
 ///
@@ -43,7 +42,7 @@ class QueryIMDBTitleDetails
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     final url = '$_baseURL$searchCriteria$_baseURLsuffix';
-    return WebRedirect.constructURI(url);
+    return Uri.parse(url);
   }
 
   /// Convert IMDB map to MovieResultDTO records.

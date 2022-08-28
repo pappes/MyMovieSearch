@@ -6,7 +6,6 @@ import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_suggestions.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
-import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 
 /// Implements [WebFetchBase] for the IMDB search suggestions API.
 ///
@@ -65,6 +64,6 @@ class QueryIMDBSuggestions
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     final prefix = searchCriteria.isEmpty ? '' : searchCriteria.substring(0, 1);
     final url = '$_baseURL/$prefix/$searchCriteria.json';
-    return WebRedirect.constructURI(url);
+    return Uri.parse(url);
   }
 }

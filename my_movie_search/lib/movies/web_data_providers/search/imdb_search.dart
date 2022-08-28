@@ -5,7 +5,6 @@ import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imdb_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
-import 'package:my_movie_search/utilities/web_data/web_redirect.dart';
 
 /// Implements [WebFetchBase] for the IMDB search html web scraper.
 ///
@@ -57,6 +56,6 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     final url = '$_baseURL$searchCriteria';
-    return WebRedirect.constructURI(url);
+    return Uri.parse(url);
   }
 }
