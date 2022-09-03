@@ -43,20 +43,14 @@ mixin ScrapeIMDBTitleDetails
       unawaited(_fetchAdditionalPersonDetails(movieData[outerElementActors]));
       unawaited(_fetchAdditionalPersonDetails(movieData[outerElementDirector]));
       _decodeList(movieData, outerElementKeywords);
-    } else {
-      _scrapeName(document, movieData);
-      _scrapeType(document, movieData);
     }
     // Get better details from the web page where possible.
     _scrapePoster(document, movieData);
     _scrapeDescription(document, movieData);
     _scrapeLanguageDetails(document, movieData);
 
-    _getRecomendationList(movieData, document);
+    _getRecommendationList(movieData, document);
     _getCastDetailsList(movieData, document);
-
-    _getAttributeValue(movieData, document, innerElementRatingCount);
-    _getAttributeValue(movieData, document, innerElementRatingValue);
 
     movieData['id'] = getCriteriaText ?? movieData['id'];
     return movieData;
@@ -74,32 +68,15 @@ mixin ScrapeIMDBTitleDetails
     return scriptElement.innerHtml;
   }
 
-  /// Extract movie type if not previously found in JSON from HTML
-  void _scrapeType(Document document, Map movieData) {
-    _getAttributeValue(movieData, document, outerElementType);
-    if ('' == movieData[outerElementType] &&
-        null != document.querySelector('a[href*="genre=short"]')) {
-      movieData[outerElementType] = "Short";
-    }
-  }
-
   /// Extract short description of movie from web page.
   void _scrapeDescription(Document document, Map movieData) {
-    final description =
+    final descriptionElement =
         document.querySelector('div[data-testid="storyline-plot-summary"]') ??
             document.querySelector('span[data-testid*="plot"]');
-    if (null != description?.text) {
-      movieData[outerElementDescription] = description!.text;
-    }
-  }
-
-  /// Extract Official name of movie from web page.
-  void _scrapeName(Document document, Map movieData) {
-    final description =
-        document.querySelector('h1[data-testid="hero-title-block"]') ??
-            document.querySelector('h1[class*="TitleHeader"]');
-    if (null != description?.text) {
-      movieData[outerElementOfficialTitle] = description!.text;
+    final newDescription = descriptionElement?.text ?? '';
+    final oldDescription = (movieData[outerElementDescription] ?? '') as String;
+    if (newDescription.length > oldDescription.length) {
+      movieData[outerElementDescription] = newDescription;
     }
   }
 
@@ -152,13 +129,13 @@ mixin ScrapeIMDBTitleDetails
             movieData[outerElementLanguage] = LanguageType.allEnglish;
             continue;
           } else {
-            // English is not the first langauge listed.
+            // English is not the first language listed.
             movieData[outerElementLanguage] = LanguageType.someEnglish;
             return;
           }
         }
         if (LanguageType.allEnglish == movieData[outerElementLanguage]) {
-          // English was the first langauge listed but found another language.
+          // English was the first language listed but found another language.
           movieData[outerElementLanguage] = LanguageType.mostlyEnglish;
           return;
         } else {
@@ -166,19 +143,6 @@ mixin ScrapeIMDBTitleDetails
           movieData[outerElementLanguage] = LanguageType.foreign;
           continue;
         }
-      }
-    }
-  }
-
-  /// Use CSS selector to find the text on the page
-  /// and extract values from the page.
-  void _getAttributeValue(Map moviedata, Document document, String attribute) {
-    if (moviedata[attribute] != null) return;
-    final elements = document.querySelectorAll('span[itemprop="$attribute"]');
-    for (final element in elements) {
-      if (element.text.length > 1) {
-        final webPageText = element.text;
-        moviedata[attribute] = webPageText;
       }
     }
   }
@@ -192,42 +156,39 @@ mixin ScrapeIMDBTitleDetails
   }
 
   void _getCastImage(Map movieData, Element recommendation) {
-    final castMemeber = {};
+    final castMember = {};
     // href will be in the form "/name/nm0145681?ref_=tt_sims_tt_t_9"
     final link =
         recommendation.querySelector('a[data-testid="title-cast-item__actor"]');
     if (null != link) {
-      castMemeber[outerElementOfficialTitle] = link.text;
-      castMemeber[outerElementIdentity] = getIdFromIMDBLink(
+      castMember[outerElementOfficialTitle] = link.text;
+      castMember[outerElementIdentity] = getIdFromIMDBLink(
         link.getAttribute(
           AttributeType.address,
         ),
       );
-      castMemeber[outerElementImage] = recommendation
+      castMember[outerElementImage] = recommendation
           .querySelector('img')
           ?.getAttribute(AttributeType.source);
 
       if (movieData[outerElementActors] == null) {
-        movieData[outerElementActors] = [castMemeber];
+        movieData[outerElementActors] = [castMember];
       } else {
-        (movieData[outerElementActors] as List).add(castMemeber);
+        (movieData[outerElementActors] as List).add(castMember);
       }
     }
   }
 
   /// Extract the movie recommendations from the current movie.
-  void _getRecomendationList(Map movieData, Document document) {
+  void _getRecommendationList(Map movieData, Document document) {
     movieData[outerElementRelated] = [];
-    for (final element in document.querySelectorAll('div.rec_overview')) {
-      _getRecomendationOld(movieData, element);
-    }
     for (final element
         in document.querySelectorAll('div.ipc-poster-card--base')) {
-      _getRecomendationNew(movieData, element);
+      _getRecommendation(movieData, element);
     }
   }
 
-  void _getRecomendationNew(Map movieData, Element recommendation) {
+  void _getRecommendation(Map movieData, Element recommendation) {
     final attributes = {};
     // href will be in the form "/title/tt0145681/?ref_=tt_sims_tt_t_9"
     final link =
@@ -242,40 +203,6 @@ mixin ScrapeIMDBTitleDetails
         recommendation.querySelector('span.ipc-rating-star--imdb')?.text; //6.9
     attributes[outerElementOfficialTitle] =
         attributes[outerElementOfficialTitle].toString();
-    (movieData[outerElementRelated] as List).add(attributes);
-  }
-
-  void _getRecomendationOld(Map movieData, Element recommendation) {
-    final attributes = {};
-    attributes[outerElementIdentity] = recommendation
-        .querySelector('div[data-tconst]')
-        ?.attributes['data-tconst']; //tt1037705
-    attributes[outerElementOfficialTitle] = recommendation
-        .querySelector('div.rec-title')
-        ?.querySelector('b')
-        ?.innerHtml; //The Book of Eli
-    attributes[outerElementYear] = recommendation
-        .querySelector('div.rec-title')
-        ?.querySelector('span')
-        ?.innerHtml; //(2010)
-    attributes[outerElementImage] =
-        recommendation.querySelector('img')?.getAttribute(AttributeType.source);
-    attributes[innerElementRatingValue] = recommendation
-        .querySelector('span.rating-rating')
-        ?.querySelector('span.value')
-        ?.innerHtml; //6.9
-    attributes[innerElementRatingCount] = recommendation
-            .querySelector('span.rating-list')
-            ?.attributes[
-        'title']; //"Users rated this 6.9/10 (297,550 votes) - click stars to rate"
-    attributes[outerElementDescription] = recommendation
-        .querySelector('div.rec-outline')
-        ?.querySelector('p')
-        ?.innerHtml; //A post-apocalyptic tale... saving humankind.
-    attributes[outerElementOfficialTitle] =
-        attributes[outerElementOfficialTitle].toString();
-    attributes[outerElementDescription] =
-        attributes[outerElementDescription].toString();
     (movieData[outerElementRelated] as List).add(attributes);
   }
 
