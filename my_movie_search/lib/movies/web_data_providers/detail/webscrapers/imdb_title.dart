@@ -28,8 +28,12 @@ mixin ScrapeIMDBTitleDetails
   ) async {
     final document = parse(webText);
     final movieData = _scrapeWebPage(document);
-    if (movieData[outerElementDescription] == null) {
-      throw 'imdb web scraper data not detected for criteria $getCriteriaText';
+    if (movieData[outerElementOfficialTitle] == null) {
+      var sample = webText;
+      if (sample.length > 100) {
+        sample = webText.replaceRange(100, webText.length, '...');
+      }
+      throw 'imdb web scraper data not detected for criteria $getCriteriaText in $sample';
     }
     return [movieData];
   }
@@ -46,7 +50,7 @@ mixin ScrapeIMDBTitleDetails
     }
     // Get better details from the web page where possible.
     _scrapePoster(document, movieData);
-    _scrapeDescription(document, movieData);
+    _scrapeBetterDescription(document, movieData);
     _scrapeLanguageDetails(document, movieData);
 
     _getRecommendationList(movieData, document);
@@ -69,7 +73,7 @@ mixin ScrapeIMDBTitleDetails
   }
 
   /// Extract short description of movie from web page.
-  void _scrapeDescription(Document document, Map movieData) {
+  void _scrapeBetterDescription(Document document, Map movieData) {
     final descriptionElement =
         document.querySelector('div[data-testid="storyline-plot-summary"]') ??
             document.querySelector('span[data-testid*="plot"]');
@@ -96,7 +100,7 @@ mixin ScrapeIMDBTitleDetails
     }
   }
 
-  /// Extract type, year, Censor Rating and duration from ul<TitleBlockMetaData>
+  /// Loop through all languages to see how predominant English is.
   void _scrapeLanguageDetails(Document document, Map movieData) {
     movieData[outerElementLanguage] = LanguageType.none;
     final languageHtml =
@@ -113,38 +117,41 @@ mixin ScrapeIMDBTitleDetails
         return;
       }
 
-      final languages = [];
+      final languages = <String>[];
       for (final item
           in languageHtml.querySelectorAll('a[href*="language="]')) {
         languages.add(item.text);
       }
       movieData[outerElementLanguages] = languages;
+      movieData[outerElementLanguage] = _distillLanguages(languages);
+    }
+  }
 
-      for (final String languageText in movieData[outerElementLanguages]) {
-        // Loop through all languages in order to see how dominant English is.
-        if (languageText.toUpperCase().contains('ENGLISH')) {
-          if (LanguageType.none == movieData[outerElementLanguage] ||
-              LanguageType.allEnglish == movieData[outerElementLanguage]) {
-            // First items found are English, assume all English until other languages found.
-            movieData[outerElementLanguage] = LanguageType.allEnglish;
-            continue;
-          } else {
-            // English is not the first language listed.
-            movieData[outerElementLanguage] = LanguageType.someEnglish;
-            return;
-          }
-        }
-        if (LanguageType.allEnglish == movieData[outerElementLanguage]) {
-          // English was the first language listed but found another language.
-          movieData[outerElementLanguage] = LanguageType.mostlyEnglish;
-          return;
-        } else {
-          // First item found is foreign, assume all foreign until other languages found.
-          movieData[outerElementLanguage] = LanguageType.foreign;
+  /// Loop through all languages in order to see how dominant English is.
+  LanguageType _distillLanguages(List<String> languages) {
+    var mainLanguage = LanguageType.none;
+    for (final String languageText in languages) {
+      if (languageText.toUpperCase().contains('ENGLISH')) {
+        if (LanguageType.none == mainLanguage ||
+            LanguageType.allEnglish == mainLanguage) {
+          // First item(s) found are English, assume all English until other languages found.
+          mainLanguage = LanguageType.allEnglish;
           continue;
+        } else {
+          // English is not the first language listed.
+          return LanguageType.someEnglish;
         }
       }
+      if (LanguageType.allEnglish == mainLanguage) {
+        // English was the first language listed but found another language.
+        return LanguageType.mostlyEnglish;
+      } else {
+        // First item found is foreign, assume all foreign until other languages found.
+        mainLanguage = LanguageType.foreign;
+        continue;
+      }
     }
+    return mainLanguage;
   }
 
   /// Extract displayed information about actors and actresses.
@@ -211,6 +218,7 @@ mixin ScrapeIMDBTitleDetails
     for (final people in cast) {
       final detailCriteria = SearchCriteriaDTO();
       detailCriteria.criteriaTitle = people.uniqueId;
+      //TODO: once rate limiting is implemented, queue a low priority fetch
     }
   }
 

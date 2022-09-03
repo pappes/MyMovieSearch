@@ -23,7 +23,7 @@ void main() {
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('tmdb finder unit tests', () {
+  group('imdb finder unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () async {
       expect(QueryIMDBTitleDetails().myDataSourceName(), 'imdb');
@@ -87,7 +87,7 @@ void main() {
     });
   });
 
-  group('TmdbFinderConverter unit tests', () {
+  group('ImdbTitleConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
       final expectedValue = expectedDTOList;
@@ -292,8 +292,8 @@ void main() {
   /// Integration tests using WebFetchBase and env and QueryIMDBTitleDetails
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('tmdb search query', () {
-    // Read tmdb search results from a simulated byte stream and convert JSON to dtos.
+  group('imdb search query', () {
+    // Read imdb search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Wait for api key to be initialised
       await EnvironmentVars.init();
@@ -326,14 +326,14 @@ void main() {
       );
     });
 
-    // Read tmdb search results from a simulated byte stream and report error due to invalid html.
+    // Read imdb search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails();
       await testClass.myClearCache();
       const expectedException =
-          '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria ';
+          '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria  in not valid html';
 
       // Invoke the functionality.
       await testClass
@@ -342,11 +342,11 @@ void main() {
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read tmdb search results from a simulated byte stream and report error due to unexpected html.
+    // Read imdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria ';
+          '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria  in <html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails();
       await testClass.myClearCache();

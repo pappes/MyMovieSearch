@@ -108,10 +108,11 @@ class MovieResultDTOListMatcher extends Matcher {
 /// Expectation matcher for test framework to compare DTO lists
 class MovieResultDTOListFuzzyMatcher extends Matcher {
   List<MovieResultDTO> expected;
-  int matchQuantity;
+  int matchQuantity = 0;
+  int percentMatch;
   late List<MovieResultDTO> _actual;
 
-  MovieResultDTOListFuzzyMatcher(this.expected, this.matchQuantity);
+  MovieResultDTOListFuzzyMatcher(this.expected, this.percentMatch);
 
   @override
   // Tell test framework what content was expected.
@@ -133,6 +134,7 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
   @override
   // Compare expected with actual.
   bool matches(dynamic actual, Map matchState) {
+    matchQuantity = (expected.length * percentMatch / 100).ceil();
     if (actual is List<MovieResultDTO>) {
       _actual = actual;
     } else {

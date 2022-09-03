@@ -70,8 +70,6 @@ const intermediateMapList = [
     'language': LanguageType.foreign,
     'languages': ['Marathi'],
     'related': [],
-    'ratingCount': '10',
-    'ratingValue': '6.5',
     'id': 'tt7602562'
   }
 ];

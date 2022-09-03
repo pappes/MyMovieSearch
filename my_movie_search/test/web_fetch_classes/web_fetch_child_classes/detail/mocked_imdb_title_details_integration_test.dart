@@ -78,7 +78,7 @@ List<MovieResultDTO> _makeDTOs(int startid, int qty) {
       {
         'source': DataSourceType.imdb.toString(),
         'uniqueId': '$uniqueId',
-        'description': '$uniqueId.',
+        'title': '$uniqueId.',
       }.toMovieResultDTO(),
     );
     uniqueId++;
@@ -104,7 +104,7 @@ Stream<String> _getOfflineHTML(String id) async* {
 <html
     <head>
       <script type="application/ld+json">{
-        "description": "$id." }
+        "name": "$id." }
       </script>
     </head>
     <body>

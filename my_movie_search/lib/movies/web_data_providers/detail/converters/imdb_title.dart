@@ -24,7 +24,8 @@ class ImdbTitleConverter {
     movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
     movie.alternateTitle =
         map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;
-    movie.description = map[outerElementDescription]?.toString() ?? movie.title;
+    movie.description =
+        map[outerElementDescription]?.toString() ?? movie.description;
     movie.imageUrl = map[outerElementImage]?.toString() ?? movie.imageUrl;
     final language = map[outerElementLanguage];
     if (language is LanguageType) {
