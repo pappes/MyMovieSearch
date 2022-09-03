@@ -51,7 +51,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   late DataSourceFn selectedDataSource =
       baseFetchWebText; // Online data source or offline data source.
 
-  String? get getCriteriaText =>
+  String get getCriteriaText =>
       null == criteria ? 'NullCriteria' : myFormatInputAsText(criteria);
   String? get _getFetchContext =>
       '${myDataSourceName()} with criteria $getCriteriaText';
@@ -228,8 +228,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// converts <INPUT_TYPE> to a string representation.
   ///
   /// Can be overridden by child classes.
-  String? myFormatInputAsText(INPUT_TYPE? contents) {
-    return contents.toString();
+  String myFormatInputAsText(INPUT_TYPE? contents) {
+    return contents?.toString() ?? '';
   }
 
   /// Define the http headers to be passed to the web server.
@@ -471,7 +471,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
     try {
       final encoded = Uri.encodeQueryComponent(
-        myFormatInputAsText(criteria as INPUT_TYPE) ?? '',
+        myFormatInputAsText(criteria as INPUT_TYPE),
       );
       address = myConstructURI(encoded);
       final client = await myGetHttpClient().getUrl(address);

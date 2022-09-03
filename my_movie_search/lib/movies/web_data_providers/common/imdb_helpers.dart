@@ -135,7 +135,7 @@ MovieContentType? _lookupImdbMovieContentType(
 ///
 /// Takes [info] which includes the title and other information
 /// in the form 'title 123 (1988–1993) (TV Series)'
-/// and [title] which does not include the other information
+/// and [title] which does not include the other information only 'title 123'
 MovieContentType? findImdbMovieContentTypeFromTitle(
   String info,
   String title,
@@ -162,7 +162,7 @@ MovieContentType? getImdbMovieContentType(
   final string = info?.toString() ?? '';
   final type = _lookupImdbMovieContentType(string, duration, id);
   if (null != type || null == info) return type;
-  logger.e('Unknown Imdb MoveContentType ${info.toString()} for id $id');
+  logger.i('Unknown Imdb MoveContentType ${info.toString()} for id $id');
   return MovieContentType.movie;
 }
 

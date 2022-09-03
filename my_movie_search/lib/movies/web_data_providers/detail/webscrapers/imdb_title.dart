@@ -9,6 +9,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extentions.dart';
+import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -42,6 +43,7 @@ mixin ScrapeIMDBTitleDetails
   Map _scrapeWebPage(Document document) {
     // Extract embedded JSON.
     final movieData = json.decode(_getMovieJson(document)) as Map;
+    movieData[outerElementIdentity] = getCriteriaText;
 
     if (movieData.isNotEmpty) {
       unawaited(_fetchAdditionalPersonDetails(movieData[outerElementActors]));
@@ -55,9 +57,28 @@ mixin ScrapeIMDBTitleDetails
 
     _getRecommendationList(movieData, document);
     _getCastDetailsList(movieData, document);
+    _getMovieContentType(movieData);
 
-    movieData['id'] = getCriteriaText ?? movieData['id'];
     return movieData;
+  }
+
+  /// Categorize the movie type.
+  void _getMovieContentType(Map movieData) {
+    final String id = movieData[outerElementIdentity] as String;
+    int? runtime;
+    try {
+      final duration = Duration.zero.fromIso8601(
+        movieData[outerElementDuration],
+      );
+      runtime = duration.inMinutes;
+    } catch (_) {}
+
+    final type = getImdbMovieContentType(
+      movieData[outerElementType],
+      runtime,
+      id,
+    );
+    movieData[outerElementType] = type ?? MovieContentType.none;
   }
 
   /// Use CSS selector to find the JSON script on the page

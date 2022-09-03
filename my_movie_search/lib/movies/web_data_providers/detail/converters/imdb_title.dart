@@ -27,10 +27,16 @@ class ImdbTitleConverter {
     movie.description =
         map[outerElementDescription]?.toString() ?? movie.description;
     movie.imageUrl = map[outerElementImage]?.toString() ?? movie.imageUrl;
+
     final language = map[outerElementLanguage];
     if (language is LanguageType) {
       movie.language = language;
     }
+    final movieType = map[outerElementType];
+    if (movieType is MovieContentType) {
+      movie.type = movieType;
+    }
+
     movie.languages.combineUnique(map[outerElementLanguages]);
     movie.genres.combineUnique(map[outerElementGenre]);
     movie.keywords.combineUnique(map[outerElementKeywords]);

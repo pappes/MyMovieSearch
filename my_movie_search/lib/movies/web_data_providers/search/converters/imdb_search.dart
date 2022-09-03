@@ -3,7 +3,6 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/utilities/extensions/enum.dart';
 
 class ImdbSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
@@ -19,12 +18,10 @@ class ImdbSearchConverter {
     movie.yearRange = map[outerElementYear]?.toString() ?? movie.yearRange;
     movie.year = movie.maxYear();
 
-    final movieType = map[outerElementType]?.toString();
-    movie.type = getEnumValue<MovieContentType>(
-          movieType,
-          MovieContentType.values,
-        ) ??
-        movie.type;
+    final movieType = map[outerElementType];
+    if (movieType is MovieContentType) {
+      movie.type = movieType;
+    }
 
     return movie;
   }
