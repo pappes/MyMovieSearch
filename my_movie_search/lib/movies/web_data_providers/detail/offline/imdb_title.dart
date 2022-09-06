@@ -1,11 +1,12 @@
 //query string https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=wonder%20woman
 
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   '''
-{"uniqueId": "tt7602562", "source": "imdb", "title": "1234", "type": "movie", "year": "2016", "language": "foreign",
+{"uniqueId": "tt7602562", "source": "imdb", "title": "1234", "type": "movie", "year": "2016", "yearRange": "2016", "language": "foreign",
 "languages": ["Marathi"], "genres": ["Drama"], "keywords": ["terror"], 
 "description": "1234 is a movie starring some people. On India's Independence Day, a few people have a party.", 
 "userRating": "6.5", "userRatingCount": "10", "imageUrl": "https://m.media-amazon.com/images/M/MV5BMDMyOD...XkEyXkFqcGdeQXVyMTc4OTM4NjE@._V1_.jpg", "related": {}}
@@ -16,7 +17,7 @@ const expectedDtoJsonStringList = [
 const intermediateMapList = [
   {
     '@context': 'http://schema.org',
-    '@type': 'Movie',
+    '@type': MovieContentType.movie,
     'url': '/title/tt7602562/',
     'name': '1234',
     'image':
@@ -43,7 +44,8 @@ const intermediateMapList = [
     },
     'description':
         "1234 is a movie starring some people. On India's Independence Day, a few people have a party.",
-    'datePublished': '2016-08-05',
+    'datePublished': '2016',
+    'yearRange': '2016',
     'creator': {'@type': 'Organization', 'url': '/company/co0813120/'},
     'keywords': ['terror'],
     'aggregateRating': {
@@ -68,9 +70,10 @@ const intermediateMapList = [
       'uploadDate': '2020-07-31T09:13:47Z'
     },
     'language': LanguageType.foreign,
+    'source': DataSourceType.imdb,
     'languages': ['Marathi'],
     'related': [],
-    'id': 'tt7602562'
+    'id': 'tt7602562',
   }
 ];
 

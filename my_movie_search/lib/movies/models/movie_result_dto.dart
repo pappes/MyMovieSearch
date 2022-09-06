@@ -305,13 +305,15 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Add [relatedDto] into the related movies list of a [MovieResultDTO] in the [key] section.
   ///
   void addRelated(String key, MovieResultDTO relatedDto) {
-    if (!related.containsKey(key)) {
-      related[key] = {};
-    }
-    if (!related[key]!.containsKey(relatedDto.uniqueId)) {
-      related[key]![relatedDto.uniqueId] = relatedDto;
-    } else {
-      related[key]![relatedDto.uniqueId]!.merge(relatedDto);
+    if ('' != relatedDto.title) {
+      if (!related.containsKey(key)) {
+        related[key] = {};
+      }
+      if (!related[key]!.containsKey(relatedDto.uniqueId)) {
+        related[key]![relatedDto.uniqueId] = relatedDto;
+      } else {
+        related[key]![relatedDto.uniqueId]!.merge(relatedDto);
+      }
     }
   }
 
@@ -554,6 +556,7 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
     return 'List<MovieResultDTO>($length)[\n$listContents\n]';
   }
 
+  /// return a string containing valid json
   String toJsonString() {
     final listContents = StringBuffer();
     String separator = '';
@@ -562,6 +565,15 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
       separator = ',\n';
     }
     return "List<MovieResultDTO>($length)\nr'''\n[\n$listContents\n]\n'''";
+  }
+
+  /// Return a list of strings containing valid json
+  String toJsonStrings() {
+    final listContents = StringBuffer();
+    for (final entry in this) {
+      listContents.write("'${entry.toJson().replaceAll("'", "\\'")}',\n");
+    }
+    return "[\n$listContents]";
   }
 
   /// Create a json encoded representation of a [List]<[MovieResultDTO]>.

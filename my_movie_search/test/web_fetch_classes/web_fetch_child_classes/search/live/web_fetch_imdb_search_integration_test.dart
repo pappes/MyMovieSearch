@@ -38,6 +38,8 @@ void main() {
       final expectedOutput = expectedDTOList;
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
+      // To update expected data, uncomment the following line
+      //print(actualOutput.toJsonStrings());
       // Check the results.
       expect(
         actualOutput,

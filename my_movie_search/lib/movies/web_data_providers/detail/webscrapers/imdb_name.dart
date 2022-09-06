@@ -2,10 +2,12 @@ import 'dart:convert' show json;
 
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/utilities/extensions/dom_extentions.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -28,11 +30,23 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   Map _scrapeWebPage(Document document) {
     // Extract embedded JSON.
     final movieData = json.decode(_getMovieJson(document)) as Map;
+    if (movieData.isNotEmpty) {
+      movieData[outerElementYear] =
+          getYear(movieData[outerElementBorn]?.toString()) ?? '';
+      final deathDate =
+          getYear(movieData[outerElementDied]?.toString())?.toString() ?? '';
+      movieData[outerElementYearRange] =
+          '${movieData[outerElementYear]}-$deathDate';
+    }
+    movieData[dataSource] = DataSourceType.imdb;
+    movieData[outerElementIdentity] = getCriteriaText;
+
     _scrapeName(document, movieData);
     _scrapePoster(document, movieData);
     _scrapeRelated(document, movieData);
 
-    movieData['id'] = getCriteriaText ?? movieData['id'];
+    movieData[outerElementType] = MovieContentType.person;
+
     return movieData;
   }
 
@@ -105,9 +119,7 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       if (null != link) {
         final movie = {};
         movie[outerElementOfficialTitle] = link.text;
-        movie[outerElementLink] = link.getAttribute(AttributeType.source);
-        movie[outerElementOfficialTitle] =
-            movie[outerElementOfficialTitle].toString();
+        movie[outerElementLink] = link.getAttribute(AttributeType.address);
         movies.add(movie);
       }
     }

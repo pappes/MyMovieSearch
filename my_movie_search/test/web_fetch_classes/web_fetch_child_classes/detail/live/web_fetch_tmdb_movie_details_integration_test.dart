@@ -65,11 +65,12 @@ void main() {
       actualOutput[1].title = actualOutput[1].title.substring(0, 195);
       actualOutput[1].uniqueId = "-1";
       actualOutput[1].uniqueId = "-1";
-      print(actualOutput.toJsonString());
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
       final expectedOutput = expectedDTOList;
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
+      // To update expected data, uncomment the following line
+      //print(actualOutput.toJsonStrings());
       // Check the results.
       expect(
         actualOutput,

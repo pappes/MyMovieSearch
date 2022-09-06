@@ -26,7 +26,7 @@ void main() {
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('tmdb finder unit tests', () {
+  group('QueryIMDBCastDetails unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () async {
       expect(QueryIMDBCastDetails().myDataSourceName(), 'imdb_cast');
@@ -90,7 +90,7 @@ void main() {
     });
   });
 
-  group('TmdbFinderConverter unit tests', () {
+  group('imdbFinderConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
       final expectedValue = expectedDTOList;
@@ -259,8 +259,8 @@ void main() {
   /// Integration tests using WebFetchBase and env and QueryIMDBCastDetails
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('tmdb search query', () {
-    // Read tmdb search results from a simulated byte stream and convert JSON to dtos.
+  group('imdb search query', () {
+    // Read imdb search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Wait for api key to be initialised
       await EnvironmentVars.init();
@@ -304,7 +304,7 @@ void main() {
       );
     });
 
-    // Read tmdb search results from a simulated byte stream and report error due to invalid html.
+    // Read imdb search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
@@ -320,7 +320,7 @@ void main() {
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read tmdb search results from a simulated byte stream and report error due to unexpected html.
+    // Read imdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =

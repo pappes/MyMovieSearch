@@ -1,11 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_name.dart'
     as person_data;
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart'
     as title_data;
-import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_search.dart';
 
@@ -87,7 +87,6 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
-    // Confirm class description is constructed as expected.
     test('Run myConvertWebTextToTraversableTree()', () async {
       final expectedOutput = intermediateMapList;
       final actualOutput =
@@ -106,7 +105,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          ImdbSearchConverter.dtoFromCompleteJsonMap(map),
+          ImdbWebScraperConverter.dtoFromCompleteJsonMap(map),
         );
       }
 
@@ -230,9 +229,23 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration redirect tests
 ////////////////////////////////////////////////////////////////////////////////
-/*
+
   group('imdb search redirect', () {
-    // Read IMDB search results from a simulated byte stream and convert JSON to dtos.
+    test('Run QueryIMDBTitleDetails myConvertWebTextToTraversableTree()',
+        () async {
+      final expectedOutput = title_data.intermediateMapList;
+
+      final imdbSearch = QueryIMDBSearch();
+      imdbSearch.criteria = SearchCriteriaDTO().fromString('tt7602562');
+      final actualOutput = await imdbSearch.myConvertWebTextToTraversableTree(
+        title_data.imdbHtmlSampleFull,
+      );
+      expect(actualOutput, expectedOutput);
+    });
+
+    // Run IMDB search for a single movie
+    // causing the query to return the movie details page
+    // instead of the search results page.
     test('Run readList() for a specific movie', () async {
       // Set up the test data.
       final expectedValue = title_data.expectedDTOList;
@@ -242,7 +255,7 @@ void main() {
       // Invoke the functionality.
       await imdbSearch
           .readList(
-            SearchCriteriaDTO().fromString('tt12345678'),
+            SearchCriteriaDTO().fromString('tt7602562'),
             source: title_data.streamImdbHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -259,7 +272,21 @@ void main() {
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
-    // Read IMDB search results from a simulated byte stream and convert JSON to dtos.
+
+    test('Run QueryIMDBNameDetails myConvertWebTextToTraversableTree()',
+        () async {
+      final expectedOutput = person_data.intermediateMapList;
+
+      final imdbSearch = QueryIMDBSearch();
+      imdbSearch.criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final actualOutput = await imdbSearch.myConvertWebTextToTraversableTree(
+        person_data.imdbHtmlSampleFull,
+      );
+      expect(actualOutput, expectedOutput);
+    });
+    // Run IMDB search for a single person
+    // causing the query to return the person details page
+    // instead of the search results page.
     test('Run readList()for a specific person', () async {
       // Set up the test data.
       final expectedValue = person_data.expectedDTOList;
@@ -269,7 +296,7 @@ void main() {
       // Invoke the functionality.
       await imdbSearch
           .readList(
-            SearchCriteriaDTO().fromString('nm12345678'),
+            SearchCriteriaDTO().fromString('nm7602562'),
             source: person_data.streamImdbHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -286,5 +313,5 @@ void main() {
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
-  });*/
+  });
 }

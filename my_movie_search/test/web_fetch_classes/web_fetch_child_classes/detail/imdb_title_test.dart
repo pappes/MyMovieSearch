@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
 import 'package:my_movie_search/utilities/environment.dart';
@@ -23,7 +23,7 @@ void main() {
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('imdb finder unit tests', () {
+  group('imdb title details unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () async {
       expect(QueryIMDBTitleDetails().myDataSourceName(), 'imdb');
@@ -97,7 +97,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          ImdbTitleConverter.dtoFromCompleteJsonMap(map),
+          ImdbWebScraperConverter.dtoFromCompleteJsonMap(map),
         );
       }
 

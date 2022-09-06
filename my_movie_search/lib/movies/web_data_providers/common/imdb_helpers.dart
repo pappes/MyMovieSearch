@@ -1,6 +1,7 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
+const dataSource = 'source';
 const outerElementIdentity = 'id';
 
 const outerElementOfficialTitle = 'name';
@@ -9,6 +10,7 @@ const outerElementDescription = 'description';
 const outerElementKeywords = 'keywords';
 const outerElementGenre = 'genre';
 const outerElementYear = 'datePublished';
+const outerElementYearRange = 'yearRange';
 const outerElementDuration = 'duration';
 const outerElementCensorRating = 'contentRating';
 const outerElementRating = 'aggregateRating';
@@ -20,6 +22,7 @@ const outerElementLanguage = 'language';
 const outerElementLanguages = 'languages';
 const outerElementRelated = 'related';
 const outerElementActors = 'actor';
+const outerElementActress = 'actress';
 const outerElementDirector = 'director';
 const outerElementLink = 'url';
 

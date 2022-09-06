@@ -1,5 +1,6 @@
 //query string https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=wonder%20woman
 
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
@@ -16,49 +17,55 @@ const intermediateMapList = [
   {
     "image":
         "https://m.media-amazon.com/images/M/MV5BMTYz...GdeQXVyODE5NzE3OTE@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "datePublished": "2017",
+    "yearRange": "2017",
     "@type": null,
     "id": "tt0451279",
-    "name": "Search Woman"
+    "name": "Search Woman",
+    "source": DataSourceType.imdbSearch
   },
   {
     "image":
         "https://m.media-amazon.com/images/M/MV5BZjA...XkFqcGdeQXVyNjExODE1MDc@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "datePublished": "1975",
-    "@type": "MovieContentType.series",
+    "yearRange": "1975",
+    "@type": MovieContentType.series,
     "id": "tt0074074",
-    "name": "Search Woman"
+    "name": "Search Woman",
+    "source": DataSourceType.imdbSearch
   },
   {
     "image":
         "https://m.media-amazon.com/images/M/MV5B...zM4ODM4NA@@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "datePublished": "2011",
-    "@type": "MovieContentType.movie",
+    "yearRange": "2011",
+    "@type": MovieContentType.movie,
     "id": "tt1740828",
-    "name": "Search Woman"
+    "name": "Search Woman",
+    "source": DataSourceType.imdbSearch
   },
   {
     "image":
         "https://m.media-amazon.com/images/M/MV5BYT...QXVyMjQwMDg0Ng@@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "datePublished": "2020",
+    "yearRange": "2020",
     "@type": null,
     "id": "tt7126948",
-    "name": "Search Woman 1984"
+    "name": "Search Woman 1984",
+    "source": DataSourceType.imdbSearch
   },
   {
     "image":
         "https://m.media-amazon.com/images/M/MV5BZTkyNmMz...GdeQXVyNzU3NjUxMzE@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "datePublished": "2019",
+    "yearRange": "2019",
     "@type": null,
     "id": "tt8752498",
-    "name": "Search Woman: Bloodlines"
+    "name": "Search Woman: Bloodlines",
+    "source": DataSourceType.imdbSearch
   },
   {
     "image": "https://m.media-amazon.com/images/S/sash/85lhIiFC....mSScRzu.png",
-    "datePublished": null,
+    "yearRange": null,
     "@type": null,
     "id": "tt13722802",
-    "name": "Search Woman 3"
+    "name": "Search Woman 3",
+    "source": DataSourceType.imdbSearch
   } /*,
   [],
   {

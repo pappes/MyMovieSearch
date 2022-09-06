@@ -1,13 +1,14 @@
 //query string https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=wonder%20woman
 
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   '''
-{"source": "imdb", "uniqueId": "tt7602562", "title": "Franka Potente", "type": "person", "year": "1974", "yearRange": "1974-", "languages": [], "genres": [], "keywords": [], 
+{"source": "imdb", "uniqueId": "nm7602562", "title": "Franka Potente", "type": "person", "year": "1974", "yearRange": "1974-", "languages": [], "genres": [], "keywords": [], 
 "description": "Franka Potente was born on 22 July 1974 in the German city of Münster, to Hildegard, a medical assistant, and Dieter Potente, a teacher, and raised in the nearby town of Dülmen. After her graduation in 1994, she went to the Otto-Falckenberg-Schule, a drama school in Munich, but soon broke off to study at the Lee Strasberg Theatre Institute in New ...", 
-"imageUrl": "https://m.media-amazon.com/images/M/MV5BNTY3ODYyNjU0NV5BMl5BanBnXkFtZTcwNDMxNDE3OA@@._V1_UY317_CR5,0,214,317_AL_.jpg", "related": {}}
+"imageUrl": "https://m.media-amazon.com/images/M/MV5BNTY3ODYyNjU0NV5BMl5BanBnXkFtZTcwNDMxNDE3OA@@._V1_UY317_CR5,0,214,317_AL_.jpg", "related": {"actress": ["tt3520738", "tt10933008"]}}
 
 '''
 ];
@@ -15,7 +16,7 @@ const expectedDtoJsonStringList = [
 const intermediateMapList = [
   {
     '@context': 'http://schema.org',
-    '@type': 'Person',
+    '@type': MovieContentType.person,
     'url': '/name/nm0004376/',
     'name': 'Franka Potente',
     'image':
@@ -23,14 +24,23 @@ const intermediateMapList = [
     'jobTitle': ['Actress', 'Soundtrack', 'Director'],
     'description':
         'Franka Potente was born on 22 July 1974 in the German city of Münster, to Hildegard, a medical assistant, and Dieter Potente, a teacher, and raised in the nearby town of Dülmen. After her graduation in 1994, she went to the Otto-Falckenberg-Schule, a drama school in Munich, but soon broke off to study at the Lee Strasberg Theatre Institute in New ...',
+    'datePublished': 1974,
+    'yearRange': '1974-',
     'birthDate': '1974-07-22',
     'related': {
       'actress': [
-        {'name': '\n    Blanco\n            ', 'url': null},
-        {'name': '\n    The Haunted Swordsman', 'url': null}
+        {
+          'name': '\n    Blanco\n            ',
+          'url': '/title/tt3520738/?ref_=nm_flmg_act_1'
+        },
+        {
+          'name': '\n    The Haunted Swordsman',
+          'url': '/title/tt10933008/?ref_=nm_flmg_act_2'
+        }
       ]
     },
-    'id': 'tt7602562'
+    'id': 'nm7602562',
+    'source': DataSourceType.imdb,
   }
 ];
 

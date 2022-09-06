@@ -58,11 +58,12 @@ void main() {
     test('Run read 3 pages from IMDB', () async {
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
-      print(actualOutput.toJsonString());
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
       final expectedOutput = expectedDTOList;
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
+      // To update expected data, uncomment the following line
+      //print(actualOutput.toJsonStrings());
       // Check the results.
       expect(
         actualOutput,

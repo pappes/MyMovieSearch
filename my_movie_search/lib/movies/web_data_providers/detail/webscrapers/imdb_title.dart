@@ -3,12 +3,13 @@ import 'dart:convert' show json;
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
 import 'package:html_unescape/html_unescape_small.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_title.dart';
-import 'package:my_movie_search/utilities/extensions/dom_extentions.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -43,42 +44,57 @@ mixin ScrapeIMDBTitleDetails
   Map _scrapeWebPage(Document document) {
     // Extract embedded JSON.
     final movieData = json.decode(_getMovieJson(document)) as Map;
-    movieData[outerElementIdentity] = getCriteriaText;
-
     if (movieData.isNotEmpty) {
       unawaited(_fetchAdditionalPersonDetails(movieData[outerElementActors]));
       unawaited(_fetchAdditionalPersonDetails(movieData[outerElementDirector]));
       _decodeList(movieData, outerElementKeywords);
+      if (movieData.containsKey(outerElementYear) &&
+          movieData[outerElementYear].toString().length > 4) {
+        movieData[outerElementYear] =
+            movieData[outerElementYear].toString().substring(0, 4);
+        movieData[outerElementYearRange] =
+            movieData[outerElementYear].toString().substring(0, 4);
+      }
     }
+
+    movieData[dataSource] = DataSourceType.imdb;
+    movieData[outerElementIdentity] = getCriteriaText;
+
     // Get better details from the web page where possible.
     _scrapePoster(document, movieData);
     _scrapeBetterDescription(document, movieData);
     _scrapeLanguageDetails(document, movieData);
+    // TODO: scrape year range from page
 
+    movieData[outerElementType] = _getMovieContentType(
+      movieData[outerElementType] as String?,
+      movieData[outerElementIdentity] as String,
+      movieData[outerElementDuration] as String?,
+    );
     _getRecommendationList(movieData, document);
     _getCastDetailsList(movieData, document);
-    _getMovieContentType(movieData);
 
     return movieData;
   }
 
   /// Categorize the movie type.
-  void _getMovieContentType(Map movieData) {
-    final String id = movieData[outerElementIdentity] as String;
-    int? runtime;
+  MovieContentType? _getMovieContentType(
+    String? movieType,
+    String id,
+    String? runtime,
+  ) {
+    int? minutes;
+
+    // Convert runtime to minutes if possible.
     try {
-      final duration = Duration.zero.fromIso8601(
-        movieData[outerElementDuration],
-      );
-      runtime = duration.inMinutes;
+      minutes = Duration.zero.fromIso8601(runtime).inMinutes;
     } catch (_) {}
 
-    final type = getImdbMovieContentType(
-      movieData[outerElementType],
-      runtime,
+    return getImdbMovieContentType(
+      movieType,
+      minutes,
       id,
     );
-    movieData[outerElementType] = type ?? MovieContentType.none;
   }
 
   /// Use CSS selector to find the JSON script on the page
@@ -235,7 +251,7 @@ mixin ScrapeIMDBTitleDetails
   }
 
   Future _fetchAdditionalPersonDetails(dynamic people) async {
-    final cast = ImdbTitleConverter.getPeopleFromJson(people);
+    final cast = ImdbWebScraperConverter.getPeopleFromJson(people);
     for (final people in cast) {
       final detailCriteria = SearchCriteriaDTO();
       detailCriteria.criteriaTitle = people.uniqueId;

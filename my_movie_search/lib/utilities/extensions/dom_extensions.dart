@@ -1,6 +1,6 @@
 import 'package:html/dom.dart' show Element, Node;
 
-//Entend stardard dart library to use enums instead of hard coded strings
+// Extend standard dart library to use enums instead of hard coded strings
 enum ElementType { anchor, image, text, table, row }
 
 const Map<ElementType, String> _htmlTags = {

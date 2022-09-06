@@ -1,8 +1,8 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/cache/imdb_name.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/webscrapers/imdb_name.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -48,7 +48,7 @@ class QueryIMDBNameDetails
   /// Convert IMDB map to MovieResultDTO records.
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
-    if (map is Map) return ImdbNamePageConverter.dtoFromCompleteJsonMap(map);
+    if (map is Map) return ImdbWebScraperConverter.dtoFromCompleteJsonMap(map);
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
 

@@ -3,7 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
-import 'package:my_movie_search/utilities/extensions/dom_extentions.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';

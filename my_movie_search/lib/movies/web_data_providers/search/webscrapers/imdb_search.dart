@@ -2,14 +2,14 @@ import 'dart:convert';
 
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_search.dart';
-import 'package:my_movie_search/utilities/extensions/dom_extentions.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const _searchResultsTable = 'findList';
@@ -53,17 +53,17 @@ mixin ScrapeIMDBSearchDetails
   }
 
   /// Delegate web scraping to IMDBPerson web scraper.
-  Future<List> _scrapePersonResult(String webText) async {
-    return [
-      await QueryIMDBNameDetails().myConvertWebTextToTraversableTree(webText)
-    ];
+  Future<List> _scrapePersonResult(String webText) {
+    final person = QueryIMDBNameDetails();
+    person.criteria = criteria;
+    return person.myConvertWebTextToTraversableTree(webText);
   }
 
   /// Delegate web scraping to IMDBMovie web scraper.
-  Future<List> _scrapeMovieResult(String webText) async {
-    return [
-      await QueryIMDBTitleDetails().myConvertWebTextToTraversableTree(webText)
-    ];
+  Future<List> _scrapeMovieResult(String webText) {
+    final movie = QueryIMDBTitleDetails();
+    movie.criteria = criteria;
+    return movie.myConvertWebTextToTraversableTree(webText);
   }
 
   /// Extract movie data from rows in html table(s).
@@ -85,10 +85,11 @@ mixin ScrapeIMDBSearchDetails
   /// <img>           -> Image
   /// <a href>        -> AnchorAddress
   /// <td> text </td> -> Info (year and type)
-  Map<String, String?> _extractRowData(Element tableRow) {
-    final rowData = <String, String?>{};
+  Map _extractRowData(Element tableRow) {
+    final rowData = {};
     for (final tableColumn in tableRow.children) {
       if (tableColumn.className == _columnMovieText) {
+        rowData[dataSource] = DataSourceType.imdbSearch;
         String title = rowData[outerElementOfficialTitle]?.toString() ?? '';
         String uniqueId = rowData[outerElementIdentity]?.toString() ?? '';
 
@@ -102,17 +103,17 @@ mixin ScrapeIMDBSearchDetails
           title = element.text;
         });
 
+        rowData[outerElementIdentity] = uniqueId;
+        rowData[outerElementOfficialTitle] = title;
+        rowData[outerElementYearRange] = getYearRange(info);
+
         final movieType = findImdbMovieContentTypeFromTitle(
           info,
           title,
           null, // Unknown duration.
           uniqueId,
-        )?.toString();
-
-        rowData[outerElementYear] = getYearRange(info);
+        );
         rowData[outerElementType] = movieType;
-        rowData[outerElementIdentity] = uniqueId;
-        rowData[outerElementOfficialTitle] = title;
       } else if (tableColumn.className == _columnMoviePoster) {
         // <img> -> Image
         tableColumn.getElementsByType(ElementType.image).forEach((element) {

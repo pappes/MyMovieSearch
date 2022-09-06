@@ -4,8 +4,8 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/cache/imdb_name.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_name.dart';
 import 'package:my_movie_search/utilities/environment.dart';
@@ -36,7 +36,7 @@ void main() {
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('tmdb finder unit tests', () {
+  group('QueryIMDBNameDetails unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () async {
       expect(QueryIMDBNameDetails().myDataSourceName(), 'imdb_person');
@@ -91,7 +91,7 @@ void main() {
       final expectedOutput = intermediateMapList;
       final testClass = QueryIMDBNameDetails();
       final criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = 'tt7602562';
+      criteria.criteriaTitle = 'nm7602562';
       testClass.criteria = criteria;
       final actualOutput = await testClass.myConvertWebTextToTraversableTree(
         imdbHtmlSampleFull,
@@ -104,13 +104,13 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
       final expectedValue = expectedDTOList;
-      expectedValue.first.uniqueId = 'tt7602562';
+      expectedValue.first.uniqueId = 'nm7602562';
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          ImdbNamePageConverter.dtoFromCompleteJsonMap(map),
+          ImdbWebScraperConverter.dtoFromCompleteJsonMap(map),
         );
       }
 
@@ -186,7 +186,7 @@ void main() {
     test('add to cache via readPrioritisedCachedList', () async {
       final testClass = QueryIMDBNameDetails();
       await testClass.clearThreadedCache();
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      final criteria = SearchCriteriaDTO().fromString('nm7602562');
       await testClass.readPrioritisedCachedList(
         criteria,
         source: streamImdbHtmlOfflineData,
@@ -211,7 +211,7 @@ void main() {
     test('fetch result from cache', () async {
       final testClass = QueryIMDBNameDetails();
       await testClass.clearThreadedCache();
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      final criteria = SearchCriteriaDTO().fromString('nm7602562');
       await testClass.readPrioritisedCachedList(
         criteria,
         source: streamImdbHtmlOfflineData,
@@ -228,7 +228,7 @@ void main() {
     test('clear cache', () async {
       final testClass = QueryIMDBNameDetails();
       await testClass.clearThreadedCache();
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      final criteria = SearchCriteriaDTO().fromString('nm7602562');
       await testClass.readPrioritisedCachedList(
         criteria,
         source: streamImdbHtmlOfflineData,
@@ -324,8 +324,8 @@ void main() {
   /// Integration tests using WebFetchBase and env and QueryIMDBNameDetails
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('tmdb search query', () {
-    // Read tmdb search results from a simulated byte stream and convert JSON to dtos.
+  group('imdb search query', () {
+    // Read imdb search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Wait for api key to be initialised
       await EnvironmentVars.init();
@@ -334,7 +334,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBNameDetails();
       await testClass.myClearCache();
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      final criteria = SearchCriteriaDTO().fromString('nm7602562');
 
       // Invoke the functionality.
       await testClass
@@ -357,7 +357,7 @@ void main() {
       );
     });
 
-    // Read tmdb search results from a simulated byte stream and report error due to invalid html.
+    // Read imdb search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
@@ -373,7 +373,7 @@ void main() {
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read tmdb search results from a simulated byte stream and report error due to unexpected html.
+    // Read imdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
