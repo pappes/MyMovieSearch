@@ -218,30 +218,6 @@ extension MapResultDTOConversion on Map {
   /// Related movie list is a json encoded DTO
   /// Wrapped in a map using uniqueId as key
   /// Which is wrapped in another map using category name as key.
-  Map<String, Map<String, MovieResultDTO>> ___stringToRelated(dynamic input) {
-    final result = <String, Map<String, MovieResultDTO>>{};
-    if (null != input) {
-      final categoriesMap = jsonDecode(input.toString()) as Map;
-      for (final categoryEntry in categoriesMap.entries) {
-        final categoryName = dynamicToString(categoryEntry.key);
-        final movies = jsonDecode(categoryEntry.value.toString()) as Map;
-
-        final categoryResults = <String, MovieResultDTO>{};
-        for (final movieEntry in movies.entries) {
-          final movieUniqueId = movieEntry.key.toString();
-          final movieMap = jsonDecode(movieEntry.value.toString()) as Map;
-
-          final movieDto = movieMap.toMovieResultDTO();
-          categoryResults[movieUniqueId] = movieDto;
-        }
-        result[categoryName] = categoryResults;
-      }
-    }
-    return result;
-  }
-
-//TODO delete me
-
   Map<String, Map<String, MovieResultDTO>> stringToRelated(dynamic categories) {
     final Map<String, Map<String, MovieResultDTO>> related = {};
     if (categories is Map) {
