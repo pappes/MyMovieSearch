@@ -3,6 +3,9 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
+/* To update this data run
+       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
+in test('Run dtoFromCompleteJsonMap()'*/
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   '{"source": "imdbSearch", "uniqueId": "tt0451279", "title": "Search Woman", "year": "2017", "yearRange": "2017", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BMTYz...GdeQXVyODE5NzE3OTE@._V1_UX32_CR0,0,32,44_AL_.jpg", "related": {}}',

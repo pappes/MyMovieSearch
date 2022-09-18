@@ -3,14 +3,21 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+
+/* To update this data run
+       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
+in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   '''
-{"source": "imdb", "uniqueId": "tt7602562", "languages": [], "genres": [], "keywords": [], 
-"related": {
-  "Directed by:": ["nm0001112"], 
-  "Writing Credits:": ["nm0835732", "nm0878638", "nm0400403"], 
-  "Cast:": ["nm0000148", "nm0000169", "nm0000688"]}}
-'''
+{"uniqueId":"tt7602562","source":"DataSourceType.imdb","languages":"[]","genres":"[]","keywords":"[]",
+  "related":{"Directed by:":{"nm0001112":{"uniqueId":"nm0001112","source":"DataSourceType.imdbSuggestions","title":"Andrew Davis","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
+    "Writing Credits:":{"nm0835732":{"uniqueId":"nm0835732","source":"DataSourceType.imdbSuggestions","title":"Jeb Stuart","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm0878638":{"uniqueId":"nm0878638","source":"DataSourceType.imdbSuggestions","title":"David Twohy","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm0400403":{"uniqueId":"nm0400403","source":"DataSourceType.imdbSuggestions","title":"Roy Huggins","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
+    "Cast:":{"nm0000148":{"uniqueId":"nm0000148","source":"DataSourceType.imdbSuggestions","title":"Harrison Ford","alternateTitle":"Dr. Richard Kimble","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm0000169":{"uniqueId":"nm0000169","source":"DataSourceType.imdbSuggestions","title":"Tommy Lee Jones","alternateTitle":"Samuel Gerard","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm0000688":{"uniqueId":"nm0000688","source":"DataSourceType.imdbSuggestions","title":"Sela Ward","alternateTitle":"Helen Kimble","languages":"[]","genres":"[]","keywords":"[]","related":{}}}}}
+''',
 ];
 
 const intermediateMapList = [

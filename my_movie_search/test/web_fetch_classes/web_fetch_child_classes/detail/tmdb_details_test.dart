@@ -57,10 +57,11 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () async {
       const expectedResult = {
+        'uniqueId': '-1',
         'source': 'DataSourceType.tmdbMovie',
         'title': '[QueryTMDBDetails] new query',
         'type': 'MovieContentType.custom',
-        'related': '{}'
+        'related': {}
       };
 
       // Invoke the functionality.
@@ -84,7 +85,6 @@ void main() {
   group('TmdbMovieDetailConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
-      final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -94,6 +94,7 @@ void main() {
         );
       }
 
+      final expectedValue = expectedDTOList;
       // Check the results.
       expect(
         actualResult,

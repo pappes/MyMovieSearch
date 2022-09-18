@@ -4,7 +4,18 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+
+/* To update this data run
+       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
+in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
+  r'''
+{"uniqueId":"nm7602562","source":"DataSourceType.imdb","title":"Franka Potente","type":"MovieContentType.person","year":"1974","yearRange":"1974-","languages":"[]","genres":"[]","keywords":"[]","description":"Franka Potente was born on 22 July 1974 in the German city of Münster, to Hildegard, a medical assistant, and Dieter Potente, a teacher, and raised in the nearby town of Dülmen. After her graduation in 1994, she went to the Otto-Falckenberg-Schule, a drama school in Munich, but soon broke off to study at the Lee Strasberg Theatre Institute in New ...","imageUrl":"https://m.media-amazon.com/images/M/MV5BNTY3ODYyNjU0NV5BMl5BanBnXkFtZTcwNDMxNDE3OA@@._V1_UY317_CR5,0,214,317_AL_.jpg",
+  "related":{"actress":{"tt3520738":{"uniqueId":"tt3520738","source":"DataSourceType.imdbSuggestions","title":"\n    Blanco\n            ","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "tt10933008":{"uniqueId":"tt10933008","source":"DataSourceType.imdbSuggestions","title":"\n    The Haunted Swordsman","languages":"[]","genres":"[]","keywords":"[]","related":{}}}}}
+''',
+];
+const _expectedDtoJsonStringList = [
   '''
 {"source": "imdb", "uniqueId": "nm7602562", "title": "Franka Potente", "type": "person", "year": "1974", "yearRange": "1974-", "languages": [], "genres": [], "keywords": [], 
 "description": "Franka Potente was born on 22 July 1974 in the German city of Münster, to Hildegard, a medical assistant, and Dieter Potente, a teacher, and raised in the nearby town of Dülmen. After her graduation in 1994, she went to the Otto-Falckenberg-Schule, a drama school in Munich, but soon broke off to study at the Lee Strasberg Theatre Institute in New ...", 

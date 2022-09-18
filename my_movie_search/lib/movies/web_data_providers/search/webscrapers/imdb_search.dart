@@ -10,6 +10,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const _searchResultsTable = 'findList';
@@ -90,8 +91,10 @@ mixin ScrapeIMDBSearchDetails
     for (final tableColumn in tableRow.children) {
       if (tableColumn.className == _columnMovieText) {
         rowData[dataSource] = DataSourceType.imdbSearch;
-        String title = rowData[outerElementOfficialTitle]?.toString() ?? '';
-        String uniqueId = rowData[outerElementIdentity]?.toString() ?? '';
+        String title =
+            DynamicHelper.toString_(rowData[outerElementOfficialTitle]);
+        String uniqueId =
+            DynamicHelper.toString_(rowData[outerElementIdentity]);
 
         // <td> text </td> -> Title (year) (Type)
         final info = tableColumn.text;

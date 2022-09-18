@@ -40,19 +40,17 @@ Future<String?> globalFnThreadName(int value) async {
 
 class DynamicHelperTest {
   String callToString(dynamic val) => dynamicToString(val);
-  static String callToString_(dynamic val) =>
-      DynamicHelper.dynamicToString_(val);
+  static String callToString_(dynamic val) => DynamicHelper.toString_(val);
 
   List<String> callToStringList(dynamic val) => dynamicToStringList(val);
   static List<String> callToStringList_(dynamic val) =>
-      DynamicHelper.dynamicToStringList_(val);
+      DynamicHelper.toStringList_(val);
 
   int callToInt(dynamic val) => dynamicToInt(val);
-  static int callToInt_(dynamic val) => DynamicHelper.dynamicToInt_(val);
+  static int callToInt_(dynamic val) => DynamicHelper.toInt_(val);
 
   double callToDouble(dynamic val) => dynamicToDouble(val);
-  static double callToDouble_(dynamic val) =>
-      DynamicHelper.dynamicToDouble_(val);
+  static double callToDouble_(dynamic val) => DynamicHelper.toDouble_(val);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

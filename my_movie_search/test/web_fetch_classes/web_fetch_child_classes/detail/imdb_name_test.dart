@@ -75,7 +75,7 @@ void main() {
         'source': 'DataSourceType.imdb',
         'title': '[QueryIMDBNameDetails] new query',
         'type': 'MovieContentType.custom',
-        'related': '{}'
+        'related': {}
       };
 
       // Invoke the functionality.
@@ -103,8 +103,6 @@ void main() {
   group('ImdbNamePageConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
-      final expectedValue = expectedDTOList;
-      expectedValue.first.uniqueId = 'nm7602562';
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -114,7 +112,8 @@ void main() {
         );
       }
 
-      actualResult.first.alternateId = "";
+      final expectedValue = expectedDTOList;
+      expectedValue.first.uniqueId = 'nm7602562';
       // Check the results.
       expect(
         actualResult,

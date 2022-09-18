@@ -10,6 +10,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 import 'package:universal_io/io.dart'
@@ -117,8 +118,8 @@ class QueryUnknownSourceMocked
   static MovieResultDTO mapToDto(Map map) {
     final result = MovieResultDTO();
     result.source = DataSourceType.custom;
-    result.uniqueId = map[outerElementIdentity]?.toString() ?? '';
-    result.description = map[outerElementDescription]?.toString() ?? '';
+    result.uniqueId = DynamicHelper.toString_(map[outerElementIdentity]);
+    result.description = DynamicHelper.toString_(map[outerElementDescription]);
     return result;
   }
 

@@ -20,6 +20,10 @@ import 'dart:convert';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+
+/* To update this data run
+       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
+in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   '''
 {"source": "tmdbMovie", "uniqueId": "104", "alternateId": "tt0130827", "title": "Lola rennt (Run Lola Run", "year": "1998", "runTime": "4860", 

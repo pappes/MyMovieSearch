@@ -70,7 +70,7 @@ class ImdbWebScraperConverter {
     for (final person in getPeopleFromJson(map[outerElementActors])) {
       movie.addRelated(relatedActorsLabel, person);
     }
-    _getRelated(movie, map[outerElementActors], relatedActorsLabel);
+    // _getRelated(movie, map[outerElementActors], relatedActorsLabel);
     _getRelated(movie, map[outerElementRelated], _relatedMoviesLabel);
 
     final related = map[outerElementRelated];

@@ -11,6 +11,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -114,8 +115,8 @@ mixin ScrapeIMDBTitleDetails
     final descriptionElement =
         document.querySelector('div[data-testid="storyline-plot-summary"]') ??
             document.querySelector('span[data-testid*="plot"]');
-    final newDescription = descriptionElement?.text ?? '';
-    final oldDescription = (movieData[outerElementDescription] ?? '') as String;
+    final newDescription = dynamicToString(descriptionElement?.text);
+    final oldDescription = dynamicToString(movieData[outerElementDescription]);
     if (newDescription.length > oldDescription.length) {
       movieData[outerElementDescription] = newDescription;
     }

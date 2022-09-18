@@ -24,9 +24,10 @@ Matcher containsSubstring(String substring, {String startsWith = ''}) {
 /// Expectation matcher for test framework to compare DTOs
 class MovieResultDTOMatcher extends Matcher {
   MovieResultDTO expected;
+  bool related;
   late MovieResultDTO _actual;
 
-  MovieResultDTOMatcher(this.expected);
+  MovieResultDTOMatcher(this.expected, {this.related = true});
 
   @override
   // Tell test framework what content was expected.
@@ -44,9 +45,10 @@ class MovieResultDTOMatcher extends Matcher {
     Map<dynamic, dynamic> matchState,
     bool verbose,
   ) {
-    return mismatchDescription.add(
-      'has actual emitted MovieResultDTO = \n${_actual.toPrintableString()}',
+    mismatchDescription.add(
+      'has actual emitted MovieResultDTO = \n${_actual.toPrintableString()}\n',
     );
+    return mismatchDescription.add(matchState['differences'].toString());
   }
 
   @override
@@ -58,16 +60,17 @@ class MovieResultDTOMatcher extends Matcher {
       _actual = MovieResultDTO().toUnknown();
     }
     matchState['actual'] = _actual;
-    return _actual.matches(expected);
+    return expected.matches(_actual, matchState: matchState, related: related);
   }
 }
 
 /// Expectation matcher for test framework to compare DTO lists
 class MovieResultDTOListMatcher extends Matcher {
   List<MovieResultDTO> expected;
+  bool related;
   late List<MovieResultDTO> _actual;
 
-  MovieResultDTOListMatcher(this.expected);
+  MovieResultDTOListMatcher(this.expected, {this.related = true});
 
   @override
   // Tell test framework what content was expected.
@@ -83,7 +86,8 @@ class MovieResultDTOListMatcher extends Matcher {
     Map<dynamic, dynamic> matchState,
     bool verbose,
   ) {
-    return mismatchDescription.add('has actual ${_actual.toPrintableString()}');
+    mismatchDescription.add('has actual ${_actual.toPrintableString()}\n');
+    return mismatchDescription.add(matchState['differences'].toString());
   }
 
   @override
@@ -97,7 +101,8 @@ class MovieResultDTOListMatcher extends Matcher {
     matchState['actual'] = _actual;
     if (_actual.length != expected.length) return false;
     for (var i = 0; i < _actual.length; i++) {
-      if (!_actual[i].matches(expected[i])) {
+      if (!_actual[i]
+          .matches(expected[i], matchState: matchState, related: related)) {
         return false;
       }
     }
@@ -128,7 +133,13 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
     Map<dynamic, dynamic> matchState,
     bool verbose,
   ) {
-    return mismatchDescription.add('has actual ${_actual.toPrintableString()}');
+    mismatchDescription.add('has actual ${_actual.toPrintableString()}\n');
+    for (final difference in matchState.entries) {
+      mismatchDescription.add(
+        ' UniqueId ${difference.key} mismatch is \n${difference.value}',
+      );
+    }
+    return mismatchDescription;
   }
 
   @override
@@ -144,12 +155,16 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
 
     for (final actualDto in _actual) {
       for (final expectedDto in expected) {
-        if (actualDto.matches(expectedDto)) {
+        final differences = {};
+        if (actualDto.matches(expectedDto,
+            matchState: differences, related: false)) {
           matchQuantity--;
           if (0 == matchQuantity) {
             // There have been enough matches to declare victory!
             return true;
           }
+        } else {
+          matchState[actualDto.uniqueId] = differences;
         }
       }
     }
@@ -200,7 +215,26 @@ Stream<MovieResultDTO> streamMovieResultDTOFromJsonMap(
 }
 
 /// Helper function to make a unique dto containing unique values.
-MovieResultDTO makeResultDTO(String sample) {
+MovieResultDTO makeResultDTOWithRelatedDTO(String sample) {
+  final mainDto = makeResultDTO(sample);
+  final relatedDto1 = makeResultDTO("{sample}1");
+  final relatedDto2 = makeResultDTO("{sample}2");
+  final relatedDto3 = makeResultDTO("{sample}3");
+  final relatedDto4 = makeResultDTO("{sample}4");
+  mainDto.related = {
+    "director": <String, MovieResultDTO>{},
+    "actor": <String, MovieResultDTO>{},
+    "writer": <String, MovieResultDTO>{},
+  };
+  mainDto.related["director"]![relatedDto1.uniqueId] = relatedDto1;
+  mainDto.related["director"]![relatedDto2.uniqueId] = relatedDto2;
+  mainDto.related["actor"]![relatedDto3.uniqueId] = relatedDto3;
+  mainDto.related["writer"]![relatedDto4.uniqueId] = relatedDto4;
+  return mainDto;
+}
+
+/// Helper function to make a unique dto containing unique values.
+MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
   final dto = MovieResultDTO();
 
   dto.source = DataSourceType.wiki;
@@ -221,6 +255,21 @@ MovieResultDTO makeResultDTO(String sample) {
   dto.languages = ['${sample}_language1', '${sample}_language2'];
   dto.genres = ['${sample}_genre1', '${sample}_genre2'];
   dto.keywords = ['${sample}_keyword1', '${sample}_keyword2'];
+  if (makeRelated) {
+    final ref = 'rel$sample';
+    dto.related = {
+      'suggestions': {
+        '$ref 1': makeResultDTO('$ref 1', makeRelated: false),
+        '$ref 2': makeResultDTO('$ref 2', makeRelated: false),
+        '$ref 3': makeResultDTO('$ref 3', makeRelated: false),
+      },
+      'actors': {
+        '$ref a': makeResultDTO('$ref a', makeRelated: false),
+        '$ref b': makeResultDTO('$ref b', makeRelated: false),
+        '$ref c': makeResultDTO('$ref c', makeRelated: false),
+      },
+    };
+  }
   return dto;
 }
 

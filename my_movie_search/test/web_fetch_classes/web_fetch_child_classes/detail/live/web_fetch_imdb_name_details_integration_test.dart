@@ -11,9 +11,17 @@ import '../../../../test_helper.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '{"source":"imdb","uniqueId":"-2","title":"[QueryIMDBNameDetails] Error in imdb_person with criteria nm0101000 interpreting web text as a map :imdb web scraper data not detected for criteria nm0101000","type":"custom","languages":[],"genres":[],"keywords":[],"related":"{}"}',
-  '{"source":"imdb","uniqueId":"nm0101001","title":"Steve Bower","type":"person","yearRange":"-","languages":[],"genres":[],"keywords":[],"description":"Steve Bower is an actor, known for Vintage Reds (1998), Late Kick Off North East and Cumbria (2010) and The Search for the Holy Grail (1998).","related":"{}"}',
-  '{"source":"imdb","uniqueId":"nm0101002","title":"Stone Bower","type":"person","yearRange":"-","languages":[],"genres":[],"keywords":[],"description":"Stone Bower is known for Against All Odds (1984), Death Valley (1982) and Jimmy the Kid (1982).","related":"{}"}',
+  r'''
+{"uniqueId":"-2","source":"DataSourceType.imdb","title":"[QueryIMDBNameDetails] Error in imdb_person with criteria nm0101000 interpreting web text as a map :imdb web scraper data not detected for criteria nm0101000","type":"MovieContentType.custom","languages":"[]","genres":"[]","keywords":"[]","related":{}}
+''',
+  r'''
+{"uniqueId":"nm0101001","source":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","yearRange":"-","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"Steve Bower is known for Vintage Reds (1998), Late Kick Off North East and Cumbria (2010) and The Search for the Holy Grail (1998).","related":{}}
+''',
+  r'''
+{"uniqueId":"nm0101002","source":"DataSourceType.imdb","title":"Stone Bower","type":"MovieContentType.person","yearRange":"-","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"Stone Bower is known for Against All Odds (1984), Death Valley (1982) and Jimmy the Kid (1982).","related":{}}
+''',
 ];
 
 /// Create a string list with [qty] unique criteria values.
@@ -59,15 +67,17 @@ void main() {
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+
+      // To update expected data, uncomment the following lines
+      // actualOutput.forEach((e) => e.related = {});
+      // print(actualOutput.toListOfDartJsonStrings());
+
       final expectedOutput = expectedDTOList;
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-
-      // To update expected data, uncomment the following line
-      //print(actualOutput.toJsonStrings());
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(expectedOutput),
+        MovieResultDTOListMatcher(expectedOutput, related: false),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
       );

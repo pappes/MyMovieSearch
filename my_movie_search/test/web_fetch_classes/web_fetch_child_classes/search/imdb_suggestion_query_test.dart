@@ -87,10 +87,11 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () async {
       const expectedResult = {
+        'uniqueId': '-1',
         'source': 'DataSourceType.imdbSuggestions',
         'title': '[QueryIMDBSuggestions] new query',
         'type': 'MovieContentType.custom',
-        'related': '{}'
+        'related': {}
       };
 
       // Invoke the functionality.

@@ -19,7 +19,11 @@ import 'dart:convert';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final
+/* To update this data run
+       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
+in test('Run dtoFromCompleteJsonMap()'*/
+    expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   '{"source": "tmdbMovie", "uniqueId": "429617", "title": "Spider-Man: Far from Home", "year": "2019", "languages": [], "genres": [], "keywords": [], "related": {}}',
   '{"source": "tmdbMovie", "uniqueId": "228161", "title": "Home", "year": "2015", "languages": [], "genres": [], "keywords": [], "related": {}}',

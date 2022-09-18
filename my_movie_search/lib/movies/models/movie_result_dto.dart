@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math' show max;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
@@ -160,7 +161,7 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   List<String> encodeList() {
     final result = <String>[];
     for (final dto in this) {
-      result.add(jsonEncode(dto.toMap(excludeCopyrightedData: false)));
+      result.add(dto.toJson(excludeCopyrightedData: false));
     }
     return result;
   }
@@ -208,8 +209,65 @@ extension MapResultDTOConversion on Map {
     dto.languages = dynamicToStringList(this[movieResultDTOLanguages]);
     dto.genres = dynamicToStringList(this[movieResultDTOGenres]);
     dto.keywords = dynamicToStringList(this[movieResultDTOKeywords]);
-    //TODO related
+    dto.related = stringToRelated(this[movieResultDTORelated]);
     return dto;
+  }
+
+  /// Convert json encoded related movies list to Map.
+  ///
+  /// Related movie list is a json encoded DTO
+  /// Wrapped in a map using uniqueId as key
+  /// Which is wrapped in another map using category name as key.
+  Map<String, Map<String, MovieResultDTO>> ___stringToRelated(dynamic input) {
+    final result = <String, Map<String, MovieResultDTO>>{};
+    if (null != input) {
+      final categoriesMap = jsonDecode(input.toString()) as Map;
+      for (final categoryEntry in categoriesMap.entries) {
+        final categoryName = dynamicToString(categoryEntry.key);
+        final movies = jsonDecode(categoryEntry.value.toString()) as Map;
+
+        final categoryResults = <String, MovieResultDTO>{};
+        for (final movieEntry in movies.entries) {
+          final movieUniqueId = movieEntry.key.toString();
+          final movieMap = jsonDecode(movieEntry.value.toString()) as Map;
+
+          final movieDto = movieMap.toMovieResultDTO();
+          categoryResults[movieUniqueId] = movieDto;
+        }
+        result[categoryName] = categoryResults;
+      }
+    }
+    return result;
+  }
+
+//TODO delete me
+
+  Map<String, Map<String, MovieResultDTO>> stringToRelated(dynamic categories) {
+    final Map<String, Map<String, MovieResultDTO>> related = {};
+    if (categories is Map) {
+      // Find the categories that movie are collected under e.g. "director", "writer", etc
+      for (final category in categories.entries) {
+        if (category.value is Map) {
+          final categoryText = category.key.toString();
+          final categoryContents = category.value as Map;
+          // Build a collection of movies keyed by the unique id.
+          final Map<String, MovieResultDTO> movies = {};
+          for (final movie in categoryContents.entries) {
+            if (movie.value is Map) {
+              final movieId = movie.key.toString();
+              // Build DTO based on attributes encoded in the map.
+              final Map movieAttributes = movie.value as Map;
+              final dto = movieAttributes.toMovieResultDTO();
+              movies[movieId] = dto;
+            }
+          }
+          if (movies.isNotEmpty) {
+            related[categoryText] = movies;
+          }
+        }
+      }
+    }
+    return related;
   }
 }
 
@@ -231,75 +289,95 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return this;
   }
 
+  /// Convert a json [String] to a [MovieResultDTO].
+  ///
+  MovieResultDTO fromJson(dynamic json) {
+    final decoded = jsonDecode(json.toString());
+    if (decoded is Map) return decoded.toMovieResultDTO();
+    return MovieResultDTO();
+  }
+
+  /// Convert a [MovieResultDTO] to a json [String].
+  ///
+  String toJson({bool excludeCopyrightedData = true}) {
+    return jsonEncode(toMap(excludeCopyrightedData: excludeCopyrightedData));
+  }
+
   /// Convert a [MovieResultDTO] object into a [Map].
   ///
-  Map<String, String> toMap({bool excludeCopyrightedData = true}) {
-    final map = <String, String>{};
+  /// All returned objects are compatible with the [StandardMessageCodec] class.
+  /// i.e. only contain string, number, bool, map or list.
+  Map<String, Object> toMap({bool excludeCopyrightedData = true}) {
+    final result = <String, Object>{};
     final defaultValues = MovieResultDTO();
+    result[movieResultDTOUniqueId] = uniqueId;
     if (source != defaultValues.source) {
-      map[movieResultDTOSource] = source.toString();
-    }
-    if (uniqueId != defaultValues.uniqueId) {
-      map[movieResultDTOUniqueId] = uniqueId;
+      result[movieResultDTOSource] = source.toString();
     }
     if (alternateId != defaultValues.alternateId) {
-      map[movieResultDTOAlternateId] = alternateId;
+      result[movieResultDTOAlternateId] = alternateId;
     }
-    if (title != defaultValues.title) map[movieResultDTOTitle] = title;
+    if (title != defaultValues.title) result[movieResultDTOTitle] = title;
     if (alternateTitle != defaultValues.alternateTitle) {
-      map[movieResultDTOAlternateTitle] = alternateTitle;
+      result[movieResultDTOAlternateTitle] = alternateTitle;
     }
 
     if (type != defaultValues.type) {
-      map[movieResultDTOType] = type.toString();
+      result[movieResultDTOType] = type.toString();
     }
     if (year != defaultValues.year) {
-      map[movieResultDTOYear] = year.toString();
+      result[movieResultDTOYear] = year.toString();
     }
     if (yearRange != defaultValues.yearRange) {
-      map[movieResultDTOYearRange] = yearRange;
+      result[movieResultDTOYearRange] = yearRange;
     }
     if (runTime != defaultValues.runTime) {
-      map[movieResultDTORunTime] = runTime.inSeconds.toString();
+      result[movieResultDTORunTime] = runTime.inSeconds.toString();
     }
     if (language != defaultValues.language) {
-      map[movieResultDTOLanguage] = language.toString();
+      result[movieResultDTOLanguage] = language.toString();
     }
 
     if (!excludeCopyrightedData) {
       if (languages != defaultValues.languages) {
-        map[movieResultDTOLanguages] = json.encode(languages);
+        result[movieResultDTOLanguages] = json.encode(languages);
       }
       if (genres != defaultValues.genres) {
-        map[movieResultDTOGenres] = json.encode(genres);
+        result[movieResultDTOGenres] = json.encode(genres);
       }
       if (keywords != defaultValues.keywords) {
-        map[movieResultDTOKeywords] = json.encode(keywords);
+        result[movieResultDTOKeywords] = json.encode(keywords);
       }
       if (description != defaultValues.description) {
-        map[movieResultDTODescription] = description;
+        result[movieResultDTODescription] = description;
       }
       if (userRating != defaultValues.userRating) {
-        map[movieResultDTOUserRating] = userRating.toString();
+        result[movieResultDTOUserRating] = userRating.toString();
       }
       if (userRatingCount != defaultValues.userRatingCount) {
-        map[movieResultDTOUserRatingCount] = userRatingCount.toString();
+        result[movieResultDTOUserRatingCount] = userRatingCount.toString();
       }
       if (censorRating != defaultValues.censorRating) {
-        map[movieResultDTOCensorRating] = censorRating.toString();
+        result[movieResultDTOCensorRating] = censorRating.toString();
       }
       if (imageUrl != defaultValues.imageUrl) {
-        map[movieResultDTOImageUrl] = imageUrl;
+        result[movieResultDTOImageUrl] = imageUrl;
       }
     }
-    //TODO: related
-    final relatedMap = <String, String>{};
-    related.forEach(
-      (key, childMap) => // Get comma delimited uniqueIds
-          relatedMap[key] = childMap.keys.toString(),
-    );
-    map[movieResultDTORelated] = relatedMap.toString();
-    return map;
+    // convert each related dto to a string
+    final relatedMap = <String, Object>{};
+    for (final category in related.entries) {
+      final Map movies = {};
+      for (final dto in category.value.entries) {
+        final movieMap = dto.value.toMap(
+          excludeCopyrightedData: excludeCopyrightedData,
+        );
+        movies[dto.value.uniqueId] = movieMap;
+      }
+      relatedMap[category.key] = movies;
+    }
+    result[movieResultDTORelated] = relatedMap;
+    return result;
   }
 
   /// Add [relatedDto] into the related movies list of a [MovieResultDTO] in the [key] section.
@@ -466,27 +544,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return toMap(excludeCopyrightedData: false).toString();
   }
 
-  String toJson() {
-    String encode(Object? dto) {
-      if (null != dto && dto is MovieResultDTO) {
-        final Map<String, dynamic> map = {};
-        map.addAll(dto.toMap(excludeCopyrightedData: false));
-        map["languages"] = dto.languages;
-        map["genres"] = dto.genres;
-        map["keywords"] = dto.keywords;
-        //map["related"] = dto.related;
-        return jsonEncode(
-          map,
-          toEncodable: encode,
-        );
-      } else {
-        return dto.toString();
-      }
-    }
-
-    return encode(this);
-  }
-
   /// Create a placeholder for a value that can not be easily represented
   /// as a [MovieResultDTO].
   ///
@@ -518,28 +575,47 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Test framework matcher to compare current [MovieResultDTO] to [other]
   ///
   /// Explains any difference found.
-  bool matches(MovieResultDTO other) {
+  bool matches(MovieResultDTO other, {Map? matchState, bool related = true}) {
     if (title == other.title && title == 'unknown') return true;
 
-    return source == other.source &&
-        uniqueId == other.uniqueId &&
-        alternateId == other.alternateId &&
-        title == other.title &&
-        alternateTitle == other.alternateTitle &&
-        description == other.description &&
-        type == other.type &&
-        year == other.year &&
-        yearRange == other.yearRange &&
-        userRating == other.userRating &&
-        censorRating == other.censorRating &&
-        runTime == other.runTime &&
-        language == other.language &&
-        languages.toString() == other.languages.toString() &&
-        genres.toString() == other.genres.toString() &&
-        keywords.toString() == other.keywords.toString() &&
-        imageUrl == other.imageUrl;
-    // TODO reinstate when toMovieResultDTO can convert text to related.
-    // this.related.toPrintableString() == other.related.toPrintableString();
+    final mismatches = <String, String>{};
+    void _matchCompare<T>(String field, T expected, T actual) {
+      if (expected != actual) {
+        mismatches[field] =
+            'is different\n  Expected: "$expected"\n  Actual: "$actual"';
+      }
+    }
+
+    _matchCompare('source', source, other.source);
+    _matchCompare('uniqueId', uniqueId, other.uniqueId);
+    _matchCompare('alternateId', alternateId, other.alternateId);
+    _matchCompare('title', title, other.title);
+    _matchCompare('alternateTitle', alternateTitle, other.alternateTitle);
+    _matchCompare('description', description, other.description);
+    _matchCompare('type', type, other.type);
+    _matchCompare('year', year, other.year);
+    _matchCompare('yearRange', yearRange, other.yearRange);
+    _matchCompare('userRating', userRating, other.userRating);
+    _matchCompare('censorRating', censorRating, other.censorRating);
+    _matchCompare('runTime', runTime, other.runTime);
+    _matchCompare('imageUrl', imageUrl, other.imageUrl);
+    _matchCompare('language', language, other.language);
+    _matchCompare(
+        'languages', languages.toString(), other.languages.toString());
+    _matchCompare('genres', genres.toString(), other.genres.toString());
+    _matchCompare('keywords', keywords.toString(), other.keywords.toString());
+
+    if (related) {
+      final expected = this.related.toPrintableString();
+      final actual = other.related.toPrintableString();
+      if (expected != actual) _matchCompare('related', expected, actual);
+    }
+
+    if (mismatches.isNotEmpty) {
+      if (null != matchState) matchState['differences'] = mismatches;
+      return false;
+    }
+    return true;
   }
 }
 
@@ -568,12 +644,52 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
   }
 
   /// Return a list of strings containing valid json
-  String toJsonStrings() {
+  ///
+  /// used for constructing test data
+  String toListOfDartJsonStrings({bool excludeCopyrightedData = true}) {
     final listContents = StringBuffer();
     for (final entry in this) {
-      listContents.write("'${entry.toJson().replaceAll("'", "\\'")}',\n");
+      final json = entry.toJson(excludeCopyrightedData: excludeCopyrightedData);
+      final dartString = "r'''\n${json.replaceAll("'", "'")}\n''',\n";
+      listContents.write(FormatDtoJson(dartString));
     }
     return "[\n$listContents]";
+  }
+
+  /// Return a list of strings containing valid json
+  ///
+  /// used for constructing test data
+  String FormatDtoJson(String json) {
+    var formatted = json;
+    formatted = formatted.replaceAll(
+      '"related":{"',
+      '\n  "related":{"',
+    );
+    formatted = formatted.replaceAll(
+      '"languages":"[\\"',
+      '\n      "languages":"[\\"',
+    );
+    formatted = formatted.replaceAll(
+      '"genres":"[\\"',
+      '\n      "genres":"[\\"',
+    );
+    formatted = formatted.replaceAll(
+      '"keywords":"[\\"',
+      '\n      "keywords":"[\\"',
+    );
+    formatted = formatted.replaceAll(
+      '"description":"',
+      '\n      "description":"',
+    );
+    formatted = formatted.replaceAll(
+      '}},"',
+      '}},\n      "',
+    );
+    formatted = formatted.replaceAll(
+      '}}},\n  ',
+      '}}},\n',
+    );
+    return formatted;
   }
 
   /// Create a json encoded representation of a [List]<[MovieResultDTO]>.

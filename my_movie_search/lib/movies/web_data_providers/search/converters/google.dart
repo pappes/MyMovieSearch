@@ -2,6 +2,7 @@
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
@@ -105,7 +106,7 @@ class GoogleMovieSearchConverter {
   }
 
   static String getTitle(Map map) {
-    final String title = map[innerElementTitle]?.toString() ?? '';
+    final title = DynamicHelper.toString_(map[innerElementTitle]);
     final lastOpen = title.lastIndexOf('(');
     return lastOpen > 1 ? title.substring(0, lastOpen) : title;
   }
@@ -118,7 +119,7 @@ class GoogleMovieSearchConverter {
 
   static String getYearRange(Map map) {
     // Extract year range from 'title (TV Series 1988–1993)'
-    final String title = map[innerElementTitle]?.toString() ?? '';
+    final title = DynamicHelper.toString_(map[innerElementTitle]);
     final lastOpen = title.lastIndexOf('(');
     final lastClose = title.lastIndexOf(')');
     if (lastOpen == -1 || lastClose == -1) return '';
@@ -126,7 +127,7 @@ class GoogleMovieSearchConverter {
     final yearRange = title.substring(lastOpen + 1, lastClose);
     final filter = RegExp('[0-9].*[0-9]');
     final numerics = filter.stringMatch(yearRange);
-    return numerics ?? '';
+    return DynamicHelper.toString_(numerics);
   }
 
   static MovieContentType getType(Map map) {
@@ -141,7 +142,7 @@ class GoogleMovieSearchConverter {
   }
 
   static String getImage(Map map) {
-    return map[innerElementImage]?.toString() ?? '';
+    return DynamicHelper.toString_(map[innerElementImage]);
   }
 
   static double getRatingValue(Map map) {

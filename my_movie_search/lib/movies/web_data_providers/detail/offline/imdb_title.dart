@@ -4,14 +4,19 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-const expectedDtoJsonStringList = [
-  '''
-{"uniqueId": "tt7602562", "source": "imdb", "title": "1234", "type": "movie", "year": "2016", "yearRange": "2016", "language": "foreign",
-"languages": ["Marathi"], "genres": ["Drama"], "keywords": ["terror"], 
-"description": "1234 is a movie starring some people. On India's Independence Day, a few people have a party.", 
-"userRating": "6.5", "userRatingCount": "10", "imageUrl": "https://m.media-amazon.com/images/M/MV5BMDMyOD...XkEyXkFqcGdeQXVyMTc4OTM4NjE@._V1_.jpg", "related": {}}
 
-'''
+/* To update this data run
+       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
+in test('Run dtoFromCompleteJsonMap()'*/
+const expectedDtoJsonStringList = [
+  r'''
+{"uniqueId":"tt7602562","source":"DataSourceType.imdb","title":"1234","type":"MovieContentType.movie","year":"2016","yearRange":"2016","language":"LanguageType.foreign","languages":"[\"Marathi\"]","genres":"[\"Drama\"]","keywords":"[\"terror\"]","description":"1234 is a movie starring some people. On India's Independence Day, a few people have a party.","userRating":"6.5","userRatingCount":"10","imageUrl":"https://m.media-amazon.com/images/M/MV5BMDMyOD...XkEyXkFqcGdeQXVyMTc4OTM4NjE@._V1_.jpg",
+  "related":{"Directed by:":{"nm4940617":{"uniqueId":"nm4940617","source":"DataSourceType.imdbSuggestions","title":"Milind Arun Kavde","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
+    "Cast:":{"nm2487587":{"uniqueId":"nm2487587","source":"DataSourceType.imdbSuggestions","title":"Abhijeet Chavhan","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm3874318":{"uniqueId":"nm3874318","source":"DataSourceType.imdbSuggestions","title":"Kishore Chougule","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm5794167":{"uniqueId":"nm5794167","source":"DataSourceType.imdbSuggestions","title":"Tejaa Deokar","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm4391467":{"uniqueId":"nm4391467","source":"DataSourceType.imdbSuggestions","title":"Arun Kadam","languages":"[]","genres":"[]","keywords":"[]","related":{}}}}}
+''',
 ];
 
 const intermediateMapList = [

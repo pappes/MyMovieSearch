@@ -60,7 +60,7 @@ void main() {
         'source': 'DataSourceType.omdb',
         'title': '[QueryOMDBMovies] new query',
         'type': 'MovieContentType.custom',
-        'related': '{}'
+        'related': {}
       };
 
       // Invoke the functionality.
@@ -84,7 +84,6 @@ void main() {
   group('OmdbMovieSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
-      final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -94,6 +93,7 @@ void main() {
         );
       }
 
+      final expectedValue = expectedDTOList;
       // Check the results.
       expect(
         actualResult,

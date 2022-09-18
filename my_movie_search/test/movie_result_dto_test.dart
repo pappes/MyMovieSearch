@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -29,6 +31,22 @@ class RestorationTestParent extends State with RestorationMixin {
   @override
   Widget build(BuildContext context) {
     return const Text('');
+  }
+}
+
+void clearCopyright(MovieResultDTO dto) {
+  dto.description = '';
+  dto.imageUrl = '';
+  dto.userRating = 0;
+  dto.userRatingCount = 0;
+  dto.censorRating = CensorRatingType.none;
+  dto.languages.clear();
+  dto.genres.clear();
+  dto.keywords.clear();
+  for (final category in dto.related.keys) {
+    for (final uniqueId in dto.related[category]!.keys) {
+      clearCopyright(dto.related[category]![uniqueId]!);
+    }
   }
 }
 
@@ -161,15 +179,12 @@ void main() {
     });
   });
 
-  group('toMap_toMovieResultDTO', () {
-    // Compare a dto to a map equivialent of the dto.
+  group('toMap_toMovieResultDTO_Restorable', () {
+    // Compare a dto to a map equivalent of the dto.
     void testToMovieResultDTO(
       MovieResultDTO expected,
-      Map<String, String> map,
+      Map<String, dynamic> map,
     ) {
-      // ignore: avoid_print
-      print(map.toString());
-
       final actual = map.toMovieResultDTO();
 
       expect(expected, MovieResultDTOMatcher(actual));
@@ -184,18 +199,12 @@ void main() {
       testToMovieResultDTO(dto, map);
     });
 
-    // Convert a dto to a map excluding copywrited content.
-    test('copywrite_DTO', () {
+    // Convert a dto to a map excluding copyrighted content.
+    test('no copyright data', () {
       final dto = makeResultDTO('abc');
 
       final map = dto.toMap();
-      dto.description = '';
-      dto.imageUrl = '';
-      dto.userRating = 0;
-      dto.censorRating = CensorRatingType.none;
-      dto.languages.clear();
-      dto.genres.clear();
-      dto.keywords.clear();
+      clearCopyright(dto);
 
       testToMovieResultDTO(dto, map);
     });
@@ -242,6 +251,53 @@ void main() {
 
       expect(list, MovieResultDTOListMatcher(rtp.list.value));
       expect(encoded, encoded2);
+    });
+  });
+
+  group('toJson_fromJson', () {
+    // Compare a dto to a map equivalent of the dto.
+    void testToMovieResultDTO(
+      MovieResultDTO expected,
+      Map<String, dynamic> map,
+    ) {
+      final json = jsonEncode(map);
+      final actual = MovieResultDTO().fromJson(json);
+
+      expect(expected, MovieResultDTOMatcher(actual));
+    }
+
+    // Convert a dto to a map.
+    test('single_DTO', () {
+      final dto = makeResultDTO('abc');
+
+      final map = dto.toMap(excludeCopyrightedData: false);
+
+      testToMovieResultDTO(dto, map);
+    });
+
+    // Convert a dto to a map excluding copyrighted content.
+    test('no copyright data', () {
+      final dto = makeResultDTO('abc');
+
+      final map = dto.toMap();
+      clearCopyright(dto);
+
+      testToMovieResultDTO(dto, map);
+    });
+
+    // Convert a list of dtos to a JSON and then convert the JSON back to a list.
+    test('multiple_DTO', () {
+      final list = <MovieResultDTO>[];
+      list.add(makeResultDTO('abc'));
+      list.add(makeResultDTO('def'));
+      list.add(makeResultDTO('ghi'));
+      final encoded = list.toJson();
+
+      final decoded = encoded.jsonToList();
+
+      expect(list[0], MovieResultDTOMatcher(decoded[0]));
+      expect(list[1], MovieResultDTOMatcher(decoded[1]));
+      expect(list[2], MovieResultDTOMatcher(decoded[2]));
     });
   });
 }

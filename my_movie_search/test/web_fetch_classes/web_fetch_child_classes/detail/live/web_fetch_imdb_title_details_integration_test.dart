@@ -67,7 +67,7 @@ void main() {
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(expectedOutput),
+        MovieResultDTOListMatcher(expectedOutput, related: false),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
       );

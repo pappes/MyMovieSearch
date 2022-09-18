@@ -10,6 +10,9 @@ import 'dart:convert';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
+/* To update this data run
+       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
+in test('Run dtoFromCompleteJsonMap()'*/
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   '{"source": "omdb", "uniqueId": "tt0451279", "title": "Wonder Woman", "type": "movie", "year": "2017", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BMTYzODQzYjQtNTczNC00MzZhLTg1ZWYtZDUxYmQ3ZTY4NzA1XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg", "related": {}}',

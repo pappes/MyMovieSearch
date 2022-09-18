@@ -60,7 +60,7 @@ void main() {
         'source': 'DataSourceType.tmdbMovie',
         'title': '[QueryTMDBMovies] new query',
         'type': 'MovieContentType.custom',
-        'related': '{}'
+        'related': {}
       };
 
       // Invoke the functionality.

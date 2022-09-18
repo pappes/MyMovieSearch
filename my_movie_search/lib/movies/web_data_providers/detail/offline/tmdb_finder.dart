@@ -26,14 +26,16 @@
 import 'dart:convert';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
+/* To update this data run
+       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
+in test('Run dtoFromCompleteJsonMap()'*/
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '''
-{"source": "tmdbFinder", "uniqueId": "18487", "title": "The Taking of Pelham 1 2 3 (The Taking of Pelham 1 2 3", "year": "2009", 
-"languages": ["en"], "genres": [], "keywords": [], 
-"description": "Armed men hijack a New York City subway train, holding the passengers hostage in return for a ransom, and turning an ordinary day's work for dispatcher Walter Garber into a face-off with the mastermind behind the crime.", 
-"userRating": "6.3", "userRatingCount": "2494", "related": {}}
-'''
+  r'''
+{"uniqueId":"18487","source":"DataSourceType.tmdbFinder","alternateId":"ToBeDefined","title":"The Taking of Pelham 1 2 3 (The Taking of Pelham 1 2 3","year":"2009",
+      "languages":"[\"en\"]","genres":"[]","keywords":"[]",
+      "description":"Armed men hijack a New York City subway train, holding the passengers hostage in return for a ransom, and turning an ordinary day's work for dispatcher Walter Garber into a face-off with the mastermind behind the crime.","userRating":"6.3","userRatingCount":"2494","related":{}}
+''',
 ];
 
 final intermediateMapList = [jsonDecode(tmdbJsonSearchFull)];

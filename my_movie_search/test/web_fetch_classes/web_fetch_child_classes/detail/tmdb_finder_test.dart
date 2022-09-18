@@ -60,7 +60,7 @@ void main() {
         'source': 'DataSourceType.tmdbMovie',
         'title': '[QueryTMDBDetails] new query',
         'type': 'MovieContentType.custom',
-        'related': '{}'
+        'related': {}
       };
 
       // Invoke the functionality.
@@ -84,7 +84,6 @@ void main() {
   group('TmdbFinderConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () async {
-      final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -94,7 +93,7 @@ void main() {
         );
       }
 
-      actualResult.first.alternateId = "";
+      final expectedValue = expectedDTOList;
       // Check the results.
       expect(
         actualResult,
@@ -139,6 +138,8 @@ void main() {
           await testClass.myConvertTreeToOutputType(map),
         );
       }
+      //  AlternateId is clear for this test because the search criteria has  not been set
+      expectedValue.first.alternateId = "";
 
       // Check the results.
       expect(

@@ -3,47 +3,47 @@ import 'package:my_movie_search/utilities/extensions/collection_extensions.dart'
 /// Extend datatype "dynamic" to provide convenience functions.
 ///
 extension DynamicHelper on dynamic {
-  /// Convert datatype of a value to a non nullablle String
+  /// Filter out non string values
   ///
   /// Sets the value to empty string if it is not currently a string
   ///
-  /// Static verison of the function supplied for calling from other static functions
+  /// Static version of the function supplied for calling from other static functions
   /// ```dart
   /// x = DynamicHelper.dynamicToString(y);
   /// ```
   ///
-  /// Non-static verison of the function supplied
+  /// Non-static version of the function supplied
   /// for simpler call syntax
   /// ```dart
   /// x = dynamicToString(y);
   /// ```
   ///
-  String dynamicToString(dynamic val) => DynamicHelper.dynamicToString_(val);
-  static String dynamicToString_(dynamic val) {
+  String dynamicToString(dynamic val) => DynamicHelper.toString_(val);
+  static String toString_(dynamic val) {
     if (val is String) {
       return val;
     }
     return '';
   }
 
-  /// Convert datatype of a value to a non nullablle List<String>
+  /// Filter out values that are not lists of strings
   ///
   /// Sets the value to empty list if it is not currently
-  /// *   a List<String>
-  /// *   a json encoded List<String>
+  /// *   a [List]<[String]>
+  /// *   a json encoded [List]<[String]>
   ///
-  /// Static verison of the function supplied for calling from other static functions
+  /// Static version of the function supplied for calling from other static functions
   /// ```dart
   /// x = DynamicHelper.dynamicToStringList_(y);
   /// ```
   ///
-  /// Non-static verison of the function supplied for simpler call syntax
+  /// Non-static version of the function supplied for simpler call syntax
   /// ```dart
   /// x = dynamicToStringList(y);
   /// ```
   ///
-  List<String> dynamicToStringList(dynamic val) => dynamicToStringList_(val);
-  static List<String> dynamicToStringList_(dynamic val) {
+  List<String> dynamicToStringList(dynamic val) => toStringList_(val);
+  static List<String> toStringList_(dynamic val) {
     if (val is String) return ListHelper.fromJson(val);
     if (val is List<String>) return val;
     final result = <String>[];
@@ -55,48 +55,48 @@ extension DynamicHelper on dynamic {
     return result;
   }
 
-  /// Convert datatype of a value to a non nullablle int
+  /// filter out values that are not [int]
   ///
   /// Sets the value to 0 if it is not currently
   /// *   a number
   /// *   a string representation of a number
   ///
-  /// Static verison of the function supplied for calling from other static functions
+  /// Static version of the function supplied for calling from other static functions
   /// ```dart
   /// x = DynamicHelper.dynamicToInt_(y);
   /// ```
   ///
-  /// Non-static verison of the function supplied for simpler call syntax
+  /// Non-static version of the function supplied for simpler call syntax
   /// ```dart
   /// x = dynamicToInt(y);
   /// ```
   ///
-  int dynamicToInt(dynamic val) => dynamicToInt_(val);
-  static int dynamicToInt_(dynamic val) {
+  int dynamicToInt(dynamic val) => toInt_(val);
+  static int toInt_(dynamic val) {
     if (val is int) return val;
     if (val is String) return int.tryParse(val) ?? 0;
     if (val == null) return 0;
     return int.tryParse(val.toString()) ?? 0;
   }
 
-  /// Convert datatype of a value to a non nullablle double
+  /// Filter out values that are not [double]
   ///
   /// Sets the value to 0 if it is not currently
   /// *   a number
   /// *   a string representation of a number
   ///
-  /// Static verison of the function supplied  for calling from other static functions
+  /// Static version of the function supplied for calling from other static functions
   /// ```dart
   /// x = DynamicHelper.dynamicToDouble_(y);
   /// ```
   ///
-  /// Non-static verison of the function supplied for simpler call syntax
+  /// Non-static version of the function supplied for simpler call syntax
   /// ```dart
   /// x = dynamicToDouble(y);
   /// ```
   ///
-  double dynamicToDouble(dynamic val) => dynamicToDouble_(val);
-  static double dynamicToDouble_(dynamic val) {
+  double dynamicToDouble(dynamic val) => toDouble_(val);
+  static double toDouble_(dynamic val) {
     if (val is double) return val;
     if (val is String) return double.tryParse(val) ?? 0;
     if (val == null) return 0;
