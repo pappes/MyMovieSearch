@@ -154,7 +154,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         Poster(
           url: _movie.imageUrl,
           onTap: () => viewWebPage(
-            makeImdbUrl(_movie.uniqueId, photos: true, mobile: true),
+            makeImdbUrl(_movie.uniqueId, photos: true),
             context,
           ),
         )
@@ -179,11 +179,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
                   'Censor Rating: ${_movie.censorRating.name}     ',
                 ),
                 onTap: () => viewWebPage(
-                  makeImdbUrl(
-                    _movie.uniqueId,
-                    parentalGuide: true,
-                    mobile: true,
-                  ),
+                  makeImdbUrl(_movie.uniqueId, parentalGuide: true),
                   context,
                 ),
               ),
@@ -198,10 +194,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           Text('UniqueId: ${_movie.uniqueId}'),
           ElevatedButton(
             onPressed: () => viewWebPage(
-              makeImdbUrl(
-                _movie.uniqueId,
-                mobile: true,
-              ),
+              makeImdbUrl(_movie.uniqueId),
               context,
             ),
             child: const Text('IMDB'),

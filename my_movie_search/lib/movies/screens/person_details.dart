@@ -136,10 +136,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         Text('Popularity: ${_person.userRatingCount}'),
         ElevatedButton(
           onPressed: () => viewWebPage(
-            makeImdbUrl(
-              _person.uniqueId,
-              mobile: true,
-            ),
+            makeImdbUrl(_person.uniqueId),
             context,
           ),
           child: const Text('IMDB'),
@@ -163,7 +160,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         Poster(
           url: _person.imageUrl,
           onTap: () => viewWebPage(
-            makeImdbUrl(_person.uniqueId, photos: true, mobile: true),
+            makeImdbUrl(_person.uniqueId, photos: true),
             context,
           ),
         )
