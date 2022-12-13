@@ -69,50 +69,121 @@ const intermediateMapList = [
     "id": "tt13722802",
     "name": "Search Woman 3",
     "source": DataSourceType.imdbSearch
-  } /*,
-  [],
-  {
-    "Image":
-        "https://m.media-amazon.com/images/M/MV5BMTYz...GdeQXVyODE5NzE3OTE@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "Info": " Search Woman (2017) ",
-    "AnchorAddress": "/title/tt0451279/?ref_=fn_tt_tt_1",
-    "Title": "Search Woman"
-  },
-  {
-    "Image":
-        "https://m.media-amazon.com/images/M/MV5BZjA...XkFqcGdeQXVyNjExODE1MDc@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "Info": " Search Woman (1975) (TV Series) ",
-    "AnchorAddress": "/title/tt0074074/?ref_=fn_tt_tt_2",
-    "Title": "Search Woman"
-  },
-  {
-    "Image":
-        "https://m.media-amazon.com/images/M/MV5B...zM4ODM4NA@@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "Info": " Search Woman (2011) (TV Movie) ",
-    "AnchorAddress": "/title/tt1740828/?ref_=fn_tt_tt_3",
-    "Title": "Search Woman"
-  },
-  {
-    "Image":
-        "https://m.media-amazon.com/images/M/MV5BYT...QXVyMjQwMDg0Ng@@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "Info": " Search Woman 1984 (2020) ",
-    "AnchorAddress": "/title/tt7126948/?ref_=fn_tt_tt_4",
-    "Title": "Search Woman 1984"
-  },
-  {
-    "Image":
-        "https://m.media-amazon.com/images/M/MV5BZTkyNmMz...GdeQXVyNzU3NjUxMzE@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "Info": " Search Woman: Bloodlines (2019) ",
-    "AnchorAddress": "/title/tt8752498/?ref_=fn_tt_tt_5",
-    "Title": "Search Woman: Bloodlines"
-  },
-  {
-    "Image": "https://m.media-amazon.com/images/S/sash/85lhIiFC....mSScRzu.png",
-    "Info": " Search Woman 3 ",
-    "AnchorAddress": "/title/tt13722802/?ref_=fn_tt_tt_6",
-    "Title": "Search Woman 3"
-  },*/
+  }
 ];
+
+const imdbSampleJson = '''
+{
+    "props": {
+        "pageProps": {
+            "nameResults": {
+                "results": [
+                    {
+                        "id": "nm0152436",
+                        "displayNameText": "Hye NDace",
+                        "knownForJobCategory": "Actress",
+                        "knownForTitleText": "Superman",
+                        "knownForTitleYear": "1994",
+                        "avatarImageModel": {
+                            "url": "https://www.microsoft,com/gx@.jpg"
+                        }
+                    },
+                    {
+                        "id": "nm2122834",
+                        "displayNameText": "ifdhKoliHeDene Her",
+                        "knownForJobCategory": "Actress",
+                        "knownForTitleText": "Catwoman!",
+                        "knownForTitleYear":"1993- ",
+                        "avatarImageModel": {
+                            "url": "https://www.microsoft,com/k0MTRlNmU@.jpg"
+                        }
+                    },
+                    {
+                        "id": "nm5122134",
+                        "displayNameText": "nrnKge K-sDHmu",
+                        "knownForJobCategory": "Actress",
+                        "knownForTitleText": "Batman",
+                        "avatarImageModel": {
+                            "url": "https://www.microsoft,com/Q0ZGExNj@.jpg"
+                        }
+                    }
+                ]
+            },
+            "titleResults": {
+                "results": [
+                    {
+                        "id": "tt0152239",
+                        "titleNameText": "Batman",
+                        "titleReleaseText": "1997",
+                        "titleTypeText": "",
+                        "titlePosterImageModel": {
+                            "url": "https://www.microsoft,com/YzODQzYj@.jpg"
+                        },
+                        "topCredits": [
+                            "dot GaGal",
+                            "s CarLyn"
+                        ],
+                        "imageType": "movie"
+                    },
+                    {
+                        "id": "tt0172034",
+                        "titleNameText": "Batman",
+                        "titleReleaseText":"1975-1979",
+                        "titleTypeText": "TV Series",
+                        "titlePosterImageModel": {
+                            "url": "https://www.microsoft,com/AxYTcxMD@.jpg"
+                        },
+                        "topCredits": [
+                            "terda PiChrine",
+                            "ggoe WaLylner"
+                        ],
+                        "imageType": "tvSeries"
+                    },
+                    {
+                        "id": "tt1142838",
+                        "titleNameText": "Batman",
+                        "titleReleaseText": "1991",
+                        "titleTypeText": "TV Movie",
+                        "titlePosterImageModel": {
+                            "url": "https://www.microsoft,com/M4NTRlZjAtzgwMDUw.jpg"
+                        },
+                        "topCredits": [
+                            "calro FNation",
+                            "aliianne PAdrcki"
+                        ],
+                        "imageType": "tvMovie"
+                    },
+                    {
+                        "id": "tt1182333",
+                        "titleNameText": "Batman",
+                        "titleReleaseText": "1999",
+                        "titleTypeText": "Video",
+                        "titlePosterImageModel": {
+                            "url": "https://www.microsoft,com/U1NmNmNT@.jpg"
+                        },
+                        "topCredits": [
+                            "elli illhan",
+                            "RussKer PasPed"
+                        ],
+                        "imageType": "video"
+                    }
+                ]
+            },
+            "companyResults": {
+                "results": []
+            },
+            "keywordResults": {
+                "results": []
+            }
+        }
+    },
+    "page": "/find",
+    "query": {
+        "q": "superman",
+        "ref_": "nv_sr_sm"
+    }
+}
+''';
 
 const imdbSearchHtmlSampleInner = '''
 <tr class="findResult odd">
@@ -147,6 +218,11 @@ const imdbSearchHtmlSampleFull = '''
     xmlns:snip=true>
     </snip>
   <body id="styleguide-v2" class="fixed">
+
+
+  <script id="__NEXT_DATA__" type="application/json">
+$imdbSampleJson
+  </script>
     <div id="wrapper">
       <div id="root" class="redesign">
         <div id="pagecontent" class="pagecontent">

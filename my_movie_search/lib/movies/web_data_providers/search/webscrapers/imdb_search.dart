@@ -16,6 +16,16 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 const _searchResultsTable = 'findList';
 const _columnMovieText = 'result_text';
 const _columnMoviePoster = 'primary_photo';
+const _searchResultId = 'id';
+const _searchResultPersonName = 'displayNameText';
+const _searchResultPersonImage = 'avatarImageModel';
+const _searchResultPersonJob = 'knownForJobCategory';
+const _searchResultPersonMovie = 'knownForTitleText';
+const _searchResultMovieName = 'titleNameText';
+const _searchResultMovieYearRange = 'titleReleaseText';
+const _searchResultMovieType = 'imageType';
+const _searchResultMovieImage = 'titlePosterImageModel';
+const _searchResultMovieActors = 'topCredits';
 
 /// Implements [WebFetchBase] for the IMDB search html web scraper.
 ///
@@ -35,16 +45,25 @@ mixin ScrapeIMDBSearchDetails
 
   /// Collect JSON and webpage text to construct a map of the movie data.
   Future<List> _scrapeSearchResult(Document document, String webText) async {
-    final scriptElement =
+    // Check to see if search retruned a single result page
+    final detailScriptElement =
         document.querySelector('script[type="application/ld+json"]');
-    if (scriptElement?.innerHtml.isNotEmpty ?? false) {
-      final movieData = json.decode(scriptElement!.innerHtml) as Map;
+    if (detailScriptElement?.innerHtml.isNotEmpty ?? false) {
+      final movieData = json.decode(detailScriptElement!.innerHtml) as Map;
       if (movieData["@type"] == "Person") {
         return _scrapePersonResult(webText);
       }
       if (movieData["@type"] != null) {
         return _scrapeMovieResult(webText);
       }
+    }
+    // Extract search content from json
+    final resultScriptElement =
+        document.querySelector('script[type="application/json"]');
+    if (detailScriptElement?.innerHtml.isNotEmpty ?? false) {
+      final searchResult = json.decode(detailScriptElement!.innerHtml) as Map;
+      final list = _extractRowsFromMap(searchResult);
+      if (list.isNotEmpty) return list;
     }
     // Extract required tables from the dom (anything named findList).
     final tables = document.getElementsByClassName(_searchResultsTable);
@@ -65,6 +84,45 @@ mixin ScrapeIMDBSearchDetails
     final movie = QueryIMDBTitleDetails();
     movie.criteria = criteria;
     return movie.myConvertWebTextToTraversableTree(webText);
+  }
+
+  // Extract search content from json
+  List<Map> _extractRowsFromMap(Map searchResult) {
+    List<Map> results = [];
+    try {
+      final content = searchResult['props']?['pageProps'] as Map;
+      final people = content?['nameResults']?['results'] as List;
+      for (final person in people) {
+        results.add(_getPerson(person as Map));
+      }
+      final movies = content?['titleResults']?['results'];
+      for (final movie in movies) {
+        results.add(_getMovie(movie as Map));
+      }
+    } catch (_) {
+      //TODO: return error explaining IMDB change of format for search result
+    }
+    return results;
+  }
+
+  Map _getPerson(Map person) {
+    final Map rowData = {};
+    rowData[outerElementIdentity] = person[_searchResultId];
+    rowData[outerElementOfficialTitle] = person[_searchResultPersonName];
+    //rowData[outerElementYearRange] = getYearRange(info);
+    //rowData[outerElementType] = movieType;
+    rowData[outerElementImage] = person[_searchResultPersonImage];
+    return rowData;
+  }
+
+  Map _getMovie(Map movie) {
+    final Map rowData = {};
+    rowData[outerElementIdentity] = rowData[_searchResultId];
+    rowData[outerElementOfficialTitle] = rowData[_searchResultMovieName];
+    rowData[outerElementYearRange] = rowData[_searchResultMovieYearRange];
+    rowData[outerElementType] = rowData[_searchResultMovieType];
+    rowData[outerElementImage] = rowData[_searchResultMovieImage];
+    return rowData;
   }
 
   /// Extract movie data from rows in html table(s).
