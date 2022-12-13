@@ -1,5 +1,5 @@
 // database table and column names
-import 'package:cloud_firestore/cloud_firestore.dart';
+/*import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 const _tableMovie = 'movies';
@@ -15,4 +15,4 @@ class DatabaseHelper {
     final table = FirebaseFirestore.instance.collection(_tableMovie);
     return table.doc(movie.uniqueId).set(map, SetOptions(merge: true));
   }
-}
+}*/

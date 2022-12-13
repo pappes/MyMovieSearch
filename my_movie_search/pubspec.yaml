@@ -44,8 +44,8 @@ dependencies:
   webview_flutter: ^2.8.0                # Show web page (Note V3.0.0 availoable but needs testing)
 
   #firebase_core: ^1.0.3                # Firebase initialisation
-  firebase_auth: ^3.0.1                 # Authenticate users against Firebase
-  cloud_firestore: ^2.4.0               # Store data in Firebase Firestore cloud database
+  #firebase_auth: ^3.0.1                 # Authenticate users against Firebase
+  #cloud_firestore: ^2.4.0               # Store data in Firebase Firestore cloud database
 
 
   # The following adds the Cupertino Icons font to your application.
