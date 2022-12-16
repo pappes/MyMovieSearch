@@ -1,5 +1,7 @@
 //query string https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=wonder%20woman
 
+// ignore_for_file: unnecessary_raw_strings
+
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
@@ -8,67 +10,86 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 in test('Run dtoFromCompleteJsonMap()'*/
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '{"source": "imdbSearch", "uniqueId": "tt0451279", "title": "Search Woman", "year": "2017", "yearRange": "2017", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BMTYz...GdeQXVyODE5NzE3OTE@._V1_UX32_CR0,0,32,44_AL_.jpg", "related": {}}',
-  '{"source": "imdbSearch", "uniqueId": "tt0074074", "title": "Search Woman", "type": "series", "year": "1975", "yearRange": "1975", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BZjA...XkFqcGdeQXVyNjExODE1MDc@._V1_UX32_CR0,0,32,44_AL_.jpg", "related": {}}',
-  '{"source": "imdbSearch", "uniqueId": "tt1740828", "title": "Search Woman", "type": "movie", "year": "2011", "yearRange": "2011", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5B...zM4ODM4NA@@._V1_UX32_CR0,0,32,44_AL_.jpg", "related": {}}',
-  '{"source": "imdbSearch", "uniqueId": "tt7126948", "title": "Search Woman 1984", "year": "2020", "yearRange": "2020", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BYT...QXVyMjQwMDg0Ng@@._V1_UX32_CR0,0,32,44_AL_.jpg", "related": {}}',
-  '{"source": "imdbSearch", "uniqueId": "tt8752498", "title": "Search Woman: Bloodlines", "year": "2019", "yearRange": "2019", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BZTkyNmMz...GdeQXVyNzU3NjUxMzE@._V1_UX32_CR0,0,32,44_AL_.jpg", "related": {}}',
-  '{"source": "imdbSearch", "uniqueId": "tt13722802", "title": "Search Woman 3", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/S/sash/85lhIiFC....mSScRzu.png", "related": {}}',
+  r'''
+{"uniqueId":"nm0152436","title":"Hye NDace","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"known for Superman(Superman)","imageUrl":"{url: https://www.microsoft,com/gx@.jpg}","related":{}}
+''',
+  r'''
+{"uniqueId":"nm2122834","title":"ifdhKoliHeDene Her","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"known for Catwoman!(Catwoman!)","imageUrl":"{url: https://www.microsoft,com/k0MTRlNmU@.jpg}","related":{}}
+''',
+  r'''
+{"uniqueId":"nm5122134","title":"nrnKge K-sDHmu","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"known for Batman(Batman)","imageUrl":"{url: https://www.microsoft,com/Q0ZGExNj@.jpg}","related":{}}
+''',
+  r'''
+{"uniqueId":"tt0152239","title":"Batman","year":"1997","yearRange":"1997","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"staring [dot GaGal, s CarLyn]","imageUrl":"{url: https://www.microsoft,com/YzODQzYj@.jpg}","related":{}}
+''',
+  r'''
+{"uniqueId":"tt0172034","title":"Batman","year":"1979","yearRange":"1975-1979","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"staring [terda PiChrine, ggoe WaLylner]","imageUrl":"{url: https://www.microsoft,com/AxYTcxMD@.jpg}","related":{}}
+''',
+  r'''
+{"uniqueId":"tt1142838","title":"Batman","year":"1991","yearRange":"1991","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"staring [calro FNation, aliianne PAdrcki]","imageUrl":"{url: https://www.microsoft,com/M4NTRlZjAtzgwMDUw.jpg}","related":{}}
+''',
+  r'''
+{"uniqueId":"tt1182333","title":"Batman","year":"1999","yearRange":"1999","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"staring [elli illhan, RussKer PasPed]","imageUrl":"{url: https://www.microsoft,com/U1NmNmNT@.jpg}","related":{}}
+''',
 ];
 
 const intermediateMapList = [
   {
-    "image":
-        "https://m.media-amazon.com/images/M/MV5BMTYz...GdeQXVyODE5NzE3OTE@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "yearRange": "2017",
-    "@type": null,
-    "id": "tt0451279",
-    "name": "Search Woman",
-    "source": DataSourceType.imdbSearch
+    'id': 'nm0152436',
+    'name': 'Hye NDace',
+    'image': {'url': 'https://www.microsoft,com/gx@.jpg'},
+    'description': 'known for Superman(Superman)'
   },
   {
-    "image":
-        "https://m.media-amazon.com/images/M/MV5BZjA...XkFqcGdeQXVyNjExODE1MDc@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "yearRange": "1975",
-    "@type": MovieContentType.series,
-    "id": "tt0074074",
-    "name": "Search Woman",
-    "source": DataSourceType.imdbSearch
+    'id': 'nm2122834',
+    'name': 'ifdhKoliHeDene Her',
+    'image': {'url': 'https://www.microsoft,com/k0MTRlNmU@.jpg'},
+    'description': 'known for Catwoman!(Catwoman!)'
   },
   {
-    "image":
-        "https://m.media-amazon.com/images/M/MV5B...zM4ODM4NA@@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "yearRange": "2011",
-    "@type": MovieContentType.movie,
-    "id": "tt1740828",
-    "name": "Search Woman",
-    "source": DataSourceType.imdbSearch
+    'id': 'nm5122134',
+    'name': 'nrnKge K-sDHmu',
+    'image': {'url': 'https://www.microsoft,com/Q0ZGExNj@.jpg'},
+    'description': 'known for Batman(Batman)'
   },
   {
-    "image":
-        "https://m.media-amazon.com/images/M/MV5BYT...QXVyMjQwMDg0Ng@@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "yearRange": "2020",
-    "@type": null,
-    "id": "tt7126948",
-    "name": "Search Woman 1984",
-    "source": DataSourceType.imdbSearch
+    'id': 'tt0152239',
+    'name': 'Batman',
+    'yearRange': '1997',
+    '@type': 'movie',
+    'image': {'url': 'https://www.microsoft,com/YzODQzYj@.jpg'},
+    'description': 'staring [dot GaGal, s CarLyn]'
   },
   {
-    "image":
-        "https://m.media-amazon.com/images/M/MV5BZTkyNmMz...GdeQXVyNzU3NjUxMzE@._V1_UX32_CR0,0,32,44_AL_.jpg",
-    "yearRange": "2019",
-    "@type": null,
-    "id": "tt8752498",
-    "name": "Search Woman: Bloodlines",
-    "source": DataSourceType.imdbSearch
+    'id': 'tt0172034',
+    'name': 'Batman',
+    'yearRange': '1975-1979',
+    '@type': 'tvSeries',
+    'image': {'url': 'https://www.microsoft,com/AxYTcxMD@.jpg'},
+    'description': 'staring [terda PiChrine, ggoe WaLylner]'
   },
   {
-    "image": "https://m.media-amazon.com/images/S/sash/85lhIiFC....mSScRzu.png",
-    "yearRange": null,
-    "@type": null,
-    "id": "tt13722802",
-    "name": "Search Woman 3",
-    "source": DataSourceType.imdbSearch
+    'id': 'tt1142838',
+    'name': 'Batman',
+    'yearRange': '1991',
+    '@type': 'tvMovie',
+    'image': {'url': 'https://www.microsoft,com/M4NTRlZjAtzgwMDUw.jpg'},
+    'description': 'staring [calro FNation, aliianne PAdrcki]'
+  },
+  {
+    'id': 'tt1182333',
+    'name': 'Batman',
+    'yearRange': '1999',
+    '@type': 'video',
+    'image': {'url': 'https://www.microsoft,com/U1NmNmNT@.jpg'},
+    'description': 'staring [elli illhan, RussKer PasPed]'
   }
 ];
 

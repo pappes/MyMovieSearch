@@ -21,6 +21,7 @@ const _searchResultPersonName = 'displayNameText';
 const _searchResultPersonImage = 'avatarImageModel';
 const _searchResultPersonJob = 'knownForJobCategory';
 const _searchResultPersonMovie = 'knownForTitleText';
+const _searchResultPersonMovieYear = 'knownForTitleText';
 const _searchResultMovieName = 'titleNameText';
 const _searchResultMovieYearRange = 'titleReleaseText';
 const _searchResultMovieType = 'imageType';
@@ -45,7 +46,7 @@ mixin ScrapeIMDBSearchDetails
 
   /// Collect JSON and webpage text to construct a map of the movie data.
   Future<List> _scrapeSearchResult(Document document, String webText) async {
-    // Check to see if search retruned a single result page
+    // Check to see if search returned a single result page
     final detailScriptElement =
         document.querySelector('script[type="application/ld+json"]');
     if (detailScriptElement?.innerHtml.isNotEmpty ?? false) {
@@ -60,15 +61,11 @@ mixin ScrapeIMDBSearchDetails
     // Extract search content from json
     final resultScriptElement =
         document.querySelector('script[type="application/json"]');
-    if (detailScriptElement?.innerHtml.isNotEmpty ?? false) {
-      final searchResult = json.decode(detailScriptElement!.innerHtml) as Map;
+    if (resultScriptElement?.innerHtml.isNotEmpty ?? false) {
+      final searchResult = json.decode(resultScriptElement!.innerHtml) as Map;
       final list = _extractRowsFromMap(searchResult);
-      if (list.isNotEmpty) return list;
+      return list;
     }
-    // Extract required tables from the dom (anything named findList).
-    final tables = document.getElementsByClassName(_searchResultsTable);
-    final list = _extractRowsFromTables(tables);
-    if (list.isNotEmpty) return list;
     throw 'no search results found in $webText';
   }
 
@@ -112,106 +109,21 @@ mixin ScrapeIMDBSearchDetails
     //rowData[outerElementYearRange] = getYearRange(info);
     //rowData[outerElementType] = movieType;
     rowData[outerElementImage] = person[_searchResultPersonImage];
+    rowData[outerElementDescription] = 'known for '
+        '${person[_searchResultPersonMovie]}'
+        '(${person[_searchResultPersonMovieYear]})';
     return rowData;
   }
 
   Map _getMovie(Map movie) {
     final Map rowData = {};
-    rowData[outerElementIdentity] = rowData[_searchResultId];
-    rowData[outerElementOfficialTitle] = rowData[_searchResultMovieName];
-    rowData[outerElementYearRange] = rowData[_searchResultMovieYearRange];
-    rowData[outerElementType] = rowData[_searchResultMovieType];
-    rowData[outerElementImage] = rowData[_searchResultMovieImage];
+    rowData[outerElementIdentity] = movie[_searchResultId];
+    rowData[outerElementOfficialTitle] = movie[_searchResultMovieName];
+    rowData[outerElementYearRange] = movie[_searchResultMovieYearRange];
+    rowData[outerElementType] = movie[_searchResultMovieType];
+    rowData[outerElementImage] = movie[_searchResultMovieImage];
+    rowData[outerElementDescription] = 'staring '
+        '${movie[_searchResultMovieActors]}';
     return rowData;
-  }
-
-  /// Extract movie data from rows in html table(s).
-  List<Map> _extractRowsFromTables(List<Element> tables) {
-    final htmlMovies = <Map>[];
-
-    for (final table in tables) {
-      final rows = table.getElementsByType(ElementType.row);
-      for (final row in rows) {
-        htmlMovies.add(_extractRowData(row));
-      }
-    }
-
-    return htmlMovies;
-  }
-
-  /// Convert HTML row element into a map of individual field data.
-  /// <a title>       -> Title
-  /// <img>           -> Image
-  /// <a href>        -> AnchorAddress
-  /// <td> text </td> -> Info (year and type)
-  Map _extractRowData(Element tableRow) {
-    final rowData = {};
-    for (final tableColumn in tableRow.children) {
-      if (tableColumn.className == _columnMovieText) {
-        rowData[dataSource] = DataSourceType.imdbSearch;
-        String title =
-            DynamicHelper.toString_(rowData[outerElementOfficialTitle]);
-        String uniqueId =
-            DynamicHelper.toString_(rowData[outerElementIdentity]);
-
-        // <td> text </td> -> Title (year) (Type)
-        final info = tableColumn.text;
-        tableColumn.getElementsByType(ElementType.anchor).forEach((element) {
-          // <a href> -> AnchorAddress
-          uniqueId =
-              getID(element.getAttribute(AttributeType.address)) ?? uniqueId;
-          // <a title> -> Title
-          title = element.text;
-        });
-
-        rowData[outerElementIdentity] = uniqueId;
-        rowData[outerElementOfficialTitle] = title;
-        rowData[outerElementYearRange] = getYearRange(info);
-
-        final movieType = findImdbMovieContentTypeFromTitle(
-          info,
-          title,
-          null, // Unknown duration.
-          uniqueId,
-        );
-        rowData[outerElementType] = movieType;
-      } else if (tableColumn.className == _columnMoviePoster) {
-        // <img> -> Image
-        tableColumn.getElementsByType(ElementType.image).forEach((element) {
-          rowData[outerElementImage] =
-              element.getAttribute(AttributeType.source);
-        });
-      }
-    }
-    return rowData;
-  }
-
-  // Determine unique ID from '/title/tt13722802/?ref_=fn_tt_tt_6'
-  static String? getID(Object? identifier) {
-    if (identifier == null) return null;
-    final id = identifier.toString();
-    final lastSlash = id.lastIndexOf('/');
-    if (lastSlash == -1) return null;
-    final secondLastSlash = id.lastIndexOf('/', lastSlash - 1);
-    if (secondLastSlash == -1) return null;
-    return id.substring(secondLastSlash + 1, lastSlash);
-  }
-
-  // Extract year range from 'title 123 (1988–1993) (TV Series) aka title 123'
-  static String? getYearRange(Object? info) {
-    if (info == null) return null;
-    final String title = info.toString();
-    final lastClose = title.lastIndexOf(')');
-    if (lastClose == -1) return null;
-    final dates = title.lastIndexOf(RegExp('[0-9]'), lastClose);
-    if (dates == -1) return null;
-    final yearOpen = title.lastIndexOf('(', dates);
-    final yearClose = title.indexOf(')', dates);
-    if (yearOpen == -1 || yearClose == -1) return null;
-
-    final yearRange = title.substring(yearOpen + 1, yearClose);
-    final filter = RegExp('[0-9].*[0-9]');
-    final numerics = filter.stringMatch(yearRange);
-    return numerics;
   }
 }
