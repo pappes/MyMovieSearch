@@ -12,15 +12,15 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"nm0152436","title":"Hye NDace","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"known for Superman(Superman)","imageUrl":"{url: https://www.microsoft,com/gx@.jpg}","related":{}}
+      "description":"known for Superman(1994)","imageUrl":"{url: https://www.microsoft,com/gx@.jpg}","related":{}}
 ''',
   r'''
 {"uniqueId":"nm2122834","title":"ifdhKoliHeDene Her","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"known for Catwoman!(Catwoman!)","imageUrl":"{url: https://www.microsoft,com/k0MTRlNmU@.jpg}","related":{}}
+      "description":"known for Catwoman!(1993- )","imageUrl":"{url: https://www.microsoft,com/k0MTRlNmU@.jpg}","related":{}}
 ''',
   r'''
 {"uniqueId":"nm5122134","title":"nrnKge K-sDHmu","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"known for Batman(Batman)","imageUrl":"{url: https://www.microsoft,com/Q0ZGExNj@.jpg}","related":{}}
+      "description":"known for Batman","imageUrl":"{url: https://www.microsoft,com/Q0ZGExNj@.jpg}","related":{}}
 ''',
   r'''
 {"uniqueId":"tt0152239","title":"Batman","year":"1997","yearRange":"1997","languages":"[]","genres":"[]","keywords":"[]",
@@ -45,19 +45,19 @@ const intermediateMapList = [
     'id': 'nm0152436',
     'name': 'Hye NDace',
     'image': {'url': 'https://www.microsoft,com/gx@.jpg'},
-    'description': 'known for Superman(Superman)'
+    'description': 'known for Superman(1994)'
   },
   {
     'id': 'nm2122834',
     'name': 'ifdhKoliHeDene Her',
     'image': {'url': 'https://www.microsoft,com/k0MTRlNmU@.jpg'},
-    'description': 'known for Catwoman!(Catwoman!)'
+    'description': 'known for Catwoman!(1993- )'
   },
   {
     'id': 'nm5122134',
     'name': 'nrnKge K-sDHmu',
     'image': {'url': 'https://www.microsoft,com/Q0ZGExNj@.jpg'},
-    'description': 'known for Batman(Batman)'
+    'description': 'known for Batman'
   },
   {
     'id': 'tt0152239',

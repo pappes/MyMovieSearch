@@ -21,7 +21,7 @@ const _searchResultPersonName = 'displayNameText';
 const _searchResultPersonImage = 'avatarImageModel';
 const _searchResultPersonJob = 'knownForJobCategory';
 const _searchResultPersonMovie = 'knownForTitleText';
-const _searchResultPersonMovieYear = 'knownForTitleText';
+const _searchResultPersonMovieYear = 'knownForTitleYear';
 const _searchResultMovieName = 'titleNameText';
 const _searchResultMovieYearRange = 'titleReleaseText';
 const _searchResultMovieType = 'imageType';
@@ -109,9 +109,11 @@ mixin ScrapeIMDBSearchDetails
     //rowData[outerElementYearRange] = getYearRange(info);
     //rowData[outerElementType] = movieType;
     rowData[outerElementImage] = person[_searchResultPersonImage];
-    rowData[outerElementDescription] = 'known for '
-        '${person[_searchResultPersonMovie]}'
-        '(${person[_searchResultPersonMovieYear]})';
+    String knownFor = 'known for ${person[_searchResultPersonMovie]}';
+    if (null != person[_searchResultPersonMovieYear]) {
+      knownFor += '(${person[_searchResultPersonMovieYear]})';
+    }
+    rowData[outerElementDescription] = knownFor;
     return rowData;
   }
 
