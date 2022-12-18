@@ -122,10 +122,16 @@ mixin ScrapeIMDBSearchDetails
     rowData[outerElementIdentity] = movie[_searchResultId];
     rowData[outerElementOfficialTitle] = movie[_searchResultMovieName];
     rowData[outerElementYearRange] = movie[_searchResultMovieYearRange];
-    rowData[outerElementType] = movie[_searchResultMovieType];
     rowData[outerElementImage] = movie[_searchResultMovieImage];
     rowData[outerElementDescription] = 'staring '
         '${movie[_searchResultMovieActors]}';
+
+    final movieType = getImdbMovieContentType(
+      movie[_searchResultMovieType],
+      null, // Unknown duration.
+      rowData[outerElementIdentity].toString(),
+    );
+    rowData[outerElementType] = movieType;
     return rowData;
   }
 }
