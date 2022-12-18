@@ -4,6 +4,7 @@ import 'dart:async' show StreamController;
 import 'dart:convert' show jsonDecode, utf8;
 
 import 'package:html/parser.dart';
+import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
 
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
@@ -279,7 +280,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ) async* {
     try {
       final tree = baseConvertCriteriaToWebText(criteria);
-      final map = baseConvertWebTextToTraversableTree(tree);
+      final map = baseConvertWebTextToTraversableTree(tree).printStream(
+          '${myDataSourceName()}:${myFormatInputAsText(criteria)}->');
       yield* baseConvertTreeToOutputType(criteria, map);
     } catch (error) {
       final errorMessage = baseConstructErrorMessage(
@@ -456,7 +458,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         myOfflineData(),
       );
 
-      yield* baseTransform(newCriteria);
+      final outputStream = baseTransform(newCriteria);
+      yield* outputStream;
     }
   }
 

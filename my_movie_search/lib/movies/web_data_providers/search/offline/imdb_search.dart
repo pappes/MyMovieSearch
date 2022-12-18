@@ -12,31 +12,31 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"nm0152436","title":"Hye NDace","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"known for Superman(1994)","imageUrl":"{url: https://www.microsoft,com/gx@.jpg}","related":{}}
+      "description":"known for Superman(1994)","imageUrl":"https://www.microsoft.com/gx@.jpg","related":{}}
 ''',
   r'''
 {"uniqueId":"nm2122834","title":"ifdhKoliHeDene Her","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"known for Catwoman!(1993- )","imageUrl":"{url: https://www.microsoft,com/k0MTRlNmU@.jpg}","related":{}}
+      "description":"known for Catwoman!(1993- )","imageUrl":"https://www.microsoft.com/k0MTRlNmU@.jpg","related":{}}
 ''',
   r'''
 {"uniqueId":"nm5122134","title":"nrnKge K-sDHmu","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"known for Batman","imageUrl":"{url: https://www.microsoft,com/Q0ZGExNj@.jpg}","related":{}}
+      "description":"known for Batman","imageUrl":"https://www.microsoft.com/Q0ZGExNj@.jpg","related":{}}
 ''',
   r'''
 {"uniqueId":"tt0152239","title":"Batman","type":"MovieContentType.movie","year":"1997","yearRange":"1997","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"staring [dot GaGal, s CarLyn]","imageUrl":"{url: https://www.microsoft,com/YzODQzYj@.jpg}","related":{}}
+      "description":"staring [dot GaGal, s CarLyn]","imageUrl":"https://www.microsoft.com/YzODQzYj@.jpg","related":{}}
 ''',
   r'''
 {"uniqueId":"tt0172034","title":"Batman","type":"MovieContentType.series","year":"1979","yearRange":"1975-1979","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"staring [terda PiChrine, ggoe WaLylner]","imageUrl":"{url: https://www.microsoft,com/AxYTcxMD@.jpg}","related":{}}
+      "description":"staring [terda PiChrine, ggoe WaLylner]","imageUrl":"https://www.microsoft.com/AxYTcxMD@.jpg","related":{}}
 ''',
   r'''
 {"uniqueId":"tt1142838","title":"Batman","type":"MovieContentType.movie","year":"1991","yearRange":"1991","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"staring [calro FNation, aliianne PAdrcki]","imageUrl":"{url: https://www.microsoft,com/M4NTRlZjAtzgwMDUw.jpg}","related":{}}
+      "description":"staring [calro FNation, aliianne PAdrcki]","imageUrl":"https://www.microsoft.com/M4NTRlZjAtzgwMDUw.jpg","related":{}}
 ''',
   r'''
 {"uniqueId":"tt1182333","title":"Batman","type":"MovieContentType.movie","year":"1999","yearRange":"1999","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"staring [elli illhan, RussKer PasPed]","imageUrl":"{url: https://www.microsoft,com/U1NmNmNT@.jpg}","related":{}}
+      "description":"staring [elli illhan, RussKer PasPed]","imageUrl":"https://www.microsoft.com/U1NmNmNT@.jpg","related":{}}
 ''',
 ];
 
@@ -44,26 +44,26 @@ const intermediateMapList = [
   {
     'id': 'nm0152436',
     'name': 'Hye NDace',
-    'image': {'url': 'https://www.microsoft,com/gx@.jpg'},
+    'image': 'https://www.microsoft.com/gx@.jpg',
     'description': 'known for Superman(1994)'
   },
   {
     'id': 'nm2122834',
     'name': 'ifdhKoliHeDene Her',
-    'image': {'url': 'https://www.microsoft,com/k0MTRlNmU@.jpg'},
+    'image': 'https://www.microsoft.com/k0MTRlNmU@.jpg',
     'description': 'known for Catwoman!(1993- )'
   },
   {
     'id': 'nm5122134',
     'name': 'nrnKge K-sDHmu',
-    'image': {'url': 'https://www.microsoft,com/Q0ZGExNj@.jpg'},
+    'image': 'https://www.microsoft.com/Q0ZGExNj@.jpg',
     'description': 'known for Batman'
   },
   {
     'id': 'tt0152239',
     'name': 'Batman',
     'yearRange': '1997',
-    'image': {'url': 'https://www.microsoft,com/YzODQzYj@.jpg'},
+    'image': 'https://www.microsoft.com/YzODQzYj@.jpg',
     'description': 'staring [dot GaGal, s CarLyn]',
     '@type': MovieContentType.movie
   },
@@ -71,7 +71,7 @@ const intermediateMapList = [
     'id': 'tt0172034',
     'name': 'Batman',
     'yearRange': '1975-1979',
-    'image': {'url': 'https://www.microsoft,com/AxYTcxMD@.jpg'},
+    'image': 'https://www.microsoft.com/AxYTcxMD@.jpg',
     'description': 'staring [terda PiChrine, ggoe WaLylner]',
     '@type': MovieContentType.series
   },
@@ -79,7 +79,7 @@ const intermediateMapList = [
     'id': 'tt1142838',
     'name': 'Batman',
     'yearRange': '1991',
-    'image': {'url': 'https://www.microsoft,com/M4NTRlZjAtzgwMDUw.jpg'},
+    'image': 'https://www.microsoft.com/M4NTRlZjAtzgwMDUw.jpg',
     'description': 'staring [calro FNation, aliianne PAdrcki]',
     '@type': MovieContentType.movie
   },
@@ -87,7 +87,7 @@ const intermediateMapList = [
     'id': 'tt1182333',
     'name': 'Batman',
     'yearRange': '1999',
-    'image': {'url': 'https://www.microsoft,com/U1NmNmNT@.jpg'},
+    'image': 'https://www.microsoft.com/U1NmNmNT@.jpg',
     'description': 'staring [elli illhan, RussKer PasPed]',
     '@type': MovieContentType.movie
   }
@@ -106,7 +106,10 @@ const imdbSampleJson = '''
                         "knownForTitleText": "Superman",
                         "knownForTitleYear": "1994",
                         "avatarImageModel": {
-                            "url": "https://www.microsoft,com/gx@.jpg"
+                            "url": "https://www.microsoft.com/gx@.jpg",
+                            "maxHeight": 100,
+                            "maxWidth": 300,
+                            "caption": "Stuff (2020)"
                         }
                     },
                     {
@@ -116,7 +119,7 @@ const imdbSampleJson = '''
                         "knownForTitleText": "Catwoman!",
                         "knownForTitleYear":"1993- ",
                         "avatarImageModel": {
-                            "url": "https://www.microsoft,com/k0MTRlNmU@.jpg"
+                            "url": "https://www.microsoft.com/k0MTRlNmU@.jpg"
                         }
                     },
                     {
@@ -125,7 +128,7 @@ const imdbSampleJson = '''
                         "knownForJobCategory": "Actress",
                         "knownForTitleText": "Batman",
                         "avatarImageModel": {
-                            "url": "https://www.microsoft,com/Q0ZGExNj@.jpg"
+                            "url": "https://www.microsoft.com/Q0ZGExNj@.jpg"
                         }
                     }
                 ]
@@ -138,7 +141,10 @@ const imdbSampleJson = '''
                         "titleReleaseText": "1997",
                         "titleTypeText": "",
                         "titlePosterImageModel": {
-                            "url": "https://www.microsoft,com/YzODQzYj@.jpg"
+                            "url": "https://www.microsoft.com/YzODQzYj@.jpg",
+                            "maxHeight": 100,
+                            "maxWidth": 300,
+                            "caption": "Stuff (2020)"
                         },
                         "topCredits": [
                             "dot GaGal",
@@ -152,7 +158,7 @@ const imdbSampleJson = '''
                         "titleReleaseText":"1975-1979",
                         "titleTypeText": "TV Series",
                         "titlePosterImageModel": {
-                            "url": "https://www.microsoft,com/AxYTcxMD@.jpg"
+                            "url": "https://www.microsoft.com/AxYTcxMD@.jpg"
                         },
                         "topCredits": [
                             "terda PiChrine",
@@ -166,7 +172,7 @@ const imdbSampleJson = '''
                         "titleReleaseText": "1991",
                         "titleTypeText": "TV Movie",
                         "titlePosterImageModel": {
-                            "url": "https://www.microsoft,com/M4NTRlZjAtzgwMDUw.jpg"
+                            "url": "https://www.microsoft.com/M4NTRlZjAtzgwMDUw.jpg"
                         },
                         "topCredits": [
                             "calro FNation",
@@ -180,7 +186,7 @@ const imdbSampleJson = '''
                         "titleReleaseText": "1999",
                         "titleTypeText": "Video",
                         "titlePosterImageModel": {
-                            "url": "https://www.microsoft,com/U1NmNmNT@.jpg"
+                            "url": "https://www.microsoft.com/U1NmNmNT@.jpg"
                         },
                         "topCredits": [
                             "elli illhan",

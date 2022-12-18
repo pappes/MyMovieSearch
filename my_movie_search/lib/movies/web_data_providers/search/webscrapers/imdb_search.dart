@@ -26,6 +26,7 @@ const _searchResultMovieName = 'titleNameText';
 const _searchResultMovieYearRange = 'titleReleaseText';
 const _searchResultMovieType = 'imageType';
 const _searchResultMovieImage = 'titlePosterImageModel';
+const _searchResultImageUrl = 'url';
 const _searchResultMovieActors = 'topCredits';
 
 /// Implements [WebFetchBase] for the IMDB search html web scraper.
@@ -108,7 +109,8 @@ mixin ScrapeIMDBSearchDetails
     rowData[outerElementOfficialTitle] = person[_searchResultPersonName];
     //rowData[outerElementYearRange] = getYearRange(info);
     //rowData[outerElementType] = movieType;
-    rowData[outerElementImage] = person[_searchResultPersonImage];
+    rowData[outerElementImage] =
+        person[_searchResultPersonImage][_searchResultImageUrl];
     String knownFor = 'known for ${person[_searchResultPersonMovie]}';
     if (null != person[_searchResultPersonMovieYear]) {
       knownFor += '(${person[_searchResultPersonMovieYear]})';
@@ -122,7 +124,8 @@ mixin ScrapeIMDBSearchDetails
     rowData[outerElementIdentity] = movie[_searchResultId];
     rowData[outerElementOfficialTitle] = movie[_searchResultMovieName];
     rowData[outerElementYearRange] = movie[_searchResultMovieYearRange];
-    rowData[outerElementImage] = movie[_searchResultMovieImage];
+    rowData[outerElementImage] =
+        movie[_searchResultMovieImage][_searchResultImageUrl];
     rowData[outerElementDescription] = 'staring '
         '${movie[_searchResultMovieActors]}';
 
