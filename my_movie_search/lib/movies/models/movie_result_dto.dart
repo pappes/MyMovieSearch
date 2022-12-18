@@ -632,9 +632,7 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
     return "[\n$listContents]";
   }
 
-  /// Return a list of strings containing valid json
-  ///
-  /// used for constructing test data
+  /// Format JSON for readability
   String FormatDtoJson(String json) {
     var formatted = json;
     formatted = formatted.replaceAll(
