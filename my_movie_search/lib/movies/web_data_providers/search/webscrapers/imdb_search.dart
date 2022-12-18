@@ -107,8 +107,6 @@ mixin ScrapeIMDBSearchDetails
     final Map rowData = {};
     rowData[outerElementIdentity] = person[_searchResultId];
     rowData[outerElementOfficialTitle] = person[_searchResultPersonName];
-    //rowData[outerElementYearRange] = getYearRange(info);
-    //rowData[outerElementType] = movieType;
     rowData[outerElementImage] =
         person[_searchResultPersonImage][_searchResultImageUrl];
     String knownFor = 'known for ${person[_searchResultPersonMovie]}';
