@@ -91,7 +91,7 @@ void main() {
       final expectedOutput = intermediateMapList;
       final testClass = QueryIMDBNameDetails();
       final criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = 'nm7602562';
+      criteria.criteriaTitle = 'nm0123456';
       testClass.criteria = criteria;
       final actualOutput = await testClass.myConvertWebTextToTraversableTree(
         imdbHtmlSampleFull,
@@ -113,7 +113,7 @@ void main() {
       }
 
       final expectedValue = expectedDTOList;
-      expectedValue.first.uniqueId = 'nm7602562';
+      expectedValue.first.uniqueId = 'nm0123456';
       // Check the results.
       expect(
         actualResult,
@@ -185,7 +185,7 @@ void main() {
     test('add to cache via readPrioritisedCachedList', () async {
       final testClass = QueryIMDBNameDetails();
       await testClass.clearThreadedCache();
-      final criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final criteria = SearchCriteriaDTO().fromString('nm0123456');
       await testClass.readPrioritisedCachedList(
         criteria,
         source: streamImdbHtmlOfflineData,
@@ -210,7 +210,7 @@ void main() {
     test('fetch result from cache', () async {
       final testClass = QueryIMDBNameDetails();
       await testClass.clearThreadedCache();
-      final criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final criteria = SearchCriteriaDTO().fromString('nm0123456');
       await testClass.readPrioritisedCachedList(
         criteria,
         source: streamImdbHtmlOfflineData,
@@ -227,7 +227,7 @@ void main() {
     test('clear cache', () async {
       final testClass = QueryIMDBNameDetails();
       await testClass.clearThreadedCache();
-      final criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final criteria = SearchCriteriaDTO().fromString('nm0123456');
       await testClass.readPrioritisedCachedList(
         criteria,
         source: streamImdbHtmlOfflineData,
@@ -333,7 +333,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBNameDetails();
       await testClass.myClearCache();
-      final criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final criteria = SearchCriteriaDTO().fromString('nm0123456');
 
       // Invoke the functionality.
       await testClass

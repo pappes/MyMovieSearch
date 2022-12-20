@@ -7,6 +7,7 @@ import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 class MovieResultDTO {
   DataSourceType source = DataSourceType.none;
@@ -262,6 +263,67 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   MovieResultDTO testDto(String testText) {
     title = testText;
+    return this;
+  }
+
+  /// Create a MovieResultDTO with supplied data.
+  ///
+  MovieResultDTO init({
+    DataSourceType source = DataSourceType.none,
+    String? uniqueId = movieResultDTOUninitialized,
+    String? alternateId = '',
+    String? title = '',
+    String? alternateTitle = '',
+    String? description = '',
+    String? type = 'MovieContentType.none',
+    String? year = '0',
+    String? yearRange = '',
+    String? userRating = '0',
+    String? userRatingCount = '0',
+    String? censorRating = 'CensorRatingType.none',
+    String? runTime = '0',
+    String? imageUrl = '',
+    String? language = 'LanguageType.none',
+    String? languages = '[]',
+    String? genres = '[]',
+    String? keywords = '[]',
+    // Related DTOs are in a category, then keyed by uniqueId
+    Map<String, Map<String, MovieResultDTO>> related = const {},
+  }) {
+    // Strongly type variables, caller must give valid data
+    this.source = source;
+    this.related = related;
+    // Weakly typed variables, help caller to massage data
+    this.uniqueId = uniqueId ?? movieResultDTOUninitialized;
+    this.alternateId = alternateId ?? '';
+    this.title = title ?? '';
+    this.alternateTitle = alternateTitle ?? '';
+    this.description = description ?? '';
+    this.yearRange = yearRange ?? '';
+    this.imageUrl = imageUrl ?? '';
+    this.year = IntHelper.fromText(year) ?? 0;
+    this.userRatingCount = IntHelper.fromText(userRatingCount) ?? 0;
+    this.userRating = DoubleHelper.fromText(userRating) ?? 0;
+    this.runTime = Duration(seconds: IntHelper.fromText(runTime) ?? 0);
+    this.languages = dynamicToStringList(languages);
+    this.genres = dynamicToStringList(genres);
+    this.keywords = dynamicToStringList(keywords);
+    // Enumerations, work with what we get
+    this.type = getEnumValue<MovieContentType>(
+          type,
+          MovieContentType.values,
+        ) ??
+        MovieContentType.none;
+    this.censorRating = getEnumValue<CensorRatingType>(
+          censorRating,
+          CensorRatingType.values,
+        ) ??
+        CensorRatingType.none;
+    this.language = getEnumValue<LanguageType>(
+          language,
+          LanguageType.values,
+        ) ??
+        LanguageType.none;
     return this;
   }
 

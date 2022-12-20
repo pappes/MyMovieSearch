@@ -40,6 +40,49 @@ const imdbSuffixURL = '?ref_=nv_sr_srsg_0';
 const imdbPhotosPath = 'mediaindex';
 const imdbParentalPath = 'parentalguide';
 
+const deepId = 'nmconst';
+const deepPersonNameHeader =
+    'nameText'; // Can be repeated for spouce - user first instance only
+const deepPersonImageHeader =
+    'primaryImage'; // Can be repeated for related movies - use first instance only
+const deepPersonImageField = 'url';
+const deepPersonDescriptionHeader = 'bio';
+const deepPersonDescriptionField = 'plainText';
+const deepPersonStartDateHeader = 'birthDate';
+const deepPersonStartDateField = 'year';
+const deepPersonEndDateHeader = 'deathDate';
+const deepPersonEndDateField = 'year';
+const deepPersonPopularityHeader = 'meterRanking';
+const deepPersonPopularityField = 'currentRank';
+
+const deepPersonRelatedSuffix =
+    'Credits'; // Repeated inside the category as "credits" - use case sensative compare
+const deepRelatedCategoryHeader =
+    'category'; // Repeated inside the node - use the first instance for the credits section
+const deepPersonRelatedMovieContainer = 'node';
+const deepPersonRelatedMovieHeader = 'title';
+const deepPersonRelatedMovieParentCharactorHeader =
+    'characters'; // same map depth as title
+const deepPersonRelatedMovieParentCharactorField =
+    'name'; // same map depth as title
+const deepPersonRelatedMovieId =
+    'id'; // Repeated inside other children of the title - do not do a deep search
+const deepPersonRelatedMovieAlternateTitle = 'originalTitleText'; //text
+const deepPersonRelatedMovieTitle = 'titleText'; //text
+const deepPersonRelatedMovieType = 'titleType'; //text
+const deepPersonRelatedMovieUrl = 'primaryImage'; //text
+const deepPersonRelatedMovieUserRating = 'aggregateRating';
+const deepPersonRelatedMovieUserRatingCount = 'voteCount';
+const deepPersonRelatedMovieYearHeader = 'releaseYear';
+const deepPersonRelatedMovieYearStart = 'year';
+const deepPersonRelatedMovieYearEnd = 'endYear';
+const deepPersonRelatedMovieDurationHeader = 'runtime';
+const deepPersonRelatedMovieDurationField = 'seconds';
+const deepPersonRelatedMovieCensorRatingHeader = 'certificate';
+const deepPersonRelatedMovieCensorRatingField = 'rating';
+const deepPersonRelatedMovieGenreHeader = 'genres';
+const deepPersonRelatedMovieGenreField = 'text';
+
 /// Create a URL from the IMDB identifier.
 ///
 /// ```dart

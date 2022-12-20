@@ -20,7 +20,8 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   ) async {
     final document = parse(webText);
     final movieData = _scrapeWebPage(document);
-    if (movieData[outerElementDescription] == null) {
+    if (movieData[outerElementDescription] == null &&
+        movieData['props'] == null) {
       throw 'imdb web scraper data not detected for criteria $getCriteriaText';
     }
     return [movieData];
@@ -54,7 +55,7 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// and extract values from the JSON.
   String _getMovieJson(Document document) {
     final scriptElement =
-        document.querySelector('script[type="application/ld+json"]');
+        document.querySelector('script[type="application/json"]');
     if (scriptElement == null || scriptElement.innerHtml.isEmpty) {
       logger.e('no JSON details found for Name $getCriteriaText');
       return '{}';

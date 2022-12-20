@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'test_helper.dart';
@@ -48,6 +49,42 @@ void clearCopyright(MovieResultDTO dto) {
       clearCopyright(dto.related[category]![uniqueId]!);
     }
   }
+}
+
+MovieResultDTO fullDTO() {
+  final dto = MovieResultDTO();
+
+  dto.source = DataSourceType.wiki;
+  dto.uniqueId = 'abc123';
+  dto.alternateId = '123abc';
+  dto.title = 'init testing';
+  dto.alternateTitle = 'testing init';
+  dto.description = 'test dto';
+  dto.type = MovieContentType.episode;
+  dto.year = 1999;
+  dto.yearRange = '1999-2005';
+  dto.userRating = 1.5;
+  dto.userRatingCount = 1500;
+  dto.censorRating = CensorRatingType.family;
+  dto.runTime = const Duration(seconds: 9000);
+  dto.imageUrl = 'www.microsoft.com';
+  dto.language = LanguageType.mostlyEnglish;
+  dto.languages = ['a', 'b', 'c'];
+  dto.genres = ['x', 'y', 'z'];
+  dto.keywords = ['they', 'them'];
+
+  final dto2 = MovieResultDTO();
+  dto2.uniqueId = 'dto2';
+  final dto3 = MovieResultDTO();
+  dto3.uniqueId = 'dto3';
+  final dto4 = MovieResultDTO();
+  dto4.uniqueId = 'dto4';
+
+  dto.related = {
+    'Actress': {dto2.uniqueId: dto2, dto3.uniqueId: dto3},
+    'Director': {dto4.uniqueId: dto4, dto3.uniqueId: dto3},
+  };
+  return dto;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -176,6 +213,42 @@ void main() {
       testYearCompare('2000', 2000);
       testYearCompare('1999-2000', 2000);
       testYearCompare('1999-', 1999);
+    });
+  });
+
+  group('MovieResultDTOinit', () {
+    // Convert a dto to a map.
+    test('empty_DTO', () {
+      final dto = MovieResultDTO();
+      final initialisedDTO = MovieResultDTO().init();
+      expect(dto, MovieResultDTOMatcher(initialisedDTO));
+    });
+    test('full_DTO_json', () {
+      final dto = fullDTO();
+
+      final initialisedDTO = MovieResultDTO().init(
+        source: dto.source,
+        uniqueId: dto.uniqueId,
+        alternateId: dto.alternateId,
+        title: dto.title,
+        alternateTitle: dto.alternateTitle,
+        description: dto.description,
+        type: dto.type.toString(),
+        year: dto.year.toString(),
+        yearRange: dto.yearRange,
+        userRating: dto.userRating.toString(),
+        userRatingCount: dto.userRatingCount.toString(),
+        censorRating: dto.censorRating.toString(),
+        runTime: '9000',
+        imageUrl: dto.imageUrl,
+        language: dto.language.toString(),
+        languages: json.encode(dto.languages),
+        genres: json.encode(dto.genres),
+        keywords: json.encode(dto.keywords),
+        related: dto.related,
+      );
+
+      expect(dto, MovieResultDTOMatcher(initialisedDTO));
     });
   });
 
