@@ -14,21 +14,23 @@ const relatedActorsLabel = 'Cast:';
 const relatedDirectorsLabel = 'Directed by:';
 
 class ImdbWebScraperConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
+  final DataSourceType source;
+  ImdbWebScraperConverter(this.source);
+  List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     final dto = dtoFromMap(map);
     return [dto];
   }
 
   /// Take a [Map] of IMDB data and create a [MovieResultDTO] from it.
-  static MovieResultDTO dtoFromMap(Map map) {
-    final movie = MovieResultDTO();
+  MovieResultDTO dtoFromMap(Map map) {
+    final movie = MovieResultDTO().init(source: source);
     _shallowConvert(movie, map);
     _deepConvert(movie, map);
     return movie;
   }
 
   /// Parse [Map] to pull IMDB data out.
-  static void _deepConvert(MovieResultDTO movie, Map map) {
+  void _deepConvert(MovieResultDTO movie, Map map) {
     final id = _deepSearch(deepId, map).toString();
     final name = _getDeepString(_deepSearch(deepPersonNameHeader, map));
     final url = _getDeepString(
@@ -47,6 +49,11 @@ class ImdbWebScraperConverter {
       _deepSearch(deepPersonEndDateHeader, map),
       key: deepPersonEndDateField,
     );
+    final yearRange = (null != endDate)
+        ? '$startDate-$endDate'
+        : (null != startDate)
+            ? startDate
+            : null;
     final popularity = _getDeepString(
       _deepSearch(deepPersonPopularityHeader, map),
       key: deepPersonPopularityField,
@@ -60,17 +67,19 @@ class ImdbWebScraperConverter {
       ),
     );
 
-    movie.init(
-      source: DataSourceType.imdbSearch,
-      uniqueId: id,
-      title: name,
-      description: description,
-      type: MovieContentType.person.toString(),
-      year: startDate,
-      yearRange: '$startDate-$endDate',
-      userRatingCount: popularity,
-      imageUrl: url,
-      related: related,
+    movie.merge(
+      MovieResultDTO().init(
+        source: source,
+        uniqueId: id,
+        title: name,
+        description: description,
+        type: getImdbMovieContentType('', null, id).toString(),
+        year: startDate,
+        yearRange: yearRange,
+        userRatingCount: popularity,
+        imageUrl: url,
+        related: related,
+      ),
     );
   }
 
@@ -124,7 +133,7 @@ class ImdbWebScraperConverter {
   }
 
   /// extract actor credits information from [list].
-  static Map<String, Map<String, MovieResultDTO>> _getDeepRelated(
+  Map<String, Map<String, MovieResultDTO>> _getDeepRelated(
     dynamic list,
   ) {
     final result = <String, Map<String, MovieResultDTO>>{};
@@ -152,7 +161,7 @@ class ImdbWebScraperConverter {
   }
 
   /// extract collections of movies for a specific category.
-  static Map<String, MovieResultDTO> _getDeepCategoryMovies(Map category) {
+  Map<String, MovieResultDTO> _getDeepCategoryMovies(Map category) {
     final result = <String, MovieResultDTO>{};
     final nodes = _deepSearch(
       deepPersonRelatedMovieContainer,
@@ -193,7 +202,7 @@ class ImdbWebScraperConverter {
   }
 
   /// extract related movie details from [map].
-  static MovieResultDTO _getDeepMovie(Map map) {
+  MovieResultDTO _getDeepMovie(Map map) {
     final id = _deepSearch(deepPersonRelatedMovieId, map)!.toString();
     final title = _getDeepString(
       _deepSearch(deepPersonRelatedMovieTitle, map),
@@ -247,9 +256,8 @@ class ImdbWebScraperConverter {
         genres = json.encode(gernreList);
       }
     }
-
-    return MovieResultDTO().init(
-      source: DataSourceType.imdbSearch,
+    final newDTO = MovieResultDTO().init(
+      source: source,
       uniqueId: id,
       title: title,
       alternateTitle: originalTitle,
@@ -263,9 +271,10 @@ class ImdbWebScraperConverter {
       imageUrl: url,
       genres: genres?.toString(),
     );
+    return newDTO;
   }
 
-  static void _shallowConvert(MovieResultDTO movie, Map map) {
+  void _shallowConvert(MovieResultDTO movie, Map map) {
     movie.uniqueId = map[outerElementIdentity]?.toString() ?? movie.uniqueId;
     movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
     movie.alternateTitle =
@@ -324,7 +333,7 @@ class ImdbWebScraperConverter {
     _getRelatedSections(related, movie);
   }
 
-  static void _getRelated(MovieResultDTO movie, related, String label) {
+  void _getRelated(MovieResultDTO movie, related, String label) {
     // Do nothing if related is null
     if (related is Map) {
       final dto = dtoFromMap(related);

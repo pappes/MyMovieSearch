@@ -32,7 +32,10 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
     print(map);
-    if (map is Map) return ImdbWebScraperConverter.dtoFromCompleteJsonMap(map);
+    if (map is Map) {
+      return ImdbWebScraperConverter(DataSourceType.imdbSearch)
+          .dtoFromCompleteJsonMap(map);
+    }
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
 

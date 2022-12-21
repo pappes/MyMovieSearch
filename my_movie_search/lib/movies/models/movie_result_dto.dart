@@ -288,11 +288,11 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String? genres = '[]',
     String? keywords = '[]',
     // Related DTOs are in a category, then keyed by uniqueId
-    Map<String, Map<String, MovieResultDTO>> related = const {},
+    Map<String, Map<String, MovieResultDTO>>? related,
   }) {
     // Strongly type variables, caller must give valid data
     this.source = source;
-    this.related = related;
+    this.related = related ?? {};
     // Weakly typed variables, help caller to massage data
     this.uniqueId = uniqueId ?? movieResultDTOUninitialized;
     this.alternateId = alternateId ?? '';
