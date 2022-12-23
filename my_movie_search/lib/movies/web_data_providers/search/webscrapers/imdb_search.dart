@@ -7,6 +7,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
@@ -36,12 +37,17 @@ const _searchResultMovieActors = 'topCredits';
 /// ```
 mixin ScrapeIMDBSearchDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
+  static final detailConverter = ImdbWebScraperConverter(
+    DataSourceType.imdbSearch,
+  );
+
   /// Scrape movie data from html table(s) named findList.
   @override
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     final document = parse(webText);
+
     return _scrapeSearchResult(document, webText);
   }
 
@@ -52,10 +58,7 @@ mixin ScrapeIMDBSearchDetails
         document.querySelector('script[type="application/ld+json"]');
     if (detailScriptElement?.innerHtml.isNotEmpty ?? false) {
       final movieData = json.decode(detailScriptElement!.innerHtml) as Map;
-      if (movieData["@type"] == "Person") {
-        return _scrapePersonResult(webText);
-      }
-      if (movieData["@type"] != null) {
+      if (movieData["@type"] != "Person" && movieData["@type"] != null) {
         return _scrapeMovieResult(webText);
       }
     }
@@ -64,17 +67,10 @@ mixin ScrapeIMDBSearchDetails
         document.querySelector('script[type="application/json"]');
     if (resultScriptElement?.innerHtml.isNotEmpty ?? false) {
       final searchResult = json.decode(resultScriptElement!.innerHtml) as Map;
-      final list = _extractRowsFromMap(searchResult);
+      final list = extractRowsFromMap(searchResult);
       return list;
     }
     throw 'no search results found in $webText';
-  }
-
-  /// Delegate web scraping to IMDBPerson web scraper.
-  Future<List> _scrapePersonResult(String webText) {
-    final person = QueryIMDBNameDetails();
-    person.criteria = criteria;
-    return person.myConvertWebTextToTraversableTree(webText);
   }
 
   /// Delegate web scraping to IMDBMovie web scraper.
@@ -85,19 +81,28 @@ mixin ScrapeIMDBSearchDetails
   }
 
   // Extract search content from json
-  List<Map> _extractRowsFromMap(Map searchResult) {
-    List<Map> results = [];
+  List<Map> extractRowsFromMap(Map searchResult) {
+    final results = <Map>[];
     try {
       final content = searchResult['props']?['pageProps'] as Map;
-      final people = content?['nameResults']?['results'] as List;
-      for (final person in people) {
-        results.add(_getPerson(person as Map));
+      if (content.containsKey('nameResults') ||
+          content.containsKey('titleResults')) {
+        final people = content['nameResults']?['results'] as List;
+        for (final person in people) {
+          results.add(_getPerson(person as Map));
+        }
+        final movies = content['titleResults']?['results'];
+        for (final movie in movies) {
+          results.add(_getMovie(movie as Map));
+        }
       }
-      final movies = content?['titleResults']?['results'];
-      for (final movie in movies) {
-        results.add(_getMovie(movie as Map));
+      if (content.containsKey(deepPersonId) ||
+          content.containsKey(deepTitleId)) {
+        // Pass through complex result for later decoding
+        results.add(searchResult);
       }
-    } catch (_) {
+    } catch (_) {}
+    if (results.isEmpty) {
       //TODO: return error explaining IMDB change of format for search result
     }
     return results;
@@ -114,6 +119,7 @@ mixin ScrapeIMDBSearchDetails
       knownFor += '(${person[_searchResultPersonMovieYear]})';
     }
     rowData[outerElementDescription] = knownFor;
+    rowData[outerElementType] = MovieContentType.person;
     return rowData;
   }
 

@@ -40,7 +40,8 @@ const imdbSuffixURL = '?ref_=nv_sr_srsg_0';
 const imdbPhotosPath = 'mediaindex';
 const imdbParentalPath = 'parentalguide';
 
-const deepId = 'nmconst';
+const deepTitleId = 'tconst';
+const deepPersonId = 'nmconst';
 const deepPersonNameHeader =
     'nameText'; // Can be repeated for spouce - user first instance only
 const deepPersonImageHeader =

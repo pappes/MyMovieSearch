@@ -24,14 +24,17 @@ class ImdbWebScraperConverter {
   /// Take a [Map] of IMDB data and create a [MovieResultDTO] from it.
   MovieResultDTO dtoFromMap(Map map) {
     final movie = MovieResultDTO().init(source: source);
-    _shallowConvert(movie, map);
-    _deepConvert(movie, map);
+    if (map.containsKey(outerElementIdentity)) {
+      _shallowConvert(movie, map);
+    } else {
+      _deepConvert(movie, map);
+    }
     return movie;
   }
 
   /// Parse [Map] to pull IMDB data out.
   void _deepConvert(MovieResultDTO movie, Map map) {
-    final id = _deepSearch(deepId, map).toString();
+    movie.uniqueId = _deepSearch(deepPersonId, map).toString();
     final name = _getDeepString(_deepSearch(deepPersonNameHeader, map));
     final url = _getDeepString(
       _deepSearch(deepPersonImageHeader, map),
@@ -70,10 +73,9 @@ class ImdbWebScraperConverter {
     movie.merge(
       MovieResultDTO().init(
         source: source,
-        uniqueId: id,
         title: name,
         description: description,
-        type: getImdbMovieContentType('', null, id).toString(),
+        type: getImdbMovieContentType('', null, movie.uniqueId).toString(),
         year: startDate,
         yearRange: yearRange,
         userRatingCount: popularity,
@@ -108,9 +110,14 @@ class ImdbWebScraperConverter {
         if (!multipleMatch) return matches.first;
       } else if (value is Map || value is Iterable) {
         // Recursively search children.
-        final result = _deepSearch(tag, value, suffixMatch: suffixMatch);
-        if (null != result) {
-          matches.add(result);
+        final result = _deepSearch(
+          tag,
+          value,
+          suffixMatch: suffixMatch,
+          multipleMatch: multipleMatch,
+        );
+        if (result is List) {
+          matches.addAll(result);
           if (!multipleMatch) return matches.first;
         }
       }
@@ -171,7 +178,7 @@ class ImdbWebScraperConverter {
     if (nodes is List) {
       for (final node in nodes) {
         if (node is Map) {
-          final title = _deepSearch(deepPersonRelatedMovieHeader, category);
+          final title = _deepSearch(deepPersonRelatedMovieHeader, node);
           if (title is Map) {
             final movieDto = _getDeepMovie(title);
             _getMovieCharatorName(movieDto, node);
@@ -275,7 +282,8 @@ class ImdbWebScraperConverter {
   }
 
   void _shallowConvert(MovieResultDTO movie, Map map) {
-    movie.uniqueId = map[outerElementIdentity]?.toString() ?? movie.uniqueId;
+    movie.uniqueId = map[outerElementIdentity]!.toString();
+
     movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
     movie.alternateTitle =
         map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;
@@ -326,7 +334,7 @@ class ImdbWebScraperConverter {
     for (final person in getPeopleFromJson(map[outerElementActors])) {
       movie.addRelated(relatedActorsLabel, person);
     }
-    // _getRelated(movie, map[outerElementActors], relatedActorsLabel);
+    //_getRelated(movie, map[outerElementActors], relatedActorsLabel);
     _getRelated(movie, map[outerElementRelated], _relatedMoviesLabel);
 
     final related = map[outerElementRelated];

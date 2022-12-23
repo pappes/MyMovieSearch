@@ -115,7 +115,6 @@ void main() {
       }
 
       final expectedValue = expectedDTOList;
-      expectedValue.first.uniqueId = 'nm0123456';
       // Check the results.
       expect(
         actualResult,
