@@ -222,14 +222,13 @@ MovieResultDTO makeResultDTOWithRelatedDTO(String sample) {
   final relatedDto3 = makeResultDTO("{sample}3");
   final relatedDto4 = makeResultDTO("{sample}4");
   mainDto.related = {
-    "director": <String, MovieResultDTO>{},
-    "actor": <String, MovieResultDTO>{},
-    "writer": <String, MovieResultDTO>{},
+    "director": {
+      relatedDto1.uniqueId: relatedDto1,
+      relatedDto2.uniqueId: relatedDto2,
+    },
+    "actor": {relatedDto3.uniqueId: relatedDto3},
+    "writer": {relatedDto4.uniqueId: relatedDto4},
   };
-  mainDto.related["director"]![relatedDto1.uniqueId] = relatedDto1;
-  mainDto.related["director"]![relatedDto2.uniqueId] = relatedDto2;
-  mainDto.related["actor"]![relatedDto3.uniqueId] = relatedDto3;
-  mainDto.related["writer"]![relatedDto4.uniqueId] = relatedDto4;
   return mainDto;
 }
 

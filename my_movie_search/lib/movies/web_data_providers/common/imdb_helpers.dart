@@ -40,13 +40,18 @@ const imdbSuffixURL = '?ref_=nv_sr_srsg_0';
 const imdbPhotosPath = 'mediaindex';
 const imdbParentalPath = 'parentalguide';
 
+// Fields common to person and title
+const deepImageHeader =
+    'primaryImage'; // Can be repeated for related movies - use first instance only
+const deepImageField = 'url';
+
+// Fields exclusive to title
 const deepTitleId = 'tconst';
+
+// Fields exclusive to person
 const deepPersonId = 'nmconst';
 const deepPersonNameHeader =
     'nameText'; // Can be repeated for spouce - user first instance only
-const deepPersonImageHeader =
-    'primaryImage'; // Can be repeated for related movies - use first instance only
-const deepPersonImageField = 'url';
 const deepPersonDescriptionHeader = 'bio';
 const deepPersonDescriptionField = 'plainText';
 const deepPersonStartDateHeader = 'birthDate';
@@ -71,7 +76,6 @@ const deepPersonRelatedMovieId =
 const deepPersonRelatedMovieAlternateTitle = 'originalTitleText'; //text
 const deepPersonRelatedMovieTitle = 'titleText'; //text
 const deepPersonRelatedMovieType = 'titleType'; //text
-const deepPersonRelatedMovieUrl = 'primaryImage'; //text
 const deepPersonRelatedMovieUserRating = 'aggregateRating';
 const deepPersonRelatedMovieUserRatingCount = 'voteCount';
 const deepPersonRelatedMovieYearHeader = 'releaseYear';

@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:math' show max;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+
+typedef RelatedMovies = Map<String, MovieResultDTO>;
+typedef RelatedMovieCategories = Map<String, RelatedMovies>;
 
 class MovieResultDTO {
   DataSourceType source = DataSourceType.none;
@@ -29,7 +31,7 @@ class MovieResultDTO {
   List<String> genres = [];
   List<String> keywords = [];
   // Related DTOs are in a category, then keyed by uniqueId
-  Map<String, Map<String, MovieResultDTO>> related = {};
+  RelatedMovieCategories related = {};
 }
 
 enum MovieContentType {
@@ -219,8 +221,8 @@ extension MapResultDTOConversion on Map {
   /// Related movie list is a json encoded DTO
   /// Wrapped in a map using uniqueId as key
   /// Which is wrapped in another map using category name as key.
-  Map<String, Map<String, MovieResultDTO>> stringToRelated(dynamic categories) {
-    final Map<String, Map<String, MovieResultDTO>> related = {};
+  RelatedMovieCategories stringToRelated(dynamic categories) {
+    final RelatedMovieCategories related = {};
     if (categories is Map) {
       // Find the categories that movie are collected under e.g. "director", "writer", etc
       for (final category in categories.entries) {
@@ -228,7 +230,7 @@ extension MapResultDTOConversion on Map {
           final categoryText = category.key.toString();
           final categoryContents = category.value as Map;
           // Build a collection of movies keyed by the unique id.
-          final Map<String, MovieResultDTO> movies = {};
+          final RelatedMovies movies = {};
           for (final movie in categoryContents.entries) {
             if (movie.value is Map) {
               final movieId = movie.key.toString();
@@ -288,7 +290,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String? genres = '[]',
     String? keywords = '[]',
     // Related DTOs are in a category, then keyed by uniqueId
-    Map<String, Map<String, MovieResultDTO>>? related,
+    RelatedMovieCategories? related,
   }) {
     // Strongly type variables, caller must give valid data
     this.source = source;
@@ -474,8 +476,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Combine related movie information from [existingDtos] into a [MovieResultDTO].
   ///
   void mergeDtoMapMap(
-    Map<String, Map<String, MovieResultDTO>> existingDtos,
-    Map<String, Map<String, MovieResultDTO>> newDtos,
+    RelatedMovieCategories existingDtos,
+    RelatedMovieCategories newDtos,
   ) {
     for (final key in newDtos.keys) {
       if (!existingDtos.containsKey(key)) {
@@ -489,8 +491,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Update [existingDtos] to also contain movies from [newDtos].
   ///
   void mergeDtoList(
-    Map<String, MovieResultDTO> existingDtos,
-    Map<String, MovieResultDTO> newDtos,
+    RelatedMovies existingDtos,
+    RelatedMovies newDtos,
   ) {
     for (final dto in newDtos.entries) {
       if (existingDtos.keys.contains(dto.key)) {

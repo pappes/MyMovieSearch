@@ -41,7 +41,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   final MovieSearchRepository movieRepository;
   StreamSubscription<MovieResultDTO>? _searchStatusSubscription;
-  final _allResults = <String, MovieResultDTO>{};
+  final RelatedMovies _allResults = {};
   List<MovieResultDTO> sortedResults = [];
   double _searchProgress = 0.0; // Value representing the search progress.
 
