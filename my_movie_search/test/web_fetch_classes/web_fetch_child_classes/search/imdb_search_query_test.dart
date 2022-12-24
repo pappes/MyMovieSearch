@@ -109,8 +109,6 @@ void main() {
               .dtoFromCompleteJsonMap(map),
         );
       }
-      print(
-          actualResult.toListOfDartJsonStrings(excludeCopyrightedData: false));
 
       final expectedValue = expectedDTOList;
       // Check the results.

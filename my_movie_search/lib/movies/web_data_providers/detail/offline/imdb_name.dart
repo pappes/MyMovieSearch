@@ -23,11 +23,12 @@ Stream<String> emitImdbHtmlSample(_) async* {
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"null","source":"DataSourceType.imdb","type":"MovieContentType.movie","languages":"[]","genres":"[]","keywords":"[]",
-  "related":{"Actor":{"tt0012370":{"uniqueId":"tt0012370","source":"DataSourceType.imdb","title":"Walk Skip Run","alternateTitle":" [Willy Rutter]  Run Forrest Run","type":"MovieContentType.movie","year":"1973","yearRange":"1973-null","runTime":"7140","languages":"[]",
-      "genres":"[\"Western\",\"Romance\"]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","related":{}},
+{"uniqueId":"nm0123456","source":"DataSourceType.imdb","title":"Mescalon Smoochington","type":"MovieContentType.person","year":"1933","yearRange":"1933-1977","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"THen Kramer said, \"Everybody is Mescalon Smoochington\".","userRatingCount":"184","imageUrl":"https://www.microsoft.com/images/M/MV5BNjdhNz.jpg",
+  "related":{"Actor":{"tt0012370":{"uniqueId":"tt0012370","source":"DataSourceType.imdb","title":"Walk Skip Run","alternateTitle":" [Willy Rutter]  Run Forrest Run","type":"MovieContentType.movie","year":"1973","yearRange":"1973","runTime":"7140","languages":"[]",
+      "genres":"[\"Western\",\"Romance\"]","keywords":"[]","userRating":"8.6","userRatingCount":"4837","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","related":{}},
       "tt0123580":{"uniqueId":"tt0123580","source":"DataSourceType.imdb","title":"Scott And Sharlene","alternateTitle":" [Nom da Plume, Other Charactor]  Aussieland","type":"MovieContentType.series","year":"1985","yearRange":"1985-2023","runTime":"1234","languages":"[]",
-      "genres":"[\"Horror\",\"Romance\"]","keywords":"[]","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BYjAxMz.jpg","related":{}}}}}
+      "genres":"[\"Horror\",\"Romance\"]","keywords":"[]","userRating":"7.5","userRatingCount":"5123","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BYjAxMz.jpg","related":{}}}}}
 ''',
 ];
 
