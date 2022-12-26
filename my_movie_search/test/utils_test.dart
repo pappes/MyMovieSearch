@@ -9,6 +9,7 @@ import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
@@ -693,6 +694,162 @@ Future main() async {
         testCombineUnique(['a', 'a', 'a'], ['a'], ['a']);
         testCombineUnique(['a', 'b', 'c'], ['a', 'b', 'c'], ['a', 'b', 'c']);
         testCombineUnique(['a', 'b', 'b'], ['b', 'b', 'c'], ['a', 'b', 'c']);
+      });
+    });
+  });
+
+  group('TreeHelper', () {
+    final simpleMap = {'marco': 'polo'};
+    final complexMap = [
+      'needle', //this list entry should not match - the value has no "key"
+      {
+        'text': {'exposition': 'blahblahblah', 'summary': 'concise'},
+        'needlesstosay': 'thisisnotahaystack',
+        'thisisaneedle': ['thisisahaystack'],
+        'needle': 'haystack1',
+        'marco': [
+          {'marco': 'polo'},
+          {'vac': 'polio'},
+          {'a': 'b', 'needle': 2, 123: 456, 'needle123': 'haystack456'},
+          {
+            'needle': {'haystacks': 'haystack3'}
+          },
+        ]
+      },
+      {
+        'pond',
+        {
+          'barn': {
+            'horse': 'stall',
+            'needle': {'haystack4'},
+            'dog': 'house'
+          }
+        },
+        'tree',
+      },
+      'haystack',
+    ];
+
+    group('deepSearch', () {
+      // Find a value in a map when there are no other values.
+      test('simple map search', () {
+        expect(TreeHelper(simpleMap).deepSearch('marco'), ['polo']);
+      });
+      // Find a value in a list when there are no other values.
+      test('simple list->map search', () {
+        expect(TreeHelper([simpleMap]).deepSearch('marco'), ['polo']);
+      });
+      // Find a value with a non-string key.
+      test('non string key search', () {
+        expect(TreeHelper(complexMap).deepSearch(123), [456]);
+      });
+
+      // Search for value in an empty list.
+      test('empty list search', () {
+        final list = [];
+        expect(TreeHelper(list).deepSearch('marco'), null);
+      });
+      // Search for value in an empty map.
+      test('empty map search', () {
+        final map = {};
+        expect(TreeHelper(map).deepSearch('marco'), null);
+      });
+      // Search for value in an empty set.
+      test('empty set search', () {
+        final set = <dynamic>{};
+        expect(TreeHelper(set).deepSearch('marco'), null);
+      });
+
+      // Search for a missing value in a tree.
+      test('complex tree search with no match', () {
+        expect(TreeHelper(complexMap).deepSearch('need'), null);
+      });
+
+      // Find a single matching value in a tree.
+      test('complex tree search', () {
+        expect(TreeHelper(complexMap).deepSearch('needle'), ['haystack1']);
+      });
+      // Find a multiple matching values in a tree.
+      test('complex tree multi-match search', () {
+        expect(
+          TreeHelper(complexMap).deepSearch('needle', multipleMatch: true),
+          [
+            'haystack1',
+            2,
+            {'haystacks': 'haystack3'},
+            {'haystack4'}
+          ],
+        );
+      });
+      // Find a matching value in a tree with partial search on keys.
+      test('complex tree suffix search', () {
+        expect(
+          TreeHelper(complexMap).deepSearch('needle', suffixMatch: true),
+          [
+            ['thisisahaystack']
+          ],
+        );
+      });
+      // Find a multiple matching values in a tree with partial search on keys.
+      test('complex tree multi-match suffix search', () {
+        expect(
+          TreeHelper(complexMap)
+              .deepSearch('needle', multipleMatch: true, suffixMatch: true),
+          [
+            ['thisisahaystack'], // list result
+            'haystack1', // string result
+            2, // int result
+            {'haystacks': 'haystack3'}, // Map result
+            {'haystack4'} // Set result
+          ],
+        );
+      });
+      // Find a multiple matching values in a tree with partial search on keys.
+      test('complex tree multi-match numeric suffix search', () {
+        expect(
+          TreeHelper(complexMap)
+              .deepSearch(123, multipleMatch: true, suffixMatch: true),
+          [456, 'haystack456'],
+        );
+      });
+    });
+
+    group('searchForString', () {
+      // Find key 'text' can convert the value to a string.
+      test('default key search', () {
+        expect(
+          TreeHelper(complexMap).searchForString(),
+          '{exposition: blahblahblah, summary: concise}',
+        );
+      });
+      // Find key 123 can convert the value to a string.
+      test('default key search', () {
+        expect(
+          TreeHelper(complexMap).searchForString(key: 123),
+          '456',
+        );
+      });
+    });
+
+    group('extensions', () {
+      // Test map, list and set extension helper classes.
+      test('searchForString map extension', () {
+        expect(simpleMap.searchForString(key: 'marco'), 'polo');
+      });
+      test('searchForString list extension', () {
+        expect([simpleMap].searchForString(key: 'marco'), 'polo');
+      });
+      test('searchForString set extension', () {
+        expect({simpleMap}.searchForString(key: 'marco'), 'polo');
+      });
+      test('deepSearch map extension', () {
+        expect(simpleMap.deepSearch('marco'), ['polo']);
+      });
+      test('deepSearch list extension', () {
+        expect([simpleMap].deepSearch('marco'), ['polo']);
+      });
+      test('deepSearch set extension', () {
+        expect({simpleMap}.deepSearch('marco'), ['polo']);
       });
     });
   });
