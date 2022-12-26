@@ -19,7 +19,7 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     final movieData = _scrapeWebPage(document);
     if (movieData[outerElementDescription] == null &&
         movieData['props'] == null) {
-      throw 'imdb web scraper data not detected for criteria $getCriteriaText';
+      throw 'imdb web scraper data not detected for criteria $getCriteriaText in $webText';
     }
     return [movieData];
   }

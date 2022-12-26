@@ -22,7 +22,6 @@ const outerElementLanguage = 'language';
 const outerElementLanguages = 'languages';
 const outerElementRelated = 'related';
 const outerElementActors = 'actor';
-const outerElementActress = 'actress';
 const outerElementDirector = 'director';
 const outerElementLink = 'url';
 
@@ -44,9 +43,16 @@ const imdbParentalPath = 'parentalguide';
 const deepImageHeader =
     'primaryImage'; // Can be repeated for related movies - use first instance only
 const deepImageField = 'url';
+const deepRelatedMovieContainer = 'node';
 
 // Fields exclusive to title
 const deepTitleId = 'tconst';
+const deepTitleRelatedHeader = 'mainColumnData';
+const deepTitleRelatedCastHeader = 'cast';
+const deepTitleRelatedCastContainer = 'node';
+const deepTitleRelatedDirectorHeader = 'directors';
+const deepTitleRelatedDirectorContainer = 'name';
+const deepTitleRelatedTitlesHeader = 'moreLikeThisTitles';
 
 // Fields exclusive to person
 const deepPersonId = 'nmconst';
@@ -65,28 +71,28 @@ const deepPersonRelatedSuffix =
     'Credits'; // Repeated inside the category as "credits" - use case sensative compare
 const deepRelatedCategoryHeader =
     'category'; // Repeated inside the node - use the first instance for the credits section
-const deepPersonRelatedMovieContainer = 'node';
-const deepPersonRelatedMovieHeader = 'title';
-const deepPersonRelatedMovieParentCharactorHeader =
+const deepRelatedMovieHeader = 'title';
+const deepRelatedMovieParentCharactorHeader =
     'characters'; // same map depth as title
-const deepPersonRelatedMovieParentCharactorField =
-    'name'; // same map depth as title
-const deepPersonRelatedMovieId =
+const deepRelatedMovieParentCharactorField = 'name'; // same map depth as title
+const deepRelatedMovieId =
     'id'; // Repeated inside other children of the title - do not do a deep search
-const deepPersonRelatedMovieAlternateTitle = 'originalTitleText'; //text
-const deepPersonRelatedMovieTitle = 'titleText'; //text
-const deepPersonRelatedMovieType = 'titleType'; //text
-const deepPersonRelatedMovieUserRating = 'aggregateRating';
-const deepPersonRelatedMovieUserRatingCount = 'voteCount';
-const deepPersonRelatedMovieYearHeader = 'releaseYear';
-const deepPersonRelatedMovieYearStart = 'year';
-const deepPersonRelatedMovieYearEnd = 'endYear';
-const deepPersonRelatedMovieDurationHeader = 'runtime';
-const deepPersonRelatedMovieDurationField = 'seconds';
-const deepPersonRelatedMovieCensorRatingHeader = 'certificate';
-const deepPersonRelatedMovieCensorRatingField = 'rating';
-const deepPersonRelatedMovieGenreHeader = 'genres';
-const deepPersonRelatedMovieGenreField = 'text';
+const deepRelatedMovieAlternateTitle = 'originalTitleText'; //text
+const deepRelatedMovieTitle = 'titleText'; //text
+const deepRelatedMovieType = 'titleType'; //text
+const deepRelatedMovieUserRating = 'aggregateRating';
+const deepRelatedMovieUserRatingCount = 'voteCount';
+const deepRelatedMovieYearHeader = 'releaseYear';
+const deepRelatedMovieYearStart = 'year';
+const deepRelatedMovieYearEnd = 'endYear';
+const deepRelatedMovieDurationHeader = 'runtime';
+const deepRelatedMovieDurationField = 'seconds';
+const deepRelatedMovieCensorRatingHeader = 'certificate';
+const deepRelatedMovieCensorRatingField = 'rating';
+const deepRelatedMovieGenreHeader = 'genres';
+const deepRelatedMovieGenreField = 'text';
+
+const deepRelatedPersonId = 'id';
 
 /// Create a URL from the IMDB identifier.
 ///

@@ -113,6 +113,8 @@ void main() {
               .dtoFromCompleteJsonMap(map),
         );
       }
+      print(
+          actualResult.toListOfDartJsonStrings(excludeCopyrightedData: false));
 
       final expectedValue = expectedDTOList;
       // Check the results.
@@ -364,7 +366,7 @@ void main() {
       final testClass = QueryIMDBNameDetails();
       await testClass.myClearCache();
       const expectedException =
-          '[QueryIMDBNameDetails] Error in imdb_person with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria ';
+          '[QueryIMDBNameDetails] Error in imdb_person with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria  in not valid html';
 
       // Invoke the functionality.
       await testClass
@@ -377,7 +379,7 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBNameDetails] Error in imdb_person with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria ';
+          '[QueryIMDBNameDetails] Error in imdb_person with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria  in <html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBNameDetails();
       await testClass.myClearCache();

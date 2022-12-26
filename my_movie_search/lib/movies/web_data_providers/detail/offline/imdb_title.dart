@@ -1,180 +1,4 @@
-//query string https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=wonder%20woman
-
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-
-/* To update this data run
-       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
-in test('Run dtoFromCompleteJsonMap()'*/
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"tt7602562","source":"DataSourceType.imdb","title":"1234","type":"MovieContentType.movie","year":"2016","yearRange":"2016","language":"LanguageType.foreign","languages":"[\"Marathi\"]","genres":"[\"Drama\"]","keywords":"[\"terror\"]","description":"1234 is a movie starring some people. On India's Independence Day, a few people have a party.","userRating":"6.5","userRatingCount":"10","imageUrl":"https://m.media-amazon.com/images/M/MV5BMDMyOD...XkEyXkFqcGdeQXVyMTc4OTM4NjE@._V1_.jpg",
-  "related":{"Directed by:":{"nm4940617":{"uniqueId":"nm4940617","source":"DataSourceType.imdbSuggestions","title":"Milind Arun Kavde","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
-    "Cast:":{"nm2487587":{"uniqueId":"nm2487587","source":"DataSourceType.imdbSuggestions","title":"Abhijeet Chavhan","languages":"[]","genres":"[]","keywords":"[]","related":{}},
-      "nm3874318":{"uniqueId":"nm3874318","source":"DataSourceType.imdbSuggestions","title":"Kishore Chougule","languages":"[]","genres":"[]","keywords":"[]","related":{}},
-      "nm5794167":{"uniqueId":"nm5794167","source":"DataSourceType.imdbSuggestions","title":"Tejaa Deokar","languages":"[]","genres":"[]","keywords":"[]","related":{}},
-      "nm4391467":{"uniqueId":"nm4391467","source":"DataSourceType.imdbSuggestions","title":"Arun Kadam","languages":"[]","genres":"[]","keywords":"[]","related":{}}}}}
-''',
-];
-
-const intermediateMapList = [
-  {
-    '@context': 'http://schema.org',
-    '@type': MovieContentType.movie,
-    'url': '/title/tt7602562/',
-    'name': '1234',
-    'image':
-        'https://m.media-amazon.com/images/M/MV5BMDMyOD...XkEyXkFqcGdeQXVyMTc4OTM4NjE@._V1_.jpg',
-    'genre': 'Drama',
-    'actor': [
-      {
-        '@type': 'Person',
-        'url': '/name/nm2487587/',
-        'name': 'Abhijeet Chavhan'
-      },
-      {
-        '@type': 'Person',
-        'url': '/name/nm3874318/',
-        'name': 'Kishore Chougule'
-      },
-      {'@type': 'Person', 'url': '/name/nm5794167/', 'name': 'Tejaa Deokar'},
-      {'@type': 'Person', 'url': '/name/nm4391467/', 'name': 'Arun Kadam'}
-    ],
-    'director': {
-      '@type': 'Person',
-      'url': '/name/nm4940617/',
-      'name': 'Milind Arun Kavde'
-    },
-    'description':
-        "1234 is a movie starring some people. On India's Independence Day, a few people have a party.",
-    'datePublished': '2016',
-    'yearRange': '2016',
-    'creator': {'@type': 'Organization', 'url': '/company/co0813120/'},
-    'keywords': ['terror'],
-    'aggregateRating': {
-      '@type': 'AggregateRating',
-      'ratingCount': 10,
-      'bestRating': '10.0',
-      'worstRating': '1.0',
-      'ratingValue': '6.5'
-    },
-    'trailer': {
-      '@type': 'VideoObject',
-      'name': '1234 (2016) Trailer',
-      'embedUrl': '/video/imdb/vi962903577',
-      'thumbnail': {
-        '@type': 'ImageObject',
-        'contentUrl':
-            'https://m.media-amazon.com/images/M/MV5BYjgwNjBmZjgtYTdiOS00ZDM4LWIxY2YtOGJmYmQ4MzlhOWIyXkEyXkFqcGdeQXRyYW5zY29kZS13b3JrZmxvdw@@._V1_.jpg'
-      },
-      'thumbnailUrl':
-          'https://m.media-amazon.com/images/M/MV5BYjgwNjBmZjgtYTdiOS00ZDM4LWIxY2YtOGJmYmQ4MzlhOWIyXkEyXkFqcGdeQXRyYW5zY29kZS13b3JrZmxvdw@@._V1_.jpg',
-      'description': "On India's Independence Day, a few people have a party.",
-      'uploadDate': '2020-07-31T09:13:47Z'
-    },
-    'language': LanguageType.foreign,
-    'source': DataSourceType.imdb,
-    'languages': ['Marathi'],
-    'related': [],
-    'id': 'tt7602562',
-  }
-];
-
-const imdbJsonSampleInner = '''
-<script type="application/ld+json">{
-  "@context": "http://schema.org",
-  "@type": "Movie",
-  "url": "/title/tt7602562/",
-  "name": "1234",
-  "image": "https://m.media-amazon.com/images/M/MV5BMDMyOD...XkEyXkFqcGdeQXVyMTc4OTM4NjE@._V1_.jpg",
-  "genre": "Drama",
-  "actor": [
-    {
-      "@type": "Person",
-      "url": "/name/nm2487587/",
-      "name": "Abhijeet Chavhan"
-    },
-    {
-      "@type": "Person",
-      "url": "/name/nm3874318/",
-      "name": "Kishore Chougule"
-    },
-    {
-      "@type": "Person",
-      "url": "/name/nm5794167/",
-      "name": "Tejaa Deokar"
-    },
-    {
-      "@type": "Person",
-      "url": "/name/nm4391467/",
-      "name": "Arun Kadam"
-    }
-  ],
-  "director": {
-    "@type": "Person",
-    "url": "/name/nm4940617/",
-    "name": "Milind Arun Kavde"
-  },
-  "description": "1234 is a movie starring some people. On India\u0027s Independence Day, a few people have a party.",
-  "datePublished": "2016-08-05",
-  "creator": {
-    "@type": "Organization",
-    "url": "/company/co0813120/"
-  },
-  "keywords": "terror",
-  "aggregateRating": {
-    "@type": "AggregateRating",
-    "ratingCount": 10,
-    "bestRating": "10.0",
-    "worstRating": "1.0",
-    "ratingValue": "6.5"
-  },
-  "trailer": {
-    "@type": "VideoObject",
-    "name": "1234 (2016) Trailer",
-    "embedUrl": "/video/imdb/vi962903577",
-    "thumbnail": {
-      "@type": "ImageObject",
-      "contentUrl": "https://m.media-amazon.com/images/M/MV5BYjgwNjBmZjgtYTdiOS00ZDM4LWIxY2YtOGJmYmQ4MzlhOWIyXkEyXkFqcGdeQXRyYW5zY29kZS13b3JrZmxvdw@@._V1_.jpg"
-    },
-    "thumbnailUrl": "https://m.media-amazon.com/images/M/MV5BYjgwNjBmZjgtYTdiOS00ZDM4LWIxY2YtOGJmYmQ4MzlhOWIyXkEyXkFqcGdeQXRyYW5zY29kZS13b3JrZmxvdw@@._V1_.jpg",
-    "description": "On India\u0027s Independence Day, a few people have a party.",
-    "uploadDate": "2020-07-31T09:13:47Z"
-  }
-}</script>
-''';
-
-const imdbHtmlSampleInner = '''
-
-    <div class="txt-block">
-    <h4 class="inline">Language:</h4>
-        <a href="/search/title?title_type=feature&primary_language=mr&sort=moviemeter,asc&ref_=tt_dt_dt"
->Marathi</a>
-    </div>
-
-
-    <div class="txt-block">
-    <h4 class="inline">Release Date:</h4> 5 August 2016 (India)
-    <span class="see-more inline">
-      <a href="releaseinfo?ref_=tt_dt_dt"
->See more</a>&nbsp;&raquo;
-    </span>
-    </div>
-
-
-
-    <div class="imdbRating" itemtype="http://schema.org/AggregateRating" itemscope="" itemprop="aggregateRating">
-        <div class="ratingValue">
-            <strong title="6.5 based on 10 user ratings"><span itemprop="ratingValue">6.5</span></strong>
-            <span class="grey">/</span><span class="grey" itemprop="bestRating">10</span>
-        </div>
-        <a href="/title/tt7602562/ratings?ref_=tt_ov_rt"><span class="small" itemprop="ratingCount">10</span></a>
-    </div>
-
-                        
-''';
 
 const imdbHtmlSampleStart = ' <!DOCTYPE html> <html     <head>';
 const imdbHtmlSampleMiddle = ' </head> <body id="styleguide-v2" class="fixed">';
@@ -189,3 +13,335 @@ Future<Stream<String>> streamImdbHtmlOfflineData(dynamic dummy) {
 Stream<String> emitImdbHtmlSample(_) async* {
   yield imdbHtmlSampleFull;
 }
+
+final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+/* To update this data run
+       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
+in test('Run dtoFromCompleteJsonMap()'*/
+const expectedDtoJsonStringList = [
+  r'''
+{"uniqueId":"tt6123456","source":"DataSourceType.imdb","title":"Scott And Sharlene","alternateTitle":"Aussieland","type":"MovieContentType.series","year":"1985","yearRange":"1985-2023","runTime":"1234","languages":"[]",
+      "genres":"[\"Horror\",\"Romance\"]","keywords":"[]","userRating":"7.5","userRatingCount":"5123","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BYjAxMz.jpg",
+  "related":{"Cast:":{"nm0012370":{"uniqueId":"nm0012370","source":"DataSourceType.imdb","title":"Bill Jole","alternateTitle":" [Willy Rutter, Jimmy Banter]  ","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","related":{}},
+      "nm0012372":{"uniqueId":"nm0012372","source":"DataSourceType.imdb","title":"Jenny Jole","alternateTitle":" [Jilly Rutter, Jenny Banter]  ","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/MV5BY.jpg","related":{}}},
+    "Directed by:":{"nm0214370":{"uniqueId":"nm0214370","source":"DataSourceType.imdb","title":"Andy Jole","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/M2V5BM.jpg","related":{}},
+      "nm0214372":{"uniqueId":"nm0214372","source":"DataSourceType.imdb","title":"Shazza Jole","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/M2V5BY.jpg","related":{}}},
+    "Suggestions:":{"tt0012370":{"uniqueId":"tt0012370","source":"DataSourceType.imdb","title":"Walk Skip Run","alternateTitle":"Run Forrest Run","type":"MovieContentType.movie","year":"1973","yearRange":"1973","runTime":"7140","languages":"[]",
+      "genres":"[\"Western\",\"Romance\"]","keywords":"[]","userRating":"8.6","userRatingCount":"4837","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","related":{}},
+      "tt0123580":{"uniqueId":"tt0123580","source":"DataSourceType.imdb","title":"Scott And Sharlene","alternateTitle":"Aussieland","type":"MovieContentType.series","year":"1985","yearRange":"1985-2023","runTime":"1234","languages":"[]",
+      "genres":"[\"Horror\",\"Romance\"]","keywords":"[]","userRating":"7.5","userRatingCount":"5123","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BYjAxMz.jpg","related":{}}}}}
+''',
+];
+
+const imdbJsonSampleInner = '''
+<script type="application/json">$_embeddedJson</script>
+''';
+const imdbHtmlSampleInner = '';
+
+const intermediateMapList = [
+  {
+    'props': {
+      'pageProps': {
+        'tconst': 'tt6123456',
+        'aboveTheFold': {
+          'id': 'tt6123456',
+          'certificate': {'rating': 'TV-G'},
+          'originalTitleText': {'text': 'Aussieland'},
+          'titleText': {'text': 'Scott And Sharlene'},
+          'titleType': {'text': 'TV Series'},
+          'primaryImage': {
+            'url': 'https://www.microsoft.com/images/M/MV5BYjAxMz.jpg'
+          },
+          'ratingsSummary': {'aggregateRating': 7.5, 'voteCount': 5123},
+          'releaseYear': {'year': 1985, 'endYear': 2023},
+          'runtime': {'seconds': 1234},
+          'genres': {
+            'genres': [
+              {'text': 'Horror'},
+              {'text': 'Romance'}
+            ]
+          },
+          'keywords': {
+            'edges': [
+              {
+                'node': {'text': 'exorcism'}
+              },
+              {
+                'node': {'text': 'boxer'}
+              },
+              {
+                'node': {'text': 'chihuahua'}
+              }
+            ]
+          },
+          'plot': {
+            'plotText': {
+              'plainText':
+                  'Then Kramer said, "Everybody is Mescalon Smoochington".'
+            }
+          }
+        },
+        'mainColumnData': {
+          'cast': {
+            'edges': [
+              {
+                'node': {
+                  'characters': [
+                    {'name': 'Willy Rutter'},
+                    {'name': 'Jimmy Banter'}
+                  ],
+                  'name': {
+                    'id': 'nm0012370',
+                    'nameText': {'text': 'Bill Jole'},
+                    'primaryImage': {
+                      'url': 'https://www.microsoft.com/images/M/MV5BM.jpg'
+                    }
+                  }
+                }
+              },
+              {
+                'node': {
+                  'characters': [
+                    {'name': 'Jilly Rutter'},
+                    {'name': 'Jenny Banter'}
+                  ],
+                  'name': {
+                    'id': 'nm0012372',
+                    'nameText': {'text': 'Jenny Jole'},
+                    'primaryImage': {
+                      'url': 'https://www.microsoft.com/images/M/MV5BY.jpg'
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          'directors': [
+            {
+              'credits': [
+                {
+                  'name': {
+                    'id': 'nm0214370',
+                    'nameText': {'text': 'Andy Jole'},
+                    'primaryImage': {
+                      'url': 'https://www.microsoft.com/images/M/M2V5BM.jpg'
+                    }
+                  }
+                },
+                {
+                  'name': {
+                    'id': 'nm0214372',
+                    'nameText': {'text': 'Shazza Jole'},
+                    'primaryImage': {
+                      'url': 'https://www.microsoft.com/images/M/M2V5BY.jpg'
+                    }
+                  }
+                }
+              ]
+            }
+          ],
+          'moreLikeThisTitles': {
+            'edges': [
+              {
+                'node': {
+                  'id': 'tt0012370',
+                  'certificate': {'rating': 'PG-13'},
+                  'originalTitleText': {'text': 'Run Forrest Run'},
+                  'titleText': {'text': 'Walk Skip Run'},
+                  'titleType': {'text': 'Movie'},
+                  'primaryImage': {
+                    'url': 'https://www.microsoft.com/images/M/MV5BM.jpg'
+                  },
+                  'ratingsSummary': {'aggregateRating': 8.6, 'voteCount': 4837},
+                  'releaseYear': {'year': 1973, 'endYear': null},
+                  'runtime': {'seconds': 7140},
+                  'titleCardGenres': {
+                    'genres': [
+                      {'text': 'Western'},
+                      {'text': 'Romance'}
+                    ]
+                  }
+                }
+              },
+              {
+                'node': {
+                  'id': 'tt0123580',
+                  'certificate': {'rating': 'TV-G'},
+                  'originalTitleText': {'text': 'Aussieland'},
+                  'titleText': {'text': 'Scott And Sharlene'},
+                  'titleType': {'text': 'TV Series'},
+                  'primaryImage': {
+                    'url': 'https://www.microsoft.com/images/M/MV5BYjAxMz.jpg'
+                  },
+                  'ratingsSummary': {'aggregateRating': 7.5, 'voteCount': 5123},
+                  'releaseYear': {'year': 1985, 'endYear': 2023},
+                  'runtime': {'seconds': 1234},
+                  'titleCardGenres': {
+                    'genres': [
+                      {'text': 'Horror'},
+                      {'text': 'Romance'}
+                    ]
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+];
+
+const _embeddedJson = r'''
+    {
+  "props": {
+    "pageProps": {
+      "tconst": "tt6123456",
+      "aboveTheFold": {
+        "id": "tt6123456",
+        "certificate": {"rating": "TV-G"},
+        "originalTitleText": {"text": "Aussieland"},
+        "titleText": {"text": "Scott And Sharlene"},
+        "titleType": {"text": "TV Series"},
+        "primaryImage": {
+          "url": "https://www.microsoft.com/images/M/MV5BYjAxMz.jpg"
+        },
+        "ratingsSummary": {"aggregateRating": 7.5, "voteCount": 5123},
+        "releaseYear": {"year": 1985, "endYear": 2023},
+        "runtime": {"seconds": 1234},
+        "genres": {
+          "genres": [
+            {"text": "Horror"},
+            {"text": "Romance"}
+          ]
+        },
+        "keywords": {
+          "edges": [
+            {
+              "node": {"text": "exorcism"}
+            },
+            {
+              "node": {"text": "boxer"}
+            },
+            {
+              "node": {"text": "chihuahua"}
+            }
+          ]
+        },
+        "plot": {
+          "plotText": {
+            "plainText":
+                "Then Kramer said, \"Everybody is Mescalon Smoochington\"."
+          }
+        }
+      },
+      "mainColumnData": {
+        "cast": {
+          "edges": [
+            {
+              "node": {
+                "characters": [
+                  {"name": "Willy Rutter"},
+                  {"name": "Jimmy Banter"}
+                ],
+                "name": {
+                  "id": "nm0012370",
+                  "nameText": {"text": "Bill Jole"},
+                  "primaryImage": {
+                    "url": "https://www.microsoft.com/images/M/MV5BM.jpg"
+                  }
+                }
+              }
+            },
+            {
+              "node": {
+                "characters": [
+                  {"name": "Jilly Rutter"},
+                  {"name": "Jenny Banter"}
+                ],
+                "name": {
+                  "id": "nm0012372",
+                  "nameText": {"text": "Jenny Jole"},
+                  "primaryImage": {
+                    "url": "https://www.microsoft.com/images/M/MV5BY.jpg"
+                  }
+                }
+              }
+            }
+          ]
+        },
+        "directors": [
+          {
+            "credits": [
+              {
+                "name": {
+                  "id": "nm0214370",
+                  "nameText": {"text": "Andy Jole"},
+                  "primaryImage": {
+                    "url": "https://www.microsoft.com/images/M/M2V5BM.jpg"
+                  }
+                }
+              },
+              {
+                "name": {
+                  "id": "nm0214372",
+                  "nameText": {"text": "Shazza Jole"},
+                  "primaryImage": {
+                    "url": "https://www.microsoft.com/images/M/M2V5BY.jpg"
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        "moreLikeThisTitles": {
+          "edges": [
+            {
+              "node": {
+                "id": "tt0012370",
+                "certificate": {"rating": "PG-13"},
+                "originalTitleText": {"text": "Run Forrest Run"},
+                "titleText": {"text": "Walk Skip Run"},
+                "titleType": {"text": "Movie"},
+                "primaryImage": {
+                  "url": "https://www.microsoft.com/images/M/MV5BM.jpg"
+                },
+                "ratingsSummary": {"aggregateRating": 8.6, "voteCount": 4837},
+                "releaseYear": {"year": 1973, "endYear": null},
+                "runtime": {"seconds": 7140},
+                "titleCardGenres": {
+                  "genres": [
+                    {"text": "Western"},
+                    {"text": "Romance"}
+                  ]
+                }
+              }
+            },
+            {
+              "node": {
+                "id": "tt0123580",
+                "certificate": {"rating": "TV-G"},
+                "originalTitleText": {"text": "Aussieland"},
+                "titleText": {"text": "Scott And Sharlene"},
+                "titleType": {"text": "TV Series"},
+                "primaryImage": {
+                  "url": "https://www.microsoft.com/images/M/MV5BYjAxMz.jpg"
+                },
+                "ratingsSummary": {"aggregateRating": 7.5, "voteCount": 5123},
+                "releaseYear": {"year": 1985, "endYear": 2023},
+                "runtime": {"seconds": 1234},
+                "titleCardGenres": {
+                  "genres": [
+                    {"text": "Horror"},
+                    {"text": "Romance"}
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}
+''';
