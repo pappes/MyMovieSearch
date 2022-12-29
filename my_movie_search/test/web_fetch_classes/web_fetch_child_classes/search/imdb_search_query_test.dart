@@ -254,6 +254,18 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final imdbSearch = QueryIMDBSearch();
 
+      // steal expectedValue from imdb_name test data but source is really imdbSearch
+      expectedValue[0].source = DataSourceType.imdbSearch;
+      final relatedCast = expectedValue[0].related['Cast:']!;
+      relatedCast['nm0012370']!.source = DataSourceType.imdbSearch;
+      relatedCast['nm0012372']!.source = DataSourceType.imdbSearch;
+      final relatedDirector = expectedValue[0].related['Directed by:']!;
+      relatedDirector['nm0214370']!.source = DataSourceType.imdbSearch;
+      relatedDirector['nm0214372']!.source = DataSourceType.imdbSearch;
+      final relatedTitle = expectedValue[0].related['Suggestions:']!;
+      relatedTitle['tt0012370']!.source = DataSourceType.imdbSearch;
+      relatedTitle['tt0123580']!.source = DataSourceType.imdbSearch;
+
       // Invoke the functionality.
       await imdbSearch
           .readList(
