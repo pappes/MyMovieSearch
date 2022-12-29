@@ -59,6 +59,7 @@ MovieResultDTO fullDTO() {
   dto.alternateId = '123abc';
   dto.title = 'init testing';
   dto.alternateTitle = 'testing init';
+  dto.alternateTitle2 = 'testing dto';
   dto.description = 'test dto';
   dto.type = MovieContentType.episode;
   dto.year = 1999;
@@ -232,6 +233,7 @@ void main() {
         alternateId: dto.alternateId,
         title: dto.title,
         alternateTitle: dto.alternateTitle,
+        alternateTitle2: dto.alternateTitle2,
         description: dto.description,
         type: dto.type.toString(),
         year: dto.year.toString(),

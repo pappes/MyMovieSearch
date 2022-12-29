@@ -100,6 +100,8 @@ void main() {
               .dtoFromCompleteJsonMap(map),
         );
       }
+      print(
+          actualResult.toListOfDartJsonStrings(excludeCopyrightedData: false));
 
       final expectedValue = expectedDTOList;
       expectedValue.first.uniqueId = 'tt6123456';

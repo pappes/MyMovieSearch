@@ -241,6 +241,7 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
   dto.alternateId = '${sample}_alternateId';
   dto.title = '${sample}_title';
   dto.alternateTitle = '${sample}_alternateTitle';
+  dto.alternateTitle2 = '${sample}_alternateTitle2';
   dto.description = '${sample}_description';
   dto.type = MovieContentType.custom;
   dto.year = 123;

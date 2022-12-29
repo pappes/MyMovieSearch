@@ -103,7 +103,7 @@ Stream<String> _getOfflineHTML(String id) async* {
 <!DOCTYPE html>
 <html
     <head>
-      <script type="application/ld+json">{
+      <script type="application/json">{
         "name": "$id." }
       </script>
     </head>

@@ -49,6 +49,8 @@ class ImdbCastConverter {
     movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
     movie.alternateTitle =
         map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;
+    movie.alternateTitle2 =
+        map[outerElementAlternateTitle2]?.toString() ?? movie.alternateTitle2;
 
     return movie;
   }

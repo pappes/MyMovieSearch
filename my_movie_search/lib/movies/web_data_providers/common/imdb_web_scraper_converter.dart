@@ -317,7 +317,8 @@ class ImdbWebScraperConverter {
         multipleMatch: true,
       );
       if (names is List && names.isNotEmpty) {
-        dto.alternateTitle = ' ${names.toString()}  ${dto.alternateTitle}';
+        dto.alternateTitle = ' ${dto.alternateTitle}';
+        dto.alternateTitle2 = ' ${names.toString()}';
       }
     }
   }
