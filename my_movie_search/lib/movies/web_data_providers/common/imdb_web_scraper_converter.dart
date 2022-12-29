@@ -112,8 +112,17 @@ class ImdbWebScraperConverter {
   MovieResultDTO _getDeepTitleCommon(Map map, String id) {
     final title = // ...{'titleText':...{...'text':<value>...}}
         map.deepSearch(deepRelatedMovieTitle)?.searchForString();
-    final originalTitle = // ...{'originalTitleText':...{...'text':<value>...}}
+    String?
+        originalTitle = // ...{'originalTitleText':...{...'text':<value>...}}
         map.deepSearch(deepRelatedMovieAlternateTitle)?.searchForString();
+    if (title == originalTitle) {
+      originalTitle = null;
+    }
+
+    final description = // ...{'plotText':...{...'plainText':<value>...}}
+        map.deepSearch(deepRelatedMoviePlotHeader)?.searchForString(
+              key: deepRelatedMoviePlotField,
+            );
     final url = // ...{'primaryImage':...{...'url':<value>...}}
         map.deepSearch(deepImageHeader)?.searchForString(
               key: deepImageField,
@@ -165,6 +174,7 @@ class ImdbWebScraperConverter {
       source: source,
       title: title,
       alternateTitle: originalTitle,
+      description: description,
       type: movieType.toString(),
       year: startDate,
       yearRange: yearRange,
@@ -344,6 +354,9 @@ class ImdbWebScraperConverter {
     movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
     movie.alternateTitle =
         map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;
+    if (movie.title == movie.alternateTitle) {
+      movie.alternateTitle = '';
+    }
     movie.description =
         map[outerElementDescription]?.toString() ?? movie.description;
     movie.imageUrl = map[outerElementImage]?.toString() ?? movie.imageUrl;

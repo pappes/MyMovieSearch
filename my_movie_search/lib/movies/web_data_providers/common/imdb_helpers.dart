@@ -77,6 +77,8 @@ const deepRelatedMovieParentCharactorHeader =
 const deepRelatedMovieParentCharactorField = 'name'; // same map depth as title
 const deepRelatedMovieId =
     'id'; // Repeated inside other children of the title - do not do a deep search
+const deepRelatedMoviePlotHeader = 'plotText';
+const deepRelatedMoviePlotField = 'plainText';
 const deepRelatedMovieAlternateTitle = 'originalTitleText'; //text
 const deepRelatedMovieTitle = 'titleText'; //text
 const deepRelatedMovieType = 'titleType'; //text

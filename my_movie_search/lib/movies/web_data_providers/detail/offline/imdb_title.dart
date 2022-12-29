@@ -21,7 +21,8 @@ in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt6123456","source":"DataSourceType.imdb","title":"Scott And Sharlene","alternateTitle":"Aussieland","type":"MovieContentType.series","year":"1985","yearRange":"1985-2023","runTime":"1234","languages":"[]",
-      "genres":"[\"Horror\",\"Romance\"]","keywords":"[]","userRating":"7.5","userRatingCount":"5123","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BYjAxMz.jpg",
+      "genres":"[\"Horror\",\"Romance\"]","keywords":"[]",
+      "description":"Then Kramer said, \"Everybody is Mescalon Smoochington\".","userRating":"7.5","userRatingCount":"5123","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BYjAxMz.jpg",
   "related":{"Cast:":{"nm0012370":{"uniqueId":"nm0012370","source":"DataSourceType.imdb","title":"Bill Jole","alternateTitle":" [Willy Rutter, Jimmy Banter]  ","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","related":{}},
       "nm0012372":{"uniqueId":"nm0012372","source":"DataSourceType.imdb","title":"Jenny Jole","alternateTitle":" [Jilly Rutter, Jenny Banter]  ","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/MV5BY.jpg","related":{}}},
     "Directed by:":{"nm0214370":{"uniqueId":"nm0214370","source":"DataSourceType.imdb","title":"Andy Jole","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/M2V5BM.jpg","related":{}},
