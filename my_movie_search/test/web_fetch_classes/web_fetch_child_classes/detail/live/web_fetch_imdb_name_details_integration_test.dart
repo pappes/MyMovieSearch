@@ -13,14 +13,14 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"-2","source":"DataSourceType.imdb","title":"[QueryIMDBNameDetails] Error in imdb_person with criteria nm0101000 interpreting web text as a map :imdb web scraper data not detected for criteria nm0101000","type":"MovieContentType.custom","languages":"[]","genres":"[]","keywords":"[]","related":{}}
+{"uniqueId":"nm0101000","source":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","related":{}}
 ''',
   r'''
-{"uniqueId":"nm0101001","source":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","yearRange":"-","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"nm0101001","source":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
       "description":"Steve Bower is known for Vintage Reds (1998), Late Kick Off North East and Cumbria (2010) and The Search for the Holy Grail (1998).","related":{}}
 ''',
   r'''
-{"uniqueId":"nm0101002","source":"DataSourceType.imdb","title":"Stone Bower","type":"MovieContentType.person","yearRange":"-","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"nm0101002","source":"DataSourceType.imdb","title":"Stone Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
       "description":"Stone Bower is known for Against All Odds (1984), Death Valley (1982) and Jimmy the Kid (1982).","related":{}}
 ''',
 ];
@@ -70,8 +70,8 @@ void main() {
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following lines
-      // actualOutput.forEach((e) => e.related = {});
-      // print(actualOutput.toListOfDartJsonStrings());
+      //actualOutput.forEach((e) => e.related = {});
+      //print(actualOutput.toListOfDartJsonStrings(excludeCopyrightedData: false));
 
       final expectedOutput = expectedDTOList;
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));

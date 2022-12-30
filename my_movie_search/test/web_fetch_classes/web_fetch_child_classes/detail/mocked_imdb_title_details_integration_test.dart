@@ -97,14 +97,24 @@ List<String> _makeQueries(int startId, int qty) {
   return results;
 }
 
+Map offlineMapList(String id) => {
+      'props': {
+        'pageProps': {
+          'tconst': id,
+          'aboveTheFold': {
+            "titleText": {"text": "$id."},
+          },
+        }
+      }
+    };
+
 /// Make dummy html results for offline queries.
 Stream<String> _getOfflineHTML(String id) async* {
   yield '''
 <!DOCTYPE html>
 <html
     <head>
-      <script type="application/json">{
-        "name": "$id." }
+      <script type="application/json">${json.encode(offlineMapList(id))}
       </script>
     </head>
     <body>

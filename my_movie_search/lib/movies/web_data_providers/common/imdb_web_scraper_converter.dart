@@ -100,12 +100,13 @@ class ImdbWebScraperConverter {
   void _deepConvertTitle(MovieResultDTO movie, Map map) {
     movie.uniqueId = map.deepSearch(deepTitleId)!.first!.toString();
     movie.merge(_getDeepTitleCommon(map, movie.uniqueId));
-    movie.related = _getDeepTitleRelated(
-      map.deepSearch(
-        deepTitleRelatedHeader, // mainColumnData
-        multipleMatch: true,
-      ),
+    final relatedMap = map.deepSearch(
+      deepTitleRelatedHeader, // mainColumnData
+      multipleMatch: true,
     );
+    if (null != relatedMap) {
+      movie.related = _getDeepTitleRelated(relatedMap);
+    }
   }
 
   /// extract related movie details from [map].
@@ -161,12 +162,38 @@ class ImdbWebScraperConverter {
         map.deepSearch(deepRelatedMovieGenreHeader);
     String? genres;
     if (null != genreNode) {
-      final gernreList = genreNode.deepSearch(
+      final genreList = genreNode.deepSearch(
         deepRelatedMovieGenreField,
         multipleMatch: true,
       );
-      if (gernreList is List && gernreList.isNotEmpty) {
-        genres = json.encode(gernreList);
+      if (genreList is List && genreList.isNotEmpty) {
+        genres = json.encode(genreList);
+      }
+    }
+
+    final languageNode = // ...{'SpokenLanguages':...[...{...'text':<value>...}...]}
+        map.deepSearch(deepRelatedMovieLanguageHeader);
+    String? languages;
+    if (null != languageNode) {
+      final languageList = languageNode.deepSearch(
+        deepRelatedMovieLanguageField,
+        multipleMatch: true,
+      );
+      if (languageList is List && languageList.isNotEmpty) {
+        languages = json.encode(languageList);
+      }
+    }
+
+    final keywordNode = // ...{'keywords':...[...{...'text':<value>...}...]}
+        map.deepSearch(deepRelatedMovieKeywordHeader);
+    String? keywords;
+    if (null != keywordNode) {
+      final keywordList = keywordNode.deepSearch(
+        deepRelatedMovieKeywordField,
+        multipleMatch: true,
+      );
+      if (keywordList is List && keywordList.isNotEmpty) {
+        keywords = json.encode(keywordList);
       }
     }
     return MovieResultDTO().init(
@@ -175,7 +202,7 @@ class ImdbWebScraperConverter {
       title: title,
       alternateTitle: originalTitle,
       description: description,
-      type: movieType.toString(),
+      type: movieType?.toString(),
       year: startDate,
       yearRange: yearRange,
       userRating: userRating,
@@ -184,6 +211,8 @@ class ImdbWebScraperConverter {
       runTime: duration,
       imageUrl: url,
       genres: genres?.toString(),
+      keywords: keywords?.toString(),
+      languages: languages?.toString(),
     );
   }
 

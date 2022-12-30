@@ -94,6 +94,10 @@ const deepRelatedMovieCensorRatingHeader = 'certificate';
 const deepRelatedMovieCensorRatingField = 'rating';
 const deepRelatedMovieGenreHeader = 'genres';
 const deepRelatedMovieGenreField = 'text';
+const deepRelatedMovieKeywordHeader = 'keywords';
+const deepRelatedMovieKeywordField = 'text';
+const deepRelatedMovieLanguageHeader = 'spokenLanguages';
+const deepRelatedMovieLanguageField = 'text';
 
 const deepRelatedPersonId = 'id';
 
