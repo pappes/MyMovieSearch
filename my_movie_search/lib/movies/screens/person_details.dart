@@ -39,6 +39,8 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   Future _getDetails(
     SearchCriteriaDTO criteria,
   ) async {
+    if (_person.uniqueId.startsWith('-')) return; // Negative IDs are errors!
+
     /// Fetch person details from cache using a separate thread.
     final fastResults = await QueryIMDBNameDetails().readPrioritisedCachedList(
       criteria,

@@ -103,7 +103,7 @@ mixin ScrapeIMDBSearchDetails
       }
     } catch (_) {}
     if (results.isEmpty) {
-      //TODO: return error explaining IMDB change of format for search result
+      throw 'Possible IMDB site update, no search result found for search query';
     }
     return results;
   }
