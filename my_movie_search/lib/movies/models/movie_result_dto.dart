@@ -17,7 +17,7 @@ class MovieResultDTO {
   String alternateId = ''; // ID in another data source e.g. from TMDB to IMDB
   String title = '';
   String alternateTitle = '';
-  String alternateTitle2 = '';
+  String charactorName = '';
   String description = '';
   MovieContentType type = MovieContentType.none;
   int year = 0;
@@ -72,7 +72,7 @@ const String movieResultDTOUniqueId = 'uniqueId';
 const String movieResultDTOAlternateId = 'alternateId';
 const String movieResultDTOTitle = 'title';
 const String movieResultDTOAlternateTitle = 'alternateTitle';
-const String movieResultDTOAlternateTitle2 = 'alternateTitle2';
+const String movieResultDTOCharactorName = 'charactorName';
 const String movieResultDTODescription = 'description';
 const String movieResultDTOType = 'type';
 const String movieResultDTOYear = 'year';
@@ -181,7 +181,7 @@ extension MapResultDTOConversion on Map {
     dto.alternateId = dynamicToString(this[movieResultDTOAlternateId]);
     dto.title = dynamicToString(this[movieResultDTOTitle]);
     dto.alternateTitle = dynamicToString(this[movieResultDTOAlternateTitle]);
-    dto.alternateTitle2 = dynamicToString(this[movieResultDTOAlternateTitle2]);
+    dto.charactorName = dynamicToString(this[movieResultDTOCharactorName]);
 
     dto.description = dynamicToString(this[movieResultDTODescription]);
     dto.year = dynamicToInt(this[movieResultDTOYear]);
@@ -279,7 +279,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String? alternateId = '',
     String? title = '',
     String? alternateTitle = '',
-    String? alternateTitle2 = '',
+    String? charactorName = '',
     String? description = '',
     String? type = 'MovieContentType.none',
     String? year = '0',
@@ -304,7 +304,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     this.alternateId = alternateId ?? '';
     this.title = title ?? '';
     this.alternateTitle = alternateTitle ?? '';
-    this.alternateTitle2 = alternateTitle2 ?? '';
+    this.charactorName = charactorName ?? '';
     this.description = description ?? '';
     this.yearRange = yearRange ?? '';
     this.imageUrl = imageUrl ?? '';
@@ -366,8 +366,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (alternateTitle != defaultValues.alternateTitle) {
       result[movieResultDTOAlternateTitle] = alternateTitle;
     }
-    if (alternateTitle2 != defaultValues.alternateTitle2) {
-      result[movieResultDTOAlternateTitle2] = alternateTitle2;
+    if (charactorName != defaultValues.charactorName) {
+      result[movieResultDTOCharactorName] = charactorName;
     }
 
     if (type != defaultValues.type) {
@@ -458,7 +458,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       }
 
       alternateTitle = bestValue(newValue.alternateTitle, alternateTitle);
-      alternateTitle2 = bestValue(newValue.alternateTitle2, alternateTitle2);
+      charactorName = bestValue(newValue.charactorName, charactorName);
       description = bestValue(newValue.description, description);
       type = bestValue(newValue.type, type);
       year = bestValue(newValue.year, year);
@@ -603,7 +603,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     dto.alternateId = alternateId;
     dto.title = 'unknown';
     dto.alternateTitle = alternateTitle;
-    dto.alternateTitle2 = alternateTitle2;
+    dto.charactorName = charactorName;
 
     dto.description = description;
     dto.type = type;
@@ -641,7 +641,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     _matchCompare('alternateId', alternateId, other.alternateId);
     _matchCompare('title', title, other.title);
     _matchCompare('alternateTitle', alternateTitle, other.alternateTitle);
-    _matchCompare('alternateTitle2', alternateTitle2, other.alternateTitle2);
+    _matchCompare('charactorName', charactorName, other.charactorName);
     _matchCompare('description', description, other.description);
     _matchCompare('type', type, other.type);
     _matchCompare('year', year, other.year);

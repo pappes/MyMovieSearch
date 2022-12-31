@@ -6,7 +6,7 @@ const outerElementIdentity = 'id';
 
 const outerElementOfficialTitle = 'name';
 const outerElementAlternateTitle = 'alternateTitle';
-const outerElementAlternateTitle2 = 'alternateTitle2';
+const outerElementCharactorName = 'charactorName';
 const outerElementDescription = 'description';
 const outerElementKeywords = 'keywords';
 const outerElementGenre = 'genre';
