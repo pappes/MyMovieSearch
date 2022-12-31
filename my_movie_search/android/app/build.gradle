@@ -36,8 +36,8 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.example.my_movie_search"
-        minSdkVersion 31
-        targetSdkVersion 28
+        minSdkVersion 28
+        targetSdkVersion 33
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
