@@ -101,7 +101,7 @@ class ImdbWebScraperConverter {
     movie.uniqueId = map.deepSearch(deepTitleId)!.first!.toString();
     movie.merge(_getDeepTitleCommon(map, movie.uniqueId));
     final relatedMap = map.deepSearch(
-      deepTitleRelatedHeader, // mainColumnData
+      deepRelatedHeader, // mainColumnData
       multipleMatch: true,
     );
     if (null != relatedMap) {

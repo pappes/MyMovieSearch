@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
@@ -8,26 +7,18 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
-import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-const _searchResultsTable = 'findList';
-const _columnMovieText = 'result_text';
-const _columnMoviePoster = 'primary_photo';
 const _searchResultId = 'id';
 const _searchResultPersonName = 'displayNameText';
-const _searchResultPersonImage = 'avatarImageModel';
-const _searchResultPersonJob = 'knownForJobCategory';
 const _searchResultPersonMovie = 'knownForTitleText';
 const _searchResultPersonMovieYear = 'knownForTitleYear';
 const _searchResultMovieName = 'titleNameText';
 const _searchResultMovieYearRange = 'titleReleaseText';
 const _searchResultMovieType = 'imageType';
-const _searchResultMovieImage = 'titlePosterImageModel';
-const _searchResultImageUrl = 'url';
 const _searchResultMovieActors = 'topCredits';
 
 /// Implements [WebFetchBase] for the IMDB search html web scraper.
@@ -47,63 +38,62 @@ mixin ScrapeIMDBSearchDetails
     String webText,
   ) async {
     final document = parse(webText);
-
-    return _scrapeSearchResult(document, webText);
+    final resultScriptElement = document.querySelector(jsonScript);
+    if (resultScriptElement?.innerHtml.isNotEmpty ?? false) {
+      return _scrapeSearchResult(resultScriptElement!.innerHtml, webText);
+    }
+    throw 'No search results found in html:$webText';
   }
 
-  /// Collect JSON and webpage text to construct a map of the movie data.
-  Future<List> _scrapeSearchResult(Document document, String webText) async {
-    // Check to see if search returned a single result page
-    final detailScriptElement =
-        document.querySelector('script[type="application/ld+json"]');
-    if (detailScriptElement?.innerHtml.isNotEmpty ?? false) {
-      final movieData = json.decode(detailScriptElement!.innerHtml) as Map;
-      if (movieData["@type"] != "Person" && movieData["@type"] != null) {
-        return _scrapeMovieResult(webText);
-      }
-    }
-    // Extract search content from json
-    final resultScriptElement =
-        document.querySelector('script[type="application/json"]');
-    if (resultScriptElement?.innerHtml.isNotEmpty ?? false) {
-      final searchResult = json.decode(resultScriptElement!.innerHtml) as Map;
-      final list = extractRowsFromMap(searchResult);
+  /// Extract search content from json
+  Future<List> _scrapeSearchResult(String jsonText, String webText) async {
+    final searchResult = json.decode(jsonText);
+
+    final contents = TreeHelper(searchResult).deepSearch(
+      deepJsonResultsSuffix, // nameResults or titleResults
+      multipleMatch: true,
+      suffixMatch: true,
+    );
+    if (null != contents) {
+      final list = _extractSearchResults(contents);
       return list;
+    } else if (null != TreeHelper(searchResult).deepSearch(deepRelatedHeader)) {
+      return _scrapeMovieDetails(webText);
     }
-    throw 'no search results found in $webText';
+    throw 'No search results found in json:$jsonText';
   }
 
   /// Delegate web scraping to IMDBMovie web scraper.
-  Future<List> _scrapeMovieResult(String webText) {
+  Future<List> _scrapeMovieDetails(String webText) {
     final movie = QueryIMDBTitleDetails();
     movie.criteria = criteria;
     return movie.myConvertWebTextToTraversableTree(webText);
   }
 
   // Extract search content from json
-  List<Map> extractRowsFromMap(Map searchResult) {
+  List<Map> _extractSearchResults(List searchResult) {
     final results = <Map>[];
-    try {
-      final content = searchResult['props']?['pageProps'] as Map;
-      if (content.containsKey('nameResults') ||
-          content.containsKey('titleResults')) {
-        final people = content['nameResults']?['results'] as List;
-        for (final person in people) {
-          results.add(_getPerson(person as Map));
-        }
-        final movies = content['titleResults']?['results'];
-        for (final movie in movies) {
-          results.add(_getMovie(movie as Map));
+    final resultNodes = searchResult.deepSearch(
+          deepJsonResults, // 'results'
+          multipleMatch: true,
+        ) ??
+        [];
+    for (final resultNode in resultNodes) {
+      if (resultNode is List) {
+        for (final result in resultNode) {
+          if (result is Map) {
+            final uniqueid = result[outerElementIdentity]?.toString() ?? '';
+            if (uniqueid.startsWith(imdbPersonPrefix)) {
+              results.add(_getPerson(result));
+            } else if (uniqueid.startsWith(imdbTitlePrefix)) {
+              results.add(_getMovie(result));
+            }
+          }
         }
       }
-      if (content.containsKey(deepPersonId) ||
-          content.containsKey(deepTitleId)) {
-        // Pass through complex result for later decoding
-        results.add(searchResult);
-      }
-    } catch (_) {}
+    }
     if (results.isEmpty) {
-      throw 'Possible IMDB site update, no search result found for search query';
+      throw 'Possible IMDB site update, no search result found for search query, json contents:$searchResult';
     }
     return results;
   }
@@ -112,8 +102,8 @@ mixin ScrapeIMDBSearchDetails
     final Map rowData = {};
     rowData[outerElementIdentity] = person[_searchResultId];
     rowData[outerElementOfficialTitle] = person[_searchResultPersonName];
-    rowData[outerElementImage] =
-        person[_searchResultPersonImage][_searchResultImageUrl];
+
+    rowData[outerElementImage] = person.searchForString(key: deepImageField);
     String knownFor = 'known for ${person[_searchResultPersonMovie]}';
     if (null != person[_searchResultPersonMovieYear]) {
       knownFor += '(${person[_searchResultPersonMovieYear]})';
@@ -128,8 +118,7 @@ mixin ScrapeIMDBSearchDetails
     rowData[outerElementIdentity] = movie[_searchResultId];
     rowData[outerElementOfficialTitle] = movie[_searchResultMovieName];
     rowData[outerElementYearRange] = movie[_searchResultMovieYearRange];
-    rowData[outerElementImage] =
-        movie[_searchResultMovieImage][_searchResultImageUrl];
+    rowData[outerElementImage] = movie.searchForString(key: deepImageField);
     rowData[outerElementDescription] = 'staring '
         '${movie[_searchResultMovieActors]}';
 

@@ -20,6 +20,19 @@ Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
   return Future.value(Stream.value('not valid html'));
 }
 
+Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
+  final unexpectedJson = imdbSearchHtmlSampleFull.replaceAll(
+    '"results"',
+    '"found"',
+  );
+  return Future.value(Stream.value(unexpectedJson));
+}
+
+Future<Stream<String>> _emitEmtpyJsonSample(dynamic dummy) {
+  const emptyJson = '$imdbSearchHtmlSampleStart{}$imdbSearchHtmlSampleEnd';
+  return Future.value(Stream.value(emptyJson));
+}
+
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
@@ -201,7 +214,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final imdbSearch = QueryIMDBSearch();
       const expectedException =
-          '[QueryIMDBSearch] Error in imdbSearch with criteria  interpreting web text as a map :no search results found in not valid html';
+          '[QueryIMDBSearch] Error in imdbSearch with criteria  interpreting web text as a map :No search results found in html:not valid html';
 
       // Invoke the functionality.
       await imdbSearch
@@ -214,7 +227,7 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBSearch] Error in imdbSearch with criteria  interpreting web text as a map :no search results found in <html><body>stuff</body></html>';
+          '[QueryIMDBSearch] Error in imdbSearch with criteria  interpreting web text as a map :No search results found in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final imdbSearch = QueryIMDBSearch();
 
@@ -226,6 +239,40 @@ void main() {
 
       // Check the results.
     });
+  });
+
+  // Read IMDB search results from a simulated byte stream and report error due to unexpected json.
+  test('unexpected json contents', () async {
+    // Set up the test data.
+    const expectedException =
+        '[QueryIMDBSearch] Error in imdbSearch with criteria  interpreting web text as a map :Possible IMDB site update, no search result found for search query, json contents:[{found: [{id: nm0152436, displayNameText:';
+    final queryResult = <MovieResultDTO>[];
+    final imdbSearch = QueryIMDBSearch();
+
+    // Invoke the functionality.
+    await imdbSearch
+        .readList(SearchCriteriaDTO(), source: _emitUnexpectedJsonSample)
+        .then((values) => queryResult.addAll(values));
+    expect(queryResult.first.title, startsWith(expectedException));
+
+    // Check the results.
+  });
+
+  // Read IMDB search results from a simulated byte stream and report error due to unexpected json.
+  test('no json results', () async {
+    // Set up the test data.
+    const expectedException =
+        '[QueryIMDBSearch] Error in imdbSearch with criteria  interpreting web text as a map :No search results found in json:{}';
+    final queryResult = <MovieResultDTO>[];
+    final imdbSearch = QueryIMDBSearch();
+
+    // Invoke the functionality.
+    await imdbSearch
+        .readList(SearchCriteriaDTO(), source: _emitEmtpyJsonSample)
+        .then((values) => queryResult.addAll(values));
+    expect(queryResult.first.title, expectedException);
+
+    // Check the results.
   });
 
 ////////////////////////////////////////////////////////////////////////////////

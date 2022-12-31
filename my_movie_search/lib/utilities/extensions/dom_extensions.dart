@@ -3,6 +3,8 @@ import 'package:html/dom.dart' show Element, Node;
 // Extend standard dart library to use enums instead of hard coded strings
 enum ElementType { anchor, image, text, table, row }
 
+const jsonScript = 'script[type="application/json"]';
+
 const Map<ElementType, String> _htmlTags = {
   ElementType.anchor: 'a',
   ElementType.image: 'img',

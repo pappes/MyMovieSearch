@@ -7,6 +7,7 @@ import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -44,8 +45,7 @@ mixin ScrapeIMDBTitleDetails
   /// Use CSS selector to find the JSON script on the page
   /// and extract values from the JSON.
   String _getMovieJson(Document document) {
-    final scriptElement =
-        document.querySelector('script[type="application/json"]');
+    final scriptElement = document.querySelector(jsonScript);
     if (scriptElement == null || scriptElement.innerHtml.isEmpty) {
       logger.e('no JSON details found for Name $getCriteriaText');
       return '{}';

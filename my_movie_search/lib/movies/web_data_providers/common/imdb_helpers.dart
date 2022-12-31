@@ -45,10 +45,10 @@ const deepImageHeader =
     'primaryImage'; // Can be repeated for related movies - use first instance only
 const deepImageField = 'url';
 const deepRelatedMovieContainer = 'node';
+const deepRelatedHeader = 'mainColumnData';
 
 // Fields exclusive to title
 const deepTitleId = 'tconst';
-const deepTitleRelatedHeader = 'mainColumnData';
 const deepTitleRelatedCastHeader = 'cast';
 const deepTitleRelatedCastContainer = 'node';
 const deepTitleRelatedDirectorHeader = 'directors';
@@ -100,6 +100,9 @@ const deepRelatedMovieLanguageHeader = 'spokenLanguages';
 const deepRelatedMovieLanguageField = 'text';
 
 const deepRelatedPersonId = 'id';
+
+const deepJsonResults = 'results';
+const deepJsonResultsSuffix = 'Results';
 
 /// Create a URL from the IMDB identifier.
 ///

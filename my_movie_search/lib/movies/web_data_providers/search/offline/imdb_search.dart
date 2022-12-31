@@ -15,15 +15,17 @@ Stream<String> _emitImdbSearchHtmlSample(_) async* {
   yield imdbSearchHtmlSampleFull;
 }
 
-const imdbSearchHtmlSampleFull = '''
+const imdbSearchHtmlSampleFull =
+    '$imdbSearchHtmlSampleStart$imdbSampleJson$imdbSearchHtmlSampleEnd';
+const imdbSearchHtmlSampleStart = '''
 <!DOCTYPE html>
 <html
     xmlns:snip=true>
     </snip>
   <body id="styleguide-v2" class="fixed">
-  <script id="__NEXT_DATA__" type="application/json">
-$imdbSampleJson
-  </script>
+  <script id="__NEXT_DATA__" type="application/json">''';
+const imdbSearchHtmlSampleEnd = '''
+</script>
     <div id="wrapper">
     </div>
   </body>
