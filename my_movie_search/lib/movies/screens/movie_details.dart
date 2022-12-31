@@ -39,6 +39,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   /// Fetch full person details from imdb.
   Future _getDetails(SearchCriteriaDTO criteria) async {
     if (_movie.uniqueId.startsWith('-')) return; // Negative IDs are errors!
+    if ('' == _movie.uniqueId) return; // Not from IMDB!
 
     /// Fetch person details from cache using a separate thread.
     final fastResults = await QueryIMDBCastDetails().readPrioritisedCachedList(
