@@ -178,6 +178,9 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBFinder();
+      await testClass.myClearCache();
+      testClass.myConstructURI('tt0101000');
+      expectedValue.first.alternateId = 'tt0101000';
 
       // Invoke the functionality.
       await testClass
@@ -205,6 +208,8 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBFinder();
+      await testClass.myClearCache();
+      testClass.myConstructURI('tt0101000');
       const expectedException = '''
 [QueryTMDBDetails] Error in tmdbMovie with criteria  interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
@@ -225,6 +230,8 @@ not valid json
           '[QueryTMDBDetails] Error in tmdbMovie with criteria  translating page map to objects :expected map got List<dynamic> unable to interpret data [{hello: world}]';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBFinder();
+      await testClass.myClearCache();
+      testClass.myConstructURI('tt0101000');
 
       // Invoke the functionality.
       await testClass
