@@ -847,7 +847,10 @@ extension DTOCompare on MovieResultDTO {
     }
     // For people sort by popularity
     if (MovieContentType.person == type) {
-      return personPopularityCompare(other);
+      if (userRatingCount != other.userRatingCount) {
+        return personPopularityCompare(other);
+      }
+      return title.compareTo(other.title) * -1;
     }
     // See how many people have rated this movie.
     if (userRatingCategory() != other.userRatingCategory()) {
