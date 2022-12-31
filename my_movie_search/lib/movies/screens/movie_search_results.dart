@@ -104,6 +104,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
             padding: const EdgeInsets.all(16.0),
             itemCount: _sortedList.length,
             itemBuilder: _movieListBuilder,
+            primary: true, //attach scrollbar controller to primary view
           ),
         );
       },
