@@ -11,26 +11,43 @@ import 'package:my_movie_search/movies/screens/popup.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
-Future<void> _invokeChromeCustomeTabs(String url, BuildContext context) async {
-  try {
-    await tabs.launch(
-      url,
-      customTabsOption: tabs.CustomTabsOption(
-        toolbarColor: Theme.of(context).primaryColor,
-        enableDefaultShare: true,
-        enableUrlBarHiding: true,
-        showPageTitle: true,
-      ),
-    );
-  } catch (e) {
-    // An exception is thrown if browser app is not installed on Android device.
-    debugPrint(e.toString());
-    showPopup(context, url);
-  }
+void _invokeChromeCustomTabs(String url, BuildContext context) {
+  tabs
+      .launch(
+        url,
+        customTabsOption: tabs.CustomTabsOption(
+          toolbarColor: Theme.of(context).primaryColor,
+          enableDefaultShare: true,
+          enableUrlBarHiding: true,
+          showPageTitle: true,
+        ),
+      )
+      .onError((error, stackTrace) => _customTabsError(error, url, context));
 }
 
-Future<void> _openBrowser(String url, BuildContext context) async {
-  if (!await launcher.launch(url)) {
+void _customTabsError(
+  Object? e,
+  String url,
+  BuildContext context,
+) {
+  // An exception is thrown if browser app is not installed on Android device.
+  debugPrint(e.toString());
+  showPopup(context, url);
+}
+
+void _openBrowser(String url, BuildContext context) {
+  launcher.launch(url).then(
+        (bool success) => _browserError(success, url, context),
+      );
+}
+
+void _browserError(
+  bool success,
+  String url,
+  BuildContext context,
+) {
+  // An exception is thrown if browser app is not installed on Android device.
+  if (!success) {
     showPopup(context, url);
   }
 }
@@ -40,7 +57,7 @@ Future<void> _openBrowser(String url, BuildContext context) async {
 /// For platforms that don't support CustomTabs, the URL is displayed to the user.
 void viewWebPage(String url, BuildContext context) {
   if (Platform.isAndroid) {
-    _invokeChromeCustomeTabs(url, context);
+    _invokeChromeCustomTabs(url, context);
   } else {
     _openBrowser(url, context);
   }

@@ -37,21 +37,26 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   }
 
   /// Fetch full person details from imdb.
-  Future _getDetails(SearchCriteriaDTO criteria) async {
+  void _getDetails(SearchCriteriaDTO criteria) {
     if (_movie.uniqueId.startsWith('-')) return; // Negative IDs are errors!
     if ('' == _movie.uniqueId) return; // Not from IMDB!
 
     /// Fetch person details from cache using a separate thread.
-    final fastResults = await QueryIMDBCastDetails().readPrioritisedCachedList(
-      criteria,
-      priority: ThreadRunner.fast,
-    );
+    QueryIMDBCastDetails()
+        .readPrioritisedCachedList(
+          criteria,
+          priority: ThreadRunner.fast,
+        )
+        .then(_showDetails);
+  }
 
-    if (fastResults.isNotEmpty) {
+  /// Fetch full person details from imdb.
+  void _showDetails(List<MovieResultDTO> castDetails) {
+    if (castDetails.isNotEmpty) {
       // Check the user has not navigated away
       if (!mounted) return;
 
-      setState(() => _mergeDetails(fastResults));
+      setState(() => _mergeDetails(castDetails));
     }
   }
 

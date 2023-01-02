@@ -593,7 +593,7 @@ Future main() async {
     group('fromJson', () {
       /// Convert JSON [input] to a [List] of [String] and compare to [expectedOutput]
       void testFromJson(String? input, List<String> expectedOutput) {
-        final actual = ListHelper.fromJson(input);
+        final actual = StringListHelper.fromJson(input);
         expect(actual, expectedOutput, reason: 'input ${input.toString()}');
       }
 

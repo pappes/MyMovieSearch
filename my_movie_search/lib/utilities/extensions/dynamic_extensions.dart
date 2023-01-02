@@ -44,7 +44,7 @@ extension DynamicHelper on dynamic {
   ///
   List<String> dynamicToStringList(dynamic val) => toStringList_(val);
   static List<String> toStringList_(dynamic val) {
-    if (val is String) return ListHelper.fromJson(val);
+    if (val is String) return StringListHelper.fromJson(val);
     if (val is List<String>) return val;
     final result = <String>[];
     if (val is List) {

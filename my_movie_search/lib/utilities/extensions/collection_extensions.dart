@@ -2,7 +2,7 @@ import 'dart:convert';
 
 /// Extend [List]<[String]> to provide convenience functions.
 ///
-extension ListHelper on List<String> {
+extension StringListHelper on List<String> {
   /// Pull a list out of a json value - even if it is not represented as a list
   ///
   /// Convert scalar value to a List with a single value
@@ -51,5 +51,24 @@ extension ListHelper on List<String> {
     unique.addAll(itemList);
     clear();
     addAll(unique);
+  }
+}
+
+/// Extend [List]<dynamic> to provide convenience functions.
+///
+extension ListHelper<T> on List<T> {
+  /// Ensure value is a list.  Make it a list if it is not.
+  List<T> valueAsList(dynamic value) {
+    if (value is T) {
+      clear();
+      add(value);
+    }
+    if (value is List) {
+      clear();
+      for (final element in value) {
+        add(element as T);
+      }
+    }
+    return this;
   }
 }
