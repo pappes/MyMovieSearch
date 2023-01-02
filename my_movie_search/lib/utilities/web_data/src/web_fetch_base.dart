@@ -308,9 +308,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return const Stream<String>.empty();
     }
 
-    Future<void> _yieldStream(Stream<String> text) async {
-      await controller.addStream(text);
-      baseCloseController(controller);
+    Future<void> _yieldStream(Stream<String> text) {
+      return controller
+          .addStream(text)
+          .then((_) => baseCloseController(controller));
     }
 
     myConvertCriteriaToWebText(criteria)
@@ -434,8 +435,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     DataSourceFn? source,
   }) async* {
     criteria = newCriteria;
+    final isCached = await myIsResultCached(newCriteria);
     // if cached yield from cache
-    if (await myIsResultCached(newCriteria)) {
+    if (isCached) {
       print(
         'base ${ThreadRunner.currentThreadName} '
         'value was cached ${myFormatInputAsText(newCriteria)}',
@@ -443,8 +445,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       yield* myFetchResultFromCache(newCriteria);
     }
     // if not cached or cache is stale retrieve fresh data
-    if (!await myIsResultCached(newCriteria) ||
-        await myIsCacheStale(newCriteria)) {
+    if (!isCached || await myIsCacheStale(newCriteria)) {
       print(
         'base ${ThreadRunner.currentThreadName} ${myDataSourceName()} '
         'uncached ${myFormatInputAsText(newCriteria)}',

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
-import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [TieredCache] for retrieving movie details from IMDB.
@@ -32,7 +31,8 @@ mixin ThreadedCacheIMDBTitleDetails
   ) async {
     // add individual result to cache
     final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
-    return _cache.add(key, fetchedResult);
+    _cache.add(key, fetchedResult);
+    return _cache.add(_makeKey(criteria), fetchedResult);
   }
 
   /// Retrieve cached result.
