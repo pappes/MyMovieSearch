@@ -9,7 +9,7 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   '''
-{"uniqueId":"tt7602562","source":"DataSourceType.imdb","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"tt7602562","source":"DataSourceType.imdbSuggestions","languages":"[]","genres":"[]","keywords":"[]",
   "related":{"Directed by:":{"nm0001112":{"uniqueId":"nm0001112","source":"DataSourceType.imdbSuggestions","title":"Andrew Davis","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
     "Writing Credits:":{"nm0835732":{"uniqueId":"nm0835732","source":"DataSourceType.imdbSuggestions","title":"Jeb Stuart","languages":"[]","genres":"[]","keywords":"[]","related":{}},
       "nm0878638":{"uniqueId":"nm0878638","source":"DataSourceType.imdbSuggestions","title":"David Twohy","languages":"[]","genres":"[]","keywords":"[]","related":{}},

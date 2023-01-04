@@ -4,7 +4,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
-class ImdbCastConverter {
+class ImdbBibliographyConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     return [_dtoFromMap(map)];
   }

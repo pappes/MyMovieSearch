@@ -24,8 +24,7 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
     _scrapeRelated(document, movieData);
 
-    movieData[outerElementIdentity] =
-        getCriteriaText ?? movieData[outerElementIdentity];
+    movieData[outerElementIdentity] = getCriteriaText;
     return movieData;
   }
 

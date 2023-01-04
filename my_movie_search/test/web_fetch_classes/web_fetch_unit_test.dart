@@ -767,12 +767,12 @@ void main() {
       //.printStream('testConvert1:');
       expect(
         actualOutput,
-        completion(emitsInOrder([
+        emitsInOrder([
           containsSubstring(
             expectedValue,
             startsWith: input == '' ? '' : '[{"id": "',
           ),
-        ])),
+        ]),
       );
     }
 
