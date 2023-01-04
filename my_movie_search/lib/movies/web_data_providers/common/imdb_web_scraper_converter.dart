@@ -29,7 +29,7 @@ class ImdbWebScraperConverter {
 
   /// Take a [Map] of IMDB data and create a [MovieResultDTO] from it.
   MovieResultDTO dtoFromMap(Map map) {
-    var movie = MovieResultDTO().init(source: source);
+    var movie = MovieResultDTO().init();
     if (map.containsKey(outerElementIdentity)) {
       _shallowConvert(movie, map);
     } else if (null != map.deepSearch(deepPersonId)) {
@@ -39,6 +39,7 @@ class ImdbWebScraperConverter {
     } else {
       movie = movie.error('Unable to interpret IMDB contents from map $map');
     }
+    movie.source = source;
     return movie;
   }
 
@@ -83,7 +84,7 @@ class ImdbWebScraperConverter {
 
     movie.merge(
       MovieResultDTO().init(
-        source: source,
+        source: DataSourceType.imdbSuggestions,
         title: name,
         description: description,
         type: getImdbMovieContentType('', null, movie.uniqueId).toString(),
@@ -198,7 +199,7 @@ class ImdbWebScraperConverter {
     }
     return MovieResultDTO().init(
       uniqueId: id,
-      source: source,
+      source: DataSourceType.imdbSuggestions,
       title: title,
       alternateTitle: originalTitle,
       description: description,
@@ -363,7 +364,7 @@ class ImdbWebScraperConverter {
             );
 
     final newDTO = MovieResultDTO().init(
-      source: source,
+      source: DataSourceType.imdbSuggestions,
       uniqueId: id,
       title: title,
       imageUrl: url,
