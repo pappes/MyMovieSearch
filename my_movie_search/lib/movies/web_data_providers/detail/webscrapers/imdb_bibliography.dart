@@ -50,7 +50,7 @@ mixin ScrapeIMDBBibliographyDetails
   String? _getRole(Element credits) {
     final anchor = credits.querySelector('a')?.text;
     final firstLine = anchor?.trim().split('\n').first;
-    return '$firstLine:';
+    return '$firstLine';
   }
 
   void _addBibliography(Map movieData, String role, dynamic bibliography) {

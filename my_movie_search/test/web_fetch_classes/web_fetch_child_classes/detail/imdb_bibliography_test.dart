@@ -301,7 +301,7 @@ void main() {
         reason: 'Related should list 2 actress and 2 director credits',
       );
       expect(
-        queryResult.first.related['Director:']!.length,
+        queryResult.first.related['Director']!.length,
         2,
         reason: 'Related should list 2 actress and 2 director credits',
       );
