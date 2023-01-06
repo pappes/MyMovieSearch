@@ -28,7 +28,7 @@ void main() async {
         input.forEach(addMapContentsToCache);
         for (final keyValuePair in expectedOutput.entries) {
           final keyIsCached = cache.isCached(keyValuePair.key);
-          expect(keyIsCached, completion(true));
+          expect(keyIsCached, true);
           final actualOutput = cache.get(
             keyValuePair.key,
             callback: nullCallback,
