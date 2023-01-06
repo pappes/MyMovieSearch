@@ -478,8 +478,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         userRatingCount,
       );
       userRatingCount = bestValue(newValue.userRatingCount, userRatingCount);
-      mergeDtoMapMap(related, newValue.related);
     }
+    mergeDtoMapMap(related, newValue.related);
   }
 
   /// Combine related movie information from [existingDtos] into a [MovieResultDTO].
