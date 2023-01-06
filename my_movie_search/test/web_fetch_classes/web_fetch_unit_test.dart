@@ -164,10 +164,9 @@ class WebFetchCached extends WebFetchBasic {
   String lastResult = '';
 
   @override
-  Future<bool> myIsResultCached(String criteria) async =>
-      criteria == lastCriteria;
+  bool myIsResultCached(String criteria) => criteria == lastCriteria;
   @override
-  Future<bool> myIsCacheStale(String criteria) async => false;
+  bool myIsCacheStale(String criteria) => false;
   @override
   Future<void> myAddResultToCache(String criteria, String fetchedResult) async {
     lastCriteria = criteria;
@@ -278,20 +277,20 @@ void main() {
     test('myIsResultCached()', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'criteria';
-      expect(testClass.myIsResultCached(input), completion(false));
+      expect(testClass.myIsResultCached(input), false);
     });
     // Default not stale cache.
     test('myIsCacheStale()', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'criteria';
-      expect(testClass.myIsCacheStale(input), completion(false));
+      expect(testClass.myIsCacheStale(input), false);
     });
     // Default no caching.
     test('myIsResultCached()', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'criteria';
       //testClass.myAddResultToCache(input);
-      expect(testClass.myIsResultCached(input), completion(false));
+      expect(testClass.myIsResultCached(input), false);
     });
   });
 
@@ -330,12 +329,13 @@ void main() {
       final actualResult =
           testClass.myConvertWebTextToTraversableTree('[{"key":"val"}]');
       expect(
-          actualResult,
-          completion([
-            [
-              {'key': 'val'}
-            ]
-          ]));
+        actualResult,
+        completion([
+          [
+            {'key': 'val'}
+          ]
+        ]),
+      );
     });
     test('invalid string', () {
       final actualResult = testClass
@@ -381,8 +381,10 @@ void main() {
       } catch (error) {
         actualResult = error.toString();
       }
-      expect(actualResult,
-          'Error in unknown with criteria NullCriteria fetching web text :JsonP([{"key":"val"}])');
+      expect(
+          actualResult,
+          'Error in unknown with criteria NullCriteria '
+          'fetching web text :JsonP([{"key":"val"}])');
     });
   });
 
@@ -395,9 +397,9 @@ void main() {
       );
       expect(listResult, []);
       final resultIsCached = testClass.myIsResultCached('Marco');
-      expect(resultIsCached, completion(false));
+      expect(resultIsCached, false);
       final resultIsStale = testClass.myIsCacheStale('Marco');
-      expect(resultIsStale, completion(false));
+      expect(resultIsStale, false);
     });
 
     test('add to cache via populateStream', () async {
@@ -416,9 +418,9 @@ void main() {
       );
       expect(listResult, ['Polo']);
       final resultIsCached = testClass.myIsResultCached('Marco');
-      expect(resultIsCached, completion(true));
+      expect(resultIsCached, true);
       final resultIsStale = testClass.myIsCacheStale('Marco');
-      expect(resultIsStale, completion(false));
+      expect(resultIsStale, false);
     });
 
     test('manually add to cache', () async {
@@ -430,9 +432,9 @@ void main() {
       );
       expect(listResult, ['Polo']);
       final resultIsCached = testClass.myIsResultCached('Marco');
-      expect(resultIsCached, completion(true));
+      expect(resultIsCached, true);
       final resultIsStale = testClass.myIsCacheStale('Marco');
-      expect(resultIsStale, completion(false));
+      expect(resultIsStale, false);
     });
 
     test('fetch result from cache', () async {
@@ -442,9 +444,9 @@ void main() {
           await testClass.myFetchResultFromCache('Marco').toList();
       expect(listResult, ['Polo']);
       final resultIsCached = testClass.myIsResultCached('Marco');
-      expect(resultIsCached, completion(true));
+      expect(resultIsCached, true);
       final resultIsStale = testClass.myIsCacheStale('Marco');
-      expect(resultIsStale, completion(false));
+      expect(resultIsStale, false);
     });
 
     test('clear cache', () async {
@@ -454,9 +456,9 @@ void main() {
       final listResult = await testClass.readCachedList('Marco');
       expect(listResult, []);
       final resultIsCached = testClass.myIsResultCached('Marco');
-      expect(resultIsCached, completion(false));
+      expect(resultIsCached, false);
       final resultIsStale = testClass.myIsCacheStale('Marco');
-      expect(resultIsStale, completion(false));
+      expect(resultIsStale, false);
     });
   });
 
@@ -689,12 +691,14 @@ void main() {
       final actualOutput = testClass.baseFetchWebText(criteria);
       expectLater(
         actualOutput, //.printStream(input),
-        completion(emitsInOrder([
-          containsSubstring(
-            expectedValue,
-            startsWith: input == '' ? '' : '[{"id": "',
-          )
-        ])),
+        completion(
+          emitsInOrder([
+            containsSubstring(
+              expectedValue,
+              startsWith: input == '' ? '' : '[{"id": "',
+            )
+          ]),
+        ),
       );
     }
 
@@ -729,12 +733,14 @@ void main() {
       final actualOutput = testClass.myConvertCriteriaToWebText(criteria);
       expect(
         actualOutput,
-        completion(emitsInOrder([
-          containsSubstring(
-            expectedValue,
-            startsWith: input == '' ? '' : '[{"id": "',
-          )
-        ])),
+        completion(
+          emitsInOrder([
+            containsSubstring(
+              expectedValue,
+              startsWith: input == '' ? '' : '[{"id": "',
+            )
+          ]),
+        ),
       );
     }
 

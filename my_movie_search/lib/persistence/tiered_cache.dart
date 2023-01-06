@@ -23,7 +23,7 @@ class TieredCache<T> {
 
   /// Check the cache to see if the item is present.
   ///
-  Future<bool> isCached(dynamic key) async {
+  bool isCached(dynamic key) {
     if (memoryCache.containsKey(key)) return true;
     //TODO: check disk and cloud caches
     return false;

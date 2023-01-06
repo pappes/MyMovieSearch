@@ -156,8 +156,11 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
     for (final actualDto in _actual) {
       for (final expectedDto in expected) {
         final differences = {};
-        if (actualDto.matches(expectedDto,
-            matchState: differences, related: false)) {
+        if (actualDto.matches(
+          expectedDto,
+          matchState: differences,
+          related: false,
+        )) {
           matchQuantity--;
           if (0 == matchQuantity) {
             // There have been enough matches to declare victory!

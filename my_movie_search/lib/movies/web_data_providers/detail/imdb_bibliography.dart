@@ -52,8 +52,9 @@ class QueryIMDBBibliographyDetails
   /// Convert IMDB map to MovieResultDTO records.
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
-    if (map is Map)
+    if (map is Map) {
       return ImdbBibliographyConverter.dtoFromCompleteJsonMap(map);
+    }
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
 

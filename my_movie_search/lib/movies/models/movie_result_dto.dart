@@ -652,7 +652,10 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     _matchCompare('imageUrl', imageUrl, other.imageUrl);
     _matchCompare('language', language, other.language);
     _matchCompare(
-        'languages', languages.toString(), other.languages.toString());
+      'languages',
+      languages.toString(),
+      other.languages.toString(),
+    );
     _matchCompare('genres', genres.toString(), other.genres.toString());
     _matchCompare('keywords', keywords.toString(), other.keywords.toString());
 
@@ -702,13 +705,13 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
     for (final entry in this) {
       final json = entry.toJson(excludeCopyrightedData: excludeCopyrightedData);
       final dartString = "r'''\n${json.replaceAll("'", "'")}\n''',\n";
-      listContents.write(FormatDtoJson(dartString));
+      listContents.write(formatDtoJson(dartString));
     }
     return "[\n$listContents]";
   }
 
   /// Format JSON for readability
-  String FormatDtoJson(String json) {
+  String formatDtoJson(String json) {
     var formatted = json;
     formatted = formatted.replaceAll(
       '"related":{"',

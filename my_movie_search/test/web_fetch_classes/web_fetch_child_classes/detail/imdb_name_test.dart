@@ -114,8 +114,6 @@ void main() {
               .dtoFromCompleteJsonMap(map),
         );
       }
-      print(
-          actualResult.toListOfDartJsonStrings(excludeCopyrightedData: false));
 
       final expectedValue = expectedDTOList;
       // Check the results.
@@ -180,9 +178,9 @@ void main() {
         source: (_) => Future.value(Stream.value('Polo')),
       );
       expect(listResult, []);
-      final resultIsCached = await testClass.isThreadedResultCached(criteria);
+      final resultIsCached = testClass.isThreadedResultCached(criteria);
       expect(resultIsCached, false);
-      final resultIsStale = await testClass.isThreadedCacheStale(criteria);
+      final resultIsStale = testClass.isThreadedCacheStale(criteria);
       expect(resultIsStale, false);
     });
 
@@ -205,9 +203,9 @@ void main() {
         reason: 'Emitted DTO list ${listResult.toPrintableString()} '
             'needs to match expected DTO List${expectedDTOList.toPrintableString()}',
       );
-      final resultIsCached = await testClass.isThreadedResultCached(criteria);
+      final resultIsCached = testClass.isThreadedResultCached(criteria);
       expect(resultIsCached, true);
-      final resultIsStale = await testClass.isThreadedCacheStale(criteria);
+      final resultIsStale = testClass.isThreadedCacheStale(criteria);
       expect(resultIsStale, false);
     });
 
@@ -222,9 +220,9 @@ void main() {
       final listResult =
           await testClass.fetchResultFromThreadedCache(criteria).toList();
       expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
-      final resultIsCached = await testClass.isThreadedResultCached(criteria);
+      final resultIsCached = testClass.isThreadedResultCached(criteria);
       expect(resultIsCached, true);
-      final resultIsStale = await testClass.isThreadedCacheStale(criteria);
+      final resultIsStale = testClass.isThreadedCacheStale(criteria);
       expect(resultIsStale, false);
     });
 
@@ -237,9 +235,9 @@ void main() {
         source: streamImdbHtmlOfflineData,
       );
       testClass.clearThreadedCache();
-      final resultIsCached = await testClass.isThreadedResultCached(criteria);
+      final resultIsCached = testClass.isThreadedResultCached(criteria);
       expect(resultIsCached, false);
-      final resultIsStale = await testClass.isThreadedCacheStale(criteria);
+      final resultIsStale = testClass.isThreadedCacheStale(criteria);
       expect(resultIsStale, false);
     });
 

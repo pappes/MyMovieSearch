@@ -100,8 +100,6 @@ void main() {
               .dtoFromCompleteJsonMap(map),
         );
       }
-      print(
-          actualResult.toListOfDartJsonStrings(excludeCopyrightedData: false));
 
       final expectedValue = expectedDTOList;
       expectedValue.first.uniqueId = 'tt6123456';
@@ -128,9 +126,9 @@ void main() {
         source: (_) async => Stream.value('Polo'),
       );
       expect(listResult, []);
-      final resultIsCached = await testClass.myIsResultCached(criteria);
+      final resultIsCached = testClass.myIsResultCached(criteria);
       expect(resultIsCached, false);
-      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      final resultIsStale = testClass.myIsCacheStale(criteria);
       expect(resultIsStale, false);
     });
 
@@ -144,9 +142,9 @@ void main() {
         source: (_) async => Stream.value('Polo'),
       );
       expect(listResult, [dto]);
-      final resultIsCached = await testClass.myIsResultCached(criteria);
+      final resultIsCached = testClass.myIsResultCached(criteria);
       expect(resultIsCached, true);
-      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      final resultIsStale = testClass.myIsCacheStale(criteria);
       expect(resultIsStale, false);
     });
 
@@ -156,9 +154,9 @@ void main() {
       final dto = MovieResultDTO().testDto('Polo');
       await testClass.myAddResultToCache(criteria, dto);
       testClass.myClearCache();
-      final resultIsCached = await testClass.myIsResultCached(criteria);
+      final resultIsCached = testClass.myIsResultCached(criteria);
       expect(resultIsCached, false);
-      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      final resultIsStale = testClass.myIsCacheStale(criteria);
       expect(resultIsStale, false);
     });
 
@@ -171,9 +169,9 @@ void main() {
         source: (_) async => Stream.value('Who Is Marco?'),
       );
       expect(listResult, MovieResultDTOListMatcher([]));
-      final resultIsCached = await testClass.myIsResultCached(criteria);
+      final resultIsCached = testClass.myIsResultCached(criteria);
       expect(resultIsCached, false);
-      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      final resultIsStale = testClass.myIsCacheStale(criteria);
       expect(resultIsStale, false);
     });
 
@@ -188,9 +186,9 @@ void main() {
         source: (_) async => Stream.value('Who Is Marco?'),
       );
       expect(listResult, MovieResultDTOListMatcher([dto]));
-      final resultIsCached = await testClass.myIsResultCached(criteria);
+      final resultIsCached = testClass.myIsResultCached(criteria);
       expect(resultIsCached, true);
-      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      final resultIsStale = testClass.myIsCacheStale(criteria);
       expect(resultIsStale, false);
     });
 
@@ -207,9 +205,9 @@ void main() {
         source: (_) async => Stream.value('"Dummy HTML"'),
       );
       expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
-      final resultIsCached = await testClass.myIsResultCached(criteria);
+      final resultIsCached = testClass.myIsResultCached(criteria);
       expect(resultIsCached, true);
-      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      final resultIsStale = testClass.myIsCacheStale(criteria);
       expect(resultIsStale, false);
     });
 
@@ -222,9 +220,9 @@ void main() {
       final listResult =
           await testClass.myFetchResultFromCache(criteria).toList();
       expect(listResult, MovieResultDTOListMatcher([dto]));
-      final resultIsCached = await testClass.myIsResultCached(criteria);
+      final resultIsCached = testClass.myIsResultCached(criteria);
       expect(resultIsCached, true);
-      final resultIsStale = await testClass.myIsCacheStale(criteria);
+      final resultIsStale = testClass.myIsCacheStale(criteria);
       expect(resultIsStale, false);
     });
   });

@@ -12,13 +12,13 @@ mixin ThreadedCacheIMDBTitleDetails
 
   /// Check cache to see if data has already been fetched.
   @override
-  Future<bool> myIsResultCached(SearchCriteriaDTO criteria) async {
+  bool myIsResultCached(SearchCriteriaDTO criteria) {
     return _cache.isCached(_makeKey(criteria));
   }
 
   /// Check cache to see if data in cache should be refreshed.
   @override
-  Future<bool> myIsCacheStale(SearchCriteriaDTO criteria) async {
+  bool myIsCacheStale(SearchCriteriaDTO criteria) {
     return false;
     //return _cache.isCached(criteria.criteriaTitle);
   }

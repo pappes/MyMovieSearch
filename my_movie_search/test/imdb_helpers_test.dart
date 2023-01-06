@@ -199,7 +199,11 @@ Future main() async {
     test(
       'miniseries',
       () => testContent(
-          MovieContentType.miniseries, 'mini series', null, 'tt1234'),
+        MovieContentType.miniseries,
+        'mini series',
+        null,
+        'tt1234',
+      ),
     );
     test(
       'series episode',
