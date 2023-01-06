@@ -47,10 +47,10 @@ void main() {
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'testing';
+      input.criteriaTitle = 'nmtesting';
       expect(
         QueryIMDBNameDetails().myFormatInputAsText(input),
-        'testing',
+        'nmtesting',
       );
     });
 
@@ -63,11 +63,11 @@ void main() {
       ];
       expect(
         QueryIMDBNameDetails().myFormatInputAsText(input),
-        contains('test1'),
+        '',
       );
       expect(
         QueryIMDBNameDetails().myFormatInputAsText(input),
-        contains('test2'),
+        '',
       );
     });
 
@@ -245,7 +245,8 @@ void main() {
       final testClass = QueryIMDBNameDetails();
       testClass.clearThreadedCache();
       for (var iteration = 0; iteration < 100; iteration++) {
-        final criteria = SearchCriteriaDTO().fromString(iteration.toString());
+        final criteria =
+            SearchCriteriaDTO().fromString('nm${iteration.toString()}');
         // Enqueue requests but do not wait for result.
         testClass.readPrioritisedCachedList(
           criteria,
@@ -360,15 +361,18 @@ void main() {
     // Read imdb search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
+      const expectedException = '[QueryIMDBNameDetails] Error in imdb_person '
+          'with criteria nm7602562 interpreting web text as a map '
+          ':imdb web scraper data not detected for criteria nm7602562 in not valid html';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBNameDetails();
       testClass.myClearCache();
-      const expectedException =
-          '[QueryIMDBNameDetails] Error in imdb_person with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria  in not valid html';
+      final criteria = SearchCriteriaDTO();
+      criteria.criteriaTitle = 'nm7602562';
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitInvalidHtmlSample)
+          .readList(criteria, source: _emitInvalidHtmlSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -376,15 +380,18 @@ void main() {
     // Read imdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException =
-          '[QueryIMDBNameDetails] Error in imdb_person with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria  in <html><body>stuff</body></html>';
+      const expectedException = '[QueryIMDBNameDetails] Error in imdb_person '
+          'with criteria nm7602562 interpreting web text as a map '
+          ':imdb web scraper data not detected for criteria nm7602562 in <html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBNameDetails();
       testClass.myClearCache();
+      final criteria = SearchCriteriaDTO();
+      criteria.criteriaTitle = 'nm7602562';
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedHtmlSample)
+          .readList(criteria, source: _emitUnexpectedHtmlSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

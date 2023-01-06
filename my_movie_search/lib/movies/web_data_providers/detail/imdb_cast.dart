@@ -1,6 +1,7 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_cast.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/webscrapers/imdb_cast.dart';
@@ -39,7 +40,11 @@ class QueryIMDBCastDetails
   @override
   String myFormatInputAsText(dynamic contents) {
     final criteria = contents as SearchCriteriaDTO;
-    return criteria.toPrintableString();
+    final text = criteria.toPrintableString();
+    if (text.startsWith(imdbTitlePrefix)) {
+      return text;
+    }
+    return ''; // do not allow searches for non-imdb IDs
   }
 
   /// API call to IMDB search returning the top matching results for [searchText].

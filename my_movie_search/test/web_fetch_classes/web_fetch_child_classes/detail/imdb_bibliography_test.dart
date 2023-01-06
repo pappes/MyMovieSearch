@@ -39,10 +39,10 @@ void main() {
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'testing';
+      input.criteriaTitle = 'nmtesting';
       expect(
         QueryIMDBBibliographyDetails().myFormatInputAsText(input),
-        'testing',
+        'nmtesting',
       );
     });
 
@@ -50,16 +50,16 @@ void main() {
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO();
       input.criteriaList = [
-        MovieResultDTO().error('test1'),
-        MovieResultDTO().error('test2'),
+        makeResultDTO('nmtest1'),
+        makeResultDTO('nmtest2'),
       ];
       expect(
         QueryIMDBBibliographyDetails().myFormatInputAsText(input),
-        contains('test1'),
+        '',
       );
       expect(
         QueryIMDBBibliographyDetails().myFormatInputAsText(input),
-        contains('test2'),
+        '',
       );
     });
 
@@ -85,7 +85,7 @@ void main() {
       final expectedOutput = intermediateMapList;
       final testClass = QueryIMDBBibliographyDetails();
       final criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = 'tt7602562';
+      criteria.criteriaTitle = 'nm7602562';
       testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
         imdbHtmlSampleFull,
@@ -107,7 +107,7 @@ void main() {
       }
 
       final expectedValue = expectedDTOList;
-      expectedValue.first.uniqueId = 'tt7602562';
+      expectedValue.first.uniqueId = 'nm7602562';
       // Check the results.
       expect(
         actualResult,
@@ -141,7 +141,7 @@ void main() {
     test('add to cache via readPrioritisedCachedList', () async {
       final testClass = QueryIMDBBibliographyDetails();
       testClass.clearThreadedCache();
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      final criteria = SearchCriteriaDTO().fromString('nm7602562');
       await testClass.readPrioritisedCachedList(
         criteria,
         source: streamImdbHtmlOfflineData,
@@ -166,7 +166,7 @@ void main() {
     test('fetch result from cache', () async {
       final testClass = QueryIMDBBibliographyDetails();
       testClass.clearThreadedCache();
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      final criteria = SearchCriteriaDTO().fromString('nm7602562');
       await testClass.readPrioritisedCachedList(
         criteria,
         source: streamImdbHtmlOfflineData,
@@ -183,7 +183,7 @@ void main() {
     test('clear cache', () async {
       final testClass = QueryIMDBBibliographyDetails();
       testClass.clearThreadedCache();
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      final criteria = SearchCriteriaDTO().fromString('nm7602562');
       await testClass.readPrioritisedCachedList(
         criteria,
         source: streamImdbHtmlOfflineData,
@@ -271,13 +271,11 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBBibliographyDetails();
       testClass.myClearCache();
-      final criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = 'tt7602562';
 
       // Invoke the functionality.
       await testClass
           .readList(
-            criteria,
+            SearchCriteriaDTO().fromString('nm7602562'),
             source: streamImdbHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -309,15 +307,20 @@ void main() {
     // Read imdb search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
+      const expectedException =
+          '[QueryIMDBBibliographyDetails] Error in imdb_bibliography '
+          'with criteria nm123 interpreting web text as a map '
+          ':imdb bibliography data not detected for criteria nm123';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBBibliographyDetails();
       testClass.myClearCache();
-      const expectedException =
-          '[QueryIMDBBibliographyDetails] Error in imdb_bibliography with criteria  interpreting web text as a map :imdb bibliography data not detected for criteria ';
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitInvalidHtmlSample)
+          .readList(
+            SearchCriteriaDTO().fromString('nm123'),
+            source: _emitInvalidHtmlSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -326,14 +329,19 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBBibliographyDetails] Error in imdb_bibliography with criteria  interpreting web text as a map :imdb bibliography data not detected for criteria ';
+          '[QueryIMDBBibliographyDetails] Error in imdb_bibliography with '
+          'criteria nm123 interpreting web text as a map '
+          ':imdb bibliography data not detected for criteria nm123';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBBibliographyDetails();
       testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedHtmlSample)
+          .readList(
+            SearchCriteriaDTO().fromString('nm123'),
+            source: _emitUnexpectedHtmlSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

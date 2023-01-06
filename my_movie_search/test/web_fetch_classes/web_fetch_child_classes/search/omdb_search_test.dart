@@ -181,7 +181,7 @@ void main() {
       // Invoke the functionality.
       await testClass
           .readList(
-            SearchCriteriaDTO(),
+            SearchCriteriaDTO().fromString('123'),
             source: streamOmdbJsonOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -205,14 +205,15 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryOMDBMovies();
       const expectedException = '''
-[QueryOMDBMovies] Error in omdb with criteria  interpreting web text as a map :FormatException: Unexpected character (at character 1)
+[QueryOMDBMovies] Error in omdb with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
 ^
 ''';
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitInvalidJsonSample)
+          .readList(SearchCriteriaDTO().fromString('123'),
+              source: _emitInvalidJsonSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -220,14 +221,16 @@ not valid json
     // Read omdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException =
-          '[QueryOMDBMovies] Error in omdb with criteria  translating page map to objects :expected map got List<dynamic> unable to interpret data [{hello: world}]';
+      const expectedException = '[QueryOMDBMovies] Error in omdb '
+          'with criteria 123 translating page map to objects '
+          ':expected map got List<dynamic> unable to interpret data [{hello: world}]';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryOMDBMovies();
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedJsonSample)
+          .readList(SearchCriteriaDTO().fromString('123'),
+              source: _emitUnexpectedJsonSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

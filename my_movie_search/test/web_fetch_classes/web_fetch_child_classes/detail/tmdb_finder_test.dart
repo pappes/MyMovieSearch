@@ -184,7 +184,7 @@ void main() {
       // Invoke the functionality.
       await testClass
           .readList(
-            SearchCriteriaDTO(),
+            SearchCriteriaDTO().fromString('123'),
             source: streamTmdbJsonOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -210,14 +210,17 @@ void main() {
       testClass.myClearCache();
       testClass.myConstructURI('tt0101000');
       const expectedException = '''
-[QueryTMDBDetails] Error in tmdbMovie with criteria  interpreting web text as a map :FormatException: Unexpected character (at character 1)
+[QueryTMDBDetails] Error in tmdbMovie with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
 ^
 ''';
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitInvalidJsonSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: _emitInvalidJsonSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -225,8 +228,9 @@ not valid json
     // Read tmdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException =
-          '[QueryTMDBDetails] Error in tmdbMovie with criteria  translating page map to objects :expected map got List<dynamic> unable to interpret data [{hello: world}]';
+      const expectedException = '[QueryTMDBDetails] Error in tmdbMovie '
+          'with criteria 123 translating page map to objects '
+          ':expected map got List<dynamic> unable to interpret data [{hello: world}]';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBFinder();
       testClass.myClearCache();
@@ -234,7 +238,10 @@ not valid json
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedJsonSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: _emitUnexpectedJsonSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

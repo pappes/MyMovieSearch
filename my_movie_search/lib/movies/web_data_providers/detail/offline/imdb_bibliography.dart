@@ -10,7 +10,7 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt7602562","source":"DataSourceType.imdbSuggestions","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"nm7602562","source":"DataSourceType.imdbSuggestions","languages":"[]","genres":"[]","keywords":"[]",
   "related":{"Actress":{"tt1234567":{"uniqueId":"tt1234567","source":"DataSourceType.imdbSuggestions","title":"Land of the fill","languages":"[]","genres":"[]","keywords":"[]","related":{}},
       "tt1234568":{"uniqueId":"tt1234568","source":"DataSourceType.imdbSuggestions","title":"Fill the land","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
     "Director":{"tt2234567":{"uniqueId":"tt2234567","source":"DataSourceType.imdbSuggestions","title":"Land of the turtle","languages":"[]","genres":"[]","keywords":"[]","related":{}},
@@ -34,7 +34,7 @@ const intermediateMapList = [
       },
       {"name": "Turtle the land", "url": "/title/tt2234568/?ref_=nm_flmg_act_1"}
     ],
-    "id": "tt7602562"
+    "id": "nm7602562"
   }
 ];
 

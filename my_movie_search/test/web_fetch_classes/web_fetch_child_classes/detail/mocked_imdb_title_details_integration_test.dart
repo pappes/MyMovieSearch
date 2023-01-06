@@ -78,8 +78,8 @@ List<MovieResultDTO> _makeDTOs(int startid, int qty) {
     results.add(
       {
         'source': DataSourceType.imdb.toString(),
-        'uniqueId': '$uniqueId',
-        'title': '$uniqueId.',
+        'uniqueId': 'tt$uniqueId',
+        'title': 'tt$uniqueId.',
       }.toMovieResultDTO(),
     );
     uniqueId++;
@@ -92,7 +92,7 @@ List<String> _makeQueries(int startId, int qty) {
   final results = <String>[];
   var uniqueId = startId;
   for (int i = 0; i < qty; i++) {
-    results.add((uniqueId).toString());
+    results.add('tt$uniqueId');
     uniqueId++;
   }
   return results;
@@ -251,7 +251,7 @@ void main() {
         final queries = _makeQueries(startId, 1);
         final errorMessage = MovieResultDTO();
         errorMessage.title =
-            '[QueryIMDBTitleDetails] Error in imdb with criteria 5000 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://www.imdb.com/title/$startId/?ref_=fn_tt_tt_1';
+            '[QueryIMDBTitleDetails] Error in imdb with criteria tt$startId interpreting web text as a map :Error in http read, HTTP status code : 404 for https://www.imdb.com/title/tt$startId/?ref_=fn_tt_tt_1';
         errorMessage.uniqueId = '-2';
         errorMessage.source = DataSourceType.imdb;
         errorMessage.type = MovieContentType.custom;

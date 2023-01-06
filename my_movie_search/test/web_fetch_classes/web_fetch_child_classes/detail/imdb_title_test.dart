@@ -33,10 +33,10 @@ void main() {
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'testing';
+      input.criteriaTitle = 'tttesting';
       expect(
         QueryIMDBTitleDetails().myFormatInputAsText(input),
-        'testing',
+        'tttesting',
       );
     });
 
@@ -49,11 +49,11 @@ void main() {
       ];
       expect(
         QueryIMDBTitleDetails().myFormatInputAsText(input),
-        contains('test1'),
+        '',
       );
       expect(
         QueryIMDBTitleDetails().myFormatInputAsText(input),
-        contains('test2'),
+        '',
       );
     });
 
@@ -302,13 +302,11 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails();
       testClass.myClearCache();
-      final criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = 'tt7602562';
 
       // Invoke the functionality.
       await testClass
           .readList(
-            criteria,
+            SearchCriteriaDTO().fromString('tt123'),
             source: streamImdbHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -329,15 +327,19 @@ void main() {
     // Read imdb search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
+      const expectedException = '[QueryIMDBTitleDetails] Error in imdb '
+          'with criteria tt123 interpreting web text as a map '
+          ':imdb web scraper data not detected for criteria tt123 in not valid html';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails();
       testClass.myClearCache();
-      const expectedException =
-          '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria  in not valid html';
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitInvalidHtmlSample)
+          .readList(
+            SearchCriteriaDTO().fromString('tt123'),
+            source: _emitInvalidHtmlSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -345,15 +347,19 @@ void main() {
     // Read imdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException =
-          '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria  in <html><body>stuff</body></html>';
+      const expectedException = '[QueryIMDBTitleDetails] Error in imdb '
+          'with criteria tt123 interpreting web text as a map '
+          ':imdb web scraper data not detected for criteria tt123 in <html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails();
       testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedHtmlSample)
+          .readList(
+            SearchCriteriaDTO().fromString('tt123'),
+            source: _emitUnexpectedHtmlSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

@@ -38,24 +38,23 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
   /// Fetch full person details from imdb.
   void _getDetails(SearchCriteriaDTO criteria) {
-    if (_person.uniqueId.startsWith('-')) return; // Negative IDs are errors!
-    if ('' == _person.uniqueId) return; // Not from IMDB!
+    if (_person.uniqueId.startsWith(imdbPersonPrefix)) {
+      /// Fetch person details from cache using a separate thread.
+      QueryIMDBNameDetails()
+          .readPrioritisedCachedList(
+            criteria,
+            priority: ThreadRunner.fast,
+          )
+          .then(_showDetails);
 
-    /// Fetch person details from cache using a separate thread.
-    QueryIMDBNameDetails()
-        .readPrioritisedCachedList(
-          criteria,
-          priority: ThreadRunner.fast,
-        )
-        .then(_showDetails);
-
-    /// Fetch related movie from cache using a separate thread.
-    QueryIMDBBibliographyDetails()
-        .readPrioritisedCachedList(
-          criteria,
-          priority: ThreadRunner.slow,
-        )
-        .then(_showDetails);
+      /// Fetch related movie from cache using a separate thread.
+      QueryIMDBBibliographyDetails()
+          .readPrioritisedCachedList(
+            criteria,
+            priority: ThreadRunner.slow,
+          )
+          .then(_showDetails);
+    }
   }
 
   /// Fetch full person details from imdb.

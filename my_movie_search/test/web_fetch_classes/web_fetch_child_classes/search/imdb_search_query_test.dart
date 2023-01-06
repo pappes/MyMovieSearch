@@ -188,7 +188,7 @@ void main() {
       // Invoke the functionality.
       await imdbSearch
           .readList(
-            SearchCriteriaDTO(),
+            SearchCriteriaDTO().fromString('123'),
             source: streamImdbSearchHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -211,12 +211,14 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final imdbSearch = QueryIMDBSearch();
-      const expectedException =
-          '[QueryIMDBSearch] Error in imdbSearch with criteria  interpreting web text as a map :No search results found in html:not valid html';
+      const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
+          'with criteria 123 interpreting web text as a map '
+          ':No search results found in html:not valid html';
 
       // Invoke the functionality.
       await imdbSearch
-          .readList(SearchCriteriaDTO(), source: _emitInvalidHtmlSample)
+          .readList(SearchCriteriaDTO().fromString('123'),
+              source: _emitInvalidHtmlSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -224,14 +226,16 @@ void main() {
     // Read IMDB search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException =
-          '[QueryIMDBSearch] Error in imdbSearch with criteria  interpreting web text as a map :No search results found in html:<html><body>stuff</body></html>';
+      const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
+          'with criteria 123 interpreting web text as a map '
+          ':No search results found in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final imdbSearch = QueryIMDBSearch();
 
       // Invoke the functionality.
       await imdbSearch
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedHtmlSample)
+          .readList(SearchCriteriaDTO().fromString('123'),
+              source: _emitUnexpectedHtmlSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 
@@ -242,14 +246,17 @@ void main() {
   // Read IMDB search results from a simulated byte stream and report error due to unexpected json.
   test('unexpected json contents', () async {
     // Set up the test data.
-    const expectedException =
-        '[QueryIMDBSearch] Error in imdbSearch with criteria  interpreting web text as a map :Possible IMDB site update, no search result found for search query, json contents:[{found: [{id: nm0152436, displayNameText:';
+    const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
+        'with criteria 123 interpreting web text as a map '
+        ':Possible IMDB site update, no search result found for search query, '
+        'json contents:[{found: [{id: nm0152436, displayNameText:';
     final queryResult = <MovieResultDTO>[];
     final imdbSearch = QueryIMDBSearch();
 
     // Invoke the functionality.
     await imdbSearch
-        .readList(SearchCriteriaDTO(), source: _emitUnexpectedJsonSample)
+        .readList(SearchCriteriaDTO().fromString('123'),
+            source: _emitUnexpectedJsonSample)
         .then((values) => queryResult.addAll(values));
     expect(queryResult.first.title, startsWith(expectedException));
 
@@ -259,14 +266,16 @@ void main() {
   // Read IMDB search results from a simulated byte stream and report error due to unexpected json.
   test('no json results', () async {
     // Set up the test data.
-    const expectedException =
-        '[QueryIMDBSearch] Error in imdbSearch with criteria  interpreting web text as a map :No search results found in json:{}';
+    const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
+        'with criteria 123 interpreting web text as a map '
+        ':No search results found in json:{}';
     final queryResult = <MovieResultDTO>[];
     final imdbSearch = QueryIMDBSearch();
 
     // Invoke the functionality.
     await imdbSearch
-        .readList(SearchCriteriaDTO(), source: _emitEmtpyJsonSample)
+        .readList(SearchCriteriaDTO().fromString('123'),
+            source: _emitEmtpyJsonSample)
         .then((values) => queryResult.addAll(values));
     expect(queryResult.first.title, expectedException);
 

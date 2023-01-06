@@ -115,7 +115,8 @@ void main() {
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(SearchCriteriaDTO(), source: emitImdbSuggestionJsonPSample)
+          .readList(SearchCriteriaDTO().fromString('123'),
+              source: emitImdbSuggestionJsonPSample)
           .then((values) => queryResult.addAll(values))
           .onError(
             // ignore: avoid_print
@@ -137,14 +138,15 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final imdbSuggestions = QueryIMDBSuggestions();
       const expectedException = '''
-[QueryIMDBSuggestions] Error in imdbSuggestions with criteria  interpreting web text as a map :FormatException: Unexpected character (at character 2)
+[QueryIMDBSuggestions] Error in imdbSuggestions with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 2)
 {not valid json}
  ^
 ''';
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(SearchCriteriaDTO(), source: _emitInvalidJsonPSample)
+          .readList(SearchCriteriaDTO().fromString('123'),
+              source: _emitInvalidJsonPSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -153,13 +155,16 @@ void main() {
     test('unexpected json contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBSuggestions] Error in imdbSuggestions with criteria  translating page map to objects :expected map got Null unable to interpret data null';
+          '[QueryIMDBSuggestions] Error in imdbSuggestions '
+          'with criteria 123 translating page map to objects '
+          ':expected map got Null unable to interpret data null';
       final queryResult = <MovieResultDTO>[];
       final imdbSuggestions = QueryIMDBSuggestions();
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedJsonPSample)
+          .readList(SearchCriteriaDTO().fromString('123'),
+              source: _emitUnexpectedJsonPSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

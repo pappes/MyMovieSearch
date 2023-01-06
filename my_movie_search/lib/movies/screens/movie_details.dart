@@ -38,16 +38,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
   /// Fetch full person details from imdb.
   void _getDetails(SearchCriteriaDTO criteria) {
-    if (_movie.uniqueId.startsWith('-')) return; // Negative IDs are errors!
-    if ('' == _movie.uniqueId) return; // Not from IMDB!
-
-    /// Fetch person details from cache using a separate thread.
-    QueryIMDBCastDetails()
-        .readPrioritisedCachedList(
-          criteria,
-          priority: ThreadRunner.fast,
-        )
-        .then(_showDetails);
+    if (_movie.uniqueId.startsWith(imdbTitlePrefix)) {
+      /// Fetch person details from cache using a separate thread.
+      QueryIMDBCastDetails()
+          .readPrioritisedCachedList(
+            criteria,
+            priority: ThreadRunner.fast,
+          )
+          .then(_showDetails);
+    }
   }
 
   /// Fetch full person details from imdb.

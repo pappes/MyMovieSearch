@@ -229,6 +229,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// converts <INPUT_TYPE> to a string representation.
   ///
   /// Can be overridden by child classes.
+  /// If this is blank the query will not run!
   String myFormatInputAsText(INPUT_TYPE? contents) {
     return contents?.toString() ?? '';
   }
@@ -447,6 +448,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         'value was cached ${myFormatInputAsText(newCriteria)}',
       );
       return myFetchResultFromCache(newCriteria);
+    }
+    if (myFormatInputAsText(newCriteria) == '') {
+      return Stream.fromIterable([]);
     }
     // if not cached or cache is stale retrieve fresh data
     print(
