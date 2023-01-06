@@ -26,12 +26,12 @@ void main() {
 
   group('imdb title details unit tests', () {
     // Confirm class description is constructed as expected.
-    test('Run myDataSourceName()', () async {
+    test('Run myDataSourceName()', () {
       expect(QueryIMDBTitleDetails().myDataSourceName(), 'imdb');
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
@@ -58,7 +58,7 @@ void main() {
     });
 
     // Confirm error is constructed as expected.
-    test('Run myYieldError()', () async {
+    test('Run myYieldError()', () {
       const expectedResult = {
         'source': 'DataSourceType.imdb',
         'title': '[QueryIMDBTitleDetails] new query',
@@ -75,22 +75,22 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
       final testClass = QueryIMDBTitleDetails();
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = 'tt7602562';
       testClass.criteria = criteria;
-      final actualOutput = await testClass.myConvertWebTextToTraversableTree(
+      final actualOutput = testClass.myConvertWebTextToTraversableTree(
         imdbHtmlSampleFull,
       );
-      expect(actualOutput, expectedOutput);
+      expect(actualOutput, completion(expectedOutput));
     });
   });
 
   group('ImdbTitleConverter unit tests', () {
     // Confirm map can be converted to DTO.
-    test('Run dtoFromCompleteJsonMap()', () async {
+    test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -235,8 +235,7 @@ void main() {
 
   group('QueryIMDBTitleDetails integration tests', () {
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
-      await EnvironmentVars.init();
+    test('Run myConstructURI()', () {
       const expected = 'https://www.imdb.com/title/1234/?ref_=fn_tt_tt_1';
 
       // Invoke the functionality.

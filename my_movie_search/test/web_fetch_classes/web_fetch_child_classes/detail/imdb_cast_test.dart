@@ -18,7 +18,8 @@ Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
 
 // ignore: avoid_classes_with_only_static_members
 class StaticJsonGenerator {
-  static Future<Stream<String>> stuff(_) async => Stream.value('"stuff"');
+  static Future<Stream<String>> stuff(_) =>
+      Future.value(Stream.value('"stuff"'));
 }
 
 void main() {
@@ -28,12 +29,12 @@ void main() {
 
   group('QueryIMDBCastDetails unit tests', () {
     // Confirm class description is constructed as expected.
-    test('Run myDataSourceName()', () async {
+    test('Run myDataSourceName()', () {
       expect(QueryIMDBCastDetails().myDataSourceName(), 'imdb_cast');
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
@@ -60,7 +61,7 @@ void main() {
     });
 
     // Confirm error is constructed as expected.
-    test('Run myYieldError()', () async {
+    test('Run myYieldError()', () {
       const expectedResult = {
         'source': 'DataSourceType.imdb',
         'title': '[QueryIMDBCastDetails] new query',
@@ -77,22 +78,22 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
       final testClass = QueryIMDBCastDetails();
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = 'tt7602562';
       testClass.criteria = criteria;
-      final actualOutput = await testClass.myConvertWebTextToTraversableTree(
+      final actualOutput = testClass.myConvertWebTextToTraversableTree(
         imdbHtmlSampleFull,
       );
-      expect(actualOutput, expectedOutput);
+      expect(actualOutput, completion(expectedOutput));
     });
   });
 
   group('ImdbCastConverter unit tests', () {
     // Confirm map can be converted to DTO.
-    test('Run dtoFromCompleteJsonMap()', () async {
+    test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -198,8 +199,7 @@ void main() {
 
   group('QueryIMDBCastDetails integration tests', () {
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
-      await EnvironmentVars.init();
+    test('Run myConstructURI()', () {
       const expected = 'https://www.imdb.com/title/1234/fullcredits/';
 
       // Invoke the functionality.
@@ -310,7 +310,8 @@ void main() {
       final testClass = QueryIMDBCastDetails();
       await testClass.myClearCache();
       const expectedException =
-          '[QueryIMDBCastDetails] Error in imdb_cast with criteria  interpreting web text as a map :imdb cast data not detected for criteria ';
+          '[QueryIMDBCastDetails] Error in imdb_cast with criteria  interpreting web text as a map '
+          ':imdb cast data not detected for criteria ';
 
       // Invoke the functionality.
       await testClass
@@ -323,7 +324,8 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBCastDetails] Error in imdb_cast with criteria  interpreting web text as a map :imdb cast data not detected for criteria ';
+          '[QueryIMDBCastDetails] Error in imdb_cast with criteria  interpreting web text as a map '
+          ':imdb cast data not detected for criteria ';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBCastDetails();
       await testClass.myClearCache();

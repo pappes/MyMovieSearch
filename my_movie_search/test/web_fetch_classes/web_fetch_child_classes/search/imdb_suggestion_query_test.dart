@@ -21,12 +21,12 @@ void main() {
 
   group('imdb suggestions unit tests', () {
     // Confirm class description is constructed as expected.
-    test('Run myDataSourceName()', () async {
+    test('Run myDataSourceName()', () {
       expect(QueryIMDBSuggestions().myDataSourceName(), 'imdbSuggestions');
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
@@ -36,8 +36,7 @@ void main() {
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList',
-        () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO();
       input.criteriaList = [
         MovieResultDTO().error('test1'),
@@ -72,7 +71,7 @@ void main() {
     });
 
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
+    test('Run myConstructURI()', () {
       const expectedResult =
           'https://sg.media-imdb.com/suggests/n/new%20query.json';
 
@@ -85,7 +84,7 @@ void main() {
     });
 
     // Confirm error is constructed as expected.
-    test('Run myYieldError()', () async {
+    test('Run myYieldError()', () {
       const expectedResult = {
         'uniqueId': '-1',
         'source': 'DataSourceType.imdbSuggestions',

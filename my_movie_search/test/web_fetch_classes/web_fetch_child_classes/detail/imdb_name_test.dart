@@ -23,12 +23,13 @@ Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
 
 // ignore: avoid_classes_with_only_static_members
 class StaticJsonGenerator {
-  static Future<Stream<String>> stuff(_) async => Stream.value('"stuff"');
+  static Future<Stream<String>> stuff(_) =>
+      Future.value(Stream.value('"stuff"'));
 
-  static Future<Stream<String>> stuffDelayed(dynamic criteria) async {
+  static Future<Stream<String>> stuffDelayed(dynamic criteria) {
     // Insert artificial delay to allow tests to observe prior processing.
-    Future.delayed(const Duration(milliseconds: 300));
-    return stuff(criteria);
+    return Future.delayed(const Duration(milliseconds: 300))
+        .then((_) => stuff(criteria));
   }
 }
 
@@ -39,12 +40,12 @@ void main() {
 
   group('QueryIMDBNameDetails unit tests', () {
     // Confirm class description is constructed as expected.
-    test('Run myDataSourceName()', () async {
+    test('Run myDataSourceName()', () {
       expect(QueryIMDBNameDetails().myDataSourceName(), 'imdb_person');
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
@@ -71,7 +72,7 @@ void main() {
     });
 
     // Confirm error is constructed as expected.
-    test('Run myYieldError()', () async {
+    test('Run myYieldError()', () {
       const expectedResult = {
         'source': 'DataSourceType.imdb',
         'title': '[QueryIMDBNameDetails] new query',
@@ -88,22 +89,22 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
       final testClass = QueryIMDBNameDetails();
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = 'nm0123456';
       testClass.criteria = criteria;
-      final actualOutput = await testClass.myConvertWebTextToTraversableTree(
+      final actualOutput = testClass.myConvertWebTextToTraversableTree(
         imdbHtmlSampleFull,
       );
-      expect(actualOutput, expectedOutput);
+      expect(actualOutput, completion(expectedOutput));
     });
   });
 
   group('ImdbNamePageConverter unit tests', () {
     // Confirm map can be converted to DTO.
-    test('Run dtoFromCompleteJsonMap()', () async {
+    test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -176,7 +177,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final listResult = await testClass.readCachedList(
         criteria,
-        source: (_) async => Stream.value('Polo'),
+        source: (_) => Future.value(Stream.value('Polo')),
       );
       expect(listResult, []);
       final resultIsCached = await testClass.isThreadedResultCached(criteria);
@@ -266,8 +267,7 @@ void main() {
 
   group('QueryIMDBNameDetails integration tests', () {
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
-      await EnvironmentVars.init();
+    test('Run myConstructURI()', () {
       const expected = 'https://www.imdb.com/name/1234';
 
       // Invoke the functionality.

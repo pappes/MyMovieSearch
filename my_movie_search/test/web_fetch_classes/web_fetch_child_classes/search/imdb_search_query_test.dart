@@ -40,12 +40,12 @@ void main() {
 
   group('imdb search unit tests', () {
     // Confirm class description is constructed as expected.
-    test('Run myDataSourceName()', () async {
+    test('Run myDataSourceName()', () {
       expect(QueryIMDBSearch().myDataSourceName(), 'imdbSearch');
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
@@ -55,8 +55,7 @@ void main() {
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList',
-        () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO();
       input.criteriaList = [
         MovieResultDTO().error('test1'),
@@ -73,7 +72,7 @@ void main() {
     });
 
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
+    test('Run myConstructURI()', () {
       const expectedResult =
           'https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=new%20query';
 
@@ -86,7 +85,7 @@ void main() {
     });
 
     // Confirm error is constructed as expected.
-    test('Run myYieldError()', () async {
+    test('Run myYieldError()', () {
       const expectedResult = {
         'source': 'DataSourceType.imdbSearch',
         'title': '[QueryIMDBSearch] new query',
@@ -101,18 +100,17 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
-      final actualOutput =
-          await QueryIMDBSearch().myConvertWebTextToTraversableTree(
+      final actualOutput = QueryIMDBSearch().myConvertWebTextToTraversableTree(
         imdbSearchHtmlSampleFull,
       );
-      expect(actualOutput, expectedOutput);
+      expect(actualOutput, completion(expectedOutput));
     });
   });
   group('ImdbSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
-    test('Run dtoFromCompleteJsonMap()', () async {
+    test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -280,16 +278,15 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search redirect', () {
-    test('Run QueryIMDBTitleDetails myConvertWebTextToTraversableTree()',
-        () async {
+    test('Run QueryIMDBTitleDetails myConvertWebTextToTraversableTree()', () {
       final expectedOutput = title_data.intermediateMapList;
 
       final imdbSearch = QueryIMDBSearch();
       imdbSearch.criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final actualOutput = await imdbSearch.myConvertWebTextToTraversableTree(
+      final actualOutput = imdbSearch.myConvertWebTextToTraversableTree(
         title_data.imdbHtmlSampleFull,
       );
-      expect(actualOutput, expectedOutput);
+      expect(actualOutput, completion(expectedOutput));
     });
 
     // Run IMDB search for a single movie

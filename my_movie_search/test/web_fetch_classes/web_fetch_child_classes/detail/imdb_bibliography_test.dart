@@ -18,7 +18,8 @@ Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
 
 // ignore: avoid_classes_with_only_static_members
 class StaticJsonGenerator {
-  static Future<Stream<String>> stuff(_) async => Stream.value('"stuff"');
+  static Future<Stream<String>> stuff(_) =>
+      Future.value(Stream.value('"stuff"'));
 }
 
 void main() {
@@ -28,13 +29,13 @@ void main() {
 
   group('QueryIMDBBibliographyDetails unit tests', () {
     // Confirm class description is constructed as expected.
-    test('Run myDataSourceName()', () async {
+    test('Run myDataSourceName()', () {
       expect(QueryIMDBBibliographyDetails().myDataSourceName(),
           'imdb_bibliography');
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
@@ -61,7 +62,7 @@ void main() {
     });
 
     // Confirm error is constructed as expected.
-    test('Run myYieldError()', () async {
+    test('Run myYieldError()', () {
       const expectedResult = {
         'source': 'DataSourceType.imdb',
         'title': '[QueryIMDBBibliographyDetails] new query',
@@ -78,22 +79,22 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
       final testClass = QueryIMDBBibliographyDetails();
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = 'tt7602562';
       testClass.criteria = criteria;
-      final actualOutput = await testClass.myConvertWebTextToTraversableTree(
+      final actualOutput = testClass.myConvertWebTextToTraversableTree(
         imdbHtmlSampleFull,
       );
-      expect(actualOutput, expectedOutput);
+      expect(actualOutput, completion(expectedOutput));
     });
   });
 
   group('ImdbBibliographyConverter unit tests', () {
     // Confirm map can be converted to DTO.
-    test('Run dtoFromCompleteJsonMap()', () async {
+    test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -129,7 +130,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final listResult = await testClass.readCachedList(
         criteria,
-        source: (_) async => Stream.value('Polo'),
+        source: (_) => Future.value(Stream.value('Polo')),
       );
       expect(listResult, []);
       final resultIsCached = await testClass.isThreadedResultCached(criteria);
@@ -202,8 +203,7 @@ void main() {
 
   group('QueryIMDBBibliographyDetails integration tests', () {
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
-      await EnvironmentVars.init();
+    test('Run myConstructURI()', () {
       const expected = 'https://www.imdb.com/name/1234/fullcredits/';
 
       // Invoke the functionality.

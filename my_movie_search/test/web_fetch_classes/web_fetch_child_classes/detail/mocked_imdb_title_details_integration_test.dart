@@ -44,8 +44,8 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
       'https://www.imdb.com/title/$expectedCriteria/?ref_=fn_tt_tt_1',
     );
 
-    Future<MockHttpClientResponse> getClientResponse(_) async {
-      return clientResponse;
+    Future<MockHttpClientResponse> getClientResponse(_) {
+      return Future.value(clientResponse);
     }
 
     // Use Mockito to return a successful response when it calls the
@@ -58,7 +58,8 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
     //when(clientRequest.close()).thenAnswer((_) async => clientResponse);
     when(clientRequest.close()).thenAnswer(getClientResponse);
 
-    when(client.getUrl(expectedUri)).thenAnswer((_) async => clientRequest);
+    when(client.getUrl(expectedUri))
+        .thenAnswer((_) => Future.value(clientRequest));
     when(clientRequest.headers).thenAnswer((_) => headers);
 
     return client;
@@ -109,8 +110,8 @@ Map offlineMapList(String id) => {
     };
 
 /// Make dummy html results for offline queries.
-Stream<String> _getOfflineHTML(String id) async* {
-  yield '''
+Stream<String> _getOfflineHTML(String id) {
+  return Stream.value('''
 <!DOCTYPE html>
 <html
     <head>
@@ -120,13 +121,13 @@ Stream<String> _getOfflineHTML(String id) async* {
     <body>
     </body>
 </html>
-''';
+''');
 }
 
 /// Make dummy html results for offline queries.
-Future<Stream<String>> _offlineSearch(dynamic criteria) async {
+Future<Stream<String>> _offlineSearch(dynamic criteria) {
   criteria as SearchCriteriaDTO;
-  return _getOfflineHTML(criteria.criteriaTitle);
+  return Future.value(_getOfflineHTML(criteria.criteriaTitle));
 }
 
 /// Call IMDB for each criteria in the list.
