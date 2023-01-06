@@ -264,7 +264,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Flush all data from the cache.
   ///
   /// Can be overridden by child classes if required.
-  Future<void> myClearCache() async {}
+  void myClearCache() {}
 
   /// Retrieve cached result.
   ///

@@ -122,7 +122,7 @@ void main() {
   group('WebFetchThreadedCache unit tests', () {
     test('empty cache', () async {
       final testClass = QueryIMDBCastDetails();
-      await testClass.clearThreadedCache();
+      testClass.clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final listResult = await testClass.readCachedList(
         criteria,
@@ -137,7 +137,7 @@ void main() {
 
     test('add to cache via readPrioritisedCachedList', () async {
       final testClass = QueryIMDBCastDetails();
-      await testClass.clearThreadedCache();
+      testClass.clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       await testClass.readPrioritisedCachedList(
         criteria,
@@ -162,7 +162,7 @@ void main() {
 
     test('fetch result from cache', () async {
       final testClass = QueryIMDBCastDetails();
-      await testClass.clearThreadedCache();
+      testClass.clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       await testClass.readPrioritisedCachedList(
         criteria,
@@ -179,13 +179,13 @@ void main() {
 
     test('clear cache', () async {
       final testClass = QueryIMDBCastDetails();
-      await testClass.clearThreadedCache();
+      testClass.clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       await testClass.readPrioritisedCachedList(
         criteria,
         source: streamImdbHtmlOfflineData,
       );
-      await testClass.clearThreadedCache();
+      testClass.clearThreadedCache();
       final resultIsCached = await testClass.isThreadedResultCached(criteria);
       expect(resultIsCached, false);
       final resultIsStale = await testClass.isThreadedCacheStale(criteria);
@@ -218,7 +218,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final testClass = QueryIMDBCastDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
@@ -240,7 +240,7 @@ void main() {
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
       final testClass = QueryIMDBCastDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -267,7 +267,7 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBCastDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = 'tt7602562';
 
@@ -308,7 +308,7 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBCastDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       const expectedException =
           '[QueryIMDBCastDetails] Error in imdb_cast with criteria  interpreting web text as a map '
           ':imdb cast data not detected for criteria ';
@@ -328,7 +328,7 @@ void main() {
           ':imdb cast data not detected for criteria ';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBCastDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass

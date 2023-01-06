@@ -182,7 +182,7 @@ class WebFetchCached extends WebFetchBasic {
   }
 
   @override
-  Future<void> myClearCache() async {
+  void myClearCache() {
     lastCriteria = '';
     lastResult = '';
   }
@@ -450,7 +450,7 @@ void main() {
     test('clear cache', () async {
       final testClass = WebFetchCached();
       await testClass.myAddResultToCache('Marco', 'Polo');
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final listResult = await testClass.readCachedList('Marco');
       expect(listResult, []);
       final resultIsCached = testClass.myIsResultCached('Marco');

@@ -46,7 +46,7 @@ mixin ThreadedCacheIMDBTitleDetails
 
   /// Flush all data from the cache.
   @override
-  Future<void> myClearCache() async {
+  void myClearCache() {
     return _cache.clear();
   }
 

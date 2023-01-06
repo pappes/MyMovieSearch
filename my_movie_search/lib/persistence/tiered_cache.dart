@@ -16,7 +16,7 @@ class TieredCache<T> {
 
   /// Remove all items from the cache.
   ///
-  Future<void> clear() async {
+  void clear() {
     memoryCache.clear();
     //TODO: flush disk and cloud caches
   }
@@ -29,7 +29,7 @@ class TieredCache<T> {
     return false;
   }
 
-  /// Check the cache to see if the item is present.
+  /// Check the cache to see how many items are present.
   ///
   int cachedSize() {
     return memoryCache.length;

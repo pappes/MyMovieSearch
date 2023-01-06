@@ -135,7 +135,7 @@ void main() {
   group('ThreadedCacheIMDBNameDetails unit tests', () {
     test('cache queueing', () async {
       final testClass = QueryIMDBNameDetails();
-      await testClass.clearThreadedCache();
+      testClass.clearThreadedCache();
       expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 0);
       expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
       for (var iteration = 0; iteration < 100; iteration++) {
@@ -173,7 +173,7 @@ void main() {
     });
     test('empty cache', () async {
       final testClass = QueryIMDBNameDetails();
-      await testClass.clearThreadedCache();
+      testClass.clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final listResult = await testClass.readCachedList(
         criteria,
@@ -188,7 +188,7 @@ void main() {
 
     test('add to cache via readPrioritisedCachedList', () async {
       final testClass = QueryIMDBNameDetails();
-      await testClass.clearThreadedCache();
+      testClass.clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
       await testClass.readPrioritisedCachedList(
         criteria,
@@ -213,7 +213,7 @@ void main() {
 
     test('fetch result from cache', () async {
       final testClass = QueryIMDBNameDetails();
-      await testClass.clearThreadedCache();
+      testClass.clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
       await testClass.readPrioritisedCachedList(
         criteria,
@@ -230,13 +230,13 @@ void main() {
 
     test('clear cache', () async {
       final testClass = QueryIMDBNameDetails();
-      await testClass.clearThreadedCache();
+      testClass.clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
       await testClass.readPrioritisedCachedList(
         criteria,
         source: streamImdbHtmlOfflineData,
       );
-      await testClass.clearThreadedCache();
+      testClass.clearThreadedCache();
       final resultIsCached = await testClass.isThreadedResultCached(criteria);
       expect(resultIsCached, false);
       final resultIsStale = await testClass.isThreadedCacheStale(criteria);
@@ -245,7 +245,7 @@ void main() {
 
     test('cache prioitisation', () async {
       final testClass = QueryIMDBNameDetails();
-      await testClass.clearThreadedCache();
+      testClass.clearThreadedCache();
       for (var iteration = 0; iteration < 100; iteration++) {
         final criteria = SearchCriteriaDTO().fromString(iteration.toString());
         // Enqueue requests but do not wait for result.
@@ -286,7 +286,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final testClass = QueryIMDBNameDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
@@ -308,7 +308,7 @@ void main() {
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
       final testClass = QueryIMDBNameDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -335,7 +335,7 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBNameDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
 
       // Invoke the functionality.
@@ -364,7 +364,7 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBNameDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       const expectedException =
           '[QueryIMDBNameDetails] Error in imdb_person with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria  in not valid html';
 
@@ -382,7 +382,7 @@ void main() {
           '[QueryIMDBNameDetails] Error in imdb_person with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria  in <html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBNameDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass

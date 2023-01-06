@@ -113,7 +113,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     );
   }
 
-  Future<void> clearThreadedCache() => _cache.clear();
+  void clearThreadedCache() => _cache.clear();
 
   /// Check cache to see if data has already been fetched.
   Future<bool> isThreadedResultCached(INPUT_TYPE criteria) =>

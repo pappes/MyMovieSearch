@@ -155,7 +155,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final dto = MovieResultDTO().testDto('Polo');
       await testClass.myAddResultToCache(criteria, dto);
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final resultIsCached = await testClass.myIsResultCached(criteria);
       expect(resultIsCached, false);
       final resultIsStale = await testClass.myIsCacheStale(criteria);
@@ -164,7 +164,7 @@ void main() {
 
     test('read empty cache via readCachedList', () async {
       final testClass = QueryIMDBTitleDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final listResult = await testClass.readCachedList(
         criteria,
@@ -179,7 +179,7 @@ void main() {
 
     test('read populated cache via readCachedList', () async {
       final testClass = QueryIMDBTitleDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final dto = MovieResultDTO().testDto('Polo');
       await testClass.myAddResultToCache(criteria, dto);
@@ -196,7 +196,7 @@ void main() {
 
     test('read populated cache via readList', () async {
       final testClass = QueryIMDBTitleDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       await testClass.readList(
         criteria,
@@ -215,7 +215,7 @@ void main() {
 
     test('fetch result from cache', () async {
       final testClass = QueryIMDBTitleDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final dto = MovieResultDTO().testDto('Polo');
       await testClass.myAddResultToCache(criteria, dto);
@@ -254,7 +254,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final testClass = QueryIMDBTitleDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
@@ -276,7 +276,7 @@ void main() {
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
       final testClass = QueryIMDBTitleDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -303,7 +303,7 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = 'tt7602562';
 
@@ -333,7 +333,7 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
       const expectedException =
           '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria  in not valid html';
 
@@ -351,7 +351,7 @@ void main() {
           '[QueryIMDBTitleDetails] Error in imdb with criteria  interpreting web text as a map :imdb web scraper data not detected for criteria  in <html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails();
-      await testClass.myClearCache();
+      testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
