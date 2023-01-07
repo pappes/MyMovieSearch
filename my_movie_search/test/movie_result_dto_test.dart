@@ -271,6 +271,7 @@ void main() {
     // Convert a dto to a map.
     test('empty_DTO', () {
       final dto = MovieResultDTO();
+      dto.type = MovieContentType.error;
       final initialisedDTO = MovieResultDTO().init();
       expect(dto, MovieResultDTOMatcher(initialisedDTO));
     });
@@ -424,5 +425,110 @@ void main() {
       expect(list[1], MovieResultDTOMatcher(decoded[1]));
       expect(list[2], MovieResultDTOMatcher(decoded[2]));
     });
+  });
+
+  void testContent(
+    MovieContentType? type,
+    String suffix,
+    int? duration,
+    String id,
+  ) {
+    final info = 'movie name$suffix';
+    const title = 'movie name';
+    expect(
+      MovieResultDTOHelpers.findMovieContentTypeFromTitle(
+          info, title, duration, id),
+      type,
+      reason:
+          'unexpected value returned from findImdbMovieContentTypeFromTitle',
+    );
+    expect(
+      MovieResultDTOHelpers.getMovieContentType(suffix, duration, id),
+      type ?? MovieContentType.movie,
+      reason: 'unexpected value returned from getImdbMovieContentType',
+    );
+  }
+
+  group('findImdbMovieContentTypeFromTitle movie', () {
+    test(
+      'normal movie',
+      () => testContent(null, '', null, 'tt1234'),
+    );
+    test(
+      'unknown movie',
+      () => testContent(null, 'info', null, 'tt1234'),
+    );
+    test(
+      'concise movie',
+      () => testContent(MovieContentType.movie, 'movie', null, 'tt1234'),
+    );
+    test(
+      'verbose movie',
+      () => testContent(MovieContentType.movie, '(funMovie!)', null, 'tt1234'),
+    );
+    test(
+      'video',
+      () => testContent(MovieContentType.movie, 'vhs video', null, 'tt1234'),
+    );
+    test(
+      'feature',
+      () => testContent(MovieContentType.movie, 'feature film', null, 'tt1234'),
+    );
+  });
+
+  group('findImdbMovieContentTypeFromTitle misc', () {
+    test('empty string', () => testContent(null, '', null, ''));
+    test(
+      '30 mins title',
+      () => testContent(MovieContentType.short, 'info', 30, ''),
+    );
+    test(
+      'short title',
+      () => testContent(MovieContentType.short, 'short', null, ''),
+    );
+    test(
+      'normal person',
+      () => testContent(MovieContentType.person, 'info', null, 'nm1234'),
+    );
+  });
+
+  group('findImdbMovieContentTypeFromTitle not a movie ie game', () {
+    test(
+      'error',
+      () => testContent(MovieContentType.error, 'info', null, '-1'),
+    );
+    test(
+      'game',
+      () => testContent(MovieContentType.custom, 'game', null, 'tt1234'),
+    );
+    test(
+      'creativeWork',
+      () =>
+          testContent(MovieContentType.custom, 'creativeWork', null, 'tt1234'),
+    );
+  });
+
+  group('findImdbMovieContentTypeFromTitle episodic', () {
+    test(
+      'miniseries',
+      () => testContent(
+        MovieContentType.miniseries,
+        'mini series',
+        null,
+        'tt1234',
+      ),
+    );
+    test(
+      'series episode',
+      () => testContent(MovieContentType.episode, 'episode', null, 'tt1234'),
+    );
+    test(
+      'tv series',
+      () => testContent(MovieContentType.series, 'series', null, 'tt1234'),
+    );
+    test(
+      'tv series special',
+      () => testContent(MovieContentType.series, 'special', null, 'tt1234'),
+    );
   });
 }

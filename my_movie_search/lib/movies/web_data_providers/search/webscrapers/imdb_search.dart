@@ -122,7 +122,7 @@ mixin ScrapeIMDBSearchDetails
     rowData[outerElementDescription] = 'staring '
         '${movie[_searchResultMovieActors]}';
 
-    final movieType = getImdbMovieContentType(
+    final movieType = MovieResultDTOHelpers.getMovieContentType(
       movie[_searchResultMovieType],
       null, // Unknown duration.
       rowData[outerElementIdentity].toString(),
