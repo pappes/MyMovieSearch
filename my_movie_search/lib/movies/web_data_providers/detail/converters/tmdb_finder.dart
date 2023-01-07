@@ -119,6 +119,7 @@ class TmdbFinderConverter {
     )!;
 
     movie.languages.combineUnique(map[movieElementOriginalLanguage]);
+    movie.getLanguageType();
 
     return movie;
   }

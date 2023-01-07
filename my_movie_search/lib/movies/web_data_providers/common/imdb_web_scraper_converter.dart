@@ -425,9 +425,10 @@ class ImdbWebScraperConverter {
       movie.runTime = Duration.zero.fromIso8601(map[outerElementDuration]);
     } catch (_) {}
 
-    movie.languages.combineUnique(map[outerElementLanguages]);
     movie.genres.combineUnique(map[outerElementGenre]);
     movie.keywords.combineUnique(map[outerElementKeywords]);
+    movie.languages.combineUnique(map[outerElementLanguages]);
+    movie.getLanguageType();
 
     for (final person in getPeopleFromJson(map[outerElementDirector])) {
       movie.addRelated(relatedDirectorsLabel, person);

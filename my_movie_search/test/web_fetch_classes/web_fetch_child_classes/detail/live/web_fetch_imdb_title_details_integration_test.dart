@@ -12,18 +12,18 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt0101000","source":"DataSourceType.imdb","title":"Zacátek dlouhého podzimu","type":"MovieContentType.movie","year":"1990","yearRange":"1990","runTime":"4860",
+{"uniqueId":"tt0101000","source":"DataSourceType.imdb","title":"Zacátek dlouhého podzimu","type":"MovieContentType.movie","year":"1990","yearRange":"1990","runTime":"4860","language":"LanguageType.foreign",
       "languages":"[\"Czech\"]",
       "genres":"[\"Drama\"]","keywords":"[]","userRating":"5.0","userRatingCount":"8","related":{}}
 ''',
   r'''
-{"uniqueId":"tt0101001","source":"DataSourceType.imdb","title":"Zai shi feng liu jie","type":"MovieContentType.movie","year":"1985","yearRange":"1985","runTime":"5340",
+{"uniqueId":"tt0101001","source":"DataSourceType.imdb","title":"Zai shi feng liu jie","type":"MovieContentType.movie","year":"1985","yearRange":"1985","runTime":"5340","language":"LanguageType.foreign",
       "languages":"[\"Cantonese\"]",
       "genres":"[\"Horror\"]",
       "keywords":"[\"ghost\"]","imageUrl":"https://m.media-amazon.com/images/M/MV5BYjJkYzRkNzMtZWVkYy00MmRjLWE1YTQtYmIwOWE4MTkyZWFmXkEyXkFqcGdeQXVyNzc5MjA3OA@@._V1_.jpg","related":{}}
 ''',
   r'''
-{"uniqueId":"tt0101002","source":"DataSourceType.imdb","title":"Joi jin gong woo","type":"MovieContentType.movie","year":"1990","yearRange":"1990","runTime":"6480",
+{"uniqueId":"tt0101002","source":"DataSourceType.imdb","title":"Joi jin gong woo","type":"MovieContentType.movie","year":"1990","yearRange":"1990","runTime":"6480","language":"LanguageType.someEnglish",
       "languages":"[\"Cantonese\",\"English\"]",
       "genres":"[\"Action\",\"Drama\"]",
       "keywords":"[\"gangster\"]",

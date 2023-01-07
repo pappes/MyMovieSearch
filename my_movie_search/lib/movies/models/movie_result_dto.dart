@@ -281,15 +281,15 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String? alternateTitle = '',
     String? charactorName = '',
     String? description = '',
-    String? type = 'MovieContentType.none',
+    String? type = '',
     String? year = '0',
     String? yearRange = '',
     String? userRating = '0',
     String? userRatingCount = '0',
-    String? censorRating = 'CensorRatingType.none',
+    String? censorRating = '',
     String? runTime = '0',
     String? imageUrl = '',
-    String? language = 'LanguageType.none',
+    String? language = '',
     String? languages = '[]',
     String? genres = '[]',
     String? keywords = '[]',
@@ -330,7 +330,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
           language,
           LanguageType.values,
         ) ??
-        LanguageType.none;
+        getLanguageType(this.languages);
     return this;
   }
 
@@ -670,6 +670,38 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       return false;
     }
     return true;
+  }
+
+  /// Loop through all languages in order to see how dominant English is.
+  LanguageType getLanguageType([Iterable? languageList]) {
+    for (final languageVal in languageList ?? languages) {
+      final languageText = languageVal.toString();
+      if (languageText.isNotEmpty) {
+        if (!languages.contains(languageText)) {
+          languages.add(languageText);
+        }
+        if (languageText.toUpperCase().startsWith('EN')) {
+          if (LanguageType.none == language ||
+              LanguageType.allEnglish == language) {
+            // First item(s) found are English, assume all English until other languages found.
+            language = LanguageType.allEnglish;
+            continue;
+          } else {
+            // English is not the first language listed.
+            return language = LanguageType.someEnglish;
+          }
+        }
+        if (LanguageType.allEnglish == language) {
+          // English was the first language listed but found another language.
+          return language = LanguageType.mostlyEnglish;
+        } else {
+          // First item found is foreign, assume all foreign until other languages found.
+          language = LanguageType.foreign;
+          continue;
+        }
+      }
+    }
+    return language;
   }
 }
 

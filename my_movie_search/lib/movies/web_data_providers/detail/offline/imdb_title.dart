@@ -20,10 +20,10 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt6123456","source":"DataSourceType.imdb","title":"Scott And Sharlene","alternateTitle":"Aussieland","type":"MovieContentType.series","year":"1985","yearRange":"1985-2023","runTime":"1234","languages":"[]",
+{"uniqueId":"tt6123456","source":"DataSourceType.imdb","title":"Scott And Sharlene","alternateTitle":"Aussieland","type":"MovieContentType.series","year":"1985","yearRange":"1985-2023","runTime":"1234","language":"LanguageType.allEnglish",
+      "languages":"[\"English\"]",
       "genres":"[\"Horror\",\"Romance\"]",
       "keywords":"[\"exorcism\",\"boxer\",\"chihuahua\"]",
-      "languages":"[\"English\"]",
       "description":"Then Kramer said, \"Everybody is Mescalon Smoochington\".","userRating":"7.5","userRatingCount":"5123","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BYjAxMz.jpg",
   "related":{"Cast:":{"nm0012370":{"uniqueId":"nm0012370","source":"DataSourceType.imdbSuggestions","title":"Bill Jole","alternateTitle":" ","charactorName":" [Willy Rutter, Jimmy Banter]","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","related":{}},
       "nm0012372":{"uniqueId":"nm0012372","source":"DataSourceType.imdbSuggestions","title":"Jenny Jole","alternateTitle":" ","charactorName":" [Jilly Rutter, Jenny Banter]","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/MV5BY.jpg","related":{}}},

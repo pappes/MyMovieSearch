@@ -131,6 +131,22 @@ Future main() async {
         expect(enumeration, null);
       },
     );
+    test(
+      'getEnumValue accepts empty string',
+      () async {
+        final enumeration = getEnumValue<ElementType>('', ElementType.values);
+        expect(enumeration, null);
+      },
+    );
+    test(
+      'getEnumValue rejects invalid string',
+      () async {
+        expect(
+          () => getEnumValue<ElementType>('invalid', ElementType.values),
+          throwsArgumentError,
+        );
+      },
+    );
   });
 
   group('SteamHelper printStream', () {
@@ -195,30 +211,6 @@ Future main() async {
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
-  });
-
-  group('getIdFromIMDBLink', () {
-    // Ensure conversion between IMDB and URL yields correct results.
-    test('check sample urls', () {
-      void testGetIdFromIMDBLink(String input, expectedOutput) {
-        final text = getIdFromIMDBLink(input);
-        expect(text, expectedOutput);
-      }
-
-      testGetIdFromIMDBLink(
-        '/title/tt0145681/?ref_=nm_sims_nm_t_9',
-        'tt0145681',
-      );
-      testGetIdFromIMDBLink(
-        '/title/tt0145682?ref_=nm_sims_nm_t_9',
-        'tt0145682',
-      );
-      testGetIdFromIMDBLink(
-        '/name/nm0145683/?ref_=nm_sims_nm_t_9',
-        'nm0145683',
-      );
-      testGetIdFromIMDBLink('/name/nm0145684?ref_=nm_sims_nm_t_9', 'nm0145684');
-    });
   });
 
   group('OnlineOfflineSelector', () {

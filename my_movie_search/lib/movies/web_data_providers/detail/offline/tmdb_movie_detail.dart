@@ -25,13 +25,12 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
        print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
-  '''
-{"source": "tmdbMovie", "uniqueId": "104", "alternateId": "tt0130827", "title": "Lola rennt (Run Lola Run", "year": "1998", "runTime": "4860", 
-"languages": ["de","{english_name: German, iso_639_1: de, name: Deutsch}","{english_name: English, iso_639_1: en, name: English}","{english_name: Japanese, iso_639_1: ja, name: 日本語}"], 
-"genres": ["Action","Drama","Thriller"], "keywords": [], 
-"description": "Lola receives a phone call from her boyfriend Manni. He lost 100,000 DM in a subway train that belongs to a very bad guy. She has 20 minutes to raise this amount and meet Manni. Otherwise, he will rob a store to get the money. Three different alternatives may happen depending on some minor event along Lola's run.", 
-"userRating": "7.3", "userRatingCount": "1537", "related": {}}
-'''
+  r'''
+{"uniqueId":"104","source":"DataSourceType.tmdbMovie","alternateId":"tt0130827","title":"Lola rennt (Run Lola Run","year":"1998","runTime":"4860","language":"LanguageType.someEnglish",
+      "languages":"[\"German\",\"English\",\"Japanese\"]",
+      "genres":"[\"Action\",\"Drama\",\"Thriller\"]","keywords":"[]",
+      "description":"Lola receives a phone call from her boyfriend Manni. He lost 100,000 DM in a subway train that belongs to a very bad guy. She has 20 minutes to raise this amount and meet Manni. Otherwise, he will rob a store to get the money. Three different alternatives may happen depending on some minor event along Lola's run.","userRating":"7.3","userRatingCount":"1537","related":{}}
+''',
 ];
 
 final intermediateMapList = [jsonDecode(tmdbJsonSearchFull)];

@@ -217,6 +217,56 @@ void main() {
     });
   });
 
+  group('LanguageType', () {
+    // Check that language list is categorised corectly.
+    test('empty_DTO', () {
+      final dto = MovieResultDTO();
+      expect(dto.getLanguageType(), LanguageType.none);
+    });
+    test('supply list to helper, get language from helper', () {
+      final dto = MovieResultDTO();
+      expect(dto.getLanguageType(['English']), LanguageType.allEnglish);
+      expect(dto.languages, ['English']);
+    });
+    test('supply list to dto, get language from helper', () {
+      final dto = MovieResultDTO();
+      dto.languages = ['English'];
+      expect(dto.getLanguageType(), LanguageType.allEnglish);
+    });
+    test('supply list to dto, get language from dto', () {
+      final dto = MovieResultDTO();
+      dto.languages = ['English'];
+      dto.getLanguageType();
+      expect(dto.language, LanguageType.allEnglish);
+    });
+    test('supply list to helper, get language from dto', () {
+      final dto = MovieResultDTO();
+      dto.getLanguageType(['English']);
+      expect(dto.language, LanguageType.allEnglish);
+      expect(dto.languages, ['English']);
+    });
+    test('All English', () {
+      final dto = MovieResultDTO();
+      expect(dto.getLanguageType(['English', 'en', 'Englasias']),
+          LanguageType.allEnglish);
+    });
+    test('Foreign', () {
+      final dto = MovieResultDTO();
+      expect(dto.getLanguageType(['Not English', 'French', 'el-Englasias']),
+          LanguageType.foreign);
+    });
+    test('mostlyEnglish', () {
+      final dto = MovieResultDTO();
+      expect(dto.getLanguageType(['English', 'French', 'el-Englasias']),
+          LanguageType.mostlyEnglish);
+    });
+    test('someEnglish', () {
+      final dto = MovieResultDTO();
+      expect(dto.getLanguageType(['French', 'Englasias']),
+          LanguageType.someEnglish);
+    });
+  });
+
   group('MovieResultDTOinit', () {
     // Convert a dto to a map.
     test('empty_DTO', () {
