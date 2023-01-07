@@ -171,69 +171,6 @@ String getIdFromIMDBLink(String? link) {
       '';
 }
 
-/// Look at information provided to see if [MovieContentType] can be determined.
-///
-/// info is in the form  ' (1988–1993) (TV Series)'
-MovieContentType? _lookupImdbMovieContentType(
-  String info,
-  int? duration,
-  String id,
-) {
-  if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
-  if (id == "-1") return MovieContentType.custom;
-  final String title = info.toLowerCase();
-  if (title.lastIndexOf('game') > -1) return MovieContentType.custom;
-  if (title.lastIndexOf('creativework') > -1) return MovieContentType.custom;
-  // mini includes TV Mini-series
-  if (title.lastIndexOf('mini') > -1) return MovieContentType.miniseries;
-  if (title.lastIndexOf('episode') > -1) return MovieContentType.episode;
-  if (title.lastIndexOf('series') > -1) return MovieContentType.series;
-  if (title.lastIndexOf('special') > -1) return MovieContentType.series;
-  if (title.lastIndexOf('short') > -1) return MovieContentType.short;
-  if (duration != null && duration < 50 && duration > 0) {
-    return MovieContentType.short;
-  }
-  if (title.lastIndexOf('movie') > -1) return MovieContentType.movie;
-  if (title.lastIndexOf('video') > -1) return MovieContentType.movie;
-  if (title.lastIndexOf('feature') > -1) return MovieContentType.movie;
-  return null;
-}
-
-/// Look at movie to see if title type (is in brackets).
-///
-/// Takes [info] which includes the title and other information
-/// in the form 'title 123 (1988–1993) (TV Series)'
-/// and [title] which does not include the other information only 'title 123'
-MovieContentType? findImdbMovieContentTypeFromTitle(
-  String info,
-  String title,
-  int? duration,
-  String id,
-) {
-  final startInfo = title.length;
-  if (info.length > startInfo) {
-    return _lookupImdbMovieContentType(
-      info.substring(startInfo), // Throw away the start of info.
-      duration,
-      id,
-    );
-  }
-  return null;
-}
-
-/// Use movie type string to lookup [MovieContentType] movie type.
-MovieContentType? getImdbMovieContentType(
-  Object? info,
-  int? duration,
-  String id,
-) {
-  final string = info?.toString() ?? '';
-  final type = _lookupImdbMovieContentType(string, duration, id);
-  if (null != type || null == info) return type;
-  logger.i('Unknown Imdb MoveContentType ${info.toString()} for id $id');
-  return MovieContentType.movie;
-}
-
 /// Converts human readable censor ratings to [CensorRatingType] rating categories.
 CensorRatingType? getImdbCensorRating(String? type) {
   // Details available at https://help.imdb.com/article/contribution/titles/certificates/GU757M8ZJ9ZPXB39

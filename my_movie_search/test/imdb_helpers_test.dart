@@ -1,26 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-
-void testContent(
-  MovieContentType? type,
-  String suffix,
-  int? duration,
-  String id,
-) {
-  final info = 'movie name$suffix';
-  const title = 'movie name';
-  expect(
-    findImdbMovieContentTypeFromTitle(info, title, duration, id),
-    type,
-    reason: 'unexpected value returned from findImdbMovieContentTypeFromTitle',
-  );
-  expect(
-    getImdbMovieContentType(suffix, duration, id),
-    type ?? MovieContentType.movie,
-    reason: 'unexpected value returned from getImdbMovieContentType',
-  );
-}
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Unit tests
@@ -133,89 +112,6 @@ Future main() async {
           'tt00123456',
         );
       },
-    );
-  });
-
-  group('findImdbMovieContentTypeFromTitle movie', () {
-    test(
-      'normal movie',
-      () => testContent(null, '', null, 'tt1234'),
-    );
-    test(
-      'unknown movie',
-      () => testContent(null, 'info', null, 'tt1234'),
-    );
-    test(
-      'concise movie',
-      () => testContent(MovieContentType.movie, 'movie', null, 'tt1234'),
-    );
-    test(
-      'verbose movie',
-      () => testContent(MovieContentType.movie, '(funMovie!)', null, 'tt1234'),
-    );
-    test(
-      'video',
-      () => testContent(MovieContentType.movie, 'vhs video', null, 'tt1234'),
-    );
-    test(
-      'feature',
-      () => testContent(MovieContentType.movie, 'feature film', null, 'tt1234'),
-    );
-  });
-
-  group('findImdbMovieContentTypeFromTitle misc', () {
-    test('empty string', () => testContent(null, '', null, ''));
-    test(
-      '30 mins title',
-      () => testContent(MovieContentType.short, 'info', 30, ''),
-    );
-    test(
-      'short title',
-      () => testContent(MovieContentType.short, 'short', null, ''),
-    );
-    test(
-      'normal person',
-      () => testContent(MovieContentType.person, 'info', null, 'nm1234'),
-    );
-  });
-
-  group('findImdbMovieContentTypeFromTitle not a movie ie game', () {
-    test(
-      'error',
-      () => testContent(MovieContentType.custom, 'info', null, '-1'),
-    );
-    test(
-      'game',
-      () => testContent(MovieContentType.custom, 'game', null, 'tt1234'),
-    );
-    test(
-      'creativeWork',
-      () =>
-          testContent(MovieContentType.custom, 'creativeWork', null, 'tt1234'),
-    );
-  });
-
-  group('findImdbMovieContentTypeFromTitle episodic', () {
-    test(
-      'miniseries',
-      () => testContent(
-        MovieContentType.miniseries,
-        'mini series',
-        null,
-        'tt1234',
-      ),
-    );
-    test(
-      'series episode',
-      () => testContent(MovieContentType.episode, 'episode', null, 'tt1234'),
-    );
-    test(
-      'tv series',
-      () => testContent(MovieContentType.series, 'series', null, 'tt1234'),
-    );
-    test(
-      'tv series special',
-      () => testContent(MovieContentType.series, 'special', null, 'tt1234'),
     );
   });
 

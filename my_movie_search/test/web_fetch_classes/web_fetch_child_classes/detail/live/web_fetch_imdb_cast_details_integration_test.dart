@@ -11,9 +11,9 @@ import '../../../../test_helper.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '{"source":"imdbSuggestions","uniqueId":"tt0101000","languages":[],"genres":[],"keywords":[]}',
-  '{"source":"imdbSuggestions","uniqueId":"tt0101001","languages":[],"genres":[],"keywords":[]}',
-  '{"source":"imdbSuggestions","uniqueId":"tt0101002","languages":[],"genres":[],"keywords":[]}',
+  '{"source":"imdbSuggestions","type":"MovieContentType.movie","uniqueId":"tt0101000","languages":[],"genres":[],"keywords":[]}',
+  '{"source":"imdbSuggestions","type":"MovieContentType.movie","uniqueId":"tt0101001","languages":[],"genres":[],"keywords":[]}',
+  '{"source":"imdbSuggestions","type":"MovieContentType.movie","uniqueId":"tt0101002","languages":[],"genres":[],"keywords":[]}',
 ];
 
 /// Create a string list with [qty] unique criteria values.

@@ -42,9 +42,9 @@ class ImdbSuggestionConverter {
     movie.imageUrl = _getImage(map[innerElementImage]) ?? movie.imageUrl;
     movie.year = map[innerElementYear] as int? ?? movie.year;
     movie.yearRange = map[innerElementYearRange]?.toString() ?? movie.yearRange;
-    movie.type = getImdbMovieContentType(
+    movie.type = MovieResultDTOHelpers.getMovieContentType(
           map[innerElementType],
-          movie.runTime.inMinutes,
+          null, // Unknown duration.
           movie.uniqueId,
         ) ??
         movie.type;

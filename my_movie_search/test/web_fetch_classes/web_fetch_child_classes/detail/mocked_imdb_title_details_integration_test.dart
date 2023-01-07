@@ -78,6 +78,7 @@ List<MovieResultDTO> _makeDTOs(int startid, int qty) {
     results.add(
       {
         'source': DataSourceType.imdb.toString(),
+        'type': MovieContentType.movie.toString(),
         'uniqueId': 'tt$uniqueId',
         'title': 'tt$uniqueId.',
       }.toMovieResultDTO(),

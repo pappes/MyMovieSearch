@@ -84,10 +84,10 @@ class ImdbWebScraperConverter {
 
     movie.merge(
       MovieResultDTO().init(
+        uniqueId: movie.uniqueId,
         source: DataSourceType.imdbSuggestions,
         title: name,
         description: description,
-        type: getImdbMovieContentType('', null, movie.uniqueId).toString(),
         year: startDate,
         yearRange: yearRange,
         userRatingCount: popularity,
@@ -156,10 +156,6 @@ class ImdbWebScraperConverter {
             ?.searchForString(key: deepRelatedMovieCensorRatingField);
     final censorRating = getImdbCensorRating(censorRatingText);
 
-    final movieTypeString = // ...{'titleType':...{...'text':<value>...}}
-        map.deepSearch(deepRelatedMovieType)?.searchForString();
-    final movieType = getImdbMovieContentType(movieTypeString, null, id);
-
     final genreNode = // ...{'genres':...[...{...'text':<value>...}...]}
         map.deepSearch(deepRelatedMovieGenreHeader);
     String? genres;
@@ -172,6 +168,14 @@ class ImdbWebScraperConverter {
         genres = json.encode(genreList);
       }
     }
+
+    final movieTypeString = // ...{'titleType':...{...'text':<value>...}}
+        map.deepSearch(deepRelatedMovieType)?.searchForString();
+    final movieType = MovieResultDTOHelpers.getMovieContentType(
+      '$movieTypeString $genres',
+      IntHelper.fromText(duration),
+      id,
+    );
 
     final languageNode = // ...{'SpokenLanguages':...[...{...'text':<value>...}...]}
         map.deepSearch(deepRelatedMovieLanguageHeader);

@@ -4,6 +4,7 @@ import 'dart:math' show max;
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
@@ -37,6 +38,7 @@ class MovieResultDTO {
 
 enum MovieContentType {
   none,
+  error,
   person,
   movie, //      includes "tv movie"
   series, //     anything less that an hour long that does repeat or repeats more than 4 times
@@ -333,6 +335,16 @@ extension MovieResultDTOHelpers on MovieResultDTO {
           LanguageType.values,
         ) ??
         getLanguageType(this.languages);
+
+    this.type = bestValue(
+      getMovieContentType(
+            genres.toString(),
+            IntHelper.fromText(runTime),
+            this.uniqueId,
+          ) ??
+          this.type,
+      this.type,
+    );
     return this;
   }
 
@@ -472,7 +484,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       }
 
       alternateTitle = newAlternateTitle;
-      print('$uniqueId  merged $title & $alternateTitle ');
       charactorName = bestValue(newValue.charactorName, charactorName);
       description = bestValue(newValue.description, description);
       type = bestValue(newValue.type, type);
@@ -485,7 +496,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       genres.addAll(newValue.genres);
       keywords.addAll(newValue.keywords);
       languages.addAll(newValue.languages);
-      getLanguageType();
       userRating = bestUserRating(
         newValue.userRating,
         newValue.userRatingCount,
@@ -493,6 +503,16 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         userRatingCount,
       );
       userRatingCount = bestValue(newValue.userRatingCount, userRatingCount);
+      getLanguageType();
+      type = bestValue(
+        getMovieContentType(
+              genres.toString(),
+              IntHelper.fromText(runTime),
+              uniqueId,
+            ) ??
+            type,
+        type,
+      );
     }
     mergeDtoMapMap(related, newValue.related);
   }
@@ -625,6 +645,72 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     dto.keywords = keywords;
     dto.related = related;
     return dto;
+  }
+
+  /// Look at information provided to see if [MovieContentType] can be determined.
+  ///
+  /// info is in the form  ' (1988–1993) (TV Series)'
+  static MovieContentType? _lookupMovieContentType(
+    String info,
+    int? seconds,
+    String id,
+  ) {
+    if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
+    if (id == "-1") return MovieContentType.error;
+    if (seconds != null && seconds < 500 && seconds > 0) {
+      return MovieContentType.short;
+    }
+    final String title = info.toLowerCase();
+    if (title.lastIndexOf('game') > -1) return MovieContentType.custom;
+    if (title.lastIndexOf('creativework') > -1) return MovieContentType.custom;
+    if (title.lastIndexOf('music') > -1) return MovieContentType.custom;
+    // mini includes TV Mini-series
+    if (title.lastIndexOf('mini') > -1) return MovieContentType.miniseries;
+    if (title.lastIndexOf('episode') > -1) return MovieContentType.episode;
+    if (title.lastIndexOf('series') > -1) return MovieContentType.series;
+    if (title.lastIndexOf('special') > -1) return MovieContentType.series;
+    if (title.lastIndexOf('short') > -1) return MovieContentType.short;
+    if (seconds != null && seconds < 3600 && seconds > 0) {
+      return MovieContentType.short;
+    }
+    if (title.lastIndexOf('movie') > -1) return MovieContentType.movie;
+    if (title.lastIndexOf('video') > -1) return MovieContentType.movie;
+    if (title.lastIndexOf('feature') > -1) return MovieContentType.movie;
+    return null;
+  }
+
+  /// Look at movie to see if title type (is in brackets).
+  ///
+  /// Takes [info] which includes the title and other information
+  /// in the form 'title 123 (1988–1993) (TV Series)'
+  /// and [title] which does not include the other information only 'title 123'
+  static MovieContentType? findMovieContentTypeFromTitle(
+    String info,
+    String title,
+    int? duration,
+    String id,
+  ) {
+    final startInfo = title.length;
+    if (info.length > startInfo) {
+      return _lookupMovieContentType(
+        info.substring(startInfo), // Throw away the start of info.
+        duration,
+        id,
+      );
+    }
+    return null;
+  }
+
+  /// Use movie type string to lookup [MovieContentType] movie type.
+  static MovieContentType? getMovieContentType(
+    Object? info,
+    int? duration,
+    String id,
+  ) {
+    final string = info?.toString() ?? '';
+    final type = _lookupMovieContentType(string, duration, id);
+    if (null != type || null == info) return type;
+    return MovieContentType.movie;
   }
 
   /// Test framework matcher to compare current [MovieResultDTO] to [other]
@@ -926,7 +1012,9 @@ extension DTOCompare on MovieResultDTO {
   ///
   /// movie > miniseries > tv series > short > series episode > game & unknown
   int titleContentCategory() {
-    if (type == MovieContentType.none || type == MovieContentType.custom) {
+    if (type == MovieContentType.none ||
+        type == MovieContentType.custom ||
+        type == MovieContentType.error) {
       return 0;
     }
     if (type == MovieContentType.episode) return 1;
