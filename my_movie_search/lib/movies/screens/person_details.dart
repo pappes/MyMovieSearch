@@ -5,6 +5,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_bibliography.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/thread.dart';
@@ -36,22 +37,33 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   }
 
   /// Fetch full person details from imdb.
-  Future _getDetails(
-    SearchCriteriaDTO criteria,
-  ) async {
-    if (_person.uniqueId.startsWith('-')) return; // Negative IDs are errors!
+  void _getDetails(SearchCriteriaDTO criteria) {
+    if (_person.uniqueId.startsWith(imdbPersonPrefix)) {
+      /// Fetch person details from cache using a separate thread.
+      QueryIMDBNameDetails()
+          .readPrioritisedCachedList(
+            criteria,
+            priority: ThreadRunner.fast,
+          )
+          .then(_showDetails);
 
-    /// Fetch person details from cache using a separate thread.
-    final fastResults = await QueryIMDBNameDetails().readPrioritisedCachedList(
-      criteria,
-      priority: ThreadRunner.fast,
-    );
+      /// Fetch related movie from cache using a separate thread.
+      QueryIMDBBibliographyDetails()
+          .readPrioritisedCachedList(
+            criteria,
+            priority: ThreadRunner.slow,
+          )
+          .then(_showDetails);
+    }
+  }
 
-    if (fastResults.isNotEmpty) {
+  /// Fetch full person details from imdb.
+  void _showDetails(List<MovieResultDTO> personDetails) {
+    if (personDetails.isNotEmpty) {
       // Check the user has not navigated away
       if (!mounted) return;
 
-      setState(() => _mergeDetails(fastResults));
+      setState(() => _mergeDetails(personDetails));
     }
   }
 

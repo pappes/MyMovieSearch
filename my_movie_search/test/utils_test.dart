@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
@@ -131,6 +130,22 @@ Future main() async {
         expect(enumeration, null);
       },
     );
+    test(
+      'getEnumValue accepts empty string',
+      () async {
+        final enumeration = getEnumValue<ElementType>('', ElementType.values);
+        expect(enumeration, null);
+      },
+    );
+    test(
+      'getEnumValue rejects invalid string',
+      () async {
+        expect(
+          () => getEnumValue<ElementType>('invalid', ElementType.values),
+          throwsArgumentError,
+        );
+      },
+    );
   });
 
   group('SteamHelper printStream', () {
@@ -142,12 +157,12 @@ Future main() async {
       final actualOutput = emitStringChars(input);
       final doublePrint =
           actualOutput.printStream('print1:').printStream('print2:');
-      final completedStream = await doublePrint.toList();
-      final revivedStream = Stream.fromIterable(completedStream);
+      final revivedStream =
+          doublePrint.toList().then((list) => Stream.fromIterable(list));
 
       await expectLater(
         revivedStream,
-        emitsInOrder(expectedValue.characters.toList()),
+        completion(emitsInOrder(expectedValue.characters.toList())),
       );
     }
 
@@ -175,13 +190,13 @@ Future main() async {
       );
       final doublePrint = actualOutput
           .printStreamFuture('print1:')
-          .printStreamFuture('print2:');
-      final completedStream = await (await doublePrint).toList();
-      final revivedStream = Stream.fromIterable(completedStream);
+          .printStreamFuture('print2:')
+          .then((stream) => stream.toList())
+          .then((list) => Stream.fromIterable(list));
 
       await expectLater(
-        revivedStream,
-        emitsInOrder(expectedValue.characters.toList()),
+        doublePrint,
+        completion(emitsInOrder(expectedValue.characters.toList())),
       );
     }
 
@@ -195,30 +210,6 @@ Future main() async {
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
-  });
-
-  group('getIdFromIMDBLink', () {
-    // Ensure conversion between IMDB and URL yields correct results.
-    test('check sample urls', () {
-      void testGetIdFromIMDBLink(String input, expectedOutput) {
-        final text = getIdFromIMDBLink(input);
-        expect(text, expectedOutput);
-      }
-
-      testGetIdFromIMDBLink(
-        '/title/tt0145681/?ref_=nm_sims_nm_t_9',
-        'tt0145681',
-      );
-      testGetIdFromIMDBLink(
-        '/title/tt0145682?ref_=nm_sims_nm_t_9',
-        'tt0145682',
-      );
-      testGetIdFromIMDBLink(
-        '/name/nm0145683/?ref_=nm_sims_nm_t_9',
-        'nm0145683',
-      );
-      testGetIdFromIMDBLink('/name/nm0145684?ref_=nm_sims_nm_t_9', 'nm0145684');
-    });
   });
 
   group('OnlineOfflineSelector', () {
@@ -260,55 +251,55 @@ Future main() async {
   group('ThreadRunner', () {
     // Perform processing on another thread
     // then later check the results of that processing.
-    test('run global async function', () async {
+    test('run global async function', () {
       final threader = ThreadRunner();
 
       final res1 = threader.run<int>(globalFnAccumulateAsync, 0); // expect 0
       final res2 = threader.run<int>(globalFnAccumulateAsync, 1); // expect 1
       final res3 = threader.run<int>(globalFnAccumulateAsync, 1); // expect 2
       final res4 = threader.run<int>(globalFnAccumulateAsync, 8); // expect 10
-      expect(await res1, 0); // 0+0
-      expect(await res2, 1); // 0+1
-      expect(await res3, 2); // 1+1
-      expect(await res4, 10); // 2+8
+      expect(res1, completion(0)); // 0+0
+      expect(res2, completion(1)); // 0+1
+      expect(res3, completion(2)); // 1+1
+      expect(res4, completion(10)); // 2+8
     });
-    test('run global async function untyped', () async {
+    test('run global async function untyped', () {
       final threader = ThreadRunner();
 
       final res1 = threader.run(globalFnAccumulateAsync, 0); // expect 0
       final res2 = threader.run(globalFnAccumulateAsync, 1); // expect 1
       final res3 = threader.run(globalFnAccumulateAsync, 1); // expect 2
       final res4 = threader.run(globalFnAccumulateAsync, 8); // expect 10
-      expect(await res1, 0); // 0+0
-      expect(await res2, 1); // 0+1
-      expect(await res3, 2); // 1+1
-      expect(await res4, 10); // 2+8
+      expect(res1, completion(0)); // 0+0
+      expect(res2, completion(1)); // 0+1
+      expect(res3, completion(2)); // 1+1
+      expect(res4, completion(10)); // 2+8
     });
-    test('run global synchronous function', () async {
+    test('run global synchronous function', () {
       final threader = ThreadRunner();
 
       final res1 = threader.run(globalFnAccumulateSync, 0); // expect 0
       final res2 = threader.run(globalFnAccumulateSync, 1); // expect 1
       final res3 = threader.run(globalFnAccumulateSync, 1); // expect 2
       final res4 = threader.run(globalFnAccumulateSync, 8); // expect 10
-      expect(await res1, 0); // 0+0
-      expect(await res2, 1); // 0+1
-      expect(await res3, 2); // 1+1
-      expect(await res4, 10); // 2+8
+      expect(res1, completion(0)); // 0+0
+      expect(res2, completion(1)); // 0+1
+      expect(res3, completion(2)); // 1+1
+      expect(res4, completion(10)); // 2+8
     });
-    test('run a fast static class function maintaining state', () async {
+    test('run a fast static class function maintaining state', () {
       final threader = ThreadRunner();
 
       final res1 = threader.run<int>(ThreadTest.accumulate, 0); // expect 0
       final res2 = threader.run<int>(ThreadTest.accumulate, 1); // expect 1
       final res3 = threader.run<int>(ThreadTest.accumulate, 1); // expect 2
       final res4 = threader.run<int>(ThreadTest.accumulate, 8); // expect 10
-      expect(await res1, 0); // 0+0
-      expect(await res2, 1); // 0+1
-      expect(await res3, 2); // 1+1
-      expect(await res4, 10); // 2+8
+      expect(res1, completion(0)); // 0+0
+      expect(res2, completion(1)); // 0+1
+      expect(res3, completion(2)); // 1+1
+      expect(res4, completion(10)); // 2+8
     });
-    test('run a fast instance class function maintaining state', () async {
+    test('run a fast instance class function maintaining state', () {
       final threader = ThreadRunner();
 
       final instance = ThreadTest();
@@ -321,41 +312,41 @@ Future main() async {
           threader.run<int>(instance.instanceAccumulate, 1); // expect 1
       final res4 =
           threader.run<int>(instance.instanceAccumulate, 8); // expect 8
-      expect(await res1, 0); // 0+0
-      expect(await res2, 1); // 0+1
-      expect(await res3, 1); // 0+1
-      expect(await res4, 8); // 0+8
+      expect(res1, completion(0)); // 0+0
+      expect(res2, completion(1)); // 0+1
+      expect(res3, completion(1)); // 0+1
+      expect(res4, completion(8)); // 0+8
     });
-    test('run throwaway thread', () async {
+    test('run throwaway thread', () {
       final res1 = ThreadRunner().run(globalFnAccumulateSync, 0); // expect 0
       final res2 = ThreadRunner().run(globalFnAccumulateSync, 1); // expect 1
       final res3 = ThreadRunner().run(globalFnAccumulateSync, 1); // expect 1
       final res4 = ThreadRunner().run(globalFnAccumulateSync, 8); // expect 8
-      expect(await res1, 0);
-      expect(await res2, 1);
-      expect(await res3, 1);
-      expect(await res4, 8);
+      expect(res1, completion(0));
+      expect(res2, completion(1));
+      expect(res3, completion(1));
+      expect(res4, completion(8));
     });
-    test('run one named thread', () async {
+    test('run one named thread', () {
       final res1 = ThreadRunner.namedThread('z').run(globalFnAccumulateSync, 0);
       final res2 = ThreadRunner.namedThread('z').run(globalFnAccumulateSync, 1);
       final res3 = ThreadRunner.namedThread('z').run(globalFnAccumulateSync, 1);
       final res4 = ThreadRunner.namedThread('z').run(globalFnAccumulateSync, 8);
-      expect(await res1, 0); // 0+0
-      expect(await res2, 1); // 0+1
-      expect(await res3, 2); // 1+1
-      expect(await res4, 10); // 2+8
+      expect(res1, completion(0)); // 0+0
+      expect(res2, completion(1)); // 0+1
+      expect(res3, completion(2)); // 1+1
+      expect(res4, completion(10)); // 2+8
     });
-    test('run a slow function on multiple named threads', () async {
+    test('run a slow function on multiple named threads', () {
       expect(ThreadRunner.currentThreadName, 'Default Thread');
       final res1 = ThreadRunner.namedThread('a').run(globalFnAccumulateSlow, 0);
       final res2 = ThreadRunner.namedThread('b').run(globalFnAccumulateSlow, 1);
       final res3 = ThreadRunner.namedThread('c').run(globalFnAccumulateSlow, 1);
       final res4 = ThreadRunner.namedThread('d').run(globalFnAccumulateSlow, 8);
-      expect(await res1, 0);
-      expect(await res2, 1);
-      expect(await res3, 1);
-      expect(await res4, 8);
+      expect(res1, completion(0));
+      expect(res2, completion(1));
+      expect(res3, completion(1));
+      expect(res4, completion(8));
     });
     test('run a slow local function on a single thread', () async {
       final threader = ThreadRunner();
@@ -365,21 +356,21 @@ Future main() async {
       final res2 = threader.run(globalFnAccumulateSlow, 1); // expect 1
       final res3 = threader.run(globalFnAccumulateSlow, 1); // expect 2
       final res4 = threader.run(globalFnAccumulateSlow, 8); // expect 10
-      expect(await res1, 0); // 0+0
-      expect(await res2, 1); // 0+1
-      expect(await res3, 2); // 1+1
-      expect(await res4, 10); // 2+8
+      expect(res1, completion(0)); // 0+0
+      expect(res2, completion(1)); // 0+1
+      expect(res3, completion(2)); // 1+1
+      expect(res4, completion(10)); // 2+8
     });
-    test('run a function on a named thread', () async {
+    test('run a function on a named thread', () {
       expect(ThreadRunner.currentThreadName, 'Default Thread');
       final res1 = ThreadRunner.namedThread('a').run(globalFnThreadName, 0);
       final res2 = ThreadRunner.namedThread('b').run(globalFnThreadName, 0);
       final res3 = ThreadRunner.namedThread('c').run(globalFnThreadName, 0);
       final res4 = ThreadRunner().run(globalFnThreadName, 0);
-      expect(await res1, 'a');
-      expect(await res2, 'b');
-      expect(await res3, 'c');
-      expect(await res4, 'Unnamed Thread');
+      expect(res1, completion('a'));
+      expect(res2, completion('b'));
+      expect(res3, completion('c'));
+      expect(res4, completion('Unnamed Thread'));
     });
   });
 
@@ -593,7 +584,7 @@ Future main() async {
     group('fromJson', () {
       /// Convert JSON [input] to a [List] of [String] and compare to [expectedOutput]
       void testFromJson(String? input, List<String> expectedOutput) {
-        final actual = ListHelper.fromJson(input);
+        final actual = StringIterableHelper.fromJson(input);
         expect(actual, expectedOutput, reason: 'input ${input.toString()}');
       }
 

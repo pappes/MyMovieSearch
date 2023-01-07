@@ -9,14 +9,14 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   '''
-{"uniqueId":"tt7602562","source":"DataSourceType.imdb","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"tt7602562","source":"DataSourceType.imdbSuggestions","languages":"[]","genres":"[]","keywords":"[]",
   "related":{"Directed by:":{"nm0001112":{"uniqueId":"nm0001112","source":"DataSourceType.imdbSuggestions","title":"Andrew Davis","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
     "Writing Credits:":{"nm0835732":{"uniqueId":"nm0835732","source":"DataSourceType.imdbSuggestions","title":"Jeb Stuart","languages":"[]","genres":"[]","keywords":"[]","related":{}},
       "nm0878638":{"uniqueId":"nm0878638","source":"DataSourceType.imdbSuggestions","title":"David Twohy","languages":"[]","genres":"[]","keywords":"[]","related":{}},
       "nm0400403":{"uniqueId":"nm0400403","source":"DataSourceType.imdbSuggestions","title":"Roy Huggins","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
-    "Cast:":{"nm0000148":{"uniqueId":"nm0000148","source":"DataSourceType.imdbSuggestions","title":"Harrison Ford","alternateTitle2":"Dr. Richard Kimble","languages":"[]","genres":"[]","keywords":"[]","related":{}},
-      "nm0000169":{"uniqueId":"nm0000169","source":"DataSourceType.imdbSuggestions","title":"Tommy Lee Jones","alternateTitle2":"Samuel Gerard","languages":"[]","genres":"[]","keywords":"[]","related":{}},
-      "nm0000688":{"uniqueId":"nm0000688","source":"DataSourceType.imdbSuggestions","title":"Sela Ward","alternateTitle2":"Helen Kimble","languages":"[]","genres":"[]","keywords":"[]","related":{}}}}}
+    "Cast:":{"nm0000148":{"uniqueId":"nm0000148","source":"DataSourceType.imdbSuggestions","title":"Harrison Ford","charactorName":"Dr. Richard Kimble","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm0000169":{"uniqueId":"nm0000169","source":"DataSourceType.imdbSuggestions","title":"Tommy Lee Jones","charactorName":"Samuel Gerard","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm0000688":{"uniqueId":"nm0000688","source":"DataSourceType.imdbSuggestions","title":"Sela Ward","charactorName":"Helen Kimble","languages":"[]","genres":"[]","keywords":"[]","related":{}}}}}
 ''',
 ];
 
@@ -35,17 +35,17 @@ const intermediateMapList = [
       {
         "name": "Harrison Ford",
         "url": "/name/nm0000148/?ref_=ttfc_fc_cl_t1",
-        "alternateTitle2": "Dr. Richard Kimble"
+        "charactorName": "Dr. Richard Kimble"
       },
       {
         "name": "Tommy Lee Jones",
         "url": "/name/nm0000169/?ref_=ttfc_fc_cl_t2",
-        "alternateTitle2": "Samuel Gerard"
+        "charactorName": "Samuel Gerard"
       },
       {
         "name": "Sela Ward",
         "url": "/name/nm0000688/?ref_=ttfc_fc_cl_t3",
-        "alternateTitle2": "Helen Kimble"
+        "charactorName": "Helen Kimble"
       }
     ],
     "id": "tt7602562"

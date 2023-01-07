@@ -44,10 +44,40 @@ extension DynamicHelper on dynamic {
   ///
   List<String> dynamicToStringList(dynamic val) => toStringList_(val);
   static List<String> toStringList_(dynamic val) {
-    if (val is String) return ListHelper.fromJson(val);
+    if (val is String) return StringIterableHelper.fromJson(val).toList();
     if (val is List<String>) return val;
     final result = <String>[];
     if (val is List) {
+      for (final item in val) {
+        result.add(item.toString());
+      }
+    }
+    return result;
+  }
+
+  /// Filter out values that are not Iterable strings
+  ///
+  /// Sets the value to empty set if it is not currently
+  /// *   a [Iterable]<[String]>
+  /// *   a json encoded [Iterable]<[String]>
+  ///
+  /// Static version of the function supplied for calling from other static functions
+  /// ```dart
+  /// x = DynamicHelper.dynamicToStringSet_(y);
+  /// ```
+  ///
+  /// Non-static version of the function supplied for simpler call syntax
+  /// ```dart
+  /// x = dynamicToStringSet(y);
+  /// ```
+  ///
+  Set<String> dynamicToStringSet(dynamic val) => toStringSet_(val);
+  static Set<String> toStringSet_(dynamic val) {
+    if (val is String) return StringIterableHelper.fromJson(val);
+    if (val is Set<String>) return val;
+    if (val is List<String>) return val.toSet();
+    final result = <String>{};
+    if (val is Iterable) {
       for (final item in val) {
         result.add(item.toString());
       }

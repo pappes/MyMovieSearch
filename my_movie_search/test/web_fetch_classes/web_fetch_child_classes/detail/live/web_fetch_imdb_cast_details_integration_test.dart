@@ -11,9 +11,9 @@ import '../../../../test_helper.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '{"source":"imdb","uniqueId":"tt0101000","languages":[],"genres":[],"keywords":[]}',
-  '{"source":"imdb","uniqueId":"tt0101001","languages":[],"genres":[],"keywords":[]}',
-  '{"source":"imdb","uniqueId":"tt0101002","languages":[],"genres":[],"keywords":[]}',
+  '{"source":"imdbSuggestions","uniqueId":"tt0101000","languages":[],"genres":[],"keywords":[]}',
+  '{"source":"imdbSuggestions","uniqueId":"tt0101001","languages":[],"genres":[],"keywords":[]}',
+  '{"source":"imdbSuggestions","uniqueId":"tt0101002","languages":[],"genres":[],"keywords":[]}',
 ];
 
 /// Create a string list with [qty] unique criteria values.
@@ -66,7 +66,7 @@ void main() {
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following lines
-      // actualOutput.forEach((e) => e.related = {});
+      //actualOutput.forEach((e) => e.related = {});
       // print(actualOutput.toListOfDartJsonStrings(excludeCopyrightedData: true));
 
       final expectedOutput = expectedDTOList;

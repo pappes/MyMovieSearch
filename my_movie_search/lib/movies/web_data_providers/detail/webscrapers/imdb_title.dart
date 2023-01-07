@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:convert' show json;
-import 'package:html/dom.dart' show Document, Element;
+import 'package:html/dom.dart' show Document;
 import 'package:html/parser.dart' show parse;
 import 'package:html_unescape/html_unescape_small.dart';
 

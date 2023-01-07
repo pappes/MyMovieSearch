@@ -59,7 +59,7 @@ MovieResultDTO fullDTO() {
   dto.alternateId = '123abc';
   dto.title = 'init testing';
   dto.alternateTitle = 'testing init';
-  dto.alternateTitle2 = 'testing dto';
+  dto.charactorName = 'testing dto';
   dto.description = 'test dto';
   dto.type = MovieContentType.episode;
   dto.year = 1999;
@@ -70,9 +70,9 @@ MovieResultDTO fullDTO() {
   dto.runTime = const Duration(seconds: 9000);
   dto.imageUrl = 'www.microsoft.com';
   dto.language = LanguageType.mostlyEnglish;
-  dto.languages = ['a', 'b', 'c'];
-  dto.genres = ['x', 'y', 'z'];
-  dto.keywords = ['they', 'them'];
+  dto.languages = {'a', 'b', 'c'};
+  dto.genres = {'x', 'y', 'z'};
+  dto.keywords = {'they', 'them'};
 
   final dto2 = MovieResultDTO();
   dto2.uniqueId = 'dto2';
@@ -217,6 +217,56 @@ void main() {
     });
   });
 
+  group('LanguageType', () {
+    // Check that language list is categorised corectly.
+    test('empty_DTO', () {
+      final dto = MovieResultDTO();
+      expect(dto.getLanguageType(), LanguageType.none);
+    });
+    test('supply list to helper, get language from helper', () {
+      final dto = MovieResultDTO();
+      expect(dto.getLanguageType({'English'}), LanguageType.allEnglish);
+      expect(dto.languages, {'English'});
+    });
+    test('supply list to dto, get language from helper', () {
+      final dto = MovieResultDTO();
+      dto.languages = {'English'};
+      expect(dto.getLanguageType(), LanguageType.allEnglish);
+    });
+    test('supply list to dto, get language from dto', () {
+      final dto = MovieResultDTO();
+      dto.languages = {'English'};
+      dto.getLanguageType();
+      expect(dto.language, LanguageType.allEnglish);
+    });
+    test('supply list to helper, get language from dto', () {
+      final dto = MovieResultDTO();
+      dto.getLanguageType({'English'});
+      expect(dto.language, LanguageType.allEnglish);
+      expect(dto.languages, {'English'});
+    });
+    test('All English', () {
+      final dto = MovieResultDTO();
+      expect(dto.getLanguageType(['English', 'en', 'Englasias']),
+          LanguageType.allEnglish);
+    });
+    test('Foreign', () {
+      final dto = MovieResultDTO();
+      expect(dto.getLanguageType(['Not English', 'French', 'el-Englasias']),
+          LanguageType.foreign);
+    });
+    test('mostlyEnglish', () {
+      final dto = MovieResultDTO();
+      expect(dto.getLanguageType(['English', 'French', 'el-Englasias']),
+          LanguageType.mostlyEnglish);
+    });
+    test('someEnglish', () {
+      final dto = MovieResultDTO();
+      expect(dto.getLanguageType(['French', 'Englasias']),
+          LanguageType.someEnglish);
+    });
+  });
+
   group('MovieResultDTOinit', () {
     // Convert a dto to a map.
     test('empty_DTO', () {
@@ -233,7 +283,7 @@ void main() {
         alternateId: dto.alternateId,
         title: dto.title,
         alternateTitle: dto.alternateTitle,
-        alternateTitle2: dto.alternateTitle2,
+        charactorName: dto.charactorName,
         description: dto.description,
         type: dto.type.toString(),
         year: dto.year.toString(),
@@ -244,9 +294,9 @@ void main() {
         runTime: '9000',
         imageUrl: dto.imageUrl,
         language: dto.language.toString(),
-        languages: json.encode(dto.languages),
-        genres: json.encode(dto.genres),
-        keywords: json.encode(dto.keywords),
+        languages: json.encode(dto.languages.toList()),
+        genres: json.encode(dto.genres.toList()),
+        keywords: json.encode(dto.keywords.toList()),
         related: dto.related,
       );
 

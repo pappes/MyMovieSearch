@@ -1,6 +1,7 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/cache/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_name.dart';
@@ -35,7 +36,11 @@ class QueryIMDBNameDetails
   @override
   String myFormatInputAsText(dynamic contents) {
     final criteria = contents as SearchCriteriaDTO;
-    return criteria.toPrintableString();
+    final text = criteria.toPrintableString();
+    if (text.startsWith(imdbPersonPrefix)) {
+      return text;
+    }
+    return ''; // do not allow searches for non-imdb IDs
   }
 
   /// API call to IMDB person details for person id.

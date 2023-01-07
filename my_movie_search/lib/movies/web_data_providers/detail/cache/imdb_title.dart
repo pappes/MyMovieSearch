@@ -12,13 +12,13 @@ mixin ThreadedCacheIMDBTitleDetails
 
   /// Check cache to see if data has already been fetched.
   @override
-  Future<bool> myIsResultCached(SearchCriteriaDTO criteria) async {
+  bool myIsResultCached(SearchCriteriaDTO criteria) {
     return _cache.isCached(_makeKey(criteria));
   }
 
   /// Check cache to see if data in cache should be refreshed.
   @override
-  Future<bool> myIsCacheStale(SearchCriteriaDTO criteria) async {
+  bool myIsCacheStale(SearchCriteriaDTO criteria) {
     return false;
     //return _cache.isCached(criteria.criteriaTitle);
   }
@@ -31,9 +31,8 @@ mixin ThreadedCacheIMDBTitleDetails
   ) async {
     // add individual result to cache
     final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
-    await _cache.add(key, fetchedResult);
-    // Add search result to cache
-    return _appendDTOToCacheResult(criteria, fetchedResult);
+    _cache.add(key, fetchedResult);
+    return _cache.add(_makeKey(criteria), fetchedResult);
   }
 
   /// Retrieve cached result.
@@ -41,47 +40,17 @@ mixin ThreadedCacheIMDBTitleDetails
   Stream<MovieResultDTO> myFetchResultFromCache(
     SearchCriteriaDTO criteria,
   ) async* {
-    yield* Stream.fromIterable(await _getValueFromCache(criteria));
+    final value = await _cache.get(_makeKey(criteria));
+    yield* Stream.value(value as MovieResultDTO);
   }
 
   /// Flush all data from the cache.
   @override
-  Future<void> myClearCache() async {
+  void myClearCache() {
     return _cache.clear();
   }
 
   /// Retrieve cached result.
-  String _makeKey(
-    SearchCriteriaDTO criteria,
-  ) =>
+  String _makeKey(SearchCriteriaDTO criteria) =>
       '${myDataSourceName()}${criteria.criteriaTitle}';
-
-  /// Retrieve cached result.
-  Future<List<MovieResultDTO>> _getValueFromCache(
-    SearchCriteriaDTO criteria,
-  ) async {
-    final value =
-        await _cache.get('${myDataSourceName()}${criteria.criteriaTitle}');
-    if (value is MovieResultDTO) {
-      return [value];
-    }
-    if (value is List<MovieResultDTO>) {
-      return value;
-    }
-    return [];
-  }
-
-  Future<void> _appendDTOToCacheResult(
-    SearchCriteriaDTO criteria,
-    MovieResultDTO fetchedResult,
-  ) async {
-    // Get existing search result from cache.
-    List<MovieResultDTO> searchResult = [];
-    if (await myIsResultCached(criteria)) {
-      searchResult = await _getValueFromCache(criteria);
-    }
-    searchResult.add(fetchedResult);
-    // Write new search result back into cache.
-    return _cache.add(_makeKey(criteria), searchResult);
-  }
 }

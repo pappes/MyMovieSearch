@@ -21,12 +21,12 @@ void main() {
 
   group('imdb suggestions unit tests', () {
     // Confirm class description is constructed as expected.
-    test('Run myDataSourceName()', () async {
+    test('Run myDataSourceName()', () {
       expect(QueryIMDBSuggestions().myDataSourceName(), 'imdbSuggestions');
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
@@ -36,8 +36,7 @@ void main() {
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList',
-        () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO();
       input.criteriaList = [
         MovieResultDTO().error('test1'),
@@ -72,7 +71,7 @@ void main() {
     });
 
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
+    test('Run myConstructURI()', () {
       const expectedResult =
           'https://sg.media-imdb.com/suggests/n/new%20query.json';
 
@@ -85,7 +84,7 @@ void main() {
     });
 
     // Confirm error is constructed as expected.
-    test('Run myYieldError()', () async {
+    test('Run myYieldError()', () {
       const expectedResult = {
         'uniqueId': '-1',
         'source': 'DataSourceType.imdbSuggestions',
@@ -116,7 +115,8 @@ void main() {
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(SearchCriteriaDTO(), source: emitImdbSuggestionJsonPSample)
+          .readList(SearchCriteriaDTO().fromString('123'),
+              source: emitImdbSuggestionJsonPSample)
           .then((values) => queryResult.addAll(values))
           .onError(
             // ignore: avoid_print
@@ -138,14 +138,15 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final imdbSuggestions = QueryIMDBSuggestions();
       const expectedException = '''
-[QueryIMDBSuggestions] Error in imdbSuggestions with criteria  interpreting web text as a map :FormatException: Unexpected character (at character 2)
+[QueryIMDBSuggestions] Error in imdbSuggestions with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 2)
 {not valid json}
  ^
 ''';
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(SearchCriteriaDTO(), source: _emitInvalidJsonPSample)
+          .readList(SearchCriteriaDTO().fromString('123'),
+              source: _emitInvalidJsonPSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -154,13 +155,16 @@ void main() {
     test('unexpected json contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBSuggestions] Error in imdbSuggestions with criteria  translating page map to objects :expected map got Null unable to interpret data null';
+          '[QueryIMDBSuggestions] Error in imdbSuggestions '
+          'with criteria 123 translating page map to objects '
+          ':expected map got Null unable to interpret data null';
       final queryResult = <MovieResultDTO>[];
       final imdbSuggestions = QueryIMDBSuggestions();
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedJsonPSample)
+          .readList(SearchCriteriaDTO().fromString('123'),
+              source: _emitUnexpectedJsonPSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

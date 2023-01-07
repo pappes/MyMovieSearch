@@ -34,8 +34,8 @@ class MovieTile extends ListTile {
         (movie.type != MovieContentType.none) ? '${movie.type.name}    ' : '';
     final alternateTitle =
         (movie.alternateTitle.isEmpty) ? '' : '${movie.alternateTitle} ';
-    final alternateTitle2 =
-        (movie.alternateTitle2.isEmpty) ? '' : '${movie.alternateTitle2} ';
+    final charactorName =
+        (movie.charactorName.isEmpty) ? '' : '${movie.charactorName} ';
     final ratingCount = (movie.userRatingCount > 0 || movie.userRating > 0)
         ? '${movie.userRating} (${formatter.format(movie.userRatingCount)})'
         : '';
@@ -43,7 +43,7 @@ class MovieTile extends ListTile {
         ? movie.runTime.toFormattedTime() + (ratingCount.isEmpty ? ' ' : ' - ')
         : '';
     return Text(
-      '$rating$content$alternateTitle2$alternateTitle$runtime$ratingCount',
+      '$rating$content$charactorName$alternateTitle$runtime$ratingCount',
       textScaleFactor: 1.0,
     );
   }

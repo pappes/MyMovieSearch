@@ -93,7 +93,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     INPUT_TYPE criteria, {
     DataSourceFn? source,
     int? limit,
-  }) async {
+  }) {
     searchResultsLimit.limit = limit;
     final list = baseYieldFetchedObjects(
       source: source,
@@ -110,15 +110,15 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     INPUT_TYPE criteria, {
     DataSourceFn? source,
     int? limit,
-  }) async {
+  }) {
     searchResultsLimit.limit = limit;
-    if (await myIsResultCached(criteria)) {
+    if (myIsResultCached(criteria)) {
       return baseYieldFetchedObjects(
         source: source,
         newCriteria: criteria,
       ).toList();
     }
-    return <OUTPUT_TYPE>[];
+    return Future.value(<OUTPUT_TYPE>[]);
   }
 
   /// Convert dart [List] or [Map] or [document] to [OUTPUT_TYPE] object data.
@@ -229,6 +229,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// converts <INPUT_TYPE> to a string representation.
   ///
   /// Can be overridden by child classes.
+  /// If this is blank the query will not run!
   String myFormatInputAsText(INPUT_TYPE? contents) {
     return contents?.toString() ?? '';
   }
@@ -242,14 +243,14 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Check cache to see if data has already been fetched.
   ///
   /// Can be overridden by child classes if required.
-  Future<bool> myIsResultCached(INPUT_TYPE criteria) async {
+  bool myIsResultCached(INPUT_TYPE criteria) {
     return false;
   }
 
   /// Check cache to see if data in cache should be refreshed.
   ///
   /// Can be overridden by child classes if required.
-  Future<bool> myIsCacheStale(INPUT_TYPE criteria) async {
+  bool myIsCacheStale(INPUT_TYPE criteria) {
     return false;
   }
 
@@ -264,7 +265,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Flush all data from the cache.
   ///
   /// Can be overridden by child classes if required.
-  Future<void> myClearCache() async {}
+  void myClearCache() {}
 
   /// Retrieve cached result.
   ///
@@ -281,7 +282,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     try {
       final tree = baseConvertCriteriaToWebText(criteria);
       final map = baseConvertWebTextToTraversableTree(tree).printStream(
-          '${myDataSourceName()}:${myFormatInputAsText(criteria)}->');
+        '${myDataSourceName()}:${myFormatInputAsText(criteria)}->',
+      );
       yield* baseConvertTreeToOutputType(criteria, map);
     } catch (error) {
       final errorMessage = baseConstructErrorMessage(
@@ -308,13 +310,15 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return const Stream<String>.empty();
     }
 
-    Future<void> _yieldStream(Stream<String> text) async {
-      await controller.addStream(text);
-      baseCloseController(controller);
+    Future<void> _yieldStream(Stream<String> text) {
+      return controller
+          .addStream(text)
+          .then((_) => baseCloseController(controller));
     }
 
     myConvertCriteriaToWebText(criteria)
-        .timeout(Duration(seconds: 24)) // TODO: allow timeout to be passed in
+        .timeout(
+            const Duration(seconds: 24)) // TODO: allow timeout to be passed in
         .then(_yieldStream)
         .onError(_logError);
     yield* controller.stream;
@@ -362,7 +366,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     webStream
-        .timeout(Duration(seconds: 25)) // TODO: allow timeout to be passed in
+        .timeout(
+            const Duration(seconds: 25)) // TODO: allow timeout to be passed in
         .reduce(_concatenate)
         .then(_wrapChildFunction)
         .onError(_logError)
@@ -415,7 +420,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     pageMap
-        .timeout(Duration(seconds: 26)) // TODO: allow timeout to be passed in
+        .timeout(
+            const Duration(seconds: 26)) // TODO: allow timeout to be passed in
         .listen(
           _wrapChildFunction,
           onDone: () => baseCloseController(controller),
@@ -432,35 +438,36 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   Stream<OUTPUT_TYPE> baseYieldFetchedObjects({
     required INPUT_TYPE newCriteria,
     DataSourceFn? source,
-  }) async* {
+  }) {
     criteria = newCriteria;
+    final isCached = myIsResultCached(newCriteria);
     // if cached yield from cache
-    if (await myIsResultCached(newCriteria)) {
+    if (isCached && !myIsCacheStale(newCriteria)) {
       print(
         'base ${ThreadRunner.currentThreadName} '
         'value was cached ${myFormatInputAsText(newCriteria)}',
       );
-      yield* myFetchResultFromCache(newCriteria);
+      return myFetchResultFromCache(newCriteria);
+    }
+    if (myFormatInputAsText(newCriteria) == '') {
+      return Stream.fromIterable([]);
     }
     // if not cached or cache is stale retrieve fresh data
-    if (!await myIsResultCached(newCriteria) ||
-        await myIsCacheStale(newCriteria)) {
-      print(
-        'base ${ThreadRunner.currentThreadName} ${myDataSourceName()} '
-        'uncached ${myFormatInputAsText(newCriteria)}',
-      );
+    print(
+      'base ${ThreadRunner.currentThreadName} ${myDataSourceName()} '
+      'uncached ${myFormatInputAsText(newCriteria)}',
+    );
 
-      searchResultsLimit.reset();
+    searchResultsLimit.reset();
 
-      final selector = OnlineOfflineSelector<DataSourceFn>();
-      selectedDataSource = selector.select(
-        source ?? baseFetchWebText,
-        myOfflineData(),
-      );
+    final selector = OnlineOfflineSelector<DataSourceFn>();
+    selectedDataSource = selector.select(
+      source ?? baseFetchWebText,
+      myOfflineData(),
+    );
 
-      final outputStream = baseTransform(newCriteria);
-      yield* outputStream;
-    }
+    final outputStream = baseTransform(newCriteria);
+    return outputStream;
   }
 
   /// Fetches and [utf8] decodes online data matching [criteria].

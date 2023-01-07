@@ -44,8 +44,8 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
       'https://www.imdb.com/title/$expectedCriteria/?ref_=fn_tt_tt_1',
     );
 
-    Future<MockHttpClientResponse> getClientResponse(_) async {
-      return clientResponse;
+    Future<MockHttpClientResponse> getClientResponse(_) {
+      return Future.value(clientResponse);
     }
 
     // Use Mockito to return a successful response when it calls the
@@ -58,7 +58,8 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
     //when(clientRequest.close()).thenAnswer((_) async => clientResponse);
     when(clientRequest.close()).thenAnswer(getClientResponse);
 
-    when(client.getUrl(expectedUri)).thenAnswer((_) async => clientRequest);
+    when(client.getUrl(expectedUri))
+        .thenAnswer((_) => Future.value(clientRequest));
     when(clientRequest.headers).thenAnswer((_) => headers);
 
     return client;
@@ -77,8 +78,8 @@ List<MovieResultDTO> _makeDTOs(int startid, int qty) {
     results.add(
       {
         'source': DataSourceType.imdb.toString(),
-        'uniqueId': '$uniqueId',
-        'title': '$uniqueId.',
+        'uniqueId': 'tt$uniqueId',
+        'title': 'tt$uniqueId.',
       }.toMovieResultDTO(),
     );
     uniqueId++;
@@ -91,7 +92,7 @@ List<String> _makeQueries(int startId, int qty) {
   final results = <String>[];
   var uniqueId = startId;
   for (int i = 0; i < qty; i++) {
-    results.add((uniqueId).toString());
+    results.add('tt$uniqueId');
     uniqueId++;
   }
   return results;
@@ -109,8 +110,8 @@ Map offlineMapList(String id) => {
     };
 
 /// Make dummy html results for offline queries.
-Stream<String> _getOfflineHTML(String id) async* {
-  yield '''
+Stream<String> _getOfflineHTML(String id) {
+  return Stream.value('''
 <!DOCTYPE html>
 <html
     <head>
@@ -120,13 +121,13 @@ Stream<String> _getOfflineHTML(String id) async* {
     <body>
     </body>
 </html>
-''';
+''');
 }
 
 /// Make dummy html results for offline queries.
-Future<Stream<String>> _offlineSearch(dynamic criteria) async {
+Future<Stream<String>> _offlineSearch(dynamic criteria) {
   criteria as SearchCriteriaDTO;
-  return _getOfflineHTML(criteria.criteriaTitle);
+  return Future.value(_getOfflineHTML(criteria.criteriaTitle));
 }
 
 /// Call IMDB for each criteria in the list.
@@ -176,7 +177,7 @@ void main() {
       bool forceError = false,
     }) async {
       // Clear any prior test results from the cache
-      await QueryIMDBTitleDetailsMocked('').myClearCache();
+      QueryIMDBTitleDetailsMocked('').myClearCache();
       // Call IMDB for each criteria in the list.
       final futures = _queueDetailSearch(criteria, online, forceError);
 
@@ -250,7 +251,7 @@ void main() {
         final queries = _makeQueries(startId, 1);
         final errorMessage = MovieResultDTO();
         errorMessage.title =
-            '[QueryIMDBTitleDetails] Error in imdb with criteria 5000 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://www.imdb.com/title/$startId/?ref_=fn_tt_tt_1';
+            '[QueryIMDBTitleDetails] Error in imdb with criteria tt$startId interpreting web text as a map :Error in http read, HTTP status code : 404 for https://www.imdb.com/title/tt$startId/?ref_=fn_tt_tt_1';
         errorMessage.uniqueId = '-2';
         errorMessage.source = DataSourceType.imdb;
         errorMessage.type = MovieContentType.custom;

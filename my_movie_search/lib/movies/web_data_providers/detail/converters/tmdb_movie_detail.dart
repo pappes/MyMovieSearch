@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 
 //query string https://api.themoviedb.org/3/movie/{movieID}?api_key={api_key}
 //json format
@@ -68,14 +69,12 @@ class TmdbMovieDetailConverter {
     movie.uniqueId = '${map[innerElementIdentity]}';
     movie.alternateId =
         map[innerElementImdbId]?.toString() ?? movie.alternateId;
-    if (null != map[innerElementCommonTitle] &&
-        null != map[innerElementOriginalTitle]) {
-      movie.title = '${map[innerElementOriginalTitle]} '
-          '(${map[innerElementCommonTitle]}';
-    } else {
-      movie.title = map[innerElementOriginalTitle]?.toString() ??
-          map[innerElementCommonTitle]?.toString() ??
-          movie.title;
+
+    final title = map[innerElementCommonTitle]?.toString();
+    final originalTitle = map[innerElementOriginalTitle]?.toString();
+    movie.title = title ?? originalTitle ?? '';
+    if (title != originalTitle) {
+      movie.alternateTitle = originalTitle ?? '';
     }
 
     final year =
@@ -109,8 +108,11 @@ class TmdbMovieDetailConverter {
     final mins = IntHelper.fromText(map[innerElementRuntime]);
     movie.runTime = _getDuration(mins) ?? movie.runTime;
 
-    movie.languages.combineUnique(map[innerElementOriginalLanguage]);
-    movie.languages.combineUnique(map[innerElementSpokenLanguages]);
+    movie.languages.combineUnique(map.deepSearch(
+      'english_name',
+      multipleMatch: true,
+    ));
+    movie.getLanguageType();
     for (final Map genre in map[innerElementGenres]) {
       movie.genres.combineUnique(genre['name'] as String);
     }

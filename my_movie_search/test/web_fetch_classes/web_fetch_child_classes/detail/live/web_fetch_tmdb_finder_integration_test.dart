@@ -12,8 +12,8 @@ import '../../../../test_helper.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '{"source":"DataSourceType.tmdbFinder","uniqueId":"913986","alternateId":"tt0101000","title":"Začátek dlouhého podzimu (Začátek dlouhého podzimu","year":"1990","languages":["cs"],"genres":[],"keywords":[],"related":"{}"}',
-  '{"source":"DataSourceType.tmdbFinder","uniqueId":"230839","alternateId":"tt0101002","title":"再戰江湖 (Return Engagement","year":"1990","languages":["cn"],"genres":[],"keywords":[],"description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.","userRating":"6.0","userRatingCount":"4","related":"{}"}',
+  '{"source":"DataSourceType.tmdbFinder","uniqueId":"913986","alternateId":"tt0101000","title":"Začátek dlouhého podzimu","year":"1990","language":"LanguageType.foreign","languages":["cs"],"genres":[],"keywords":[],"related":"{}"}',
+  '{"source":"DataSourceType.tmdbFinder","uniqueId":"230839","alternateId":"tt0101002","title":"Return Engagement","alternateTitle":"再戰江湖","year":"1990","language":"LanguageType.foreign","languages":["cn"],"genres":[],"keywords":[],"description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.","userRating":"6.0","userRatingCount":"4","related":"{}"}',
 ];
 
 /// Create a string list with [qty] unique criteria values.

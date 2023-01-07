@@ -17,7 +17,7 @@ class MovieResultDTO {
   String alternateId = ''; // ID in another data source e.g. from TMDB to IMDB
   String title = '';
   String alternateTitle = '';
-  String alternateTitle2 = '';
+  String charactorName = '';
   String description = '';
   MovieContentType type = MovieContentType.none;
   int year = 0;
@@ -28,9 +28,9 @@ class MovieResultDTO {
   Duration runTime = Duration.zero;
   String imageUrl = '';
   LanguageType language = LanguageType.none;
-  List<String> languages = [];
-  List<String> genres = [];
-  List<String> keywords = [];
+  Set<String> languages = {};
+  Set<String> genres = {};
+  Set<String> keywords = {};
   // Related DTOs are in a category, then keyed by uniqueId
   RelatedMovieCategories related = {};
 }
@@ -72,7 +72,7 @@ const String movieResultDTOUniqueId = 'uniqueId';
 const String movieResultDTOAlternateId = 'alternateId';
 const String movieResultDTOTitle = 'title';
 const String movieResultDTOAlternateTitle = 'alternateTitle';
-const String movieResultDTOAlternateTitle2 = 'alternateTitle2';
+const String movieResultDTOCharactorName = 'charactorName';
 const String movieResultDTODescription = 'description';
 const String movieResultDTOType = 'type';
 const String movieResultDTOYear = 'year';
@@ -181,7 +181,7 @@ extension MapResultDTOConversion on Map {
     dto.alternateId = dynamicToString(this[movieResultDTOAlternateId]);
     dto.title = dynamicToString(this[movieResultDTOTitle]);
     dto.alternateTitle = dynamicToString(this[movieResultDTOAlternateTitle]);
-    dto.alternateTitle2 = dynamicToString(this[movieResultDTOAlternateTitle2]);
+    dto.charactorName = dynamicToString(this[movieResultDTOCharactorName]);
 
     dto.description = dynamicToString(this[movieResultDTODescription]);
     dto.year = dynamicToInt(this[movieResultDTOYear]);
@@ -212,9 +212,9 @@ extension MapResultDTOConversion on Map {
         ) ??
         dto.language;
 
-    dto.languages = dynamicToStringList(this[movieResultDTOLanguages]);
-    dto.genres = dynamicToStringList(this[movieResultDTOGenres]);
-    dto.keywords = dynamicToStringList(this[movieResultDTOKeywords]);
+    dto.languages = dynamicToStringSet(this[movieResultDTOLanguages]);
+    dto.genres = dynamicToStringSet(this[movieResultDTOGenres]);
+    dto.keywords = dynamicToStringSet(this[movieResultDTOKeywords]);
     dto.related = stringToRelated(this[movieResultDTORelated]);
     return dto;
   }
@@ -279,17 +279,17 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String? alternateId = '',
     String? title = '',
     String? alternateTitle = '',
-    String? alternateTitle2 = '',
+    String? charactorName = '',
     String? description = '',
-    String? type = 'MovieContentType.none',
+    String? type = '',
     String? year = '0',
     String? yearRange = '',
     String? userRating = '0',
     String? userRatingCount = '0',
-    String? censorRating = 'CensorRatingType.none',
+    String? censorRating = '',
     String? runTime = '0',
     String? imageUrl = '',
-    String? language = 'LanguageType.none',
+    String? language = '',
     String? languages = '[]',
     String? genres = '[]',
     String? keywords = '[]',
@@ -302,9 +302,11 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     // Weakly typed variables, help caller to massage data
     this.uniqueId = uniqueId ?? movieResultDTOUninitialized;
     this.alternateId = alternateId ?? '';
-    this.title = title ?? '';
-    this.alternateTitle = alternateTitle ?? '';
-    this.alternateTitle2 = alternateTitle2 ?? '';
+    this.title = title ?? alternateTitle ?? '';
+    if (title != alternateTitle) {
+      this.alternateTitle = alternateTitle ?? '';
+    }
+    this.charactorName = charactorName ?? '';
     this.description = description ?? '';
     this.yearRange = yearRange ?? '';
     this.imageUrl = imageUrl ?? '';
@@ -312,9 +314,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     this.userRatingCount = IntHelper.fromText(userRatingCount) ?? 0;
     this.userRating = DoubleHelper.fromText(userRating) ?? 0;
     this.runTime = Duration(seconds: IntHelper.fromText(runTime) ?? 0);
-    this.languages = dynamicToStringList(languages);
-    this.genres = dynamicToStringList(genres);
-    this.keywords = dynamicToStringList(keywords);
+    this.languages = dynamicToStringSet(languages);
+    this.genres = dynamicToStringSet(genres);
+    this.keywords = dynamicToStringSet(keywords);
     // Enumerations, work with what we get
     this.type = getEnumValue<MovieContentType>(
           type,
@@ -330,7 +332,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
           language,
           LanguageType.values,
         ) ??
-        LanguageType.none;
+        getLanguageType(this.languages);
     return this;
   }
 
@@ -366,8 +368,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (alternateTitle != defaultValues.alternateTitle) {
       result[movieResultDTOAlternateTitle] = alternateTitle;
     }
-    if (alternateTitle2 != defaultValues.alternateTitle2) {
-      result[movieResultDTOAlternateTitle2] = alternateTitle2;
+    if (charactorName != defaultValues.charactorName) {
+      result[movieResultDTOCharactorName] = charactorName;
     }
 
     if (type != defaultValues.type) {
@@ -388,13 +390,13 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
     if (!excludeCopyrightedData) {
       if (languages != defaultValues.languages) {
-        result[movieResultDTOLanguages] = json.encode(languages);
+        result[movieResultDTOLanguages] = json.encode(languages.toList());
       }
       if (genres != defaultValues.genres) {
-        result[movieResultDTOGenres] = json.encode(genres);
+        result[movieResultDTOGenres] = json.encode(genres.toList());
       }
       if (keywords != defaultValues.keywords) {
-        result[movieResultDTOKeywords] = json.encode(keywords);
+        result[movieResultDTOKeywords] = json.encode(keywords.toList());
       }
       if (description != defaultValues.description) {
         result[movieResultDTODescription] = description;
@@ -451,14 +453,27 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         0 == userRatingCount ||
         DataSourceType.imdb == newValue.source) {
       source = bestValue(newValue.source, source);
+
+      final oldTitle = title;
       if (DataSourceType.imdb == newValue.source && '' != newValue.title) {
         title = _htmlDecode.convert(newValue.title);
       } else {
-        title = bestValue(newValue.title, title);
+        title = bestValue(newValue.title, title).trim();
+      }
+      var newAlternateTitle = '';
+      if ('' != newValue.alternateTitle.trim() &&
+          title != newValue.alternateTitle.trim()) {
+        newAlternateTitle = newValue.alternateTitle;
+      } else if ('' != oldTitle.trim() && title != oldTitle.trim()) {
+        newAlternateTitle = oldTitle;
+      } else if ('' != alternateTitle.trim() &&
+          title != alternateTitle.trim()) {
+        newAlternateTitle = alternateTitle;
       }
 
-      alternateTitle = bestValue(newValue.alternateTitle, alternateTitle);
-      alternateTitle2 = bestValue(newValue.alternateTitle2, alternateTitle2);
+      alternateTitle = newAlternateTitle;
+      print('$uniqueId  merged $title & $alternateTitle ');
+      charactorName = bestValue(newValue.charactorName, charactorName);
       description = bestValue(newValue.description, description);
       type = bestValue(newValue.type, type);
       year = bestValue(newValue.year, year);
@@ -467,10 +482,10 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       type = bestValue(newValue.type, type);
       censorRating = bestValue(newValue.censorRating, censorRating);
       imageUrl = bestValue(newValue.imageUrl, imageUrl);
-      language = bestValue(newValue.language, language);
-      languages = bestList(newValue.languages, languages);
-      genres = bestList(newValue.genres, genres);
-      keywords = bestList(newValue.keywords, keywords);
+      genres.addAll(newValue.genres);
+      keywords.addAll(newValue.keywords);
+      languages.addAll(newValue.languages);
+      getLanguageType();
       userRating = bestUserRating(
         newValue.userRating,
         newValue.userRatingCount,
@@ -478,8 +493,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         userRatingCount,
       );
       userRatingCount = bestValue(newValue.userRatingCount, userRatingCount);
-      mergeDtoMapMap(related, newValue.related);
     }
+    mergeDtoMapMap(related, newValue.related);
   }
 
   /// Combine related movie information from [existingDtos] into a [MovieResultDTO].
@@ -534,16 +549,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       return b;
     }
     return a;
-  }
-
-  /// Combine [a] and [b] excluding duplicate entries from the result.
-  ///
-  List<String> bestList(List<String> a, List<String> b) {
-    final result = <String>{};
-    result.addAll(a);
-    result.addAll(b);
-
-    return result.toList();
   }
 
   /// Compare [rating1] with [rating2] and return the most relevant value.
@@ -603,7 +608,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     dto.alternateId = alternateId;
     dto.title = 'unknown';
     dto.alternateTitle = alternateTitle;
-    dto.alternateTitle2 = alternateTitle2;
+    dto.charactorName = charactorName;
 
     dto.description = description;
     dto.type = type;
@@ -641,7 +646,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     _matchCompare('alternateId', alternateId, other.alternateId);
     _matchCompare('title', title, other.title);
     _matchCompare('alternateTitle', alternateTitle, other.alternateTitle);
-    _matchCompare('alternateTitle2', alternateTitle2, other.alternateTitle2);
+    _matchCompare('charactorName', charactorName, other.charactorName);
     _matchCompare('description', description, other.description);
     _matchCompare('type', type, other.type);
     _matchCompare('year', year, other.year);
@@ -652,7 +657,10 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     _matchCompare('imageUrl', imageUrl, other.imageUrl);
     _matchCompare('language', language, other.language);
     _matchCompare(
-        'languages', languages.toString(), other.languages.toString());
+      'languages',
+      languages.toString(),
+      other.languages.toString(),
+    );
     _matchCompare('genres', genres.toString(), other.genres.toString());
     _matchCompare('keywords', keywords.toString(), other.keywords.toString());
 
@@ -667,6 +675,38 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       return false;
     }
     return true;
+  }
+
+  /// Loop through all languages in order to see how dominant English is.
+  LanguageType getLanguageType([Iterable? languageList]) {
+    for (final languageVal in languageList ?? languages) {
+      final languageText = languageVal.toString();
+      if (languageText.isNotEmpty) {
+        if (!languages.contains(languageText)) {
+          languages.add(languageText);
+        }
+        if (languageText.toUpperCase().startsWith('EN')) {
+          if (LanguageType.none == language ||
+              LanguageType.allEnglish == language) {
+            // First item(s) found are English, assume all English until other languages found.
+            language = LanguageType.allEnglish;
+            continue;
+          } else {
+            // English is not the first language listed.
+            return language = LanguageType.someEnglish;
+          }
+        }
+        if (LanguageType.allEnglish == language) {
+          // English was the first language listed but found another language.
+          return language = LanguageType.mostlyEnglish;
+        } else {
+          // First item found is foreign, assume all foreign until other languages found.
+          language = LanguageType.foreign;
+          continue;
+        }
+      }
+    }
+    return language;
   }
 }
 
@@ -702,13 +742,13 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
     for (final entry in this) {
       final json = entry.toJson(excludeCopyrightedData: excludeCopyrightedData);
       final dartString = "r'''\n${json.replaceAll("'", "'")}\n''',\n";
-      listContents.write(FormatDtoJson(dartString));
+      listContents.write(formatDtoJson(dartString));
     }
     return "[\n$listContents]";
   }
 
   /// Format JSON for readability
-  String FormatDtoJson(String json) {
+  String formatDtoJson(String json) {
     var formatted = json;
     formatted = formatted.replaceAll(
       '"related":{"',
@@ -847,7 +887,10 @@ extension DTOCompare on MovieResultDTO {
     }
     // For people sort by popularity
     if (MovieContentType.person == type) {
-      return personPopularityCompare(other);
+      if (userRatingCount != other.userRatingCount) {
+        return personPopularityCompare(other);
+      }
+      return title.compareTo(other.title) * -1;
     }
     // See how many people have rated this movie.
     if (userRatingCategory() != other.userRatingCategory()) {

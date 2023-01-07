@@ -23,12 +23,12 @@ void main() {
 
   group('tmdb finder unit tests', () {
     // Confirm class description is constructed as expected.
-    test('Run myDataSourceName()', () async {
+    test('Run myDataSourceName()', () {
       expect(QueryTMDBFinder().myDataSourceName(), 'tmdbMovie');
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
@@ -55,7 +55,7 @@ void main() {
     });
 
     // Confirm error is constructed as expected.
-    test('Run myYieldError()', () async {
+    test('Run myYieldError()', () {
       const expectedResult = {
         'source': 'DataSourceType.tmdbMovie',
         'title': '[QueryTMDBDetails] new query',
@@ -71,19 +71,18 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
-      final actualOutput =
-          await QueryTMDBFinder().myConvertWebTextToTraversableTree(
+      final actualOutput = QueryTMDBFinder().myConvertWebTextToTraversableTree(
         tmdbJsonSearchFull,
       );
-      expect(actualOutput, expectedOutput);
+      expect(actualOutput, completion(expectedOutput));
     });
   });
 
   group('TmdbFinderConverter unit tests', () {
     // Confirm map can be converted to DTO.
-    test('Run dtoFromCompleteJsonMap()', () async {
+    test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -178,11 +177,14 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBFinder();
+      testClass.myClearCache();
+      testClass.myConstructURI('tt0101000');
+      expectedValue.first.alternateId = 'tt0101000';
 
       // Invoke the functionality.
       await testClass
           .readList(
-            SearchCriteriaDTO(),
+            SearchCriteriaDTO().fromString('123'),
             source: streamTmdbJsonOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -205,15 +207,20 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBFinder();
+      testClass.myClearCache();
+      testClass.myConstructURI('tt0101000');
       const expectedException = '''
-[QueryTMDBDetails] Error in tmdbMovie with criteria  interpreting web text as a map :FormatException: Unexpected character (at character 1)
+[QueryTMDBDetails] Error in tmdbMovie with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
 ^
 ''';
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitInvalidJsonSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: _emitInvalidJsonSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -221,14 +228,20 @@ not valid json
     // Read tmdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException =
-          '[QueryTMDBDetails] Error in tmdbMovie with criteria  translating page map to objects :expected map got List<dynamic> unable to interpret data [{hello: world}]';
+      const expectedException = '[QueryTMDBDetails] Error in tmdbMovie '
+          'with criteria 123 translating page map to objects '
+          ':expected map got List<dynamic> unable to interpret data [{hello: world}]';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBFinder();
+      testClass.myClearCache();
+      testClass.myConstructURI('tt0101000');
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedJsonSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: _emitUnexpectedJsonSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

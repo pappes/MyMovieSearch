@@ -23,12 +23,12 @@ void main() {
 
   group('google search unit tests', () {
     // Confirm class description is constructed as expected.
-    test('Run myDataSourceName()', () async {
+    test('Run myDataSourceName()', () {
       expect(QueryGoogleMovies().myDataSourceName(), 'google');
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () async {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
@@ -55,7 +55,7 @@ void main() {
     });
 
     // Confirm error is constructed as expected.
-    test('Run myYieldError()', () async {
+    test('Run myYieldError()', () {
       const expectedResult = {
         'source': 'DataSourceType.google',
         'title': '[QueryGoogleMovies] new query',
@@ -72,19 +72,19 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
       final actualOutput =
-          await QueryGoogleMovies().myConvertWebTextToTraversableTree(
+          QueryGoogleMovies().myConvertWebTextToTraversableTree(
         googleMoviesJsonSearchFull,
       );
-      expect(actualOutput, expectedOutput);
+      expect(actualOutput, completion(expectedOutput));
     });
   });
 
   group('GoogleMovieSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
-    test('Run dtoFromCompleteJsonMap()', () async {
+    test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -184,7 +184,7 @@ void main() {
       // Invoke the functionality.
       await testClass
           .readList(
-            SearchCriteriaDTO(),
+            SearchCriteriaDTO().fromString('123'),
             source: streamGoogleMoviesJsonOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -208,14 +208,17 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryGoogleMovies();
       const expectedException = '''
-[QueryGoogleMovies] Error in google with criteria  interpreting web text as a map :FormatException: Unexpected character (at character 1)
+[QueryGoogleMovies] Error in google with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
 ^
 ''';
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitInvalidJsonSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: _emitInvalidJsonSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -223,14 +226,18 @@ not valid json
     // Read google search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException =
-          '[QueryGoogleMovies] Error in google with criteria  translating page map to objects :expected map got List<dynamic> unable to interpret data [{hello: world}]';
+      const expectedException = '[QueryGoogleMovies] Error in google '
+          'with criteria 123 translating page map to objects '
+          ':expected map got List<dynamic> unable to interpret data [{hello: world}]';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryGoogleMovies();
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO(), source: _emitUnexpectedJsonSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: _emitUnexpectedJsonSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

@@ -24,8 +24,7 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
     _scrapeRelated(document, movieData);
 
-    movieData[outerElementIdentity] =
-        getCriteriaText ?? movieData[outerElementIdentity];
+    movieData[outerElementIdentity] = getCriteriaText;
     return movieData;
   }
 
@@ -79,7 +78,7 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         final charactor = row.querySelector('a[href*="/title/tt"]')?.text;
         if (null != charactor) {
           // Include name of character played by actor for display in search results.
-          person[outerElementAlternateTitle2] = charactor;
+          person[outerElementCharactorName] = charactor;
         }
         movies.add(person);
       }

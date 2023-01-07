@@ -60,7 +60,7 @@ class QueryUnknownSourceMocked
       return clientResponse;
     });
 
-    when(client.getUrl(any)).thenAnswer((_) async => clientRequest);
+    when(client.getUrl(any)).thenAnswer((_) => Future.value(clientRequest));
     when(clientRequest.headers).thenAnswer((_) => headers);
 
     return client;
@@ -138,8 +138,8 @@ class WebFetchBasic extends WebFetchBase<String, String> {
   WebFetchBasic() {
     selectedDataSource = loopBackDataSource;
   }
-  Future<Stream<String>> loopBackDataSource(dynamic s) async =>
-      Stream.value(s.toString());
+  Future<Stream<String>> loopBackDataSource(dynamic s) =>
+      Future.value(Stream.value(s.toString()));
 
   ConvertTreeToOutputTypeFn overriddenMyConvertTreeToOutputType =
       (dynamic map) async => [map.toString()];
@@ -164,10 +164,9 @@ class WebFetchCached extends WebFetchBasic {
   String lastResult = '';
 
   @override
-  Future<bool> myIsResultCached(String criteria) async =>
-      criteria == lastCriteria;
+  bool myIsResultCached(String criteria) => criteria == lastCriteria;
   @override
-  Future<bool> myIsCacheStale(String criteria) async => false;
+  bool myIsCacheStale(String criteria) => false;
   @override
   Future<void> myAddResultToCache(String criteria, String fetchedResult) async {
     lastCriteria = criteria;
@@ -182,7 +181,7 @@ class WebFetchCached extends WebFetchBasic {
   }
 
   @override
-  Future<void> myClearCache() async {
+  void myClearCache() {
     lastCriteria = '';
     lastResult = '';
   }
@@ -275,23 +274,23 @@ void main() {
       expect(testClass.myFormatInputAsText(input), 'criteria');
     });
     // Default not cached.
-    test('myIsResultCached()', () async {
+    test('myIsResultCached()', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'criteria';
-      expect(await testClass.myIsResultCached(input), false);
+      expect(testClass.myIsResultCached(input), false);
     });
     // Default not stale cache.
-    test('myIsCacheStale()', () async {
+    test('myIsCacheStale()', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'criteria';
-      expect(await testClass.myIsCacheStale(input), false);
+      expect(testClass.myIsCacheStale(input), false);
     });
     // Default no caching.
-    test('myIsResultCached()', () async {
+    test('myIsResultCached()', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'criteria';
       //testClass.myAddResultToCache(input);
-      expect(await testClass.myIsResultCached(input), false);
+      expect(testClass.myIsResultCached(input), false);
     });
   });
 
@@ -306,10 +305,13 @@ void main() {
         throwsA('No content returned from web call'),
       );
     });
-    test('html doc', () async {
-      final html = await _getOfflineHTML('123').toList();
-      final actualResult =
-          await testClass.myConvertWebTextToTraversableTree(html.first);
+    test('html doc', () {
+      final actualResult = _getOfflineHTML('123')
+          .toList()
+          .then(
+            (html) => testClass.myConvertWebTextToTraversableTree(html.first),
+          )
+          .then((element) => element.first.outerHtml);
       const expectedResult = '''
 <!DOCTYPE html><html><head>
       <script type="application/ld+json">{
@@ -321,45 +323,51 @@ void main() {
 
 </body></html>''';
 
-      expect(actualResult.first.outerHtml, expectedResult);
+      expect(actualResult, completion(expectedResult));
     });
-    test('json doc', () async {
+    test('json doc', () {
       final actualResult =
-          await testClass.myConvertWebTextToTraversableTree('[{"key":"val"}]');
-      expect(actualResult.toString(), '[[{key: val}]]');
+          testClass.myConvertWebTextToTraversableTree('[{"key":"val"}]');
+      expect(
+        actualResult,
+        completion([
+          [
+            {'key': 'val'}
+          ]
+        ]),
+      );
     });
-    test('invalid string', () async {
-      final actualResult = await testClass
-          .myConvertWebTextToTraversableTree('<html>this is junk</ht>');
-      expect(actualResult.toString(), '[#document]');
+    test('invalid string', () {
+      final actualResult = testClass
+          .myConvertWebTextToTraversableTree('<html>this is junk</ht>')
+          .then((val) => val.toString());
+      expect(actualResult, completion('[#document]'));
     });
   });
 
   group('WebFetchBase myConvertCriteriaToWebText unit tests', () {
     final testClass = WebFetchBasic();
 
-    test('empty string', () async {
-      final streamResult = await testClass.myConvertCriteriaToWebText('');
-      final listResult = await streamResult.toList();
-      final textResult = listResult.first;
-      expect(textResult, '');
+    test('empty string', () {
+      final result = testClass
+          .myConvertCriteriaToWebText('')
+          .then((stream) => stream.toList());
+      expect(result, completion(['']));
     });
 
-    test('without jsonp transformation', () async {
-      final streamResult =
-          await testClass.myConvertCriteriaToWebText('JsonP([{"key":"val"}])');
-      final listResult = await streamResult.toList();
-      final textResult = listResult.first;
-      expect(textResult, 'JsonP([{"key":"val"}])');
+    test('without jsonp transformation', () {
+      final result = testClass
+          .myConvertCriteriaToWebText('JsonP([{"key":"val"}])')
+          .then((stream) => stream.toList());
+      expect(result, completion(['JsonP([{"key":"val"}])']));
     });
 
-    test('with jsonp transformation', () async {
+    test('with jsonp transformation', () {
       testClass.transformJsonP = true;
-      final streamResult =
-          await testClass.myConvertCriteriaToWebText('JsonP([{"key":"val"}])');
-      final listResult = await streamResult.toList();
-      final textResult = listResult.first;
-      expect(textResult, '[{"key":"val"}]');
+      final result = testClass
+          .myConvertCriteriaToWebText('JsonP([{"key":"val"}])')
+          .then((stream) => stream.toList());
+      expect(result, completion(['[{"key":"val"}]']));
     });
 
     test('exception handler', () async {
@@ -373,8 +381,10 @@ void main() {
       } catch (error) {
         actualResult = error.toString();
       }
-      expect(actualResult,
-          'Error in unknown with criteria NullCriteria fetching web text :JsonP([{"key":"val"}])');
+      expect(
+          actualResult,
+          'Error in unknown with criteria NullCriteria '
+          'fetching web text :JsonP([{"key":"val"}])');
     });
   });
 
@@ -383,12 +393,12 @@ void main() {
       final testClass = WebFetchCached();
       final listResult = await testClass.readCachedList(
         'Marco',
-        source: (_) async => Stream.value('Polo'),
+        source: (_) => Future.value(Stream.value('Polo')),
       );
       expect(listResult, []);
-      final resultIsCached = await testClass.myIsResultCached('Marco');
+      final resultIsCached = testClass.myIsResultCached('Marco');
       expect(resultIsCached, false);
-      final resultIsStale = await testClass.myIsCacheStale('Marco');
+      final resultIsStale = testClass.myIsCacheStale('Marco');
       expect(resultIsStale, false);
     });
 
@@ -398,17 +408,18 @@ void main() {
       testClass.populateStream(
         sc,
         'Marco',
-        source: (_) async => Stream.value('"Polo"'), // Stream a Json result
+        source: (_) =>
+            Future.value(Stream.value('"Polo"')), // Stream a Json result
       );
       await sc.stream.drain();
       final listResult = await testClass.readCachedList(
         'Marco',
-        source: (_) async => Stream.value('Who Is Marco?'),
+        source: (_) => Future.value(Stream.value('Who Is Marco?')),
       );
       expect(listResult, ['Polo']);
-      final resultIsCached = await testClass.myIsResultCached('Marco');
+      final resultIsCached = testClass.myIsResultCached('Marco');
       expect(resultIsCached, true);
-      final resultIsStale = await testClass.myIsCacheStale('Marco');
+      final resultIsStale = testClass.myIsCacheStale('Marco');
       expect(resultIsStale, false);
     });
 
@@ -417,12 +428,12 @@ void main() {
       await testClass.myAddResultToCache('Marco', 'Polo');
       final listResult = await testClass.readCachedList(
         'Marco',
-        source: (_) async => Stream.value('Polo'),
+        source: (_) => Future.value(Stream.value('Polo')),
       );
       expect(listResult, ['Polo']);
-      final resultIsCached = await testClass.myIsResultCached('Marco');
+      final resultIsCached = testClass.myIsResultCached('Marco');
       expect(resultIsCached, true);
-      final resultIsStale = await testClass.myIsCacheStale('Marco');
+      final resultIsStale = testClass.myIsCacheStale('Marco');
       expect(resultIsStale, false);
     });
 
@@ -432,21 +443,21 @@ void main() {
       final listResult =
           await testClass.myFetchResultFromCache('Marco').toList();
       expect(listResult, ['Polo']);
-      final resultIsCached = await testClass.myIsResultCached('Marco');
+      final resultIsCached = testClass.myIsResultCached('Marco');
       expect(resultIsCached, true);
-      final resultIsStale = await testClass.myIsCacheStale('Marco');
+      final resultIsStale = testClass.myIsCacheStale('Marco');
       expect(resultIsStale, false);
     });
 
     test('clear cache', () async {
       final testClass = WebFetchCached();
       await testClass.myAddResultToCache('Marco', 'Polo');
-      await testClass.myClearCache();
+      testClass.myClearCache();
       final listResult = await testClass.readCachedList('Marco');
       expect(listResult, []);
-      final resultIsCached = await testClass.myIsResultCached('Marco');
+      final resultIsCached = testClass.myIsResultCached('Marco');
       expect(resultIsCached, false);
-      final resultIsStale = await testClass.myIsCacheStale('Marco');
+      final resultIsStale = testClass.myIsCacheStale('Marco');
       expect(resultIsStale, false);
     });
   });
@@ -456,11 +467,11 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('WebFetchBase mocked baseConvertTreeToOutputType', () {
-    Future<void> testConvert(
+    void testConvert(
       List<Map> input,
       List<MovieResultDTO>? expectedValue, [
       String? expectedError,
-    ]) async {
+    ]) {
       final pageMap = Stream.fromIterable(input);
       final actualOutput =
           QueryUnknownSourceMocked().baseConvertTreeToOutputType(
@@ -470,43 +481,43 @@ void main() {
       if (null != expectedValue) {
         final expectedMatchers =
             expectedValue.map((e) => MovieResultDTOMatcher(e));
-        await expectLater(actualOutput, emitsInOrder(expectedMatchers));
+        expect(actualOutput, emitsInOrder(expectedMatchers));
       }
     }
 
     // Convert 0 maps into dtos.
-    test('empty input', () async {
+    test('empty input', () {
       final input = [<String, dynamic>{}];
       final output = <MovieResultDTO>[];
-      await testConvert(input, output);
+      testConvert(input, output);
     });
     // Convert 1 map into a dto.
     test(
       'single map input',
-      () async {
+      () {
         final input = _makeMaps(1);
         final output = _makeDTOs(1);
-        await testConvert(input, output);
+        testConvert(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
     // Convert multiple maps into dtos.
     test(
       'multiple map input',
-      () async {
+      () {
         final input = _makeMaps(100);
         final output = _makeDTOs(100);
-        await testConvert(input, output);
+        testConvert(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
     // Limit number of DTOs returned.
     test(
       'limit output',
-      () async {
+      () {
         final input = _makeMaps(123);
         final output = _makeDTOs(100);
-        await testConvert(input, output);
+        testConvert(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
@@ -514,7 +525,7 @@ void main() {
     //override myConvertTreeToOutputType to throw an exception
     test(
       'exception handling',
-      () async {
+      () {
         final testClass = QueryUnknownSourceMocked();
         testClass.overriddenConvertTreeToOutputType =
             (_) => throw 'Conversion Failed';
@@ -530,7 +541,7 @@ void main() {
         final newId = int.parse(expectedOutput.uniqueId) - 1;
         expectedOutput.uniqueId = newId.toString();
 
-        await expectLater(
+        expect(
           actualOutput,
           emitsInOrder(
             [MovieResultDTOMatcher(expectedOutput)],
@@ -543,7 +554,7 @@ void main() {
     //override myConvertWebTextToTraversableTree to encapsulate errors
     test(
       'stream exception handling',
-      () async {
+      () {
         final testClass = QueryUnknownSourceMocked();
         const expectedError =
             '[QueryIMDBTitleDetails] Error in unknown with criteria '
@@ -553,50 +564,50 @@ void main() {
           SearchCriteriaDTO(),
           Stream.error('more exception handling'),
         );
-        final dtoOutput = await actualOutput.toList();
-        expect(dtoOutput.first.title, expectedError);
+        final dtoOutput = actualOutput.toList().then((dto) => dto.first.title);
+        expect(dtoOutput, completion(expectedError));
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
   });
 
   group('WebFetchBase mocked baseConvertWebTextToTraversableTree', () {
-    Future<void> testConvert(
+    void testConvert(
       String input,
       List<dynamic>? expectedValue, [
       String? expectedError,
-    ]) async {
+    ]) {
       final jsonStream = Stream.value(input);
       final actualOutput = QueryUnknownSourceMocked()
           .baseConvertWebTextToTraversableTree(jsonStream);
       if (null != expectedValue) {
-        await expectLater(actualOutput, emitsInOrder(expectedValue));
+        expect(actualOutput, emitsInOrder(expectedValue));
       }
     }
 
     // Convert 0 json maps into a trees.
-    test('empty input', () async {
+    test('empty input', () {
       final input = _makeJson(0);
       final output = _makeMaps(0);
-      await testConvert(input, [output]);
+      testConvert(input, [output]);
     });
     // Convert 1 json map into a tree.
     test(
       'single map input',
-      () async {
+      () {
         final input = _makeJson(1);
         final output = _makeMaps(1);
-        await testConvert(input, [output]);
+        testConvert(input, [output]);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
     // Convert multiple json maps into a trees.
     test(
       'multiple map input',
-      () async {
+      () {
         final input = _makeJson(10);
         final output = _makeMaps(10);
-        await testConvert(input, [output]);
+        testConvert(input, [output]);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
@@ -604,7 +615,7 @@ void main() {
     //override myConvertWebTextToTraversableTree to provide a multi-part stream
     test(
       'stream with multiple results',
-      () async {
+      () {
         final testClass = QueryUnknownSourceMocked();
         final streamOutput = testClass.baseConvertWebTextToTraversableTree(
           Stream.fromIterable([
@@ -617,7 +628,7 @@ void main() {
         //final actualOutput = await streamOutput.toList();
         final expectOutput = _makeMaps(4);
 
-        await expectLater(streamOutput, emitsInOrder([expectOutput]));
+        expect(streamOutput, emitsInOrder([expectOutput]));
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
@@ -668,96 +679,100 @@ void main() {
   });
 
   group('WebFetchBase mocked baseFetchWebText', () {
-    Future<void> testConvert(
+    void testConvert(
       String input,
       String expectedValue, [
       String? expectedError,
-    ]) async {
+    ]) {
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = input;
       final testClass = QueryUnknownSourceMocked();
 
-      final actualOutput = await testClass.baseFetchWebText(criteria);
-      await expectLater(
+      final actualOutput = testClass.baseFetchWebText(criteria);
+      expectLater(
         actualOutput, //.printStream(input),
-        emitsInOrder([
-          containsSubstring(
-            expectedValue,
-            startsWith: input == '' ? '' : '[{"id": "',
-          )
-        ]),
+        completion(
+          emitsInOrder([
+            containsSubstring(
+              expectedValue,
+              startsWith: input == '' ? '' : '[{"id": "',
+            )
+          ]),
+        ),
       );
     }
 
     // Convert empty input to empty output.
-    test('empty input', () async {
+    test('empty input', () {
       const input = '';
       const output = '';
-      await testConvert(input, output);
+      testConvert(input, output);
     });
     // Convert 1 json map into a tree.
     test(
       'mocked http call',
-      () async {
+      () {
         const input = '1234';
         const output = '1234.';
-        await testConvert(input, output);
+        testConvert(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
   });
 
   group('WebFetchBase mocked myConvertCriteriaToWebText', () {
-    Future<void> testConvert(
+    void testConvert(
       String input,
       String expectedValue, [
       String? expectedError,
-    ]) async {
+    ]) {
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = input;
       final testClass = QueryUnknownSourceMocked();
 
-      final actualOutput = await testClass.myConvertCriteriaToWebText(criteria);
-      await expectLater(
+      final actualOutput = testClass.myConvertCriteriaToWebText(criteria);
+      expect(
         actualOutput,
-        emitsInOrder([
-          containsSubstring(
-            expectedValue,
-            startsWith: input == '' ? '' : '[{"id": "',
-          )
-        ]),
+        completion(
+          emitsInOrder([
+            containsSubstring(
+              expectedValue,
+              startsWith: input == '' ? '' : '[{"id": "',
+            )
+          ]),
+        ),
       );
     }
 
     // Convert empty input to empty output.
-    test('empty input', () async {
+    test('empty input', () {
       const input = '';
       const output = '';
-      await testConvert(input, output);
+      testConvert(input, output);
     });
     // Convert 1 json map into a tree.
     test(
       'mocked http call',
-      () async {
+      () {
         const input = '1234';
         const output = '1234.';
-        await testConvert(input, output);
+        testConvert(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
   });
   group('WebFetchBase mocked baseConvertCriteriaToWebText', () {
-    Future<void> testConvert(
+    void testConvert(
       String input,
       String expectedValue, [
       String? expectedError,
-    ]) async {
+    ]) {
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = input;
       final testClass = QueryUnknownSourceMocked();
       final actualOutput = testClass.baseConvertCriteriaToWebText(criteria);
       //.printStream('testConvert1:');
-      await expectLater(
+      expect(
         actualOutput,
         emitsInOrder([
           containsSubstring(
@@ -769,18 +784,18 @@ void main() {
     }
 
     // Convert empty input to empty output.
-    test('empty input', () async {
+    test('empty input', () {
       const input = '';
       const output = '';
-      await testConvert(input, output);
+      testConvert(input, output);
     });
     // Convert 1 json map into a tree.
     test(
       'mocked http call',
-      () async {
+      () {
         const input = '1234';
         const output = '1234.';
-        await testConvert(input, output);
+        testConvert(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
@@ -837,58 +852,58 @@ void main() {
   });
 
   group('WebFetchBase mocked baseTransform unit tests', () {
-    Future<void> testTransform(
+    void testTransform(
       String input,
       List<MovieResultDTO>? expectedValue, [
       String? expectedError,
-    ]) async {
+    ]) {
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = input;
       final actualOutput = QueryUnknownSourceMocked().baseTransform(criteria);
       if (null != expectedValue) {
         final expectedMatchers =
             expectedValue.map((e) => MovieResultDTOMatcher(e));
-        await expectLater(actualOutput, emitsInOrder(expectedMatchers));
+        expect(actualOutput, emitsInOrder(expectedMatchers));
       }
       if (null != expectedError) {
-        final list = await actualOutput.toList();
-        expect(list.first.title, expectedError);
+        final dtoTitle = actualOutput.toList().then((list) => list.first.title);
+        expect(dtoTitle, completion(expectedError));
       }
     }
 
     // Convert 0 maps into dtos.
-    test('empty input', () async {
+    test('empty input', () {
       const input = '';
       final output = <MovieResultDTO>[];
-      await testTransform(input, output);
+      testTransform(input, output);
     });
     // Convert 1 map into a dto.
     test(
       'single map input',
-      () async {
+      () {
         const input = '1000';
         final output = _makeDTOs(1);
-        await testTransform(input, output);
+        testTransform(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
     test(
       'http error code 404',
-      () async {
+      () {
         const input = 'HTTP404';
         const output =
             '[QueryIMDBTitleDetails] Error in unknown with criteria NullCriteria interpreting web text as a map :Error in http read, HTTP status code : 404 for https://www.unknown.com/title/HTTP404/?ref_=fn_tt_tt_1';
-        await testTransform(input, null, output);
+        testTransform(input, null, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
     test(
       'http EXCEPTION',
-      () async {
+      () {
         const input = 'EXCEPTION';
         const output =
             '[QueryIMDBTitleDetails] Error in unknown with criteria NullCriteria fetching web text: :go away!';
-        await testTransform(input, null, output);
+        testTransform(input, null, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );

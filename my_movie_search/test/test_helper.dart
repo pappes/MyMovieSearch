@@ -156,8 +156,11 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
     for (final actualDto in _actual) {
       for (final expectedDto in expected) {
         final differences = {};
-        if (actualDto.matches(expectedDto,
-            matchState: differences, related: false)) {
+        if (actualDto.matches(
+          expectedDto,
+          matchState: differences,
+          related: false,
+        )) {
           matchQuantity--;
           if (0 == matchQuantity) {
             // There have been enough matches to declare victory!
@@ -241,7 +244,7 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
   dto.alternateId = '${sample}_alternateId';
   dto.title = '${sample}_title';
   dto.alternateTitle = '${sample}_alternateTitle';
-  dto.alternateTitle2 = '${sample}_alternateTitle2';
+  dto.charactorName = '${sample}_charactorName';
   dto.description = '${sample}_description';
   dto.type = MovieContentType.custom;
   dto.year = 123;
@@ -252,9 +255,9 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
   dto.runTime = const Duration(hours: 1, minutes: 2, seconds: 3);
   dto.imageUrl = '${sample}_imageUrl';
   dto.language = LanguageType.mostlyEnglish;
-  dto.languages = ['${sample}_language1', '${sample}_language2'];
-  dto.genres = ['${sample}_genre1', '${sample}_genre2'];
-  dto.keywords = ['${sample}_keyword1', '${sample}_keyword2'];
+  dto.languages = {'${sample}_language1', '${sample}_language2'};
+  dto.genres = {'${sample}_genre1', '${sample}_genre2'};
+  dto.keywords = {'${sample}_keyword1', '${sample}_keyword2'};
   if (makeRelated) {
     final ref = 'rel$sample';
     dto.related = {

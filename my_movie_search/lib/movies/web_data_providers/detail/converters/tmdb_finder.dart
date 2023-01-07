@@ -81,14 +81,12 @@ class TmdbFinderConverter {
     movie.uniqueId =
         map[movieElementTMDBIdentity]?.toString() ?? movie.uniqueId;
     movie.alternateId = 'ToBeDefined'; // Overridden in QueryTMDBFinder
-    if (null != map[movieElementCommonTitle] &&
-        null != map[movieElementOriginalTitle]) {
-      movie.title = '${map[movieElementOriginalTitle]} '
-          '(${map[movieElementCommonTitle]}';
-    } else {
-      movie.title = map[movieElementOriginalTitle]?.toString() ??
-          map[movieElementCommonTitle]?.toString() ??
-          movie.title;
+
+    final title = map[movieElementCommonTitle]?.toString();
+    final originalTitle = map[movieElementOriginalTitle]?.toString();
+    movie.title = title ?? originalTitle ?? '';
+    if (title != originalTitle) {
+      movie.alternateTitle = originalTitle ?? '';
     }
 
     final year =
@@ -120,6 +118,7 @@ class TmdbFinderConverter {
     )!;
 
     movie.languages.combineUnique(map[movieElementOriginalLanguage]);
+    movie.getLanguageType();
 
     return movie;
   }

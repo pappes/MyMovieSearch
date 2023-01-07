@@ -82,7 +82,7 @@ mixin ThreadedCacheIMDBNameDetails
   }
 
   @override
-  Future<void> clearThreadedCache() async {
+  void clearThreadedCache() {
     super.clearThreadedCache();
     normalQueue.clear();
     verySlowQueue.clear();

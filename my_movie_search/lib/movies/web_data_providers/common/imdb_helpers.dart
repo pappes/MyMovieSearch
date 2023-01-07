@@ -6,7 +6,7 @@ const outerElementIdentity = 'id';
 
 const outerElementOfficialTitle = 'name';
 const outerElementAlternateTitle = 'alternateTitle';
-const outerElementAlternateTitle2 = 'alternateTitle2';
+const outerElementCharactorName = 'charactorName';
 const outerElementDescription = 'description';
 const outerElementKeywords = 'keywords';
 const outerElementGenre = 'genre';
@@ -80,9 +80,10 @@ const deepRelatedMovieId =
     'id'; // Repeated inside other children of the title - do not do a deep search
 const deepRelatedMoviePlotHeader = 'plotText';
 const deepRelatedMoviePlotField = 'plainText';
-const deepRelatedMovieAlternateTitle = 'originalTitleText'; //text
-const deepRelatedMovieTitle = 'titleText'; //text
-const deepRelatedMovieType = 'titleType'; //text
+const deepRelatedMovieOriginalTitle = 'originalTitleText'; // child key = text
+const deepRelatedMovieAlternateTitle = 'akas'; // child key = text
+const deepRelatedMovieTitle = 'titleText'; // child key = text
+const deepRelatedMovieType = 'titleType'; // child key = text
 const deepRelatedMovieUserRating = 'aggregateRating';
 const deepRelatedMovieUserRatingCount = 'voteCount';
 const deepRelatedMovieYearHeader = 'releaseYear';
@@ -240,6 +241,8 @@ CensorRatingType? getImdbCensorRating(String? type) {
   if (type.lastIndexOf('Banned') > -1) return CensorRatingType.adult;
   if (type.lastIndexOf('X') > -1) return CensorRatingType.adult;
   if (type.lastIndexOf('R21') > -1) return CensorRatingType.adult;
+  // Suitable for Only Adults
+  if (type.lastIndexOf('SOA') > -1) return CensorRatingType.adult;
 
   if (type.lastIndexOf('Z') > -1) return CensorRatingType.restricted;
   //R includes R, R(A), RP18

@@ -157,8 +157,7 @@ class BaseMovieRepository {
   static Future<List<MovieResultDTO>> _getIMDBPersonDetailsFast(
     SearchCriteriaDTO criteria,
   ) async {
-    final x = await QueryIMDBSuggestions().readList(criteria);
-    return x;
+    return QueryIMDBSuggestions().readList(criteria);
   }
 
   /// Add fetch full person details from imdb.
