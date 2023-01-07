@@ -28,9 +28,9 @@ class MovieResultDTO {
   Duration runTime = Duration.zero;
   String imageUrl = '';
   LanguageType language = LanguageType.none;
-  List<String> languages = [];
-  List<String> genres = [];
-  List<String> keywords = [];
+  Set<String> languages = {};
+  Set<String> genres = {};
+  Set<String> keywords = {};
   // Related DTOs are in a category, then keyed by uniqueId
   RelatedMovieCategories related = {};
 }
@@ -212,9 +212,9 @@ extension MapResultDTOConversion on Map {
         ) ??
         dto.language;
 
-    dto.languages = dynamicToStringList(this[movieResultDTOLanguages]);
-    dto.genres = dynamicToStringList(this[movieResultDTOGenres]);
-    dto.keywords = dynamicToStringList(this[movieResultDTOKeywords]);
+    dto.languages = dynamicToStringSet(this[movieResultDTOLanguages]);
+    dto.genres = dynamicToStringSet(this[movieResultDTOGenres]);
+    dto.keywords = dynamicToStringSet(this[movieResultDTOKeywords]);
     dto.related = stringToRelated(this[movieResultDTORelated]);
     return dto;
   }
@@ -312,9 +312,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     this.userRatingCount = IntHelper.fromText(userRatingCount) ?? 0;
     this.userRating = DoubleHelper.fromText(userRating) ?? 0;
     this.runTime = Duration(seconds: IntHelper.fromText(runTime) ?? 0);
-    this.languages = dynamicToStringList(languages);
-    this.genres = dynamicToStringList(genres);
-    this.keywords = dynamicToStringList(keywords);
+    this.languages = dynamicToStringSet(languages);
+    this.genres = dynamicToStringSet(genres);
+    this.keywords = dynamicToStringSet(keywords);
     // Enumerations, work with what we get
     this.type = getEnumValue<MovieContentType>(
           type,
@@ -388,13 +388,13 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
     if (!excludeCopyrightedData) {
       if (languages != defaultValues.languages) {
-        result[movieResultDTOLanguages] = json.encode(languages);
+        result[movieResultDTOLanguages] = json.encode(languages.toList());
       }
       if (genres != defaultValues.genres) {
-        result[movieResultDTOGenres] = json.encode(genres);
+        result[movieResultDTOGenres] = json.encode(genres.toList());
       }
       if (keywords != defaultValues.keywords) {
-        result[movieResultDTOKeywords] = json.encode(keywords);
+        result[movieResultDTOKeywords] = json.encode(keywords.toList());
       }
       if (description != defaultValues.description) {
         result[movieResultDTODescription] = description;
@@ -467,10 +467,10 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       type = bestValue(newValue.type, type);
       censorRating = bestValue(newValue.censorRating, censorRating);
       imageUrl = bestValue(newValue.imageUrl, imageUrl);
-      language = bestValue(newValue.language, language);
-      languages = bestList(newValue.languages, languages);
-      genres = bestList(newValue.genres, genres);
-      keywords = bestList(newValue.keywords, keywords);
+      genres.addAll(newValue.genres);
+      keywords.addAll(newValue.keywords);
+      languages.addAll(newValue.languages);
+      getLanguageType();
       userRating = bestUserRating(
         newValue.userRating,
         newValue.userRatingCount,
@@ -534,16 +534,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       return b;
     }
     return a;
-  }
-
-  /// Combine [a] and [b] excluding duplicate entries from the result.
-  ///
-  List<String> bestList(List<String> a, List<String> b) {
-    final result = <String>{};
-    result.addAll(a);
-    result.addAll(b);
-
-    return result.toList();
   }
 
   /// Compare [rating1] with [rating2] and return the most relevant value.

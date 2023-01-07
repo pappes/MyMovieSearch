@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:html/parser.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
@@ -585,7 +584,7 @@ Future main() async {
     group('fromJson', () {
       /// Convert JSON [input] to a [List] of [String] and compare to [expectedOutput]
       void testFromJson(String? input, List<String> expectedOutput) {
-        final actual = StringListHelper.fromJson(input);
+        final actual = StringIterableHelper.fromJson(input);
         expect(actual, expectedOutput, reason: 'input ${input.toString()}');
       }
 

@@ -70,9 +70,9 @@ MovieResultDTO fullDTO() {
   dto.runTime = const Duration(seconds: 9000);
   dto.imageUrl = 'www.microsoft.com';
   dto.language = LanguageType.mostlyEnglish;
-  dto.languages = ['a', 'b', 'c'];
-  dto.genres = ['x', 'y', 'z'];
-  dto.keywords = ['they', 'them'];
+  dto.languages = {'a', 'b', 'c'};
+  dto.genres = {'x', 'y', 'z'};
+  dto.keywords = {'they', 'them'};
 
   final dto2 = MovieResultDTO();
   dto2.uniqueId = 'dto2';
@@ -225,25 +225,25 @@ void main() {
     });
     test('supply list to helper, get language from helper', () {
       final dto = MovieResultDTO();
-      expect(dto.getLanguageType(['English']), LanguageType.allEnglish);
-      expect(dto.languages, ['English']);
+      expect(dto.getLanguageType({'English'}), LanguageType.allEnglish);
+      expect(dto.languages, {'English'});
     });
     test('supply list to dto, get language from helper', () {
       final dto = MovieResultDTO();
-      dto.languages = ['English'];
+      dto.languages = {'English'};
       expect(dto.getLanguageType(), LanguageType.allEnglish);
     });
     test('supply list to dto, get language from dto', () {
       final dto = MovieResultDTO();
-      dto.languages = ['English'];
+      dto.languages = {'English'};
       dto.getLanguageType();
       expect(dto.language, LanguageType.allEnglish);
     });
     test('supply list to helper, get language from dto', () {
       final dto = MovieResultDTO();
-      dto.getLanguageType(['English']);
+      dto.getLanguageType({'English'});
       expect(dto.language, LanguageType.allEnglish);
-      expect(dto.languages, ['English']);
+      expect(dto.languages, {'English'});
     });
     test('All English', () {
       final dto = MovieResultDTO();
@@ -294,9 +294,9 @@ void main() {
         runTime: '9000',
         imageUrl: dto.imageUrl,
         language: dto.language.toString(),
-        languages: json.encode(dto.languages),
-        genres: json.encode(dto.genres),
-        keywords: json.encode(dto.keywords),
+        languages: json.encode(dto.languages.toList()),
+        genres: json.encode(dto.genres.toList()),
+        keywords: json.encode(dto.keywords.toList()),
         related: dto.related,
       );
 
