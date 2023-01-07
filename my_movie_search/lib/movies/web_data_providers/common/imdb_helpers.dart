@@ -240,6 +240,8 @@ CensorRatingType? getImdbCensorRating(String? type) {
   if (type.lastIndexOf('Banned') > -1) return CensorRatingType.adult;
   if (type.lastIndexOf('X') > -1) return CensorRatingType.adult;
   if (type.lastIndexOf('R21') > -1) return CensorRatingType.adult;
+  // Suitable for Only Adults
+  if (type.lastIndexOf('SOA') > -1) return CensorRatingType.adult;
 
   if (type.lastIndexOf('Z') > -1) return CensorRatingType.restricted;
   //R includes R, R(A), RP18
