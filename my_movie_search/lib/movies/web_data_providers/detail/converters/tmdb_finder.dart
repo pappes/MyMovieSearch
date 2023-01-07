@@ -81,13 +81,12 @@ class TmdbFinderConverter {
     movie.uniqueId =
         map[movieElementTMDBIdentity]?.toString() ?? movie.uniqueId;
     movie.alternateId = 'ToBeDefined'; // Overridden in QueryTMDBFinder
-    movie.title = map[movieElementCommonTitle]?.toString() ?? '';
 
-    final originalTitle = map[movieElementOriginalTitle]?.toString() ?? '';
-    if ('' == movie.title) {
-      movie.title = originalTitle;
-    } else if (movie.title != originalTitle) {
-      movie.alternateTitle = originalTitle;
+    final title = map[movieElementCommonTitle]?.toString();
+    final originalTitle = map[movieElementOriginalTitle]?.toString();
+    movie.title = title ?? originalTitle ?? '';
+    if (title != originalTitle) {
+      movie.alternateTitle = originalTitle ?? '';
     }
 
     final year =

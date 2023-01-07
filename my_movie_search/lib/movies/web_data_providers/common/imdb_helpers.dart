@@ -80,7 +80,8 @@ const deepRelatedMovieId =
     'id'; // Repeated inside other children of the title - do not do a deep search
 const deepRelatedMoviePlotHeader = 'plotText';
 const deepRelatedMoviePlotField = 'plainText';
-const deepRelatedMovieAlternateTitle = 'originalTitleText'; // child key = text
+const deepRelatedMovieOriginalTitle = 'originalTitleText'; // child key = text
+const deepRelatedMovieAlternateTitle = 'akas'; // child key = text
 const deepRelatedMovieTitle = 'titleText'; // child key = text
 const deepRelatedMovieType = 'titleType'; // child key = text
 const deepRelatedMovieUserRating = 'aggregateRating';

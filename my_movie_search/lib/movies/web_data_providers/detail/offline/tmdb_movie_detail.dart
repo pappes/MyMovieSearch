@@ -26,7 +26,7 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"104","source":"DataSourceType.tmdbMovie","alternateId":"tt0130827","title":"Lola rennt (Run Lola Run","year":"1998","runTime":"4860","language":"LanguageType.someEnglish",
+{"uniqueId":"104","source":"DataSourceType.tmdbMovie","alternateId":"tt0130827","title":"Run Lola Run","alternateTitle":"Lola rennt","year":"1998","runTime":"4860","language":"LanguageType.someEnglish",
       "languages":"[\"German\",\"English\",\"Japanese\"]",
       "genres":"[\"Action\",\"Drama\",\"Thriller\"]","keywords":"[]",
       "description":"Lola receives a phone call from her boyfriend Manni. He lost 100,000 DM in a subway train that belongs to a very bad guy. She has 20 minutes to raise this amount and meet Manni. Otherwise, he will rob a store to get the money. Three different alternatives may happen depending on some minor event along Lola's run.","userRating":"7.3","userRatingCount":"1537","related":{}}

@@ -69,14 +69,12 @@ class TmdbMovieDetailConverter {
     movie.uniqueId = '${map[innerElementIdentity]}';
     movie.alternateId =
         map[innerElementImdbId]?.toString() ?? movie.alternateId;
-    if (null != map[innerElementCommonTitle] &&
-        null != map[innerElementOriginalTitle]) {
-      movie.title = '${map[innerElementOriginalTitle]} '
-          '(${map[innerElementCommonTitle]}';
-    } else {
-      movie.title = map[innerElementOriginalTitle]?.toString() ??
-          map[innerElementCommonTitle]?.toString() ??
-          movie.title;
+
+    final title = map[innerElementCommonTitle]?.toString();
+    final originalTitle = map[innerElementOriginalTitle]?.toString();
+    movie.title = title ?? originalTitle ?? '';
+    if (title != originalTitle) {
+      movie.alternateTitle = originalTitle ?? '';
     }
 
     final year =

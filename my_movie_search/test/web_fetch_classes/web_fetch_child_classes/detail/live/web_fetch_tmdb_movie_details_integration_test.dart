@@ -12,9 +12,9 @@ import '../../../../test_helper.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '{"source":"DataSourceType.tmdbMovie","uniqueId":"913986","alternateId":"tt0101000","title":"Začátek dlouhého podzimu (Začátek dlouhého podzimu","year":"1990","language":"LanguageType.foreign","languages":["Czech"],"genres":["Drama","Family"],"keywords":[],"related":"{}"}',
+  '{"source":"DataSourceType.tmdbMovie","uniqueId":"913986","alternateId":"tt0101000","title":"Začátek dlouhého podzimu","year":"1990","language":"LanguageType.foreign","languages":["Czech"],"genres":["Drama","Family"],"keywords":[],"related":"{}"}',
   '{"source":"DataSourceType.tmdbMovie","uniqueId":"-1","title":"[QueryTMDBDetails] Error in tmdbMovie with criteria tt0101001 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/movie/tt0101001?api_key=a","type":"MovieContentType.custom","languages":[],"genres":[],"keywords":[],"related":"{}"}',
-  '{"source":"DataSourceType.tmdbMovie","uniqueId":"230839","alternateId":"tt0101002","title":"再戰江湖 (Return Engagement","year":"1990","runTime":"6480","language":"LanguageType.foreign","languages":["Cantonese"],"genres":["Crime","Action","Drama"],"keywords":[],"description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.","userRating":"6.0","userRatingCount":"4","related":"{}"}',
+  '{"source":"DataSourceType.tmdbMovie","uniqueId":"230839","alternateId":"tt0101002","title":"Return Engagement","alternateTitle":"再戰江湖","year":"1990","runTime":"6480","language":"LanguageType.foreign","languages":["Cantonese"],"genres":["Crime","Action","Drama"],"keywords":[],"description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.","userRating":"6.0","userRatingCount":"4","related":"{}"}',
 ];
 
 /// Create a string list with [qty] unique criteria values.

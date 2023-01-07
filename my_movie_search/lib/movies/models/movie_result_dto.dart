@@ -302,8 +302,10 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     // Weakly typed variables, help caller to massage data
     this.uniqueId = uniqueId ?? movieResultDTOUninitialized;
     this.alternateId = alternateId ?? '';
-    this.title = title ?? '';
-    this.alternateTitle = alternateTitle ?? '';
+    this.title = title ?? alternateTitle ?? '';
+    if (title != alternateTitle) {
+      this.alternateTitle = alternateTitle ?? '';
+    }
     this.charactorName = charactorName ?? '';
     this.description = description ?? '';
     this.yearRange = yearRange ?? '';
@@ -451,13 +453,26 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         0 == userRatingCount ||
         DataSourceType.imdb == newValue.source) {
       source = bestValue(newValue.source, source);
+
+      final oldTitle = title;
       if (DataSourceType.imdb == newValue.source && '' != newValue.title) {
         title = _htmlDecode.convert(newValue.title);
       } else {
-        title = bestValue(newValue.title, title);
+        title = bestValue(newValue.title, title).trim();
+      }
+      var newAlternateTitle = '';
+      if ('' != newValue.alternateTitle.trim() &&
+          title != newValue.alternateTitle.trim()) {
+        newAlternateTitle = newValue.alternateTitle;
+      } else if ('' != oldTitle.trim() && title != oldTitle.trim()) {
+        newAlternateTitle = oldTitle;
+      } else if ('' != alternateTitle.trim() &&
+          title != alternateTitle.trim()) {
+        newAlternateTitle = alternateTitle;
       }
 
-      alternateTitle = bestValue(newValue.alternateTitle, alternateTitle);
+      alternateTitle = newAlternateTitle;
+      print('$uniqueId  merged $title & $alternateTitle ');
       charactorName = bestValue(newValue.charactorName, charactorName);
       description = bestValue(newValue.description, description);
       type = bestValue(newValue.type, type);

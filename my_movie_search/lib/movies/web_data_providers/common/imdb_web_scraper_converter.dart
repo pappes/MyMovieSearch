@@ -116,9 +116,10 @@ class ImdbWebScraperConverter {
         map.deepSearch(deepRelatedMovieTitle)?.searchForString();
     String?
         originalTitle = // ...{'originalTitleText':...{...'text':<value>...}}
-        map.deepSearch(deepRelatedMovieAlternateTitle)?.searchForString();
+        map.deepSearch(deepRelatedMovieOriginalTitle)?.searchForString();
     if (title == originalTitle) {
-      originalTitle = null;
+      originalTitle =
+          map.deepSearch(deepRelatedMovieAlternateTitle)?.searchForString();
     }
 
     final description = // ...{'plotText':...{...'plainText':<value>...}}
