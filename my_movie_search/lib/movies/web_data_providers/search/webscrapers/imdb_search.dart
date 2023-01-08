@@ -32,24 +32,37 @@ mixin ScrapeIMDBSearchDetails
     DataSourceType.imdbSearch,
   );
 
-  /// Scrape movie data from html table(s) named findList.
+  /// Reduce computation effort for html extraction.
   @override
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
+    String webText,
+  ) async {
+    try {
+      final json = fastParse(webText);
+      return _scrapeSearchResult(json, 'N/A', webText);
+    } catch (_) {
+      return _slowConvertWebTextToTraversableTree(webText);
+    }
+  }
+
+  /// Scrape movie data from html json <script> tag.
+  Future<List<dynamic>> _slowConvertWebTextToTraversableTree(
     String webText,
   ) async {
     final document = parse(webText);
     final resultScriptElement = document.querySelector(jsonScript);
     if (resultScriptElement?.innerHtml.isNotEmpty ?? false) {
-      return _scrapeSearchResult(resultScriptElement!.innerHtml, webText);
+      final jsonText = resultScriptElement!.innerHtml;
+      final jsonTree = json.decode(jsonText);
+      return _scrapeSearchResult(jsonTree, jsonText, webText);
     }
     throw 'No search results found in html:$webText';
   }
 
   /// Extract search content from json
-  Future<List> _scrapeSearchResult(String jsonText, String webText) async {
-    final searchResult = json.decode(jsonText);
-
-    final contents = TreeHelper(searchResult).deepSearch(
+  Future<List> _scrapeSearchResult(
+      dynamic jsonTree, String jsonText, String webText) async {
+    final contents = TreeHelper(jsonTree).deepSearch(
       deepJsonResultsSuffix, // nameResults or titleResults
       multipleMatch: true,
       suffixMatch: true,
@@ -57,7 +70,7 @@ mixin ScrapeIMDBSearchDetails
     if (null != contents) {
       final list = _extractSearchResults(contents);
       return list;
-    } else if (null != TreeHelper(searchResult).deepSearch(deepRelatedHeader)) {
+    } else if (null != TreeHelper(jsonTree).deepSearch(deepRelatedHeader)) {
       return _scrapeMovieDetails(webText);
     }
     throw 'No search results found in json:$jsonText';

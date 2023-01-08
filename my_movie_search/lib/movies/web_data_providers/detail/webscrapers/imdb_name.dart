@@ -11,9 +11,20 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [WebScraper] for retrieving person details from IMDB.
 mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  /// Convert web text to a traversable tree of [List] or [Map] data.
+  /// Reduce computation effort for html extraction.
   @override
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
+    String webText,
+  ) async {
+    try {
+      return fastParse(webText);
+    } catch (_) {
+      return slowConvertWebTextToTraversableTree(webText);
+    }
+  }
+
+  /// Convert web text to a traversable tree of [List] or [Map] data.
+  Future<List<dynamic>> slowConvertWebTextToTraversableTree(
     String webText,
   ) async {
     final document = parse(webText);

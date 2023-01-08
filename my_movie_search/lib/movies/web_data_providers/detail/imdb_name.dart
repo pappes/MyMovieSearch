@@ -69,16 +69,4 @@ class QueryIMDBNameDetails
     error.source = DataSourceType.imdb;
     return error;
   }
-
-  /// Reduce computation effort for html extraction.
-  @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
-    String webText,
-  ) async {
-    try {
-      return fastParse(webText);
-    } catch (_) {
-      return super.myConvertWebTextToTraversableTree(webText);
-    }
-  }
 }

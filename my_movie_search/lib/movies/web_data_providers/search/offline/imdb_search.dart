@@ -120,9 +120,7 @@ const intermediateMapList = [
 ];
 
 const imdbSampleJson = '''
-{
-    "props": {
-        "pageProps": {
+{"props":{"pageProps":{
             "nameResults": {
                 "results": [
                     {
@@ -235,5 +233,4 @@ const imdbSampleJson = '''
         "q": "superman",
         "ref_": "nv_sr_sm"
     }
-}
-''';
+}''';

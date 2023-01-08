@@ -20,11 +20,22 @@ mixin ScrapeIMDBTitleDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final htmlDecode = HtmlUnescape();
 
+  /// Reduce computation effort for html extraction.
+  @override
+  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+    String webText,
+  ) async {
+    try {
+      return fastParse(webText);
+    } catch (_) {
+      return slowConvertWebTextToTraversableTree(webText);
+    }
+  }
+
   /// Convert web text to a traversable tree of [List] or [Map] data.
   ///
   ///
-  @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<dynamic>> slowConvertWebTextToTraversableTree(
     String webText,
   ) async {
     final document = parse(webText);
