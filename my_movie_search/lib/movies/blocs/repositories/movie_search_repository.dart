@@ -29,7 +29,9 @@ class MovieSearchRepository extends BaseMovieRepository {
 
   @override
 
-  /// Initiates a search for the provied criteria.
+  /// Initiates a search for the provied [criteria].
+  ///
+  /// [searchUID] is a unique correlation ID identifying this search request
   void initSearch(int searchUID, SearchCriteriaDTO criteria) {
     if (criteria.criteriaList.isEmpty) {
       searchText(searchUID, criteria);
@@ -38,7 +40,8 @@ class MovieSearchRepository extends BaseMovieRepository {
     }
   }
 
-  /// Initiates a search with all known movie search providers.
+  /// Initiates a search with all known movie "search" providers.
+  /// Requests details retrival for all returned search results.
   void searchText(int searchUID, SearchCriteriaDTO criteria) {
     for (final provider in [
       _imdbSearch,
@@ -55,7 +58,7 @@ class MovieSearchRepository extends BaseMovieRepository {
     }
   }
 
-  /// Initiates a search for a specified list of movies.
+  /// Initiates a details retrival for a specified list of movies.
   void searchList(int searchUID, SearchCriteriaDTO criteria) {
     initProvider();
     addResults(searchUID, criteria.criteriaList);

@@ -1,3 +1,4 @@
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -22,6 +23,7 @@ class MovieDetailsPage extends StatefulWidget {
 class _MovieDetailsPageState extends State<MovieDetailsPage>
     with RestorationMixin {
   late MovieResultDTO _movie;
+  bool _redrawRequired = true;
   final _restorableMovie = RestorableMovie();
   var _mobileLayout = true;
 
@@ -45,18 +47,31 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
             criteria,
             priority: ThreadRunner.fast,
           )
-          .then(_showDetails);
+          .then(_requestShowDetails);
     }
   }
 
   /// Fetch full person details from imdb.
-  void _showDetails(List<MovieResultDTO> castDetails) {
+  void _requestShowDetails(List<MovieResultDTO> castDetails) {
     if (castDetails.isNotEmpty) {
-      // Check the user has not navigated away
-      if (!mounted) return;
-
-      setState(() => _mergeDetails(castDetails));
+      _mergeDetails(castDetails);
     }
+    _redrawRequired = true;
+    EasyThrottle.throttle(
+      'MovieDetails${_movie.uniqueId}',
+      const Duration(milliseconds: 500), // limit refresh to 2 per second
+      () => _showDetails(), // Initial screen draw
+      onAfter: () => _showDetails(), // Process throttled updates
+    );
+  }
+
+  /// Fetch full person details from imdb.
+  void _showDetails() {
+    // Check the user has not navigated away
+    if (!mounted || !_redrawRequired) return;
+
+    setState(() => _movie);
+    _redrawRequired = false;
   }
 
   void _mergeDetails(List<MovieResultDTO> details) {

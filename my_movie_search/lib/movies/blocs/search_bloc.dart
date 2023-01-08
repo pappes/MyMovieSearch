@@ -1,6 +1,7 @@
 import 'dart:async' show StreamSubscription;
 
 import 'package:bloc/bloc.dart' show Bloc, Emitter;
+import 'package:easy_debounce/easy_throttle.dart';
 import 'package:equatable/equatable.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -44,6 +45,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   final RelatedMovies _allResults = {};
   List<MovieResultDTO> sortedResults = [];
   double _searchProgress = 0.0; // Value representing the search progress.
+  bool _searchComplete = false;
+  bool _throttleActive = false; // There hase been a recent result.
+  bool _throttledDataPending = false; // There has been multple recent results.
+  String _throttleName = '';
 
   @override
   // Clean up all open objects.
@@ -61,10 +66,21 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     movieRepository.close();
     _allResults.clear();
     sortedResults.clear();
+    _throttleName = 'SearchBloc${criteria.toPrintableString()}';
     _searchStatusSubscription = movieRepository
         .search(criteria)
         .listen((dto) => _receiveDTO(dto))
-      ..onDone(() => isClosed ? null : add(const SearchCompleted()));
+      ..onDone(_completeSearch);
+  }
+
+  /// Notify subscribers the stream of data is complete.
+  void _completeSearch() {
+    _searchComplete = true;
+
+    if (!isClosed && !_throttleActive) {
+      // Ensure subscriber has not cancelled to subscription
+      add(const SearchCompleted());
+    }
   }
 
   /// Maintain map of fetched movie snippets and details.
@@ -87,12 +103,38 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       old.alternateId = '';
       newValue.mergeDtoList(_allResults, {old.uniqueId: old});
     }
-    _sortResults();
+    _throttleUpdates();
+  }
+
+  /// Batch up data for updates to subscribers.
+  ///
+  /// Postpone sorting and displaying of data if there has been a recent update.
+  void _throttleUpdates() {
+    _throttleActive = true;
+    _throttledDataPending = EasyThrottle.throttle(
+      _throttleName,
+      const Duration(milliseconds: 2000), // limit refresh to every 2 seconds
+      () => _sendResults(), // Initial screen draw
+      onAfter: () => _throttleCompleted(), // Process throttled updates
+    );
+  }
+
+  /// Process any pending operations that were held waiting for more data.
+  void _throttleCompleted() {
+    _throttleActive = false;
+    if (_throttledDataPending) {
+      _sendResults();
+      _throttledDataPending = false;
+    }
+
+    if (!isClosed && _searchComplete) {
+      _completeSearch();
+    }
   }
 
   /// Prepare data for display by sorting by relevence and
   /// update bloc state to indicate that new data is available.
-  void _sortResults() {
+  void _sendResults() {
     sortedResults.clear();
     sortedResults.addAll(_allResults.values.toList());
     // Sort by relevence with recent year first
