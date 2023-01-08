@@ -317,8 +317,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     myConvertCriteriaToWebText(criteria)
-        .timeout(
-            const Duration(seconds: 24)) // TODO: allow timeout to be passed in
+        .timeout(const Duration(seconds: 24)) // TODO: allow configurable
         .then(_yieldStream)
         .onError(_logError);
     yield* controller.stream;
@@ -366,8 +365,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     webStream
-        .timeout(
-            const Duration(seconds: 25)) // TODO: allow timeout to be passed in
+        .timeout(const Duration(seconds: 25)) // TODO: configurable timeout
         .reduce(_concatenate)
         .then(_wrapChildFunction)
         .onError(_logError)
@@ -420,8 +418,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     pageMap
-        .timeout(
-            const Duration(seconds: 26)) // TODO: allow timeout to be passed in
+        .timeout(const Duration(seconds: 26)) // TODO: configurable timeout
         .listen(
           _wrapChildFunction,
           onDone: () => baseCloseController(controller),

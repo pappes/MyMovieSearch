@@ -115,8 +115,10 @@ void main() {
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(SearchCriteriaDTO().fromString('123'),
-              source: emitImdbSuggestionJsonPSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: emitImdbSuggestionJsonPSample,
+          )
           .then((values) => queryResult.addAll(values))
           .onError(
             // ignore: avoid_print
@@ -145,8 +147,10 @@ void main() {
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(SearchCriteriaDTO().fromString('123'),
-              source: _emitInvalidJsonPSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: _emitInvalidJsonPSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -163,8 +167,10 @@ void main() {
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(SearchCriteriaDTO().fromString('123'),
-              source: _emitUnexpectedJsonPSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: _emitUnexpectedJsonPSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

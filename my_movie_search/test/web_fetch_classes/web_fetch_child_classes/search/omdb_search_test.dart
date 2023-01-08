@@ -212,8 +212,10 @@ not valid json
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO().fromString('123'),
-              source: _emitInvalidJsonSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: _emitInvalidJsonSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -229,8 +231,10 @@ not valid json
 
       // Invoke the functionality.
       await testClass
-          .readList(SearchCriteriaDTO().fromString('123'),
-              source: _emitUnexpectedJsonSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: _emitUnexpectedJsonSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

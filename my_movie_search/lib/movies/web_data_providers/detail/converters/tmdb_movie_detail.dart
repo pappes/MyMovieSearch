@@ -108,10 +108,12 @@ class TmdbMovieDetailConverter {
     final mins = IntHelper.fromText(map[innerElementRuntime]);
     movie.runTime = _getDuration(mins) ?? movie.runTime;
 
-    movie.languages.combineUnique(map.deepSearch(
-      'english_name',
-      multipleMatch: true,
-    ));
+    movie.languages.combineUnique(
+      map.deepSearch(
+        'english_name',
+        multipleMatch: true,
+      ),
+    );
     movie.getLanguageType();
     for (final Map genre in map[innerElementGenres]) {
       movie.genres.combineUnique(genre['name'] as String);

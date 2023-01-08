@@ -154,7 +154,9 @@ class WebFetchBasic extends WebFetchBase<String, String> {
   @override
   String myYieldError(String contents) => contents;
 
-  void setMyConvertTreeToOutputType(ConvertTreeToOutputTypeFn fn) {
+  ConvertTreeToOutputTypeFn get convertTreeToOutputTypeFunction =>
+      overriddenMyConvertTreeToOutputType;
+  set convertTreeToOutputTypeFunction(ConvertTreeToOutputTypeFn fn) {
     overriddenMyConvertTreeToOutputType = fn;
   }
 }

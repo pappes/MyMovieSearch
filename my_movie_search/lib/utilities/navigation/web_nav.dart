@@ -36,7 +36,7 @@ void _customTabsError(
 }
 
 void _openBrowser(String url, BuildContext context) {
-  launcher.launch(url).then(
+  launcher.launchUrl(Uri.parse(url)).then(
         (bool success) => _browserError(success, url, context),
       );
 }

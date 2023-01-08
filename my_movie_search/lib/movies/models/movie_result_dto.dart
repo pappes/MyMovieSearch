@@ -4,7 +4,7 @@ import 'dart:math' show max;
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+//import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
@@ -655,7 +655,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     int? seconds,
     String id,
   ) {
-    if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
+    if (id.startsWith('nm')) return MovieContentType.person;
     if (id == "-1") return MovieContentType.error;
     if (seconds != null && seconds < 500 && seconds > 0) {
       return MovieContentType.short;

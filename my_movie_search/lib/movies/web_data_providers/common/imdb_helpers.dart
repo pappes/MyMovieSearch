@@ -1,5 +1,4 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 const dataSource = 'source';
 const outerElementIdentity = 'id';

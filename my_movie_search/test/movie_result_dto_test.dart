@@ -247,23 +247,31 @@ void main() {
     });
     test('All English', () {
       final dto = MovieResultDTO();
-      expect(dto.getLanguageType(['English', 'en', 'Englasias']),
-          LanguageType.allEnglish);
+      expect(
+        dto.getLanguageType(['English', 'en', 'Englasias']),
+        LanguageType.allEnglish,
+      );
     });
     test('Foreign', () {
       final dto = MovieResultDTO();
-      expect(dto.getLanguageType(['Not English', 'French', 'el-Englasias']),
-          LanguageType.foreign);
+      expect(
+        dto.getLanguageType(['Not English', 'French', 'el-Englasias']),
+        LanguageType.foreign,
+      );
     });
     test('mostlyEnglish', () {
       final dto = MovieResultDTO();
-      expect(dto.getLanguageType(['English', 'French', 'el-Englasias']),
-          LanguageType.mostlyEnglish);
+      expect(
+        dto.getLanguageType(['English', 'French', 'el-Englasias']),
+        LanguageType.mostlyEnglish,
+      );
     });
     test('someEnglish', () {
       final dto = MovieResultDTO();
-      expect(dto.getLanguageType(['French', 'Englasias']),
-          LanguageType.someEnglish);
+      expect(
+        dto.getLanguageType(['French', 'Englasias']),
+        LanguageType.someEnglish,
+      );
     });
   });
 
@@ -437,7 +445,11 @@ void main() {
     const title = 'movie name';
     expect(
       MovieResultDTOHelpers.findMovieContentTypeFromTitle(
-          info, title, duration, id),
+        info,
+        title,
+        duration,
+        id,
+      ),
       type,
       reason:
           'unexpected value returned from findImdbMovieContentTypeFromTitle',

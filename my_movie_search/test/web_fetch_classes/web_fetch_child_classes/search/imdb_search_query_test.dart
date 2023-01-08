@@ -217,8 +217,10 @@ void main() {
 
       // Invoke the functionality.
       await imdbSearch
-          .readList(SearchCriteriaDTO().fromString('123'),
-              source: _emitInvalidHtmlSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: _emitInvalidHtmlSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -234,8 +236,10 @@ void main() {
 
       // Invoke the functionality.
       await imdbSearch
-          .readList(SearchCriteriaDTO().fromString('123'),
-              source: _emitUnexpectedHtmlSample)
+          .readList(
+            SearchCriteriaDTO().fromString('123'),
+            source: _emitUnexpectedHtmlSample,
+          )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 
@@ -255,8 +259,10 @@ void main() {
 
     // Invoke the functionality.
     await imdbSearch
-        .readList(SearchCriteriaDTO().fromString('123'),
-            source: _emitUnexpectedJsonSample)
+        .readList(
+          SearchCriteriaDTO().fromString('123'),
+          source: _emitUnexpectedJsonSample,
+        )
         .then((values) => queryResult.addAll(values));
     expect(queryResult.first.title, startsWith(expectedException));
 
@@ -274,8 +280,10 @@ void main() {
 
     // Invoke the functionality.
     await imdbSearch
-        .readList(SearchCriteriaDTO().fromString('123'),
-            source: _emitEmtpyJsonSample)
+        .readList(
+          SearchCriteriaDTO().fromString('123'),
+          source: _emitEmtpyJsonSample,
+        )
         .then((values) => queryResult.addAll(values));
     expect(queryResult.first.title, expectedException);
 
