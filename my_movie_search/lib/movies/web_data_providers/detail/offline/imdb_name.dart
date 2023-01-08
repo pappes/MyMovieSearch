@@ -21,7 +21,7 @@ Stream<String> emitImdbHtmlSample(_) async* {
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"nm0123456","source":"DataSourceType.imdb","title":"Mescalon Smoochington","type":"MovieContentType.person","year":"1933","yearRange":"1933-1977","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"nm0123456","source":"DataSourceType.imdb","title":"Mescalon Smoochington <3","type":"MovieContentType.person","year":"1933","yearRange":"1933-1977","languages":"[]","genres":"[]","keywords":"[]",
       "description":"THen Kramer said, \"Everybody is Mescalon Smoochington\".","userRatingCount":"184","imageUrl":"https://www.microsoft.com/images/M/MV5BNjdhNz.jpg",
   "related":{"Actor":{"tt0012370":{"uniqueId":"tt0012370","source":"DataSourceType.imdbSuggestions","title":"Walk Skip Run","charactorName":" [Willy Rutter]","alternateTitle":" Run Forrest Run","type":"MovieContentType.movie","year":"1973","yearRange":"1973","runTime":"7140","languages":"[]",
       "genres":"[\"Western\",\"Romance\"]","keywords":"[]","userRating":"8.6","userRatingCount":"4837","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","related":{}},
@@ -42,7 +42,7 @@ const intermediateMapList = [
         'nmconst': 'nm0123456',
         'aboveTheFold': {
           'id': 'nm0123456',
-          'nameText': {'text': 'Mescalon Smoochington'},
+          'nameText': {'text': 'Mescalon Smoochington <3'},
           'primaryImage': {
             'url': 'https://www.microsoft.com/images/M/MV5BNjdhNz.jpg'
           },
@@ -157,13 +157,11 @@ const intermediateMapList = [
 ];
 
 const _embeddedJson = r'''
-{
-  "props": {
-    "pageProps": {
+{"props":{"pageProps":{
       "nmconst": "nm0123456",
       "aboveTheFold": {
         "id": "nm0123456",
-        "nameText": {"text": "Mescalon Smoochington"},
+        "nameText": {"text": "Mescalon Smoochington \u003c3"},
         "primaryImage": {
           "url": "https://www.microsoft.com/images/M/MV5BNjdhNz.jpg"
         },
@@ -274,5 +272,4 @@ const _embeddedJson = r'''
       }
     }
   }
-}
-''';
+}''';

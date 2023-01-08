@@ -20,7 +20,7 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt6123456","source":"DataSourceType.imdb","title":"Scott And Sharlene","alternateTitle":"Aussieland","type":"MovieContentType.series","year":"1985","yearRange":"1985-2023","runTime":"1234","language":"LanguageType.allEnglish",
+{"uniqueId":"tt6123456","source":"DataSourceType.imdb","title":"Scott And Sharlene <3","alternateTitle":"Aussieland","type":"MovieContentType.series","year":"1985","yearRange":"1985-2023","runTime":"1234","language":"LanguageType.allEnglish",
       "languages":"[\"English\"]",
       "genres":"[\"Horror\",\"Romance\"]",
       "keywords":"[\"exorcism\",\"boxer\",\"chihuahua\"]",
@@ -50,7 +50,7 @@ const intermediateMapList = [
           'id': 'tt6123456',
           'certificate': {'rating': 'TV-G'},
           'originalTitleText': {'text': 'Aussieland'},
-          'titleText': {'text': 'Scott And Sharlene'},
+          'titleText': {'text': 'Scott And Sharlene <3'},
           'titleType': {'text': 'TV Series'},
           'primaryImage': {
             'url': 'https://www.microsoft.com/images/M/MV5BYjAxMz.jpg'
@@ -201,15 +201,12 @@ const intermediateMapList = [
 ];
 
 const _embeddedJson = r'''
-    {
-  "props": {
-    "pageProps": {
-      "tconst": "tt6123456",
+{"props":{"pageProps":{"tconst":"tt6123456",
       "aboveTheFold": {
         "id": "tt6123456",
         "certificate": {"rating": "TV-G"},
         "originalTitleText": {"text": "Aussieland"},
-        "titleText": {"text": "Scott And Sharlene"},
+        "titleText": {"text": "Scott And Sharlene \u003c3"},
         "titleType": {"text": "TV Series"},
         "primaryImage": {
           "url": "https://www.microsoft.com/images/M/MV5BYjAxMz.jpg"
@@ -356,5 +353,4 @@ const _embeddedJson = r'''
       }
     }
   }
-}
-''';
+}''';

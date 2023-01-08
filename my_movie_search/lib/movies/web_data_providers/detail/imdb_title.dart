@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -68,5 +70,17 @@ class QueryIMDBTitleDetails
     error.type = MovieContentType.custom;
     error.source = DataSourceType.imdb;
     return error;
+  }
+
+  /// Reduce computation effort for html extraction.
+  @override
+  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+    String webText,
+  ) async {
+    try {
+      return fastParse(webText);
+    } catch (_) {
+      return super.myConvertWebTextToTraversableTree(webText);
+    }
   }
 }

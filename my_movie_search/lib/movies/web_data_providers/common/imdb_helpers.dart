@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 const dataSource = 'source';
@@ -272,4 +274,22 @@ String? _getRegexGroupInBrackets(String stringToSearch, String regexFormula) {
     }
   }
   return null;
+}
+
+/// Use text searching on raw imdb HTML to extract json content.
+///
+/// Bypasses the need to perform a large html parse operation
+/// and an expensive querySelector operation.
+List<dynamic> fastParse(String webText) {
+  final startTag = webText.indexOf('{"props":{"pageProps":{');
+  if (-1 != startTag) {
+    final endTag = webText.indexOf('</script>', startTag);
+    if (-1 != endTag) {
+      // Assume text is json encoded.
+      final json = webText.substring(startTag, endTag);
+      final tree = jsonDecode(json);
+      return [tree];
+    }
+  }
+  throw 'Fast parse unsuccessful, try a slow parse!';
 }
