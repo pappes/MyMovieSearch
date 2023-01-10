@@ -4,10 +4,15 @@ extension StreamHelper<T> on Stream<T> {
   /// Consumes values from a stream and prints them out then puts them on a new stream.
   ///
   /// For debugging purposes only.
-  Stream<T> printStream([String prefix = '']) async* {
+  Stream<T> printStream([String prefix = '', int limit = 400]) async* {
     try {
       await for (final value in this) {
-        print('$prefix $value');
+        final text = value.toString();
+        if (text.length > limit) {
+          print('$prefix ${text.substring(0, limit ~/ 4)}...');
+        } else {
+          print('$prefix $value');
+        }
         yield value;
       }
       print('$prefix done');

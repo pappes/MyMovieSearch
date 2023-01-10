@@ -9,8 +9,8 @@ import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
-typedef RelatedMovies = Map<String, MovieResultDTO>;
-typedef RelatedMovieCategories = Map<String, RelatedMovies>;
+typedef MovieCollection = Map<String, MovieResultDTO>;
+typedef RelatedMovieCategories = Map<String, MovieCollection>;
 
 class MovieResultDTO {
   DataSourceType source = DataSourceType.none;
@@ -235,7 +235,7 @@ extension MapResultDTOConversion on Map {
           final categoryText = category.key.toString();
           final categoryContents = category.value as Map;
           // Build a collection of movies keyed by the unique id.
-          final RelatedMovies movies = {};
+          final MovieCollection movies = {};
           for (final movie in categoryContents.entries) {
             if (movie.value is Map) {
               final movieId = movie.key.toString();
@@ -460,7 +460,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Combine information from [newValue] into a [MovieResultDTO].
   ///
   void merge(MovieResultDTO newValue) {
-    //TODO alternate ID
     if (newValue.userRatingCount > userRatingCount ||
         0 == userRatingCount ||
         DataSourceType.imdb == newValue.source) {
@@ -484,6 +483,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       }
 
       alternateTitle = newAlternateTitle;
+      alternateId = bestValue(newValue.alternateId, alternateId);
       charactorName = bestValue(newValue.charactorName, charactorName);
       description = bestValue(newValue.description, description);
       type = bestValue(newValue.type, type);
@@ -519,7 +519,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Combine related movie information from [existingDtos] into a [MovieResultDTO].
   ///
-  void mergeDtoMapMap(
+  static void mergeDtoMapMap(
     RelatedMovieCategories existingDtos,
     RelatedMovieCategories newDtos,
   ) {
@@ -534,9 +534,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Update [existingDtos] to also contain movies from [newDtos].
   ///
-  void mergeDtoList(
-    RelatedMovies existingDtos,
-    RelatedMovies newDtos,
+  static void mergeDtoList(
+    MovieCollection existingDtos,
+    MovieCollection newDtos,
   ) {
     for (final dto in newDtos.entries) {
       if (existingDtos.keys.contains(dto.key)) {

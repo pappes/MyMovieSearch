@@ -42,7 +42,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   final MovieSearchRepository movieRepository;
   StreamSubscription<MovieResultDTO>? _searchStatusSubscription;
-  final RelatedMovies _allResults = {};
+  final MovieCollection _allResults = {};
   List<MovieResultDTO> sortedResults = [];
   double _searchProgress = 0.0; // Value representing the search progress.
   bool _searchComplete = false;
@@ -86,24 +86,45 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   /// Maintain map of fetched movie snippets and details.
   /// Update bloc state to indicate that new data is available.
   void _receiveDTO(MovieResultDTO newValue) {
-    if (newValue.uniqueId.startsWith(movieResultDTOMessagePrefix) ||
-        !_allResults.containsKey(newValue.uniqueId)) {
-      _allResults[newValue.uniqueId] = newValue;
-    } else {
-      newValue.mergeDtoList(_allResults, {newValue.uniqueId: newValue});
-      _allResults[newValue.uniqueId]!.merge(newValue);
-    }
-    if ('' != newValue.alternateId) {
-      // Delete TMDB record from collection
-      // and merge combined TMDB data with IMDB record
-      final old = _allResults[newValue.uniqueId]!;
-      _allResults.remove(newValue.uniqueId);
+    final key = newValue.uniqueId;
+    final existingMatch = _allResults[key];
 
-      old.uniqueId = old.alternateId;
-      old.alternateId = '';
-      newValue.mergeDtoList(_allResults, {old.uniqueId: old});
+    if (key.startsWith(movieResultDTOMessagePrefix)) {
+      _allResults[key] = newValue;
+    } else if (null == existingMatch) {
+      // Insert value into list
+      _allResults[key] = newValue;
+    } else {
+      //Merge into existing data
+      MovieResultDTOHelpers.mergeDtoList(
+        _allResults,
+        {key: newValue},
+      );
+    }
+
+    if (newValue.alternateId.isNotEmpty) {
+      _replaceTemporaryDTO(_allResults, key);
     }
     _throttleUpdates();
+  }
+
+  /// Reinsert record into the map because we cant update the key directly.
+  /// Update bloc state to indicate that new data is available.
+  void _replaceTemporaryDTO(MovieCollection collection, String key) {
+    // Delete TMDB record from collection
+    // and merge combined TMDB data with IMDB record
+    // e.g. uniqueId="11234" alternateId="nm0109036"
+    final replacementRecord = collection[key]!;
+    final imdbId = replacementRecord.alternateId;
+
+    replacementRecord.uniqueId = imdbId;
+    replacementRecord.alternateId = '';
+    MovieResultDTOHelpers.mergeDtoList(
+      collection,
+      {imdbId: replacementRecord},
+    );
+
+    collection.remove(key);
   }
 
   /// Batch up data for updates to subscribers.

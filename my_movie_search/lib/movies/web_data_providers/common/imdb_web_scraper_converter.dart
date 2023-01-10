@@ -276,7 +276,7 @@ class ImdbWebScraperConverter {
   void combineMovies(
     RelatedMovieCategories existing,
     String category,
-    RelatedMovies movies,
+    MovieCollection movies,
   ) {
     if (movies.isNotEmpty) {
       if (existing.containsKey(category)) {
@@ -288,8 +288,8 @@ class ImdbWebScraperConverter {
   }
 
   /// extract collections of movies for a specific category from a map or a list.
-  RelatedMovies _getDeepPersonRelatedMoviesForCategory(dynamic category) {
-    final RelatedMovies result = {};
+  MovieCollection _getDeepPersonRelatedMoviesForCategory(dynamic category) {
+    final MovieCollection result = {};
     final nodes = TreeHelper(category).deepSearch(
       deepRelatedMovieContainer,
       multipleMatch: true,
@@ -310,8 +310,8 @@ class ImdbWebScraperConverter {
   }
 
   /// extract collections of movies for a specific category from a map or a list.
-  RelatedMovies _getDeepTitleRelatedMoviesForCategory(dynamic nodes) {
-    final RelatedMovies result = {};
+  MovieCollection _getDeepTitleRelatedMoviesForCategory(dynamic nodes) {
+    final MovieCollection result = {};
     if (nodes is List) {
       for (final node in nodes) {
         if (node is Map) {
@@ -325,8 +325,8 @@ class ImdbWebScraperConverter {
   }
 
   /// extract collections of movies for a specific category from a map or a list.
-  RelatedMovies _getDeepTitleRelatedPeopleForCategory(dynamic nodes) {
-    final RelatedMovies result = {};
+  MovieCollection _getDeepTitleRelatedPeopleForCategory(dynamic nodes) {
+    final MovieCollection result = {};
     if (nodes is List) {
       for (final node in nodes) {
         if (node is Map) {
