@@ -18,6 +18,12 @@ typedef SearchFunction = Future<List<MovieResultDTO>> Function(
   SearchCriteriaDTO criteria,
 );
 
+class SearchFunctions {
+  SearchFunction? fastSearch;
+  SearchFunction? supplementarySearch;
+  SearchFunction? slowSearch;
+}
+
 /// Retrieve for movie data from multiple online sources.
 ///
 /// BlockRepository to consolidate data retrieval from multiple search
@@ -113,42 +119,55 @@ class BaseMovieRepository {
       final detailCriteria = SearchCriteriaDTO();
       detailCriteria.criteriaTitle = dto.uniqueId;
       _requestedDetails[dto.uniqueId] = null;
-      SearchFunction? fastSearch;
-      SearchFunction? supplementarySearch;
-      SearchFunction? slowSearch;
 
-      if (dto.uniqueId.startsWith(imdbTitlePrefix)) {
-        fastSearch = _getIMDBMovieDetailsFast;
-        slowSearch = _getIMDBMovieDetailsSlow;
-        if (DataSourceType.imdbSuggestions == dto.source ||
-            DataSourceType.imdbSearch == dto.source) {
-          // restrict supplementary source to prevent recursive infinite loop
-          supplementarySearch = _getTMDBExtraDetails;
-        }
-      } else if (dto.uniqueId.startsWith(imdbPersonPrefix)) {
-        fastSearch = _getIMDBPersonDetailsFast;
-        slowSearch = _getIMDBPersonDetailsSlow;
-        if (DataSourceType.imdbSuggestions == dto.source ||
-            DataSourceType.imdbSearch == dto.source) {
-          // restrict supplementary source to prevent recursive infinite loop
-          supplementarySearch = _getTMDBExtraDetails;
-        }
-      } else {
-        fastSearch = _getTMDBMovieDetailsFast;
-      }
+      final functions = SearchFunctions();
+      _getDetailSources(dto, functions);
+
       // Load fast results into list for display on screen
-      fastSearch(detailCriteria).then(
-        (searchResults) => _addDetails(originalSearchUID, searchResults),
-      );
-      // Load slow results into cache for access on details screen in a seperate thread
-      if (null != supplementarySearch) {
-        supplementarySearch(detailCriteria).then(
+      if (null != functions.fastSearch) {
+        functions.fastSearch!(detailCriteria).then(
+          (searchResults) => _addDetails(originalSearchUID, searchResults),
+        );
+      }
+      // Load supplementary results into list for display on screen
+      if (null != functions.supplementarySearch) {
+        functions.supplementarySearch!(detailCriteria).then(
           (searchResults) => _addDetails(originalSearchUID, searchResults),
         );
       }
       // Load slow results into cache for access on details screen in a seperate thread
-      if (dotenv.env['PREFETCH'] == 'true' && null != slowSearch) {
-        slowSearch(detailCriteria);
+      if (dotenv.env['PREFETCH'] == 'true' && null != functions.slowSearch) {
+        functions.slowSearch!(detailCriteria);
+      }
+    }
+  }
+
+  /// Maintain a map of unique movie detail requests
+  /// and request retrieval if the fetch is not already in progress.
+  void _getDetailSources(
+    MovieResultDTO dto,
+    SearchFunctions functions,
+  ) {
+    if (dto.uniqueId.startsWith(imdbTitlePrefix)) {
+      functions.fastSearch = _getIMDBMovieDetailsFast;
+      functions.slowSearch = _getIMDBMovieDetailsSlow;
+      if (DataSourceType.imdbSuggestions == dto.source ||
+          DataSourceType.imdbSearch == dto.source) {
+        // restrict supplementary details to IMDB search sources
+        // to prevent recursive infinite loop.  Want to avoid :
+        // IMDB details -> TMDB Finder -> TMDB Details -> IMDB Details
+        functions.supplementarySearch = _getTMDBExtraDetails;
+      }
+    } else if (dto.uniqueId.startsWith(imdbPersonPrefix)) {
+      functions.fastSearch = _getIMDBPersonDetailsFast;
+      functions.slowSearch = _getIMDBPersonDetailsSlow;
+      if (DataSourceType.imdbSuggestions == dto.source ||
+          DataSourceType.imdbSearch == dto.source) {}
+    } else {
+      if (dto.alternateId.startsWith(imdbPersonPrefix)) {
+        functions.fastSearch = _getTMDBPersonDetailsFast;
+      } else {
+        functions.fastSearch = _getTMDBMovieDetailsFast;
       }
     }
   }
@@ -191,16 +210,30 @@ class BaseMovieRepository {
       QueryTMDBMovieDetails().readList(criteria);
 
   /// Add fetch full movie details from tmdb.
+  static Future<List<MovieResultDTO>> _getTMDBPersonDetailsFast(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryTMDBMovieDetails().readList(criteria);
+
+  /// Add fetch full movie details from tmdb.
   static Future<List<MovieResultDTO>> _getTMDBExtraDetails(
     SearchCriteriaDTO criteria,
   ) =>
       QueryTMDBFinder().readList(criteria);
 
   /// Add fetched tmbd movie details into the stream and search imdb.
+  ///
+  /// TMDBFinder returns a TMDB ID based on an IMDB ID
+  /// which then requries another call to get TMDB details
+  /// TMDBMovie returns an IMDB ID based on a TMDB ID
+  /// which then requries another call to get IMDB details
   void _addDetails(int originalSearchUID, List<MovieResultDTO> values) {
     for (final dto in values) {
       if (DataSourceType.tmdbFinder == dto.source &&
-          dto.alternateId.startsWith(imdbPersonPrefix)) {}
+          dto.alternateId.startsWith(imdbPersonPrefix)) {
+        //TODO: do something here?
+        xxx
+      }
     }
     if (!searchInterrupted(originalSearchUID)) {
       for (final dto in values) {
