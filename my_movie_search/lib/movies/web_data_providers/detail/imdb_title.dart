@@ -64,11 +64,8 @@ class QueryIMDBTitleDetails
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) {
-    final error = MovieResultDTO().error();
-    error.title = '[QueryIMDBTitleDetails] $message';
-    error.type = MovieContentType.custom;
-    error.source = DataSourceType.imdb;
-    return error;
-  }
+  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
+        '[QueryIMDBTitleDetails] $message',
+        DataSourceType.imdb,
+      );
 }

@@ -54,9 +54,8 @@ void clearCopyright(MovieResultDTO dto) {
 MovieResultDTO fullDTO() {
   final dto = MovieResultDTO();
 
-  dto.source = DataSourceType.wiki;
+  dto.bestSource = DataSourceType.wiki;
   dto.uniqueId = 'abc123';
-  dto.alternateId = '123abc';
   dto.title = 'init testing';
   dto.alternateTitle = 'testing init';
   dto.charactorName = 'testing dto';
@@ -73,6 +72,10 @@ MovieResultDTO fullDTO() {
   dto.languages = {'a', 'b', 'c'};
   dto.genres = {'x', 'y', 'z'};
   dto.keywords = {'they', 'them'};
+  dto.sources = {
+    DataSourceType.tmdbMovie: '123abc',
+    DataSourceType.wiki: 'abc123'
+  };
 
   final dto2 = MovieResultDTO();
   dto2.uniqueId = 'dto2';
@@ -287,9 +290,8 @@ void main() {
       final dto = fullDTO();
 
       final initialisedDTO = MovieResultDTO().init(
-        source: dto.source,
+        bestSource: dto.bestSource,
         uniqueId: dto.uniqueId,
-        alternateId: dto.alternateId,
         title: dto.title,
         alternateTitle: dto.alternateTitle,
         charactorName: dto.charactorName,

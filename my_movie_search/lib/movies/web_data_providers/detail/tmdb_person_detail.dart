@@ -50,13 +50,10 @@ class QueryTMDBPersonDetails
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) {
-    final error = MovieResultDTO();
-    error.title = '[QueryTMDBDetails] $message';
-    error.type = MovieContentType.custom;
-    error.source = DataSourceType.tmdbPerson;
-    return error;
-  }
+  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
+        '[QueryTMDBDetails] $message',
+        DataSourceType.tmdbPerson,
+      );
 
   /// API call to TMDB returning the movie details for [searchText].
   @override

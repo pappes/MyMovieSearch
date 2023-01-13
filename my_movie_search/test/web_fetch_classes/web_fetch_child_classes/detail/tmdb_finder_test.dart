@@ -88,7 +88,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          TmdbFinderConverter.dtoFromCompleteJsonMap(map as Map),
+          TmdbFinderConverter('ImdbId123').dtoFromCompleteJsonMap(map as Map),
         );
       }
 
@@ -137,8 +137,9 @@ void main() {
           await testClass.myConvertTreeToOutputType(map),
         );
       }
-      //  AlternateId is clear for this test because the search criteria has  not been set
-      expectedValue.first.alternateId = "";
+      // Sourcesneed to be modified for this test
+      // because the search criteria has not been set
+      //expectedValue.first.alternateId = "";
 
       // Check the results.
       expect(
@@ -179,7 +180,7 @@ void main() {
       final testClass = QueryTMDBFinder();
       testClass.myClearCache();
       testClass.myConstructURI('tt0101000');
-      expectedValue.first.alternateId = 'tt0101000';
+      //expectedValue.first.alternateId = 'tt0101000';
 
       // Invoke the functionality.
       await testClass

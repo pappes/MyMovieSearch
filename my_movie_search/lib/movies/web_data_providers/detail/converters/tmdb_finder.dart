@@ -54,7 +54,10 @@ const personElementPosterPath = 'profile_path';
 const personElementPopularity = 'popularity';
 
 class TmdbFinderConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
+  String imdbId;
+  TmdbFinderConverter(this.imdbId);
+
+  List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
 
@@ -75,12 +78,14 @@ class TmdbFinderConverter {
     return searchResults;
   }
 
-  static MovieResultDTO dtoFromMovieMap(Map map) {
-    final movie = MovieResultDTO();
-    movie.source = DataSourceType.tmdbFinder;
-    movie.uniqueId =
-        map[movieElementTMDBIdentity]?.toString() ?? movie.uniqueId;
-    movie.alternateId = 'ToBeDefined'; // Overridden in QueryTMDBFinder
+  MovieResultDTO dtoFromMovieMap(Map map) {
+    final movie = MovieResultDTO().setSource(
+      newSource: DataSourceType.tmdbFinder,
+      newUniqueId: map[movieElementTMDBIdentity]?.toString(),
+    );
+    // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
+    // no longer need to have alternateId field
+    movie.uniqueId = imdbId;
 
     final title = map[movieElementCommonTitle]?.toString();
     final originalTitle = map[movieElementOriginalTitle]?.toString();
@@ -123,20 +128,19 @@ class TmdbFinderConverter {
     return movie;
   }
 
-  static MovieResultDTO dtoFromPersonMap(Map map) {
-    final person = MovieResultDTO();
-    person.source = DataSourceType.tmdbFinder;
-    person.uniqueId =
-        map[movieElementTMDBIdentity]?.toString() ?? person.uniqueId;
-    person.alternateId = 'ToBeDefined'; // Overridden in QueryTMDBFinder
-    person.title = map[personElementCommonTitle]?.toString() ?? person.title;
-
+  MovieResultDTO dtoFromPersonMap(Map map) {
+    final person = MovieResultDTO().init(
+      bestSource: DataSourceType.tmdbFinder,
+      uniqueId: map[movieElementTMDBIdentity]?.toString(),
+      title: map[personElementCommonTitle]?.toString(),
+      userRatingCount: map[personElementPopularity]?.toString(),
+    );
+    // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
+    // no longer need to have alternateId field!
+    person.uniqueId = imdbId;
     // TODO expand partial URL to full url
     //person.imageUrl = map[personElementPosterPath]?.toString() ?? person.imageUrl;
-    person.userRatingCount = IntHelper.fromText(
-      map[personElementPopularity],
-      nullValueSubstitute: person.userRatingCount,
-    )!;
+
     return person;
   }
 }

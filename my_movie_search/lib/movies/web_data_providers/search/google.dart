@@ -54,13 +54,10 @@ class QueryGoogleMovies
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) {
-    final error = MovieResultDTO().error();
-    error.title = '[QueryGoogleMovies] $message';
-    error.type = MovieContentType.custom;
-    error.source = DataSourceType.google;
-    return error;
-  }
+  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
+        '[QueryGoogleMovies] $message',
+        DataSourceType.google,
+      );
 
   /// API call to Google returning the top 10 matching results for [searchText].
   @override

@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart' show Bloc, Emitter;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:equatable/equatable.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 
@@ -102,29 +103,49 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       );
     }
 
-    if (newValue.alternateId.isNotEmpty) {
-      _replaceTemporaryDTO(_allResults, key);
-    }
+    _findTemporaryDTO(_allResults, newValue);
     _throttleUpdates();
   }
 
   /// Reinsert record into the map because we cant update the key directly.
   /// Update bloc state to indicate that new data is available.
-  void _replaceTemporaryDTO(MovieCollection collection, String key) {
+  void _findTemporaryDTO(MovieCollection collection, MovieResultDTO newValue) {
+    final tmdbSources = [
+      DataSourceType.tmdbFinder,
+      DataSourceType.tmdbMovie,
+      DataSourceType.tmdbPerson,
+    ];
+    if (MovieContentType.error != newValue.type) {
+      for (final source in tmdbSources) {
+        final imdbid = newValue.uniqueId;
+        final tmdbid = newValue.sources[source];
+        if (null != tmdbid) {
+          _replaceTemporaryDTO(_allResults, imdbid, tmdbid);
+        }
+      }
+    }
+  }
+
+  /// Reinsert record into the map because we cant update the key directly.
+  /// Update bloc state to indicate that new data is available.
+  void _replaceTemporaryDTO(
+    MovieCollection collection,
+    String imdbId,
+    String tmdbId,
+  ) {
     // Delete TMDB record from collection
     // and merge combined TMDB data with IMDB record
-    // e.g. uniqueId="11234" alternateId="nm0109036"
-    final replacementRecord = collection[key]!;
-    final imdbId = replacementRecord.alternateId;
+    // e.g. tmdbid="11234" imdbid="nm0109036"
+    final temporaryRecord = collection[tmdbId]!;
+    if (MovieContentType.error != temporaryRecord.type) {
+      temporaryRecord.uniqueId = imdbId;
+      MovieResultDTOHelpers.mergeDtoList(
+        collection,
+        {imdbId: temporaryRecord},
+      );
 
-    replacementRecord.uniqueId = imdbId;
-    replacementRecord.alternateId = '';
-    MovieResultDTOHelpers.mergeDtoList(
-      collection,
-      {imdbId: replacementRecord},
-    );
-
-    collection.remove(key);
+      collection.remove(tmdbId);
+    }
   }
 
   /// Batch up data for updates to subscribers.

@@ -148,26 +148,37 @@ class BaseMovieRepository {
     MovieResultDTO dto,
     SearchFunctions functions,
   ) {
-    if (dto.uniqueId.startsWith(imdbTitlePrefix)) {
-      functions.fastSearch = _getIMDBMovieDetailsFast;
-      functions.slowSearch = _getIMDBMovieDetailsSlow;
-      if (DataSourceType.imdbSuggestions == dto.source ||
-          DataSourceType.imdbSearch == dto.source) {
-        // restrict supplementary details to IMDB search sources
+    if (MovieContentType.person == dto.type) {
+      if (DataSourceType.imdbSuggestions == dto.bestSource ||
+          DataSourceType.imdbSearch == dto.bestSource ||
+          DataSourceType.tmdbPerson == dto.bestSource) {
+        functions.fastSearch = _getIMDBPersonDetailsFast;
+        functions.slowSearch = _getIMDBPersonDetailsSlow;
+      }
+    } else {
+      if (DataSourceType.imdbSuggestions == dto.bestSource ||
+          DataSourceType.imdbSearch == dto.bestSource ||
+          DataSourceType.tmdbSearch == dto.bestSource) {
+        functions.fastSearch = _getIMDBMovieDetailsFast;
+        functions.slowSearch = _getIMDBMovieDetailsSlow;
+      }
+      if (!dto.sources.containsKey(DataSourceType.tmdbFinder)) {
+        // Restrict supplementary details
         // to prevent recursive infinite loop.  Want to avoid :
         // IMDB details -> TMDB Finder -> TMDB Details -> IMDB Details
         functions.supplementarySearch = _getTMDBExtraDetails;
       }
-    } else if (dto.uniqueId.startsWith(imdbPersonPrefix)) {
-      functions.fastSearch = _getIMDBPersonDetailsFast;
-      functions.slowSearch = _getIMDBPersonDetailsSlow;
-      if (DataSourceType.imdbSuggestions == dto.source ||
-          DataSourceType.imdbSearch == dto.source) {}
-    } else {
-      if (dto.alternateId.startsWith(imdbPersonPrefix)) {
-        functions.fastSearch = _getTMDBPersonDetailsFast;
+    }
+
+    if (dto.sources.containsKey(DataSourceType.tmdbFinder)) {
+      if (MovieContentType.person == dto.type) {
+        if (!dto.sources.containsKey(DataSourceType.tmdbPerson)) {
+          functions.fastSearch = _getTMDBPersonDetailsFast;
+        }
       } else {
-        functions.fastSearch = _getTMDBMovieDetailsFast;
+        if (!dto.sources.containsKey(DataSourceType.tmdbMovie)) {
+          functions.fastSearch = _getTMDBMovieDetailsFast;
+        }
       }
     }
   }
@@ -229,20 +240,16 @@ class BaseMovieRepository {
   /// which then requries another call to get IMDB details
   void _addDetails(int originalSearchUID, List<MovieResultDTO> values) {
     for (final dto in values) {
-      if (DataSourceType.tmdbFinder == dto.source &&
-          dto.alternateId.startsWith(imdbPersonPrefix)) {
+      if (DataSourceType.tmdbFinder == dto.bestSource &&
+          MovieContentType.person == dto.type) {
         //TODO: do something here?
-        xxx
       }
     }
     if (!searchInterrupted(originalSearchUID)) {
       for (final dto in values) {
-        if (DataSourceType.tmdbMovie == dto.source &&
-            (dto.alternateId.startsWith(imdbTitlePrefix) ||
-                dto.alternateId.startsWith(imdbPersonPrefix))) {
-          final imdbDetails = MovieResultDTO();
-          imdbDetails.uniqueId = dto.alternateId;
-          _getDetails(originalSearchUID, imdbDetails);
+        if (DataSourceType.tmdbMovie == dto.bestSource &&
+            !dto.sources.containsKey(DataSourceType.imdb)) {
+          _getDetails(originalSearchUID, dto);
         }
         _finishDetails(dto);
       }
@@ -265,7 +272,7 @@ class BaseMovieRepository {
   /// Update map to inidicate detail fetch is no longer in progress.
   /// If result comes from IMDB or if id is not an IMDB id.
   void _recordResult(MovieResultDTO dto) {
-    if (DataSourceType.imdb == dto.source ||
+    if (DataSourceType.imdb == dto.bestSource ||
         (!dto.uniqueId.startsWith(imdbTitlePrefix) &&
             !dto.uniqueId.startsWith(imdbPersonPrefix))) {
       _requestedDetails[dto.uniqueId] = dto.title;

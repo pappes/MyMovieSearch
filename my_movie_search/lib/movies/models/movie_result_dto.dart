@@ -4,18 +4,17 @@ import 'dart:math' show max;
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
-//import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 typedef MovieCollection = Map<String, MovieResultDTO>;
 typedef RelatedMovieCategories = Map<String, MovieCollection>;
+typedef MovieSources = Map<DataSourceType, String>;
 
 class MovieResultDTO {
-  DataSourceType source = DataSourceType.none;
+  DataSourceType bestSource = DataSourceType.none;
   String uniqueId = movieResultDTOUninitialized; // ID in current data source
-  String alternateId = ''; // ID in another data source e.g. from TMDB to IMDB
   String title = '';
   String alternateTitle = '';
   String charactorName = '';
@@ -32,6 +31,7 @@ class MovieResultDTO {
   Set<String> languages = {};
   Set<String> genres = {};
   Set<String> keywords = {};
+  MovieSources sources = {};
   // Related DTOs are in a category, then keyed by uniqueId
   RelatedMovieCategories related = {};
 }
@@ -69,9 +69,8 @@ enum LanguageType {
 }
 
 // member variable names
-const String movieResultDTOSource = 'source';
+const String movieResultDTOBestSource = 'bestSource';
 const String movieResultDTOUniqueId = 'uniqueId';
-const String movieResultDTOAlternateId = 'alternateId';
 const String movieResultDTOTitle = 'title';
 const String movieResultDTOAlternateTitle = 'alternateTitle';
 const String movieResultDTOCharactorName = 'charactorName';
@@ -88,6 +87,7 @@ const String movieResultDTOLanguage = 'language';
 const String movieResultDTOLanguages = 'languages';
 const String movieResultDTOGenres = 'genres';
 const String movieResultDTOKeywords = 'keywords';
+const String movieResultDTOSources = 'sources';
 const String movieResultDTORelated = 'related';
 const String movieResultDTOUninitialized = '-1';
 const String movieResultDTOMessagePrefix = '-';
@@ -180,7 +180,6 @@ extension MapResultDTOConversion on Map {
   MovieResultDTO toMovieResultDTO() {
     final dto = MovieResultDTO();
     dto.uniqueId = dynamicToString(this[movieResultDTOUniqueId]);
-    dto.alternateId = dynamicToString(this[movieResultDTOAlternateId]);
     dto.title = dynamicToString(this[movieResultDTOTitle]);
     dto.alternateTitle = dynamicToString(this[movieResultDTOAlternateTitle]);
     dto.charactorName = dynamicToString(this[movieResultDTOCharactorName]);
@@ -193,11 +192,11 @@ extension MapResultDTOConversion on Map {
     dto.runTime = Duration(seconds: dynamicToInt(this[movieResultDTORunTime]));
     dto.imageUrl = dynamicToString(this[movieResultDTOImageUrl]);
 
-    dto.source = getEnumValue<DataSourceType>(
-          this[movieResultDTOSource],
+    dto.bestSource = getEnumValue<DataSourceType>(
+          this[movieResultDTOBestSource],
           DataSourceType.values,
         ) ??
-        dto.source;
+        dto.bestSource;
     dto.type = getEnumValue<MovieContentType>(
           this[movieResultDTOType],
           MovieContentType.values,
@@ -214,11 +213,35 @@ extension MapResultDTOConversion on Map {
         ) ??
         dto.language;
 
+    dto.sources = stringToSources(this[movieResultDTOSources]);
     dto.languages = dynamicToStringSet(this[movieResultDTOLanguages]);
     dto.genres = dynamicToStringSet(this[movieResultDTOGenres]);
     dto.keywords = dynamicToStringSet(this[movieResultDTOKeywords]);
     dto.related = stringToRelated(this[movieResultDTORelated]);
     return dto;
+  }
+
+  /// Convert json encoded [Map]<[String], [String]>
+  /// to [Map]<[DataSourceType][String]>.
+  ///
+  /// Discards anything that cannont be converted.
+  MovieSources stringToSources(dynamic input) {
+    final MovieSources sources = {};
+    if (input is Map) {
+      for (final sourceEntry in input.entries) {
+        final value = sourceEntry.value;
+        if (sourceEntry.key is String && value is String) {
+          final sourceEnum = getEnumValue<DataSourceType>(
+            sourceEntry.key,
+            DataSourceType.values,
+          );
+          if (null != sourceEnum) {
+            sources[sourceEnum] = value;
+          }
+        }
+      }
+    }
+    return sources;
   }
 
   /// Convert json encoded related movies list to Map.
@@ -261,10 +284,15 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Create a MovieResultDTO encapsulating an error.
   ///
   static int _lastError = -1;
-  MovieResultDTO error([String errorText = '']) {
+  MovieResultDTO error([
+    String errorText = '',
+    DataSourceType errorSource = DataSourceType.none,
+  ]) {
+    type = MovieContentType.error;
     _lastError = _lastError - 1;
     uniqueId = _lastError.toString();
     title = errorText;
+    bestSource = errorSource;
     return this;
   }
 
@@ -273,12 +301,28 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return this;
   }
 
+  /// Reinitialise the source for a movie.
+  ///
+  MovieResultDTO setSource({
+    Object? newSource,
+    String? newUniqueId,
+  }) {
+    uniqueId = newUniqueId ?? uniqueId;
+
+    if (newSource is DataSourceType) {
+      bestSource = newSource;
+    }
+
+    sources.clear();
+    sources[bestSource] = uniqueId;
+    return this;
+  }
+
   /// Create a MovieResultDTO with supplied data.
   ///
   MovieResultDTO init({
-    DataSourceType source = DataSourceType.none,
+    DataSourceType bestSource = DataSourceType.none,
     String? uniqueId = movieResultDTOUninitialized,
-    String? alternateId = '',
     String? title = '',
     String? alternateTitle = '',
     String? charactorName = '',
@@ -295,15 +339,16 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String? languages = '[]',
     String? genres = '[]',
     String? keywords = '[]',
+    String? sources = '{}',
     // Related DTOs are in a category, then keyed by uniqueId
     RelatedMovieCategories? related,
   }) {
     // Strongly type variables, caller must give valid data
-    this.source = source;
+    this.bestSource = bestSource;
     this.related = related ?? {};
     // Weakly typed variables, help caller to massage data
     this.uniqueId = uniqueId ?? movieResultDTOUninitialized;
-    this.alternateId = alternateId ?? '';
+    this.sources[this.bestSource] = this.uniqueId;
     this.title = title ?? alternateTitle ?? '';
     if (title != alternateTitle) {
       this.alternateTitle = alternateTitle ?? '';
@@ -370,11 +415,11 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     final result = <String, Object>{};
     final defaultValues = MovieResultDTO();
     result[movieResultDTOUniqueId] = uniqueId;
-    if (source != defaultValues.source) {
-      result[movieResultDTOSource] = source.toString();
+    if (bestSource != defaultValues.bestSource) {
+      result[movieResultDTOBestSource] = bestSource.toString();
     }
-    if (alternateId != defaultValues.alternateId) {
-      result[movieResultDTOAlternateId] = alternateId;
+    if (sources != defaultValues.sources) {
+      result[movieResultDTOSources] = jsonEncode(sources);
     }
     if (title != defaultValues.title) result[movieResultDTOTitle] = title;
     if (alternateTitle != defaultValues.alternateTitle) {
@@ -462,11 +507,11 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   void merge(MovieResultDTO newValue) {
     if (newValue.userRatingCount > userRatingCount ||
         0 == userRatingCount ||
-        DataSourceType.imdb == newValue.source) {
-      source = bestValue(newValue.source, source);
+        DataSourceType.imdb == newValue.bestSource) {
+      bestSource = bestValue(newValue.bestSource, bestSource);
 
       final oldTitle = title;
-      if (DataSourceType.imdb == newValue.source && '' != newValue.title) {
+      if (DataSourceType.imdb == newValue.bestSource && '' != newValue.title) {
         title = _htmlDecode.convert(newValue.title);
       } else {
         title = bestValue(newValue.title, title).trim();
@@ -483,7 +528,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       }
 
       alternateTitle = newAlternateTitle;
-      alternateId = bestValue(newValue.alternateId, alternateId);
       charactorName = bestValue(newValue.charactorName, charactorName);
       description = bestValue(newValue.description, description);
       type = bestValue(newValue.type, type);
@@ -496,6 +540,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       genres.addAll(newValue.genres);
       keywords.addAll(newValue.keywords);
       languages.addAll(newValue.languages);
+      sources.addAll(newValue.sources);
       userRating = bestUserRating(
         newValue.userRating,
         newValue.userRatingCount,
@@ -553,7 +598,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   T bestValue<T>(T a, T b) {
     if (a is MovieContentType && b is MovieContentType) bestType(a, b);
     if (a is CensorRatingType && b is CensorRatingType) bestCensorRating(a, b);
-    if (a is DataSourceType && b is DataSourceType) bestSource(a, b);
+    if (a is DataSourceType && b is DataSourceType) bestBestSource(a, b);
     if (a is LanguageType && b is LanguageType) bestLanguage(a, b);
     if (a is num && b is num && a < b) return b;
     if (a is Duration && b is Duration && a < b) return b;
@@ -600,7 +645,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Compare [a] with [b] and return the most relevant value.
   ///
-  DataSourceType bestSource(DataSourceType a, DataSourceType b) {
+  DataSourceType bestBestSource(DataSourceType a, DataSourceType b) {
     if (b == DataSourceType.imdb) return b;
     return a;
   }
@@ -623,9 +668,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   ///
   MovieResultDTO toUnknown() {
     final dto = MovieResultDTO();
-    dto.source = source;
+    dto.bestSource = bestSource;
     dto.uniqueId = uniqueId;
-    dto.alternateId = alternateId;
     dto.title = 'unknown';
     dto.alternateTitle = alternateTitle;
     dto.charactorName = charactorName;
@@ -643,6 +687,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     dto.languages = languages;
     dto.genres = genres;
     dto.keywords = keywords;
+    dto.sources = sources;
     dto.related = related;
     return dto;
   }
@@ -727,9 +772,38 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       }
     }
 
-    _matchCompare('source', source, other.source);
-    _matchCompare('uniqueId', uniqueId, other.uniqueId);
-    _matchCompare('alternateId', alternateId, other.alternateId);
+    void _matchCompareId(String field, String expected, String actual) {
+      if (!expected.startsWith(movieResultDTOMessagePrefix) ||
+          !actual.startsWith(movieResultDTOMessagePrefix)) {
+        _matchCompare(field, expected, actual);
+      }
+    }
+
+    void _matchCompareIdMap(
+      String field,
+      MovieSources expected,
+      MovieSources actual,
+    ) {
+      if (expected.length != actual.length) {
+        _matchCompare(field, expected, actual);
+      }
+      for (var index = 0; index < expected.length; index++) {
+        _matchCompareId(
+          field,
+          expected.values.elementAt(index),
+          actual.values.elementAt(index),
+        );
+        _matchCompare(
+          field,
+          expected.keys.elementAt(index),
+          actual.keys.elementAt(index),
+        );
+      }
+    }
+
+    _matchCompare('source', bestSource, other.bestSource);
+    _matchCompareId('uniqueId', uniqueId, other.uniqueId);
+    _matchCompareIdMap('sources', sources, other.sources);
     _matchCompare('title', title, other.title);
     _matchCompare('alternateTitle', alternateTitle, other.alternateTitle);
     _matchCompare('charactorName', charactorName, other.charactorName);

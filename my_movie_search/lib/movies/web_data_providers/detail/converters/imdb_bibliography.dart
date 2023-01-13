@@ -10,9 +10,10 @@ class ImdbBibliographyConverter {
   }
 
   static MovieResultDTO _dtoFromMap(Map map) {
-    final movie = MovieResultDTO();
-    movie.source = DataSourceType.imdbSuggestions;
-    movie.uniqueId = map[outerElementIdentity]?.toString() ?? movie.uniqueId;
+    final movie = MovieResultDTO().init(
+      bestSource: DataSourceType.imdbSuggestions,
+      uniqueId: map[outerElementIdentity]?.toString(),
+    );
 
     for (final category in map.entries) {
       _getMovies(
@@ -43,15 +44,12 @@ class ImdbBibliographyConverter {
     if (id == '') {
       return null;
     }
-    final movie = MovieResultDTO();
-    movie.source = DataSourceType.imdbSuggestions;
-    movie.uniqueId = id;
-    movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
-    movie.alternateTitle =
-        map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;
-    movie.charactorName =
-        map[outerElementCharactorName]?.toString() ?? movie.charactorName;
-
-    return movie;
+    return MovieResultDTO().init(
+      bestSource: DataSourceType.imdbSuggestions,
+      uniqueId: id,
+      title: map[outerElementOfficialTitle]?.toString(),
+      alternateTitle: map[outerElementAlternateTitle]?.toString(),
+      charactorName: map[outerElementCharactorName]?.toString(),
+    );
   }
 }

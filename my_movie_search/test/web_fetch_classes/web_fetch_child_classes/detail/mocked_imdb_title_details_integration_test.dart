@@ -250,12 +250,13 @@ void main() {
       () async {
         const startId = 5000;
         final queries = _makeQueries(startId, 1);
-        final errorMessage = MovieResultDTO();
-        errorMessage.title =
-            '[QueryIMDBTitleDetails] Error in imdb with criteria tt$startId interpreting web text as a map :Error in http read, HTTP status code : 404 for https://www.imdb.com/title/tt$startId/?ref_=fn_tt_tt_1';
-        errorMessage.uniqueId = '-2';
-        errorMessage.source = DataSourceType.imdb;
-        errorMessage.type = MovieContentType.custom;
+        final errorMessage = MovieResultDTO().error(
+          '[QueryIMDBTitleDetails] Error in imdb '
+          'with criteria tt$startId interpreting web text as a map '
+          ':Error in http read, HTTP status code : 404 for '
+          'https://www.imdb.com/title/tt$startId/?ref_=fn_tt_tt_1',
+          DataSourceType.imdb,
+        );
         await testRead(queries, [errorMessage], forceError: true);
       },
       timeout: const Timeout(Duration(seconds: 30)),

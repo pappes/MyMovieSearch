@@ -37,9 +37,13 @@ class ImdbWebScraperConverter {
     } else if (null != map.deepSearch(deepTitleId)) {
       _deepConvertTitle(movie, map);
     } else {
-      movie = movie.error('Unable to interpret IMDB contents from map $map');
+      return movie.error(
+        'Unable to interpret IMDB contents from map $map',
+        source,
+      );
     }
-    movie.source = source;
+    // Reintialise the source after setting the ID
+    movie.setSource();
     return movie;
   }
 
@@ -85,7 +89,7 @@ class ImdbWebScraperConverter {
     movie.merge(
       MovieResultDTO().init(
         uniqueId: movie.uniqueId,
-        source: DataSourceType.imdbSuggestions,
+        bestSource: DataSourceType.imdbSuggestions,
         title: name,
         description: description,
         year: startDate,
@@ -204,7 +208,7 @@ class ImdbWebScraperConverter {
     }
     return MovieResultDTO().init(
       uniqueId: id,
-      source: DataSourceType.imdbSuggestions,
+      bestSource: DataSourceType.imdbSuggestions,
       title: title,
       alternateTitle: originalTitle,
       description: description,
@@ -369,7 +373,7 @@ class ImdbWebScraperConverter {
             );
 
     final newDTO = MovieResultDTO().init(
-      source: DataSourceType.imdbSuggestions,
+      bestSource: DataSourceType.imdbSuggestions,
       uniqueId: id,
       title: title,
       imageUrl: url,
@@ -385,7 +389,10 @@ class ImdbWebScraperConverter {
   }
 
   void _shallowConvert(MovieResultDTO movie, Map map) {
-    movie.uniqueId = map[outerElementIdentity]!.toString();
+    movie.setSource(
+      newSource: map[dataSource],
+      newUniqueId: map[outerElementIdentity]!.toString(),
+    );
 
     movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
     movie.alternateTitle =
@@ -413,10 +420,6 @@ class ImdbWebScraperConverter {
       nullValueSubstitute: movie.userRatingCount,
     )!;
 
-    final source = map[dataSource];
-    if (source is DataSourceType) {
-      movie.source = source;
-    }
     final language = map[outerElementLanguage];
     if (language is LanguageType) {
       movie.language = language;
@@ -493,12 +496,11 @@ class ImdbWebScraperConverter {
     if (map[outerElementType] != 'Person' || id == '') {
       return null;
     }
-    final movie = MovieResultDTO();
-    movie.source = DataSourceType.imdbSuggestions;
-    movie.uniqueId = id;
-    movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
-
-    return movie;
+    return MovieResultDTO().init(
+      bestSource: DataSourceType.imdbSuggestions,
+      uniqueId: id,
+      title: map[outerElementOfficialTitle]?.toString(),
+    );
   }
 
   static void _getRelatedSections(related, MovieResultDTO movie) {
@@ -548,11 +550,10 @@ class ImdbWebScraperConverter {
     if (id == '') {
       return null;
     }
-    final movie = MovieResultDTO();
-    movie.source = DataSourceType.imdbSuggestions;
-    movie.uniqueId = id;
-    movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
-
-    return movie;
+    return MovieResultDTO().init(
+      bestSource: DataSourceType.imdbSuggestions,
+      uniqueId: id,
+      title: map[outerElementOfficialTitle]?.toString(),
+    );
   }
 }

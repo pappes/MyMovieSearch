@@ -44,10 +44,12 @@ class OmdbMovieSearchConverter {
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
-    final movie = MovieResultDTO();
-    movie.source = DataSourceType.omdb;
-    movie.uniqueId = map[innerElementIdentity]?.toString() ?? movie.uniqueId;
-    movie.title = map[innerElementTitle]?.toString() ?? movie.title;
+    final movie = MovieResultDTO().init(
+      bestSource: DataSourceType.omdb,
+      uniqueId: map[innerElementIdentity]?.toString(),
+      title: map[innerElementTitle]?.toString(),
+      imageUrl: map[innerElementImage]?.toString(),
+    );
 
     final year = getYear(map[innerElementYear]?.toString());
     if (null != year) {
@@ -57,7 +59,6 @@ class OmdbMovieSearchConverter {
       movie.year = movie.maxYear();
     }
 
-    movie.imageUrl = map[innerElementImage]?.toString() ?? movie.imageUrl;
     switch (map[innerElementType]) {
       case omdbResultTypeMovie:
         movie.type = MovieContentType.movie;

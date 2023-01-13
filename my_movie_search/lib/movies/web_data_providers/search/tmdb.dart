@@ -22,7 +22,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
-    return DataSourceType.tmdbMovie.name;
+    return DataSourceType.tmdbSearch.name;
   }
 
   /// Static snapshot of data for offline operation.
@@ -46,13 +46,10 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) {
-    final error = MovieResultDTO();
-    error.title = '[QueryTMDBMovies] $message';
-    error.type = MovieContentType.custom;
-    error.source = DataSourceType.tmdbMovie;
-    return error;
-  }
+  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
+        '[QueryTMDBMovies] $message',
+        DataSourceType.tmdbSearch,
+      );
 
   /// API call to TMDB returning the top 10 matching results for [searchText].
   @override

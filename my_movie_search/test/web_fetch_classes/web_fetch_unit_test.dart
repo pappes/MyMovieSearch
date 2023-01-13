@@ -92,13 +92,10 @@ class QueryUnknownSourceMocked
 
   /// Include entire error in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) {
-    final error = MovieResultDTO().error();
-    error.title = '[QueryIMDBTitleDetails] $message';
-    error.type = MovieContentType.custom;
-    error.source = DataSourceType.custom;
-    return error;
-  }
+  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
+        '[QueryIMDBTitleDetails] $message',
+        DataSourceType.custom,
+      );
 
   // Define myConstructURI to return an fake Uri
   @override
@@ -115,13 +112,11 @@ class QueryUnknownSourceMocked
     return listToDto(tree as List);
   }
 
-  static MovieResultDTO mapToDto(Map map) {
-    final result = MovieResultDTO();
-    result.source = DataSourceType.custom;
-    result.uniqueId = DynamicHelper.toString_(map[outerElementIdentity]);
-    result.description = DynamicHelper.toString_(map[outerElementDescription]);
-    return result;
-  }
+  static MovieResultDTO mapToDto(Map map) => MovieResultDTO().init(
+        uniqueId: DynamicHelper.toString_(map[outerElementIdentity]),
+        bestSource: DataSourceType.custom,
+        description: DynamicHelper.toString_(map[outerElementDescription]),
+      );
 
   static List<MovieResultDTO> listToDto(List list) {
     final List<MovieResultDTO> results = [];

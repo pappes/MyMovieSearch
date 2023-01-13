@@ -64,11 +64,13 @@ class TmdbMovieDetailConverter {
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
-    final movie = MovieResultDTO();
-    movie.source = DataSourceType.tmdbMovie;
-    movie.uniqueId = '${map[innerElementIdentity]}';
-    movie.alternateId =
-        map[innerElementImdbId]?.toString() ?? movie.alternateId;
+    final movie = MovieResultDTO().setSource(
+      newSource: DataSourceType.tmdbMovie,
+      newUniqueId: '${map[innerElementIdentity]}',
+    );
+    // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
+    // no longer need to have alternateId field
+    movie.uniqueId = map[innerElementImdbId]?.toString() ?? movie.uniqueId;
 
     final title = map[innerElementCommonTitle]?.toString();
     final originalTitle = map[innerElementOriginalTitle]?.toString();

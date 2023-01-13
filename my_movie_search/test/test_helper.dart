@@ -239,9 +239,8 @@ MovieResultDTO makeResultDTOWithRelatedDTO(String sample) {
 MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
   final dto = MovieResultDTO();
 
-  dto.source = DataSourceType.wiki;
+  dto.bestSource = DataSourceType.wiki;
   dto.uniqueId = '${sample}_uniqueId';
-  dto.alternateId = '${sample}_alternateId';
   dto.title = '${sample}_title';
   dto.alternateTitle = '${sample}_alternateTitle';
   dto.charactorName = '${sample}_charactorName';
@@ -258,6 +257,10 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
   dto.languages = {'${sample}_language1', '${sample}_language2'};
   dto.genres = {'${sample}_genre1', '${sample}_genre2'};
   dto.keywords = {'${sample}_keyword1', '${sample}_keyword2'};
+  dto.sources = {
+    DataSourceType.tmdbMovie: '${sample}_alternateTitle',
+    DataSourceType.wiki: '${sample}_uniqueId'
+  };
   if (makeRelated) {
     final ref = 'rel$sample';
     dto.related = {

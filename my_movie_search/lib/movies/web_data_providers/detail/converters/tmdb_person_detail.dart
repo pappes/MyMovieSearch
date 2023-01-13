@@ -37,10 +37,9 @@ class TmdbPersonDetailConverter {
       map[innerElementYear]?.toString() ?? '',
     )?.year.toString();
 
-    return MovieResultDTO().init(
-      source: DataSourceType.tmdbPerson,
+    final person = MovieResultDTO().init(
+      bestSource: DataSourceType.tmdbPerson,
       uniqueId: map[innerElementIdentity]?.toString(),
-      alternateId: map[innerElementImdbId]?.toString(),
       title: map[innerElementCommonTitle]?.toString(),
       description: map[innerElementOverview]?.toString(),
       type: MovieContentType.person.toString(),
@@ -50,5 +49,10 @@ class TmdbPersonDetailConverter {
         map[innerElementVoteAverage],
       )?.toString(),
     );
+
+    person.uniqueId = map[innerElementImdbId]?.toString() ?? person.uniqueId;
+    // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
+    // no longer need to have alternateId field
+    return person;
   }
 }

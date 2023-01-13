@@ -34,20 +34,21 @@ class ImdbSuggestionConverter {
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
-    final movie = MovieResultDTO();
-    movie.source = DataSourceType.imdbSuggestions;
-    movie.uniqueId = map[innerElementIdentity]?.toString() ?? movie.uniqueId;
-    movie.title = map[innerElementTitle]?.toString() ?? movie.title;
-    movie.imageUrl = _getImage(map[innerElementImage]) ?? movie.imageUrl;
-    movie.year = map[innerElementYear] as int? ?? movie.year;
-    movie.yearRange = map[innerElementYearRange]?.toString() ?? movie.yearRange;
-    movie.type = MovieResultDTOHelpers.getMovieContentType(
-          map[innerElementType],
-          null, // Unknown duration.
-          movie.uniqueId,
-        ) ??
-        movie.type;
+    final uniqueId = map[innerElementIdentity]?.toString();
+    final movieType = MovieResultDTOHelpers.getMovieContentType(
+      map[innerElementType],
+      null, // Unknown duration.
+      uniqueId ?? '',
+    )?.toString();
 
+    final movie = MovieResultDTO().init(
+        bestSource: DataSourceType.imdbSuggestions,
+        uniqueId: map[innerElementIdentity]?.toString(),
+        title: map[innerElementTitle]?.toString(),
+        imageUrl: _getImage(map[innerElementImage]),
+        year: map[innerElementYear]?.toString(),
+        yearRange: map[innerElementYearRange]?.toString(),
+        type: movieType);
     return movie;
   }
 

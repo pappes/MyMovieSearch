@@ -55,11 +55,12 @@ class TmdbMovieSearchConverter {
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
-    final movie = MovieResultDTO();
-    movie.source = DataSourceType.tmdbMovie;
-    movie.uniqueId = '${map[innerElementIdentity]}';
-    movie.title = map[innerElementTitle]?.toString() ?? movie.title;
-    movie.imageUrl = map[innerElementImage]?.toString() ?? movie.imageUrl;
+    final movie = MovieResultDTO().init(
+      bestSource: DataSourceType.tmdbSearch,
+      uniqueId: '${map[innerElementIdentity]}',
+      title: map[innerElementTitle]?.toString(),
+      imageUrl: map[innerElementImage]?.toString(),
+    );
 
     final year = getYear(map[innerElementYear]?.toString());
     if (null != year) {

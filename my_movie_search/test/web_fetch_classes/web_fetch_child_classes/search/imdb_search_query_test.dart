@@ -316,7 +316,7 @@ void main() {
       final imdbSearch = QueryIMDBSearch();
 
       // steal expectedValue from imdb_name test data but source is really imdbSearch
-      expectedValue[0].source = DataSourceType.imdbSearch;
+      expectedValue[0].bestSource = DataSourceType.imdbSearch;
 
       // Invoke the functionality.
       await imdbSearch
@@ -360,7 +360,7 @@ void main() {
       final imdbSearch = QueryIMDBSearch();
 
       // steal expectedValue from imdb_name test data but source is really imdbSearch
-      expectedValue[0].source = DataSourceType.imdbSearch;
+      expectedValue[0].setSource(newSource: DataSourceType.imdbSearch);
 
       // Invoke the functionality.
       await imdbSearch

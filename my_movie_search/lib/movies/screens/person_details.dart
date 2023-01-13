@@ -40,7 +40,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
   /// Fetch full person details from imdb.
   void _getDetails(SearchCriteriaDTO criteria) {
-    if (_person.uniqueId.startsWith(imdbPersonPrefix)) {
+    if (MovieContentType.person == _person.type) {
       /// Fetch person details from cache using a separate thread.
       QueryIMDBNameDetails()
           .readPrioritisedCachedList(
@@ -160,7 +160,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   Widget leftColumn() {
     return Wrap(
       children: <Widget>[
-        Text('Source: ${_person.source.name}      '),
+        Text('Source: ${_person.bestSource.name}      '),
         Text('UniqueId: ${_person.uniqueId}      '),
         Text('Popularity: ${_person.userRatingCount}'),
         ElevatedButton(

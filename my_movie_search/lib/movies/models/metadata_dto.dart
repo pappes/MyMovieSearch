@@ -15,6 +15,7 @@ enum DataSourceType {
   omdb,
   tmdbPerson,
   tmdbMovie,
+  tmdbSearch,
   tmdbFinder,
   google,
   wiki,

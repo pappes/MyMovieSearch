@@ -30,9 +30,8 @@ class QueryTMDBFinder extends QueryTMDBMovieDetails {
       throw 'expected map got ${map.runtimeType} unable to interpret data $map';
     }
     final results = <MovieResultDTO>[];
-    for (final movie in TmdbFinderConverter.dtoFromCompleteJsonMap(map)) {
-      // Save the original IMDB_ID in the resultant object.
-      movie.alternateId = _originalID;
+    for (final movie
+        in TmdbFinderConverter(_originalID).dtoFromCompleteJsonMap(map)) {
       results.add(movie);
     }
     return results;

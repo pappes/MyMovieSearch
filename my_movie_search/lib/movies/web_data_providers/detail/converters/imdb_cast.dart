@@ -11,7 +11,7 @@ class ImdbCastConverter {
 
   static MovieResultDTO _dtoFromMap(Map map) {
     final movie = MovieResultDTO().init(
-      source: DataSourceType.imdbSuggestions,
+      bestSource: DataSourceType.imdbSuggestions,
       uniqueId: map[outerElementIdentity]?.toString(),
     );
 
@@ -45,7 +45,7 @@ class ImdbCastConverter {
       return null;
     }
     final movie = MovieResultDTO().init(
-      source: DataSourceType.imdbSuggestions,
+      bestSource: DataSourceType.imdbSuggestions,
       uniqueId: id,
       title: map[outerElementOfficialTitle]?.toString(),
       alternateTitle: map[outerElementAlternateTitle]?.toString(),

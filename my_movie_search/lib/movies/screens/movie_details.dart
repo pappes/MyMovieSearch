@@ -212,7 +212,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       ),
       Wrap(
         children: <Widget>[
-          Text('Source: ${_movie.source.name}      '),
+          Text('Source: ${_movie.bestSource.name}      '),
           Text('UniqueId: ${_movie.uniqueId}'),
           ElevatedButton(
             onPressed: () => viewWebPage(

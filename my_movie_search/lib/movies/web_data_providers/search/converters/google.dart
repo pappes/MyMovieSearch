@@ -76,7 +76,7 @@ class GoogleMovieSearchConverter {
 
   static MovieResultDTO dtoFromMap(Map map) {
     final movie = MovieResultDTO();
-    movie.source = DataSourceType.google;
+    movie.bestSource = DataSourceType.google;
 
     movie.title = getTitle(map);
     movie.yearRange = getYearRange(map);

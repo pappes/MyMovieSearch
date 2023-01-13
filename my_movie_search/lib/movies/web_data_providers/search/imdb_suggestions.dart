@@ -51,13 +51,10 @@ class QueryIMDBSuggestions
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) {
-    final error = MovieResultDTO();
-    error.title = '[QueryIMDBSuggestions] $message';
-    error.type = MovieContentType.custom;
-    error.source = DataSourceType.imdbSuggestions;
-    return error;
-  }
+  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
+        '[QueryIMDBSuggestions] $message',
+        DataSourceType.imdbSuggestions,
+      );
 
   /// API call to IMDB search returning the top matching results for [searchText].
   @override
