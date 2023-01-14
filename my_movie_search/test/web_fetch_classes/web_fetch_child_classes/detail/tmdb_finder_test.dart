@@ -57,9 +57,9 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'source': 'DataSourceType.tmdbMovie',
+        'bestSource': 'DataSourceType.tmdbMovie',
         'title': '[QueryTMDBDetails] new query',
-        'type': 'MovieContentType.custom',
+        'type': 'MovieContentType.error',
         'related': {}
       };
 
@@ -131,15 +131,13 @@ void main() {
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
+      testClass.imdbId = 'ImdbId123';
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
           await testClass.myConvertTreeToOutputType(map),
         );
       }
-      // Sourcesneed to be modified for this test
-      // because the search criteria has not been set
-      //expectedValue.first.alternateId = "";
 
       // Check the results.
       expect(
@@ -179,13 +177,12 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBFinder();
       testClass.myClearCache();
-      testClass.myConstructURI('tt0101000');
-      //expectedValue.first.alternateId = 'tt0101000';
+      testClass.myConstructURI('ImdbId123');
 
       // Invoke the functionality.
       await testClass
           .readList(
-            SearchCriteriaDTO().fromString('123'),
+            SearchCriteriaDTO().fromString('ImdbId123'),
             source: streamTmdbJsonOfflineData,
           )
           .then((values) => queryResult.addAll(values))

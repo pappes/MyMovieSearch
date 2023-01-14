@@ -115,7 +115,7 @@ class BaseMovieRepository {
   void _getDetails(int originalSearchUID, MovieResultDTO dto) {
     if ("null" != dto.uniqueId &&
         !_requestedDetails.containsKey(dto.uniqueId) &&
-        !dto.uniqueId.startsWith(movieResultDTOMessagePrefix)) {
+        !dto.uniqueId.startsWith(movieDTOMessagePrefix)) {
       final detailCriteria = SearchCriteriaDTO();
       detailCriteria.criteriaTitle = dto.uniqueId;
       _requestedDetails[dto.uniqueId] = null;

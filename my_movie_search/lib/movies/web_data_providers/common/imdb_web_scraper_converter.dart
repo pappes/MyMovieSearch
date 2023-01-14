@@ -43,7 +43,7 @@ class ImdbWebScraperConverter {
       );
     }
     // Reintialise the source after setting the ID
-    movie.setSource();
+    movie.setSource(newSource: source);
     return movie;
   }
 

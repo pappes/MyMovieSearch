@@ -10,12 +10,12 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"nm7602562","source":"DataSourceType.imdbSuggestions","languages":"[]","genres":"[]","keywords":"[]",
-  "related":{"Actress":{"tt1234567":{"uniqueId":"tt1234567","source":"DataSourceType.imdbSuggestions","title":"Land of the fill","languages":"[]","genres":"[]","keywords":"[]","related":{}},
-      "tt1234568":{"uniqueId":"tt1234568","source":"DataSourceType.imdbSuggestions","title":"Fill the land","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
-    "Director":{"tt2234567":{"uniqueId":"tt2234567","source":"DataSourceType.imdbSuggestions","title":"Land of the turtle","languages":"[]","genres":"[]","keywords":"[]","related":{}},
-      "tt2234568":{"uniqueId":"tt2234568","source":"DataSourceType.imdbSuggestions","title":"Turtle the land","languages":"[]","genres":"[]","keywords":"[]","related":{}}}}}
-'''
+{"uniqueId":"nm7602562","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"nm7602562"},
+  "related":{"Actress":{"tt1234567":{"uniqueId":"tt1234567","bestSource":"DataSourceType.imdbSuggestions","title":"Land of the fill","type":"MovieContentType.title","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt1234567"},"related":{}},
+      "tt1234568":{"uniqueId":"tt1234568","bestSource":"DataSourceType.imdbSuggestions","title":"Fill the land","type":"MovieContentType.title","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt1234568"},"related":{}}},
+    "Director":{"tt2234567":{"uniqueId":"tt2234567","bestSource":"DataSourceType.imdbSuggestions","title":"Land of the turtle","type":"MovieContentType.title","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt2234567"},"related":{}},
+      "tt2234568":{"uniqueId":"tt2234568","bestSource":"DataSourceType.imdbSuggestions","title":"Turtle the land","type":"MovieContentType.title","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt2234568"},"related":{}}}}}
+''',
 ];
 
 const intermediateMapList = [

@@ -16,7 +16,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryTMDBFinder extends QueryTMDBMovieDetails {
   static const _baseURL = 'https://api.themoviedb.org/3/find/';
   static const _midURL = '?language=en-US&external_source=imdb_id&api_key=';
-  String _originalID = "";
+  String imdbId = '';
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
@@ -31,7 +31,7 @@ class QueryTMDBFinder extends QueryTMDBMovieDetails {
     }
     final results = <MovieResultDTO>[];
     for (final movie
-        in TmdbFinderConverter(_originalID).dtoFromCompleteJsonMap(map)) {
+        in TmdbFinderConverter(imdbId).dtoFromCompleteJsonMap(map)) {
       results.add(movie);
     }
     return results;
@@ -40,7 +40,7 @@ class QueryTMDBFinder extends QueryTMDBMovieDetails {
   /// API call to TMDB returning the movie details for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    _originalID = searchCriteria;
+    imdbId = searchCriteria;
     final omdbKey = dotenv
         .env['TMDB_KEY']; // From the file assets/.env (not source controlled)
     return Uri.parse('$_baseURL$searchCriteria$_midURL$omdbKey');

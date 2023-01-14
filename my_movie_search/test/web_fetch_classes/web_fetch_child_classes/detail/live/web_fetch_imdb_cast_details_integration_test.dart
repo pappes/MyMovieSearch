@@ -5,15 +5,23 @@ import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart'
 
 import '../../../../test_helper.dart';
 
+// ignore_for_file: unnecessary_raw_strings
+
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real IMDB endpoint!
 ////////////////////////////////////////////////////////////////////////////////
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '{"source":"imdbSuggestions","type":"MovieContentType.movie","uniqueId":"tt0101000","languages":[],"genres":[],"keywords":[]}',
-  '{"source":"imdbSuggestions","type":"MovieContentType.movie","uniqueId":"tt0101001","languages":[],"genres":[],"keywords":[]}',
-  '{"source":"imdbSuggestions","type":"MovieContentType.movie","uniqueId":"tt0101002","languages":[],"genres":[],"keywords":[]}',
+  r'''
+{"uniqueId":"tt0101000","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.title","sources":{"DataSourceType.imdbSuggestions":"tt0101000"},"related":{}}
+''',
+  r'''
+{"uniqueId":"tt0101001","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.title","sources":{"DataSourceType.imdbSuggestions":"tt0101001"},"related":{}}
+''',
+  r'''
+{"uniqueId":"tt0101002","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.title","sources":{"DataSourceType.imdbSuggestions":"tt0101002"},"related":{}}
+''',
 ];
 
 /// Create a string list with [qty] unique criteria values.
@@ -66,7 +74,7 @@ void main() {
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following lines
-      //actualOutput.forEach((e) => e.related = {});
+      // actualOutput.forEach((e) => e.related = {});
       // print(actualOutput.toListOfDartJsonStrings(excludeCopyrightedData: true));
 
       final expectedOutput = expectedDTOList;

@@ -9,14 +9,14 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   '''
-{"uniqueId":"tt7602562","source":"DataSourceType.imdbSuggestions","type": "MovieContentType.movie","languages":"[]","genres":"[]","keywords":"[]",
-  "related":{"Directed by:":{"nm0001112":{"uniqueId":"nm0001112","source":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"Andrew Davis","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
-    "Writing Credits:":{"nm0835732":{"uniqueId":"nm0835732","source":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"Jeb Stuart","languages":"[]","genres":"[]","keywords":"[]","related":{}},
-      "nm0878638":{"uniqueId":"nm0878638","source":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"David Twohy","languages":"[]","genres":"[]","keywords":"[]","related":{}},
-      "nm0400403":{"uniqueId":"nm0400403","source":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"Roy Huggins","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
-    "Cast:":{"nm0000148":{"uniqueId":"nm0000148","source":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"Harrison Ford","charactorName":"Dr. Richard Kimble","languages":"[]","genres":"[]","keywords":"[]","related":{}},
-      "nm0000169":{"uniqueId":"nm0000169","source":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"Tommy Lee Jones","charactorName":"Samuel Gerard","languages":"[]","genres":"[]","keywords":"[]","related":{}},
-      "nm0000688":{"uniqueId":"nm0000688","source":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"Sela Ward","charactorName":"Helen Kimble","languages":"[]","genres":"[]","keywords":"[]","related":{}}}}}
+{"uniqueId":"tt7602562","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.title","languages":"[]","genres":"[]","keywords":"[]",
+  "related":{"Directed by:":{"nm0001112":{"uniqueId":"nm0001112","bestSource":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"Andrew Davis","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
+    "Writing Credits:":{"nm0835732":{"uniqueId":"nm0835732","bestSource":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"Jeb Stuart","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm0878638":{"uniqueId":"nm0878638","bestSource":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"David Twohy","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm0400403":{"uniqueId":"nm0400403","bestSource":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"Roy Huggins","languages":"[]","genres":"[]","keywords":"[]","related":{}}},
+    "Cast:":{"nm0000148":{"uniqueId":"nm0000148","bestSource":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"Harrison Ford","charactorName":"Dr. Richard Kimble","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm0000169":{"uniqueId":"nm0000169","bestSource":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"Tommy Lee Jones","charactorName":"Samuel Gerard","languages":"[]","genres":"[]","keywords":"[]","related":{}},
+      "nm0000688":{"uniqueId":"nm0000688","bestSource":"DataSourceType.imdbSuggestions","type": "MovieContentType.person","title":"Sela Ward","charactorName":"Helen Kimble","languages":"[]","genres":"[]","keywords":"[]","related":{}}}}}
 ''',
 ];
 

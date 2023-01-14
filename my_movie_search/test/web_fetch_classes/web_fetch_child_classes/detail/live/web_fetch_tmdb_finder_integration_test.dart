@@ -12,8 +12,16 @@ import '../../../../test_helper.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '{"source":"DataSourceType.tmdbFinder","uniqueId":"913986","alternateId":"tt0101000","title":"Začátek dlouhého podzimu","year":"1990","language":"LanguageType.foreign","languages":["cs"],"genres":[],"keywords":[],"related":"{}"}',
-  '{"source":"DataSourceType.tmdbFinder","uniqueId":"230839","alternateId":"tt0101002","title":"Return Engagement","alternateTitle":"再戰江湖","year":"1990","language":"LanguageType.foreign","languages":["cn"],"genres":[],"keywords":[],"description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.","userRating":"6.0","userRatingCount":"4","related":"{}"}',
+  r'''
+{"uniqueId":"tt0101000","bestSource":"DataSourceType.tmdbFinder","title":"Začátek dlouhého podzimu","year":"1990","language":"LanguageType.foreign",
+      "languages":"[\"cs\"]","genres":"[]","keywords":"[]","sources":{"DataSourceType.tmdbFinder":"913986"},"related":{}}
+''',
+  r'''
+{"uniqueId":"tt0101002","bestSource":"DataSourceType.tmdbFinder","title":"Return Engagement","alternateTitle":"再戰江湖","year":"1990","language":"LanguageType.foreign",
+      "languages":"[\"cn\"]","genres":"[]","keywords":"[]",
+      "description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.",
+      "userRating":"6.0","userRatingCount":"4","sources":{"DataSourceType.tmdbFinder":"230839"},"related":{}}
+''',
 ];
 
 /// Create a string list with [qty] unique criteria values.
@@ -66,7 +74,8 @@ void main() {
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
-      //print(actualOutput.toJsonStrings());
+      //print(actualOutput.toListOfDartJsonStrings(excludeCopyrightedData: false));
+
       // Check the results.
       expect(
         actualOutput,

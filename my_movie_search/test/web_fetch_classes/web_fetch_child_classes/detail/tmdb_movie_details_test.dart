@@ -57,12 +57,13 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'uniqueId': '-1',
-        'source': 'DataSourceType.tmdbMovie',
+        'uniqueId': '-2',
+        'bestSource': 'DataSourceType.tmdbMovie',
         'title': '[QueryTMDBDetails] new query',
-        'type': 'MovieContentType.custom',
+        'type': 'MovieContentType.error',
         'related': {}
       };
+      MovieResultDTOHelpers.resetError();
 
       // Invoke the functionality.
       final actualResult =
@@ -93,8 +94,6 @@ void main() {
           TmdbMovieDetailConverter.dtoFromCompleteJsonMap(map as Map),
         );
       }
-
-      //print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData: false));
 
       final expectedValue = expectedDTOList;
       // Check the results.

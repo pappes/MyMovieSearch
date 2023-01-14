@@ -24,7 +24,7 @@ void main() {
   group('tmdb search unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryTMDBMovies().myDataSourceName(), 'tmdbMovie');
+      expect(QueryTMDBMovies().myDataSourceName(), 'tmdbSearch');
     });
 
     // Confirm criteria is displayed as expected.
@@ -57,9 +57,9 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'source': 'DataSourceType.tmdbMovie',
+        'bestSource': 'DataSourceType.tmdbSearch',
         'title': '[QueryTMDBMovies] new query',
-        'type': 'MovieContentType.custom',
+        'type': 'MovieContentType.error',
         'related': {}
       };
 
@@ -206,7 +206,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBMovies();
       const expectedException = '''
-[QueryTMDBMovies] Error in tmdbMovie with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 1)
+[QueryTMDBMovies] Error in tmdbSearch with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
 ^
 ''';
@@ -224,7 +224,7 @@ not valid json
     // Read tmdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException = '[QueryTMDBMovies] Error in tmdbMovie '
+      const expectedException = '[QueryTMDBMovies] Error in tmdbSearch '
           'with criteria 123 translating page map to objects '
           ':expected map got List<dynamic> unable to interpret data [{hello: world}]';
       final queryResult = <MovieResultDTO>[];

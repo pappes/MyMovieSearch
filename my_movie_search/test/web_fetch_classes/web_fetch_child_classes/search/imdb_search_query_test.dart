@@ -87,9 +87,9 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'source': 'DataSourceType.imdbSearch',
+        'bestSource': 'DataSourceType.imdbSearch',
         'title': '[QueryIMDBSearch] new query',
-        'type': 'MovieContentType.custom',
+        'type': 'MovieContentType.error',
         'related': {}
       };
 
@@ -316,7 +316,7 @@ void main() {
       final imdbSearch = QueryIMDBSearch();
 
       // steal expectedValue from imdb_name test data but source is really imdbSearch
-      expectedValue[0].bestSource = DataSourceType.imdbSearch;
+      expectedValue[0].setSource(newSource: DataSourceType.imdbSearch);
 
       // Invoke the functionality.
       await imdbSearch

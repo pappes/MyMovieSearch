@@ -34,31 +34,31 @@ const imdbSearchHtmlSampleEnd = '''
 
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"nm0152436","source":"DataSourceType.imdbSearch","title":"Hye NDace","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"nm0152436","bestSource":"DataSourceType.imdbSearch","title":"Hye NDace","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
       "description":"known for Superman(1994)","imageUrl":"https://www.microsoft.com/gx@.jpg","related":{}}
 ''',
   r'''
-{"uniqueId":"nm2122834","source":"DataSourceType.imdbSearch","title":"ifdhKoliHeDene Her","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"nm2122834","bestSource":"DataSourceType.imdbSearch","title":"ifdhKoliHeDene Her","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
       "description":"known for Catwoman!(1993- )","imageUrl":"https://www.microsoft.com/k0MTRlNmU@.jpg","related":{}}
 ''',
   r'''
-{"uniqueId":"nm5122134","source":"DataSourceType.imdbSearch","title":"nrnKge K-sDHmu","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"nm5122134","bestSource":"DataSourceType.imdbSearch","title":"nrnKge K-sDHmu","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
       "description":"known for Batman","imageUrl":"https://www.microsoft.com/Q0ZGExNj@.jpg","related":{}}
 ''',
   r'''
-{"uniqueId":"tt0152239","source":"DataSourceType.imdbSearch","title":"Batman","type":"MovieContentType.movie","year":"1997","yearRange":"1997","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"tt0152239","bestSource":"DataSourceType.imdbSearch","title":"Batman","type":"MovieContentType.movie","year":"1997","yearRange":"1997","languages":"[]","genres":"[]","keywords":"[]",
       "description":"staring [dot GaGal, s CarLyn]","imageUrl":"https://www.microsoft.com/YzODQzYj@.jpg","related":{}}
 ''',
   r'''
-{"uniqueId":"tt0172034","source":"DataSourceType.imdbSearch","title":"Batman","type":"MovieContentType.series","year":"1979","yearRange":"1975-1979","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"tt0172034","bestSource":"DataSourceType.imdbSearch","title":"Batman","type":"MovieContentType.series","year":"1979","yearRange":"1975-1979","languages":"[]","genres":"[]","keywords":"[]",
       "description":"staring [terda PiChrine, ggoe WaLylner]","imageUrl":"https://www.microsoft.com/AxYTcxMD@.jpg","related":{}}
 ''',
   r'''
-{"uniqueId":"tt1142838","source":"DataSourceType.imdbSearch","title":"Batman","type":"MovieContentType.movie","year":"1991","yearRange":"1991","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"tt1142838","bestSource":"DataSourceType.imdbSearch","title":"Batman","type":"MovieContentType.movie","year":"1991","yearRange":"1991","languages":"[]","genres":"[]","keywords":"[]",
       "description":"staring [calro FNation, aliianne PAdrcki]","imageUrl":"https://www.microsoft.com/M4NTRlZjAtzgwMDUw.jpg","related":{}}
 ''',
   r'''
-{"uniqueId":"tt1182333","source":"DataSourceType.imdbSearch","title":"Batman","type":"MovieContentType.movie","year":"1999","yearRange":"1999","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"tt1182333","bestSource":"DataSourceType.imdbSearch","title":"Batman","type":"MovieContentType.movie","year":"1999","yearRange":"1999","languages":"[]","genres":"[]","keywords":"[]",
       "description":"staring [elli illhan, RussKer PasPed]","imageUrl":"https://www.microsoft.com/U1NmNmNT@.jpg","related":{}}
 ''',
 ];

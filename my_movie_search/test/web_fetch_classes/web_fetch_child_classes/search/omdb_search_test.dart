@@ -57,9 +57,9 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'source': 'DataSourceType.omdb',
+        'bestSource': 'DataSourceType.omdb',
         'title': '[QueryOMDBMovies] new query',
-        'type': 'MovieContentType.custom',
+        'type': 'MovieContentType.error',
         'related': {}
       };
 

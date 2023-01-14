@@ -5,6 +5,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
 import 'package:my_movie_search/utilities/environment.dart';
 
 import '../../../../test_helper.dart';
+// ignore_for_file: unnecessary_raw_strings
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real TMDB endpoint!
@@ -12,12 +13,24 @@ import '../../../../test_helper.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '{"source":"DataSourceType.tmdbMovie","uniqueId":"2287","title":"Rize","year":"2005","languages":[],"genres":[],"keywords":[],"related":"{}"}',
-  '{"source":"DataSourceType.tmdbMovie","uniqueId":"409888","title":"Tiny Snowflakes","year":"2003","languages":[],"genres":[],"keywords":[],"related":"{}"}',
-  '{"source":"DataSourceType.tmdbMovie","uniqueId":"586327","title":"The Rizen: Possession","year":"2019","languages":[],"genres":[],"keywords":[],"related":"{}"}',
-  '{"source":"DataSourceType.tmdbMovie","uniqueId":"453289","title":"The Rizen","year":"2017","languages":[],"genres":[],"keywords":[],"related":"{}"}',
-  '{"source":"DataSourceType.tmdbMovie","uniqueId":"405911","title":"Cats in Riga","year":"2015","languages":[],"genres":[],"keywords":[],"related":"{}"}',
-  '{"source":"DataSourceType.tmdbMovie","uniqueId":"11404","title":"Driving Lessons","year":"2006","languages":[],"genres":[],"keywords":[],"related":"{}"}',
+  r'''
+{"uniqueId":"11404","bestSource":"DataSourceType.tmdbSearch","title":"Driving Lessons","year":"2006","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.tmdbSearch":"11404"},"related":{}}
+''',
+  r'''
+{"uniqueId":"2287","bestSource":"DataSourceType.tmdbSearch","title":"Rize","year":"2005","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.tmdbSearch":"2287"},"related":{}}
+''',
+  r'''
+{"uniqueId":"405911","bestSource":"DataSourceType.tmdbSearch","title":"Cats in Riga","year":"2015","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.tmdbSearch":"405911"},"related":{}}
+''',
+  r'''
+{"uniqueId":"409888","bestSource":"DataSourceType.tmdbSearch","title":"Tiny Snowflakes","year":"2003","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.tmdbSearch":"409888"},"related":{}}
+''',
+  r'''
+{"uniqueId":"453289","bestSource":"DataSourceType.tmdbSearch","title":"The Rizen","year":"2017","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.tmdbSearch":"453289"},"related":{}}
+''',
+  r'''
+{"uniqueId":"586327","bestSource":"DataSourceType.tmdbSearch","title":"The Rizen: Possession","year":"2019","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.tmdbSearch":"586327"},"related":{}}
+''',
 ];
 
 void main() {
@@ -39,7 +52,8 @@ void main() {
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
-      //print(actualOutput.toJsonStrings());
+      // print(actualOutput.toListOfDartJsonStrings(excludeCopyrightedData: false));
+
       // Check the results.
       expect(
         actualOutput,

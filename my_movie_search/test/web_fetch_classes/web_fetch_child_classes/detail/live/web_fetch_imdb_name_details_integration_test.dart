@@ -13,15 +13,15 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"nm0101000","source":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","related":{}}
+{"uniqueId":"nm0101000","bestSource":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdb":"nm0101000"},"related":{}}
 ''',
   r'''
-{"uniqueId":"nm0101001","source":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"Steve Bower is known for Vintage Reds (1998), Late Kick Off North East and Cumbria (2010) and The Search for the Holy Grail (1998).","related":{}}
+{"uniqueId":"nm0101001","bestSource":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"Steve Bower is known for Vintage Reds (1998), Late Kick Off North East and Cumbria (2010) and The Search for the Holy Grail (1998).","sources":{"DataSourceType.imdb":"nm0101001"},"related":{}}
 ''',
   r'''
-{"uniqueId":"nm0101002","source":"DataSourceType.imdb","title":"Stone Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"Stone Bower is known for Against All Odds (1984), Death Valley (1982) and Jimmy the Kid (1982).","related":{}}
+{"uniqueId":"nm0101002","bestSource":"DataSourceType.imdb","title":"Stone Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"Stone Bower is known for Against All Odds (1984), Death Valley (1982) and Jimmy the Kid (1982).","sources":{"DataSourceType.imdb":"nm0101002"},"related":{}}
 ''',
 ];
 

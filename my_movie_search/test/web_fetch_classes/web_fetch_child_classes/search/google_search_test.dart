@@ -57,9 +57,9 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'source': 'DataSourceType.google',
+        'bestSource': 'DataSourceType.google',
         'title': '[QueryGoogleMovies] new query',
-        'type': 'MovieContentType.custom',
+        'type': 'MovieContentType.error',
         'related': {}
       };
 

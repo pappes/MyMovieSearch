@@ -114,7 +114,6 @@ class QueryUnknownSourceMocked
 
   static MovieResultDTO mapToDto(Map map) => MovieResultDTO().init(
         uniqueId: DynamicHelper.toString_(map[outerElementIdentity]),
-        bestSource: DataSourceType.custom,
         description: DynamicHelper.toString_(map[outerElementDescription]),
       );
 
@@ -191,7 +190,6 @@ List<MovieResultDTO> _makeDTOs(int qty) {
     final uniqueId = 1000 + i;
     results.add(
       {
-        'source': DataSourceType.custom.toString(),
         'uniqueId': '$uniqueId',
         'description': '$uniqueId.',
       }.toMovieResultDTO(),

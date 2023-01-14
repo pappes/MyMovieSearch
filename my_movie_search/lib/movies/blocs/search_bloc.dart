@@ -90,7 +90,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     final key = newValue.uniqueId;
     final existingMatch = _allResults[key];
 
-    if (key.startsWith(movieResultDTOMessagePrefix)) {
+    if (key.startsWith(movieDTOMessagePrefix)) {
       _allResults[key] = newValue;
     } else if (null == existingMatch) {
       // Insert value into list

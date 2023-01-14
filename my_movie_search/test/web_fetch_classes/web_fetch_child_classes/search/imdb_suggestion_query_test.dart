@@ -86,16 +86,19 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'uniqueId': '-1',
-        'source': 'DataSourceType.imdbSuggestions',
+        'uniqueId': '-',
+        'bestSource': 'DataSourceType.imdbSuggestions',
         'title': '[QueryIMDBSuggestions] new query',
-        'type': 'MovieContentType.custom',
+        'type': 'MovieContentType.error',
         'related': {}
       };
 
       // Invoke the functionality.
       final actualResult =
           QueryIMDBSuggestions().myYieldError('new query').toMap();
+      // Exact id does not need to match as long as it is negative number
+      actualResult['uniqueId'] =
+          actualResult['uniqueId'].toString().substring(0, 1);
 
       // Check the results.
       expect(actualResult, expectedResult);

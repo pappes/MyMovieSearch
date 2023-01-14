@@ -66,9 +66,9 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'source': 'DataSourceType.imdb',
+        'bestSource': 'DataSourceType.imdb',
         'title': '[QueryIMDBBibliographyDetails] new query',
-        'type': 'MovieContentType.custom',
+        'type': 'MovieContentType.error',
         'related': {}
       };
 

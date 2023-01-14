@@ -14,7 +14,7 @@ typedef MovieSources = Map<DataSourceType, String>;
 
 class MovieResultDTO {
   DataSourceType bestSource = DataSourceType.none;
-  String uniqueId = movieResultDTOUninitialized; // ID in current data source
+  String uniqueId = movieDTOUninitialized; // ID in current data source
   String title = '';
   String alternateTitle = '';
   String charactorName = '';
@@ -40,6 +40,7 @@ enum MovieContentType {
   none,
   error,
   person,
+  title, //      unknow movie type
   movie, //      includes "tv movie"
   series, //     anything less that an hour long that does repeat or repeats more than 4 times
   miniseries, // anything more that an hour long that does repeat
@@ -69,28 +70,28 @@ enum LanguageType {
 }
 
 // member variable names
-const String movieResultDTOBestSource = 'bestSource';
-const String movieResultDTOUniqueId = 'uniqueId';
-const String movieResultDTOTitle = 'title';
-const String movieResultDTOAlternateTitle = 'alternateTitle';
-const String movieResultDTOCharactorName = 'charactorName';
-const String movieResultDTODescription = 'description';
-const String movieResultDTOType = 'type';
-const String movieResultDTOYear = 'year';
-const String movieResultDTOYearRange = 'yearRange';
-const String movieResultDTOUserRating = 'userRating';
-const String movieResultDTOUserRatingCount = 'userRatingCount';
-const String movieResultDTOCensorRating = 'censorRating';
-const String movieResultDTORunTime = 'runTime';
-const String movieResultDTOImageUrl = 'imageUrl';
-const String movieResultDTOLanguage = 'language';
-const String movieResultDTOLanguages = 'languages';
-const String movieResultDTOGenres = 'genres';
-const String movieResultDTOKeywords = 'keywords';
-const String movieResultDTOSources = 'sources';
-const String movieResultDTORelated = 'related';
-const String movieResultDTOUninitialized = '-1';
-const String movieResultDTOMessagePrefix = '-';
+const String movieDTOBestSource = 'bestSource';
+const String movieDTOUniqueId = 'uniqueId';
+const String movieDTOTitle = 'title';
+const String movieDTOAlternateTitle = 'alternateTitle';
+const String movieDTOCharactorName = 'charactorName';
+const String movieDTODescription = 'description';
+const String movieDTOType = 'type';
+const String movieDTOYear = 'year';
+const String movieDTOYearRange = 'yearRange';
+const String movieDTOUserRating = 'userRating';
+const String movieDTOUserRatingCount = 'userRatingCount';
+const String movieDTOCensorRating = 'censorRating';
+const String movieDTORunTime = 'runTime';
+const String movieDTOImageUrl = 'imageUrl';
+const String movieDTOLanguage = 'language';
+const String movieDTOLanguages = 'languages';
+const String movieDTOGenres = 'genres';
+const String movieDTOKeywords = 'keywords';
+const String movieDTOSources = 'sources';
+const String movieDTORelated = 'related';
+const String movieDTOUninitialized = '-1';
+const String movieDTOMessagePrefix = '-';
 
 class RestorableMovie extends RestorableValue<MovieResultDTO> {
   @override
@@ -179,45 +180,48 @@ extension MapResultDTOConversion on Map {
   ///
   MovieResultDTO toMovieResultDTO() {
     final dto = MovieResultDTO();
-    dto.uniqueId = dynamicToString(this[movieResultDTOUniqueId]);
-    dto.title = dynamicToString(this[movieResultDTOTitle]);
-    dto.alternateTitle = dynamicToString(this[movieResultDTOAlternateTitle]);
-    dto.charactorName = dynamicToString(this[movieResultDTOCharactorName]);
+    dto.uniqueId = dynamicToString(this[movieDTOUniqueId]);
+    dto.title = dynamicToString(this[movieDTOTitle]);
+    dto.alternateTitle = dynamicToString(this[movieDTOAlternateTitle]);
+    dto.charactorName = dynamicToString(this[movieDTOCharactorName]);
 
-    dto.description = dynamicToString(this[movieResultDTODescription]);
-    dto.year = dynamicToInt(this[movieResultDTOYear]);
-    dto.yearRange = dynamicToString(this[movieResultDTOYearRange]);
-    dto.userRating = dynamicToDouble(this[movieResultDTOUserRating]);
-    dto.userRatingCount = dynamicToInt(this[movieResultDTOUserRatingCount]);
-    dto.runTime = Duration(seconds: dynamicToInt(this[movieResultDTORunTime]));
-    dto.imageUrl = dynamicToString(this[movieResultDTOImageUrl]);
+    dto.description = dynamicToString(this[movieDTODescription]);
+    dto.year = dynamicToInt(this[movieDTOYear]);
+    dto.yearRange = dynamicToString(this[movieDTOYearRange]);
+    dto.userRating = dynamicToDouble(this[movieDTOUserRating]);
+    dto.userRatingCount = dynamicToInt(this[movieDTOUserRatingCount]);
+    dto.runTime = Duration(seconds: dynamicToInt(this[movieDTORunTime]));
+    dto.imageUrl = dynamicToString(this[movieDTOImageUrl]);
 
     dto.bestSource = getEnumValue<DataSourceType>(
-          this[movieResultDTOBestSource],
+          this[movieDTOBestSource],
           DataSourceType.values,
         ) ??
         dto.bestSource;
     dto.type = getEnumValue<MovieContentType>(
-          this[movieResultDTOType],
+          this[movieDTOType],
           MovieContentType.values,
         ) ??
         dto.type;
     dto.censorRating = getEnumValue<CensorRatingType>(
-          this[movieResultDTOCensorRating],
+          this[movieDTOCensorRating],
           CensorRatingType.values,
         ) ??
         dto.censorRating;
     dto.language = getEnumValue<LanguageType>(
-          this[movieResultDTOLanguage],
+          this[movieDTOLanguage],
           LanguageType.values,
         ) ??
         dto.language;
 
-    dto.sources = stringToSources(this[movieResultDTOSources]);
-    dto.languages = dynamicToStringSet(this[movieResultDTOLanguages]);
-    dto.genres = dynamicToStringSet(this[movieResultDTOGenres]);
-    dto.keywords = dynamicToStringSet(this[movieResultDTOKeywords]);
-    dto.related = stringToRelated(this[movieResultDTORelated]);
+    dto.sources = stringToSources(this[movieDTOSources]);
+    if (!dto.sources.containsKey(dto.bestSource)) {
+      dto.sources[dto.bestSource] = dto.uniqueId;
+    }
+    dto.languages = dynamicToStringSet(this[movieDTOLanguages]);
+    dto.genres = dynamicToStringSet(this[movieDTOGenres]);
+    dto.keywords = dynamicToStringSet(this[movieDTOKeywords]);
+    dto.related = stringToRelated(this[movieDTORelated]);
     return dto;
   }
 
@@ -284,6 +288,10 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Create a MovieResultDTO encapsulating an error.
   ///
   static int _lastError = -1;
+  static resetError() {
+    _lastError = -1;
+  }
+
   MovieResultDTO error([
     String errorText = '',
     DataSourceType errorSource = DataSourceType.none,
@@ -322,7 +330,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   ///
   MovieResultDTO init({
     DataSourceType bestSource = DataSourceType.none,
-    String? uniqueId = movieResultDTOUninitialized,
+    String? uniqueId = movieDTOUninitialized,
     String? title = '',
     String? alternateTitle = '',
     String? charactorName = '',
@@ -347,7 +355,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     this.bestSource = bestSource;
     this.related = related ?? {};
     // Weakly typed variables, help caller to massage data
-    this.uniqueId = uniqueId ?? movieResultDTOUninitialized;
+    this.uniqueId = uniqueId ?? movieDTOUninitialized;
     this.sources[this.bestSource] = this.uniqueId;
     this.title = title ?? alternateTitle ?? '';
     if (title != alternateTitle) {
@@ -414,63 +422,69 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   Map<String, Object> toMap({bool excludeCopyrightedData = true}) {
     final result = <String, Object>{};
     final defaultValues = MovieResultDTO();
-    result[movieResultDTOUniqueId] = uniqueId;
+    result[movieDTOUniqueId] = uniqueId;
     if (bestSource != defaultValues.bestSource) {
-      result[movieResultDTOBestSource] = bestSource.toString();
+      result[movieDTOBestSource] = bestSource.toString();
     }
-    if (sources != defaultValues.sources) {
-      result[movieResultDTOSources] = jsonEncode(sources);
-    }
-    if (title != defaultValues.title) result[movieResultDTOTitle] = title;
+    if (title != defaultValues.title) result[movieDTOTitle] = title;
     if (alternateTitle != defaultValues.alternateTitle) {
-      result[movieResultDTOAlternateTitle] = alternateTitle;
+      result[movieDTOAlternateTitle] = alternateTitle;
     }
     if (charactorName != defaultValues.charactorName) {
-      result[movieResultDTOCharactorName] = charactorName;
+      result[movieDTOCharactorName] = charactorName;
     }
 
     if (type != defaultValues.type) {
-      result[movieResultDTOType] = type.toString();
+      result[movieDTOType] = type.toString();
     }
     if (year != defaultValues.year) {
-      result[movieResultDTOYear] = year.toString();
+      result[movieDTOYear] = year.toString();
     }
     if (yearRange != defaultValues.yearRange) {
-      result[movieResultDTOYearRange] = yearRange;
+      result[movieDTOYearRange] = yearRange;
     }
     if (runTime != defaultValues.runTime) {
-      result[movieResultDTORunTime] = runTime.inSeconds.toString();
+      result[movieDTORunTime] = runTime.inSeconds.toString();
     }
     if (language != defaultValues.language) {
-      result[movieResultDTOLanguage] = language.toString();
+      result[movieDTOLanguage] = language.toString();
     }
 
     if (!excludeCopyrightedData) {
       if (languages != defaultValues.languages) {
-        result[movieResultDTOLanguages] = json.encode(languages.toList());
+        result[movieDTOLanguages] = json.encode(languages.toList());
       }
       if (genres != defaultValues.genres) {
-        result[movieResultDTOGenres] = json.encode(genres.toList());
+        result[movieDTOGenres] = json.encode(genres.toList());
       }
       if (keywords != defaultValues.keywords) {
-        result[movieResultDTOKeywords] = json.encode(keywords.toList());
+        result[movieDTOKeywords] = json.encode(keywords.toList());
       }
       if (description != defaultValues.description) {
-        result[movieResultDTODescription] = description;
+        result[movieDTODescription] = description;
       }
       if (userRating != defaultValues.userRating) {
-        result[movieResultDTOUserRating] = userRating.toString();
+        result[movieDTOUserRating] = userRating.toString();
       }
       if (userRatingCount != defaultValues.userRatingCount) {
-        result[movieResultDTOUserRatingCount] = userRatingCount.toString();
+        result[movieDTOUserRatingCount] = userRatingCount.toString();
       }
       if (censorRating != defaultValues.censorRating) {
-        result[movieResultDTOCensorRating] = censorRating.toString();
+        result[movieDTOCensorRating] = censorRating.toString();
       }
       if (imageUrl != defaultValues.imageUrl) {
-        result[movieResultDTOImageUrl] = imageUrl;
+        result[movieDTOImageUrl] = imageUrl;
       }
     }
+
+    if (sources.isNotEmpty) {
+      final sourcesMap = <String, String>{};
+      for (final source in sources.entries) {
+        sourcesMap[source.key.toString()] = source.value;
+      }
+      result[movieDTOSources] = sourcesMap;
+    }
+
     // convert each related dto to a string
     final relatedMap = <String, Object>{};
     for (final category in related.entries) {
@@ -483,7 +497,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       }
       relatedMap[category.key] = movies;
     }
-    result[movieResultDTORelated] = relatedMap;
+    result[movieDTORelated] = relatedMap;
     return result;
   }
 
@@ -505,9 +519,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Combine information from [newValue] into a [MovieResultDTO].
   ///
   void merge(MovieResultDTO newValue) {
-    if (newValue.userRatingCount > userRatingCount ||
+    if (newValue.userRatingCount >= userRatingCount ||
         0 == userRatingCount ||
-        DataSourceType.imdb == newValue.bestSource) {
+        newValue.sources.containsKey(DataSourceType.imdb)) {
       bestSource = bestValue(newValue.bestSource, bestSource);
 
       final oldTitle = title;
@@ -701,7 +715,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String id,
   ) {
     if (id.startsWith('nm')) return MovieContentType.person;
-    if (id == "-1") return MovieContentType.error;
+    if (id == "-1") return MovieContentType.none;
+    if (id.startsWith(movieDTOMessagePrefix)) return MovieContentType.error;
     if (seconds != null && seconds < 500 && seconds > 0) {
       return MovieContentType.short;
     }
@@ -721,6 +736,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (title.lastIndexOf('movie') > -1) return MovieContentType.movie;
     if (title.lastIndexOf('video') > -1) return MovieContentType.movie;
     if (title.lastIndexOf('feature') > -1) return MovieContentType.movie;
+    if (id.startsWith('tt')) return MovieContentType.title;
     return null;
   }
 
@@ -743,7 +759,11 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         id,
       );
     }
-    return null;
+    return _lookupMovieContentType(
+      '', // Throw away the start of info.
+      duration,
+      id,
+    );
   }
 
   /// Use movie type string to lookup [MovieContentType] movie type.
@@ -755,7 +775,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     final string = info?.toString() ?? '';
     final type = _lookupMovieContentType(string, duration, id);
     if (null != type || null == info) return type;
-    return MovieContentType.movie;
+    return null;
   }
 
   /// Test framework matcher to compare current [MovieResultDTO] to [other]
@@ -765,24 +785,24 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (title == other.title && title == 'unknown') return true;
 
     final mismatches = <String, String>{};
-    void _matchCompare<T>(String field, T expected, T actual) {
+    void _matchCompare<T>(String field, T actual, T expected) {
       if (expected != actual) {
         mismatches[field] =
             'is different\n  Expected: "$expected"\n  Actual: "$actual"';
       }
     }
 
-    void _matchCompareId(String field, String expected, String actual) {
-      if (!expected.startsWith(movieResultDTOMessagePrefix) ||
-          !actual.startsWith(movieResultDTOMessagePrefix)) {
+    void _matchCompareId(String field, String actual, String expected) {
+      if (!expected.startsWith(movieDTOMessagePrefix) ||
+          !actual.startsWith(movieDTOMessagePrefix)) {
         _matchCompare(field, expected, actual);
       }
     }
 
     void _matchCompareIdMap(
       String field,
-      MovieSources expected,
       MovieSources actual,
+      MovieSources expected,
     ) {
       if (expected.length != actual.length) {
         _matchCompare(field, expected, actual);
@@ -803,7 +823,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
     _matchCompare('source', bestSource, other.bestSource);
     _matchCompareId('uniqueId', uniqueId, other.uniqueId);
-    _matchCompareIdMap('sources', sources, other.sources);
+    if (MovieContentType.error != type) {
+      _matchCompareIdMap('sources', sources, other.sources);
+    }
     _matchCompare('title', title, other.title);
     _matchCompare('alternateTitle', alternateTitle, other.alternateTitle);
     _matchCompare('charactorName', charactorName, other.charactorName);
@@ -931,6 +953,10 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
       '\n      "description":"',
     );
     formatted = formatted.replaceAll(
+      '"userRating":"',
+      '\n      "userRating":"',
+    );
+    formatted = formatted.replaceAll(
       '}},"',
       '}},\n      "',
     );
@@ -1037,10 +1063,10 @@ extension DTOCompare on MovieResultDTO {
   ///
   int compareTo(MovieResultDTO other) {
     // Treat null and negative numbers as lower than any other value
-    if (uniqueId == movieResultDTOUninitialized &&
-        other.uniqueId != movieResultDTOUninitialized) return -1;
-    if (uniqueId != movieResultDTOUninitialized &&
-        other.uniqueId == movieResultDTOUninitialized) return 1;
+    if (uniqueId == movieDTOUninitialized &&
+        other.uniqueId != movieDTOUninitialized) return -1;
+    if (uniqueId != movieDTOUninitialized &&
+        other.uniqueId == movieDTOUninitialized) return 1;
     // Preference people > movies.
     if (contentCategory() != other.contentCategory()) {
       return contentCategory().compareTo(other.contentCategory());

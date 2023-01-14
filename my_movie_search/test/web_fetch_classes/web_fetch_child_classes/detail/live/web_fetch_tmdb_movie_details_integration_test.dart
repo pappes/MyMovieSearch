@@ -12,9 +12,21 @@ import '../../../../test_helper.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '{"source":"DataSourceType.tmdbMovie","uniqueId":"913986","alternateId":"tt0101000","title":"Začátek dlouhého podzimu","year":"1990","language":"LanguageType.foreign","languages":["Czech"],"genres":["Drama","Family"],"keywords":[],"related":"{}"}',
-  '{"source":"DataSourceType.tmdbMovie","uniqueId":"-1","title":"[QueryTMDBDetails] Error in tmdbMovie with criteria tt0101001 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/movie/tt0101001?api_key=a","type":"MovieContentType.custom","languages":[],"genres":[],"keywords":[],"related":"{}"}',
-  '{"source":"DataSourceType.tmdbMovie","uniqueId":"230839","alternateId":"tt0101002","title":"Return Engagement","alternateTitle":"再戰江湖","year":"1990","runTime":"6480","language":"LanguageType.foreign","languages":["Cantonese"],"genres":["Crime","Action","Drama"],"keywords":[],"description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.","userRating":"6.0","userRatingCount":"4","related":"{}"}',
+  r'''
+{"uniqueId":"-1","bestSource":"DataSourceType.tmdbMovie","title":"[QueryTMDBDetails] Error in tmdbMovie with criteria tt0101001 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/movie/tt0101001?api_key=a","type":"MovieContentType.error","languages":"[]","genres":"[]","keywords":"[]","related":{}}
+''',
+  r'''
+{"uniqueId":"tt0101000","bestSource":"DataSourceType.tmdbMovie","title":"Začátek dlouhého podzimu","year":"1990","language":"LanguageType.foreign",
+      "languages":"[\"Czech\"]",
+      "genres":"[\"Drama\",\"Family\"]","keywords":"[]","sources":{"DataSourceType.tmdbMovie":"913986"},"related":{}}
+''',
+  r'''
+{"uniqueId":"tt0101002","bestSource":"DataSourceType.tmdbMovie","title":"Return Engagement","alternateTitle":"再戰江湖","year":"1990","runTime":"6480","language":"LanguageType.foreign",
+      "languages":"[\"Cantonese\"]",
+      "genres":"[\"Crime\",\"Action\",\"Drama\"]","keywords":"[]",
+      "description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.",
+      "userRating":"6.0","userRatingCount":"4","sources":{"DataSourceType.tmdbMovie":"230839"},"related":{}}
+''',
 ];
 
 /// Create a string list with [qty] unique criteria values.
@@ -62,15 +74,16 @@ void main() {
 
       final expectedOutput = expectedDTOList;
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-      // To update expected data, uncomment the following line
-      //print(actualOutput.toJsonStrings());
 
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
+
       actualOutput[1].title = actualOutput[1].title.substring(0, 195);
-      actualOutput[1].uniqueId = "-1";
-      actualOutput[1].uniqueId = "-1";
+      actualOutput[1].setSource(newUniqueId: "-1");
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+
+      // To update expected data, uncomment the following line
+      //print(actualOutput.toListOfDartJsonStrings(excludeCopyrightedData: false));
 
       // Check the results.
       expect(

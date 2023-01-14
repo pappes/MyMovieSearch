@@ -25,10 +25,10 @@ final
 in test('Run dtoFromCompleteJsonMap()'*/
     expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '{"source": "tmdbMovie", "uniqueId": "429617", "title": "Spider-Man: Far from Home", "year": "2019", "languages": [], "genres": [], "keywords": [], "related": {}}',
-  '{"source": "tmdbMovie", "uniqueId": "228161", "title": "Home", "year": "2015", "languages": [], "genres": [], "keywords": [], "related": {}}',
-  '{"source": "tmdbMovie", "uniqueId": "521029", "title": "Annabelle Comes Home", "year": "2019", "languages": [], "genres": [], "keywords": [], "related": {}}',
-  '{"source": "tmdbMovie", "uniqueId": "380565", "title": "Home Invasion", "year": "2016", "languages": [], "genres": [], "keywords": [], "related": {}}',
+  '{"bestSource": "tmdbSearch", "uniqueId": "429617", "title": "Spider-Man: Far from Home", "year": "2019", "languages": [], "genres": [], "keywords": [], "related": {}}',
+  '{"bestSource": "tmdbSearch", "uniqueId": "228161", "title": "Home", "year": "2015", "languages": [], "genres": [], "keywords": [], "related": {}}',
+  '{"bestSource": "tmdbSearch", "uniqueId": "521029", "title": "Annabelle Comes Home", "year": "2019", "languages": [], "genres": [], "keywords": [], "related": {}}',
+  '{"bestSource": "tmdbSearch", "uniqueId": "380565", "title": "Home Invasion", "year": "2016", "languages": [], "genres": [], "keywords": [], "related": {}}',
 ];
 
 final intermediateMapList = [jsonDecode(tmdbJsonSearchFull)];

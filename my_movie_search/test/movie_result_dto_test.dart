@@ -72,10 +72,7 @@ MovieResultDTO fullDTO() {
   dto.languages = {'a', 'b', 'c'};
   dto.genres = {'x', 'y', 'z'};
   dto.keywords = {'they', 'them'};
-  dto.sources = {
-    DataSourceType.tmdbMovie: '123abc',
-    DataSourceType.wiki: 'abc123'
-  };
+  dto.sources = {DataSourceType.wiki: 'abc123'};
 
   final dto2 = MovieResultDTO();
   dto2.uniqueId = 'dto2';
@@ -282,7 +279,8 @@ void main() {
     // Convert a dto to a map.
     test('empty_DTO', () {
       final dto = MovieResultDTO();
-      dto.type = MovieContentType.error;
+      dto.type = MovieContentType.none;
+      dto.setSource();
       final initialisedDTO = MovieResultDTO().init();
       expect(dto, MovieResultDTOMatcher(initialisedDTO));
     });
@@ -458,7 +456,7 @@ void main() {
     );
     expect(
       MovieResultDTOHelpers.getMovieContentType(suffix, duration, id),
-      type ?? MovieContentType.movie,
+      type,
       reason: 'unexpected value returned from getImdbMovieContentType',
     );
   }
@@ -466,11 +464,15 @@ void main() {
   group('findImdbMovieContentTypeFromTitle movie', () {
     test(
       'normal movie',
-      () => testContent(null, '', null, 'tt1234'),
+      () => testContent(null, '', null, '1234'),
+    );
+    test(
+      'normal imdb movie',
+      () => testContent(MovieContentType.title, '', null, 'tt1234'),
     );
     test(
       'unknown movie',
-      () => testContent(null, 'info', null, 'tt1234'),
+      () => testContent(MovieContentType.title, 'info', null, 'tt1234'),
     );
     test(
       'concise movie',
@@ -509,7 +511,11 @@ void main() {
   group('findImdbMovieContentTypeFromTitle not a movie ie game', () {
     test(
       'error',
-      () => testContent(MovieContentType.error, 'info', null, '-1'),
+      () => testContent(MovieContentType.none, 'info', null, '-1'),
+    );
+    test(
+      'error',
+      () => testContent(MovieContentType.error, 'info', null, '-2'),
     );
     test(
       'game',

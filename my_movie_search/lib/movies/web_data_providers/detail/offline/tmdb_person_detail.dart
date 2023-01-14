@@ -28,8 +28,9 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"11234","source":"DataSourceType.tmdbPerson","alternateId":"nm0109036","title":"Fred Abraham","type":"MovieContentType.person","year":"1963","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"I came, I saw, I went","userRating":"0.6","userRatingCount":"1","related":{}}
+{"uniqueId":"nm0109036","bestSource":"DataSourceType.tmdbPerson","title":"Fred Abraham","type":"MovieContentType.person","year":"1963","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"I came, I saw, I went",
+      "userRating":"0.6","userRatingCount":"1","sources":{"DataSourceType.tmdbPerson":"11234"},"related":{}}
 ''',
 ];
 

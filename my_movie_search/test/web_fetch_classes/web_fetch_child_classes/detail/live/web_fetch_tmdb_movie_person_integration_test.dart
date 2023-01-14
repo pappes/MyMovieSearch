@@ -14,19 +14,22 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"100","source":"DataSourceType.tmdbPerson","alternateId":"nm0005454","title":"Scott Speedman","type":"MovieContentType.person","year":"1975","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"Scott Speedman (born September 1, 1975) is a British-born Canadian film and television actor. He is best known for playing Ben Covington in the coming-of-age television drama Felicity and Lycan-Vampire hybrid Michael Corvin in the gothic horror/action Underworld films.\n\nDescription above from the Wikipedia article Scott Speedman, licensed under CC-BY-SA, full list of contributors on Wikipedia.","userRating":"20.488","userRatingCount":"1","related":{}}
+{"uniqueId":"nm0005454","bestSource":"DataSourceType.tmdbPerson","title":"Scott Speedman","type":"MovieContentType.person","year":"1975","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"Scott Speedman (born September 1, 1975) is a British-born Canadian film and television actor. He is best known for playing Ben Covington in the coming-of-age television drama Felicity and Lycan-Vampire hybrid Michael Corvin in the gothic horror/action Underworld films.\n\nDescription above from the Wikipedia article Scott Speedman, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+      "userRating":"23.657","userRatingCount":"1","sources":{"DataSourceType.tmdbPerson":"100"},"related":{}}
 ''',
   r'''
-{"uniqueId":"101","source":"DataSourceType.tmdbPerson","alternateId":"nm0914455","title":"Leonor Watling","type":"MovieContentType.person","year":"1975","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"Leonor Elizabeth Ceballos Watling (born July 28, 1975) is an award-winning Spanish film actress and singer.","userRating":"8.116","userRatingCount":"1","related":{}}
+{"uniqueId":"nm0914455","bestSource":"DataSourceType.tmdbPerson","title":"Leonor Watling","type":"MovieContentType.person","year":"1975","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"Leonor Elizabeth Ceballos Watling (born July 28, 1975) is an award-winning Spanish film actress and singer.",
+      "userRating":"12.855","userRatingCount":"1","sources":{"DataSourceType.tmdbPerson":"101"},"related":{}}
 ''',
   r'''
-{"uniqueId":"102","source":"DataSourceType.tmdbPerson","alternateId":"nm0001323","title":"Debbie Harry","type":"MovieContentType.person","year":"1945","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"An American singer, songwriter, and actress, known as the lead singer of the new wave band Blondie.","userRating":"9.282","userRatingCount":"1","related":{}}
+{"uniqueId":"nm0001323","bestSource":"DataSourceType.tmdbPerson","title":"Debbie Harry","type":"MovieContentType.person","year":"1945","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"An American singer, songwriter, and actress, known as the lead singer of the new wave band Blondie.",
+      "userRating":"9.059","userRatingCount":"1","sources":{"DataSourceType.tmdbPerson":"102"},"related":{}}
 ''',
   r'''
-{"uniqueId":"-1","source":"DataSourceType.tmdbPerson","title":"[QueryTMDBDetails] Error in tmdbPerson with criteria 000 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/person/000?api_key=a134ed10f829ac7b27e5d16f57067951","type":"MovieContentType.custom","languages":"[]","genres":"[]","keywords":"[]","related":{}}
+{"uniqueId":"-2","bestSource":"DataSourceType.tmdbPerson","title":"[QueryTMDBDetails] Error in tmdbPerson with criteria 000 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/person/000?api_key=a134ed10f829ac7b27e5d16f57067951","type":"MovieContentType.error","languages":"[]","genres":"[]","keywords":"[]","related":{}}
 ''',
 ];
 
@@ -73,6 +76,7 @@ void main() {
     test('Run read 3 pages from TMDB', () async {
       // Wait for api key to be initialised
       await EnvironmentVars.init();
+      MovieResultDTOHelpers.resetError();
 
       final expectedOutput = expectedDTOList;
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));

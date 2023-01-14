@@ -76,7 +76,6 @@ class GoogleMovieSearchConverter {
 
   static MovieResultDTO dtoFromMap(Map map) {
     final movie = MovieResultDTO();
-    movie.bestSource = DataSourceType.google;
 
     movie.title = getTitle(map);
     movie.yearRange = getYearRange(map);
@@ -102,6 +101,8 @@ class GoogleMovieSearchConverter {
         }
       }
     }
+    // Reinitialise source after setting ID
+    movie.setSource(newSource: DataSourceType.google);
     return movie;
   }
 
@@ -114,7 +115,7 @@ class GoogleMovieSearchConverter {
   static String getID(Map map) {
     return map[innerElementIdentity]?.toString() ??
         map[innerElementPageconst]?.toString() ??
-        movieResultDTOUninitialized;
+        movieDTOUninitialized;
   }
 
   static String getYearRange(Map map) {

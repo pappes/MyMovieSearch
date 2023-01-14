@@ -10,20 +10,20 @@ import '../test_helper.dart';
 final expectedDTOList = expectedDTOStream.toList();
 final expectedDTOStream = streamMovieResultDTOFromJsonMap([
   {
-    movieResultDTOTitle: '1234',
-    movieResultDTOUniqueId: 'tt7602562',
-    movieResultDTOBestSource: DataSourceType.imdb.toString(),
-    movieResultDTOYear: '2016',
-    movieResultDTODescription: '1234 is a movie ... terror in the country.',
-    movieResultDTOLanguages: 'null',
-    movieResultDTOGenres: '"Drama"',
-    movieResultDTOKeywords: '["terror","T&A"]',
+    movieDTOTitle: '1234',
+    movieDTOUniqueId: 'tt7602562',
+    movieDTOBestSource: DataSourceType.imdb.toString(),
+    movieDTOYear: '2016',
+    movieDTODescription: '1234 is a movie ... terror in the country.',
+    movieDTOLanguages: 'null',
+    movieDTOGenres: '"Drama"',
+    movieDTOKeywords: '["terror","T&A"]',
 // movieResultDTOYearRange = 'yearRange';
-    movieResultDTOType: MovieContentType.movie.toString(),
-    movieResultDTOUserRating: '6.5',
-    movieResultDTOUserRatingCount: '10',
+    movieDTOType: MovieContentType.movie.toString(),
+    movieDTOUserRating: '6.5',
+    movieDTOUserRatingCount: '10',
 // movieResultDTOCensorRating = 'censorRating';
-    movieResultDTOImageUrl:
+    movieDTOImageUrl:
         'https://m.media-amazon.com/images/M/MV5B...c4OTM4NjE@._V1_.jpg',
   }
 ]);
