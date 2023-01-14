@@ -823,7 +823,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
     _matchCompare('source', bestSource, other.bestSource);
     _matchCompareId('uniqueId', uniqueId, other.uniqueId);
-    if (MovieContentType.error != type) {
+    if (MovieContentType.error != type && sources.isNotEmpty) {
       _matchCompareIdMap('sources', sources, other.sources);
     }
     _matchCompare('title', title, other.title);

@@ -47,8 +47,8 @@ class MovieSearchRepository extends BaseMovieRepository {
       _imdbSearch,
       _imdbSuggestions,
       _omdbSearch,
-      _tmdbSearch,
       _googleSearch,
+      _tmdbSearch,
     ]) {
       initProvider();
       provider

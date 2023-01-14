@@ -119,7 +119,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       for (final source in tmdbSources) {
         final imdbid = newValue.uniqueId;
         final tmdbid = newValue.sources[source];
-        if (null != tmdbid) {
+        if (null != tmdbid && _allResults.containsKey(tmdbid)) {
           _replaceTemporaryDTO(_allResults, imdbid, tmdbid);
         }
       }
