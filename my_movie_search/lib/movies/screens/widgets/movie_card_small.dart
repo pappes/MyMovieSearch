@@ -39,11 +39,14 @@ class MovieTile extends ListTile {
     final ratingCount = (movie.userRatingCount > 0 || movie.userRating > 0)
         ? '${movie.userRating} (${formatter.format(movie.userRatingCount)})'
         : '';
+    final aListRanking =
+        (movie.aListRanking > 0) ? '+${movie.aListRanking} ' : '';
     final runtime = (movie.runTime.inMinutes > 0)
         ? movie.runTime.toFormattedTime() + (ratingCount.isEmpty ? ' ' : ' - ')
         : '';
     return Text(
-      '$rating$content$charactorName$alternateTitle$runtime$ratingCount',
+      '$rating$content$charactorName$runtime$ratingCount'
+      '$aListRanking$alternateTitle',
       textScaleFactor: 1.0,
     );
   }

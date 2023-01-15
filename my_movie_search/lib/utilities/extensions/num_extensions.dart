@@ -21,6 +21,26 @@ extension DoubleHelper on double {
     if (count == 0) return zeroValueSubstitute;
     return count ?? nullValueSubstitute;
   }
+
+  /// Convert an [formattedText] to decimal representation ignoring thousand seperators
+  ///
+  /// [tolerance] is the percentage varianace allowed
+  ///
+  /// ```dart
+  ///if (DoubleHelper.fuzzyMatch(123.7, 124.2)) ...
+  /// ```
+  static bool fuzzyMatch<T>(T actual, T expected, {int tolerance = 80}) {
+    if (actual != expected) {
+      final expectedDouble = fromText(expected.toString()) ?? 0.0;
+      final actualDouble = fromText(actual.toString()) ?? 0.0;
+      final percent = tolerance / 100;
+      // Avoid divide by zero! Zero is never in percentage range!
+      if (0.0 == expectedDouble) return false;
+      if (actualDouble / expectedDouble < percent) return false;
+      if (expectedDouble / actualDouble < percent) return false;
+    }
+    return true;
+  }
 }
 
 /// Extend [int] to provide convenience functions.

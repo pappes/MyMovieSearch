@@ -22,6 +22,7 @@ class MovieResultDTO {
   MovieContentType type = MovieContentType.none;
   int year = 0;
   String yearRange = '';
+  int aListRanking = 0; // 100 = star, 0 = extra
   double userRating = 0;
   int userRatingCount = 0;
   CensorRatingType censorRating = CensorRatingType.none;
@@ -79,6 +80,7 @@ const String movieDTODescription = 'description';
 const String movieDTOType = 'type';
 const String movieDTOYear = 'year';
 const String movieDTOYearRange = 'yearRange';
+const String movieDTOaListRanking = 'aListRanking';
 const String movieDTOUserRating = 'userRating';
 const String movieDTOUserRatingCount = 'userRatingCount';
 const String movieDTOCensorRating = 'censorRating';
@@ -188,6 +190,7 @@ extension MapResultDTOConversion on Map {
     dto.description = dynamicToString(this[movieDTODescription]);
     dto.year = dynamicToInt(this[movieDTOYear]);
     dto.yearRange = dynamicToString(this[movieDTOYearRange]);
+    dto.aListRanking = dynamicToInt(this[movieDTOaListRanking]);
     dto.userRating = dynamicToDouble(this[movieDTOUserRating]);
     dto.userRatingCount = dynamicToInt(this[movieDTOUserRatingCount]);
     dto.runTime = Duration(seconds: dynamicToInt(this[movieDTORunTime]));
@@ -338,6 +341,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String? type = '',
     String? year = '0',
     String? yearRange = '',
+    String? aListRanking = '0',
     String? userRating = '0',
     String? userRatingCount = '0',
     String? censorRating = '',
@@ -366,6 +370,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     this.yearRange = yearRange ?? '';
     this.imageUrl = imageUrl ?? '';
     this.year = IntHelper.fromText(year) ?? 0;
+    this.aListRanking = IntHelper.fromText(aListRanking) ?? 0;
     this.userRatingCount = IntHelper.fromText(userRatingCount) ?? 0;
     this.userRating = DoubleHelper.fromText(userRating) ?? 0;
     this.runTime = Duration(seconds: IntHelper.fromText(runTime) ?? 0);
@@ -448,6 +453,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     }
     if (language != defaultValues.language) {
       result[movieDTOLanguage] = language.toString();
+    }
+    if (aListRanking != defaultValues.aListRanking) {
+      result[movieDTOaListRanking] = aListRanking.toString();
     }
 
     if (!excludeCopyrightedData) {
@@ -555,6 +563,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       keywords.addAll(newValue.keywords);
       languages.addAll(newValue.languages);
       sources.addAll(newValue.sources);
+      aListRanking = bestValue(newValue.aListRanking, aListRanking);
       userRating = bestUserRating(
         newValue.userRating,
         newValue.userRatingCount,
@@ -692,6 +701,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     dto.type = type;
     dto.year = year;
     dto.yearRange = yearRange;
+    dto.aListRanking = aListRanking;
     dto.userRating = userRating;
     dto.userRatingCount = userRatingCount;
     dto.censorRating = censorRating;
@@ -778,78 +788,149 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return null;
   }
 
+  /// Compare 2 fields and describe the difference
+  void _matchCompare<T>(
+    Map<String, String> mismatches,
+    String fieldName,
+    T actual,
+    T expected, {
+    bool fuzzy = false,
+  }) {
+    if (fuzzy && (actual is int || actual is double)) {
+      _matchFuzzyCompare(mismatches, fieldName, expected, actual);
+    } else {
+      if (expected != actual) {
+        mismatches[fieldName] =
+            'is different\n  Expected: "$expected"\n  Actual: "$actual"\n';
+      }
+    }
+  }
+
+  /// Compare 2 fields and describe the difference
+  void _matchFuzzyCompare<T>(
+    Map<String, String> mismatches,
+    String fieldName,
+    T actual,
+    T expected,
+  ) {
+    if (expected != actual) {
+      if (!DoubleHelper.fuzzyMatch(actual, expected, tolerance: 80)) {
+        mismatches[fieldName] =
+            'is different  Expected approx: "$expected"  Actual: "$actual"\n';
+      }
+    }
+  }
+
+  /// Compare 2 identifiers and describe the difference
+  ///
+  /// Allow error identifiers to be different
+  void _matchCompareId(
+    Map<String, String> mismatches,
+    String fieldName,
+    String actual,
+    String expected,
+  ) {
+    if (!expected.startsWith(movieDTOMessagePrefix) ||
+        !actual.startsWith(movieDTOMessagePrefix)) {
+      _matchCompare(mismatches, fieldName, expected, actual);
+    }
+  }
+
+  /// Compare 2 movie source collections and describe the difference
+  ///
+  /// Allow error identifiers to be different
+  void _matchCompareIdMap(
+    Map<String, String> mismatches,
+    String fieldName,
+    MovieSources actual,
+    MovieSources expected,
+  ) {
+    if (expected.length != actual.length) {
+      _matchCompare(mismatches, '$fieldName length', expected, actual);
+    }
+    for (var index = 0; index < expected.length; index++) {
+      // Compare source name
+      _matchCompare(
+        mismatches,
+        fieldName,
+        expected.keys.elementAt(index),
+        actual.keys.elementAt(index),
+      );
+      // Compare source identifier
+      _matchCompareId(
+        mismatches,
+        fieldName,
+        expected.values.elementAt(index),
+        actual.values.elementAt(index),
+      );
+    }
+  }
+
   /// Test framework matcher to compare current [MovieResultDTO] to [other]
   ///
   /// Explains any difference found.
-  bool matches(MovieResultDTO other, {Map? matchState, bool related = true}) {
+  /// [matchState] allows ifformation about mismatches to be passed back
+  /// [related] allows exclusion of the related dto collection for comparison
+  /// [fuzzy] allows volitile numeric data to have a 75% variation
+  bool matches(
+    MovieResultDTO other, {
+    Map? matchState,
+    bool related = true,
+    bool fuzzy = false,
+    String prefix = '',
+  }) {
     if (title == other.title && title == 'unknown') return true;
 
     final mismatches = <String, String>{};
-    void _matchCompare<T>(String field, T actual, T expected) {
-      if (expected != actual) {
-        mismatches[field] =
-            'is different\n  Expected: "$expected"\n  Actual: "$actual"';
-      }
-    }
+    void matchCompare<T>(String fieldName, T actual, T expected) =>
+        _matchCompare(
+          mismatches,
+          '$prefix$fieldName',
+          actual,
+          expected,
+          fuzzy: fuzzy,
+        );
 
-    void _matchCompareId(String field, String actual, String expected) {
-      if (!expected.startsWith(movieDTOMessagePrefix) ||
-          !actual.startsWith(movieDTOMessagePrefix)) {
-        _matchCompare(field, expected, actual);
-      }
-    }
+    void matchCompareId(String fieldName, String actual, String expected) =>
+        _matchCompareId(mismatches, '$prefix$fieldName', actual, expected);
 
-    void _matchCompareIdMap(
-      String field,
+    void matchCompareIdMap(
+      String fieldName,
       MovieSources actual,
       MovieSources expected,
-    ) {
-      if (expected.length != actual.length) {
-        _matchCompare(field, expected, actual);
-      }
-      for (var index = 0; index < expected.length; index++) {
-        _matchCompareId(
-          field,
-          expected.values.elementAt(index),
-          actual.values.elementAt(index),
-        );
-        _matchCompare(
-          field,
-          expected.keys.elementAt(index),
-          actual.keys.elementAt(index),
-        );
-      }
-    }
+    ) =>
+        _matchCompareIdMap(mismatches, '$prefix$fieldName', actual, expected);
 
-    _matchCompare('source', bestSource, other.bestSource);
-    _matchCompareId('uniqueId', uniqueId, other.uniqueId);
+    matchCompare('source', bestSource, other.bestSource);
+    matchCompareId('uniqueId', uniqueId, other.uniqueId);
     if (MovieContentType.error != type && sources.isNotEmpty) {
-      _matchCompareIdMap('sources', sources, other.sources);
+      matchCompareIdMap('sources', sources, other.sources);
     }
-    _matchCompare('title', title, other.title);
-    _matchCompare('alternateTitle', alternateTitle, other.alternateTitle);
-    _matchCompare('charactorName', charactorName, other.charactorName);
-    _matchCompare('description', description, other.description);
-    _matchCompare('type', type, other.type);
-    _matchCompare('year', year, other.year);
-    _matchCompare('yearRange', yearRange, other.yearRange);
-    _matchCompare('userRating', userRating, other.userRating);
-    _matchCompare('censorRating', censorRating, other.censorRating);
-    _matchCompare('runTime', runTime, other.runTime);
-    _matchCompare('imageUrl', imageUrl, other.imageUrl);
-    _matchCompare('language', language, other.language);
-    _matchCompare(
+    matchCompare('title', title, other.title);
+    matchCompare('alternateTitle', alternateTitle, other.alternateTitle);
+    matchCompare('charactorName', charactorName, other.charactorName);
+    matchCompare('description', description, other.description);
+    matchCompare('type', type, other.type);
+    matchCompare('year', year, other.year);
+    matchCompare('aListRanking', aListRanking, other.aListRanking);
+    matchCompare('yearRange', yearRange, other.yearRange);
+    matchCompare('userRating', userRating, other.userRating);
+    matchCompare('censorRating', censorRating, other.censorRating);
+    matchCompare('runTime', runTime, other.runTime);
+    matchCompare('imageUrl', imageUrl, other.imageUrl);
+    matchCompare('language', language, other.language);
+    matchCompare(
       'languages',
       languages.toString(),
       other.languages.toString(),
     );
-    _matchCompare('genres', genres.toString(), other.genres.toString());
-    _matchCompare('keywords', keywords.toString(), other.keywords.toString());
+    matchCompare('genres', genres.toString(), other.genres.toString());
+    matchCompare('keywords', keywords.toString(), other.keywords.toString());
 
     if (related) {
       final expected = this.related.toPrintableString();
       final actual = other.related.toPrintableString();
-      if (expected != actual) _matchCompare('related', expected, actual);
+      if (expected != actual) matchCompare('related', expected, actual);
     }
 
     if (mismatches.isNotEmpty) {
@@ -1073,7 +1154,8 @@ extension DTOCompare on MovieResultDTO {
     }
     // For people sort by popularity
     if (MovieContentType.person == type) {
-      if (userRatingCount != other.userRatingCount) {
+      if (aListRanking != other.aListRanking ||
+          userRatingCount != other.userRatingCount) {
         return personPopularityCompare(other);
       }
       return title.compareTo(other.title) * -1;
@@ -1164,9 +1246,10 @@ extension DTOCompare on MovieResultDTO {
 
   /// Rank movies based on raw popularity.
   ///
-  int personPopularityCompare(MovieResultDTO? other) {
-    final otherCount = other?.userRatingCount ?? 0;
-    return userRatingCount.compareTo(otherCount);
+  int personPopularityCompare(MovieResultDTO other) {
+    final popularity = userRatingCount + aListRanking;
+    final otherPopularity = other.userRatingCount + other.aListRanking;
+    return popularity.compareTo(otherPopularity);
   }
 
   /// Extract year release or year of most recent episode.

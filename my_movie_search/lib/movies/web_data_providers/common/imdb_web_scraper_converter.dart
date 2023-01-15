@@ -331,11 +331,15 @@ class ImdbWebScraperConverter {
   /// extract collections of movies for a specific category from a map or a list.
   MovieCollection _getDeepTitleRelatedPeopleForCategory(dynamic nodes) {
     final MovieCollection result = {};
+    var aListRanking = 100;
     if (nodes is List) {
       for (final node in nodes) {
         if (node is Map) {
           final movieDto = _getDeepTitleRelatedPerson(node);
           _getMovieCharactorName(movieDto, node);
+          if (0 < aListRanking) {
+            movieDto.aListRanking = aListRanking--;
+          }
           result[movieDto.uniqueId] = movieDto;
         }
       }

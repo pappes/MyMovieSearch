@@ -25,17 +25,20 @@ Matcher containsSubstring(String substring, {String startsWith = ''}) {
 class MovieResultDTOMatcher extends Matcher {
   MovieResultDTO expected;
   bool related;
+  bool verbose;
   late MovieResultDTO _actual;
 
-  MovieResultDTOMatcher(this.expected, {this.related = true});
+  MovieResultDTOMatcher(
+    this.expected, {
+    this.related = true,
+    this.verbose = false,
+  });
 
   @override
   // Tell test framework what content was expected.
-  Description describe(Description description) {
-    return description.add(
-      'has expected MovieResultDTO content = \n${expected.toPrintableString()}',
-    );
-  }
+  Description describe(Description description) => description.add(
+        '$expected (set MovieResultDTOMatcher verbose:true for full details)',
+      );
 
   @override
   // Tell test framework what difference was found.
@@ -45,9 +48,10 @@ class MovieResultDTOMatcher extends Matcher {
     Map<dynamic, dynamic> matchState,
     bool verbose,
   ) {
-    mismatchDescription.add(
-      'has actual emitted MovieResultDTO = \n${_actual.toPrintableString()}\n',
-    );
+    if (verbose || this.verbose) {
+      mismatchDescription.add('Expected: ${expected.toPrintableString()}\n');
+      mismatchDescription.add('  Actual: ${_actual.toPrintableString()}\n');
+    }
     return mismatchDescription.add(matchState['differences'].toString());
   }
 
@@ -68,15 +72,20 @@ class MovieResultDTOMatcher extends Matcher {
 class MovieResultDTOListMatcher extends Matcher {
   List<MovieResultDTO> expected;
   bool related;
+  bool verbose;
   late List<MovieResultDTO> _actual;
 
-  MovieResultDTOListMatcher(this.expected, {this.related = true});
+  MovieResultDTOListMatcher(
+    this.expected, {
+    this.related = true,
+    this.verbose = false,
+  });
 
   @override
   // Tell test framework what content was expected.
-  Description describe(Description description) {
-    return description.add('has expected ${expected.toPrintableString()}');
-  }
+  Description describe(Description description) => description.add(
+        '$expected (set MovieResultDTOListMatcher verbose:true for full details)',
+      );
 
   @override
   // Tell test framework what difference was found.
@@ -86,7 +95,10 @@ class MovieResultDTOListMatcher extends Matcher {
     Map<dynamic, dynamic> matchState,
     bool verbose,
   ) {
-    mismatchDescription.add('has actual ${_actual.toPrintableString()}\n');
+    if (verbose || this.verbose) {
+      mismatchDescription.add('Expected: ${expected.toPrintableString()}\n');
+      mismatchDescription.add('  Actual: ${_actual.toPrintableString()}\n');
+    }
     return mismatchDescription.add(matchState['differences'].toString());
   }
 
@@ -99,10 +111,16 @@ class MovieResultDTOListMatcher extends Matcher {
       _actual = [MovieResultDTO().toUnknown()];
     }
     matchState['actual'] = _actual;
+
     if (_actual.length != expected.length) return false;
     for (var i = 0; i < _actual.length; i++) {
-      if (!_actual[i]
-          .matches(expected[i], matchState: matchState, related: related)) {
+      final match = _actual[i].matches(
+        expected[i],
+        matchState: matchState,
+        related: related,
+        prefix: 'instance(${i + 1}) -> ',
+      );
+      if (!match) {
         return false;
       }
     }
@@ -110,14 +128,18 @@ class MovieResultDTOListMatcher extends Matcher {
   }
 }
 
-/// Expectation matcher for test framework to compare DTO lists
+/// Expectation matcher for comparing volitile DTO list data
 class MovieResultDTOListFuzzyMatcher extends Matcher {
   List<MovieResultDTO> expected;
   int matchQuantity = 0;
   int percentMatch;
   late List<MovieResultDTO> _actual;
 
-  MovieResultDTOListFuzzyMatcher(this.expected, this.percentMatch);
+  /// Constructor for fuzzy match list comparison
+  ///
+  /// [expected] is the list of DTOs to look for
+  /// [percentMatch] allows a portion of the records to match instead of all records
+  MovieResultDTOListFuzzyMatcher(this.expected, {this.percentMatch = 100});
 
   @override
   // Tell test framework what content was expected.
@@ -160,6 +182,7 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
           expectedDto,
           matchState: differences,
           related: false,
+          fuzzy: true,
         )) {
           matchQuantity--;
           if (0 == matchQuantity) {
@@ -248,6 +271,7 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
   dto.type = MovieContentType.custom;
   dto.year = 123;
   dto.yearRange = '${sample}_yearRange';
+  dto.aListRanking = 42;
   dto.userRating = 456;
   dto.userRatingCount = 789;
   dto.censorRating = CensorRatingType.family;

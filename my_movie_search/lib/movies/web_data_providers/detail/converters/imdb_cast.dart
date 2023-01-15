@@ -27,11 +27,15 @@ class ImdbCastConverter {
   }
 
   static void _getMovies(MovieResultDTO movie, String label, dynamic movies) {
+    var aListRanking = 100;
     if (null != movies && movies is List) {
       for (final relatedMap in movies) {
         if (relatedMap is Map) {
           final dto = dtoFromRelatedMap(relatedMap);
           if (null != dto) {
+            if (0 < aListRanking) {
+              dto.aListRanking = aListRanking--;
+            }
             movie.addRelated(label, dto);
           }
         }
