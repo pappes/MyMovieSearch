@@ -11,7 +11,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 part 'bloc_parts/search_event.dart';
 part 'bloc_parts/search_state.dart';
 
-/// Moview search business logic wrapper.
+/// Movie search business logic wrapper.
 ///
 /// Provides a [Bloc] compliant business logic layer to
 /// manage fetching movie data
@@ -119,7 +119,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       for (final source in tmdbSources) {
         final imdbid = newValue.uniqueId;
         final tmdbid = newValue.sources[source];
-        if (null != tmdbid && _allResults.containsKey(tmdbid)) {
+        if (null != tmdbid &&
+            tmdbid != imdbid &&
+            _allResults.containsKey(tmdbid)) {
           _replaceTemporaryDTO(_allResults, imdbid, tmdbid);
         }
       }
