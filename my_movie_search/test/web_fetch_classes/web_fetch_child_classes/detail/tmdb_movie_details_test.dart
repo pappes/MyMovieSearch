@@ -59,7 +59,7 @@ void main() {
       const expectedResult = {
         'uniqueId': '-2',
         'bestSource': 'DataSourceType.tmdbMovie',
-        'title': '[QueryTMDBDetails] new query',
+        'title': '[tmdbMovie] new query',
         'type': 'MovieContentType.error',
         'related': {}
       };
@@ -210,7 +210,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBMovieDetails();
       const expectedException = '''
-[QueryTMDBDetails] Error in tmdbMovie with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 1)
+[tmdbMovie] Error in tmdbMovie with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
 ^
 ''';
@@ -228,7 +228,7 @@ not valid json
     // Read tmdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException = '[QueryTMDBDetails] Error in tmdbMovie '
+      const expectedException = '[tmdbMovie] Error in tmdbMovie '
           'with criteria 123 translating page map to objects '
           ':expected map got List<dynamic> unable to interpret data [{hello: world}]';
       final queryResult = <MovieResultDTO>[];

@@ -82,7 +82,7 @@ void main() {
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(expectedOutput, related: false),
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
       );

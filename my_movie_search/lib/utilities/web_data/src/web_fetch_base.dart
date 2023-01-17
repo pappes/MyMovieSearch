@@ -481,6 +481,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         myFormatInputAsText(criteria as INPUT_TYPE),
       );
       address = myConstructURI(encoded);
+      print('requesting: $address');
       final client = await myGetHttpClient().getUrl(address);
       myConstructHeaders(client.headers);
       final request = client.close();

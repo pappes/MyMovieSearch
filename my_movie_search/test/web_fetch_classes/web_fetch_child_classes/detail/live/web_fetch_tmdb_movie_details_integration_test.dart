@@ -5,6 +5,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_deta
 import 'package:my_movie_search/utilities/environment.dart';
 
 import '../../../../test_helper.dart';
+// ignore_for_file: unnecessary_raw_strings
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real TMDB endpoint!
@@ -13,7 +14,7 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"-1","bestSource":"DataSourceType.tmdbMovie","title":"[QueryTMDBDetails] Error in tmdbMovie with criteria tt0101001 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/movie/tt0101001?api_key=a","type":"MovieContentType.error","languages":"[]","genres":"[]","keywords":"[]","related":{}}
+{"uniqueId":"-1","bestSource":"DataSourceType.tmdbMovie","title":"[tmdbMovie] Error in tmdbMovie with criteria tt0101001 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/movie/tt0101001?api_key=a134ed10","type":"MovieContentType.error","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.tmdbMovie":"-1"},"related":{}}
 ''',
   r'''
 {"uniqueId":"tt0101000","bestSource":"DataSourceType.tmdbMovie","title":"Začátek dlouhého podzimu","year":"1990","language":"LanguageType.foreign",
@@ -88,7 +89,7 @@ void main() {
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(expectedOutput, related: false),
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
       );

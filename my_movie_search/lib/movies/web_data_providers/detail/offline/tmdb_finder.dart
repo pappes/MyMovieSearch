@@ -32,7 +32,7 @@ in test('Run dtoFromCompleteJsonMap()'*/
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"ImdbId123","bestSource":"DataSourceType.tmdbFinder","title":"The Taking of Pelham 1 2 3","year":"2009","language":"LanguageType.allEnglish",
+{"uniqueId":"ttImdbId123","bestSource":"DataSourceType.tmdbFinder","title":"The Taking of Pelham 1 2 3","year":"2009","language":"LanguageType.allEnglish",
       "languages":"[\"en\"]","genres":"[]","keywords":"[]",
       "description":"Armed men hijack a New York City subway train, holding the passengers hostage in return for a ransom, and turning an ordinary day's work for dispatcher Walter Garber into a face-off with the mastermind behind the crime.","userRating":"6.3","userRatingCount":"2494","sources":{"DataSourceType.tmdbFinder":"18487"},"related":{}}
 ''',
