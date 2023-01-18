@@ -88,19 +88,12 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   /// Update bloc state to indicate that new data is available.
   void _receiveDTO(MovieResultDTO newValue) {
     final key = newValue.uniqueId;
-    final existingMatch = _allResults[key];
 
     if (key.startsWith(movieDTOMessagePrefix)) {
       _allResults[key] = newValue;
-    } else if (null == existingMatch) {
-      // Insert value into list
-      _allResults[key] = newValue;
     } else {
-      //Merge into existing data
-      MovieResultDTOHelpers.mergeDtoList(
-        _allResults,
-        {key: newValue},
-      );
+      // Merge value with existing information and insert value into list
+      _allResults[key] = DtoCache.merge(newValue);
     }
 
     _findTemporaryDTO(_allResults, newValue);
@@ -141,10 +134,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     final temporaryRecord = collection[tmdbId]!;
     if (MovieContentType.error != temporaryRecord.type) {
       temporaryRecord.uniqueId = imdbId;
-      MovieResultDTOHelpers.mergeDtoList(
-        collection,
-        {imdbId: temporaryRecord},
-      );
+      _allResults[imdbId] = DtoCache.merge(temporaryRecord);
 
       collection.remove(tmdbId);
     }

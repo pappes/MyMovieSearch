@@ -128,14 +128,14 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   Stream<OUTPUT_TYPE> fetchResultFromThreadedCache(
     INPUT_TYPE criteria,
   ) async* {
-    final value = await _cache.get(_getCacheKey(criteria));
+    final value = _cache.get(_getCacheKey(criteria));
     if (value is List<OUTPUT_TYPE>) {
       yield* Stream.fromIterable(value);
     }
   }
 
   /// Insert transformed data into cache.
-  Future<void> _addResultToCache(
+  void _addResultToCache(
     INPUT_TYPE criteria,
     List<OUTPUT_TYPE> fetchedResult,
   ) =>

@@ -8,24 +8,28 @@ class TieredCache<T> {
 
   /// Put a data item into the cache if it is not already there.
   ///
-  Future<void> add(dynamic key, dynamic item) async {
-    if (null == item || item is! T || memoryCache.containsKey(key)) return;
-    memoryCache[key] = item;
-    //TODO: queue for adding to disk and cloud caches
+  void add(dynamic key, dynamic item) {
+    if (null != item && item is T && !memoryCache.containsKey(key)) {
+      memoryCache[key] = item;
+    }
+  }
+
+  /// Remove an item from the cache.
+  ///
+  void remove(dynamic key) {
+    memoryCache.remove(key);
   }
 
   /// Remove all items from the cache.
   ///
   void clear() {
     memoryCache.clear();
-    //TODO: flush disk and cloud caches
   }
 
   /// Check the cache to see if the item is present.
   ///
   bool isCached(dynamic key) {
     if (memoryCache.containsKey(key)) return true;
-    //TODO: check disk and cloud caches
     return false;
   }
 
@@ -38,16 +42,7 @@ class TieredCache<T> {
   /// Get data from the cache.
   ///
   /// If data is not in any cache, executes [callback] to construct the value.
-  Future<T> get(dynamic key, {Future<T> Function()? callback}) async {
-    try {
-      return _getSynchronously(key);
-    } catch (_) {
-      assert(null != callback);
-      return callback!();
-    }
-  }
-
-  T _getSynchronously(dynamic key) {
+  T get(dynamic key) {
     final val = memoryCache[key];
     if (val is T) {
       return val;
@@ -57,18 +52,17 @@ class TieredCache<T> {
 
   /// Put a data item as a list into into the cache.
   ///
-  Future<void> addToCacheList(dynamic key, dynamic item) async {
+  void addToCacheList(dynamic key, dynamic item) {
     if (null == item || [item] is! T) return;
 
     if (memoryCache.containsKey(key)) {
       // Get existing search result from cache.
-      final newList = _getSynchronously(key) as List;
+      final newList = get(key) as List;
       newList.add(item);
       memoryCache[key] = newList as T;
     } else {
       memoryCache[key] = [item] as T;
     }
     return;
-    //TODO: queue for adding to disk and cloud caches
   }
 }

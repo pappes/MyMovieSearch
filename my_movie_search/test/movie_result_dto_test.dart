@@ -680,4 +680,47 @@ void main() {
       () => testContent(MovieContentType.series, 'special', null, 'tt1234'),
     );
   });
+
+  group('merge', () {
+    // Check that language list is categorised corectly.
+    test('empty_DTO', () {
+      final dto1 = MovieResultDTO();
+      final dto2 = MovieResultDTO();
+      dto1.merge(dto2);
+      expect(dto1.title, '');
+      expect(dto1.description, '');
+    });
+    test('some details', () {
+      final dto1 = MovieResultDTO();
+      final dto2 = MovieResultDTO();
+      final dto3 = MovieResultDTO();
+      dto1.title = 'merge into me';
+      dto2.description = 'merge me';
+      dto3.title = 'related dto';
+      dto2.related = {
+        'suggestions': {dto3.uniqueId: dto3}
+      };
+      dto1.merge(dto2);
+      expect(dto1.title, 'merge into me');
+      expect(dto1.description, 'merge me');
+      expect(dto1.related.length, 1);
+      expect(dto1.related.keys.first, 'suggestions');
+      expect(dto1.related.values.first.values.first.title, 'related dto');
+    });
+    test('exclude related', () {
+      final dto1 = MovieResultDTO();
+      final dto2 = MovieResultDTO();
+      final dto3 = MovieResultDTO();
+      dto1.title = 'merge into me';
+      dto2.description = 'merge me';
+      dto3.title = 'related dto';
+      dto2.related = {
+        'suggestions': {dto3.uniqueId: dto3}
+      };
+      dto1.merge(dto2, excludeRelated: true);
+      expect(dto1.title, 'merge into me');
+      expect(dto1.description, 'merge me');
+      expect(dto1.related.length, 0);
+    });
+  });
 }

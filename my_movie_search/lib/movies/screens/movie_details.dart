@@ -32,7 +32,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   @override
   void initState() {
     super.initState();
-    _movie = widget.movie;
+    _movie = DtoCache.fetch(widget.movie);
     final detailCriteria = SearchCriteriaDTO();
     detailCriteria.criteriaTitle = _movie.uniqueId;
     _getDetails(detailCriteria);

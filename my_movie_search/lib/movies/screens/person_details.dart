@@ -32,7 +32,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   @override
   void initState() {
     super.initState();
-    _person = widget.person;
+    _person = DtoCache.fetch(widget.person);
     final detailCriteria = SearchCriteriaDTO();
     detailCriteria.criteriaTitle = _person.uniqueId;
     _getDetails(detailCriteria);

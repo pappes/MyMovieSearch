@@ -4,6 +4,7 @@ import 'dart:math' show max;
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
+import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
@@ -285,6 +286,46 @@ extension MapResultDTOConversion on Map {
   }
 }
 
+// ignore: avoid_classes_with_only_static_members
+class DtoCache {
+  static final _globalDtoCache = TieredCache<MovieResultDTO>();
+
+  /// Retrieve data from the cache.
+  ///
+  static MovieResultDTO fetch(MovieResultDTO newValue) => merge(newValue);
+
+  /// remove [newValue] from the cache.
+  ///
+  static void remove(MovieResultDTO newValue) {
+    _globalDtoCache.remove(_key(newValue));
+  }
+
+  /// Store information from [newValue] into a cache and
+  /// merge with any existing record.
+  ///
+  static MovieResultDTO merge(MovieResultDTO newValue) {
+    final key = _key(newValue);
+    if (_globalDtoCache.isCached(key)) {
+      return _globalDtoCache.get(key).merge(newValue);
+    }
+    _globalDtoCache.add(key, newValue);
+    return newValue;
+  }
+
+  /// Update cache to merge in movies from [newDtos] and
+  /// return the same records with updated values.
+  ///
+  static MovieCollection mergeCollection(MovieCollection newDtos) {
+    final MovieCollection merged = {};
+    for (final dto in newDtos.entries) {
+      merged[dto.key] = merge(dto.value);
+    }
+    return merged;
+  }
+
+  static String _key(MovieResultDTO dto) => dto.uniqueId;
+}
+
 extension MovieResultDTOHelpers on MovieResultDTO {
   static final _htmlDecode = HtmlUnescape();
 
@@ -526,7 +567,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Combine information from [newValue] into a [MovieResultDTO].
   ///
-  void merge(MovieResultDTO newValue) {
+  MovieResultDTO merge(MovieResultDTO newValue, {bool excludeRelated = false}) {
     if (newValue.userRatingCount >= userRatingCount ||
         0 == userRatingCount ||
         newValue.sources.containsKey(DataSourceType.imdb)) {
@@ -551,6 +592,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
       alternateTitle = newAlternateTitle;
       charactorName = bestValue(newValue.charactorName, charactorName);
+      if (newValue.uniqueId == 'tt3127016') {
+        newValue.uniqueId = 'tt3127016';
+      }
       description = bestValue(newValue.description, description);
       type = bestValue(newValue.type, type);
       year = bestValue(newValue.year, year);
@@ -582,33 +626,37 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         type,
       );
     }
-    mergeDtoMapMap(related, newValue.related);
+    if (!excludeRelated) {
+      mergeRelatedDtos(related, newValue.related);
+    }
+    return this;
   }
 
   /// Combine related movie information from [existingDtos] into a [MovieResultDTO].
   ///
-  static void mergeDtoMapMap(
+  static void mergeRelatedDtos(
     RelatedMovieCategories existingDtos,
     RelatedMovieCategories newDtos,
   ) {
     for (final key in newDtos.keys) {
-      if (!existingDtos.containsKey(key)) {
+      if (existingDtos.containsKey(key)) {
+        _mergeDtoList(existingDtos[key]!, newDtos[key]!);
+      } else {
         // Create empty list to pass through to merge function.
-        existingDtos[key] = {};
+        existingDtos[key] = newDtos[key]!;
       }
-      mergeDtoList(existingDtos[key]!, newDtos[key]!);
     }
   }
 
   /// Update [existingDtos] to also contain movies from [newDtos].
   ///
-  static void mergeDtoList(
+  static void _mergeDtoList(
     MovieCollection existingDtos,
     MovieCollection newDtos,
   ) {
     for (final dto in newDtos.entries) {
       if (existingDtos.keys.contains(dto.key)) {
-        existingDtos[dto.key]!.merge(dto.value);
+        existingDtos[dto.key]!.merge(dto.value, excludeRelated: true);
       } else {
         existingDtos[dto.key] = dto.value;
       }

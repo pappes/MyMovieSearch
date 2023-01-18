@@ -88,7 +88,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          TmdbFinderConverter('ImdbId123').dtoFromCompleteJsonMap(map as Map),
+          TmdbFinderConverter('ttImdbId123').dtoFromCompleteJsonMap(map as Map),
         );
       }
 
@@ -132,7 +132,7 @@ void main() {
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
-      testClass.imdbId = 'ImdbId123';
+      testClass.imdbId = 'ttImdbId123';
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
