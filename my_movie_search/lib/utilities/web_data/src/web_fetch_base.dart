@@ -270,7 +270,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Retrieve cached result.
   ///
   /// Can be overridden by child classes if required.
-  Stream<OUTPUT_TYPE> myFetchResultFromCache(INPUT_TYPE criteria) async* {}
+  List<OUTPUT_TYPE> myFetchResultFromCache(INPUT_TYPE criteria) => [];
 
   /// Convert a HTML, JSON or JSONP [Stream] of [String]
   /// to a [Stream] of <OUTPUT_TYPE> objects.
@@ -444,7 +444,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         'base ${ThreadRunner.currentThreadName} '
         'value was cached ${myFormatInputAsText(newCriteria)}',
       );
-      return myFetchResultFromCache(newCriteria);
+      return Stream.fromIterable(myFetchResultFromCache(newCriteria));
     }
     if (myFormatInputAsText(newCriteria) == '') {
       return Stream.fromIterable([]);

@@ -799,31 +799,13 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return null;
   }
 
-  /// Look at movie to see if title type (is in brackets).
-  ///
-  /// Takes [info] which includes the title and other information
-  /// in the form 'title 123 (1988–1993) (TV Series)'
-  /// and [title] which does not include the other information only 'title 123'
-  static MovieContentType? findMovieContentTypeFromTitle(
-    String info,
-    String title,
-    int? duration,
-    String id,
-  ) {
-    final startInfo = title.length;
-    if (info.length > startInfo) {
-      return _lookupMovieContentType(
-        info.substring(startInfo), // Throw away the start of info.
-        duration,
-        id,
-      );
-    }
-    return _lookupMovieContentType(
-      '', // Throw away the start of info.
-      duration,
-      id,
-    );
-  }
+  /// update title type based on information in the dto.
+  MovieContentType getContentType() => type = getMovieContentType(
+        null,
+        runTime.inSeconds,
+        uniqueId,
+      ) ??
+      type;
 
   /// Use movie type string to lookup [MovieContentType] movie type.
   static MovieContentType? getMovieContentType(

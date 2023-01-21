@@ -570,19 +570,6 @@ void main() {
     int? duration,
     String id,
   ) {
-    final info = 'movie name$suffix';
-    const title = 'movie name';
-    expect(
-      MovieResultDTOHelpers.findMovieContentTypeFromTitle(
-        info,
-        title,
-        duration,
-        id,
-      ),
-      type,
-      reason:
-          'unexpected value returned from findImdbMovieContentTypeFromTitle',
-    );
     expect(
       MovieResultDTOHelpers.getMovieContentType(suffix, duration, id),
       type,

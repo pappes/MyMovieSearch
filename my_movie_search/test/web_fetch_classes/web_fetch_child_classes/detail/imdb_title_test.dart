@@ -217,9 +217,24 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final dto = MovieResultDTO().testDto('Polo');
       await testClass.myAddResultToCache(criteria, dto);
-      final listResult =
-          await testClass.myFetchResultFromCache(criteria).toList();
+      final listResult = testClass.myFetchResultFromCache(criteria);
       expect(listResult, MovieResultDTOListMatcher([dto]));
+      final resultIsCached = testClass.myIsResultCached(criteria);
+      expect(resultIsCached, true);
+      final resultIsStale = testClass.myIsCacheStale(criteria);
+      expect(resultIsStale, false);
+    });
+
+    test('fetch multiple results from cache', () async {
+      final testClass = QueryIMDBTitleDetails();
+      testClass.myClearCache();
+      final criteria = SearchCriteriaDTO().fromString('Marco');
+      final dto1 = MovieResultDTO().testDto('Polo1');
+      final dto2 = MovieResultDTO().testDto('Polo2');
+      await testClass.myAddResultToCache(criteria, dto1);
+      await testClass.myAddResultToCache(criteria, dto2);
+      final listResult = testClass.myFetchResultFromCache(criteria);
+      expect(listResult, MovieResultDTOListMatcher([dto1, dto2]));
       final resultIsCached = testClass.myIsResultCached(criteria);
       expect(resultIsCached, true);
       final resultIsStale = testClass.myIsCacheStale(criteria);

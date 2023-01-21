@@ -68,6 +68,7 @@ class TmdbMovieSearchConverter {
     } else {
       movie.yearRange = map[innerElementYear]?.toString() ?? movie.yearRange;
     }
+    movie.getContentType();
 
     return movie;
   }

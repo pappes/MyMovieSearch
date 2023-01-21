@@ -8,7 +8,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// Implements [TieredCache] for retrieving movie details from IMDB.
 mixin ThreadedCacheIMDBTitleDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final _cache = TieredCache();
+  static final _cache = TieredCache<List<MovieResultDTO>>();
 
   /// Check cache to see if data has already been fetched.
   @override
@@ -29,19 +29,20 @@ mixin ThreadedCacheIMDBTitleDetails
     SearchCriteriaDTO criteria,
     MovieResultDTO fetchedResult,
   ) async {
-    // add individual result to cache
+    // add individual result to cache, keyed by uniqueId
     final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
     _cache.add(key, fetchedResult);
-    return _cache.add(_makeKey(criteria), fetchedResult);
+    // add search results result to cache, keyed by search criteria
+    return _cache.add(_makeKey(criteria), [fetchedResult]);
   }
 
   /// Retrieve cached result.
   @override
-  Stream<MovieResultDTO> myFetchResultFromCache(
+  List<MovieResultDTO> myFetchResultFromCache(
     SearchCriteriaDTO criteria,
-  ) async* {
+  ) {
     final value = _cache.get(_makeKey(criteria));
-    yield* Stream.value(value as MovieResultDTO);
+    return value;
     // TODO: treat value as a list not as a single DTO
   }
 

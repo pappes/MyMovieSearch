@@ -32,7 +32,7 @@ const innerElementIdentity = 'id';
 const innerElementImdbId = 'imdb_id';
 const innerElementImage = 'logo_path';
 const innerElementYear = 'release_date';
-const innerElementType = 'video';
+const innerElementTypeVideo = 'video';
 const innerElementAdult = 'adult';
 const innerElementGenres = 'genres';
 const innerElementCommonTitle = 'title';
@@ -86,15 +86,6 @@ class TmdbMovieDetailConverter {
     } else {
       movie.yearRange = map[innerElementYear]?.toString() ?? movie.yearRange;
     }
-
-    // TODO expand partial URL to full url
-    // movie.imageUrl = map[innerElementPosterPath]?.toString() ?? movie.imageUrl;
-    if ('true' == map[innerElementType]) {
-      movie.type = MovieContentType.short;
-    }
-    if ('true' == map[innerElementAdult]) {
-      movie.censorRating = CensorRatingType.adult;
-    }
     movie.description =
         map[innerElementOverview]?.toString() ?? movie.description;
 
@@ -116,14 +107,23 @@ class TmdbMovieDetailConverter {
         multipleMatch: true,
       ),
     );
+    movie.getContentType();
     movie.getLanguageType();
     for (final Map genre in map[innerElementGenres]) {
       movie.genres.combineUnique(genre['name'] as String);
     }
-    /*TODO
-    const inner_element_poster_path = 'poster_path';
-    movie.uniqueId = map[inner_element_poster_path] ?? movie.uniqueId;*/
+    // TODO:
+    // const inner_element_poster_path = 'poster_path';
+    // movie.uniqueId = map[inner_element_poster_path] ?? movie.uniqueId;*/
 
+    // TODO expand partial URL to full url
+    // movie.imageUrl = map[innerElementPosterPath]?.toString() ?? movie.imageUrl;
+    if ('true' == map[innerElementTypeVideo]) {
+      movie.type = MovieContentType.short;
+    }
+    if ('true' == map[innerElementAdult]) {
+      movie.censorRating = CensorRatingType.adult;
+    }
     return movie;
   }
 

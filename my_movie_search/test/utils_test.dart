@@ -428,8 +428,6 @@ Future main() async {
       testToStringList(null, []);
     });
 
-    //TODO: test string list
-
     // Convert a value to a int - non static version.
     test('dynamicToInt()', () {
       void testToInt(input, expectedOutput) {

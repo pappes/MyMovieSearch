@@ -124,6 +124,7 @@ class TmdbFinderConverter {
 
     movie.languages.combineUnique(map[movieElementOriginalLanguage]);
     movie.getLanguageType();
+    movie.getContentType();
 
     return movie;
   }
@@ -134,6 +135,7 @@ class TmdbFinderConverter {
       uniqueId: map[movieElementTMDBIdentity]?.toString(),
       title: map[personElementCommonTitle]?.toString(),
       userRatingCount: map[personElementPopularity]?.toString(),
+      type: MovieContentType.person.toString(),
     );
     // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
     // no longer need to have alternateId field!

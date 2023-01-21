@@ -7,10 +7,16 @@ class TieredCache<T> {
   Map memoryCache = {};
 
   /// Put a data item into the cache if it is not already there.
+  /// If it is a list and already present, merge the lists.
   ///
   void add(dynamic key, dynamic item) {
-    if (null != item && item is T && !memoryCache.containsKey(key)) {
-      memoryCache[key] = item;
+    if (null != item && item is T) {
+      final existing = memoryCache[key];
+      if (null != existing && existing is List && item is List) {
+        existing.addAll(item);
+      } else {
+        memoryCache[key] = item;
+      }
     }
   }
 

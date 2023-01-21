@@ -170,10 +170,11 @@ class WebFetchCached extends WebFetchBasic {
   }
 
   @override
-  Stream<String> myFetchResultFromCache(String criteria) async* {
+  List<String> myFetchResultFromCache(String criteria) {
     if (criteria == lastCriteria) {
-      yield* Stream.value(lastResult);
+      return [lastResult];
     }
+    return [];
   }
 
   @override
