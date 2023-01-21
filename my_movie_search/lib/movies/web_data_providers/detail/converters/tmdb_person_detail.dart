@@ -2,6 +2,7 @@
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 const outerElementFailureIndicator = 'success';
@@ -49,6 +50,11 @@ class TmdbPersonDetailConverter {
         map[innerElementVoteAverage],
       )?.toString(),
     );
+
+    final poster = map[innerElementImage];
+    if (null != poster) {
+      person.imageUrl = '$tmdbPosterPathPrefix$poster';
+    }
 
     person.uniqueId = map[innerElementImdbId]?.toString() ?? person.uniqueId;
     // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID

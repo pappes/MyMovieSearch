@@ -60,10 +60,10 @@ class MovieSearchRepository extends BaseMovieRepository {
   /// Requests details retrieval for all returned search results.
   void _searchText(int searchUID, SearchCriteriaDTO criteria) {
     for (final provider in [
-      _imdbSearch,
+      /*_imdbSearch,
       _imdbSuggestions,
-      _omdbSearch,
       _googleSearch,
+      _omdbSearch,*/
       _tmdbSearch,
     ]) {
       initProvider();

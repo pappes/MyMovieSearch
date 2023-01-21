@@ -93,6 +93,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       _allResults[key] = newValue;
     } else {
       // Merge value with existing information and insert value into list
+
       _allResults[key] = DtoCache.merge(newValue);
     }
 
@@ -174,6 +175,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     // Sort by relevence with recent year first
     sortedResults.sort((a, b) => b.compareTo(a));
     _updateProgress();
+    _searchProgress++;
+    //TODO: find out why late updates are not causing image to be updated
 
     if (!isClosed) {
       add(SearchDataReceived(sortedResults));

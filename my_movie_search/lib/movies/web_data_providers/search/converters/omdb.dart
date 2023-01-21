@@ -12,6 +12,17 @@ import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 //Type = title type
 //Poster = image url
 
+// TODO: scrape additional omdb fields & use api for detail (free account is limited to 100/day)
+//Rated = "N/A",
+//Released = "01 Jun 2002",
+//Runtime = "127 min",
+//Genre = "Comedy",
+//Plot = "Three men, each with their own special needs, all fall in love with the same woman.",
+//Language = "Telugu",
+//Poster = "https://m.media-amazon.com/images/M/MV5BMTcxNTI2OTctODAyYS00OGI3LTljZGEtOWFjODQyMjBkODNkXkEyXkFqcGdeQXVyODE1NTg0MjE@._V1_SX300.jpg",
+//imdbRating = "5.7",
+//imdbVotes = "76",
+
 const outerElementResultsCollection = 'Search';
 const outerElementSearchSuccess = 'Response';
 const outerElementFailureReason = 'Error';

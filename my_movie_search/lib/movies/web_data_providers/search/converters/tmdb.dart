@@ -1,14 +1,16 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 //query string https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=wonder+woman
 //json format
 //name = title/name
 //id = unique key
-//logo_path = image url
+//poster_path = image url fragment
 
+//logo_path = image url
 //query string https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=wonder+woman
 //json format
 //title = title/name
@@ -16,7 +18,6 @@ import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 //release_date = date the movie was released e.g. "2019-06-28",
 //vote_average = User rating
 //vote_count =  Count of users taht have rated
-//poster_path = image url fragment
 //backdrop_path = alternate image url fragment
 //video = indicator of low quality movie (true/false)
 //adult = indicator of adult content (true/false)
@@ -31,7 +32,7 @@ const outerElementSearchSuccess = 'total_results';
 const outerElementFailureReason = 'status_message';
 const innerElementIdentity = 'id';
 const innerElementTitle = 'title';
-const innerElementImage = 'logo_path';
+const innerElementImage = 'poster_path';
 const innerElementYear = 'release_date';
 const innerElementType = 'video';
 
@@ -59,8 +60,12 @@ class TmdbMovieSearchConverter {
       bestSource: DataSourceType.tmdbSearch,
       uniqueId: '${map[innerElementIdentity]}',
       title: map[innerElementTitle]?.toString(),
-      imageUrl: map[innerElementImage]?.toString(),
     );
+
+    final poster = map[innerElementImage];
+    if (null != poster) {
+      movie.imageUrl = '$tmdbPosterPathPrefix$poster';
+    }
 
     final year = getYear(map[innerElementYear]?.toString());
     if (null != year) {

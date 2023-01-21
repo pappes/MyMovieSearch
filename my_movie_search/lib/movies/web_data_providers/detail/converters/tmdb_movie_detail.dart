@@ -2,6 +2,7 @@
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
@@ -112,12 +113,12 @@ class TmdbMovieDetailConverter {
     for (final Map genre in map[innerElementGenres]) {
       movie.genres.combineUnique(genre['name'] as String);
     }
-    // TODO:
-    // const inner_element_poster_path = 'poster_path';
-    // movie.uniqueId = map[inner_element_poster_path] ?? movie.uniqueId;*/
 
-    // TODO expand partial URL to full url
-    // movie.imageUrl = map[innerElementPosterPath]?.toString() ?? movie.imageUrl;
+    final poster = map[innerElementPosterPath];
+    if (null != poster) {
+      movie.imageUrl = '$tmdbPosterPathPrefix$poster';
+    }
+
     if ('true' == map[innerElementTypeVideo]) {
       movie.type = MovieContentType.short;
     }
