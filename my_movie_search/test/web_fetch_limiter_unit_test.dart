@@ -8,7 +8,7 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('WebFetchLimiter', () {
-    test('consume 1 result from default limit', () async {
+    test('consume 1 result from default limit', () {
       final l = WebFetchLimiter();
       expect(l.currentUsage, 0, reason: 'initial usage');
       expect(l.limit, 100, reason: 'initial limit');
@@ -17,7 +17,7 @@ void main() {
       expect(l.currentUsage, 1, reason: 'final usage');
       expect(l.limit, 100, reason: 'final limit');
     });
-    test('consume all results from default limit', () async {
+    test('consume all results from default limit', () {
       final l = WebFetchLimiter();
       expect(l.currentUsage, 0, reason: 'initial usage');
       expect(l.limit, 100, reason: 'initial limit');
@@ -26,7 +26,7 @@ void main() {
       expect(l.currentUsage, 100, reason: 'final usage');
       expect(l.limit, 100, reason: 'final limit');
     });
-    test('consume too many results from default limit', () async {
+    test('consume too many results from default limit', () {
       final l = WebFetchLimiter();
       expect(l.currentUsage, 0, reason: 'initial usage');
       expect(l.limit, 100, reason: 'initial limit');
@@ -35,7 +35,7 @@ void main() {
       expect(l.currentUsage, 100, reason: 'final usage');
       expect(l.limit, 100, reason: 'final limit');
     });
-    test('non default limit from constructor', () async {
+    test('non default limit from constructor', () {
       final l = WebFetchLimiter(10);
       expect(l.currentUsage, 0, reason: 'initial usage');
       expect(l.limit, 10, reason: 'initial limit');
@@ -44,7 +44,7 @@ void main() {
       expect(l.currentUsage, 10, reason: 'final usage');
       expect(l.limit, 10, reason: 'final limit');
     });
-    test('non default limit from setter', () async {
+    test('non default limit from setter', () {
       final l = WebFetchLimiter();
       l.limit = 10;
       expect(l.currentUsage, 0, reason: 'initial usage');

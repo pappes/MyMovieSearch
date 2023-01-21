@@ -53,20 +53,18 @@ void main() {
     });
 
     // Confirm map can be converted to DTO.
-    test('Run myTransformMapToOutput()', () async {
-      final expectedValue = await expectedDTOList;
+    test('Run myTransformMapToOutput()', () {
+      final expectedValue = expectedDTOList;
       final imdbSuggestions = QueryIMDBSuggestions();
 
       // Invoke the functionality and collect results.
-      final actualResult = await imdbSuggestions
-          .myConvertTreeToOutputType({'d': expectedDTOMap});
+      final actualResult =
+          imdbSuggestions.myConvertTreeToOutputType({'d': expectedDTOMap});
 
       // Check the results.
       expect(
         actualResult,
-        MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+        completion(MovieResultDTOListMatcher(expectedValue)),
       );
     });
 

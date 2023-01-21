@@ -297,6 +297,7 @@ class BaseMovieRepository {
   void _finishDetails(MovieResultDTO dto) {
     yieldResult(dto);
     _recordResult(dto);
+    // TODO: check if stream controllers are being closed
     //if (_awaitingProviders == 0 && !_awaitingDetails) close();
   }
 

@@ -239,7 +239,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () async {
+    test('myConvertTreeToOutputType() errors', () {
       final testClass = QueryIMDBCastDetails();
       testClass.myClearCache();
 

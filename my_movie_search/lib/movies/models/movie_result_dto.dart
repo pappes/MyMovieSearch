@@ -219,7 +219,8 @@ extension MapResultDTOConversion on Map {
         dto.language;
 
     dto.sources = stringToSources(this[movieDTOSources]);
-    if (!dto.sources.containsKey(dto.bestSource)) {
+    if (!dto.sources.containsKey(dto.bestSource) &&
+        !dto.uniqueId.startsWith(movieDTOMessagePrefix)) {
       dto.sources[dto.bestSource] = dto.uniqueId;
     }
     dto.languages = dynamicToStringSet(this[movieDTOLanguages]);

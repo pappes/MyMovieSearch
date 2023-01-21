@@ -53,7 +53,7 @@ class QueryUnknownSourceMocked
     // provided HttpClient.
     when(clientResponse.statusCode).thenAnswer((_) => httpReturnCode);
     when(clientResponse.transform(utf8.decoder))
-        .thenAnswer((_) => _getOfflineJson(currentCriteria));
+        .thenAnswer((_) => Stream.value(_getOfflineJson(currentCriteria)));
 
     when(clientRequest.close()).thenAnswer((_) async {
       if (currentCriteria == 'EXCEPTION') throw 'go away!';
@@ -85,7 +85,7 @@ class QueryUnknownSourceMocked
 
   // Default myConvertWebTextToTraversableTree to jsonDecode but allow tests to alter it
   ConvertWebTextToTreeFn overriddenConvertWebTextToTraversableTree =
-      (webText) async => [jsonDecode(webText)];
+      (webText) => Future.value([jsonDecode(webText)]);
   @override
   Future<List> myConvertWebTextToTraversableTree(String webText) async =>
       overriddenConvertWebTextToTraversableTree(webText);
@@ -107,9 +107,9 @@ class QueryUnknownSourceMocked
   @override
   DataSourceFn myOfflineData() => (_) async => const Stream<String>.empty();
 
-  static Future<List<MovieResultDTO>> treeToDto(dynamic tree) async {
-    if (tree is Map) return [mapToDto(tree)];
-    return listToDto(tree as List);
+  static Future<List<MovieResultDTO>> treeToDto(dynamic tree) {
+    if (tree is Map) return Future.value([mapToDto(tree)]);
+    return Future.value(listToDto(tree as List));
   }
 
   static MovieResultDTO mapToDto(Map map) => MovieResultDTO().init(
@@ -233,9 +233,9 @@ Stream<String> _getOfflineHTML(String id) {
 }
 
 /// Make dummy json results for offline queries.
-Stream<String> _getOfflineJson(String id) {
-  if (id == '') return Stream.value('');
-  return Stream.value('[{"id": "$id","description": "$id."}]');
+String _getOfflineJson(String id) {
+  if (id == '') return '';
+  return '[{"id": "$id","description": "$id."}]';
 }
 
 /// Make dummy json results for offline queries.
@@ -620,7 +620,6 @@ void main() {
             '{"id": "1003","description": "1003."}]',
           ]),
         );
-        //final actualOutput = await streamOutput.toList();
         final expectOutput = _makeMaps(4);
 
         expect(streamOutput, emitsInOrder([expectOutput]));
@@ -822,9 +821,8 @@ void main() {
       final streamResult = await testClass.baseFetchWebText(criteria);
       final listResult = await streamResult.toList();
       final textResult = listResult.first;
-      final expectedResult =
-          await _getOfflineJson(criteria.criteriaTitle).toList();
-      expect([textResult], expectedResult);
+      final expectedResult = _getOfflineJson(criteria.criteriaTitle);
+      expect(textResult, expectedResult);
     });
 
     test('http error code 404', () async {

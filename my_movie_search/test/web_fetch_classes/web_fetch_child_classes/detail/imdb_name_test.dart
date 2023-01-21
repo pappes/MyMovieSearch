@@ -131,7 +131,7 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('ThreadedCacheIMDBNameDetails unit tests', () {
-    test('cache queueing', () async {
+    test('cache queueing', () {
       final testClass = QueryIMDBNameDetails();
       testClass.clearThreadedCache();
       expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 0);
@@ -305,7 +305,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () async {
+    test('myConvertTreeToOutputType() errors', () {
       final testClass = QueryIMDBNameDetails();
       testClass.myClearCache();
 

@@ -241,7 +241,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () async {
+    test('myConvertTreeToOutputType() errors', () {
       final testClass = QueryIMDBBibliographyDetails();
       testClass.myClearCache();
 

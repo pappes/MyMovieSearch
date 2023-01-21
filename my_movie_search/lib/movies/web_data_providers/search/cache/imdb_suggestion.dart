@@ -98,8 +98,7 @@ mixin ThreadedCacheIMDBSuggestions
   Stream<MovieResultDTO> _fetchResultFromCache(
     SearchCriteriaDTO criteria,
   ) async* {
-    final value =
-        await _cache.get('${myDataSourceName()}${criteria.criteriaTitle}');
+    final value = _cache.get('${myDataSourceName()}${criteria.criteriaTitle}');
     if (value is MovieResultDTO) {
       yield value;
     }
@@ -113,7 +112,7 @@ mixin ThreadedCacheIMDBSuggestions
         return null;
       }
 
-      if (_normalQueue.length < 10 && ThreadRunner.verySlow != priority) {
+      if (_normalQueue.length < 3 && ThreadRunner.verySlow != priority) {
         _normalQueue.add(criteria);
       } else {
         _verySlowQueue.add(criteria);

@@ -155,6 +155,7 @@ void main() {
     });
   });
   group('stream test', () {
+    // Test the internal workings of the transformer.
     test('transformer', () async {
       // Set up the test data.
       const testInput = imdbJsonPSampleFull;

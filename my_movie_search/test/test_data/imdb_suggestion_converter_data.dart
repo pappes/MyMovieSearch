@@ -15,16 +15,18 @@ import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb
 //q = title type
 //i = image with dimensions)
 
-Stream<MovieResultDTO> streamFromInnerJsonMap(
+List<MovieResultDTO> jsonMapToDto(
   Iterable<Map<dynamic, dynamic>> records,
-) async* {
+) {
+  final result = <MovieResultDTO>[];
   for (final record in records) {
-    yield ImdbSuggestionConverter.dtoFromMap(record);
+    result.add(ImdbSuggestionConverter.dtoFromMap(record));
   }
+  return result;
 }
 
-final expectedDTOList = expectedDTOStream.toList();
-final expectedDTOStream = streamFromInnerJsonMap(expectedDTOMap);
+final expectedDTOList = jsonMapToDto(expectedDTOMap);
+final expectedDTOStream = Stream.value(expectedDTOList);
 final expectedDTOMap = [
   {
     "l": "Imdb Offline Suggestions 1984",

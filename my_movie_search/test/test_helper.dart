@@ -176,56 +176,63 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
     matchState['actual'] = _actual;
 
     for (final actualDto in _actual) {
+      bool resultMatched = false;
       for (final expectedDto in expected) {
         final differences = {};
-        if (actualDto.matches(
-          expectedDto,
-          matchState: differences,
-          related: false,
-          fuzzy: true,
-        )) {
-          matchQuantity--;
-          if (0 == matchQuantity) {
-            // There have been enough matches to declare victory!
-            return true;
+        if (actualDto.uniqueId == expectedDto.uniqueId) {
+          resultMatched = true;
+          if (actualDto.matches(
+            expectedDto,
+            matchState: differences,
+            related: false,
+            fuzzy: true,
+          )) {
+            matchQuantity--;
+            if (0 == matchQuantity) {
+              // There have been enough matches to declare victory!
+              return true;
+            }
+          } else {
+            matchState[actualDto.uniqueId] = differences;
           }
-        } else {
-          matchState[actualDto.uniqueId] = differences;
         }
+      }
+      if (false == resultMatched) {
+        matchState[actualDto.uniqueId] = 'No match for ${actualDto.uniqueId}\n';
       }
     }
     return false;
   }
 }
 
-/// Converts a [str] to a stream.
-Stream<String> emitString(String str) async* {
-  yield str;
-}
+/// Converts a [text] to a stream.
+Stream<String> emitString(String text) => Stream.value(text);
 
-/// Converts a [str] to a stream.
-Stream<String> emitStringChars(String str) async* {
-  for (final chr in str.characters.toList()) {
+/// Converts a [text] to a stream of charactors.
+///
+/// Emits one charactor at a time.
+Stream<String> emitStringChars(String text) async* {
+  for (final chr in text.characters) {
     yield chr;
   }
 }
 
-/// Converts a [str] to a stream of bytes.
+/// Converts a [text] to a stream of bytes.
 ///
 /// Emits one byte at a time.
-Stream<List<int>> emitByteStream(String str) async* {
-  for (final rune in str.runes.toList()) {
+Stream<List<int>> emitByteStream(String text) async* {
+  for (final rune in text.runes) {
     yield [rune];
   }
 }
 
-/// Converts [str] to a stream containing a list of bytes.
+/// Converts [text] to a stream containing a list of bytes.
 ///
 /// Emits all bytes at the same time.
-Stream<List<int>> emitConsolidatedByteStream(String str) async* {
+Stream<List<int>> emitConsolidatedByteStream(String text) async* {
   final lst = <int>[];
 
-  for (final rune in str.runes.toList()) {
+  for (final rune in text.runes.toList()) {
     lst.add(rune);
   }
   yield lst;

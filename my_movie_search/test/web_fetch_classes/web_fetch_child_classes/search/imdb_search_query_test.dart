@@ -345,10 +345,10 @@ void main() {
 
       final imdbSearch = QueryIMDBSearch();
       imdbSearch.criteria = SearchCriteriaDTO().fromString('nm7602562');
-      final actualOutput = await imdbSearch.myConvertWebTextToTraversableTree(
+      final actualOutput = imdbSearch.myConvertWebTextToTraversableTree(
         person_data.imdbHtmlSampleFull,
       );
-      expect(actualOutput, expectedOutput);
+      expect(actualOutput, completion(expectedOutput));
     });
     // Run IMDB search for a single person
     // causing the query to return the person details page

@@ -40,8 +40,9 @@ mixin ThreadedCacheIMDBTitleDetails
   Stream<MovieResultDTO> myFetchResultFromCache(
     SearchCriteriaDTO criteria,
   ) async* {
-    final value = await _cache.get(_makeKey(criteria));
+    final value = _cache.get(_makeKey(criteria));
     yield* Stream.value(value as MovieResultDTO);
+    // TODO: treat value as a list not as a single DTO
   }
 
   /// Flush all data from the cache.

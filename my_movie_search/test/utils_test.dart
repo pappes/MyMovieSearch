@@ -16,7 +16,6 @@ import 'test_helper.dart';
 
 typedef DataSourceFn = String Function();
 
-// ignore: avoid_classes_with_only_static_members
 class ThreadTest {
   static var _counter = 0;
   static Future<int> accumulate(int value) async => _counter += value;
@@ -62,7 +61,7 @@ Future main() async {
     // Formatted time includes the correct values.
     test(
       'toFormattedTime converts duration to string',
-      () async {
+      () {
         const input = Duration(
           days: 10,
           hours: 20,
@@ -78,7 +77,7 @@ Future main() async {
     // All ISO duration components can be encoded except year and month.
     test(
       'fromIso8601 values from a string',
-      () async {
+      () {
         const input = 'P1W3DT20H30M40S';
         const expectedOutput = Duration(
           days: 10,
@@ -103,7 +102,7 @@ Future main() async {
     );
     test(
       'getAttribute uses the enum to identify the attribute to extract',
-      () async {
+      () {
         const expectedOutput = 'https://stuff.com';
         final anchors = dom.body!.getElementsByType(ElementType.anchor);
         final anchorElement = anchors.first;
@@ -117,7 +116,7 @@ Future main() async {
     // dom componenets can be referenced by enum.
     test(
       'getEnumValue converts a string to an enumeration',
-      () async {
+      () {
         final enumeration =
             getEnumValue<ElementType>('anchor', ElementType.values);
         expect(enumeration, ElementType.anchor);
@@ -125,21 +124,21 @@ Future main() async {
     );
     test(
       'getEnumValue accepts null',
-      () async {
+      () {
         final enumeration = getEnumValue<ElementType>(null, ElementType.values);
         expect(enumeration, null);
       },
     );
     test(
       'getEnumValue accepts empty string',
-      () async {
+      () {
         final enumeration = getEnumValue<ElementType>('', ElementType.values);
         expect(enumeration, null);
       },
     );
     test(
       'getEnumValue rejects invalid string',
-      () async {
+      () {
         expect(
           () => getEnumValue<ElementType>('invalid', ElementType.values),
           throwsArgumentError,
@@ -149,18 +148,18 @@ Future main() async {
   });
 
   group('SteamHelper printStream', () {
-    Future<void> testPrint(
+    void testPrint(
       String input,
       String expectedValue, [
       String? expectedError,
-    ]) async {
+    ]) {
       final actualOutput = emitStringChars(input);
       final doublePrint =
           actualOutput.printStream('print1:').printStream('print2:');
       final revivedStream =
           doublePrint.toList().then((list) => Stream.fromIterable(list));
 
-      await expectLater(
+      expectLater(
         revivedStream,
         completion(emitsInOrder(expectedValue.characters.toList())),
       );
@@ -169,21 +168,21 @@ Future main() async {
     // Ensure that stream can be observed multiple times and not cause issues.
     test(
       'printStream outputs the same stream',
-      () async {
+      () {
         const input = 'abc';
         const output = 'abc';
-        await testPrint(input, output);
+        testPrint(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
   });
 
   group('SteamHelper printStreamFuture', () {
-    Future<void> testPrint(
+    void testPrint(
       String input,
       String expectedValue, [
       String? expectedError,
-    ]) async {
+    ]) {
       final actualOutput = Future.delayed(
         const Duration(seconds: 1),
         () => emitStringChars(input),
@@ -194,7 +193,7 @@ Future main() async {
           .then((stream) => stream.toList())
           .then((list) => Stream.fromIterable(list));
 
-      await expectLater(
+      expect(
         doublePrint,
         completion(emitsInOrder(expectedValue.characters.toList())),
       );
@@ -203,10 +202,10 @@ Future main() async {
     // Ensure that stream can be observed multiple times and not cause issues.
     test(
       'printStream outputs the same stream',
-      () async {
+      () {
         const input = 'abc';
         const output = 'abc';
-        await testPrint(input, output);
+        testPrint(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );

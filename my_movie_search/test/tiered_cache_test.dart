@@ -5,7 +5,7 @@ import 'package:my_movie_search/persistence/tiered_cache.dart';
 /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-void main() async {
+void main() {
   group('Store In Memory', () {
     test('String', () {
       /// Run a series of values through the cache and compare to expected output
