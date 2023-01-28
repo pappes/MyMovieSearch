@@ -242,7 +242,8 @@ CensorRatingType? getImdbCensorRating(String? type) {
 /// // returns https://m.media-amazon.com/images/M/MV5BODQxYWM2ODItYjE4ZC00YzAxLTljZDQtMjRjMmE0ZGMwYzZjXkEyXkFqcGdeQXVyODIyOTEyMzY@.jpg
 /// ```
 String getBigImage(String? smallImage) {
-  if (null != smallImage && smallImage.startsWith('http')) {
+  if (null != smallImage &&
+      smallImage.startsWith('https://m.media-amazon.com/images')) {
     // http followed by zero or more of anything "(http.*)""
     // followed by a period then multiple non periods "\.[^.]*""
     // followed by file extension including one more period "\.jpg"
@@ -263,7 +264,7 @@ String getBigImage(String? smallImage) {
     final result = Uri.decodeFull(truncated ?? smallImage);
     return result;
   }
-  return '';
+  return smallImage ?? '';
 }
 
 String? _getRegexGroupInBrackets(String stringToSearch, String regexFormula) {

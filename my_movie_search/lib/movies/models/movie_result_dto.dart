@@ -287,24 +287,31 @@ extension MapResultDTOConversion on Map {
   }
 }
 
-// ignore: avoid_classes_with_only_static_members
 class DtoCache {
-  static final _globalDtoCache = TieredCache<MovieResultDTO>();
+  DtoCache();
+
+  factory DtoCache.singleton() {
+    return _singleton;
+  }
+
+  static final DtoCache _singleton = DtoCache();
+
+  final _globalDtoCache = TieredCache<MovieResultDTO>();
 
   /// Retrieve data from the cache.
   ///
-  static MovieResultDTO fetch(MovieResultDTO newValue) => merge(newValue);
+  MovieResultDTO fetch(MovieResultDTO newValue) => merge(newValue);
 
   /// remove [newValue] from the cache.
   ///
-  static void remove(MovieResultDTO newValue) {
+  void remove(MovieResultDTO newValue) {
     _globalDtoCache.remove(_key(newValue));
   }
 
   /// Store information from [newValue] into a cache and
   /// merge with any existing record.
   ///
-  static MovieResultDTO merge(MovieResultDTO newValue) {
+  MovieResultDTO merge(MovieResultDTO newValue) {
     final key = _key(newValue);
     if (_globalDtoCache.isCached(key)) {
       return _globalDtoCache.get(key).merge(newValue);
@@ -316,7 +323,7 @@ class DtoCache {
   /// Update cache to merge in movies from [newDtos] and
   /// return the same records with updated values.
   ///
-  static MovieCollection mergeCollection(MovieCollection newDtos) {
+  MovieCollection mergeCollection(MovieCollection newDtos) {
     final MovieCollection merged = {};
     for (final dto in newDtos.entries) {
       merged[dto.key] = merge(dto.value);

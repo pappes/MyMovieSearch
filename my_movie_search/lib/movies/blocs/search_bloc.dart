@@ -94,7 +94,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     } else {
       // Merge value with existing information and insert value into list
 
-      _allResults[key] = DtoCache.merge(newValue);
+      _allResults[key] = DtoCache.singleton().merge(newValue);
     }
 
     _findTemporaryDTO(_allResults, newValue);
@@ -135,7 +135,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     final temporaryRecord = collection[tmdbId]!;
     if (MovieContentType.error != temporaryRecord.type) {
       temporaryRecord.uniqueId = imdbId;
-      _allResults[imdbId] = DtoCache.merge(temporaryRecord);
+      _allResults[imdbId] = DtoCache.singleton().merge(temporaryRecord);
 
       collection.remove(tmdbId);
     }
