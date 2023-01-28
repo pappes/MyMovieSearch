@@ -1,8 +1,7 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 import 'package:universal_io/io.dart'
@@ -56,14 +55,16 @@ abstract class QueryTMDBCommon
   /// API call to TMDB returning the movie details for [searchText].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final omdbKey = dotenv
-        .env['TMDB_KEY']; // From the file assets/.env (not source controlled)
+    // Get key from the file assets/secrets.json (not source controlled)
+    final omdbKey = Settings.singleton().get('TMDB_KEY');
     return Uri.parse('$baseURL$searchCriteria$midURL$omdbKey');
   }
 
   // Add authorization token for compatability with the TMDB V4 API.
   @override
   void myConstructHeaders(HttpHeaders headers) {
-    headers.add('Authorization', ' Bearer ${dotenv.env['TMDB_KEY']}');
+    // Get key from the file assets/secrets.json (not source controlled)
+    final omdbKey = Settings.singleton().get('TMDB_KEY');
+    headers.add('Authorization', ' Bearer $omdbKey');
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_person_detail.dart';
-import 'package:my_movie_search/utilities/environment.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 
 import '../../../../test_helper.dart';
 // ignore_for_file: unnecessary_raw_strings
@@ -14,22 +14,22 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"nm0005454","bestSource":"DataSourceType.tmdbPerson","title":"Scott Speedman","type":"MovieContentType.person","year":"1975","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"Scott Speedman (born September 1, 1975) is a British-born Canadian film and television actor. He is best known for playing Ben Covington in the coming-of-age television drama Felicity and Lycan-Vampire hybrid Michael Corvin in the gothic horror/action Underworld films.\n\nDescription above from the Wikipedia article Scott Speedman, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
-      "userRating":"23.627","userRatingCount":"1","sources":{"DataSourceType.tmdbPerson":"100"},"related":{}}
-''',
-  r'''
-{"uniqueId":"nm0914455","bestSource":"DataSourceType.tmdbPerson","title":"Leonor Watling","type":"MovieContentType.person","year":"1975","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"Leonor Elizabeth Ceballos Watling (born July 28, 1975) is an award-winning Spanish film actress and singer.",
-      "userRating":"18.586","userRatingCount":"1","sources":{"DataSourceType.tmdbPerson":"101"},"related":{}}
+{"uniqueId":"-2","bestSource":"DataSourceType.tmdbPerson","title":"[tmdbPerson] Error in tmdbPerson with criteria 000 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/person/000?api_key=a13","type":"MovieContentType.error","languages":"[]","genres":"[]","keywords":"[]","related":{}}
 ''',
   r'''
 {"uniqueId":"nm0001323","bestSource":"DataSourceType.tmdbPerson","title":"Debbie Harry","type":"MovieContentType.person","year":"1945","languages":"[]","genres":"[]","keywords":"[]",
       "description":"An American singer, songwriter, and actress, known as the lead singer of the new wave band Blondie.",
-      "userRating":"13.236","userRatingCount":"1","sources":{"DataSourceType.tmdbPerson":"102"},"related":{}}
+      "userRating":"7.476","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/9dw709YXEC9Ctk3HgM4uSTXURpK.jpg","sources":{"DataSourceType.tmdbPerson":"102"},"related":{}}
 ''',
   r'''
-{"uniqueId":"-2","bestSource":"DataSourceType.tmdbPerson","title":"[tmdbPerson] Error in tmdbPerson with criteria 000 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/person/000?api_key=a13","type":"MovieContentType.error","languages":"[]","genres":"[]","keywords":"[]","related":{}}
+{"uniqueId":"nm0005454","bestSource":"DataSourceType.tmdbPerson","title":"Scott Speedman","type":"MovieContentType.person","year":"1975","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"Scott Speedman (born September 1, 1975) is a British-born Canadian film and television actor. He is best known for playing Ben Covington in the coming-of-age television drama Felicity and Lycan-Vampire hybrid Michael Corvin in the gothic horror/action Underworld films.\n\nDescription above from the Wikipedia article Scott Speedman, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
+      "userRating":"18.481","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/tGgD96WOhmuQU4e6ZTU5IEx4W9E.jpg","sources":{"DataSourceType.tmdbPerson":"100"},"related":{}}
+''',
+  r'''
+{"uniqueId":"nm0914455","bestSource":"DataSourceType.tmdbPerson","title":"Leonor Watling","type":"MovieContentType.person","year":"1975","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"Leonor Elizabeth Ceballos Watling (born July 28, 1975) is an award-winning Spanish film actress and singer.",
+      "userRating":"5.248","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/uyEM3c37lL90by5vmuOk0XZQ83O.jpg","sources":{"DataSourceType.tmdbPerson":"101"},"related":{}}
 ''',
 ];
 
@@ -68,6 +68,8 @@ Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
 }
 
 void main() {
+  // Wait for api key to be initialised
+  setUpAll(() => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,8 +77,6 @@ void main() {
   group('live QueryTMDBPersonDetails test', () {
     // Convert 3 TMDB pages into dtos.
     test('Run read 3 pages from TMDB', () async {
-      // Wait for api key to be initialised
-      await EnvironmentVars.init();
       MovieResultDTOHelpers.resetError();
 
       final expectedOutput = expectedDTOList;

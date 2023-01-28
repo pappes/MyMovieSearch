@@ -5,7 +5,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/omdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/omdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
-import 'package:my_movie_search/utilities/environment.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
@@ -17,6 +17,8 @@ Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
 }
 
 void main() {
+  // Wait for api key to be initialised
+  setUpAll(() => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -108,8 +110,7 @@ void main() {
 
   group('QueryOMDBMovies integration tests', () {
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
-      await EnvironmentVars.init();
+    test('Run myConstructURI()', () {
       const expectedResult1 = 'https://www.omdbapi.com/?apikey=';
       const expectedResult2 = '&s=new%20query&page=1';
 
@@ -171,8 +172,6 @@ void main() {
   group('omdb search query', () {
     // Read omdb search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
-      // Wait for api key to be initialised
-      await EnvironmentVars.init();
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];

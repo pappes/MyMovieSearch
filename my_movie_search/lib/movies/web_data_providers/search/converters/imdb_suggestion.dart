@@ -27,9 +27,11 @@ class ImdbSuggestionConverter {
     final resultCollection = map[outerElementResultsCollection];
 
     final allSuggestions = <MovieResultDTO>[];
-    if (resultCollection is Iterable<Map>) {
-      for (final Map innerJson in resultCollection) {
-        allSuggestions.add(dtoFromMap(innerJson));
+    if (resultCollection is Iterable) {
+      for (final innerJson in resultCollection) {
+        if (innerJson is Map) {
+          allSuggestions.add(dtoFromMap(innerJson));
+        }
       }
     }
     return allSuggestions;

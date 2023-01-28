@@ -19,16 +19,25 @@ import 'dart:convert';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
-final
+// ignore_for_file: unnecessary_raw_strings
+
 /* To update this data run
        print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
 in test('Run dtoFromCompleteJsonMap()'*/
-    expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  '{"bestSource": "tmdbSearch", "uniqueId": "429617", "title": "Spider-Man: Far from Home", "year": "2019", "languages": [], "genres": [], "keywords": [], "related": {}}',
-  '{"bestSource": "tmdbSearch", "uniqueId": "228161", "title": "Home", "year": "2015", "languages": [], "genres": [], "keywords": [], "related": {}}',
-  '{"bestSource": "tmdbSearch", "uniqueId": "521029", "title": "Annabelle Comes Home", "year": "2019", "languages": [], "genres": [], "keywords": [], "related": {}}',
-  '{"bestSource": "tmdbSearch", "uniqueId": "380565", "title": "Home Invasion", "year": "2016", "languages": [], "genres": [], "keywords": [], "related": {}}',
+  r'''
+{"uniqueId":"429617","bestSource":"DataSourceType.tmdbSearch","title":"Spider-Man: Far from Home","year":"2019","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://image.tmdb.org/t/p/w500/4q2NyXl.jpg","sources":{"DataSourceType.tmdbSearch":"429617"},"related":{}}
+''',
+  r'''
+{"uniqueId":"228161","bestSource":"DataSourceType.tmdbSearch","title":"Home","year":"2015","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://image.tmdb.org/t/p/w500/usFeWMGR.jpg","sources":{"DataSourceType.tmdbSearch":"228161"},"related":{}}
+''',
+  r'''
+{"uniqueId":"521029","bestSource":"DataSourceType.tmdbSearch","title":"Annabelle Comes Home","year":"2019","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://image.tmdb.org/t/p/w500/qWsHRVRs.jpg","sources":{"DataSourceType.tmdbSearch":"521029"},"related":{}}
+''',
+  r'''
+{"uniqueId":"380565","bestSource":"DataSourceType.tmdbSearch","title":"Home Invasion","year":"2016","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://image.tmdb.org/t/p/w500/9Wbtkxnw.jpg","sources":{"DataSourceType.tmdbSearch":"380565"},"related":{}}
+''',
 ];
 
 final intermediateMapList = [jsonDecode(tmdbJsonSearchFull)];

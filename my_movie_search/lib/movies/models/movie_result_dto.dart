@@ -289,12 +289,13 @@ extension MapResultDTOConversion on Map {
 
 class DtoCache {
   DtoCache();
+  DtoCache._internal();
 
   factory DtoCache.singleton() {
     return _singleton;
   }
 
-  static final DtoCache _singleton = DtoCache();
+  static final DtoCache _singleton = DtoCache._internal();
 
   final _globalDtoCache = TieredCache<MovieResultDTO>();
 

@@ -5,7 +5,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_movie_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_movie_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_detail.dart';
-import 'package:my_movie_search/utilities/environment.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
@@ -17,6 +17,8 @@ Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
 }
 
 void main() {
+  // Wait for api key to be initialised
+  setUpAll(() => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -111,8 +113,7 @@ void main() {
 
   group('QueryTMDBMovieDetails integration tests', () {
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
-      await EnvironmentVars.init();
+    test('Run myConstructURI()', () {
       final testClass = QueryTMDBMovieDetails();
       testClass.myClearCache();
       const expected = 'https://api.themoviedb.org/3/movie/1234?api_key=';
@@ -175,8 +176,6 @@ void main() {
   group('tmdb search query', () {
     // Read tmdb search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
-      // Wait for api key to be initialised
-      await EnvironmentVars.init();
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];

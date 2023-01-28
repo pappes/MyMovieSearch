@@ -1,10 +1,9 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/google.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/google.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const _googleResultsPerPage = 10; // More than 10 results in an error!
@@ -62,8 +61,8 @@ class QueryGoogleMovies
   /// API call to Google returning the top 10 matching results for [searchText].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final googleKey = dotenv
-        .env['GOOGLE_KEY']; // From the file assets/.env (not source controlled)
+    // Get key from the file assets/secrets.json (not source controlled)
+    final googleKey = Settings.singleton().get('GOOGLE_KEY');
     final startRecord = (pageNumber - 1) * _googleResultsPerPage;
     final url = '$_baseURL$googleKey'
         '&q=$searchCriteria&start=$startRecord&'

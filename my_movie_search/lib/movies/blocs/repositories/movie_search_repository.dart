@@ -1,4 +1,3 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:my_movie_search/movies/blocs/repositories/base_movie_repository.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -11,6 +10,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dar
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 
 typedef SearchFunction = Future<List<MovieResultDTO>> Function(
   MovieResultDTO criteria,
@@ -60,10 +60,10 @@ class MovieSearchRepository extends BaseMovieRepository {
   /// Requests details retrieval for all returned search results.
   void _searchText(int searchUID, SearchCriteriaDTO criteria) {
     for (final provider in [
-      /*_imdbSearch,
+      _imdbSearch,
       _imdbSuggestions,
       _googleSearch,
-      _omdbSearch,*/
+      _omdbSearch,
       _tmdbSearch,
     ]) {
       initProvider();
@@ -106,7 +106,7 @@ class MovieSearchRepository extends BaseMovieRepository {
       }
       // Load slow results into cache for access on details screen in a seperate thread
       for (final function in functions.slowSearch) {
-        if (dotenv.env['PREFETCH'] == 'true') {
+        if (Settings.singleton().get('PREFETCH') == 'true') {
           function(dto);
         }
       }

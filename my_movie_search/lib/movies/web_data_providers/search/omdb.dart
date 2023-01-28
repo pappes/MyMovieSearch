@@ -1,10 +1,9 @@
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/omdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/omdb.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [WebFetchBase] for searching the Open Movie Database.
@@ -54,8 +53,8 @@ class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// API call to OMDB returning the top 10 matching results for [searchText].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final omdbKey = dotenv
-        .env["OMDB_KEY"]; // From the file assets/.env (not source controlled)
+    // Get key from the file assets/secrets.json (not source controlled)
+    final omdbKey = Settings.singleton().get('OMDB_KEY');
     return Uri.parse(
       '$_baseURL$omdbKey&s=$searchCriteria&page=$pageNumber',
     );

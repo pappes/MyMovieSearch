@@ -30,7 +30,7 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"nm0109036","bestSource":"DataSourceType.tmdbPerson","title":"Fred Abraham","type":"MovieContentType.person","year":"1963","languages":"[]","genres":"[]","keywords":"[]",
       "description":"I came, I saw, I went",
-      "userRating":"0.6","userRatingCount":"1","sources":{"DataSourceType.tmdbPerson":"11234"},"related":{}}
+      "userRating":"0.6","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/kU3B75TyRiCfivoq.jpg","sources":{"DataSourceType.tmdbPerson":"11234"},"related":{}}
 ''',
 ];
 

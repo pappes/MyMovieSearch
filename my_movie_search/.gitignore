@@ -5,6 +5,7 @@
 *.swp
 .env*
 secret.dart
+secrets.json
 .DS_Store
 .atom/
 .buildlog/

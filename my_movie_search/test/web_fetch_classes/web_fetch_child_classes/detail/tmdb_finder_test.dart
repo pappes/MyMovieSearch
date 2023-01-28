@@ -5,7 +5,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_finder.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_finder.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_finder.dart';
-import 'package:my_movie_search/utilities/environment.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
@@ -17,6 +17,8 @@ Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
 }
 
 void main() {
+  // Wait for api key to be initialised
+  setUpAll(() => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -108,8 +110,7 @@ void main() {
 
   group('QueryTMDBFinder integration tests', () {
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
-      await EnvironmentVars.init();
+    test('Run myConstructURI()', () {
       const expected =
           'https://api.themoviedb.org/3/find/1234?language=en-US&external_source=imdb_id&api_key=';
 
@@ -127,7 +128,6 @@ void main() {
   group('QueryTMDBFinder integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      await EnvironmentVars.init();
       final testClass = QueryTMDBFinder();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
@@ -149,8 +149,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () async {
-      await EnvironmentVars.init();
+    test('myConvertTreeToOutputType() errors', () {
       final testClass = QueryTMDBFinder();
 
       // Invoke the functionality and collect results.
@@ -172,8 +171,6 @@ void main() {
   group('tmdb search query', () {
     // Read tmdb search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
-      // Wait for api key to be initialised
-      await EnvironmentVars.init();
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
@@ -204,7 +201,6 @@ void main() {
 
     // Read tmdb search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
-      await EnvironmentVars.init();
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBFinder();
@@ -228,7 +224,6 @@ not valid json
 
     // Read tmdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
-      await EnvironmentVars.init();
       // Set up the test data.
       const expectedException = '[tmdbFinder] Error in tmdbFinder '
           'with criteria tt0101000 translating page map to objects '

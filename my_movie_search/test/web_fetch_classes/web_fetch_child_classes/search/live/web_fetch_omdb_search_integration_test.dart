@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
-import 'package:my_movie_search/utilities/environment.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 
 import '../../../../test_helper.dart';
 // ignore_for_file: unnecessary_raw_strings
@@ -37,6 +37,8 @@ const expectedDtoJsonStringList = [
 ];
 
 void main() {
+  // Wait for api key to be initialised
+  setUpAll(() => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -44,9 +46,6 @@ void main() {
   group('live QueryOMDBMovies search test', () {
     // Search for a rare movie.
     test('Run read 3 pages from OMDB', () async {
-      // Wait for api key to be initialised
-      await EnvironmentVars.init();
-
       final criteria = SearchCriteriaDTO().fromString('rize');
       final actualOutput =
           await QueryOMDBMovies().readList(criteria, limit: 10);

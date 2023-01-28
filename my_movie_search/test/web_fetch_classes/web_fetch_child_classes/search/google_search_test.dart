@@ -5,7 +5,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/google.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/google.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/google.dart';
-import 'package:my_movie_search/utilities/environment.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
@@ -17,6 +17,8 @@ Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
 }
 
 void main() {
+  // Wait for api key to be initialised
+  setUpAll(() => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -110,8 +112,7 @@ void main() {
 
   group('QueryGoogleMovies integration tests', () {
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
-      await EnvironmentVars.init();
+    test('Run myConstructURI()', () {
       const expectedResult1 =
           'https://customsearch.googleapis.com/customsearch/v1?cx=';
       const expectedResult2 = '&q=new%20query&start=0&num=10';
@@ -174,8 +175,6 @@ void main() {
   group('google search query', () {
     // Read google search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
-      // Wait for api key to be initialised
-      await EnvironmentVars.init();
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];

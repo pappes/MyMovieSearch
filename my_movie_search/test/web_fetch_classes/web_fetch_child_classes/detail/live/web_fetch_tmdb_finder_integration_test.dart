@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_finder.dart';
-import 'package:my_movie_search/utilities/environment.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 
 import '../../../../test_helper.dart';
 
@@ -13,11 +13,11 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt0101000","bestSource":"DataSourceType.tmdbFinder","title":"Začátek dlouhého podzimu","year":"1990","language":"LanguageType.foreign",
+{"uniqueId":"tt0101000","bestSource":"DataSourceType.tmdbFinder","title":"Začátek dlouhého podzimu","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
       "languages":"[\"cs\"]","genres":"[]","keywords":"[]","sources":{"DataSourceType.tmdbFinder":"913986"},"related":{}}
 ''',
   r'''
-{"uniqueId":"tt0101002","bestSource":"DataSourceType.tmdbFinder","title":"Return Engagement","alternateTitle":"再戰江湖","year":"1990","language":"LanguageType.foreign",
+{"uniqueId":"tt0101002","bestSource":"DataSourceType.tmdbFinder","title":"Return Engagement","alternateTitle":"再戰江湖","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
       "languages":"[\"cn\"]","genres":"[]","keywords":"[]",
       "description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.",
       "userRating":"6.0","userRatingCount":"4","sources":{"DataSourceType.tmdbFinder":"230839"},"related":{}}
@@ -57,6 +57,8 @@ Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
 }
 
 void main() {
+  // Wait for api key to be initialised
+  setUpAll(() => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -64,9 +66,6 @@ void main() {
   group('live QueryTMDBFinder test', () {
     // Convert 3 TMDB pages into dtos.
     test('Run read 3 pages from TMDB', () async {
-      // Wait for api key to be initialised
-      await EnvironmentVars.init();
-
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));

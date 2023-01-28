@@ -9,7 +9,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scrape
 import 'package:my_movie_search/movies/web_data_providers/detail/cache/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_name.dart';
-import 'package:my_movie_search/utilities/environment.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import '../../../test_helper.dart';
 
@@ -34,6 +34,8 @@ class StaticJsonGenerator {
 }
 
 void main() {
+  // Wait for api key to be initialised
+  setUpAll(() => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -328,8 +330,6 @@ void main() {
   group('imdb search query', () {
     // Read imdb search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
-      // Wait for api key to be initialised
-      await EnvironmentVars.init();
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
