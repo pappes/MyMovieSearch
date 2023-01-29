@@ -15,6 +15,9 @@ extension DurationHelper on Duration {
   /// ```
   Duration fromIso8601(dynamic val) {
     final isoString = val?.toString() ?? '';
+    if (null == val || '' == val.toString()) {
+      return Duration.zero;
+    }
     //logic adapted from https://dev.to/ashishrawat2911/parse-iso8601-duration-string-to-duration-object-in-dart-flutter-1gc1
     if (!RegExp(
       r'^(-|\+)?P'

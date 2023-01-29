@@ -7,6 +7,7 @@ import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/thread.dart';
@@ -41,7 +42,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   /// Fetch full person details from imdb.
   void _getDetails(SearchCriteriaDTO criteria) {
     if (_movie.uniqueId.startsWith(imdbTitlePrefix)) {
-      /// Fetch person details from cache using a separate thread.
+      /// Fetch movie details
+      QueryIMDBTitleDetails()
+          .readList(
+            criteria,
+          )
+          .then(_requestShowDetails);
+
+      /// Fetch cast details from cache using a separate thread.
       QueryIMDBCastDetails()
           .readPrioritisedCachedList(
             criteria,
@@ -163,7 +171,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ...description(),
-            ...related(),
+            ...suggestions(),
+            ...cast(),
           ],
         ),
       ],
@@ -179,7 +188,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
             makeImdbUrl(_movie.uniqueId, photos: true),
             context,
           ),
-        )
+        ),
       ],
     );
   }
@@ -240,30 +249,45 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     ];
   }
 
-  List<Widget> related() {
+  final caseInsensativeSuggestion =
+      RegExp('[sS][uU][gG][gG][eE][sS][tT][iI][oO][nN]');
+
+  List<Widget> suggestions() => related(caseInsensativeSuggestion);
+
+  List<Widget> cast() => related(caseInsensativeSuggestion, invertFilter: true);
+
+  List<Widget> related(RegExp filter, {bool invertFilter = false}) {
+    bool testFilter(String text, RegExp filter, bool invertFilter) {
+      if (invertFilter && !filter.hasMatch(text)) return true;
+      if (!invertFilter && filter.hasMatch(text)) return true;
+      return false;
+    }
+
     final categories = <Widget>[];
     for (final category in _movie.related.entries) {
-      final rolesMap = category.value;
-      final rolesLabel = category.key;
-      //inal map = category.value;
-      final description = rolesMap.toShortString();
-      categories.add(BoldLabel('$rolesLabel (${rolesMap.length})'));
+      if (testFilter(category.key, filter, invertFilter)) {
+        final rolesMap = category.value;
+        final rolesLabel = category.key;
+        //inal map = category.value;
+        final description = rolesMap.toShortString();
+        categories.add(BoldLabel('$rolesLabel (${rolesMap.length})'));
 
-      categories.add(
-        Center(
-          child: GestureDetector(
-            onTap: () => searchForRelated(
-              '$rolesLabel ${_movie.title}',
-              rolesMap.values.toList(),
-              context,
-            ),
-            child: Text(
-              description,
-              textAlign: TextAlign.center,
+        categories.add(
+          Center(
+            child: GestureDetector(
+              onTap: () => searchForRelated(
+                '$rolesLabel ${_movie.title}',
+                rolesMap.values.toList(),
+                context,
+              ),
+              child: Text(
+                description,
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
     return categories;
   }
