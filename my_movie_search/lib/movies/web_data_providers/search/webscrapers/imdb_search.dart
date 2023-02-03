@@ -61,7 +61,10 @@ mixin ScrapeIMDBSearchDetails
 
   /// Extract search content from json
   Future<List> _scrapeSearchResult(
-      dynamic jsonTree, String jsonText, String webText) async {
+    dynamic jsonTree,
+    String jsonText,
+    String webText,
+  ) async {
     final contents = TreeHelper(jsonTree).deepSearch(
       deepJsonResultsSuffix, // nameResults or titleResults
       multipleMatch: true,

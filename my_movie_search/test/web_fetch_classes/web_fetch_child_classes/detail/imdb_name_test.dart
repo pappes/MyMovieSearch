@@ -92,7 +92,7 @@ void main() {
     });
     // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
-      final expectedOutput = intermediateMapList;
+      const expectedOutput = intermediateMapList;
       final testClass = QueryIMDBNameDetails();
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = 'nm0123456';

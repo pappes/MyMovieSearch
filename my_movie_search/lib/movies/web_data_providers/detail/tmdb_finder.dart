@@ -5,6 +5,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_finder.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_finder.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [WebFetchBase] for using IMDB IDs searching The Movie Database (TMDB).
@@ -34,7 +35,7 @@ class QueryTMDBFinder extends QueryTMDBCommon {
     if (text.startsWith(imdbPersonPrefix) || text.startsWith(imdbTitlePrefix)) {
       return text;
     }
-    print('surpressed $source search for non IMDB id $text');
+    logger.v('surpressed $source search for non IMDB id $text');
     return ''; // do not allow searches for non-imdb IDs
   }
 

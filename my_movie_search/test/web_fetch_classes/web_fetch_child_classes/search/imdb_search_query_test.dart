@@ -101,7 +101,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     test('Run myConvertWebTextToTraversableTree()', () {
-      final expectedOutput = intermediateMapList;
+      const expectedOutput = intermediateMapList;
       final actualOutput = QueryIMDBSearch().myConvertWebTextToTraversableTree(
         imdbSearchHtmlSampleFull,
       );
@@ -296,7 +296,7 @@ void main() {
 
   group('imdb search redirect', () {
     test('Run QueryIMDBTitleDetails myConvertWebTextToTraversableTree()', () {
-      final expectedOutput = title_data.intermediateMapList;
+      const expectedOutput = title_data.intermediateMapList;
 
       final imdbSearch = QueryIMDBSearch();
       imdbSearch.criteria = SearchCriteriaDTO().fromString('tt7602562');
@@ -341,7 +341,7 @@ void main() {
 
     test('Run QueryIMDBNameDetails myConvertWebTextToTraversableTree()',
         () async {
-      final expectedOutput = person_data.intermediateMapList;
+      const expectedOutput = person_data.intermediateMapList;
 
       final imdbSearch = QueryIMDBSearch();
       imdbSearch.criteria = SearchCriteriaDTO().fromString('nm7602562');

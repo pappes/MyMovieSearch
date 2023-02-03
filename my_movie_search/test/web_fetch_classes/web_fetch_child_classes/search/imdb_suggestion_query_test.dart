@@ -110,7 +110,7 @@ void main() {
     // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
-      final expectedValue = await expectedDTOList;
+      final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final imdbSuggestions = QueryIMDBSuggestions();
 

@@ -1,23 +1,25 @@
 import 'dart:async';
 
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+
 extension StreamHelper<T> on Stream<T> {
   /// Consumes values from a stream and prints them out then puts them on a new stream.
   ///
   /// For debugging purposes only.
-  Stream<T> printStream([String prefix = '', int limit = 400]) async* {
+  Stream<T> printStream([String prefix = '', int limit = 4000]) async* {
     try {
       await for (final value in this) {
         final text = value.toString();
         if (text.length > limit) {
-          print('$prefix ${text.substring(0, limit ~/ 4)}...');
+          logger.i('$prefix ${text.substring(0, limit ~/ 4)}...');
         } else {
-          print('$prefix $value');
+          logger.i('$prefix $value');
         }
         yield value;
       }
-      print('$prefix done');
+      logger.i('$prefix done');
     } catch (error, stackTrace) {
-      print('$prefix ERR: ${error.toString()}');
+      logger.i('$prefix ERR: ${error.toString()}');
       yield* Stream.error(error, stackTrace);
     }
   }
@@ -37,10 +39,10 @@ extension FutureStreamHelper<T> on Future<Stream<T>?> {
       }
       final datatype =
           (awaited == null) ? 'null' : awaited.runtimeType.toString();
-      print('$prefix Unexpected data type: $datatype');
+      logger.w('$prefix Unexpected data type: $datatype');
       return Stream<T>.empty();
     } catch (error) {
-      print('$prefix EXCEPTION: ${error.toString()}');
+      logger.w('$prefix EXCEPTION: ${error.toString()}');
       rethrow;
     }
   }

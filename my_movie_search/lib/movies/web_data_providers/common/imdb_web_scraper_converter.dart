@@ -29,7 +29,7 @@ class ImdbWebScraperConverter {
 
   /// Take a [Map] of IMDB data and create a [MovieResultDTO] from it.
   MovieResultDTO dtoFromMap(Map map) {
-    var movie = MovieResultDTO().init();
+    final movie = MovieResultDTO().init();
     if (map.containsKey(outerElementIdentity)) {
       _shallowConvert(movie, map);
     } else if (null != map.deepSearch(deepPersonId)) {

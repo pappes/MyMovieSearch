@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -84,7 +86,7 @@ void main() {
     });
     // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
-      final expectedOutput = intermediateMapList;
+      const expectedOutput = intermediateMapList;
       final testClass = QueryIMDBBibliographyDetails();
       final criteria = SearchCriteriaDTO();
       criteria.criteriaTitle = 'nm7602562';

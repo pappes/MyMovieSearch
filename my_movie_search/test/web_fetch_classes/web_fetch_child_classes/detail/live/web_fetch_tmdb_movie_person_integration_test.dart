@@ -29,7 +29,7 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"nm0914455","bestSource":"DataSourceType.tmdbPerson","title":"Leonor Watling","type":"MovieContentType.person","year":"1975","languages":"[]","genres":"[]","keywords":"[]",
       "description":"Leonor Elizabeth Ceballos Watling (born July 28, 1975) is an award-winning Spanish film actress and singer.",
-      "userRating":"5.248","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/uyEM3c37lL90by5vmuOk0XZQ83O.jpg","sources":{"DataSourceType.tmdbPerson":"101"},"related":{}}
+      "userRating":"10.248","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/uyEM3c37lL90by5vmuOk0XZQ83O.jpg","sources":{"DataSourceType.tmdbPerson":"101"},"related":{}}
 ''',
 ];
 

@@ -46,13 +46,14 @@ class ImdbSuggestionConverter {
     )?.toString();
 
     final movie = MovieResultDTO().init(
-        bestSource: DataSourceType.imdbSuggestions,
-        uniqueId: map[innerElementIdentity]?.toString(),
-        title: map[innerElementTitle]?.toString(),
-        imageUrl: _getImage(map[innerElementImage]),
-        year: map[innerElementYear]?.toString(),
-        yearRange: map[innerElementYearRange]?.toString(),
-        type: movieType);
+      bestSource: DataSourceType.imdbSuggestions,
+      uniqueId: map[innerElementIdentity]?.toString(),
+      title: map[innerElementTitle]?.toString(),
+      imageUrl: _getImage(map[innerElementImage]),
+      year: map[innerElementYear]?.toString(),
+      yearRange: map[innerElementYearRange]?.toString(),
+      type: movieType,
+    );
     return movie;
   }
 

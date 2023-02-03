@@ -440,7 +440,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     final isCached = myIsResultCached(newCriteria);
     // if cached yield from cache
     if (isCached && !myIsCacheStale(newCriteria)) {
-      print(
+      logger.v(
         'base ${ThreadRunner.currentThreadName} '
         'value was cached ${myFormatInputAsText(newCriteria)}',
       );
@@ -450,7 +450,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return Stream.fromIterable([]);
     }
     // if not cached or cache is stale retrieve fresh data
-    print(
+    logger.v(
       'base ${ThreadRunner.currentThreadName} ${myDataSourceName()} '
       'uncached ${myFormatInputAsText(newCriteria)}',
     );
@@ -481,7 +481,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         myFormatInputAsText(criteria as INPUT_TYPE),
       );
       address = myConstructURI(encoded);
-      print('requesting: $address');
+      logger.v('requesting: $address');
       final client = await myGetHttpClient().getUrl(address);
       myConstructHeaders(client.headers);
       final request = client.close();

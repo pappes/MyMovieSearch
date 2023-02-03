@@ -184,7 +184,7 @@ void main() {
     test('convert raw bytestream to map to DTO', () async {
       // Set up the test data.
       const testInput = imdbJsonPSampleFull;
-      final expectedDTO = await expectedDTOList;
+      final expectedDTO = expectedDTOList;
 
       // Compare the stream output to the expected output.
       int dtoCount = 0;

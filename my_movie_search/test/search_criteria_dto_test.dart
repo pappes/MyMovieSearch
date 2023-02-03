@@ -75,12 +75,6 @@ void main() {
   group('RestoreSearchCriteriaDTO', () {
     // Convert a restorable dto to JSON and then convert the JSON to a restorable dto.
     test('RestorableCriteria', () {
-      void whatIsThis(thing) {
-        print(thing.runtimeType);
-      }
-
-      whatIsThis(SearchCriteriaSource);
-
       final criteria = makeCriteriaDTO('abc');
       final rtp = RestorationTestParent(criteria.criteriaTitle);
       rtp.restoreState(null, true);

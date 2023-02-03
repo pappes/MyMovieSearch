@@ -302,12 +302,6 @@ void main() {
       );
     });
     test('html doc', () {
-      final actualResult = _getOfflineHTML('123')
-          .toList()
-          .then(
-            (html) => testClass.myConvertWebTextToTraversableTree(html.first),
-          )
-          .then((element) => element.first.outerHtml);
       const expectedResult = '''
 <!DOCTYPE html><html><head>
       <script type="application/ld+json">{
@@ -318,6 +312,12 @@ void main() {
     
 
 </body></html>''';
+      final actualResult = _getOfflineHTML('123')
+          .toList()
+          .then(
+            (html) => testClass.myConvertWebTextToTraversableTree(html.first),
+          )
+          .then((element) => element.first.outerHtml);
 
       expect(actualResult, completion(expectedResult));
     });
@@ -436,8 +436,7 @@ void main() {
     test('fetch result from cache', () async {
       final testClass = WebFetchCached();
       await testClass.myAddResultToCache('Marco', 'Polo');
-      final listResult =
-          await testClass.myFetchResultFromCache('Marco').toList();
+      final listResult = testClass.myFetchResultFromCache('Marco').toList();
       expect(listResult, ['Polo']);
       final resultIsCached = testClass.myIsResultCached('Marco');
       expect(resultIsCached, true);

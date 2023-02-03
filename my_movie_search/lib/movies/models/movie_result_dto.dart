@@ -341,7 +341,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Create a MovieResultDTO encapsulating an error.
   ///
   static int _lastError = -1;
-  static resetError() {
+  static void resetError() {
     _lastError = -1;
   }
 
