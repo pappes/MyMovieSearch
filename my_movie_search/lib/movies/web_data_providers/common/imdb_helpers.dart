@@ -176,6 +176,7 @@ String getIdFromIMDBLink(String? link) {
 CensorRatingType? getImdbCensorRating(String? type) {
   // Details available at https://help.imdb.com/article/contribution/titles/certificates/GU757M8ZJ9ZPXB39
   if (type == null) return null;
+  if (type.lastIndexOf('Unrated') > -1) return CensorRatingType.none;
   if (type.lastIndexOf('Banned') > -1) return CensorRatingType.adult;
   if (type.lastIndexOf('X') > -1) return CensorRatingType.adult;
   if (type.lastIndexOf('R21') > -1) return CensorRatingType.adult;
