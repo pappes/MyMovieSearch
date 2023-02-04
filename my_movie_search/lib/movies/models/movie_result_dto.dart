@@ -818,11 +818,11 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Use movie type string to lookup [MovieContentType] movie type.
   static MovieContentType? getMovieContentType(
     Object? info,
-    int? duration,
+    int? seconds,
     String id,
   ) {
     final string = info?.toString() ?? '';
-    final type = _lookupMovieContentType(string, duration, id);
+    final type = _lookupMovieContentType(string, seconds, id);
     if (null != type || null == info) return type;
     return null;
   }

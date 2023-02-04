@@ -570,8 +570,11 @@ Future main() async {
       testToNumber('0000', 0);
       testToNumber('0001', 1);
       testToNumber('2010', 2010);
+      testToNumber('(2010)', 2010);
       testToNumber('2011-2014', 2014);
+      testToNumber('(2011-2014)', 2014);
       testToNumber('2015-', 2015);
+      testToNumber('(2015-)', 2015);
       testToNumber('number', null);
       testToNumber(null, null);
     });

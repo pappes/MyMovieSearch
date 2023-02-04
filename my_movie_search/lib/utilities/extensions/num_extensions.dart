@@ -80,12 +80,21 @@ int? getYear(String? yeartext) {
     if (4 == yeartext.length) {
       // 1995
       return DateTime.tryParse('$yeartext-01-01')?.year;
+    } else if (6 == yeartext.length) {
+      // (1995)
+      return DateTime.tryParse('${yeartext.substring(1, 5)}-01-01')?.year;
     } else if (9 == yeartext.length) {
       // 1995-1999
       return DateTime.tryParse('${yeartext.substring(5)}-01-01')?.year;
+    } else if (11 == yeartext.length) {
+      // (1995-1999)
+      return DateTime.tryParse('${yeartext.substring(6, 10)}-01-01')?.year;
     } else if (5 == yeartext.length) {
       // 1995-
       return DateTime.tryParse('${yeartext.substring(0, 4)}-01-01')?.year;
+    } else if (7 == yeartext.length) {
+      // (1995-)
+      return DateTime.tryParse('${yeartext.substring(1, 5)}-01-01')?.year;
     } else if (4 < yeartext.length) {
       return DateTime.tryParse(yeartext)?.year;
     }

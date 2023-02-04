@@ -9,6 +9,13 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 ////////////////////////////////////////////////////////////////////////////////
 /// Helper functions
 ////////////////////////////////////////////////////////////////////////////////
+
+void printTestData(List<MovieResultDTO> actualResult) {
+  // ignore: avoid_print
+  print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData: false));
+  expect('all call to this code', 'must be commented out');
+}
+
 Matcher containsSubstring(String substring, {String startsWith = ''}) {
   bool testFunction(String actual) {
     if (actual.startsWith(startsWith) &&

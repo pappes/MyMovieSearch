@@ -12,6 +12,7 @@ enum DataSourceType {
   imdb,
   imdbSearch,
   imdbSuggestions,
+  imdbKeywords,
   omdb,
   tmdbPerson,
   tmdbMovie,

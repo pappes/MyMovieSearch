@@ -3,7 +3,7 @@ import 'dart:async' show StreamSubscription;
 import 'package:bloc/bloc.dart' show Bloc, Emitter;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:equatable/equatable.dart';
-import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/base_movie_repository.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -41,7 +41,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     });
   }
 
-  final MovieSearchRepository movieRepository;
+  final BaseMovieRepository movieRepository;
   StreamSubscription<MovieResultDTO>? _searchStatusSubscription;
   final MovieCollection _allResults = {};
   List<MovieResultDTO> sortedResults = [];
@@ -148,7 +148,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     _throttleActive = true;
     _throttledDataPending = EasyThrottle.throttle(
       _throttleName,
-      const Duration(milliseconds: 2000), // limit refresh to every 2 seconds
+      const Duration(milliseconds: 500), // limit refresh to twice per second
       () => _sendResults(), // Initial screen draw
       onAfter: () => _throttleCompleted(), // Process throttled updates
     );
@@ -174,22 +174,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     sortedResults.addAll(_allResults.values.toList());
     // Sort by relevence with recent year first
     sortedResults.sort((a, b) => b.compareTo(a));
-    _updateProgress();
     _searchProgress++;
-    //TODO: find out why late updates are not causing image to be updated
 
     if (!isClosed) {
       add(SearchDataReceived(sortedResults));
-    }
-  }
-
-  /// Calculate a value representing the search progress.
-  /// Currently uses count of rows + sum of user rating values
-  /// to account for progressive population of movie details.
-  void _updateProgress() {
-    _searchProgress = sortedResults.length.toDouble();
-    for (final element in sortedResults) {
-      _searchProgress += element.userRating;
     }
   }
 }
