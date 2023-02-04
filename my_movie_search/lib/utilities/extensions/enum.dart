@@ -4,7 +4,7 @@
 /// getEnumValue<SpokenLanguage>('English',SpokenLanguage.values);
 /// ```
 T? getEnumValue<T extends Enum>(dynamic stringValue, List<T> enumClass) {
-  if (stringValue != null && stringValue != '') {
+  if (stringValue != null && stringValue != '' && stringValue != 'null') {
     final fullString = stringValue.toString();
     // If passed in value is type.enum then discard the type.
     if (fullString.contains('${T.toString()}.')) {

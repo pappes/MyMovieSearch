@@ -575,6 +575,7 @@ Future main() async {
       testToNumber('(2011-2014)', 2014);
       testToNumber('2015-', 2015);
       testToNumber('(2015-)', 2015);
+      testToNumber('(2015- )', 2015);
       testToNumber('number', null);
       testToNumber(null, null);
     });

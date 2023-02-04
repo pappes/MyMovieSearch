@@ -95,6 +95,9 @@ int? getYear(String? yeartext) {
     } else if (7 == yeartext.length) {
       // (1995-)
       return DateTime.tryParse('${yeartext.substring(1, 5)}-01-01')?.year;
+    } else if (8 == yeartext.length) {
+      // (1995- )
+      return DateTime.tryParse('${yeartext.substring(1, 5)}-01-01')?.year;
     } else if (4 < yeartext.length) {
       return DateTime.tryParse(yeartext)?.year;
     }
