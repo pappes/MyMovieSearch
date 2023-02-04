@@ -1286,9 +1286,10 @@ extension DTOCompare on MovieResultDTO {
   /// Rank movies based on raw popularity.
   ///
   int personPopularityCompare(MovieResultDTO other) {
-    final popularity = userRatingCount + aListRanking;
-    final otherPopularity = other.userRatingCount + other.aListRanking;
-    return popularity.compareTo(otherPopularity);
+    if (aListRanking > 1 || other.aListRanking > 1) {
+      return aListRanking.compareTo(other.aListRanking);
+    }
+    return userRatingCount.compareTo(other.userRatingCount);
   }
 
   /// Extract year release or year of most recent episode.

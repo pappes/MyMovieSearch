@@ -7,11 +7,11 @@ import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieTile extends ListTile {
-  MovieTile(BuildContext context, MovieResultDTO movie)
+  MovieTile(BuildContext context, MovieResultDTO movie, bool hideType)
       : super(
           leading: _getImage(movie.imageUrl),
           title: _getTitle(movie),
-          subtitle: _getDescription(movie),
+          subtitle: _getDescription(movie, hideType),
           onTap: () => Navigator.push(
             context,
             getRoute(context, movie),
@@ -20,18 +20,19 @@ class MovieTile extends ListTile {
 
   static Widget _getTitle(MovieResultDTO movie) {
     return Text(
-      '${movie.title}(${movie.yearRange == '' ? movie.year : movie.yearRange}, '
-      '${movie.bestSource.name}), ${movie.language.name})',
+      '${movie.title}(${movie.yearRange == '' ? movie.year : movie.yearRange}) - '
+      '${movie.bestSource.name}, ${movie.language.name}',
       textScaleFactor: 1.0,
     );
   }
 
-  static Widget _getDescription(MovieResultDTO movie) {
+  static Widget _getDescription(MovieResultDTO movie, bool hideType) {
     final rating = (movie.censorRating != CensorRatingType.none)
         ? '${movie.censorRating.name} '
         : '';
-    final content =
-        (movie.type != MovieContentType.none) ? '${movie.type.name}    ' : '';
+    final content = (movie.type != MovieContentType.none && !hideType)
+        ? '${movie.type.name}    '
+        : '';
     final alternateTitle =
         (movie.alternateTitle.isEmpty) ? '' : '${movie.alternateTitle} ';
     final charactorName =
