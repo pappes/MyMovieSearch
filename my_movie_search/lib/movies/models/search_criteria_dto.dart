@@ -21,8 +21,9 @@ enum SearchStatus { awaitingInput, searching, cacheDirty, displayingResults }
 
 enum SearchCriteriaSource {
   none,
-  google,
-  imdb,
+  movieTitle,
+  movieKeyword,
+  movieDTOList,
   tpb,
   lime,
   custom,
@@ -117,6 +118,12 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   SearchCriteriaDTO fromString(String criteria) {
     final dto = SearchCriteriaDTO();
     dto.criteriaTitle = criteria;
+    return dto;
+  }
+
+  SearchCriteriaDTO init(SearchCriteriaSource source) {
+    final dto = SearchCriteriaDTO();
+    dto.criteriaSource = source;
     return dto;
   }
 }

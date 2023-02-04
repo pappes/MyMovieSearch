@@ -206,7 +206,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       categories.add(BoldLabel('$rolesLabel: (${rolesMap.length})'));
       categories.add(
         Center(
-          child: GestureDetector(
+          child: InkWell(
             onTap: () => searchForRelated(
               // Open search details when tapped.
               '$rolesLabel: ${_person.title}',

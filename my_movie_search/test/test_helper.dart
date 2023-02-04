@@ -321,7 +321,7 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
 SearchCriteriaDTO makeCriteriaDTO(String sample) {
   final dto = SearchCriteriaDTO();
 
-  dto.criteriaSource = SearchCriteriaSource.google;
+  dto.criteriaSource = SearchCriteriaSource.movieDTOList;
   dto.criteriaTitle = '${sample}_criteriaTitle';
   dto.searchId = '${sample}_searchId';
   dto.criteriaList = [

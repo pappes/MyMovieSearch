@@ -193,31 +193,33 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     );
   }
 
+  Widget movieFacts() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text('Type: ${_movie.type.name}'),
+        Text(
+          'User Rating: ${_movie.userRating.toString()} '
+          '(${formatter.format(_movie.userRatingCount)})',
+        ),
+        Wrap(
+          children: <Widget>[
+            Text('Censor Rating: ${_movie.censorRating.name}     '),
+            Text('Language: ${_movie.language.name}'),
+          ],
+        ),
+      ],
+    );
+  }
+
   List<Widget> leftHeader() {
     return [
-      Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('Type: ${_movie.type.name}'),
-          Text(
-            'User Rating: ${_movie.userRating.toString()} '
-            '(${formatter.format(_movie.userRatingCount)})',
-          ),
-          Wrap(
-            children: <Widget>[
-              GestureDetector(
-                child: Text(
-                  'Censor Rating: ${_movie.censorRating.name}     ',
-                ),
-                onTap: () => viewWebPage(
-                  makeImdbUrl(_movie.uniqueId, parentalGuide: true),
-                  context,
-                ),
-              ),
-              Text('Language: ${_movie.language.name}'),
-            ],
-          ),
-        ],
+      InkWell(
+        child: movieFacts(),
+        onTap: () => viewWebPage(
+          makeImdbUrl(_movie.uniqueId, parentalGuide: true),
+          context,
+        ),
       ),
       Wrap(
         children: <Widget>[
@@ -245,7 +247,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       ),
       Text('Languages: ${_movie.languages.toString()}'),
       Text('Genres: ${_movie.genres.toString()}'),
-      Text('Keywords: ${_movie.keywords.toString()}'),
+      keywords(),
     ];
   }
 
@@ -255,6 +257,29 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   List<Widget> suggestions() => related(caseInsensativeSuggestion);
 
   List<Widget> cast() => related(caseInsensativeSuggestion, invertFilter: true);
+
+  Widget keywords() {
+    Widget makeHyperlink(String keyword) {
+      return InkWell(
+        child: Text('  $keyword  '),
+        onTap: () => searchForKeyword(
+          keyword,
+          context,
+        ),
+      );
+    }
+
+    final hyperlinks = <Widget>[];
+    for (final keyword in _movie.keywords) {
+      hyperlinks.add(makeHyperlink(keyword));
+    }
+    return Wrap(
+      children: <Widget>[
+        const Text('Keywords: '),
+        ...hyperlinks,
+      ],
+    );
+  }
 
   List<Widget> related(RegExp filter, {bool invertFilter = false}) {
     bool testFilter(String text, RegExp filter, bool invertFilter) {
@@ -268,13 +293,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       if (testFilter(category.key, filter, invertFilter)) {
         final rolesMap = category.value;
         final rolesLabel = category.key;
-        //inal map = category.value;
         final description = rolesMap.toShortString();
         categories.add(BoldLabel('$rolesLabel (${rolesMap.length})'));
 
         categories.add(
           Center(
-            child: GestureDetector(
+            child: InkWell(
               onTap: () => searchForRelated(
                 '$rolesLabel ${_movie.title}',
                 rolesMap.values.toList(),

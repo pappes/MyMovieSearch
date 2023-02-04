@@ -17,6 +17,8 @@ import 'package:flutter/material.dart'
         Text,
         Widget;
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
+import 'package:my_movie_search/movies/blocs/repositories/base_movie_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/movie_keyword_repository.dart';
 
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
@@ -49,8 +51,14 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     super.initState();
     _title = widget.criteria.criteriaTitle;
     _searchId = widget.criteria.searchId;
+    BaseMovieRepository dataSource;
+    if (SearchCriteriaSource.movieKeyword == widget.criteria.criteriaSource) {
+      dataSource = MovieKeywordRepository();
+    } else {
+      dataSource = MovieSearchRepository();
+    }
     //TODO: use a factory in inject search bloc instances _searchBloc = BlocProvider.of<SearchBloc>(context);
-    _searchBloc = SearchBloc(movieRepository: MovieSearchRepository());
+    _searchBloc = SearchBloc(movieRepository: dataSource);
     if (_searchBloc != null && !_searchBloc!.isClosed) {
       _searchBloc!.add(SearchRequested(widget.criteria));
     }

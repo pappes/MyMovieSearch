@@ -91,7 +91,8 @@ void searchForRelated(
   if (movies.length == 1) {
     Navigator.push(context, getRoute(context, movies[0]));
   } else {
-    final criteria = SearchCriteriaDTO();
+    final criteria =
+        SearchCriteriaDTO().init(SearchCriteriaSource.movieDTOList);
     criteria.criteriaList.addAll(movies);
     criteria.criteriaTitle = description;
     Navigator.push(
@@ -101,4 +102,20 @@ void searchForRelated(
       ),
     );
   }
+}
+
+/// Navigates to a search results page populated with movie for the keyword.
+///
+void searchForKeyword(
+  String keyword,
+  BuildContext context,
+) {
+  final criteria = SearchCriteriaDTO().init(SearchCriteriaSource.movieKeyword);
+  criteria.criteriaTitle = keyword;
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => MovieSearchResultsNewPage(criteria: criteria),
+    ),
+  );
 }

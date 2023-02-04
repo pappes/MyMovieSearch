@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_keywords.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_keywords.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imdb_keywords.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [WebFetchBase] for the IMDB keywords html web scraper.
@@ -55,6 +56,7 @@ class QueryIMDBKeywords extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   /// API call to IMDB keywords returning the top matching results for [keywordsText].
   @override
   Uri myConstructURI(String keywordsCriteria, {int pageNumber = 1}) {
+    searchResultsLimit = WebFetchLimiter(100);
     final url = '$_baseURL$keywordsCriteria';
     return Uri.parse(url);
   }

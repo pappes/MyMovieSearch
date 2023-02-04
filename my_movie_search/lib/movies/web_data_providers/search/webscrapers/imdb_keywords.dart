@@ -107,8 +107,21 @@ mixin ScrapeIMDBKeywordsDetails
   String? _getDescription(Element? section) =>
       htmlDecode.convert(section?.text.trim() ?? '');
 
-  String? _getImage(Element? section) =>
-      section?.querySelector('img')?.attributes['src'];
+  String? _getImage(Element? section) {
+    final imageAttributes = section?.querySelector('img')?.attributes;
+    if (null != imageAttributes) {
+      final loadlate = imageAttributes['loadlate']?.length ?? 0;
+      if (loadlate > 10) {
+        return imageAttributes['loadlate'];
+      }
+      if (imageAttributes['src'] ==
+          'https://m.media-amazon.com/images/S/sash/4FyxwxECzL-U1J8.pn') {
+        return null;
+      }
+      return imageAttributes['src'];
+    }
+    return null;
+  }
 
   String? _getRatingCount(Element? section) =>
       section?.querySelector("span[name='nv']")?.text.trim();

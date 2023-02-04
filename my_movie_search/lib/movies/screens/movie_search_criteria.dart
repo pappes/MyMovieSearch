@@ -46,7 +46,7 @@ class MovieSearchCriteriaPage extends StatefulWidget {
 
 class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     with RestorationMixin {
-  final _criteria = SearchCriteriaDTO();
+  final _criteria = SearchCriteriaDTO().init(SearchCriteriaSource.movieTitle);
   final _restorableCriteria = RestorableSearchCriteria();
   void searchForMovie() {
     Navigator.push(
