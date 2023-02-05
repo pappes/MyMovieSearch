@@ -52,7 +52,10 @@ class ImdbKeywordsConverter {
         description: map[keywordDescription]?.toString(),
         imageUrl: map[keywordImage]?.toString(),
         year: getYear(map[keywordYearRange]?.toString())?.toString(),
-        yearRange: map[keywordYearRange]?.toString(),
+        yearRange: map[keywordYearRange]
+            ?.toString()
+            .replaceAll('(', '')
+            .replaceAll(')', ''),
         type: movieType,
         censorRating: getImdbCensorRating(map[keywordCensorRating]?.toString())
             .toString(),

@@ -125,10 +125,10 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
         title: Text("More widgets than available data to populate them!"),
       );
     }
-    var hideType = false;
+    var hidePersonType = false;
     if (SearchCriteriaSource.movieDTOList == widget.criteria.criteriaSource) {
-      hideType = true;
+      hidePersonType = true;
     }
-    return MovieTile(context, _sortedList[listIndex], hideType);
+    return MovieTile(context, _sortedList[listIndex], hidePersonType);
   }
 }

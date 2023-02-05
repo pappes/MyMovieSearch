@@ -7,11 +7,11 @@ import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieTile extends ListTile {
-  MovieTile(BuildContext context, MovieResultDTO movie, bool hideType)
+  MovieTile(BuildContext context, MovieResultDTO movie, bool hidePersonType)
       : super(
           leading: _getImage(movie.imageUrl),
           title: _getTitle(movie),
-          subtitle: _getDescription(movie, hideType),
+          subtitle: _getDescription(movie, hidePersonType),
           onTap: () => Navigator.push(
             context,
             getRoute(context, movie),
@@ -26,11 +26,12 @@ class MovieTile extends ListTile {
     );
   }
 
-  static Widget _getDescription(MovieResultDTO movie, bool hideType) {
+  static Widget _getDescription(MovieResultDTO movie, bool hidePersonType) {
     final rating = (movie.censorRating != CensorRatingType.none)
         ? '${movie.censorRating.name} '
         : '';
-    final content = (movie.type != MovieContentType.none && !hideType)
+    final content = (movie.type != MovieContentType.none &&
+            (movie.type != MovieContentType.person || !hidePersonType))
         ? '${movie.type.name}    '
         : '';
     final alternateTitle =
