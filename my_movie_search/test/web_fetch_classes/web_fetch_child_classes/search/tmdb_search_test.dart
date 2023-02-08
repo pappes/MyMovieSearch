@@ -95,6 +95,9 @@ void main() {
         );
       }
 
+      // Uncomment this line to update expectedDTOList if sample data changes
+      // printTestData(actualResult);
+
       // Check the results.
       expect(
         actualResult,

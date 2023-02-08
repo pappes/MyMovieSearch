@@ -51,7 +51,7 @@ void main() {
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
-      //print(actualOutput.toListOfDartJsonStrings(excludeCopyrightedData: false));
+      // printTestData(actualOutput);
 
       // Check the results.
       expect(

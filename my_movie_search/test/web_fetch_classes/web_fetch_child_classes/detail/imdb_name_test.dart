@@ -117,6 +117,9 @@ void main() {
         );
       }
 
+      // Uncomment this line to update expectedDTOList if sample data changes
+      // printTestData(actualResult);
+
       final expectedValue = expectedDTOList;
       // Check the results.
       expect(

@@ -104,7 +104,9 @@ void main() {
           ImdbCastConverter.dtoFromCompleteJsonMap(map),
         );
       }
-      //print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData: false));
+
+      // Uncomment this line to update expectedDTOList if sample data changes
+      // printTestData(actualResult);
 
       final expectedValue = expectedDTOList;
       expectedValue.first.uniqueId = 'tt7602562';

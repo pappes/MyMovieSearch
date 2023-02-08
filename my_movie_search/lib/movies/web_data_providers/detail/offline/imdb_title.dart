@@ -15,8 +15,7 @@ Stream<String> emitImdbHtmlSample(_) async* {
 }
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-/* To update this data run
-       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
+/* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''

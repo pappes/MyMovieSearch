@@ -81,7 +81,7 @@ void main() {
 
       // To update expected data, uncomment the following line
       // actualOutput.forEach((e) => e.related = {});
-      // print(actualOutput.toListOfDartJsonStrings(excludeCopyrightedData: false));
+      // printTestData(actualOutput);
 
       // Check the results.
       expect(

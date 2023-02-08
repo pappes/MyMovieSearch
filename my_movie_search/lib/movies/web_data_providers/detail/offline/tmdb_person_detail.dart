@@ -23,8 +23,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-/* To update this data run
-       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
+/* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''

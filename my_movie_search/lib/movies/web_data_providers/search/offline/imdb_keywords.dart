@@ -2,14 +2,16 @@
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
-/* To update this data run
-       print(actualResult.toListOfDartJsonStrings(excludeCopyrightedData:false));
+/* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt0218354","bestSource":"DataSourceType.imdbKeywords","title":"The Catgirl<3","type":"MovieContentType.title","year":"2010","yearRange":"(2003–2010)","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"tt0218354","bestSource":"DataSourceType.imdbKeywords","title":"The Catgirl<3","type":"MovieContentType.title","year":"2010","yearRange":"2003–2010","languages":"[]","genres":"[]","keywords":"[]",
       "description":"Then Kramer said, \"Everybody is Mescalon Smoochington\"<3",
       "userRating":"5.999","userRatingCount":"644","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BOWI5MzNiY2QyNTA4NzExMDg@._V1_UY98_CR32,0,67,98_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0218354"},"related":{}}
+''',
+  r'''
+{"uniqueId":"https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main","bestSource":"DataSourceType.imdbKeywords","title":"Next »","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbKeywords":"https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"},"related":{}}
 ''',
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
@@ -61,7 +63,12 @@ const intermediateMapList = [
     'directors': null,
     'topCredits': null,
     'keywords': null
-  }
+  },
+  {
+    'id':
+        'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main',
+    'titleNameText': 'Next »',
+  },
 ];
 
 const imdbSampleMid = '''
@@ -112,4 +119,5 @@ const imdbSampleMid = '''
             </span>
         </p>
     </div>
+    <a href="?page=2&amp;sort=moviemeter,asc&amp;keywords=dream&amp;explore=keywords&amp;mode=detail&amp;ref_=kw_nxt#main" class="lister-page-next next-page" ref-marker="kw_nxt">Next »</a>
 </div>''';

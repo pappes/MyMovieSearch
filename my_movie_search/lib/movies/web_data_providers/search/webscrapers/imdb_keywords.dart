@@ -7,7 +7,6 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
-import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const keywordId = 'id';
@@ -59,6 +58,10 @@ mixin ScrapeIMDBKeywordsDetails
         if (null != id && id.toString().startsWith(imdbTitlePrefix)) {
           movieData.add(movie);
         }
+      }
+      final next = document.querySelector('.lister-page-next');
+      if (null != next) {
+        movieData.add(_addNextPage(next));
       }
     } else {
       throw 'imdb keyword data not detected for criteria $getCriteriaText';
@@ -180,6 +183,17 @@ mixin ScrapeIMDBKeywordsDetails
         }
       }
     }
+
     return sections;
+  }
+
+  Map _addNextPage(Element next) {
+    final String baseURL =
+        myConstructURI(criteria?.criteriaTitle ?? '').toString();
+    final String extraURL = next.attributes['href'] ?? '';
+    return {
+      keywordId: '$baseURL${extraURL.replaceAll('?', '&')}',
+      keywordName: next.text,
+    };
   }
 }

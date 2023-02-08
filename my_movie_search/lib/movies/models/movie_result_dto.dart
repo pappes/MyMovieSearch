@@ -836,11 +836,11 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     bool fuzzy = false,
   }) {
     if (fuzzy && (actual is int || actual is double)) {
-      _matchFuzzyCompare(mismatches, fieldName, expected, actual);
+      _matchFuzzyCompare(mismatches, fieldName, actual, expected);
     } else {
       if (expected != actual) {
         mismatches[fieldName] =
-            'is different\n  Expected: "$expected"\n  Actual: "$actual"\n';
+            'is different\n  Expected: "$expected"\n    Actual: "$actual"\n';
       }
     }
   }
@@ -854,8 +854,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   ) {
     if (expected != actual) {
       if (!DoubleHelper.fuzzyMatch(actual, expected, tolerance: 80)) {
-        mismatches[fieldName] =
-            'is different  Expected approx: "$expected"  Actual: "$actual"\n';
+        mismatches[fieldName] = 'is different\n'
+            '  Expected approx: "$expected"\n'
+            '           Actual: "$actual"\n';
       }
     }
   }
@@ -871,7 +872,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   ) {
     if (!expected.startsWith(movieDTOMessagePrefix) ||
         !actual.startsWith(movieDTOMessagePrefix)) {
-      _matchCompare(mismatches, fieldName, expected, actual);
+      _matchCompare(mismatches, fieldName, actual, expected);
     }
   }
 
@@ -885,22 +886,22 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     MovieSources expected,
   ) {
     if (expected.length != actual.length) {
-      _matchCompare(mismatches, '$fieldName length', expected, actual);
+      _matchCompare(mismatches, '$fieldName length', actual, expected);
     }
     for (var index = 0; index < expected.length; index++) {
       // Compare source name
       _matchCompare(
         mismatches,
         fieldName,
-        expected.keys.elementAt(index),
         actual.keys.elementAt(index),
+        expected.keys.elementAt(index),
       );
       // Compare source identifier
       _matchCompareId(
         mismatches,
         fieldName,
-        expected.values.elementAt(index),
         actual.values.elementAt(index),
+        expected.values.elementAt(index),
       );
     }
   }

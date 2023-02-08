@@ -15,19 +15,6 @@ Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
   return Future.value(Stream.value('not valid html'));
 }
 
-Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
-  final unexpectedJson = imdbKeywordsHtmlSampleFull.replaceAll(
-    '"results"',
-    '"found"',
-  );
-  return Future.value(Stream.value(unexpectedJson));
-}
-
-Future<Stream<String>> _emitEmtpyJsonSample(dynamic dummy) {
-  const emptyJson = '$imdbKeywordsHtmlSampleStart{}$imdbKeywordsHtmlSampleEnd';
-  return Future.value(Stream.value(emptyJson));
-}
-
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
@@ -96,10 +83,14 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
+
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final actualOutput =
-          QueryIMDBKeywords().myConvertWebTextToTraversableTree(
+      final testClass = QueryIMDBKeywords();
+      final criteria = SearchCriteriaDTO();
+      criteria.criteriaTitle = 'dream';
+      testClass.criteria = criteria;
+      final actualOutput = testClass.myConvertWebTextToTraversableTree(
         imdbKeywordsHtmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
@@ -187,7 +178,7 @@ void main() {
       // Invoke the functionality.
       await imdbKeywords
           .readList(
-            SearchCriteriaDTO().fromString('123'),
+            SearchCriteriaDTO().fromString('dream'),
             source: streamImdbKeywordsHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
