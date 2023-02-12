@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 //query string https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&q=wonder&safe=off&key=<key>
@@ -30,10 +31,13 @@ const innerElementRatingValue = 'ratingvalue';
 const innerElementRatingCount = 'ratingcount';
 const innerElementIdentity = 'pageid';
 const innerElementPageconst = 'imdb:pageconst';
-const innerElementType = 'og:type';
 const innerElementImage = 'og:image';
-const omdbResultTypeMovie = 'video.movie';
-const omdbResultTypeSeries = 'video.tv_show';
+const innerElementType = 'og:type';
+const innerElementSubtype = 'subpagetype';
+const innerElementPrefixedSubtype = 'imdb:$innerElementSubtype';
+const imdbResultTypeMovie = 'video.movie';
+const imdbResultTypeSeries = 'video.tv_show';
+const imdbPageTypeParentPage = 'main';
 
 class GoogleMovieSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
@@ -46,7 +50,9 @@ class GoogleMovieSearchConverter {
         return _searchError(map);
       }
       for (final Map movie in map[outerElementResultsCollection]) {
-        searchResults.add(dtoFromMap(movie));
+        if (!isImdbChildPage(movie)) {
+          searchResults.add(dtoFromMap(movie));
+        }
       }
     } catch (e) {
       final error = MovieResultDTO();
@@ -133,9 +139,9 @@ class GoogleMovieSearchConverter {
 
   static MovieContentType getType(Map map) {
     switch (map[innerElementType]) {
-      case omdbResultTypeMovie:
+      case imdbResultTypeMovie:
         return MovieContentType.movie;
-      case omdbResultTypeSeries:
+      case imdbResultTypeSeries:
         return MovieContentType.series;
       default:
         return MovieContentType.none;
@@ -158,5 +164,19 @@ class GoogleMovieSearchConverter {
       map[innerElementRatingCount],
       nullValueSubstitute: 0,
     )!;
+  }
+
+  // Ignore duplicated child pages. Page sub type is: main
+  // or reviews or fullcredits or trivia or locations or plotsummary or ...
+  static bool isImdbChildPage(Map map) {
+    final subPageType = map.searchForString(key: innerElementSubtype) ??
+        map.searchForString(key: innerElementPrefixedSubtype) ??
+        'unknown';
+
+    if (subPageType == imdbPageTypeParentPage) {
+      return false;
+    }
+
+    return true;
   }
 }

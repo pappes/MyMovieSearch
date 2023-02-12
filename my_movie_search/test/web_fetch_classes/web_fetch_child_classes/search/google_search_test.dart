@@ -97,7 +97,7 @@ void main() {
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // printTestData(actualResult);
+      // printTestData(actualResult, excludeCopyrightedData: false);
 
       final expectedValue = expectedDTOList;
       // Check the results.

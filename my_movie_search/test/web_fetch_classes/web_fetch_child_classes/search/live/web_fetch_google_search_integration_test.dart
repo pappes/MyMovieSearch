@@ -14,35 +14,14 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt0376554","bestSource":"DataSourceType.google","title":"Danehaye rize barf ","type":"MovieContentType.movie","year":"2003","yearRange":"2003","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BYzVlZjdiYzAtODU5NC00NDg1LTk2YmQtZWI5MzlmM2IwN2M5XkEyXkFqcGdeQXVyNDQ3OTQ2MTY@._V1_FMjpg_UX1000_.jpg","sources":{"DataSourceType.google":"tt0376554"},"related":{}}
-''',
-  r'''
 {"uniqueId":"tt0436724","bestSource":"DataSourceType.google","title":"Rize ","type":"MovieContentType.movie","year":"2005","yearRange":"2005","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BZDNkZWZiMjMtNTY0Ni00Yjg0LWFlNjctNTRhMTI3MTU5ZjE2XkEyXkFqcGdeQXVyMTY5Nzc4MDY@._V1_FMjpg_UX1000_.jpg","sources":{"DataSourceType.google":"tt0436724"},"related":{}}
-''',
-  r'''
-{"uniqueId":"tt0436724","bestSource":"DataSourceType.google","title":"Rize ","type":"MovieContentType.movie","year":"2005","yearRange":"2005","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BZDNkZWZiMjMtNTY0Ni00Yjg0LWFlNjctNTRhMTI3MTU5ZjE2XkEyXkFqcGdeQXVyMTY5Nzc4MDY@._V1_UY1200_CR135,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0436724"},"related":{}}
-''',
-  r'''
-{"uniqueId":"tt0436724","bestSource":"DataSourceType.google","title":"Rize ","type":"MovieContentType.movie","year":"2005","yearRange":"2005","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BZDNkZWZiMjMtNTY0Ni00Yjg0LWFlNjctNTRhMTI3MTU5ZjE2XkEyXkFqcGdeQXVyMTY5Nzc4MDY@._V1_UY1200_CR135,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0436724"},"related":{}}
-''',
-  r'''
-{"uniqueId":"tt0436724","bestSource":"DataSourceType.google","title":"Rize ","type":"MovieContentType.movie","year":"2005","yearRange":"2005","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BZDNkZWZiMjMtNTY0Ni00Yjg0LWFlNjctNTRhMTI3MTU5ZjE2XkEyXkFqcGdeQXVyMTY5Nzc4MDY@._V1_UY1200_CR135,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0436724"},"related":{}}
-''',
-  r'''
-{"uniqueId":"tt0436724","bestSource":"DataSourceType.google","title":"Rize ","type":"MovieContentType.movie","year":"2005","yearRange":"2005","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BZDNkZWZiMjMtNTY0Ni00Yjg0LWFlNjctNTRhMTI3MTU5ZjE2XkEyXkFqcGdeQXVyMTY5Nzc4MDY@._V1_UY1200_CR135,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0436724"},"related":{}}
-''',
-  r'''
-{"uniqueId":"tt0436724","bestSource":"DataSourceType.google","title":"Rize ","type":"MovieContentType.movie","year":"2005","yearRange":"2005","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BZDNkZWZiMjMtNTY0Ni00Yjg0LWFlNjctNTRhMTI3MTU5ZjE2XkEyXkFqcGdeQXVyMTY5Nzc4MDY@._V1_UY1200_CR135,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0436724"},"related":{}}
-''',
-  r'''
-{"uniqueId":"tt0436724","bestSource":"DataSourceType.google","title":"Reviews: Rize - IMDb","type":"MovieContentType.movie","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BZDNkZWZiMjMtNTY0Ni00Yjg0LWFlNjctNTRhMTI3MTU5ZjE2XkEyXkFqcGdeQXVyMTY5Nzc4MDY@._V1_UY1200_CR135,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0436724"},"related":{}}
 ''',
   r'''
 {"uniqueId":"tt7529532","bestSource":"DataSourceType.google","title":"Tenacious D: Rize of the Fenix ","year":"2012","yearRange":"2012","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BZmNiZmJlYTktMDY2NC00YTlkLTlhOTMtNDZlNzA2YzFmMzcxXkEyXkFqcGdeQXVyNjE4NDU1Njk@._V1_FMjpg_UX1000_.jpg","sources":{"DataSourceType.google":"tt7529532"},"related":{}}
 ''',
   r'''
 {"uniqueId":"tt8067018","bestSource":"DataSourceType.google","title":"The Rize & Fall of Tephlon Ent ","type":"MovieContentType.movie","year":"2016","yearRange":"2016","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BOTJhNjAwOWQtNTlkMS00MjVkLTgwZmYtYThjZmMwNjg3MTRkXkEyXkFqcGdeQXVyODU4ODIwNzU@._V1_FMjpg_UX1000_.jpg","sources":{"DataSourceType.google":"tt8067018"},"related":{}}
-''',
+'''
 ];
 
 void main() {
@@ -63,7 +42,7 @@ void main() {
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
-      // printTestData(actualOutput);
+      // printTestData(actualOutput, excludeCopyrightedData: false);
 
       // Check the results.
       expect(

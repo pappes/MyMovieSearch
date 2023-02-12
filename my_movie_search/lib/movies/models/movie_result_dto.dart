@@ -23,7 +23,7 @@ class MovieResultDTO {
   MovieContentType type = MovieContentType.none;
   int year = 0;
   String yearRange = '';
-  int aListRanking = 0; // 100 = star, 0 = extra
+  int creditsOrder = 0; // 100 = star, 0 = extra
   double userRating = 0;
   int userRatingCount = 0;
   CensorRatingType censorRating = CensorRatingType.none;
@@ -81,7 +81,7 @@ const String movieDTODescription = 'description';
 const String movieDTOType = 'type';
 const String movieDTOYear = 'year';
 const String movieDTOYearRange = 'yearRange';
-const String movieDTOaListRanking = 'aListRanking';
+const String movieDTOcreditsOrder = 'creditsOrder';
 const String movieDTOUserRating = 'userRating';
 const String movieDTOUserRatingCount = 'userRatingCount';
 const String movieDTOCensorRating = 'censorRating';
@@ -191,7 +191,7 @@ extension MapResultDTOConversion on Map {
     dto.description = dynamicToString(this[movieDTODescription]);
     dto.year = dynamicToInt(this[movieDTOYear]);
     dto.yearRange = dynamicToString(this[movieDTOYearRange]);
-    dto.aListRanking = dynamicToInt(this[movieDTOaListRanking]);
+    dto.creditsOrder = dynamicToInt(this[movieDTOcreditsOrder]);
     dto.userRating = dynamicToDouble(this[movieDTOUserRating]);
     dto.userRatingCount = dynamicToInt(this[movieDTOUserRatingCount]);
     dto.runTime = Duration(seconds: dynamicToInt(this[movieDTORunTime]));
@@ -391,7 +391,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String? type = '',
     String? year = '0',
     String? yearRange = '',
-    String? aListRanking = '0',
+    String? creditsOrder = '0',
     String? userRating = '0',
     String? userRatingCount = '0',
     String? censorRating = '',
@@ -420,7 +420,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     this.yearRange = yearRange ?? '';
     this.imageUrl = imageUrl ?? '';
     this.year = IntHelper.fromText(year) ?? 0;
-    this.aListRanking = IntHelper.fromText(aListRanking) ?? 0;
+    this.creditsOrder = IntHelper.fromText(creditsOrder) ?? 0;
     this.userRatingCount = IntHelper.fromText(userRatingCount) ?? 0;
     this.userRating = DoubleHelper.fromText(userRating) ?? 0;
     this.runTime = Duration(seconds: IntHelper.fromText(runTime) ?? 0);
@@ -504,8 +504,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (language != defaultValues.language) {
       result[movieDTOLanguage] = language.toString();
     }
-    if (aListRanking != defaultValues.aListRanking) {
-      result[movieDTOaListRanking] = aListRanking.toString();
+    if (creditsOrder != defaultValues.creditsOrder) {
+      result[movieDTOcreditsOrder] = creditsOrder.toString();
     }
 
     if (!excludeCopyrightedData) {
@@ -616,7 +616,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       keywords.addAll(newValue.keywords);
       languages.addAll(newValue.languages);
       sources.addAll(newValue.sources);
-      aListRanking = bestValue(newValue.aListRanking, aListRanking);
+      creditsOrder = bestValue(newValue.creditsOrder, creditsOrder);
       userRating = bestUserRating(
         newValue.userRating,
         newValue.userRatingCount,
@@ -758,7 +758,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     dto.type = type;
     dto.year = year;
     dto.yearRange = yearRange;
-    dto.aListRanking = aListRanking;
+    dto.creditsOrder = creditsOrder;
     dto.userRating = userRating;
     dto.userRatingCount = userRatingCount;
     dto.censorRating = censorRating;
@@ -952,7 +952,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     matchCompare('description', description, other.description);
     matchCompare('type', type, other.type);
     matchCompare('year', year, other.year);
-    matchCompare('aListRanking', aListRanking, other.aListRanking);
+    matchCompare('creditsOrder', creditsOrder, other.creditsOrder);
     matchCompare('yearRange', yearRange, other.yearRange);
     matchCompare('userRating', userRating, other.userRating);
     matchCompare('censorRating', censorRating, other.censorRating);
@@ -1194,7 +1194,7 @@ extension DTOCompare on MovieResultDTO {
     }
     // For people sort by popularity
     if (MovieContentType.person == type) {
-      if (aListRanking != other.aListRanking ||
+      if (creditsOrder != other.creditsOrder ||
           userRatingCount != other.userRatingCount) {
         return personPopularityCompare(other);
       }
@@ -1287,8 +1287,8 @@ extension DTOCompare on MovieResultDTO {
   /// Rank movies based on raw popularity.
   ///
   int personPopularityCompare(MovieResultDTO other) {
-    if (aListRanking > 1 || other.aListRanking > 1) {
-      return aListRanking.compareTo(other.aListRanking);
+    if (creditsOrder > 1 || other.creditsOrder > 1) {
+      return creditsOrder.compareTo(other.creditsOrder);
     }
     return userRatingCount.compareTo(other.userRatingCount);
   }
