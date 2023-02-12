@@ -74,8 +74,8 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-   - settings.json
-   - secrets.json
+   - assets/settings.json
+   - assets/secrets.json
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
