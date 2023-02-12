@@ -62,6 +62,7 @@ class ImdbKeywordsConverter {
         userRating: map[keywordPopularityRating]?.toString(),
         userRatingCount: map[keywordPopularityRatingCount]?.toString()
 
+// TODO: extra details for keyword results
 /*
     map[keywordDirectors] = _getDirectors(row);
     map[keywordActors] = _getActors(row);

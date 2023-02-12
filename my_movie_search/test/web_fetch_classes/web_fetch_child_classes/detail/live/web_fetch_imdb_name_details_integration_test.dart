@@ -71,7 +71,7 @@ void main() {
 
       // To update expected data, uncomment the following lines
       //actualOutput.forEach((e) => e.related = {});
-      // printTestData(actualOutput);
+      // printTestData(actualOutput, excludeCopyrightedData: true);
 
       final expectedOutput = expectedDTOList;
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));

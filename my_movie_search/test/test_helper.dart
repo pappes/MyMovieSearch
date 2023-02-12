@@ -10,8 +10,10 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 /// Helper functions
 ////////////////////////////////////////////////////////////////////////////////
 
-void printTestData(List<MovieResultDTO> actualResult,
-    {bool excludeCopyrightedData = true}) {
+void printTestData(
+  List<MovieResultDTO> actualResult, {
+  bool excludeCopyrightedData = false,
+}) {
   // ignore: avoid_print
   print(actualResult.toListOfDartJsonStrings(
     excludeCopyrightedData: excludeCopyrightedData,

@@ -11,7 +11,8 @@ const expectedDtoJsonStringList = [
       "userRating":"5.999","userRatingCount":"644","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BOWI5MzNiY2QyNTA4NzExMDg@._V1_UY98_CR32,0,67,98_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0218354"},"related":{}}
 ''',
   r'''
-{"uniqueId":"https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main","bestSource":"DataSourceType.imdbKeywords","title":"Next »","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbKeywords":"https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"},"related":{}}
+{"uniqueId":"https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main","bestSource":"DataSourceType.imdbKeywords","title":"Next »","languages":"[]","genres":"[]","keywords":"[]",
+      "description":"{\"keyword\":dream, \"page\":2, \"url\":https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main}","sources":{"DataSourceType.imdbKeywords":"https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"},"related":{}}
 ''',
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
@@ -68,6 +69,9 @@ const intermediateMapList = [
     'id':
         'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main',
     'titleNameText': 'Next »',
+    'keywords': 'dream',
+    'titleDescription':
+        '{"keyword":dream, "page":2, "url":https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main}'
   },
 ];
 
@@ -96,11 +100,11 @@ const imdbSampleMid = '''
               <strong>5.999
               </strong>
         </div>
-        <p class="text-muted">
+        <p class="">
             Then Kramer said, "Everybody is Mescalon Smoochington"&lt;3
         </p>
 
-        <p class="">
+        <p class="text-muted">
             Director:
             <a href="/name/nm0311837/?ref_=kw_li_dr_0">Vonuck Heint
             </a>

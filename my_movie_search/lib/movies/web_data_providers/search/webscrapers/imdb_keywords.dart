@@ -174,11 +174,11 @@ mixin ScrapeIMDBKeywordsDetails
           } else if (subsection.className.contains('text-muted') &&
               sections.containsKey('ratings')) {
             //after ratings
-            sections['description'] = subsection;
+            sections['related'] = subsection;
           } else if (subsection.className.contains('num_votes')) {
             sections['votes'] = subsection;
           } else {
-            sections['related'] = subsection;
+            sections['description'] = subsection;
           }
         }
       }
@@ -188,12 +188,17 @@ mixin ScrapeIMDBKeywordsDetails
   }
 
   Map _addNextPage(Element next) {
-    final String baseURL =
-        myConstructURI(criteria?.criteriaTitle ?? '').toString();
+    final keyword = criteria?.criteriaTitle ?? '';
+    final baseURL = myConstructURI(keyword);
     final String extraURL = next.attributes['href'] ?? '';
+    final fullUrl = Uri.parse('$baseURL${extraURL.replaceAll('?', '&')}');
+    final pageNumber = fullUrl.queryParameters['page'];
     return {
-      keywordId: '$baseURL${extraURL.replaceAll('?', '&')}',
+      keywordId: fullUrl.toString(),
       keywordName: next.text,
+      keywordKeywords: keyword,
+      keywordDescription:
+          '{"keyword":$keyword, "page":$pageNumber, "url":$fullUrl}',
     };
   }
 }

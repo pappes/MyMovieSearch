@@ -55,7 +55,7 @@ void main() {
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
-      // printTestData(actualOutput);
+      // printTestData(actualOutput, excludeCopyrightedData: true);
 
       // Check the results.
       expect(

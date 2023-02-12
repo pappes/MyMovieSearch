@@ -81,7 +81,7 @@ void main() {
 
       // To update expected data, uncomment the following line
       // actualOutput.forEach((e) => e.related = {});
-      // printTestData(actualOutput);
+      // printTestData(actualOutput, excludeCopyrightedData: true);
 
       // Check the results.
       expect(
