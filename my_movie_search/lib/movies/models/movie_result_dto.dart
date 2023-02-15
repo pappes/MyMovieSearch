@@ -941,36 +941,36 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     ) =>
         _matchCompareIdMap(mismatches, '$prefix$fieldName', actual, expected);
 
-    matchCompare('source', bestSource, other.bestSource);
-    matchCompareId('uniqueId', uniqueId, other.uniqueId);
+    matchCompare('source', other.bestSource, bestSource);
+    matchCompareId('uniqueId', other.uniqueId, uniqueId);
     if (MovieContentType.error != type && sources.isNotEmpty) {
-      matchCompareIdMap('sources', sources, other.sources);
+      matchCompareIdMap('sources', other.sources, sources);
     }
-    matchCompare('title', title, other.title);
-    matchCompare('alternateTitle', alternateTitle, other.alternateTitle);
-    matchCompare('charactorName', charactorName, other.charactorName);
-    matchCompare('description', description, other.description);
-    matchCompare('type', type, other.type);
-    matchCompare('year', year, other.year);
-    matchCompare('creditsOrder', creditsOrder, other.creditsOrder);
-    matchCompare('yearRange', yearRange, other.yearRange);
-    matchCompare('userRating', userRating, other.userRating);
-    matchCompare('censorRating', censorRating, other.censorRating);
-    matchCompare('runTime', runTime, other.runTime);
-    matchCompare('imageUrl', imageUrl, other.imageUrl);
-    matchCompare('language', language, other.language);
+    matchCompare('title', other.title, title);
+    matchCompare('alternateTitle', other.alternateTitle, alternateTitle);
+    matchCompare('charactorName', other.charactorName, charactorName);
+    matchCompare('description', other.description, description);
+    matchCompare('type', other.type, type);
+    matchCompare('year', other.year, year);
+    matchCompare('creditsOrder', other.creditsOrder, creditsOrder);
+    matchCompare('yearRange', other.yearRange, yearRange);
+    matchCompare('userRating', other.userRating, userRating);
+    matchCompare('censorRating', other.censorRating, censorRating);
+    matchCompare('runTime', other.runTime, runTime);
+    matchCompare('imageUrl', other.imageUrl, imageUrl);
+    matchCompare('language', other.language, language);
     matchCompare(
       'languages',
       languages.toString(),
       other.languages.toString(),
     );
-    matchCompare('genres', genres.toString(), other.genres.toString());
-    matchCompare('keywords', keywords.toString(), other.keywords.toString());
+    matchCompare('genres', other.genres.toString(), genres.toString());
+    matchCompare('keywords', other.keywords.toString(), keywords.toString());
 
     if (related) {
       final expected = this.related.toPrintableString();
       final actual = other.related.toPrintableString();
-      if (expected != actual) matchCompare('related', expected, actual);
+      if (expected != actual) matchCompare('related', actual, expected);
     }
 
     if (mismatches.isNotEmpty) {

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
 import 'package:html_unescape/html_unescape_small.dart';
@@ -83,8 +85,8 @@ mixin ScrapeIMDBKeywordsDetails
     map[keywordPopularityRating] = _getPopularityRating(sections['ratings']);
     map[keywordPopularityRatingCount] = _getRatingCount(sections['votes']);
     map[keywordDuration] = _getDuration(sections['subheading']);
-    map[keywordDirectors] = _getDirectors(row);
-    map[keywordActors] = _getActors(row);
+    map[keywordDirectors] = _getDirectors(sections['related']);
+    map[keywordActors] = _getActors(sections['related']);
     map[keywordKeywords] = _getKeywords(row);
 
     return map;
@@ -144,15 +146,39 @@ mixin ScrapeIMDBKeywordsDetails
       section?.querySelector('.lister-item-year')?.text.trim();
 
   String? _getKeywords(Element? section) {
-    return null; // TODO:
+    return criteria?.criteriaTitle;
   }
 
   String? _getActors(Element? section) {
-    return null; // TODO:
+    final cast = {};
+    var skipDirectors = section?.innerHtml.contains('Director') ?? false;
+    if (section?.innerHtml.contains('Stars') ?? false) {
+      for (final element in section!.children) {
+        if (!skipDirectors) {
+          if (null != element.attributes['href']) {
+            cast[element.text] = element.attributes['href'];
+          }
+        } else if (element.text == '|') {
+          skipDirectors = false;
+        }
+      }
+    }
+    return json.encode(cast);
   }
 
   String? _getDirectors(Element? section) {
-    return null; // TODO:
+    final directors = {};
+    if (section?.innerHtml.contains('Director') ?? false) {
+      for (final element in section!.children) {
+        if (element.text == '|') {
+          break;
+        }
+        if (null != element.attributes['href']) {
+          directors[element.text] = element.attributes['href'];
+        }
+      }
+    }
+    return json.encode(directors);
   }
 
   Map<String, Element> _getSections(Element row) {
@@ -166,18 +192,18 @@ mixin ScrapeIMDBKeywordsDetails
           if (subsection.className.contains('lister-item-header')) {
             sections['header'] = subsection;
           } else if (subsection.className.contains('text-muted') &&
-              !sections.containsKey('ratings')) {
-            //before ratings
+              !sections.containsKey('subheading')) {
             sections['subheading'] = subsection;
           } else if (subsection.className.contains('ratings-bar')) {
             sections['ratings'] = subsection;
           } else if (subsection.className.contains('text-muted') &&
-              sections.containsKey('ratings')) {
-            //after ratings
-            sections['related'] = subsection;
-          } else if (subsection.className.contains('num_votes')) {
+              subsection.text.contains('Votes')) {
             sections['votes'] = subsection;
-          } else {
+          } else if (subsection.className.contains('text-muted') &&
+              (subsection.text.contains('Director') ||
+                  subsection.text.contains('Stars'))) {
+            sections['related'] = subsection;
+          } else if (!sections.containsKey('description')) {
             sections['description'] = subsection;
           }
         }

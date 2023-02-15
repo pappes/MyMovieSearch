@@ -1,8 +1,11 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
+import 'dart:convert';
+
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imdb_keywords.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
@@ -45,30 +48,58 @@ class ImdbKeywordsConverter {
       uniqueId,
     )?.toString();
 
-    final movie = MovieResultDTO().init(
-        bestSource: DataSourceType.imdbKeywords,
-        uniqueId: uniqueId,
-        title: map[keywordName]?.toString(),
-        description: map[keywordDescription]?.toString(),
-        imageUrl: map[keywordImage]?.toString(),
-        year: getYear(map[keywordYearRange]?.toString())?.toString(),
-        yearRange: map[keywordYearRange]
-            ?.toString()
-            .replaceAll('(', '')
-            .replaceAll(')', ''),
-        type: movieType,
-        censorRating: getImdbCensorRating(map[keywordCensorRating]?.toString())
-            .toString(),
-        userRating: map[keywordPopularityRating]?.toString(),
-        userRatingCount: map[keywordPopularityRatingCount]?.toString()
+    final RelatedMovieCategories related = {};
+    final directors = _getRelatedPeople(map[keywordDirectors]?.toString());
+    final cast = _getRelatedPeople(map[keywordActors]?.toString());
+    if (directors.isNotEmpty) {
+      related[relatedDirectorsLabel] = directors;
+    }
+    if (cast.isNotEmpty) {
+      related[relatedActorsLabel] = cast;
+    }
 
-// TODO: extra details for keyword results
-/*
-    map[keywordDirectors] = _getDirectors(row);
-    map[keywordActors] = _getActors(row);
-    map[keywordKeywords] = _getKeywords(row);
-*/
-        );
+    final movie = MovieResultDTO().init(
+      bestSource: DataSourceType.imdbKeywords,
+      uniqueId: uniqueId,
+      title: map[keywordName]?.toString(),
+      description: map[keywordDescription]?.toString(),
+      imageUrl: map[keywordImage]?.toString(),
+      year: getYear(map[keywordYearRange]?.toString())?.toString(),
+      yearRange: map[keywordYearRange]
+          ?.toString()
+          .replaceAll('(', '')
+          .replaceAll(')', ''),
+      type: movieType,
+      censorRating:
+          getImdbCensorRating(map[keywordCensorRating]?.toString()).toString(),
+      userRating: map[keywordPopularityRating]?.toString(),
+      userRatingCount: map[keywordPopularityRatingCount]?.toString(),
+      keywords: '["${map[keywordKeywords]}"]',
+      related: related,
+    );
     return movie;
+  }
+
+  static MovieCollection _getRelatedPeople(String? jsonText) {
+    final MovieCollection relatedPeople = {};
+    if (null != jsonText) {
+      final map = json.decode(jsonText) as Map;
+      for (final entry in map.entries) {
+        relatedPeople.addAll(_decodePerson(entry));
+      }
+    }
+    return relatedPeople;
+  }
+
+  static MovieCollection _decodePerson(MapEntry entry) {
+    final name = entry.key?.toString();
+    final url = entry.value?.toString();
+    if (null != url) {
+      final id = getIdFromIMDBLink(url);
+      if (null != name && '' != id) {
+        return {id: MovieResultDTO().init(uniqueId: id, title: name)};
+      }
+    }
+    return {};
   }
 }
