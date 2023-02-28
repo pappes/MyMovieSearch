@@ -180,6 +180,19 @@ final expectedDTOMap = [
     ]
   },
   {
+    "l": "Imdb Offline Suggestions",
+    "id": "tt1384354",
+    "s": "Keri Russell, Nathan Fillion",
+    "y": 2009,
+    "yr": "2009-",
+    "q": "movie",
+    "i": [
+      "https://m.media-amazon.com/images/M/MV5B...xODE1MDc@._V1_.jpg",
+      500,
+      741
+    ]
+  },
+  {
     "l": "Jennifer Wenger",
     "id": "nm2128254",
     "s": "Actress, Jimmy Kimmel Live! (2006-2007)",
@@ -219,6 +232,8 @@ const String imdbJsonSampleInner = '''
   {"l":"Imdb Offline Suggestions","id":"tt0374459","s":"Cathy Lee Crosby, Kaz Garas","y":1974,"q":"TV movie"
       ,"i":["https://m.media-amazon.com/images/M/MV5B...kwMDE@._V1_.jpg",353,500]},
   {"l":"Imdb Offline Suggestions","id":"tt1384353","s":"Keri Russell, Nathan Fillion","y":2009,"q":"video"
+      ,"i":["https://m.media-amazon.com/images/M/MV5B...xODE1MDc@._V1_.jpg",500,741]},
+  {"l":"Imdb Offline Suggestions","id":"tt1384354","s":"Keri Russell, Nathan Fillion","y":2009,"yr":"2009-","q":"movie"
       ,"i":["https://m.media-amazon.com/images/M/MV5B...xODE1MDc@._V1_.jpg",500,741]},
   {"l":"Jennifer Wenger","id":"nm2128254","s":"Actress, Jimmy Kimmel Live! (2006-2007)"
       ,"i":["https://m.media-amazon.com/images/M/MV5B...cxNQ@@._V1_.jpg",640,428]}

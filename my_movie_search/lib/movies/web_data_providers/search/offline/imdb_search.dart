@@ -53,7 +53,7 @@ const expectedDtoJsonStringList = [
       "description":"staring [terda PiChrine, ggoe WaLylner]","imageUrl":"https://www.microsoft.com/AxYTcxMD@.jpg","related":{}}
 ''',
   r'''
-{"uniqueId":"tt1142838","bestSource":"DataSourceType.imdbSearch","title":"Batman","type":"MovieContentType.movie","year":"1991","yearRange":"1991","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"tt1142838","bestSource":"DataSourceType.imdbSearch","title":"Batman","type":"MovieContentType.series","year":"1991","yearRange":"1991-","languages":"[]","genres":"[]","keywords":"[]",
       "description":"staring [calro FNation, aliianne PAdrcki]","imageUrl":"https://www.microsoft.com/M4NTRlZjAtzgwMDUw.jpg","related":{}}
 ''',
   r'''
@@ -103,10 +103,10 @@ const intermediateMapList = [
   {
     'id': 'tt1142838',
     'name': 'Batman',
-    'yearRange': '1991',
+    'yearRange': '1991-',
     'image': 'https://www.microsoft.com/M4NTRlZjAtzgwMDUw.jpg',
     'description': 'staring [calro FNation, aliianne PAdrcki]',
-    '@type': MovieContentType.movie
+    '@type': MovieContentType.series
   },
   {
     'id': 'tt1182333',
@@ -192,7 +192,7 @@ const imdbSampleJson = '''
                     {
                         "id": "tt1142838",
                         "titleNameText": "Batman",
-                        "titleReleaseText": "1991",
+                        "titleReleaseText": "1991-",
                         "titleTypeText": "TV Movie",
                         "titlePosterImageModel": {
                             "url": "https://www.microsoft.com/M4NTRlZjAtzgwMDUw.jpg"

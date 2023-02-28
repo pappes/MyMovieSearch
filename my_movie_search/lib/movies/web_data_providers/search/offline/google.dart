@@ -27,7 +27,7 @@ const expectedDtoJsonStringList = [
 {"uniqueId":"tt7126948","bestSource":"DataSourceType.google","title":"Wonder Woman 1984 ","type":"MovieContentType.movie","year":"2020","yearRange":"2020","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BYTlhNzJjYzYtNGU3My00ZDI5LTgzZDUtYzllYjU1ZmU0YTgwXkEyXkFqcGdeQXVyMjQwMDg0Ng@@._V1_UY1200_CR90,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt7126948"},"related":{}}
 ''',
   r'''
-{"uniqueId":"tt1595656","bestSource":"DataSourceType.google","title":"To the Wonder ","type":"MovieContentType.movie","year":"2012","yearRange":"2012","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTAwNzk1NjM2ODZeQTJeQWpwZ15BbWU3MDE1MjQwMjk@._V1_UY1200_CR90,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt1595656"},"related":{}}
+{"uniqueId":"tt1595656","bestSource":"DataSourceType.google","title":"To the Wonder ","type":"MovieContentType.series","year":"2012","yearRange":"2012-","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTAwNzk1NjM2ODZeQTJeQWpwZ15BbWU3MDE1MjQwMjk@._V1_UY1200_CR90,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt1595656"},"related":{}}
 ''',
   r'''
 {"uniqueId":"tt0094582","bestSource":"DataSourceType.google","title":"The Wonder Years ","type":"MovieContentType.series","year":"1993","yearRange":"1988–1993","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BMWRhYjZjOTQtOGNiNC00MTQ0LWE2MTYtMTQxYzEwNDE3NjYyXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_UY1200_CR114,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0094582"},"related":{}}
@@ -207,8 +207,8 @@ const googleMoviesJsonSearchInner = r'''
     },
     {
       "kind": "customsearch#result",
-      "title": "To the Wonder (2012) - IMDb",
-      "htmlTitle": "To the \u003cb\u003eWonder\u003c/b\u003e (2012) - IMDb",
+      "title": "To the Wonder (2012-) - IMDb",
+      "htmlTitle": "To the \u003cb\u003eWonder\u003c/b\u003e (2012-) - IMDb",
       "link": "https://www.imdb.com/title/tt1595656/",
       "displayLink": "www.imdb.com",
       "snippet": "Directed by Terrence Malick. With Ben Affleck, Olga Kurylenko, Javier Bardem, \nRachel McAdams. After falling in love in Paris, Marina and Neil come to ...",
@@ -241,9 +241,9 @@ const googleMoviesJsonSearchInner = r'''
             "theme-color": "#000000",
             "og:type": "video.movie",
             "og:site_name": "IMDb",
-            "og:title": "To the Wonder (2012) - IMDb",
+            "og:title": "To the Wonder (2012-) - IMDb",
             "pageid": "tt1595656",
-            "title": "To the Wonder (2012) - IMDb",
+            "title": "To the Wonder (2012-) - IMDb",
             "og:description": "Directed by Terrence Malick.  With Ben Affleck, ...",
             "fb:app_id": "115109575169727",
             "og:url": "http://www.imdb.com/title/tt1595656/",

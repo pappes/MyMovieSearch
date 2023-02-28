@@ -176,7 +176,7 @@ class ImdbWebScraperConverter {
     final movieTypeString = // ...{'titleType':...{...'text':<value>...}}
         map.deepSearch(deepRelatedMovieType)?.searchForString();
     final movieType = MovieResultDTOHelpers.getMovieContentType(
-      '$movieTypeString $genres',
+      '$movieTypeString $genres $yearRange',
       IntHelper.fromText(duration),
       id,
     );

@@ -29,7 +29,7 @@ const expectedDtoJsonStringList = [
       "nm0012372":{"uniqueId":"nm0012372","bestSource":"DataSourceType.imdbSuggestions","title":"Jenny Jole","alternateTitle":" ","charactorName":" [Jilly Rutter, Jenny Banter]","type":"MovieContentType.person","creditsOrder":"99","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/MV5BY.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0012372"},"related":{}}},
     "Directed by:":{"nm0214370":{"uniqueId":"nm0214370","bestSource":"DataSourceType.imdbSuggestions","title":"Andy Jole","type":"MovieContentType.person","creditsOrder":"100","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/M2V5BM.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0214370"},"related":{}},
       "nm0214372":{"uniqueId":"nm0214372","bestSource":"DataSourceType.imdbSuggestions","title":"Shazza Jole","type":"MovieContentType.person","creditsOrder":"99","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://www.microsoft.com/images/M/M2V5BY.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0214372"},"related":{}}},
-    "Suggestions:":{"tt0012370":{"uniqueId":"tt0012370","bestSource":"DataSourceType.imdbSuggestions","title":"Walk Skip Run","alternateTitle":"Run Forrest Run","type":"MovieContentType.title","year":"1973","yearRange":"1973","runTime":"7140","languages":"[]",
+    "Suggestions:":{"tt0012370":{"uniqueId":"tt0012370","bestSource":"DataSourceType.imdbSuggestions","title":"Walk Skip Run","alternateTitle":"Run Forrest Run","type":"MovieContentType.series","year":"1973","yearRange":"1973-1974","runTime":"7140","languages":"[]",
       "genres":"[\"Western\",\"Romance\"]","keywords":"[]",
       "userRating":"8.6","userRatingCount":"4837","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0012370"},"related":{}},
       "tt0123580":{"uniqueId":"tt0123580","bestSource":"DataSourceType.imdbSuggestions","title":"Scott And Sharlene","alternateTitle":"Aussieland","type":"MovieContentType.series","year":"1985","yearRange":"1985-2023","runTime":"1234","languages":"[]",
@@ -163,7 +163,7 @@ const intermediateMapList = [
                     'url': 'https://www.microsoft.com/images/M/MV5BM.jpg'
                   },
                   'ratingsSummary': {'aggregateRating': 8.6, 'voteCount': 4837},
-                  'releaseYear': {'year': 1973, 'endYear': null},
+                  'releaseYear': {'year': 1973, 'endYear': 1974},
                   'runtime': {'seconds': 7140},
                   'titleCardGenres': {
                     'genres': [
@@ -319,7 +319,7 @@ const _embeddedJson = r'''
                   "url": "https://www.microsoft.com/images/M/MV5BM.jpg"
                 },
                 "ratingsSummary": {"aggregateRating": 8.6, "voteCount": 4837},
-                "releaseYear": {"year": 1973, "endYear": null},
+                "releaseYear": {"year": 1973, "endYear": 1974},
                 "runtime": {"seconds": 7140},
                 "titleCardGenres": {
                   "genres": [

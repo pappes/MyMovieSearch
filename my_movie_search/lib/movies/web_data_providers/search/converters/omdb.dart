@@ -62,14 +62,6 @@ class OmdbMovieSearchConverter {
       imageUrl: map[innerElementImage]?.toString(),
     );
 
-    final year = getYear(map[innerElementYear]?.toString());
-    if (null != year) {
-      movie.year = year;
-    } else {
-      movie.yearRange = map[innerElementYear]?.toString() ?? movie.yearRange;
-      movie.year = movie.maxYear();
-    }
-
     switch (map[innerElementType]) {
       case omdbResultTypeMovie:
         movie.type = MovieContentType.movie;
@@ -83,6 +75,15 @@ class OmdbMovieSearchConverter {
       default:
         movie.type = MovieContentType.none;
         break;
+    }
+
+    final year = getYear(map[innerElementYear]?.toString());
+    movie.year = year ?? movie.year;
+    final yearRange = map[innerElementYear]?.toString();
+    if (null != yearRange && yearRange.length > 4) {
+      movie.yearRange = yearRange;
+      movie.year = movie.maxYear();
+      movie.type = MovieContentType.series;
     }
 
     return movie;

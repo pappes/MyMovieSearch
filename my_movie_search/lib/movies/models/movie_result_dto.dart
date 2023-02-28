@@ -795,6 +795,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (title.lastIndexOf('mini') > -1) return MovieContentType.miniseries;
     if (title.lastIndexOf('episode') > -1) return MovieContentType.episode;
     if (title.lastIndexOf('series') > -1) return MovieContentType.series;
+    if (title.lastIndexOf('-') > -1) return MovieContentType.series;
+    if (title.lastIndexOf('–') > -1) return MovieContentType.series;
     if (title.lastIndexOf('special') > -1) return MovieContentType.series;
     if (title.lastIndexOf('short') > -1) return MovieContentType.short;
     if (seconds != null && seconds < 3600 && seconds > 0) {
@@ -809,7 +811,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// update title type based on information in the dto.
   MovieContentType getContentType() => type = getMovieContentType(
-        null,
+        yearRange,
         runTime.inSeconds,
         uniqueId,
       ) ??

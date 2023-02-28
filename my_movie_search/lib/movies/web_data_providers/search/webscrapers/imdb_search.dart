@@ -139,7 +139,7 @@ mixin ScrapeIMDBSearchDetails
         '${movie[_searchResultMovieActors]}';
 
     final movieType = MovieResultDTOHelpers.getMovieContentType(
-      movie[_searchResultMovieType],
+      '${movie[_searchResultMovieType]} ${rowData[outerElementYearRange]}',
       null, // Unknown duration.
       rowData[outerElementIdentity].toString(),
     );

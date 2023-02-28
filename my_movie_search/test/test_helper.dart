@@ -130,7 +130,7 @@ class MovieResultDTOListMatcher extends Matcher {
         expected[i],
         matchState: matchState,
         related: related,
-        prefix: 'instance(${i + 1}) -> ',
+        prefix: 'instance(${i + 1}) AKA ${expected[i].uniqueId} -> ',
       );
       if (!match) {
         return false;

@@ -84,8 +84,7 @@ class GoogleMovieSearchConverter {
     final movie = MovieResultDTO();
 
     movie.title = getTitle(map);
-    movie.yearRange = getYearRange(map);
-    movie.year = movie.maxYear();
+
     final inner = map[innerElementPagemap];
     if (inner is Map) {
       final metaTags = inner[innerElementMetatags];
@@ -97,7 +96,6 @@ class GoogleMovieSearchConverter {
           movie.type = getType(metatag);
         }
       }
-
       final innerRating = inner[innerElementPagemap];
       if (innerRating is Iterable) {
         final rating = innerRating.first;
@@ -107,6 +105,13 @@ class GoogleMovieSearchConverter {
         }
       }
     }
+
+    movie.yearRange = getYearRange(map);
+    movie.year = movie.maxYear();
+    if (movie.yearRange.length > 4) {
+      movie.type = MovieContentType.series;
+    }
+
     // Reinitialise source after setting ID
     movie.setSource(newSource: DataSourceType.google);
     return movie;
@@ -132,7 +137,8 @@ class GoogleMovieSearchConverter {
     if (lastOpen == -1 || lastClose == -1) return '';
 
     final yearRange = title.substring(lastOpen + 1, lastClose);
-    final filter = RegExp('[0-9].*[0-9]');
+    // Anything starting and ending with numerics allowing ofr optional dash at end of line
+    final filter = RegExp('[0-9].*[0-9]-?–?');
     final numerics = filter.stringMatch(yearRange);
     return DynamicHelper.toString_(numerics);
   }

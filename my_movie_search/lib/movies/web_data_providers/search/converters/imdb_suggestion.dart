@@ -40,7 +40,7 @@ class ImdbSuggestionConverter {
   static MovieResultDTO dtoFromMap(Map map) {
     final uniqueId = map[innerElementIdentity]?.toString();
     final movieType = MovieResultDTOHelpers.getMovieContentType(
-      map[innerElementType],
+      "${map[innerElementType]} ${map[innerElementYearRange]}",
       null, // Unknown duration.
       uniqueId ?? '',
     )?.toString();

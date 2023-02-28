@@ -42,8 +42,12 @@ class ImdbKeywordsConverter {
     if (null != minutes) {
       seconds = Duration(minutes: minutes).inSeconds;
     }
+    final yearRange = map[keywordYearRange]
+        ?.toString()
+        .replaceAll('(', '')
+        .replaceAll(')', '');
     final movieType = MovieResultDTOHelpers.getMovieContentType(
-      map[keywordTypeInfo],
+      "${map[keywordTypeInfo]} $yearRange",
       seconds,
       uniqueId,
     )?.toString();
@@ -65,10 +69,7 @@ class ImdbKeywordsConverter {
       description: map[keywordDescription]?.toString(),
       imageUrl: map[keywordImage]?.toString(),
       year: getYear(map[keywordYearRange]?.toString())?.toString(),
-      yearRange: map[keywordYearRange]
-          ?.toString()
-          .replaceAll('(', '')
-          .replaceAll(')', ''),
+      yearRange: yearRange,
       type: movieType,
       censorRating:
           getImdbCensorRating(map[keywordCensorRating]?.toString()).toString(),
