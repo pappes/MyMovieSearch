@@ -36,6 +36,7 @@ mixin ScrapeIMDBKeywordsDetails
     DataSourceType.imdbKeywords,
   );
   static final htmlDecode = HtmlUnescape();
+  static const splitter = LineSplitter();
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
@@ -134,7 +135,8 @@ mixin ScrapeIMDBKeywordsDetails
   String? _getDuration(Element? section) =>
       section?.querySelector('.runtime')?.text.trim();
 
-  String? _getPopularityRating(Element? section) => section?.text.trim();
+  String _getPopularityRating(Element? section) =>
+      splitter.convert(section?.text.trim() ?? '').first.trim();
 
   String? _getCensorRating(Element? section) =>
       section?.querySelector(".certificate")?.text.trim();

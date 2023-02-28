@@ -20,7 +20,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0032976","bestSource":"DataSourceType.imdbKeywords","title":"Rebecca","type":"MovieContentType.title","year":"1940","yearRange":"1940","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A self-conscious woman juggles adjusting to her new role as an aristocrat's wife and avoiding being intimidated by his first wife's spectral presence.","userRatingCount":"138910","censorRating":"CensorRatingType.kids","imageUrl":"https://m.media-amazon.com/images/M/MV5BYTcxYWExOTMtMWFmYy00ZjgzLWI0YjktNWEzYzJkZTg0NDdmL2ltYWdlXkEyXkFqcGdeQXVyNjc1NTYyMjg@._V1_UY209_CR3,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0032976"},
+      "description":"A self-conscious woman juggles adjusting to her new role as an aristocrat's wife and avoiding being intimidated by his first wife's spectral presence.",
+      "userRating":"8.1","userRatingCount":"139186","censorRating":"CensorRatingType.kids","imageUrl":"https://m.media-amazon.com/images/M/MV5BYTcxYWExOTMtMWFmYy00ZjgzLWI0YjktNWEzYzJkZTg0NDdmL2ltYWdlXkEyXkFqcGdeQXVyNjc1NTYyMjg@._V1_UY209_CR3,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0032976"},
   "related":{"Directed by:":{"nm0000033":{"uniqueId":"nm0000033","title":"Alfred Hitchcock","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000033"},"related":{}}},
     "Cast:":{"nm0000059":{"uniqueId":"nm0000059","title":"Laurence Olivier","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000059"},"related":{}},
       "nm0000021":{"uniqueId":"nm0000021","title":"Joan Fontaine","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000021"},"related":{}},
@@ -30,7 +31,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0033467","bestSource":"DataSourceType.imdbKeywords","title":"Citizen Kane","type":"MovieContentType.title","year":"1941","yearRange":"1941","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Following the death of publishing tycoon Charles Foster Kane, reporters scramble to uncover the meaning of his final utterance: 'Rosebud.'","userRatingCount":"445588","censorRating":"CensorRatingType.family","imageUrl":"https://m.media-amazon.com/images/M/MV5BYjBiOTYxZWItMzdiZi00NjlkLWIzZTYtYmFhZjhiMTljOTdkXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0033467"},
+      "description":"Following the death of publishing tycoon Charles Foster Kane, reporters scramble to uncover the meaning of his final utterance: 'Rosebud.'",
+      "userRating":"8.3","userRatingCount":"446192","censorRating":"CensorRatingType.family","imageUrl":"https://m.media-amazon.com/images/M/MV5BYjBiOTYxZWItMzdiZi00NjlkLWIzZTYtYmFhZjhiMTljOTdkXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0033467"},
   "related":{"Directed by:":{"nm0000080":{"uniqueId":"nm0000080","title":"Orson Welles","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000080"},"related":{}}},
     "Cast:":{"nm0000080":{"uniqueId":"nm0000080","title":"Orson Welles","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000080"},"related":{}},
       "nm0001072":{"uniqueId":"nm0001072","title":"Joseph Cotten","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001072"},"related":{}},
@@ -40,7 +42,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0037008","bestSource":"DataSourceType.imdbKeywords","title":"Laura","type":"MovieContentType.title","year":"1944","yearRange":"1944","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A police detective falls in love with the woman whose murder he is investigating.","userRatingCount":"48441","censorRating":"CensorRatingType.kids","imageUrl":"https://m.media-amazon.com/images/M/MV5BNjYwY2VmOGEtZTM1Mi00YmZhLWFkY2QtNmNlYzA0NmE5MTNlXkEyXkFqcGdeQXVyMzg1ODEwNQ@@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0037008"},
+      "description":"A police detective falls in love with the woman whose murder he is investigating.",
+      "userRating":"7.9","userRatingCount":"48525","censorRating":"CensorRatingType.kids","imageUrl":"https://m.media-amazon.com/images/M/MV5BNjYwY2VmOGEtZTM1Mi00YmZhLWFkY2QtNmNlYzA0NmE5MTNlXkEyXkFqcGdeQXVyMzg1ODEwNQ@@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0037008"},
   "related":{"Directed by:":{"nm0695937":{"uniqueId":"nm0695937","title":"Otto Preminger","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0695937"},"related":{}}},
     "Cast:":{"nm0000074":{"uniqueId":"nm0000074","title":"Gene Tierney","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000074"},"related":{}},
       "nm0000763":{"uniqueId":"nm0000763","title":"Dana Andrews","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000763"},"related":{}},
@@ -50,7 +53,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0057427","bestSource":"DataSourceType.imdbKeywords","title":"Le procès","type":"MovieContentType.title","year":"1962","yearRange":"1962","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"An unassuming office worker is arrested and stands trial, but he is never made aware of his charges.","userRatingCount":"22261","censorRating":"CensorRatingType.family","imageUrl":"https://m.media-amazon.com/images/M/MV5BN2JiZTM2ZWMtOWI5ZS00ZjI2LWI5OTktNTJjZmU2NzM4NGE2XkEyXkFqcGdeQXVyNDE0OTU3NDY@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0057427"},
+      "description":"An unassuming office worker is arrested and stands trial, but he is never made aware of his charges.",
+      "userRating":"7.6","userRatingCount":"22315","censorRating":"CensorRatingType.family","imageUrl":"https://m.media-amazon.com/images/M/MV5BN2JiZTM2ZWMtOWI5ZS00ZjI2LWI5OTktNTJjZmU2NzM4NGE2XkEyXkFqcGdeQXVyNDE0OTU3NDY@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0057427"},
   "related":{"Directed by:":{"nm0000080":{"uniqueId":"nm0000080","title":"Orson Welles","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000080"},"related":{}}},
     "Cast:":{"nm0000578":{"uniqueId":"nm0000578","title":"Anthony Perkins","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000578"},"related":{}},
       "nm0289450":{"uniqueId":"nm0289450","title":"Arnoldo Foà","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0289450"},"related":{}},
@@ -60,7 +64,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0058329","bestSource":"DataSourceType.imdbKeywords","title":"Marnie","type":"MovieContentType.title","year":"1964","yearRange":"1964","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Mark marries Marnie although she is a habitual thief and has serious psychological problems, and tries to help her confront and resolve them.","userRatingCount":"50769","censorRating":"CensorRatingType.adult","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTEwMzhiMDktMzFlMi00NTE1LTlkOTItZWI5ODA2Y2E5YjUzXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0058329"},
+      "description":"Mark marries Marnie although she is a habitual thief and has serious psychological problems, and tries to help her confront and resolve them.",
+      "userRating":"7.1","userRatingCount":"50885","censorRating":"CensorRatingType.adult","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTEwMzhiMDktMzFlMi00NTE1LTlkOTItZWI5ODA2Y2E5YjUzXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0058329"},
   "related":{"Directed by:":{"nm0000033":{"uniqueId":"nm0000033","title":"Alfred Hitchcock","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000033"},"related":{}}},
     "Cast:":{"nm0001335":{"uniqueId":"nm0001335","title":"Tippi Hedren","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001335"},"related":{}},
       "nm0000125":{"uniqueId":"nm0000125","title":"Sean Connery","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000125"},"related":{}},
@@ -68,9 +73,21 @@ const expectedDtoJsonStringList = [
       "nm0490103":{"uniqueId":"nm0490103","title":"Louise Latham","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0490103"},"related":{}}}}}
 ''',
   r'''
+{"uniqueId":"tt0062185","bestSource":"DataSourceType.imdbKeywords","title":"Reflections in a Golden Eye","type":"MovieContentType.title","year":"1967","yearRange":"1967","languages":"[]","genres":"[]",
+      "keywords":"[\"enigma\"]",
+      "description":"Bizarre tale of sex, betrayal, and perversion at a military post.",
+      "userRating":"6.7","userRatingCount":"7708","censorRating":"CensorRatingType.adult","imageUrl":"https://m.media-amazon.com/images/M/MV5BZDlkZGZmM2EtOTZiNi00ZjExLTk3NmMtNzAwOGUxYzQ4N2I3XkEyXkFqcGdeQXVyMTUzMDUzNTI3._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0062185"},
+  "related":{"Directed by:":{"nm0001379":{"uniqueId":"nm0001379","title":"John Huston","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001379"},"related":{}}},
+    "Cast:":{"nm0000072":{"uniqueId":"nm0000072","title":"Elizabeth Taylor","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000072"},"related":{}},
+      "nm0000008":{"uniqueId":"nm0000008","title":"Marlon Brando","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000008"},"related":{}},
+      "nm0001417":{"uniqueId":"nm0001417","title":"Brian Keith","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001417"},"related":{}},
+      "nm0364915":{"uniqueId":"nm0364915","title":"Julie Harris","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0364915"},"related":{}}}}}
+''',
+  r'''
 {"uniqueId":"tt0066769","bestSource":"DataSourceType.imdbKeywords","title":"The Andromeda Strain","type":"MovieContentType.title","year":"1971","yearRange":"1971","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A team of top scientists work feverishly in a secret, state-of-the-art laboratory to discover what has killed the citizens of a small town and learn how this deadly contagion can be stopped.","userRatingCount":"38248","censorRating":"CensorRatingType.kids","imageUrl":"https://m.media-amazon.com/images/M/MV5BYzY4NGZkOTMtNTRjNy00NWY4LWI2ZmUtODc3NWY3MTBhNzE2XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0066769"},
+      "description":"A team of top scientists work feverishly in a secret, state-of-the-art laboratory to discover what has killed the citizens of a small town and learn how this deadly contagion can be stopped.",
+      "userRating":"7.2","userRatingCount":"38320","censorRating":"CensorRatingType.kids","imageUrl":"https://m.media-amazon.com/images/M/MV5BYzY4NGZkOTMtNTRjNy00NWY4LWI2ZmUtODc3NWY3MTBhNzE2XkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0066769"},
   "related":{"Directed by:":{"nm0936404":{"uniqueId":"nm0936404","title":"Robert Wise","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0936404"},"related":{}}},
     "Cast:":{"nm0647921":{"uniqueId":"nm0647921","title":"James Olson","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0647921"},"related":{}},
       "nm0384050":{"uniqueId":"nm0384050","title":"Arthur Hill","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0384050"},"related":{}},
@@ -80,7 +97,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0069467","bestSource":"DataSourceType.imdbKeywords","title":"Viskningar och rop","type":"MovieContentType.title","year":"1972","yearRange":"1972","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"When a woman dying of cancer in early twentieth-century Sweden is visited by her two sisters, long-repressed feelings between the siblings rise to the surface.","userRatingCount":"34941","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjFmZTdlZWEtOTY0MS00MWJlLWEyOGMtZmI5ZGI1N2FiZWYxXkEyXkFqcGdeQXVyMTUzMDUzNTI3._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0069467"},
+      "description":"When a woman dying of cancer in early twentieth-century Sweden is visited by her two sisters, long-repressed feelings between the siblings rise to the surface.",
+      "userRating":"8.0","userRatingCount":"35019","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjFmZTdlZWEtOTY0MS00MWJlLWEyOGMtZmI5ZGI1N2FiZWYxXkEyXkFqcGdeQXVyMTUzMDUzNTI3._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0069467"},
   "related":{"Directed by:":{"nm0000005":{"uniqueId":"nm0000005","title":"Ingmar Bergman","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000005"},"related":{}}},
     "Cast:":{"nm0027683":{"uniqueId":"nm0027683","title":"Harriet Andersson","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0027683"},"related":{}},
       "nm0880521":{"uniqueId":"nm0880521","title":"Liv Ullmann","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0880521"},"related":{}},
@@ -90,7 +108,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0070917","bestSource":"DataSourceType.imdbKeywords","title":"The Wicker Man","type":"MovieContentType.title","year":"1973","yearRange":"1973","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A puritan Police Sergeant arrives in a Scottish island village in search of a missing girl, who the Pagan locals claim never existed.","userRatingCount":"83226","censorRating":"CensorRatingType.restricted","imageUrl":"https://m.media-amazon.com/images/M/MV5BOWIzY2QyNDQtOWI3Ni00MjEwLTlhYTgtZTgyMThiY2JkMTY4XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UY209_CR1,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0070917"},
+      "description":"A puritan Police Sergeant arrives in a Scottish island village in search of a missing girl, who the Pagan locals claim never existed.",
+      "userRating":"7.5","userRatingCount":"83426","censorRating":"CensorRatingType.restricted","imageUrl":"https://m.media-amazon.com/images/M/MV5BOWIzY2QyNDQtOWI3Ni00MjEwLTlhYTgtZTgyMThiY2JkMTY4XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UY209_CR1,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0070917"},
   "related":{"Directed by:":{"nm0362736":{"uniqueId":"nm0362736","title":"Robin Hardy","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0362736"},"related":{}}},
     "Cast:":{"nm0940919":{"uniqueId":"nm0940919","title":"Edward Woodward","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0940919"},"related":{}},
       "nm0000489":{"uniqueId":"nm0000489","title":"Christopher Lee","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000489"},"related":{}},
@@ -100,7 +119,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0071360","bestSource":"DataSourceType.imdbKeywords","title":"The Conversation","type":"MovieContentType.title","year":"1974","yearRange":"1974","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A paranoid, secretive surveillance expert has a crisis of conscience when he suspects that the couple he is spying on will be murdered.","userRatingCount":"114182","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNzAwZWRhZTEtOWYwMi00YzQ5LWE1MzQtM2JlZWE0Y2E4ZDg3XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0071360"},
+      "description":"A paranoid, secretive surveillance expert has a crisis of conscience when he suspects that the couple he is spying on will be murdered.",
+      "userRating":"7.8","userRatingCount":"114407","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNzAwZWRhZTEtOWYwMi00YzQ5LWE1MzQtM2JlZWE0Y2E4ZDg3XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0071360"},
   "related":{"Directed by:":{"nm0000338":{"uniqueId":"nm0000338","title":"Francis Ford Coppola","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000338"},"related":{}}},
     "Cast:":{"nm0000432":{"uniqueId":"nm0000432","title":"Gene Hackman","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000432"},"related":{}},
       "nm0001030":{"uniqueId":"nm0001030","title":"John Cazale","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001030"},"related":{}},
@@ -110,7 +130,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0073580","bestSource":"DataSourceType.imdbKeywords","title":"Professione: reporter","type":"MovieContentType.title","year":"1975","yearRange":"1975","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Unable to find the war he's been asked to cover, a frustrated war correspondent takes the risky path of co-opting the identity of a dead arms-deal acquaintance.","userRatingCount":"24462","censorRating":"CensorRatingType.restricted","imageUrl":"https://m.media-amazon.com/images/M/MV5BM2MyODc3OWEtYzRiYS00Yzc5LTliZjMtNTQ1NWFlMDRmZmVlL2ltYWdlXkEyXkFqcGdeQXVyNzM0MDQ1Mw@@._V1_UY209_CR7,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0073580"},
+      "description":"Unable to find the war he's been asked to cover, a frustrated war correspondent takes the risky path of co-opting the identity of a dead arms-deal acquaintance.",
+      "userRating":"7.5","userRatingCount":"24510","censorRating":"CensorRatingType.restricted","imageUrl":"https://m.media-amazon.com/images/M/MV5BM2MyODc3OWEtYzRiYS00Yzc5LTliZjMtNTQ1NWFlMDRmZmVlL2ltYWdlXkEyXkFqcGdeQXVyNzM0MDQ1Mw@@._V1_UY209_CR7,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0073580"},
   "related":{"Directed by:":{"nm0000774":{"uniqueId":"nm0000774","title":"Michelangelo Antonioni","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000774"},"related":{}}},
     "Cast:":{"nm0000197":{"uniqueId":"nm0000197","title":"Jack Nicholson","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000197"},"related":{}},
       "nm0773932":{"uniqueId":"nm0773932","title":"Maria Schneider","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0773932"},"related":{}},
@@ -120,7 +141,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0074486","bestSource":"DataSourceType.imdbKeywords","title":"Eraserhead","type":"MovieContentType.title","year":"1977","yearRange":"1977","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Henry Spencer tries to survive his industrial environment, his angry girlfriend, and the unbearable screams of his newly born mutant child.","userRatingCount":"119195","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMDExYzg5YjQtMzE0Yy00OWJjLThiZTctMWI5MzhjM2RmNjA4L2ltYWdlXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0074486"},
+      "description":"Henry Spencer tries to survive his industrial environment, his angry girlfriend, and the unbearable screams of his newly born mutant child.",
+      "userRating":"7.3","userRatingCount":"119511","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMDExYzg5YjQtMzE0Yy00OWJjLThiZTctMWI5MzhjM2RmNjA4L2ltYWdlXkEyXkFqcGdeQXVyNTAyODkwOQ@@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0074486"},
   "related":{"Directed by:":{"nm0000186":{"uniqueId":"nm0000186","title":"David Lynch","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000186"},"related":{}}},
     "Cast:":{"nm0620756":{"uniqueId":"nm0620756","title":"Jack Nance","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0620756"},"related":{}},
       "nm0829270":{"uniqueId":"nm0829270","title":"Charlotte Stewart","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0829270"},"related":{}},
@@ -130,7 +152,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0074811","bestSource":"DataSourceType.imdbKeywords","title":"The Tenant","type":"MovieContentType.title","year":"1976","yearRange":"1976","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A bureaucrat rents a Paris apartment where he finds himself drawn into a rabbit hole of dangerous paranoia.","userRatingCount":"45025","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BOWJlYzBjMDQtOGRhOS00OGZjLWEwMjQtY2E0MzI0ZDllYWNmXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0074811"},
+      "description":"A bureaucrat rents a Paris apartment where he finds himself drawn into a rabbit hole of dangerous paranoia.",
+      "userRating":"7.6","userRatingCount":"45116","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BOWJlYzBjMDQtOGRhOS00OGZjLWEwMjQtY2E0MzI0ZDllYWNmXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0074811"},
   "related":{"Directed by:":{"nm0000591":{"uniqueId":"nm0000591","title":"Roman Polanski","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000591"},"related":{}}},
     "Cast:":{"nm0000591":{"uniqueId":"nm0000591","title":"Roman Polanski","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000591"},"related":{}},
       "nm0000254":{"uniqueId":"nm0000254","title":"Isabelle Adjani","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000254"},"related":{}},
@@ -140,7 +163,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0082085","bestSource":"DataSourceType.imdbKeywords","title":"Blow Out","type":"MovieContentType.title","year":"1981","yearRange":"1981","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A movie sound recordist accidentally records the evidence that proves that a car accident was actually murder and consequently finds himself in danger.","userRatingCount":"56086","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZmZiMmZmNjQtNGM3OC00MTFkLWIxMzktZmJhMGYzMjYwYzZmXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0082085"},
+      "description":"A movie sound recordist accidentally records the evidence that proves that a car accident was actually murder and consequently finds himself in danger.",
+      "userRating":"7.4","userRatingCount":"56326","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZmZiMmZmNjQtNGM3OC00MTFkLWIxMzktZmJhMGYzMjYwYzZmXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0082085"},
   "related":{"Directed by:":{"nm0000361":{"uniqueId":"nm0000361","title":"Brian De Palma","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000361"},"related":{}}},
     "Cast:":{"nm0000237":{"uniqueId":"nm0000237","title":"John Travolta","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000237"},"related":{}},
       "nm0000262":{"uniqueId":"nm0000262","title":"Nancy Allen","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000262"},"related":{}},
@@ -148,29 +172,21 @@ const expectedDtoJsonStringList = [
       "nm0001240":{"uniqueId":"nm0001240","title":"Dennis Franz","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001240"},"related":{}}}}}
 ''',
   r'''
-{"uniqueId":"tt0085933","bestSource":"DataSourceType.imdbKeywords","title":"Merry Christmas, Mr. Lawrence","type":"MovieContentType.title","year":"1983","yearRange":"1983","languages":"[]","genres":"[]",
+{"uniqueId":"tt0098068","bestSource":"DataSourceType.imdbKeywords","title":"Parents","type":"MovieContentType.title","year":"1989","yearRange":"1989","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"During W.W. II, a British colonel tries to bridge the cultural divides between a British P.O.W. and the Japanese camp commander in order to avoid blood-shed.","userRatingCount":"18302","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMzY0Zjc4Y2YtNDM4Mi00NmRmLTg4Y2UtYmEyMTU0MmY3ZmM1XkEyXkFqcGdeQXVyNjQ2MjQ5NzM@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0085933"},
-  "related":{"Directed by:":{"nm0651915":{"uniqueId":"nm0651915","title":"Nagisa Ôshima","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0651915"},"related":{}}},
-    "Cast:":{"nm0000309":{"uniqueId":"nm0000309","title":"David Bowie","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000309"},"related":{}},
-      "nm0002018":{"uniqueId":"nm0002018","title":"Tom Conti","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0002018"},"related":{}},
-      "nm0757098":{"uniqueId":"nm0757098","title":"Ryuichi Sakamoto","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0757098"},"related":{}},
-      "nm0001429":{"uniqueId":"nm0001429","title":"Takeshi Kitano","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001429"},"related":{}}}}}
+      "description":"A young boy living in 1950s suburbia suspects his parents are cannibalistic murderers.",
+      "userRating":"6.1","userRatingCount":"7982","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNDg4ODVkODAtMTczZi00OWY4LTlhZWEtMWIxYzQ2OTlmMDc2XkEyXkFqcGdeQXVyNjMwMjk0MTQ@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0098068"},
+  "related":{"Directed by:":{"nm0000837":{"uniqueId":"nm0000837","title":"Bob Balaban","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000837"},"related":{}}},
+    "Cast:":{"nm0001642":{"uniqueId":"nm0001642","title":"Randy Quaid","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001642"},"related":{}},
+      "nm0002148":{"uniqueId":"nm0002148","title":"Mary Beth Hurt","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0002148"},"related":{}},
+      "nm0006800":{"uniqueId":"nm0006800","title":"Sandy Dennis","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0006800"},"related":{}},
+      "nm0535077":{"uniqueId":"nm0535077","title":"Bryan Madorsky","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0535077"},"related":{}}}}}
 ''',
   r'''
-{"uniqueId":"tt0097883","bestSource":"DataSourceType.imdbKeywords","title":"Millennium","type":"MovieContentType.title","year":"1989","yearRange":"1989","languages":"[]","genres":"[]",
+{"uniqueId":"tt0098936","bestSource":"DataSourceType.imdbKeywords","title":"Twin Peaks","type":"MovieContentType.series","year":"1991","yearRange":"1990–1991","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"An NTSB investigator seeking the cause of an airline disaster meets a warrior woman from 1000 years in the future.","userRatingCount":"6573","censorRating":"CensorRatingType.family","imageUrl":"https://m.media-amazon.com/images/M/MV5BNzQ0MWFjYTAtMDYyYS00ZDkxLTljNDQtZjhmZWRkOWM5YmY3XkEyXkFqcGdeQXVyMTUzMDUzNTI3._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0097883"},
-  "related":{"Directed by:":{"nm0027183":{"uniqueId":"nm0027183","title":"Michael Anderson","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0027183"},"related":{}}},
-    "Cast:":{"nm0001434":{"uniqueId":"nm0001434","title":"Kris Kristofferson","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001434"},"related":{}},
-      "nm0001440":{"uniqueId":"nm0001440","title":"Cheryl Ladd","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001440"},"related":{}},
-      "nm0871240":{"uniqueId":"nm0871240","title":"Daniel J. Travanti","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0871240"},"related":{}},
-      "nm0431451":{"uniqueId":"nm0431451","title":"Robert Joy","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0431451"},"related":{}}}}}
-''',
-  r'''
-{"uniqueId":"tt0098936","bestSource":"DataSourceType.imdbKeywords","title":"Twin Peaks","type":"MovieContentType.title","year":"1991","yearRange":"1990–1991","languages":"[]","genres":"[]",
-      "keywords":"[\"enigma\"]",
-      "description":"An idiosyncratic FBI agent investigates the murder of a young woman in the even more idiosyncratic town of Twin Peaks.","userRatingCount":"200883","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTExNzk2NjcxNTNeQTJeQWpwZ15BbWU4MDcxOTczOTIx._V1_UY209_CR11,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0098936"},
+      "description":"An idiosyncratic FBI agent investigates the murder of a young woman in the even more idiosyncratic town of Twin Peaks.",
+      "userRating":"8.8","userRatingCount":"201352","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTExNzk2NjcxNTNeQTJeQWpwZ15BbWU4MDcxOTczOTIx._V1_UY209_CR11,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0098936"},
   "related":{"Cast:":{"nm0001492":{"uniqueId":"nm0001492","title":"Kyle MacLachlan","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001492"},"related":{}},
       "nm0648920":{"uniqueId":"nm0648920","title":"Michael Ontkean","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0648920"},"related":{}},
       "nm0000749":{"uniqueId":"nm0000749","title":"Mädchen Amick","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000749"},"related":{}},
@@ -179,7 +195,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0099871","bestSource":"DataSourceType.imdbKeywords","title":"Jacob's Ladder","type":"MovieContentType.title","yearRange":"I 1990","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Mourning his dead child, a haunted Vietnam War veteran attempts to uncover his past while suffering from a severe case of dissociation. To do so, he must decipher reality and life from his own dreams, delusions, and perceptions of death.","userRatingCount":"110890","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZTg5MTMyNjktNTZhOC00MGFlLWFlMTMtZGU2MjE3OWQ3NjJkXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_UY209_CR1,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0099871"},
+      "description":"Mourning his dead child, a haunted Vietnam War veteran attempts to uncover his past while suffering from a severe case of dissociation. To do so, he must decipher reality and life from his own dreams, delusions, and perceptions of death.",
+      "userRating":"7.4","userRatingCount":"111138","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZTg5MTMyNjktNTZhOC00MGFlLWFlMTMtZGU2MjE3OWQ3NjJkXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_UY209_CR1,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0099871"},
   "related":{"Directed by:":{"nm0001490":{"uniqueId":"nm0001490","title":"Adrian Lyne","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001490"},"related":{}}},
     "Cast:":{"nm0000209":{"uniqueId":"nm0000209","title":"Tim Robbins","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000209"},"related":{}},
       "nm0001615":{"uniqueId":"nm0001615","title":"Elizabeth Peña","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001615"},"related":{}},
@@ -189,7 +206,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0105665","bestSource":"DataSourceType.imdbKeywords","title":"Twin Peaks: Fire Walk with Me","type":"MovieContentType.title","year":"1992","yearRange":"1992","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Laura Palmer's harrowing final days are chronicled one year after the murder of Teresa Banks, a resident of Twin Peaks' neighboring town.","userRatingCount":"99038","censorRating":"CensorRatingType.restricted","imageUrl":"https://m.media-amazon.com/images/M/MV5BMzc5ODcyNTYtMDAwNy00MDhjLWFmOWUtNGVhMDRlYjE1YzNjXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0105665"},
+      "description":"Laura Palmer's harrowing final days are chronicled one year after the murder of Teresa Banks, a resident of Twin Peaks' neighboring town.",
+      "userRating":"7.2","userRatingCount":"99239","censorRating":"CensorRatingType.restricted","imageUrl":"https://m.media-amazon.com/images/M/MV5BMzc5ODcyNTYtMDAwNy00MDhjLWFmOWUtNGVhMDRlYjE1YzNjXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0105665"},
   "related":{"Directed by:":{"nm0000186":{"uniqueId":"nm0000186","title":"David Lynch","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000186"},"related":{}}},
     "Cast:":{"nm0498247":{"uniqueId":"nm0498247","title":"Sheryl Lee","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0498247"},"related":{}},
       "nm0936403":{"uniqueId":"nm0936403","title":"Ray Wise","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0936403"},"related":{}},
@@ -199,7 +217,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0109665","bestSource":"DataSourceType.imdbKeywords","title":"Dream Lover","type":"MovieContentType.title","year":"1993","yearRange":"1993","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A successful businessman tries to uncover what is wrong with his wife.","userRatingCount":"5315","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BOTA5ZjAyMDUtOWJmMS00NWY3LWJkMjQtMDQxZmEyOTFhM2YxXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0109665"},
+      "description":"A successful businessman tries to uncover what is wrong with his wife.",
+      "userRating":"6.2","userRatingCount":"5334","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BOTA5ZjAyMDUtOWJmMS00NWY3LWJkMjQtMDQxZmEyOTFhM2YxXkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0109665"},
   "related":{"Directed by:":{"nm0443582":{"uniqueId":"nm0443582","title":"Nicholas Kazan","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0443582"},"related":{}}},
     "Cast:":{"nm0000652":{"uniqueId":"nm0000652","title":"James Spader","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000652"},"related":{}},
       "nm0000749":{"uniqueId":"nm0000749","title":"Mädchen Amick","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000749"},"related":{}},
@@ -209,7 +228,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0114814","bestSource":"DataSourceType.imdbKeywords","title":"The Usual Suspects","type":"MovieContentType.title","year":"1995","yearRange":"1995","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A sole survivor tells of the twisty events leading up to a horrific gun battle on a boat, which began when five criminals met at a seemingly random police lineup.","userRatingCount":"1092394","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BYTViNjMyNmUtNDFkNC00ZDRlLThmMDUtZDU2YWE4NGI2ZjVmXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0114814"},
+      "description":"A sole survivor tells of the twisty events leading up to a horrific gun battle on a boat, which began when five criminals met at a seemingly random police lineup.",
+      "userRating":"8.5","userRatingCount":"1094153","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BYTViNjMyNmUtNDFkNC00ZDRlLThmMDUtZDU2YWE4NGI2ZjVmXkEyXkFqcGdeQXVyNjU0OTQ0OTY@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0114814"},
   "related":{"Directed by:":{"nm0001741":{"uniqueId":"nm0001741","title":"Bryan Singer","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001741"},"related":{}}},
     "Cast:":{"nm0000228":{"uniqueId":"nm0000228","title":"Kevin Spacey","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000228"},"related":{}},
       "nm0000321":{"uniqueId":"nm0000321","title":"Gabriel Byrne","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000321"},"related":{}},
@@ -219,7 +239,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0125664","bestSource":"DataSourceType.imdbKeywords","title":"Man on the Moon","type":"MovieContentType.title","year":"1999","yearRange":"1999","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"The life and career of legendary comedian Andy Kaufman.","userRatingCount":"132861","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNDI1Mjc3MzAtZDk0OS00OTZlLTlhZjktNzA3ODgwZGY2NWIwXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0125664"},
+      "description":"The life and career of legendary comedian Andy Kaufman.",
+      "userRating":"7.4","userRatingCount":"133030","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNDI1Mjc3MzAtZDk0OS00OTZlLTlhZjktNzA3ODgwZGY2NWIwXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0125664"},
   "related":{"Directed by:":{"nm0001232":{"uniqueId":"nm0001232","title":"Milos Forman","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001232"},"related":{}}},
     "Cast:":{"nm0000120":{"uniqueId":"nm0000120","title":"Jim Carrey","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000120"},"related":{}},
       "nm0000362":{"uniqueId":"nm0000362","title":"Danny DeVito","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000362"},"related":{}},
@@ -229,7 +250,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0156887","bestSource":"DataSourceType.imdbKeywords","title":"Perfect Blue","type":"MovieContentType.title","year":"1997","yearRange":"1997","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A pop singer gives up her career to become an actress, but she slowly goes insane when she starts being stalked by an obsessed fan and what seems to be a ghost of her past.","userRatingCount":"80137","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMmMzOWNhNTYtYmY0My00OGJiLWIzNDUtZWRhNGY0NWFjNzFmXkEyXkFqcGdeQXVyNjUxMDQ0MTg@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0156887"},
+      "description":"A pop singer gives up her career to become an actress, but she slowly goes insane when she starts being stalked by an obsessed fan and what seems to be a ghost of her past.",
+      "userRating":"8.0","userRatingCount":"80581","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMmMzOWNhNTYtYmY0My00OGJiLWIzNDUtZWRhNGY0NWFjNzFmXkEyXkFqcGdeQXVyNjUxMDQ0MTg@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0156887"},
   "related":{"Directed by:":{"nm0464804":{"uniqueId":"nm0464804","title":"Satoshi Kon","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0464804"},"related":{}}},
     "Cast:":{"nm0412585":{"uniqueId":"nm0412585","title":"Junko Iwao","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0412585"},"related":{}},
       "nm0559551":{"uniqueId":"nm0559551","title":"Rica Matsumoto","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0559551"},"related":{}},
@@ -239,7 +261,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0161081","bestSource":"DataSourceType.imdbKeywords","title":"What Lies Beneath","type":"MovieContentType.title","year":"2000","yearRange":"2000","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"The wife of a university research scientist believes that her lakeside Vermont home is haunted by a ghost - or that she is losing her mind.","userRatingCount":"128976","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNTY4NjNkMTMtNTEyOC00NDBiLWFkZjMtZDkwYzU3OTFjOTkzXkEyXkFqcGdeQXVyNTUyMzE4Mzg@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0161081"},
+      "description":"The wife of a university research scientist believes that her lakeside Vermont home is haunted by a ghost - or that she is losing her mind.",
+      "userRating":"6.6","userRatingCount":"129201","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNTY4NjNkMTMtNTEyOC00NDBiLWFkZjMtZDkwYzU3OTFjOTkzXkEyXkFqcGdeQXVyNTUyMzE4Mzg@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0161081"},
   "related":{"Directed by:":{"nm0000709":{"uniqueId":"nm0000709","title":"Robert Zemeckis","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000709"},"related":{}}},
     "Cast:":{"nm0000148":{"uniqueId":"nm0000148","title":"Harrison Ford","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000148"},"related":{}},
       "nm0000201":{"uniqueId":"nm0000201","title":"Michelle Pfeiffer","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000201"},"related":{}},
@@ -249,7 +272,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0166924","bestSource":"DataSourceType.imdbKeywords","title":"Mulholland Drive","type":"MovieContentType.title","year":"2001","yearRange":"2001","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"After a car wreck on the winding Mulholland Drive renders a woman amnesiac, she and a perky Hollywood-hopeful search for clues and answers across Los Angeles in a twisting venture beyond dreams and reality.","userRatingCount":"361595","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BYTRiMzg4NDItNTc3Zi00NjBjLTgwOWYtOGZjMTFmNGU4ODY4XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0166924"},
+      "description":"After a car wreck on the winding Mulholland Drive renders a woman amnesiac, she and a perky Hollywood-hopeful search for clues and answers across Los Angeles in a twisting venture beyond dreams and reality.",
+      "userRating":"7.9","userRatingCount":"362328","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BYTRiMzg4NDItNTc3Zi00NjBjLTgwOWYtOGZjMTFmNGU4ODY4XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0166924"},
   "related":{"Directed by:":{"nm0000186":{"uniqueId":"nm0000186","title":"David Lynch","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000186"},"related":{}}},
     "Cast:":{"nm0915208":{"uniqueId":"nm0915208","title":"Naomi Watts","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0915208"},"related":{}},
       "nm0005009":{"uniqueId":"nm0005009","title":"Laura Harring","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0005009"},"related":{}},
@@ -259,7 +283,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0246578","bestSource":"DataSourceType.imdbKeywords","title":"Donnie Darko","type":"MovieContentType.title","year":"2001","yearRange":"2001","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"After narrowly escaping a bizarre accident, a troubled teenager is plagued by visions of a man in a large rabbit suit who manipulates him to commit a series of crimes.","userRatingCount":"809435","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjZlZDlkYTktMmU1My00ZDBiLWFlNjEtYTBhNjVhOTM4ZjJjXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0246578"},
+      "description":"After narrowly escaping a bizarre accident, a troubled teenager is plagued by visions of a man in a large rabbit suit who manipulates him to commit a series of crimes.",
+      "userRating":"8.0","userRatingCount":"810935","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjZlZDlkYTktMmU1My00ZDBiLWFlNjEtYTBhNjVhOTM4ZjJjXkEyXkFqcGdeQXVyMTMxODk2OTU@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0246578"},
   "related":{"Directed by:":{"nm0446819":{"uniqueId":"nm0446819","title":"Richard Kelly","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0446819"},"related":{}}},
     "Cast:":{"nm0350453":{"uniqueId":"nm0350453","title":"Jake Gyllenhaal","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0350453"},"related":{}},
       "nm0540441":{"uniqueId":"nm0540441","title":"Jena Malone","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0540441"},"related":{}},
@@ -269,7 +294,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0252501","bestSource":"DataSourceType.imdbKeywords","title":"Hearts in Atlantis","type":"MovieContentType.title","year":"2001","yearRange":"2001","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Widowed Liz Garfield and her son Bobby change when mysterious stranger Ted Brautigan enters their lives.","userRatingCount":"39556","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNjFjNWNmYWUtZTFlMi00ZDcxLWJkY2MtNjMwYmM0OTc5OTM1XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0252501"},
+      "description":"Widowed Liz Garfield and her son Bobby change when mysterious stranger Ted Brautigan enters their lives.",
+      "userRating":"6.9","userRatingCount":"39625","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNjFjNWNmYWUtZTFlMi00ZDcxLWJkY2MtNjMwYmM0OTc5OTM1XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0252501"},
   "related":{"Directed by:":{"nm0382956":{"uniqueId":"nm0382956","title":"Scott Hicks","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0382956"},"related":{}}},
     "Cast:":{"nm0000164":{"uniqueId":"nm0000164","title":"Anthony Hopkins","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000164"},"related":{}},
       "nm0947338":{"uniqueId":"nm0947338","title":"Anton Yelchin","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0947338"},"related":{}},
@@ -279,7 +305,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0272152","bestSource":"DataSourceType.imdbKeywords","title":"K-PAX","type":"MovieContentType.title","year":"2001","yearRange":"2001","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"PROT is a patient at a mental hospital who claims to be from a faraway planet named K-PAX. His psychiatrist tries to help him, only to begin to doubt his own explanations.","userRatingCount":"186417","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjE2Mjc4Y2EtN2QyNy00YTI5LWFlMjUtYjkwOTdhYTliMTliXkEyXkFqcGdeQXVyMjA0MzYwMDY@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0272152"},
+      "description":"PROT is a patient at a mental hospital who claims to be from a faraway planet named K-PAX. His psychiatrist tries to help him, only to begin to doubt his own explanations.",
+      "userRating":"7.4","userRatingCount":"186609","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjE2Mjc4Y2EtN2QyNy00YTI5LWFlMjUtYjkwOTdhYTliMTliXkEyXkFqcGdeQXVyMjA0MzYwMDY@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0272152"},
   "related":{"Directed by:":{"nm0812200":{"uniqueId":"nm0812200","title":"Iain Softley","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0812200"},"related":{}}},
     "Cast:":{"nm0000228":{"uniqueId":"nm0000228","title":"Kevin Spacey","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000228"},"related":{}},
       "nm0000313":{"uniqueId":"nm0000313","title":"Jeff Bridges","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000313"},"related":{}},
@@ -289,7 +316,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0324133","bestSource":"DataSourceType.imdbKeywords","title":"Swimming Pool","type":"MovieContentType.title","year":"2003","yearRange":"2003","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A British mystery author visits her publisher's home in the South of France, where her interaction with his unusual daughter sets off some touchy dynamics.","userRatingCount":"46768","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZGNjMmUzNjQtMjJjYy00ZWYyLTlhNDAtNDk2Y2QxZWQ0Y2NiXkEyXkFqcGdeQXVyNjc5NjEzNA@@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0324133"},
+      "description":"A British mystery author visits her publisher's home in the South of France, where her interaction with his unusual daughter sets off some touchy dynamics.",
+      "userRating":"6.7","userRatingCount":"46837","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZGNjMmUzNjQtMjJjYy00ZWYyLTlhNDAtNDk2Y2QxZWQ0Y2NiXkEyXkFqcGdeQXVyNjc5NjEzNA@@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0324133"},
   "related":{"Directed by:":{"nm0654830":{"uniqueId":"nm0654830","title":"François Ozon","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0654830"},"related":{}}},
     "Cast:":{"nm0001648":{"uniqueId":"nm0001648","title":"Charlotte Rampling","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001648"},"related":{}},
       "nm0001097":{"uniqueId":"nm0001097","title":"Charles Dance","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001097"},"related":{}},
@@ -297,19 +325,10 @@ const expectedDtoJsonStringList = [
       "nm0483788":{"uniqueId":"nm0483788","title":"Jean-Marie Lamour","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0483788"},"related":{}}}}}
 ''',
   r'''
-{"uniqueId":"tt0332658","bestSource":"DataSourceType.imdbKeywords","title":"Intermission","type":"MovieContentType.title","year":"2003","yearRange":"2003","languages":"[]","genres":"[]",
-      "keywords":"[\"enigma\"]",
-      "description":"A variety of losers in Dublin have harrowingly farcical intersecting stories of love, greed and violence.","userRatingCount":"16057","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTUyNjQzNzYyMF5BMl5BanBnXkFtZTcwNDg0MzUyMQ@@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0332658"},
-  "related":{"Directed by:":{"nm1259871":{"uniqueId":"nm1259871","title":"John Crowley","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm1259871"},"related":{}}},
-    "Cast:":{"nm0614165":{"uniqueId":"nm0614165","title":"Cillian Murphy","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0614165"},"related":{}},
-      "nm0531808":{"uniqueId":"nm0531808","title":"Kelly Macdonald","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0531808"},"related":{}},
-      "nm0268199":{"uniqueId":"nm0268199","title":"Colin Farrell","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0268199"},"related":{}},
-      "nm0376602":{"uniqueId":"nm0376602","title":"Shirley Henderson","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0376602"},"related":{}}}}}
-''',
-  r'''
 {"uniqueId":"tt0337876","bestSource":"DataSourceType.imdbKeywords","title":"Birth","type":"MovieContentType.title","year":"2004","yearRange":"2004","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A young boy attempts to convince a woman that he is her dead husband reborn.","userRatingCount":"37501","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNzUzNzI4MzU4NV5BMl5BanBnXkFtZTcwMjcxMzcyMQ@@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0337876"},
+      "description":"A young boy attempts to convince a woman that he is her dead husband reborn.",
+      "userRating":"6.2","userRatingCount":"37572","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNzUzNzI4MzU4NV5BMl5BanBnXkFtZTcwMjcxMzcyMQ@@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0337876"},
   "related":{"Directed by:":{"nm0322242":{"uniqueId":"nm0322242","title":"Jonathan Glazer","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0322242"},"related":{}}},
     "Cast:":{"nm0000173":{"uniqueId":"nm0000173","title":"Nicole Kidman","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000173"},"related":{}},
       "nm1080974":{"uniqueId":"nm1080974","title":"Cameron Bright","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm1080974"},"related":{}},
@@ -319,7 +338,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0348593","bestSource":"DataSourceType.imdbKeywords","title":"The Door in the Floor","type":"MovieContentType.title","year":"2004","yearRange":"2004","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A writer's young assistant becomes both pawn and catalyst in his boss's disintegrating household.","userRatingCount":"15862","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTYyNTIxODA1M15BMl5BanBnXkFtZTYwMzY1NjY3._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0348593"},
+      "description":"A writer's young assistant becomes both pawn and catalyst in his boss's disintegrating household.",
+      "userRating":"6.6","userRatingCount":"15872","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTYyNTIxODA1M15BMl5BanBnXkFtZTYwMzY1NjY3._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0348593"},
   "related":{"Directed by:":{"nm0931095":{"uniqueId":"nm0931095","title":"Tod Williams","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0931095"},"related":{}}},
     "Cast:":{"nm0000313":{"uniqueId":"nm0000313","title":"Jeff Bridges","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000313"},"related":{}},
       "nm0000107":{"uniqueId":"nm0000107","title":"Kim Basinger","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000107"},"related":{}},
@@ -329,7 +349,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0365686","bestSource":"DataSourceType.imdbKeywords","title":"Revolver","type":"MovieContentType.title","year":"2005","yearRange":"2005","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Gambler Jake Green enters into a game with potentially deadly consequences.","userRatingCount":"97886","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTQ1OTA3MjM4MF5BMl5BanBnXkFtZTYwMTMxODc4._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0365686"},
+      "description":"Gambler Jake Green enters into a game with potentially deadly consequences.",
+      "userRating":"6.3","userRatingCount":"98050","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTQ1OTA3MjM4MF5BMl5BanBnXkFtZTYwMTMxODc4._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0365686"},
   "related":{"Directed by:":{"nm0005363":{"uniqueId":"nm0005363","title":"Guy Ritchie","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0005363"},"related":{}}},
     "Cast:":{"nm0005458":{"uniqueId":"nm0005458","title":"Jason Statham","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0005458"},"related":{}},
       "nm0000501":{"uniqueId":"nm0000501","title":"Ray Liotta","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000501"},"related":{}},
@@ -339,7 +360,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0366627","bestSource":"DataSourceType.imdbKeywords","title":"The Jacket","type":"MovieContentType.title","year":"2005","yearRange":"2005","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A Gulf war veteran is wrongly sent to a mental institution for insane criminals, where he becomes the object of a doctor's experiments, and his life is completely affected by them.","userRatingCount":"115183","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjY1ZTNiMGYtOGJjNy00MmE4LWFjYzQtOTNjYzYzZTcyNzQ5XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0366627"},
+      "description":"A Gulf war veteran is wrongly sent to a mental institution for insane criminals, where he becomes the object of a doctor's experiments, and his life is completely affected by them.",
+      "userRating":"7.1","userRatingCount":"115332","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjY1ZTNiMGYtOGJjNy00MmE4LWFjYzQtOTNjYzYzZTcyNzQ5XkEyXkFqcGdeQXVyMjUzOTY1NTc@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0366627"},
   "related":{"Directed by:":{"nm0562266":{"uniqueId":"nm0562266","title":"John Maybury","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0562266"},"related":{}}},
     "Cast:":{"nm0004778":{"uniqueId":"nm0004778","title":"Adrien Brody","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0004778"},"related":{}},
       "nm0461136":{"uniqueId":"nm0461136","title":"Keira Knightley","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0461136"},"related":{}},
@@ -349,7 +371,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0368794","bestSource":"DataSourceType.imdbKeywords","title":"I'm Not There","type":"MovieContentType.title","year":"2007","yearRange":"2007","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Ruminations on the life of Bob Dylan, where six characters embody a different aspect of the musician's life and work.","userRatingCount":"59573","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTY4MzM2MjcwNV5BMl5BanBnXkFtZTcwODg3MDU1MQ@@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0368794"},
+      "description":"Ruminations on the life of Bob Dylan, where six characters embody a different aspect of the musician's life and work.",
+      "userRating":"6.8","userRatingCount":"59622","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTY4MzM2MjcwNV5BMl5BanBnXkFtZTcwODg3MDU1MQ@@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0368794"},
   "related":{"Directed by:":{"nm0001331":{"uniqueId":"nm0001331","title":"Todd Haynes","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001331"},"related":{}}},
     "Cast:":{"nm0000288":{"uniqueId":"nm0000288","title":"Christian Bale","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000288"},"related":{}},
       "nm0000949":{"uniqueId":"nm0000949","title":"Cate Blanchett","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000949"},"related":{}},
@@ -359,7 +382,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0454848","bestSource":"DataSourceType.imdbKeywords","title":"Inside Man","type":"MovieContentType.title","year":"2006","yearRange":"2006","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A police detective, a bank robber, and a high-power broker enter high-stakes negotiations after the criminal's brilliant heist spirals into a hostage situation.","userRatingCount":"378090","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BYjc4MjA2ZDgtOGY3YS00NDYzLTlmNTEtYWMxMzcwZjgzYWNjXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0454848"},
+      "description":"A police detective, a bank robber, and a high-power broker enter high-stakes negotiations after the criminal's brilliant heist spirals into a hostage situation.",
+      "userRating":"7.6","userRatingCount":"378867","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BYjc4MjA2ZDgtOGY3YS00NDYzLTlmNTEtYWMxMzcwZjgzYWNjXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0454848"},
   "related":{"Directed by:":{"nm0000490":{"uniqueId":"nm0000490","title":"Spike Lee","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000490"},"related":{}}},
     "Cast:":{"nm0000243":{"uniqueId":"nm0000243","title":"Denzel Washington","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000243"},"related":{}},
       "nm0654110":{"uniqueId":"nm0654110","title":"Clive Owen","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0654110"},"related":{}},
@@ -369,7 +393,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0481369","bestSource":"DataSourceType.imdbKeywords","title":"The Number 23","type":"MovieContentType.title","year":"2007","yearRange":"2007","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Walter Sparrow becomes obsessed with a novel that he believes was written about him, as more and more similarities between himself and his literary alter ego seem to arise.","userRatingCount":"205377","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZDg0YzAxZGYtNTdkYy00ZmUyLWIwNDQtOTA0NGNlZGZiMjkwXkEyXkFqcGdeQXVyMjQwMjk0NjI@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0481369"},
+      "description":"Walter Sparrow becomes obsessed with a novel that he believes was written about him, as more and more similarities between himself and his literary alter ego seem to arise.",
+      "userRating":"6.4","userRatingCount":"205659","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZDg0YzAxZGYtNTdkYy00ZmUyLWIwNDQtOTA0NGNlZGZiMjkwXkEyXkFqcGdeQXVyMjQwMjk0NjI@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0481369"},
   "related":{"Directed by:":{"nm0001708":{"uniqueId":"nm0001708","title":"Joel Schumacher","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001708"},"related":{}}},
     "Cast:":{"nm0000120":{"uniqueId":"nm0000120","title":"Jim Carrey","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000120"},"related":{}},
       "nm0000515":{"uniqueId":"nm0000515","title":"Virginia Madsen","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000515"},"related":{}},
@@ -379,7 +404,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0945513","bestSource":"DataSourceType.imdbKeywords","title":"Source Code","type":"MovieContentType.title","year":"2011","yearRange":"2011","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A soldier wakes up in someone else's body and discovers he's part of an experimental government program to find the bomber of a commuter train within 8 minutes.","userRatingCount":"526152","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTY0MTc3MzMzNV5BMl5BanBnXkFtZTcwNDE4MjE0NA@@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0945513"},
+      "description":"A soldier wakes up in someone else's body and discovers he's part of an experimental government program to find the bomber of a commuter train within 8 minutes.",
+      "userRating":"7.5","userRatingCount":"526864","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTY0MTc3MzMzNV5BMl5BanBnXkFtZTcwNDE4MjE0NA@@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0945513"},
   "related":{"Directed by:":{"nm1512910":{"uniqueId":"nm1512910","title":"Duncan Jones","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm1512910"},"related":{}}},
     "Cast:":{"nm0350453":{"uniqueId":"nm0350453","title":"Jake Gyllenhaal","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0350453"},"related":{}},
       "nm1157358":{"uniqueId":"nm1157358","title":"Michelle Monaghan","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm1157358"},"related":{}},
@@ -389,7 +415,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0970179","bestSource":"DataSourceType.imdbKeywords","title":"Hugo","type":"MovieContentType.title","year":"2011","yearRange":"2011","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"In 1931 Paris, an orphan living in the walls of a train station gets wrapped up in a mystery involving his late father and an automaton.","userRatingCount":"326329","censorRating":"CensorRatingType.family","imageUrl":"https://m.media-amazon.com/images/M/MV5BMjAzNzk5MzgyNF5BMl5BanBnXkFtZTcwOTE4NDU5Ng@@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0970179"},
+      "description":"In 1931 Paris, an orphan living in the walls of a train station gets wrapped up in a mystery involving his late father and an automaton.",
+      "userRating":"7.5","userRatingCount":"326706","censorRating":"CensorRatingType.family","imageUrl":"https://m.media-amazon.com/images/M/MV5BMjAzNzk5MzgyNF5BMl5BanBnXkFtZTcwOTE4NDU5Ng@@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0970179"},
   "related":{"Directed by:":{"nm0000217":{"uniqueId":"nm0000217","title":"Martin Scorsese","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000217"},"related":{}}},
     "Cast:":{"nm2633535":{"uniqueId":"nm2633535","title":"Asa Butterfield","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm2633535"},"related":{}},
       "nm1631269":{"uniqueId":"nm1631269","title":"Chloë Grace Moretz","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm1631269"},"related":{}},
@@ -399,7 +426,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt10731256","bestSource":"DataSourceType.imdbKeywords","title":"Don't Worry Darling","type":"MovieContentType.title","yearRange":"I 2022","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A 1950s housewife living with her husband in a utopian experimental community begins to worry that his glamorous company could be hiding disturbing secrets.","userRatingCount":"101873","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMzFkMWUzM2ItZWFjMi00NDY0LTk2MDMtZDhkMDE2MjRlYmZlXkEyXkFqcGdeQXVyNTAzNzgwNTg@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt10731256"},
+      "description":"A 1950s housewife living with her husband in a utopian experimental community begins to worry that his glamorous company could be hiding disturbing secrets.",
+      "userRating":"6.2","userRatingCount":"104456","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMzFkMWUzM2ItZWFjMi00NDY0LTk2MDMtZDhkMDE2MjRlYmZlXkEyXkFqcGdeQXVyNTAzNzgwNTg@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt10731256"},
   "related":{"Directed by:":{"nm1312575":{"uniqueId":"nm1312575","title":"Olivia Wilde","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm1312575"},"related":{}}},
     "Cast:":{"nm6073955":{"uniqueId":"nm6073955","title":"Florence Pugh","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm6073955"},"related":{}},
       "nm4089170":{"uniqueId":"nm4089170","title":"Harry Styles","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm4089170"},"related":{}},
@@ -407,9 +435,21 @@ const expectedDtoJsonStringList = [
       "nm1312575":{"uniqueId":"nm1312575","title":"Olivia Wilde","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm1312575"},"related":{}}}}}
 ''',
   r'''
+{"uniqueId":"tt1189076","bestSource":"DataSourceType.imdbKeywords","title":"Ricky","type":"MovieContentType.title","yearRange":"I 2009","languages":"[]","genres":"[]",
+      "keywords":"[\"enigma\"]",
+      "description":"When Katie, an ordinary woman, meets Paco, an ordinary man, something magical happens: a love story. From this union an extraordinary child is born: Ricky.",
+      "userRating":"5.8","userRatingCount":"3108","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BOTgxNWVkYmYtMzUxNS00YTM1LTg3YjktYzQ4ODQxMWVhYmJiXkEyXkFqcGdeQXVyMTAyNTQ0MTk@._V1_UX140_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt1189076"},
+  "related":{"Directed by:":{"nm0654830":{"uniqueId":"nm0654830","title":"François Ozon","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0654830"},"related":{}}},
+    "Cast:":{"nm0484005":{"uniqueId":"nm0484005","title":"Alexandra Lamy","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0484005"},"related":{}},
+      "nm0530365":{"uniqueId":"nm0530365","title":"Sergi López","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0530365"},"related":{}},
+      "nm3274621":{"uniqueId":"nm3274621","title":"Mélusine Mayance","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm3274621"},"related":{}},
+      "nm3274218":{"uniqueId":"nm3274218","title":"Arthur Peyret","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm3274218"},"related":{}}}}}
+''',
+  r'''
 {"uniqueId":"tt13444912","bestSource":"DataSourceType.imdbKeywords","title":"The Midnight Club","type":"MovieContentType.title","year":"2022","yearRange":"2022","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"The Midnight Club follows an octet of terminally-ill teenage patients at Brightcliffe Hospice as they gather at midnight to share scary stories.","userRatingCount":"25787","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNTc5OGU1YjItZmVhZi00NmE3LTk0ZWEtZDE1OGJjMTMzNDY2XkEyXkFqcGdeQXVyMTEyMjM2NDc2._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt13444912"},
+      "description":"The Midnight Club follows an octet of terminally-ill teenage patients at Brightcliffe Hospice as they gather at midnight to share scary stories.",
+      "userRating":"6.5","userRatingCount":"26200","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNTc5OGU1YjItZmVhZi00NmE3LTk0ZWEtZDE1OGJjMTMzNDY2XkEyXkFqcGdeQXVyMTEyMjM2NDc2._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt13444912"},
   "related":{"Cast:":{"nm7223890":{"uniqueId":"nm7223890","title":"Iman Benson","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm7223890"},"related":{}},
       "nm9723807":{"uniqueId":"nm9723807","title":"Igby Rigney","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm9723807"},"related":{}},
       "nm11517225":{"uniqueId":"nm11517225","title":"Sadoc Vazkez","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm11517225"},"related":{}},
@@ -418,7 +458,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt1924396","bestSource":"DataSourceType.imdbKeywords","title":"The Best Offer","type":"MovieContentType.title","year":"2013","yearRange":"2013","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A lonely art expert working for a mysterious and reclusive heiress finds not only her art worth examining.","userRatingCount":"121575","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTQ4MzQ3NjA0N15BMl5BanBnXkFtZTgwODQyNjQ4MDE@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt1924396"},
+      "description":"A lonely art expert working for a mysterious and reclusive heiress finds not only her art worth examining.",
+      "userRating":"7.8","userRatingCount":"121823","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTQ4MzQ3NjA0N15BMl5BanBnXkFtZTgwODQyNjQ4MDE@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt1924396"},
   "related":{"Directed by:":{"nm0868153":{"uniqueId":"nm0868153","title":"Giuseppe Tornatore","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0868153"},"related":{}}},
     "Cast:":{"nm0001691":{"uniqueId":"nm0001691","title":"Geoffrey Rush","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001691"},"related":{}},
       "nm0836343":{"uniqueId":"nm0836343","title":"Jim Sturgess","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0836343"},"related":{}},
@@ -428,7 +469,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt2084970","bestSource":"DataSourceType.imdbKeywords","title":"The Imitation Game","type":"MovieContentType.title","year":"2014","yearRange":"2014","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"During World War II, the English mathematical genius Alan Turing tries to crack the German Enigma code with help from fellow mathematicians while attempting to come to terms with his troubled private life.","userRatingCount":"778365","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BOTgwMzFiMWYtZDhlNS00ODNkLWJiODAtZDVhNzgyNzJhYjQ4L2ltYWdlXkEyXkFqcGdeQXVyNzEzOTYxNTQ@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt2084970"},
+      "description":"During World War II, the English mathematical genius Alan Turing tries to crack the German Enigma code with help from fellow mathematicians while attempting to come to terms with his troubled private life.",
+      "userRating":"8.0","userRatingCount":"780104","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BOTgwMzFiMWYtZDhlNS00ODNkLWJiODAtZDVhNzgyNzJhYjQ4L2ltYWdlXkEyXkFqcGdeQXVyNzEzOTYxNTQ@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt2084970"},
   "related":{"Directed by:":{"nm0878763":{"uniqueId":"nm0878763","title":"Morten Tyldum","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0878763"},"related":{}}},
     "Cast:":{"nm1212722":{"uniqueId":"nm1212722","title":"Benedict Cumberbatch","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm1212722"},"related":{}},
       "nm0461136":{"uniqueId":"nm0461136","title":"Keira Knightley","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0461136"},"related":{}},
@@ -438,7 +480,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt2365580","bestSource":"DataSourceType.imdbKeywords","title":"Where'd You Go, Bernadette","type":"MovieContentType.title","year":"2019","yearRange":"2019","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A loving mom becomes compelled to reconnect with her creative passions after years of sacrificing herself for her family. Her leap of faith takes her on an epic adventure that jump-starts her life and leads to her triumphant rediscovery.","userRatingCount":"22841","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNDZiY2MyN2ItZjYyMi00YWNiLTk3NTQtNzk3YWFlOTg1MzViXkEyXkFqcGdeQXVyODk2NDQ3MTA@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt2365580"},
+      "description":"A loving mom becomes compelled to reconnect with her creative passions after years of sacrificing herself for her family. Her leap of faith takes her on an epic adventure that jump-starts her life and leads to her triumphant rediscovery.",
+      "userRating":"6.5","userRatingCount":"22923","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNDZiY2MyN2ItZjYyMi00YWNiLTk3NTQtNzk3YWFlOTg1MzViXkEyXkFqcGdeQXVyODk2NDQ3MTA@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt2365580"},
   "related":{"Directed by:":{"nm0000500":{"uniqueId":"nm0000500","title":"Richard Linklater","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000500"},"related":{}}},
     "Cast:":{"nm0000949":{"uniqueId":"nm0000949","title":"Cate Blanchett","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000949"},"related":{}},
       "nm0001082":{"uniqueId":"nm0001082","title":"Billy Crudup","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0001082"},"related":{}},
@@ -448,7 +491,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt2452254","bestSource":"DataSourceType.imdbKeywords","title":"Clouds of Sils Maria","type":"MovieContentType.title","year":"2014","yearRange":"2014","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A film star comes face-to-face with an uncomfortable reflection of herself while starring in a revival of the play that launched her career.","userRatingCount":"30207","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMjAwMTg3MDE0NF5BMl5BanBnXkFtZTgwNjQ1ODQyNTE@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt2452254"},
+      "description":"A film star comes face-to-face with an uncomfortable reflection of herself while starring in a revival of the play that launched her career.",
+      "userRating":"6.7","userRatingCount":"30237","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMjAwMTg3MDE0NF5BMl5BanBnXkFtZTgwNjQ1ODQyNTE@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt2452254"},
   "related":{"Directed by:":{"nm0000801":{"uniqueId":"nm0000801","title":"Olivier Assayas","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000801"},"related":{}}},
     "Cast:":{"nm0000300":{"uniqueId":"nm0000300","title":"Juliette Binoche","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000300"},"related":{}},
       "nm0829576":{"uniqueId":"nm0829576","title":"Kristen Stewart","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0829576"},"related":{}},
@@ -458,7 +502,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt3262342","bestSource":"DataSourceType.imdbKeywords","title":"Loving Vincent","type":"MovieContentType.title","year":"2017","yearRange":"2017","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"In a story depicted in oil painted animation, a young man comes to the last hometown of painter Vincent van Gogh to deliver the troubled artist's final letter and ends up investigating his final days there.","userRatingCount":"59299","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTU3NjE2NjgwN15BMl5BanBnXkFtZTgwNDYzMzEwMzI@._V1_UY209_CR1,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt3262342"},
+      "description":"In a story depicted in oil painted animation, a young man comes to the last hometown of painter Vincent van Gogh to deliver the troubled artist's final letter and ends up investigating his final days there.",
+      "userRating":"7.8","userRatingCount":"59465","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTU3NjE2NjgwN15BMl5BanBnXkFtZTgwNDYzMzEwMzI@._V1_UY209_CR1,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt3262342"},
   "related":{"Directed by:":{"nm3699790":{"uniqueId":"nm3699790","title":"Dorota Kobiela","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm3699790"},"related":{}},
       "nm1364790":{"uniqueId":"nm1364790","title":"Hugh Welchman","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm1364790"},"related":{}}},
     "Cast:":{"nm3150488":{"uniqueId":"nm3150488","title":"Douglas Booth","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm3150488"},"related":{}},
@@ -469,7 +514,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt3289956","bestSource":"DataSourceType.imdbKeywords","title":"The Autopsy of Jane Doe","type":"MovieContentType.title","year":"2016","yearRange":"2016","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"A father and son, both coroners, are pulled into a complex mystery while attempting to identify the body of a young woman, who was apparently harboring dark secrets.","userRatingCount":"122582","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMjA2MTEzMzkzM15BMl5BanBnXkFtZTgwMjM2MTM5MDI@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt3289956"},
+      "description":"A father and son, both coroners, are pulled into a complex mystery while attempting to identify the body of a young woman, who was apparently harboring dark secrets.",
+      "userRating":"6.8","userRatingCount":"123112","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMjA2MTEzMzkzM15BMl5BanBnXkFtZTgwMjM2MTM5MDI@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt3289956"},
   "related":{"Directed by:":{"nm0004217":{"uniqueId":"nm0004217","title":"André Øvredal","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0004217"},"related":{}}},
     "Cast:":{"nm0004051":{"uniqueId":"nm0004051","title":"Brian Cox","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0004051"},"related":{}},
       "nm0386472":{"uniqueId":"nm0386472","title":"Emile Hirsch","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0386472"},"related":{}},
@@ -479,7 +525,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt3387648","bestSource":"DataSourceType.imdbKeywords","title":"The Taking","type":"MovieContentType.title","year":"2014","yearRange":"2014","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"An elderly woman battling Alzheimer's disease agrees to let a film crew document her condition, but what they discover is something far more sinister going on.","userRatingCount":"34106","censorRating":"CensorRatingType.restricted","imageUrl":"https://m.media-amazon.com/images/M/MV5BZWQ3YmU4ZjYtZGE2Ni00NjhiLTk2NTMtYmVmYmNkNWViYzUxXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt3387648"},
+      "description":"An elderly woman battling Alzheimer's disease agrees to let a film crew document her condition, but what they discover is something far more sinister going on.",
+      "userRating":"6.0","userRatingCount":"34282","censorRating":"CensorRatingType.restricted","imageUrl":"https://m.media-amazon.com/images/M/MV5BZWQ3YmU4ZjYtZGE2Ni00NjhiLTk2NTMtYmVmYmNkNWViYzUxXkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt3387648"},
   "related":{"Directed by:":{"nm0733263":{"uniqueId":"nm0733263","title":"Adam Robitel","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0733263"},"related":{}}},
     "Cast:":{"nm0489010":{"uniqueId":"nm0489010","title":"Jill Larson","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0489010"},"related":{}},
       "nm0708867":{"uniqueId":"nm0708867","title":"Anne Ramsay","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0708867"},"related":{}},
@@ -489,7 +536,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt3613454","bestSource":"DataSourceType.imdbKeywords","title":"Zankyô no teroru","type":"MovieContentType.title","year":"2014","yearRange":"2014","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Tokyo has been decimated by a terrorist attack, the only clue to the culprit's identity is a bizarre internet video. Two mysterious children form Sphinx, a clandestine entity determined to pull the trigger on this world.","userRatingCount":"11725","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNjdhYzY0M2QtODgwZi00NDg2LTliNDQtMzA4ZTMzMzQ0MGEyXkEyXkFqcGdeQXVyMTA3OTEyODI1._V1_UY209_CR4,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt3613454"},
+      "description":"Tokyo has been decimated by a terrorist attack, the only clue to the culprit's identity is a bizarre internet video. Two mysterious children form Sphinx, a clandestine entity determined to pull the trigger on this world.",
+      "userRating":"7.8","userRatingCount":"11776","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNjdhYzY0M2QtODgwZi00NDg2LTliNDQtMzA4ZTMzMzQ0MGEyXkEyXkFqcGdeQXVyMTA3OTEyODI1._V1_UY209_CR4,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt3613454"},
   "related":{"Cast:":{"nm5481013":{"uniqueId":"nm5481013","title":"Kaito Ishikawa","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm5481013"},"related":{}},
       "nm6160361":{"uniqueId":"nm6160361","title":"Sôma Saitô","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm6160361"},"related":{}},
       "nm6662487":{"uniqueId":"nm6662487","title":"Atsumi Tanezaki","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm6662487"},"related":{}},
@@ -498,7 +546,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt4602066","bestSource":"DataSourceType.imdbKeywords","title":"The Catcher Was a Spy","type":"MovieContentType.title","year":"2018","yearRange":"2018","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Former Major League Baseball player Moe Berg goes undercover in World War II Europe for the Office of Strategic Services.","userRatingCount":"10130","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BODhlNDc0ZTQtN2FiOS00OGRiLWE2YmYtZmI2ZmU1NzM5MmJlXkEyXkFqcGdeQXVyODY3Nzc0OTk@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt4602066"},
+      "description":"Former Major League Baseball player Moe Berg goes undercover in World War II Europe for the Office of Strategic Services.",
+      "userRating":"6.2","userRatingCount":"10148","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BODhlNDc0ZTQtN2FiOS00OGRiLWE2YmYtZmI2ZmU1NzM5MmJlXkEyXkFqcGdeQXVyODY3Nzc0OTk@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt4602066"},
   "related":{"Directed by:":{"nm0506802":{"uniqueId":"nm0506802","title":"Ben Lewin","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0506802"},"related":{}}},
     "Cast:":{"nm0748620":{"uniqueId":"nm0748620","title":"Paul Rudd","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0748620"},"related":{}},
       "nm0269419":{"uniqueId":"nm0269419","title":"Pierfrancesco Favino","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0269419"},"related":{}},
@@ -508,7 +557,8 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt6160448","bestSource":"DataSourceType.imdbKeywords","title":"White Noise","type":"MovieContentType.title","yearRange":"I 2022","languages":"[]","genres":"[]",
       "keywords":"[\"enigma\"]",
-      "description":"Dramatizes a contemporary American family's attempts to deal with the mundane conflicts of everyday life while grappling with the universal mysteries of love, death, and the possibility of happiness in an uncertain world.","userRatingCount":"32324","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMDdmYjc3Y2EtM2FjYS00NGI2LTliZjgtYmQxMzJiMmUxNmI4XkEyXkFqcGdeQXVyNjY1MTg4Mzc@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt6160448"},
+      "description":"Dramatizes a contemporary American family's attempts to deal with the mundane conflicts of everyday life while grappling with the universal mysteries of love, death, and the possibility of happiness in an uncertain world.",
+      "userRating":"5.7","userRatingCount":"34528","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BMDdmYjc3Y2EtM2FjYS00NGI2LTliZjgtYmQxMzJiMmUxNmI4XkEyXkFqcGdeQXVyNjY1MTg4Mzc@._V1_UY209_CR0,0,140,209_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt6160448"},
   "related":{"Directed by:":{"nm0000876":{"uniqueId":"nm0000876","title":"Noah Baumbach","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0000876"},"related":{}}},
     "Cast:":{"nm3485845":{"uniqueId":"nm3485845","title":"Adam Driver","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm3485845"},"related":{}},
       "nm1950086":{"uniqueId":"nm1950086","title":"Greta Gerwig","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm1950086"},"related":{}},
