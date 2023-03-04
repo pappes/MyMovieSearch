@@ -38,7 +38,10 @@ void main() {
 
     // Confirm dto criteria is displayed as expected.
     test('Run myFormatInputAsText() for encoded keyword', () {
-      const expectedKeyword = 'testing';
+      const expectedKeyword = '''
+testing and punctuation 
+'' "" <> {} [] Tabs -> 			<-
+      ''';
       const expectedPage = 200;
       const expectedUrl = 'http://somewhere';
 
