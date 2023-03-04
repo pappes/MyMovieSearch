@@ -26,13 +26,36 @@ void main() {
       expect(QueryIMDBKeywords().myDataSourceName(), 'imdbKeywords');
     });
 
-    // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
+    // Confirm simple criteria is displayed as expected.
+    test('Run myFormatInputAsText() for simple keyword', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
         QueryIMDBKeywords().myFormatInputAsText(input),
         'testing',
+      );
+    });
+
+    // Confirm dto criteria is displayed as expected.
+    test('Run myFormatInputAsText() for encoded keyword', () {
+      const expectedKeyword = 'testing';
+      const expectedPage = 200;
+      const expectedUrl = 'http://somewhere';
+
+      final input = SearchCriteriaDTO();
+      final jsonText = QueryIMDBKeywords.encodeJson(
+        expectedKeyword,
+        expectedPage.toString(),
+        expectedUrl,
+      );
+      input.criteriaList.add(MovieResultDTO().init(description: jsonText));
+      expect(
+        QueryIMDBKeywords().myFormatInputAsText(input),
+        expectedKeyword,
+      );
+      expect(
+        QueryIMDBKeywords().myGetPageNumber(input),
+        expectedPage,
       );
     });
 

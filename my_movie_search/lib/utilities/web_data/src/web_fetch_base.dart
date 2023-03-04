@@ -226,12 +226,20 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should be overridden by child classes.
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1});
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts [criteria] as a string representation.
   ///
   /// Can be overridden by child classes.
   /// If this is blank the query will not run!
-  String myFormatInputAsText(INPUT_TYPE? contents) {
-    return contents?.toString() ?? '';
+  String myFormatInputAsText(INPUT_TYPE? criteria) {
+    return criteria?.toString() ?? '';
+  }
+
+  /// Extracts page number from [criteria]
+  ///
+  /// Can be overridden by child classes.
+  /// If this is blank the query will not run!
+  int myGetPageNumber(INPUT_TYPE? criteria) {
+    return 1;
   }
 
   /// Define the http headers to be passed to the web server.
@@ -477,10 +485,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     HttpClientResponse response;
 
     try {
+      criteria as INPUT_TYPE;
       final encoded = Uri.encodeQueryComponent(
-        myFormatInputAsText(criteria as INPUT_TYPE),
+        myFormatInputAsText(criteria),
       );
-      address = myConstructURI(encoded);
+      address = myConstructURI(encoded, pageNumber: myGetPageNumber(criteria));
+
       logger.v('requesting: $address');
       final client = await myGetHttpClient().getUrl(address);
       myConstructHeaders(client.headers);

@@ -9,6 +9,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/imdb_keywords.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const keywordId = 'id';
@@ -220,13 +221,16 @@ mixin ScrapeIMDBKeywordsDetails
     final baseURL = myConstructURI(keyword);
     final String extraURL = next.attributes['href'] ?? '';
     final fullUrl = Uri.parse('$baseURL${extraURL.replaceAll('?', '&')}');
-    final pageNumber = fullUrl.queryParameters['page'];
+    final pageNumber = fullUrl.queryParameters['page'] ?? '1';
     return {
       keywordId: fullUrl.toString(),
       keywordName: next.text,
       keywordKeywords: keyword,
-      keywordDescription:
-          '{"keyword":$keyword, "page":$pageNumber, "url":$fullUrl}',
+      keywordDescription: QueryIMDBKeywords.encodeJson(
+        keyword,
+        pageNumber,
+        fullUrl.toString(),
+      ),
     };
   }
 }
