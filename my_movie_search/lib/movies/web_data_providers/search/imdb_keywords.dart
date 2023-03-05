@@ -46,19 +46,6 @@ class QueryIMDBKeywords extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
 
-  String _getCriteriaJsonValue(dynamic criteria, String key) {
-    try {
-      criteria as SearchCriteriaDTO;
-
-      final jsonText = criteria.criteriaList.first.description;
-      if (jsonText.isNotEmpty) {
-        final map = jsonDecode(jsonText) as Map;
-        return map[key] as String;
-      }
-    } catch (_) {}
-    return '';
-  }
-
   /// Extract plain text or dto encoded keyword.
   @override
   String myFormatInputAsText(dynamic contents) {
@@ -90,11 +77,33 @@ class QueryIMDBKeywords extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     return Uri.parse(url);
   }
 
+  static String _getCriteriaJsonValue(dynamic criteria, String key) {
+    try {
+      criteria as SearchCriteriaDTO;
+
+      final jsonText = criteria.criteriaList.first.description;
+      if (jsonText.isNotEmpty) {
+        final map = jsonDecode(jsonText) as Map;
+        return map[key] as String;
+      }
+    } catch (_) {}
+    return '';
+  }
+
   static String encodeJson(String keyword, String pageNumber, String url) {
-    return '{'
+    final jsonText = '{'
         ' "$jsonKeywordKey":${json.encode(keyword)},'
         ' "$jsonPageKey":${json.encode(pageNumber)},'
         ' "url":${json.encode(url)}'
         '}';
+    return jsonText;
+  }
+
+  static SearchCriteriaDTO convertMovieDtoToCriteriaDto(MovieResultDTO card) {
+    final criteria =
+        SearchCriteriaDTO().init(SearchCriteriaSource.movieKeyword);
+    criteria.criteriaList.add(card);
+    criteria.criteriaTitle = _getCriteriaJsonValue(criteria, jsonKeywordKey);
+    return criteria;
   }
 }

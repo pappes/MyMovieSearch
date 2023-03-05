@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as tabs;
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/movie_details.dart';
@@ -9,6 +10,7 @@ import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
 import 'package:my_movie_search/movies/screens/popup.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/imdb_keywords.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 void _invokeChromeCustomTabs(String url, BuildContext context) {
@@ -71,10 +73,12 @@ MaterialPageRoute<dynamic> getRoute(
   MovieResultDTO movie,
 ) {
   if (movie.uniqueId.startsWith(imdbPersonPrefix)) {
+    // Open person details.
     return MaterialPageRoute(
       builder: (context) => PersonDetailsPage(person: movie),
     );
   } else {
+    // Open Movie details.
     return MaterialPageRoute(
       builder: (context) => MovieDetailsPage(movie: movie),
     );
@@ -89,8 +93,10 @@ void searchForRelated(
   BuildContext context,
 ) {
   if (movies.length == 1) {
+    // Only one result so open details screen.
     Navigator.push(context, getRoute(context, movies[0]));
   } else {
+    // Multiple results so show them as individual cards.
     final criteria =
         SearchCriteriaDTO().init(SearchCriteriaSource.movieDTOList);
     criteria.criteriaList.addAll(movies);
@@ -110,6 +116,7 @@ void searchForKeyword(
   String keyword,
   BuildContext context,
 ) {
+  // Fetch first batch of movies that match the keyword.
   final criteria = SearchCriteriaDTO().init(SearchCriteriaSource.movieKeyword);
   criteria.criteriaTitle = keyword;
   Navigator.push(
@@ -118,4 +125,30 @@ void searchForKeyword(
       builder: (context) => MovieSearchResultsNewPage(criteria: criteria),
     ),
   );
+}
+
+/// Display more details for the selected card.
+///
+void resultDrillDown(
+  MovieResultDTO movie,
+  BuildContext context,
+) {
+  if (movie.sources.containsKey(DataSourceType.imdbKeywords) &&
+      movie.uniqueId.startsWith('http')) {
+    // Search for next batch of movies that match the keyword.
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => MovieSearchResultsNewPage(
+          criteria: QueryIMDBKeywords.convertMovieDtoToCriteriaDto(movie),
+        ),
+      ),
+    );
+  } else {
+    // Show details screen (movie details or person details)
+    Navigator.push(
+      context,
+      getRoute(context, movie),
+    );
+  }
 }
