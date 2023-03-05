@@ -58,7 +58,7 @@ class TmdbMovieDetailConverter {
     } else {
       final error = MovieResultDTO();
       error.title = map[outerElementFailureReason]?.toString() ??
-          'No failure reason provided in results ${map.toString()}';
+          'No failure reason provided in results $map';
       searchResults.add(error);
     }
     return searchResults;

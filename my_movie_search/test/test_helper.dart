@@ -15,9 +15,11 @@ void printTestData(
   bool excludeCopyrightedData = false,
 }) {
   // ignore: avoid_print
-  print(actualResult.toListOfDartJsonStrings(
-    excludeCopyrightedData: excludeCopyrightedData,
-  ));
+  print(
+    actualResult.toListOfDartJsonStrings(
+      excludeCopyrightedData: excludeCopyrightedData,
+    ),
+  );
   expect('must be commented out', 'all call to printTestData');
 }
 

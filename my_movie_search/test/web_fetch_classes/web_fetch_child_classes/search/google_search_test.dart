@@ -192,7 +192,7 @@ void main() {
           .then((values) => queryResult.addAll(values))
           .onError(
             // ignore: avoid_print
-            (error, stackTrace) => print('$error, ${stackTrace.toString()}'),
+            (error, stackTrace) => print('$error, $stackTrace'),
           );
 
       // Check the results.

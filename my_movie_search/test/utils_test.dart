@@ -586,7 +586,7 @@ Future main() async {
       /// Convert JSON [input] to a [List] of [String] and compare to [expectedOutput]
       void testFromJson(String? input, List<String> expectedOutput) {
         final actual = StringIterableHelper.fromJson(input);
-        expect(actual, expectedOutput, reason: 'input ${input.toString()}');
+        expect(actual, expectedOutput, reason: 'input $input');
       }
 
       //Convert a JSON encoded array to List<String>
@@ -637,7 +637,7 @@ Future main() async {
         expect(
           input1,
           expectedOutput,
-          reason: 'input ${input1.toString()},  ${input2.toString()}',
+          reason: 'input $input1,  $input2',
         );
       }
 

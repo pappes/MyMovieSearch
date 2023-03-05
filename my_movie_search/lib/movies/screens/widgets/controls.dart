@@ -23,7 +23,6 @@ class Poster extends Widget {
     Key? key,
   }) : super(key: key) {
     urlText = SelectableText(url, style: tinyFont);
-    print(url);
     controls = makeControls();
   }
 

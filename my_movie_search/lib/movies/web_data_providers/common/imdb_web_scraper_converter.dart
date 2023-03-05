@@ -361,7 +361,7 @@ class ImdbWebScraperConverter {
       );
       if (names is List && names.isNotEmpty) {
         dto.alternateTitle = ' ${dto.alternateTitle}';
-        dto.charactorName = ' ${names.toString()}';
+        dto.charactorName = ' $names';
       }
     }
   }

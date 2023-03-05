@@ -250,8 +250,7 @@ void main() {
       final testClass = QueryIMDBNameDetails();
       testClass.clearThreadedCache();
       for (var iteration = 0; iteration < 100; iteration++) {
-        final criteria =
-            SearchCriteriaDTO().fromString('nm${iteration.toString()}');
+        final criteria = SearchCriteriaDTO().fromString('nm$iteration');
         // Enqueue requests but do not wait for result.
         testClass.readPrioritisedCachedList(
           criteria,
@@ -349,7 +348,7 @@ void main() {
           .then((values) => queryResult.addAll(values))
           .onError(
             // ignore: avoid_print
-            (error, stackTrace) => print('$error, ${stackTrace.toString()}'),
+            (error, stackTrace) => print('$error, $stackTrace'),
           );
 
       // Check the results.

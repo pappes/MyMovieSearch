@@ -69,7 +69,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   }) {
     void errorHandler(error, stackTrace) {
       logger.e(
-        'Error in WebFetch populate: $error\n${stackTrace.toString()}',
+        'Error in WebFetch populate: $error\n$stackTrace',
       );
       sc.add(myYieldError(error.toString()));
     }
@@ -295,7 +295,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       yield* baseConvertTreeToOutputType(criteria, map);
     } catch (error) {
       final errorMessage = baseConstructErrorMessage(
-        'transform ${criteria.toString()} to resulting object',
+        'transform ${myFormatInputAsText(criteria)} to resulting object',
         error,
       );
       yield myYieldError(errorMessage);

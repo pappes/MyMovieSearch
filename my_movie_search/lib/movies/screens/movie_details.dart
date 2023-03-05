@@ -129,7 +129,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             if (_movie.yearRange.isEmpty)
-              Text('Year: ${_movie.year.toString()}')
+              Text('Year: ${_movie.year}')
             else
               Text('Year Range: ${_movie.yearRange}'),
             Align(
@@ -199,7 +199,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       children: <Widget>[
         Text('Type: ${_movie.type.name}'),
         Text(
-          'User Rating: ${_movie.userRating.toString()} '
+          'User Rating: ${_movie.userRating} '
           '(${formatter.format(_movie.userRatingCount)})',
         ),
         Wrap(
@@ -245,8 +245,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         _movie.description,
         style: biggerFont,
       ),
-      Text('Languages: ${_movie.languages.toString()}'),
-      Text('Genres: ${_movie.genres.toString()}'),
+      Text('Languages: ${_movie.languages}'),
+      Text('Genres: ${_movie.genres}'),
       keywords(),
     ];
   }
@@ -282,7 +282,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   }
 
   List<Widget> related(RegExp filter, {bool invertFilter = false}) {
-    bool testFilter(String text, RegExp filter, bool invertFilter) {
+    bool filterIncludes(String text) {
       if (invertFilter && !filter.hasMatch(text)) return true;
       if (!invertFilter && filter.hasMatch(text)) return true;
       return false;
@@ -290,7 +290,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
     final categories = <Widget>[];
     for (final category in _movie.related.entries) {
-      if (testFilter(category.key, filter, invertFilter)) {
+      if (filterIncludes(category.key)) {
         final rolesMap = category.value;
         final rolesLabel = category.key;
         final description = rolesMap.toShortString();

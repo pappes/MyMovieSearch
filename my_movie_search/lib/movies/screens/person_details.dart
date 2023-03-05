@@ -130,7 +130,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             if (_person.yearRange.isEmpty)
-              Text('Born: ${_person.year.toString()}')
+              Text('Born: ${_person.year}')
             else
               Text('Lifespan: ${_person.yearRange}'),
           ],

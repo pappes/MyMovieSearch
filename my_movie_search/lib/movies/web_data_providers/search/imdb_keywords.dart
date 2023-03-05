@@ -72,7 +72,7 @@ class QueryIMDBKeywords extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   /// API call to IMDB keywords returning the top matching results for [keywordsText].
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
-    searchResultsLimit = WebFetchLimiter(100);
+    searchResultsLimit = WebFetchLimiter(55);
     final url = '$_baseURL$encodedCriteria$_pageURL$pageNumber';
     return Uri.parse(url);
   }

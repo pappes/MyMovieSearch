@@ -129,6 +129,10 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     if (SearchCriteriaSource.movieDTOList == widget.criteria.criteriaSource) {
       hidePersonType = true;
     }
-    return MovieTile(context, _sortedList[listIndex], hidePersonType);
+    return MovieTile(
+      context,
+      _sortedList[listIndex],
+      hidePersonType: hidePersonType,
+    );
   }
 }

@@ -37,7 +37,7 @@ void main() {
       expect(
         actualOutput.toString(),
         expectedOutput,
-        reason: 'input:$lines decoder:${decoder.toString()}',
+        reason: 'input:$lines decoder:$decoder',
       );
     }
 

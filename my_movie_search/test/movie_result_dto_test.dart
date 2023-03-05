@@ -241,7 +241,11 @@ void main() {
       const bool verbose = false;
       expect(matcher.matches(dtoActual, matchState), false);
       matcher.describeMismatch(
-          dtoExpected, mismatchDescription, matchState, verbose);
+        dtoExpected,
+        mismatchDescription,
+        matchState,
+        verbose,
+      );
 
       expect(mismatchDescription.toString(), expectedError);
     });

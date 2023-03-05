@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart'
-    show Widget, Text, ListTile, BuildContext, Navigator, Image, NetworkImage;
+    show Widget, Text, ListTile, BuildContext, Image, NetworkImage;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
@@ -7,8 +7,11 @@ import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieTile extends ListTile {
-  MovieTile(BuildContext context, MovieResultDTO movie, bool hidePersonType)
-      : super(
+  MovieTile(
+    BuildContext context,
+    MovieResultDTO movie, {
+    bool hidePersonType = false,
+  }) : super(
           leading: _getImage(movie.imageUrl),
           title: _getTitle(movie),
           subtitle: _getDescription(movie, hidePersonType),

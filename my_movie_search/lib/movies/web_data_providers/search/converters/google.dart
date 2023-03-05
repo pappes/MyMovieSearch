@@ -56,8 +56,7 @@ class GoogleMovieSearchConverter {
       }
     } catch (e) {
       final error = MovieResultDTO();
-      error.title =
-          'Unknown google error - potential API change! $e ${map.toString()}';
+      error.title = 'Unknown google error - potential API change! $e $map';
       logger.e(error.title);
 
       searchResults.add(error);
@@ -74,9 +73,9 @@ class GoogleMovieSearchConverter {
       error.title = resultsError[innerElementErrorFailureReason]?.toString() ??
           'No failure reason provided in results';
     } else {
-      error.title = 'Google found no matching results ${map.toString()}';
+      error.title = 'Google found no matching results $map';
     }
-    error.title += ' ${map.toString()}';
+    error.title += ' $map';
     return [error];
   }
 

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -286,7 +284,7 @@ void main() {
           .then((values) => queryResult.addAll(values))
           .onError(
             // ignore: avoid_print
-            (error, stackTrace) => print('$error, ${stackTrace.toString()}'),
+            (error, stackTrace) => print('$error, $stackTrace'),
           );
 
       // Check the results.

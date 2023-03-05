@@ -19,7 +19,7 @@ extension StreamHelper<T> on Stream<T> {
       }
       logger.i('$prefix done');
     } catch (error, stackTrace) {
-      logger.i('$prefix ERR: ${error.toString()}');
+      logger.i('$prefix ERR: $error');
       yield* Stream.error(error, stackTrace);
     }
   }
@@ -42,7 +42,7 @@ extension FutureStreamHelper<T> on Future<Stream<T>?> {
       logger.w('$prefix Unexpected data type: $datatype');
       return Stream<T>.empty();
     } catch (error) {
-      logger.w('$prefix EXCEPTION: ${error.toString()}');
+      logger.w('$prefix EXCEPTION: $error');
       rethrow;
     }
   }

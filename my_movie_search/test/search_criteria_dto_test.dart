@@ -55,9 +55,6 @@ void main() {
       SearchCriteriaDTO expected,
       Map<String, String> map,
     ) {
-      // ignore: avoid_print
-      print(map.toString());
-
       final actual = map.toSearchCriteriaDTO();
 
       compareCriteria(expected, actual);
