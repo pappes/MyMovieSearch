@@ -14,6 +14,8 @@ Future<Stream<String>> _emitInvalidJsonPSample(dynamic dummy) {
   return Future.value(Stream.value('imdbJsonPFunction({not valid json})'));
 }
 
+final criteria = SearchCriteriaDTO().fromString('123');
+
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
@@ -22,7 +24,8 @@ void main() {
   group('imdb suggestions unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryIMDBSuggestions().myDataSourceName(), 'imdbSuggestions');
+      expect(
+          QueryIMDBSuggestions(criteria).myDataSourceName(), 'imdbSuggestions');
     });
 
     // Confirm criteria is displayed as expected.
@@ -30,8 +33,8 @@ void main() {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
-        QueryIMDBSuggestions().myFormatInputAsText(input),
-        'testing',
+        QueryIMDBSuggestions(criteria).myFormatInputAsText(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -43,11 +46,11 @@ void main() {
         MovieResultDTO().error('test2'),
       ];
       expect(
-        QueryIMDBSuggestions().myFormatInputAsText(input),
+        QueryIMDBSuggestions(input).myFormatInputAsText(),
         contains('test1'),
       );
       expect(
-        QueryIMDBSuggestions().myFormatInputAsText(input),
+        QueryIMDBSuggestions(input).myFormatInputAsText(),
         contains('test2'),
       );
     });
@@ -55,7 +58,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myTransformMapToOutput()', () {
       final expectedValue = expectedDTOList;
-      final imdbSuggestions = QueryIMDBSuggestions();
+      final imdbSuggestions = QueryIMDBSuggestions(criteria);
 
       // Invoke the functionality and collect results.
       final actualResult =
@@ -75,7 +78,7 @@ void main() {
 
       // Invoke the functionality.
       final actualResult =
-          QueryIMDBSuggestions().myConstructURI('new query').toString();
+          QueryIMDBSuggestions(criteria).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -93,7 +96,7 @@ void main() {
 
       // Invoke the functionality.
       final actualResult =
-          QueryIMDBSuggestions().myYieldError('new query').toMap();
+          QueryIMDBSuggestions(criteria).myYieldError('new query').toMap();
       // Exact id does not need to match as long as it is negative number
       actualResult['uniqueId'] =
           actualResult['uniqueId'].toString().substring(0, 1);
@@ -112,12 +115,11 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final imdbSuggestions = QueryIMDBSuggestions();
+      final imdbSuggestions = QueryIMDBSuggestions(criteria);
 
       // Invoke the functionality.
       await imdbSuggestions
           .readList(
-            SearchCriteriaDTO().fromString('123'),
             source: emitImdbSuggestionJsonPSample,
           )
           .then((values) => queryResult.addAll(values))
@@ -139,7 +141,7 @@ void main() {
     test('invalid jsonp', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final imdbSuggestions = QueryIMDBSuggestions();
+      final imdbSuggestions = QueryIMDBSuggestions(criteria);
       const expectedException = '''
 [QueryIMDBSuggestions] Error in imdbSuggestions with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 2)
 {not valid json}
@@ -149,7 +151,6 @@ void main() {
       // Invoke the functionality.
       await imdbSuggestions
           .readList(
-            SearchCriteriaDTO().fromString('123'),
             source: _emitInvalidJsonPSample,
           )
           .then((values) => queryResult.addAll(values));
@@ -164,12 +165,11 @@ void main() {
           'with criteria 123 translating page map to objects '
           ':expected map got Null unable to interpret data null';
       final queryResult = <MovieResultDTO>[];
-      final imdbSuggestions = QueryIMDBSuggestions();
+      final imdbSuggestions = QueryIMDBSuggestions(criteria);
 
       // Invoke the functionality.
       await imdbSuggestions
           .readList(
-            SearchCriteriaDTO().fromString('123'),
             source: _emitUnexpectedJsonPSample,
           )
           .then((values) => queryResult.addAll(values));

@@ -64,8 +64,7 @@ void main() {
     test('Run a search on IMDB that is likely to have static results',
         () async {
       final criteria = SearchCriteriaDTO().fromString('rize');
-      final actualOutput =
-          await QueryIMDBSearch().readList(criteria, limit: 10);
+      final actualOutput = await QueryIMDBSearch(criteria).readList(limit: 10);
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
       final expectedOutput = expectedDTOList;
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));

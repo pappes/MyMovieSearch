@@ -41,7 +41,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     });
   }
 
-  final BaseMovieRepository movieRepository;
+  BaseMovieRepository movieRepository;
   StreamSubscription<MovieResultDTO>? _searchStatusSubscription;
   final MovieCollection _allResults = {};
   List<MovieResultDTO> sortedResults = [];

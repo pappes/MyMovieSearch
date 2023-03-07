@@ -12,23 +12,20 @@ mixin ThreadedCacheIMDBTitleDetails
 
   /// Check cache to see if data has already been fetched.
   @override
-  bool myIsResultCached(SearchCriteriaDTO criteria) {
+  bool myIsResultCached() {
     return _cache.isCached(_makeKey(criteria));
   }
 
   /// Check cache to see if data in cache should be refreshed.
   @override
-  bool myIsCacheStale(SearchCriteriaDTO criteria) {
+  bool myIsCacheStale() {
     return false;
     //return _cache.isCached(criteria.criteriaTitle);
   }
 
   /// Insert transformed data into cache.
   @override
-  Future<void> myAddResultToCache(
-    SearchCriteriaDTO criteria,
-    MovieResultDTO fetchedResult,
-  ) async {
+  Future<void> myAddResultToCache(MovieResultDTO fetchedResult) async {
     // add individual result to cache, keyed by uniqueId
     final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
     _cache.add(key, fetchedResult);
@@ -38,9 +35,7 @@ mixin ThreadedCacheIMDBTitleDetails
 
   /// Retrieve cached result.
   @override
-  List<MovieResultDTO> myFetchResultFromCache(
-    SearchCriteriaDTO criteria,
-  ) {
+  List<MovieResultDTO> myFetchResultFromCache() {
     final value = _cache.get(_makeKey(criteria));
     return value;
     // TODO: treat value as a list not as a single DTO

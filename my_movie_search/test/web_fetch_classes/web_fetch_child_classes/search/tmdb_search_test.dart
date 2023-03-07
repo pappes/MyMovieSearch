@@ -16,6 +16,8 @@ Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
   return Future.value(Stream.value('not valid json'));
 }
 
+final criteria = SearchCriteriaDTO().fromString('123');
+
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => Settings.singleton().init());
@@ -26,16 +28,14 @@ void main() {
   group('tmdb search unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryTMDBMovies().myDataSourceName(), 'tmdbSearch');
+      expect(QueryTMDBMovies(criteria).myDataSourceName(), 'tmdbSearch');
     });
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'testing';
       expect(
-        QueryTMDBMovies().myFormatInputAsText(input),
-        'testing',
+        QueryTMDBMovies(criteria).myFormatInputAsText(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -47,11 +47,11 @@ void main() {
         MovieResultDTO().error('test2'),
       ];
       expect(
-        QueryTMDBMovies().myFormatInputAsText(input),
+        QueryTMDBMovies(input).myFormatInputAsText(),
         contains('test1'),
       );
       expect(
-        QueryTMDBMovies().myFormatInputAsText(input),
+        QueryTMDBMovies(input).myFormatInputAsText(),
         contains('test2'),
       );
     });
@@ -66,7 +66,8 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryTMDBMovies().myYieldError('new query').toMap();
+      final actualResult =
+          QueryTMDBMovies(criteria).myYieldError('new query').toMap();
       actualResult.remove('uniqueId');
 
       // Check the results.
@@ -75,7 +76,8 @@ void main() {
     // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
-      final actualOutput = QueryTMDBMovies().myConvertWebTextToTraversableTree(
+      final actualOutput =
+          QueryTMDBMovies(criteria).myConvertWebTextToTraversableTree(
         tmdbJsonSearchFull,
       );
       expect(actualOutput, completion(expectedOutput));
@@ -120,7 +122,7 @@ void main() {
 
       // Invoke the functionality.
       final actualResult =
-          QueryTMDBMovies().myConstructURI('new query').toString();
+          QueryTMDBMovies(criteria).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, startsWith(expectedResult1));
@@ -135,7 +137,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final expectedValue = expectedDTOList;
-      final testClass = QueryTMDBMovies();
+      final testClass = QueryTMDBMovies(criteria);
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -155,7 +157,7 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final testClass = QueryTMDBMovies();
+      final testClass = QueryTMDBMovies(criteria);
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -179,12 +181,11 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBMovies();
+      final testClass = QueryTMDBMovies(criteria);
 
       // Invoke the functionality.
       await testClass
           .readList(
-            SearchCriteriaDTO().fromString('123'),
             source: streamTmdbJsonOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -206,7 +207,7 @@ void main() {
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBMovies();
+      final testClass = QueryTMDBMovies(criteria);
       const expectedException = '''
 [QueryTMDBMovies] Error in tmdbSearch with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
@@ -216,7 +217,6 @@ not valid json
       // Invoke the functionality.
       await testClass
           .readList(
-            SearchCriteriaDTO().fromString('123'),
             source: _emitInvalidJsonSample,
           )
           .then((values) => queryResult.addAll(values));
@@ -230,12 +230,11 @@ not valid json
           'with criteria 123 translating page map to objects '
           ':expected map got List<dynamic> unable to interpret data [{hello: world}]';
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBMovies();
+      final testClass = QueryTMDBMovies(criteria);
 
       // Invoke the functionality.
       await testClass
           .readList(
-            SearchCriteriaDTO().fromString('123'),
             source: _emitUnexpectedJsonSample,
           )
           .then((values) => queryResult.addAll(values));

@@ -33,6 +33,8 @@ Future<Stream<String>> _emitEmtpyJsonSample(dynamic dummy) {
   return Future.value(Stream.value(emptyJson));
 }
 
+final criteria = SearchCriteriaDTO().fromString('123');
+
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
@@ -41,16 +43,14 @@ void main() {
   group('imdb search unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryIMDBSearch().myDataSourceName(), 'imdbSearch');
+      expect(QueryIMDBSearch(criteria).myDataSourceName(), 'imdbSearch');
     });
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'testing';
       expect(
-        QueryIMDBSearch().myFormatInputAsText(input),
-        'testing',
+        QueryIMDBSearch(criteria).myFormatInputAsText(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -62,11 +62,11 @@ void main() {
         MovieResultDTO().error('test2'),
       ];
       expect(
-        QueryIMDBSearch().myFormatInputAsText(input),
+        QueryIMDBSearch(input).myFormatInputAsText(),
         contains('test1'),
       );
       expect(
-        QueryIMDBSearch().myFormatInputAsText(input),
+        QueryIMDBSearch(input).myFormatInputAsText(),
         contains('test2'),
       );
     });
@@ -78,7 +78,7 @@ void main() {
 
       // Invoke the functionality.
       final actualResult =
-          QueryIMDBSearch().myConstructURI('new query').toString();
+          QueryIMDBSearch(criteria).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -94,7 +94,8 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryIMDBSearch().myYieldError('new query').toMap();
+      final actualResult =
+          QueryIMDBSearch(criteria).myYieldError('new query').toMap();
       actualResult.remove('uniqueId');
 
       // Check the results.
@@ -102,7 +103,8 @@ void main() {
     });
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final actualOutput = QueryIMDBSearch().myConvertWebTextToTraversableTree(
+      final actualOutput =
+          QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
         imdbSearchHtmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
@@ -142,7 +144,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final expectedValue = expectedDTOList;
-      final imdbSearch = QueryIMDBSearch();
+      final imdbSearch = QueryIMDBSearch(criteria);
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -162,7 +164,7 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final imdbSearch = QueryIMDBSearch();
+      final imdbSearch = QueryIMDBSearch(criteria);
 
       // Invoke the functionality and collect results.
       final actualResult = imdbSearch.myConvertTreeToOutputType('map');
@@ -186,12 +188,11 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final imdbSearch = QueryIMDBSearch();
+      final imdbSearch = QueryIMDBSearch(criteria);
 
       // Invoke the functionality.
       await imdbSearch
           .readList(
-            SearchCriteriaDTO().fromString('123'),
             source: streamImdbSearchHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -213,7 +214,7 @@ void main() {
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final imdbSearch = QueryIMDBSearch();
+      final imdbSearch = QueryIMDBSearch(criteria);
       const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
           'with criteria 123 interpreting web text as a map '
           ':No search results found in html:not valid html';
@@ -221,7 +222,6 @@ void main() {
       // Invoke the functionality.
       await imdbSearch
           .readList(
-            SearchCriteriaDTO().fromString('123'),
             source: _emitInvalidHtmlSample,
           )
           .then((values) => queryResult.addAll(values));
@@ -235,12 +235,11 @@ void main() {
           'with criteria 123 interpreting web text as a map '
           ':No search results found in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
-      final imdbSearch = QueryIMDBSearch();
+      final imdbSearch = QueryIMDBSearch(criteria);
 
       // Invoke the functionality.
       await imdbSearch
           .readList(
-            SearchCriteriaDTO().fromString('123'),
             source: _emitUnexpectedHtmlSample,
           )
           .then((values) => queryResult.addAll(values));
@@ -258,12 +257,11 @@ void main() {
         ':Possible IMDB site update, no search result found for search query, '
         'json contents:[{found: [{id: nm0152436, displayNameText:';
     final queryResult = <MovieResultDTO>[];
-    final imdbSearch = QueryIMDBSearch();
+    final imdbSearch = QueryIMDBSearch(criteria);
 
     // Invoke the functionality.
     await imdbSearch
         .readList(
-          SearchCriteriaDTO().fromString('123'),
           source: _emitUnexpectedJsonSample,
         )
         .then((values) => queryResult.addAll(values));
@@ -279,12 +277,11 @@ void main() {
         'with criteria 123 interpreting web text as a map '
         ':No search results found in json:{}';
     final queryResult = <MovieResultDTO>[];
-    final imdbSearch = QueryIMDBSearch();
+    final imdbSearch = QueryIMDBSearch(criteria);
 
     // Invoke the functionality.
     await imdbSearch
         .readList(
-          SearchCriteriaDTO().fromString('123'),
           source: _emitEmtpyJsonSample,
         )
         .then((values) => queryResult.addAll(values));
@@ -301,8 +298,7 @@ void main() {
     test('Run QueryIMDBTitleDetails myConvertWebTextToTraversableTree()', () {
       const expectedOutput = title_data.intermediateMapList;
 
-      final imdbSearch = QueryIMDBSearch();
-      imdbSearch.criteria = SearchCriteriaDTO().fromString('tt7602562');
+      final imdbSearch = QueryIMDBSearch(criteria);
       final actualOutput = imdbSearch.myConvertWebTextToTraversableTree(
         title_data.imdbHtmlSampleFull,
       );
@@ -316,7 +312,7 @@ void main() {
       // Set up the test data.
       final expectedValue = title_data.expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final imdbSearch = QueryIMDBSearch();
+      final imdbSearch = QueryIMDBSearch(criteria);
 
       // steal expectedValue from imdb_name test data but source is really imdbSearch
       expectedValue[0].setSource(newSource: DataSourceType.imdbSearch);
@@ -324,7 +320,6 @@ void main() {
       // Invoke the functionality.
       await imdbSearch
           .readList(
-            SearchCriteriaDTO().fromString('tt7602562'),
             source: title_data.streamImdbHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -346,8 +341,7 @@ void main() {
         () async {
       const expectedOutput = person_data.intermediateMapList;
 
-      final imdbSearch = QueryIMDBSearch();
-      imdbSearch.criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final imdbSearch = QueryIMDBSearch(criteria);
       final actualOutput = imdbSearch.myConvertWebTextToTraversableTree(
         person_data.imdbHtmlSampleFull,
       );
@@ -360,7 +354,7 @@ void main() {
       // Set up the test data.
       final expectedValue = person_data.expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final imdbSearch = QueryIMDBSearch();
+      final imdbSearch = QueryIMDBSearch(criteria);
 
       // steal expectedValue from imdb_name test data but source is really imdbSearch
       expectedValue[0].setSource(newSource: DataSourceType.imdbSearch);
@@ -368,7 +362,6 @@ void main() {
       // Invoke the functionality.
       await imdbSearch
           .readList(
-            SearchCriteriaDTO().fromString('nm7602562'),
             source: person_data.streamImdbHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))

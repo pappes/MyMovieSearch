@@ -36,7 +36,7 @@ void main() {
     test('Run read 3 pages from Google', () async {
       final criteria = SearchCriteriaDTO().fromString('rize');
       final actualOutput =
-          await QueryGoogleMovies().readList(criteria, limit: 1000);
+          await QueryGoogleMovies(criteria).readList(limit: 1000);
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
       final expectedOutput = expectedDTOList;
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));

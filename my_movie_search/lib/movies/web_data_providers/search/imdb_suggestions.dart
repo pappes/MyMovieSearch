@@ -21,7 +21,7 @@ class QueryIMDBSuggestions
   static const defaultSearchResultsLimit = 10;
 
   /// Limit results to 10 most relevant by default.
-  QueryIMDBSuggestions() {
+  QueryIMDBSuggestions(SearchCriteriaDTO criteria) : super(criteria) {
     searchResultsLimit = WebFetchLimiter(defaultSearchResultsLimit);
     transformJsonP = true;
   }
@@ -37,10 +37,7 @@ class QueryIMDBSuggestions
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String myFormatInputAsText(dynamic contents) {
-    final criteria = contents as SearchCriteriaDTO;
-    return criteria.toPrintableString();
-  }
+  String myFormatInputAsText() => criteria.toPrintableString();
 
   /// Convert IMDB map to MovieResultDTO records.
   @override

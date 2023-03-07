@@ -1,6 +1,7 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_finder.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_finder.dart';
@@ -16,10 +17,11 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// QueryTMDBFinder().readList(criteria);
 /// ```
 class QueryTMDBFinder extends QueryTMDBCommon {
-  QueryTMDBFinder() {
+  QueryTMDBFinder(SearchCriteriaDTO criteria) : super(criteria) {
     baseURL = 'https://api.themoviedb.org/3/find/';
     midURL = '?language=en-US&external_source=imdb_id&api_key=';
     source = DataSourceType.tmdbFinder;
+    imdbId = criteria.criteriaTitle;
   }
   String imdbId = '';
 
@@ -30,8 +32,8 @@ class QueryTMDBFinder extends QueryTMDBCommon {
 
   /// converts <INPUT_TYPE> to a string representation if criteria is an IMDB id.
   @override
-  String myFormatInputAsText(dynamic contents) {
-    final text = super.myFormatInputAsText(contents);
+  String myFormatInputAsText() {
+    final text = super.myFormatInputAsText();
     if (text.startsWith(imdbPersonPrefix) || text.startsWith(imdbTitlePrefix)) {
       return text;
     }
@@ -56,7 +58,6 @@ class QueryTMDBFinder extends QueryTMDBCommon {
   /// API call to TMDB returning the movie details for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    imdbId = searchCriteria;
     return super.myConstructURI(searchCriteria, pageNumber: pageNumber);
   }
 }

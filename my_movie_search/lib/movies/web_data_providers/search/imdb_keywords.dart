@@ -24,6 +24,8 @@ class QueryIMDBKeywords extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
       'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=';
   static const _pageURL = '&page=';
 
+  QueryIMDBKeywords(SearchCriteriaDTO criteria) : super(criteria);
+
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
@@ -48,10 +50,9 @@ class QueryIMDBKeywords extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
 
   /// Extract plain text or dto encoded keyword.
   @override
-  String myFormatInputAsText(dynamic contents) {
-    String keyword = _getCriteriaJsonValue(contents, jsonKeywordKey);
+  String myFormatInputAsText() {
+    String keyword = _getCriteriaJsonValue(criteria, jsonKeywordKey);
     if (keyword.isEmpty) {
-      final criteria = contents as SearchCriteriaDTO;
       keyword = criteria.toPrintableString();
     }
     return keyword;
@@ -59,7 +60,7 @@ class QueryIMDBKeywords extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
 
   /// Extract page number from dto encoded data
   @override
-  int myGetPageNumber(dynamic criteria) =>
+  int myGetPageNumber() =>
       IntHelper.fromText(_getCriteriaJsonValue(criteria, jsonPageKey)) ?? 1;
 
   /// Include entire map in the movie title when an error occurs.
@@ -77,10 +78,8 @@ class QueryIMDBKeywords extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     return Uri.parse(url);
   }
 
-  static String _getCriteriaJsonValue(dynamic criteria, String key) {
+  static String _getCriteriaJsonValue(SearchCriteriaDTO criteria, String key) {
     try {
-      criteria as SearchCriteriaDTO;
-
       final jsonText = criteria.criteriaList.first.description;
       if (jsonText.isNotEmpty) {
         final map = jsonDecode(jsonText) as Map;
@@ -100,10 +99,11 @@ class QueryIMDBKeywords extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   }
 
   static SearchCriteriaDTO convertMovieDtoToCriteriaDto(MovieResultDTO card) {
-    final criteria =
+    final newCriteria =
         SearchCriteriaDTO().init(SearchCriteriaSource.movieKeyword);
-    criteria.criteriaList.add(card);
-    criteria.criteriaTitle = _getCriteriaJsonValue(criteria, jsonKeywordKey);
-    return criteria;
+    newCriteria.criteriaList.add(card);
+    newCriteria.criteriaTitle =
+        _getCriteriaJsonValue(newCriteria, jsonKeywordKey);
+    return newCriteria;
   }
 }

@@ -15,6 +15,8 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBSearchDetails {
   static const _baseURL = 'https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=';
 
+  QueryIMDBSearch(SearchCriteriaDTO criteria) : super(criteria);
+
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
@@ -40,10 +42,7 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String myFormatInputAsText(dynamic contents) {
-    final criteria = contents as SearchCriteriaDTO;
-    return criteria.toPrintableString();
-  }
+  String myFormatInputAsText() => criteria.toPrintableString();
 
   /// Include entire map in the movie title when an error occurs.
   @override

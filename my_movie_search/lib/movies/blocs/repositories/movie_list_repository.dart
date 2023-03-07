@@ -119,7 +119,7 @@ class MovieListRepository extends BaseMovieRepository {
     final tmdbId = _getTMDBId(dto);
     if (null != tmdbId) {
       final detailCriteria = SearchCriteriaDTO().fromString(tmdbId);
-      return QueryTMDBMovieDetails().readList(detailCriteria);
+      return QueryTMDBMovieDetails(detailCriteria).readList();
     }
     return Future.value(<MovieResultDTO>[]);
   }
@@ -131,7 +131,7 @@ class MovieListRepository extends BaseMovieRepository {
     final tmdbId = _getTMDBId(dto);
     if (null != tmdbId) {
       final detailCriteria = SearchCriteriaDTO().fromString(tmdbId);
-      return QueryTMDBPersonDetails().readList(detailCriteria);
+      return QueryTMDBPersonDetails(detailCriteria).readList();
     }
     return Future.value(<MovieResultDTO>[]);
   }
@@ -141,7 +141,7 @@ class MovieListRepository extends BaseMovieRepository {
     MovieResultDTO dto,
   ) {
     final detailCriteria = SearchCriteriaDTO().fromString(dto.uniqueId);
-    return QueryTMDBFinder().readList(detailCriteria);
+    return QueryTMDBFinder(detailCriteria).readList();
   }
 
   /// Add fetched tmbd movie details into the stream and search imdb.

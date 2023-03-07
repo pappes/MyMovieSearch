@@ -32,7 +32,9 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
   /// Returns a new [HttpClient] instance to allow mocking in tests.
   late int httpStatus;
   String? expectedCriteria;
-  QueryIMDBTitleDetailsMocked(this.expectedCriteria, {this.httpStatus = 200});
+  QueryIMDBTitleDetailsMocked(SearchCriteriaDTO criteria, this.expectedCriteria,
+      {this.httpStatus = 200})
+      : super(criteria);
 
   @override
   HttpClient myGetHttpClient() {
@@ -139,22 +141,19 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(
 ) {
   final List<Future<List<MovieResultDTO>>> futures = [];
   for (final queryKey in queries) {
-    final criteria = SearchCriteriaDTO();
+    final criteria = SearchCriteriaDTO().fromString(queryKey);
     final imdbDetails = simulateHTTP404
-        ? QueryIMDBTitleDetailsMocked(queryKey, httpStatus: 404)
+        ? QueryIMDBTitleDetailsMocked(criteria, queryKey, httpStatus: 404)
         : QueryIMDBTitleDetailsMocked(
+            criteria,
             queryKey,
           ); //Separate instance per search (async)
-    criteria.criteriaTitle = queryKey;
 
     Future<List<MovieResultDTO>> future;
     if (online) {
-      future = imdbDetails.readList(
-        criteria,
-      );
+      future = imdbDetails.readList();
     } else {
       future = imdbDetails.readList(
-        criteria,
         source: _offlineSearch,
       );
     }
@@ -178,7 +177,8 @@ void main() {
       bool forceError = false,
     }) async {
       // Clear any prior test results from the cache
-      QueryIMDBTitleDetailsMocked('').myClearCache();
+      final criteriaDto = SearchCriteriaDTO();
+      QueryIMDBTitleDetailsMocked(criteriaDto, '').myClearCache();
       // Call IMDB for each criteria in the list.
       final futures = _queueDetailSearch(criteria, online, forceError);
 

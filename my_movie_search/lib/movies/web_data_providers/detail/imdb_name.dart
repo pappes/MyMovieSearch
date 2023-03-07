@@ -19,6 +19,8 @@ class QueryIMDBNameDetails
   static const _baseURL = 'https://www.imdb.com/name/';
   static const defaultSearchResultsLimit = 100;
 
+  QueryIMDBNameDetails(SearchCriteriaDTO criteria) : super(criteria);
+
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
@@ -34,8 +36,7 @@ class QueryIMDBNameDetails
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String myFormatInputAsText(dynamic contents) {
-    final criteria = contents as SearchCriteriaDTO;
+  String myFormatInputAsText() {
     final text = criteria.toPrintableString();
     if (text.startsWith(imdbPersonPrefix)) {
       return text;

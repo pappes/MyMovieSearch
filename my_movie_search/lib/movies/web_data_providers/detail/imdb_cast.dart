@@ -18,6 +18,8 @@ class QueryIMDBCastDetails
   static const _baseURL = 'https://www.imdb.com/title/';
   static const _baseURLsuffix = '/fullcredits/';
 
+  QueryIMDBCastDetails(SearchCriteriaDTO criteria) : super(criteria);
+
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
@@ -25,9 +27,10 @@ class QueryIMDBCastDetails
   }
 
   @override
-  WebFetchBase<MovieResultDTO, SearchCriteriaDTO> myClone() {
-    return QueryIMDBCastDetails();
-  }
+  WebFetchBase<MovieResultDTO, SearchCriteriaDTO> myClone(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryIMDBCastDetails(criteria);
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
@@ -38,8 +41,7 @@ class QueryIMDBCastDetails
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String myFormatInputAsText(dynamic contents) {
-    final criteria = contents as SearchCriteriaDTO;
+  String myFormatInputAsText() {
     final text = criteria.toPrintableString();
     if (text.startsWith(imdbTitlePrefix)) {
       return text;

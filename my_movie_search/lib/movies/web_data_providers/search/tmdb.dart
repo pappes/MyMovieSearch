@@ -18,6 +18,8 @@ import 'package:universal_io/io.dart' show HttpHeaders;
 class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static const _baseURL = 'https://api.themoviedb.org/3/search/movie?api_key=';
 
+  QueryTMDBMovies(SearchCriteriaDTO criteria) : super(criteria);
+
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
@@ -38,10 +40,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String myFormatInputAsText(dynamic contents) {
-    final criteria = contents as SearchCriteriaDTO;
-    return criteria.toPrintableString();
-  }
+  String myFormatInputAsText() => criteria.toPrintableString();
 
   /// Include entire map in the movie title when an error occurs.
   @override

@@ -578,7 +578,7 @@ void main() {
         () async {
       final criteria = SearchCriteriaDTO().fromString('enigma');
       final actualOutput =
-          await QueryIMDBKeywords().readList(criteria, limit: 10);
+          await QueryIMDBKeywords(criteria).readList(limit: 10);
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
       final expectedOutput = expectedDTOList;
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));

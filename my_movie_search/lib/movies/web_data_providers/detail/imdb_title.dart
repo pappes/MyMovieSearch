@@ -19,6 +19,8 @@ class QueryIMDBTitleDetails
   static const _baseURL = 'https://www.imdb.com/title/';
   static const _baseURLsuffix = '/?ref_=fn_tt_tt_1';
 
+  QueryIMDBTitleDetails(SearchCriteriaDTO criteria) : super(criteria);
+
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
@@ -34,8 +36,7 @@ class QueryIMDBTitleDetails
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String myFormatInputAsText(dynamic contents) {
-    final criteria = contents as SearchCriteriaDTO;
+  String myFormatInputAsText() {
     final text = criteria.toPrintableString();
     if (text.startsWith(imdbTitlePrefix)) {
       return text;

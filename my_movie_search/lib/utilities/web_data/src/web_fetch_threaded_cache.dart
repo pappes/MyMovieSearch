@@ -9,7 +9,6 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 ///
 /// ```dart
 /// TC().readPrioritisedCachedList(
-///   criteria,
 ///   priority: ThreadRunner.verySlow,
 /// );
 /// ```
@@ -17,13 +16,14 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     extends WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   static final _cache = TieredCache();
 
+  WebFetchThreadedCache(INPUT_TYPE criteria) : super(criteria);
+
   /// Return a list with data matching [criteria].
   ///
   /// Optionally override the [priority] to push slow operations to another thread.
   /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
-  Future<List<OUTPUT_TYPE>> readPrioritisedCachedList(
-    INPUT_TYPE criteria, {
+  Future<List<OUTPUT_TYPE>> readPrioritisedCachedList({
     String priority = ThreadRunner.slow,
     DataSourceFn? source,
     int? limit,
@@ -31,41 +31,41 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     var result = <OUTPUT_TYPE>[];
 
     // if cached and not stale yield from cache
-    if (isThreadedResultCached(criteria) && !isThreadedCacheStale(criteria)) {
+    if (isThreadedResultCached() && !isThreadedCacheStale()) {
       logger.v(
         '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
-        'value was pre-cached ${myFormatInputAsText(criteria)}',
+        'value was pre-cached ${myFormatInputAsText()}',
       );
-      return fetchResultFromThreadedCache(criteria).toList();
+      return fetchResultFromThreadedCache().toList();
     }
-    final newPriority = confirmThreadCachePriority(criteria, priority, limit);
+    final newPriority = confirmThreadCachePriority(priority, limit);
 
     if (null == newPriority) {
       logger.v(
         '${ThreadRunner.currentThreadName}($priority) '
-        'discarded ${myFormatInputAsText(criteria)}',
+        'discarded ${myFormatInputAsText()}',
       );
-      completeThreadCacheRequest(criteria, priority);
+      completeThreadCacheRequest(priority);
       return [];
     }
     logger.v(
       '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
-      'requesting ${myFormatInputAsText(criteria)}',
+      'requesting ${myFormatInputAsText()}',
     );
 
-    initialiseThreadCacheRequest(criteria, newPriority, limit);
+    initialiseThreadCacheRequest(newPriority, limit);
     result = await ThreadRunner.namedThread(newPriority).run(
       runReadList,
       {
-        'newInstance': myClone(),
+        'newInstance': myClone(criteria),
         'criteria': criteria,
         'source': source,
         'limit': limit,
       },
     ) as List<OUTPUT_TYPE>;
 
-    _addResultToCache(criteria, result);
-    completeThreadCacheRequest(criteria, priority);
+    _addResultToCache(result);
+    completeThreadCacheRequest(priority);
 
     return result;
   }
@@ -75,7 +75,6 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   /// Returns new priority for the request.
   /// Returns null if the request should be discarded.
   String? confirmThreadCachePriority(
-    INPUT_TYPE criteria,
     String priority,
     int? limit,
   ) =>
@@ -83,13 +82,12 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
 
   /// Perform any class specific request tracking.
   void initialiseThreadCacheRequest(
-    INPUT_TYPE criteria,
     String priority,
     int? limit,
   ) {}
 
   /// Perform any class specific request tracking.
-  void completeThreadCacheRequest(INPUT_TYPE criteria, String priority) {}
+  void completeThreadCacheRequest(String priority) {}
 
   /// Returns new instance of the child class.
   ///
@@ -101,13 +99,12 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   /// ```dart
   /// return QueryIMDBNameDetails();
   /// ```
-  WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> myClone();
+  WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> myClone(INPUT_TYPE criteria);
 
   /// static wrapper to readList() for compatibility with ThreadRunner.
   static Future<List> runReadList(Map input) {
     final instance = input['newInstance'] as WebFetchBase;
     return instance.readList(
-      input['criteria'],
       source: input['source'] as DataSourceFn?,
       limit: input['limit'] as int?,
     );
@@ -116,20 +113,17 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   void clearThreadedCache() => _cache.clear();
 
   /// Check cache to see if data has already been fetched.
-  bool isThreadedResultCached(INPUT_TYPE criteria) =>
-      _cache.isCached(_getCacheKey(criteria));
+  bool isThreadedResultCached() => _cache.isCached(_getCacheKey());
 
   /// Check cache to see if data in cache should be refreshed.
-  bool isThreadedCacheStale(INPUT_TYPE criteria) {
+  bool isThreadedCacheStale() {
     return false;
-    //return _cache.isCached(_getCacheKey(criteria));
+    //return _cache.isCached(_getCacheKey());
   }
 
   /// Retrieve cached result.
-  Stream<OUTPUT_TYPE> fetchResultFromThreadedCache(
-    INPUT_TYPE criteria,
-  ) async* {
-    final value = _cache.get(_getCacheKey(criteria));
+  Stream<OUTPUT_TYPE> fetchResultFromThreadedCache() async* {
+    final value = _cache.get(_getCacheKey());
     if (value is List<OUTPUT_TYPE>) {
       yield* Stream.fromIterable(value);
     }
@@ -137,11 +131,9 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
 
   /// Insert transformed data into cache.
   void _addResultToCache(
-    INPUT_TYPE criteria,
     List<OUTPUT_TYPE> fetchedResult,
   ) =>
-      _cache.add(_getCacheKey(criteria), fetchedResult);
+      _cache.add(_getCacheKey(), fetchedResult);
 
-  String _getCacheKey(INPUT_TYPE criteria) =>
-      '${myDataSourceName()}${myFormatInputAsText(criteria)}';
+  String _getCacheKey() => '${myDataSourceName()}${myFormatInputAsText()}';
 }

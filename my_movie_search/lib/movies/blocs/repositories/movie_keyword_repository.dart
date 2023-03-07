@@ -21,22 +21,18 @@ class SearchFunctions {
 /// [Search] provides a stream of incomplete and complete results.
 /// [Close] can be used to cancel a search.
 class MovieKeywordRepository extends MovieListRepository {
-  final QueryIMDBKeywords _imdbKeywords;
-
-  MovieKeywordRepository() : _imdbKeywords = QueryIMDBKeywords();
-
-  @override
+  late QueryIMDBKeywords _imdbKeywords;
 
   /// Initiates a search for the provied [criteria].
   ///
   /// [searchUID] is a unique correlation ID identifying this search request
+  @override
   void initSearch(int searchUID, SearchCriteriaDTO criteria) {
-    for (final provider in [
-      _imdbKeywords,
-    ]) {
+    _imdbKeywords = QueryIMDBKeywords(criteria);
+    for (final provider in [_imdbKeywords]) {
       initProvider();
       provider
-          .readList(criteria, limit: 10)
+          .readList(limit: 10)
           .then((values) => addResults(searchUID, values))
           .whenComplete(finishProvider);
     }

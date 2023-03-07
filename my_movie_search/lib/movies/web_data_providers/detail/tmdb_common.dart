@@ -22,6 +22,8 @@ abstract class QueryTMDBCommon
   late String baseURL;
   String midURL = '?api_key=';
 
+  QueryTMDBCommon(SearchCriteriaDTO criteria) : super(criteria);
+
   /// Must be orerridden by child classes.
   /// Static snapshot of data for offline operation.
   @override
@@ -40,10 +42,7 @@ abstract class QueryTMDBCommon
 
   /// converts SearchCriteriaDTO to a string representation.
   @override
-  String myFormatInputAsText(dynamic contents) {
-    final criteria = contents as SearchCriteriaDTO;
-    return criteria.toPrintableString();
-  }
+  String myFormatInputAsText() => criteria.toPrintableString();
 
   /// Include entire map in the movie title when an error occurs.
   @override

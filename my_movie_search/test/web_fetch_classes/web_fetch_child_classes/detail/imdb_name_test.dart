@@ -43,7 +43,8 @@ void main() {
   group('QueryIMDBNameDetails unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryIMDBNameDetails().myDataSourceName(), 'imdb_person');
+      final input = SearchCriteriaDTO();
+      expect(QueryIMDBNameDetails(input).myDataSourceName(), 'imdb_person');
     });
 
     // Confirm criteria is displayed as expected.
@@ -51,7 +52,7 @@ void main() {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'nmtesting';
       expect(
-        QueryIMDBNameDetails().myFormatInputAsText(input),
+        QueryIMDBNameDetails(input).myFormatInputAsText(),
         'nmtesting',
       );
     });
@@ -64,17 +65,18 @@ void main() {
         MovieResultDTO().error('test2'),
       ];
       expect(
-        QueryIMDBNameDetails().myFormatInputAsText(input),
+        QueryIMDBNameDetails(input).myFormatInputAsText(),
         '',
       );
       expect(
-        QueryIMDBNameDetails().myFormatInputAsText(input),
+        QueryIMDBNameDetails(input).myFormatInputAsText(),
         '',
       );
     });
 
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
+      final criteria = SearchCriteriaDTO();
       const expectedResult = {
         'bestSource': 'DataSourceType.imdb',
         'title': '[QueryIMDBNameDetails] new query',
@@ -84,7 +86,7 @@ void main() {
 
       // Invoke the functionality.
       final actualResult =
-          QueryIMDBNameDetails().myYieldError('new query').toMap();
+          QueryIMDBNameDetails(criteria).myYieldError('new query').toMap();
       actualResult.remove('uniqueId');
 
       // Check the results.
@@ -93,8 +95,8 @@ void main() {
     // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final testClass = QueryIMDBNameDetails();
       final criteria = SearchCriteriaDTO();
+      final testClass = QueryIMDBNameDetails(criteria);
       criteria.criteriaTitle = 'nm0123456';
       testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
@@ -137,69 +139,57 @@ void main() {
 
   group('ThreadedCacheIMDBNameDetails unit tests', () {
     test('cache queueing', () {
-      final testClass = QueryIMDBNameDetails();
-      testClass.clearThreadedCache();
+      QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 0);
       expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
       for (var iteration = 0; iteration < 100; iteration++) {
         final criteria = SearchCriteriaDTO().fromString(iteration.toString());
+        final testClass = QueryIMDBNameDetails(criteria);
         // Enqueue requests but do not wait for result.
-        testClass.initialiseThreadCacheRequest(
-          criteria,
-          ThreadRunner.slow,
-          null,
-        );
+        testClass.initialiseThreadCacheRequest(ThreadRunner.slow, null);
       }
       expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 100);
       expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
       for (var iteration = 0; iteration < 10; iteration++) {
         final criteria = SearchCriteriaDTO().fromString(iteration.toString());
+        final testClass = QueryIMDBNameDetails(criteria);
         // Enqueue requests but do not wait for result.
-        testClass.initialiseThreadCacheRequest(
-          criteria,
-          ThreadRunner.slow,
-          null,
-        );
+        testClass.initialiseThreadCacheRequest(ThreadRunner.slow, null);
       }
       expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 100);
       expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
       for (var iteration = 0; iteration < 10; iteration++) {
         final criteria = SearchCriteriaDTO().fromString(iteration.toString());
+        final testClass = QueryIMDBNameDetails(criteria);
         // Enqueue requests but do not wait for result.
-        testClass.completeThreadCacheRequest(
-          criteria,
-          ThreadRunner.slow,
-        );
+        testClass.completeThreadCacheRequest(ThreadRunner.slow);
       }
       expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 90);
       expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
     });
     test('empty cache', () async {
-      final testClass = QueryIMDBNameDetails();
-      testClass.clearThreadedCache();
+      QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('Marco');
+      final testClass = QueryIMDBNameDetails(criteria);
       final listResult = await testClass.readCachedList(
-        criteria,
         source: (_) => Future.value(Stream.value('Polo')),
       );
       expect(listResult, []);
-      final resultIsCached = testClass.isThreadedResultCached(criteria);
+      final resultIsCached = testClass.isThreadedResultCached();
       expect(resultIsCached, false);
-      final resultIsStale = testClass.isThreadedCacheStale(criteria);
+      final resultIsStale = testClass.isThreadedCacheStale();
       expect(resultIsStale, false);
     });
 
     test('add to cache via readPrioritisedCachedList', () async {
-      final testClass = QueryIMDBNameDetails();
-      testClass.clearThreadedCache();
+      QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
+      final testClass = QueryIMDBNameDetails(criteria);
       await testClass.readPrioritisedCachedList(
-        criteria,
         source: streamImdbHtmlOfflineData,
       );
       // Return some random junk that will not get used do to caching
       final listResult = await testClass.readPrioritisedCachedList(
-        criteria,
         source: StaticJsonGenerator.stuff,
       );
       expect(
@@ -208,52 +198,49 @@ void main() {
         reason: 'Emitted DTO list ${listResult.toPrintableString()} '
             'needs to match expected DTO List${expectedDTOList.toPrintableString()}',
       );
-      final resultIsCached = testClass.isThreadedResultCached(criteria);
+      final resultIsCached = testClass.isThreadedResultCached();
       expect(resultIsCached, true);
-      final resultIsStale = testClass.isThreadedCacheStale(criteria);
+      final resultIsStale = testClass.isThreadedCacheStale();
       expect(resultIsStale, false);
     });
 
     test('fetch result from cache', () async {
-      final testClass = QueryIMDBNameDetails();
-      testClass.clearThreadedCache();
+      QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
+      final testClass = QueryIMDBNameDetails(criteria);
       await testClass.readPrioritisedCachedList(
-        criteria,
         source: streamImdbHtmlOfflineData,
       );
       final listResult =
-          await testClass.fetchResultFromThreadedCache(criteria).toList();
+          await testClass.fetchResultFromThreadedCache().toList();
       expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
-      final resultIsCached = testClass.isThreadedResultCached(criteria);
+      final resultIsCached = testClass.isThreadedResultCached();
       expect(resultIsCached, true);
-      final resultIsStale = testClass.isThreadedCacheStale(criteria);
+      final resultIsStale = testClass.isThreadedCacheStale();
       expect(resultIsStale, false);
     });
 
     test('clear cache', () async {
-      final testClass = QueryIMDBNameDetails();
-      testClass.clearThreadedCache();
+      QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
+      final testClass = QueryIMDBNameDetails(criteria);
       await testClass.readPrioritisedCachedList(
-        criteria,
         source: streamImdbHtmlOfflineData,
       );
       testClass.clearThreadedCache();
-      final resultIsCached = testClass.isThreadedResultCached(criteria);
+      final resultIsCached = testClass.isThreadedResultCached();
       expect(resultIsCached, false);
-      final resultIsStale = testClass.isThreadedCacheStale(criteria);
+      final resultIsStale = testClass.isThreadedCacheStale();
       expect(resultIsStale, false);
     });
 
     test('cache prioitisation', () async {
-      final testClass = QueryIMDBNameDetails();
-      testClass.clearThreadedCache();
+      QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       for (var iteration = 0; iteration < 100; iteration++) {
         final criteria = SearchCriteriaDTO().fromString('nm$iteration');
+        final testClass = QueryIMDBNameDetails(criteria);
         // Enqueue requests but do not wait for result.
         testClass.readPrioritisedCachedList(
-          criteria,
           source: StaticJsonGenerator.stuffDelayed,
         );
       }
@@ -272,10 +259,11 @@ void main() {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
       const expected = 'https://www.imdb.com/name/1234';
+      final criteria = SearchCriteriaDTO();
+      final testClass = QueryIMDBNameDetails(criteria);
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBNameDetails().myConstructURI('1234').toString();
+      final actualResult = testClass.myConstructURI('1234').toString();
 
       // Check the results.
       expect(actualResult, expected);
@@ -288,8 +276,9 @@ void main() {
   group('QueryIMDBNameDetails integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final testClass = QueryIMDBNameDetails();
-      testClass.myClearCache();
+      final criteria = SearchCriteriaDTO();
+      final testClass = QueryIMDBNameDetails(criteria);
+      testClass.clearThreadedCache();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
@@ -310,8 +299,9 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () {
-      final testClass = QueryIMDBNameDetails();
-      testClass.myClearCache();
+      final criteria = SearchCriteriaDTO();
+      final testClass = QueryIMDBNameDetails(criteria);
+      testClass.clearThreadedCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -335,14 +325,13 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryIMDBNameDetails();
-      testClass.myClearCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
+      final testClass = QueryIMDBNameDetails(criteria);
+      testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
           .readList(
-            criteria,
             source: streamImdbHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -367,14 +356,13 @@ void main() {
           'with criteria nm7602562 interpreting web text as a map '
           ':imdb web scraper data not detected for criteria nm7602562 in not valid html';
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryIMDBNameDetails();
+      final criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final testClass = QueryIMDBNameDetails(criteria);
       testClass.myClearCache();
-      final criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = 'nm7602562';
 
       // Invoke the functionality.
       await testClass
-          .readList(criteria, source: _emitInvalidHtmlSample)
+          .readList(source: _emitInvalidHtmlSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
     });
@@ -386,14 +374,13 @@ void main() {
           'with criteria nm7602562 interpreting web text as a map '
           ':imdb web scraper data not detected for criteria nm7602562 in <html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryIMDBNameDetails();
+      final criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final testClass = QueryIMDBNameDetails(criteria);
       testClass.myClearCache();
-      final criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = 'nm7602562';
 
       // Invoke the functionality.
       await testClass
-          .readList(criteria, source: _emitUnexpectedHtmlSample)
+          .readList(source: _emitUnexpectedHtmlSample)
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
 

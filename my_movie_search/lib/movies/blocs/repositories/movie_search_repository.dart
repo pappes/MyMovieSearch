@@ -25,35 +25,32 @@ class SearchFunctions {
 /// [Search] provides a stream of incomplete and complete results.
 /// [Close] can be used to cancel a search.
 class MovieSearchRepository extends MovieListRepository {
-  final QueryIMDBSuggestions _imdbSuggestions;
-  final QueryIMDBSearch _imdbSearch;
-  final QueryOMDBMovies _omdbSearch;
-  final QueryTMDBMovies _tmdbSearch;
-  final QueryGoogleMovies _googleSearch;
-
-  MovieSearchRepository()
-      : _imdbSuggestions = QueryIMDBSuggestions(),
-        _imdbSearch = QueryIMDBSearch(),
-        _omdbSearch = QueryOMDBMovies(),
-        _tmdbSearch = QueryTMDBMovies(),
-        _googleSearch = QueryGoogleMovies();
-
-  @override
+  late QueryIMDBSuggestions _imdbSuggestions;
+  late QueryIMDBSearch _imdbSearch;
+  late QueryOMDBMovies _omdbSearch;
+  late QueryTMDBMovies _tmdbSearch;
+  late QueryGoogleMovies _googleSearch;
 
   /// Initiates a search for the provied [criteria].
   ///
   /// [searchUID] is a unique correlation ID identifying this search request
+  @override
   void initSearch(int searchUID, SearchCriteriaDTO criteria) {
+    _imdbSuggestions = QueryIMDBSuggestions(criteria);
+    _imdbSearch = QueryIMDBSearch(criteria);
+    _omdbSearch = QueryOMDBMovies(criteria);
+    _tmdbSearch = QueryTMDBMovies(criteria);
+    _googleSearch = QueryGoogleMovies(criteria);
     if (criteria.criteriaList.isEmpty) {
-      _searchText(searchUID, criteria);
+      _searchText(searchUID);
     } else {
-      _searchList(searchUID, criteria);
+      _searchList(searchUID);
     }
   }
 
   /// Initiates a search with all known movie "search" providers.
   /// Requests details retrieval for all returned search results.
-  void _searchText(int searchUID, SearchCriteriaDTO criteria) {
+  void _searchText(int searchUID) {
     for (final provider in [
       _imdbSearch,
       _imdbSuggestions,
@@ -63,14 +60,14 @@ class MovieSearchRepository extends MovieListRepository {
     ]) {
       initProvider();
       provider
-          .readList(criteria, limit: 10)
+          .readList(limit: 10)
           .then((values) => addResults(searchUID, values))
           .whenComplete(finishProvider);
     }
   }
 
   /// Initiates a details retrival for a specified list of movies.
-  void _searchList(int searchUID, SearchCriteriaDTO criteria) {
+  void _searchList(int searchUID) {
     initProvider();
     addResults(searchUID, criteria.criteriaList);
     finishProvider();

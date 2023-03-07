@@ -46,14 +46,15 @@ typedef TransformFn = List Function(Map? map);
 ///   baseMethodName - should not need to be overridden by base class
 /// Methods without these prefixes are intended for external use and should not be overridden
 abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
-  INPUT_TYPE? criteria;
+  INPUT_TYPE criteria;
   WebFetchLimiter searchResultsLimit = WebFetchLimiter();
   bool transformJsonP = false;
   late DataSourceFn selectedDataSource =
       baseFetchWebText; // Online data source or offline data source.
 
-  String get getCriteriaText =>
-      null == criteria ? 'NullCriteria' : myFormatInputAsText(criteria);
+  WebFetchBase(this.criteria);
+
+  String get getCriteriaText => myFormatInputAsText();
   String? get _getFetchContext =>
       '${myDataSourceName()} with criteria $getCriteriaText';
 
@@ -62,8 +63,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
   void populateStream(
-    StreamController<OUTPUT_TYPE> sc,
-    INPUT_TYPE criteria, {
+    StreamController<OUTPUT_TYPE> sc, {
     DataSourceFn? source,
     int? limit,
   }) {
@@ -78,7 +78,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     try {
       baseYieldFetchedObjects(
         source: source,
-        newCriteria: criteria,
       ).pipe(sc).onError(errorHandler);
     } catch (error, stackTrace) {
       errorHandler(error, stackTrace);
@@ -89,16 +88,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
-  Future<List<OUTPUT_TYPE>> readList(
-    INPUT_TYPE criteria, {
-    DataSourceFn? source,
-    int? limit,
-  }) {
+  Future<List<OUTPUT_TYPE>> readList({DataSourceFn? source, int? limit}) {
     searchResultsLimit.limit = limit;
-    final list = baseYieldFetchedObjects(
-      source: source,
-      newCriteria: criteria,
-    ).toList();
+    final list = baseYieldFetchedObjects(source: source).toList();
     return list;
   }
 
@@ -106,16 +98,11 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
-  Future<List<OUTPUT_TYPE>> readCachedList(
-    INPUT_TYPE criteria, {
-    DataSourceFn? source,
-    int? limit,
-  }) {
+  Future<List<OUTPUT_TYPE>> readCachedList({DataSourceFn? source, int? limit}) {
     searchResultsLimit.limit = limit;
-    if (myIsResultCached(criteria)) {
+    if (myIsResultCached()) {
       return baseYieldFetchedObjects(
         source: source,
-        newCriteria: criteria,
       ).toList();
     }
     return Future.value(<OUTPUT_TYPE>[]);
@@ -167,7 +154,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Default implementation pulls back and UTF8 decodes HTML or Json or JsonP.
   /// Data source can be offline or online data source as requested by calling function.
   /// online data fetches from the web URL defined by [myConstructURI].
-  Future<Stream<String>> myConvertCriteriaToWebText(INPUT_TYPE criteria) async {
+  Future<Stream<String>> myConvertCriteriaToWebText() async {
     // Use a controller to allow the onError callback to populate the stream.
     final controller = StreamController<String>();
     bool returningError = false;
@@ -230,7 +217,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Can be overridden by child classes.
   /// If this is blank the query will not run!
-  String myFormatInputAsText(INPUT_TYPE? criteria) {
+  String myFormatInputAsText() {
     return criteria?.toString() ?? '';
   }
 
@@ -238,7 +225,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Can be overridden by child classes.
   /// If this is blank the query will not run!
-  int myGetPageNumber(INPUT_TYPE? criteria) {
+  int myGetPageNumber() {
     return 1;
   }
 
@@ -251,14 +238,14 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Check cache to see if data has already been fetched.
   ///
   /// Can be overridden by child classes if required.
-  bool myIsResultCached(INPUT_TYPE criteria) {
+  bool myIsResultCached() {
     return false;
   }
 
   /// Check cache to see if data in cache should be refreshed.
   ///
   /// Can be overridden by child classes if required.
-  bool myIsCacheStale(INPUT_TYPE criteria) {
+  bool myIsCacheStale() {
     return false;
   }
 
@@ -266,7 +253,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Can be overridden by child classes if required.
   Future<void> myAddResultToCache(
-    INPUT_TYPE criteria,
     OUTPUT_TYPE fetchedResult,
   ) async {}
 
@@ -278,24 +264,22 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Retrieve cached result.
   ///
   /// Can be overridden by child classes if required.
-  List<OUTPUT_TYPE> myFetchResultFromCache(INPUT_TYPE criteria) => [];
+  List<OUTPUT_TYPE> myFetchResultFromCache() => [];
 
   /// Convert a HTML, JSON or JSONP [Stream] of [String]
   /// to a [Stream] of <OUTPUT_TYPE> objects.
   ///
   /// Should not be overridden by child classes.
-  Stream<OUTPUT_TYPE> baseTransform(
-    INPUT_TYPE criteria,
-  ) async* {
+  Stream<OUTPUT_TYPE> baseTransform() async* {
     try {
-      final tree = baseConvertCriteriaToWebText(criteria);
+      final tree = baseConvertCriteriaToWebText();
       final map = baseConvertWebTextToTraversableTree(tree).printStream(
-        '${myDataSourceName()}:${myFormatInputAsText(criteria)}->',
+        '${myDataSourceName()}:${myFormatInputAsText()}->',
       );
-      yield* baseConvertTreeToOutputType(criteria, map);
+      yield* baseConvertTreeToOutputType(map);
     } catch (error) {
       final errorMessage = baseConstructErrorMessage(
-        'transform ${myFormatInputAsText(criteria)} to resulting object',
+        'transform ${myFormatInputAsText()} to resulting object',
         error,
       );
       yield myYieldError(errorMessage);
@@ -306,7 +290,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Calls child class [myConvertCriteriaToWebText]
   /// Converts Future<Stream<String>> to Stream<String>
-  Stream<String> baseConvertCriteriaToWebText(INPUT_TYPE criteria) async* {
+  Stream<String> baseConvertCriteriaToWebText() async* {
     // Use a controller to allow callback functions to populate the stream.
     final controller = StreamController<String>();
 
@@ -324,7 +308,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
           .then((_) => baseCloseController(controller));
     }
 
-    myConvertCriteriaToWebText(criteria)
+    myConvertCriteriaToWebText()
         .timeout(const Duration(seconds: 24)) // TODO: allow configurable
         .then(_yieldStream)
         .onError(_logError);
@@ -394,7 +378,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should not be overridden by child classes.
 
   Stream<OUTPUT_TYPE> baseConvertTreeToOutputType(
-    INPUT_TYPE criteria,
     Stream<dynamic> pageMap,
   ) async* {
     // Use a controller to allow callback functions to populate the stream.
@@ -410,7 +393,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
     List<OUTPUT_TYPE> _yieldList(List<OUTPUT_TYPE> objects) {
       for (final object in objects) {
-        myAddResultToCache(criteria, object);
+        myAddResultToCache(object);
       }
       // Construct result set with a subset of results.
       final capacity = searchResultsLimit.consume(objects.length);
@@ -436,31 +419,29 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     yield* controller.stream;
   }
 
-  /// Create a stream with data matching [newCriteria].
+  /// Create a stream with data matching [criteria].
   ///
   /// Should not be overridden by child classes.
   /// Should not be called directly by child classes.
   Stream<OUTPUT_TYPE> baseYieldFetchedObjects({
-    required INPUT_TYPE newCriteria,
     DataSourceFn? source,
   }) {
-    criteria = newCriteria;
-    final isCached = myIsResultCached(newCriteria);
+    final isCached = myIsResultCached();
     // if cached yield from cache
-    if (isCached && !myIsCacheStale(newCriteria)) {
+    if (isCached && !myIsCacheStale()) {
       logger.v(
         'base ${ThreadRunner.currentThreadName} '
-        'value was cached ${myFormatInputAsText(newCriteria)}',
+        'value was cached ${myFormatInputAsText()}',
       );
-      return Stream.fromIterable(myFetchResultFromCache(newCriteria));
+      return Stream.fromIterable(myFetchResultFromCache());
     }
-    if (myFormatInputAsText(newCriteria) == '') {
+    if (myFormatInputAsText() == '') {
       return Stream.fromIterable([]);
     }
     // if not cached or cache is stale retrieve fresh data
     logger.v(
       'base ${ThreadRunner.currentThreadName} ${myDataSourceName()} '
-      'uncached ${myFormatInputAsText(newCriteria)}',
+      'uncached ${myFormatInputAsText()}',
     );
 
     searchResultsLimit.reset();
@@ -471,7 +452,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       myOfflineData(),
     );
 
-    final outputStream = baseTransform(newCriteria);
+    final outputStream = baseTransform();
     return outputStream;
   }
 
@@ -487,9 +468,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     try {
       criteria as INPUT_TYPE;
       final encoded = Uri.encodeQueryComponent(
-        myFormatInputAsText(criteria),
+        myFormatInputAsText(),
       );
-      address = myConstructURI(encoded, pageNumber: myGetPageNumber(criteria));
+      address = myConstructURI(encoded, pageNumber: myGetPageNumber());
 
       logger.v('requesting: $address');
       final client = await myGetHttpClient().getUrl(address);

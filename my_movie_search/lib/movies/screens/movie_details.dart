@@ -43,18 +43,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   void _getDetails(SearchCriteriaDTO criteria) {
     if (_movie.uniqueId.startsWith(imdbTitlePrefix)) {
       /// Fetch movie details
-      QueryIMDBTitleDetails()
-          .readList(
-            criteria,
-          )
-          .then(_requestShowDetails);
+      QueryIMDBTitleDetails(criteria).readList().then(_requestShowDetails);
 
       /// Fetch cast details from cache using a separate thread.
-      QueryIMDBCastDetails()
-          .readPrioritisedCachedList(
-            criteria,
-            priority: ThreadRunner.fast,
-          )
+      QueryIMDBCastDetails(criteria)
+          .readPrioritisedCachedList(priority: ThreadRunner.fast)
           .then(_requestShowDetails);
     }
   }

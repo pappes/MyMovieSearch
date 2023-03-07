@@ -42,19 +42,13 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   void _getDetails(SearchCriteriaDTO criteria) {
     if (MovieContentType.person == _person.type) {
       /// Fetch person details from cache using a separate thread.
-      QueryIMDBNameDetails()
-          .readPrioritisedCachedList(
-            criteria,
-            priority: ThreadRunner.fast,
-          )
+      QueryIMDBNameDetails(criteria)
+          .readPrioritisedCachedList(priority: ThreadRunner.fast)
           .then(_requestShowDetails);
 
       /// Fetch related movie from cache using a separate thread.
-      QueryIMDBBibliographyDetails()
-          .readPrioritisedCachedList(
-            criteria,
-            priority: ThreadRunner.slow,
-          )
+      QueryIMDBBibliographyDetails(criteria)
+          .readPrioritisedCachedList(priority: ThreadRunner.slow)
           .then(_requestShowDetails);
     }
   }

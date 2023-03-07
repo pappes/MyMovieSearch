@@ -44,8 +44,7 @@ void main() {
     // Search for a rare movie.
     test('Run read 3 pages from TMDB', () async {
       final criteria = SearchCriteriaDTO().fromString('rize');
-      final actualOutput =
-          await QueryTMDBMovies().readList(criteria, limit: 10);
+      final actualOutput = await QueryTMDBMovies(criteria).readList(limit: 10);
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
       final expectedOutput = expectedDTOList;
       expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));

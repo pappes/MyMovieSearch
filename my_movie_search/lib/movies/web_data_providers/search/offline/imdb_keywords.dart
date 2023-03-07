@@ -9,7 +9,7 @@ const expectedDtoJsonStringList = [
 {"uniqueId":"tt0218354","bestSource":"DataSourceType.imdbKeywords","title":"The Catgirl<3","type":"MovieContentType.series","year":"2010","yearRange":"2003–2010","languages":"[]","genres":"[]",
       "keywords":"[\"dream\"]",
       "description":"Then Kramer said, \"Everybody is Mescalon Smoochington\"<3",
-      "userRating":"5.999","userRatingCount":"644","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BOWI5MzNiY2QyNTA4NzExMDg@._V1_UY98_CR32,0,67,98_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0218354"},
+      "userRating":"5.999","userRatingCount":"374","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BOWI5MzNiY2QyNTA4NzExMDg@._V1_UY98_CR32,0,67,98_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0218354"},
   "related":{"Directed by:":{"nm0311837":{"uniqueId":"nm0311837","title":"Vonuck Heint\n            ","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0311837"},"related":{}}},
     "Cast:":{"nm0718931":{"uniqueId":"nm0718931","title":"Rano Romino\n            ","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0718931"},"related":{}},
       "nm0714533":{"uniqueId":"nm0714533","title":"Eara Sabvan\n            ","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0714533"},"related":{}},
@@ -17,10 +17,9 @@ const expectedDtoJsonStringList = [
       "nm0414736":{"uniqueId":"nm0414736","title":"Tnny Keom \n            ","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0414736"},"related":{}}}}}
 ''',
   r'''
-{"uniqueId":"https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main","bestSource":"DataSourceType.imdbKeywords","title":"Next »","languages":"[]","genres":"[]",
+{"uniqueId":"https://www.imdb.com/search/keyword/?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main","bestSource":"DataSourceType.imdbKeywords","title":"Next »","languages":"[]","genres":"[]",
       "keywords":"[\"dream\"]",
-      "description":"{\"keyword\":dream, \"page\":2, \"url\":https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main}","sources":{"DataSourceType.imdbKeywords":"https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"},
-  "related":{"Directed by:":{},"Cast:":{}}}
+      "description":"{ \"keyword\":\"dream\", \"page\":\"2\", \"url\":\"https://www.imdb.com/search/keyword/?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main\"}","sources":{"DataSourceType.imdbKeywords":"https://www.imdb.com/search/keyword/?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"},"related":{}}
 ''',
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
@@ -77,11 +76,11 @@ const intermediateMapList = [
   },
   {
     'id':
-        'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main',
+        'https://www.imdb.com/search/keyword/?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main',
     'titleNameText': 'Next »',
     'keywords': 'dream',
     'titleDescription':
-        '{"keyword":dream, "page":2, "url":https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=dream&page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main}'
+        '{ "keyword":"dream", "page":"2", "url":"https://www.imdb.com/search/keyword/?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"}'
   },
 ];
 

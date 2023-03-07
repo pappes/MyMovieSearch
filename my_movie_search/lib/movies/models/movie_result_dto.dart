@@ -1159,7 +1159,7 @@ extension MapMapMovieResultDTOHelpers
     String separator = '';
     for (final key in keys) {
       listContents.write(
-        '$separator${key.toString()}:${this[key]!.toPrintableString()}',
+        '$separator$key:${this[key]!.toPrintableString()}',
       );
       separator = ',\n';
     }
@@ -1173,7 +1173,7 @@ extension MapMapMovieResultDTOHelpers
     String separator = '';
     for (final key in keys) {
       listContents.write(
-        '$separator${key.toString()}:${this[key]!.toShortString()}',
+        '$separator$key:${this[key]!.toShortString()}',
       );
       separator = ',\n';
     }

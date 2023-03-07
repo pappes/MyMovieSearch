@@ -18,8 +18,7 @@ mixin ThreadedCacheIMDBSuggestions
   /// Optionally override the [priority] to push slow operations to another thread.
   /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
-  Future<List<MovieResultDTO>> readPrioritisedCachedList(
-    SearchCriteriaDTO criteria, {
+  Future<List<MovieResultDTO>> readPrioritisedCachedList({
     String priority = ThreadRunner.slow,
     DataSourceFn? source,
     int? limit = QueryIMDBSuggestions.defaultSearchResultsLimit,
@@ -27,25 +26,25 @@ mixin ThreadedCacheIMDBSuggestions
     var result = <MovieResultDTO>[];
 
     // if cached and not stale yield from cache
-    if (await _isResultCached(criteria) && !await _isCacheStale(criteria)) {
+    if (await _isResultCached() && !await _isCacheStale()) {
       logger.v(
         '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
-        'value was pre cached ${myFormatInputAsText(criteria)}',
+        'value was pre cached ${myFormatInputAsText()}',
       );
-      return _fetchResultFromCache(criteria).toList();
+      return _fetchResultFromCache().toList();
     }
 
-    final newPriority = _enqueueRequest(criteria, priority);
+    final newPriority = _enqueueRequest(priority);
     if (null == newPriority) {
       logger.v(
         '${ThreadRunner.currentThreadName}($priority) '
-        'discarded ${myFormatInputAsText(criteria)}',
+        'discarded ${myFormatInputAsText()}',
       );
       return [];
     }
     logger.v(
       '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
-      'requesting ${myFormatInputAsText(criteria)}',
+      'requesting ${myFormatInputAsText()}',
     );
 
     result = await ThreadRunner.namedThread(newPriority).run(
@@ -65,21 +64,21 @@ mixin ThreadedCacheIMDBSuggestions
 
   /// static wrapper to readList() for compatability with ThreadRunner.
   static Future<List<MovieResultDTO>> runReadList(Map input) {
-    return QueryIMDBSuggestions().readList(
-      input['criteria'] as SearchCriteriaDTO,
+    return QueryIMDBSuggestions(input['criteria'] as SearchCriteriaDTO)
+        .readList(
       source: input['source'] as DataSourceFn?,
       limit: input['limit'] as int?,
     );
   }
 
   /// Check cache to see if data has already been fetched.
-  Future<bool> _isResultCached(SearchCriteriaDTO criteria) async {
+  Future<bool> _isResultCached() async {
     final key = '${myDataSourceName()}${criteria.criteriaTitle}';
     return _cache.isCached(key);
   }
 
   /// Check cache to see if data in cache should be refreshed.
-  Future<bool> _isCacheStale(SearchCriteriaDTO criteria) async {
+  Future<bool> _isCacheStale() async {
     return false;
     //return _cache.isCached(criteria.criteriaTitle);
   }
@@ -96,16 +95,14 @@ mixin ThreadedCacheIMDBSuggestions
   }
 
   /// Retrieve cached result.
-  Stream<MovieResultDTO> _fetchResultFromCache(
-    SearchCriteriaDTO criteria,
-  ) async* {
+  Stream<MovieResultDTO> _fetchResultFromCache() async* {
     final value = _cache.get('${myDataSourceName()}${criteria.criteriaTitle}');
     if (value is MovieResultDTO) {
       yield value;
     }
   }
 
-  String? _enqueueRequest(SearchCriteriaDTO criteria, String priority) {
+  String? _enqueueRequest(String priority) {
     // Track and throttle low priority requests
     if (ThreadRunner.slow == priority || ThreadRunner.verySlow == priority) {
       if (_normalQueue.contains(criteria) ||

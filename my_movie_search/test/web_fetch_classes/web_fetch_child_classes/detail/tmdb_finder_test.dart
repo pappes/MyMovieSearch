@@ -16,6 +16,8 @@ Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
   return Future.value(Stream.value('not valid json'));
 }
 
+final criteria = SearchCriteriaDTO().fromString('ttImdbId123');
+
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => Settings.singleton().init());
@@ -26,16 +28,14 @@ void main() {
   group('tmdb finder unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryTMDBFinder().myDataSourceName(), 'tmdbFinder');
+      expect(QueryTMDBFinder(criteria).myDataSourceName(), 'tmdbFinder');
     });
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'tt testing';
       expect(
-        QueryTMDBFinder().myFormatInputAsText(input),
-        'tt testing',
+        QueryTMDBFinder(criteria).myFormatInputAsText(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -47,11 +47,7 @@ void main() {
         MovieResultDTO().error('test2'),
       ];
       expect(
-        QueryTMDBFinder().myFormatInputAsText(input),
-        '',
-      );
-      expect(
-        QueryTMDBFinder().myFormatInputAsText(input),
+        QueryTMDBFinder(input).myFormatInputAsText(),
         '',
       );
     });
@@ -66,7 +62,8 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryTMDBFinder().myYieldError('new query').toMap();
+      final actualResult =
+          QueryTMDBFinder(criteria).myYieldError('new query').toMap();
       actualResult.remove('uniqueId');
 
       // Check the results.
@@ -75,7 +72,8 @@ void main() {
     // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
-      final actualOutput = QueryTMDBFinder().myConvertWebTextToTraversableTree(
+      final actualOutput =
+          QueryTMDBFinder(criteria).myConvertWebTextToTraversableTree(
         tmdbJsonSearchFull,
       );
       expect(actualOutput, completion(expectedOutput));
@@ -116,9 +114,11 @@ void main() {
     test('Run myConstructURI()', () {
       const expected =
           'https://api.themoviedb.org/3/find/1234?language=en-US&external_source=imdb_id&api_key=';
+      final criteria = SearchCriteriaDTO().fromString('1234');
 
       // Invoke the functionality.
-      final actualResult = QueryTMDBFinder().myConstructURI('1234').toString();
+      final actualResult =
+          QueryTMDBFinder(criteria).myConstructURI('1234').toString();
 
       // Check the results.
       expect(actualResult, startsWith(expected));
@@ -131,7 +131,7 @@ void main() {
   group('QueryTMDBFinder integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final testClass = QueryTMDBFinder();
+      final testClass = QueryTMDBFinder(criteria);
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
@@ -153,7 +153,7 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () {
-      final testClass = QueryTMDBFinder();
+      final testClass = QueryTMDBFinder(criteria);
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -177,14 +177,12 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBFinder();
+      final testClass = QueryTMDBFinder(criteria);
       testClass.myClearCache();
-      testClass.myConstructURI('ttImdbId123');
 
       // Invoke the functionality.
       await testClass
           .readList(
-            SearchCriteriaDTO().fromString('ttImdbId123'),
             source: streamTmdbJsonOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -206,11 +204,10 @@ void main() {
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBFinder();
+      final testClass = QueryTMDBFinder(criteria);
       testClass.myClearCache();
-      testClass.myConstructURI('tt0101000');
       const expectedException = '''
-[tmdbFinder] Error in tmdbFinder with criteria tt0101000 interpreting web text as a map :FormatException: Unexpected character (at character 1)
+[tmdbFinder] Error in tmdbFinder with criteria ttImdbId123 interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
 ^
 ''';
@@ -218,7 +215,6 @@ not valid json
       // Invoke the functionality.
       await testClass
           .readList(
-            SearchCriteriaDTO().fromString('tt0101000'),
             source: _emitInvalidJsonSample,
           )
           .then((values) => queryResult.addAll(values));
@@ -229,17 +225,15 @@ not valid json
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[tmdbFinder] Error in tmdbFinder '
-          'with criteria tt0101000 translating page map to objects '
+          'with criteria ttImdbId123 translating page map to objects '
           ':expected map got List<dynamic> unable to interpret data [{hello: world}]';
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBFinder();
+      final testClass = QueryTMDBFinder(criteria);
       testClass.myClearCache();
-      testClass.myConstructURI('tt0101000');
 
       // Invoke the functionality.
       await testClass
           .readList(
-            SearchCriteriaDTO().fromString('tt0101000'),
             source: _emitUnexpectedJsonSample,
           )
           .then((values) => queryResult.addAll(values));

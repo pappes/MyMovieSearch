@@ -12,6 +12,7 @@ import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 /// [Search] provides a stream of incomplete and complete results.
 /// [Close] can be used to cancel a search.
 class BaseMovieRepository {
+  late SearchCriteriaDTO criteria;
   StreamController<MovieResultDTO>? _movieStreamController;
   var _awaitingProviders = 0;
   final Map _requestedDetails = {};
@@ -25,7 +26,8 @@ class BaseMovieRepository {
   /// Partial results are yielded quickly with limited information.
   /// Complete results are returned progressivly
   /// and need to be merged with the partial results.
-  Stream<MovieResultDTO> search(SearchCriteriaDTO criteria) async* {
+  Stream<MovieResultDTO> search(SearchCriteriaDTO newCriteria) async* {
+    criteria = newCriteria;
     ++_searchUID;
     final feedback = MovieResultDTO();
     feedback.title = 'Searching ...';
@@ -54,7 +56,7 @@ class BaseMovieRepository {
     _movieStreamController = null;
   }
 
-  /// Initiates a search with all known movie search providers.
+  /// Initinalise the class for a new search with all known movie search providers.
   /// To be overridden by specific implementations, calling:
   ///   initProvider() before requesting data for a source.
   ///   addResults(searchUID,dto) for matching data.

@@ -81,8 +81,7 @@ mixin ScrapeIMDBSearchDetails
 
   /// Delegate web scraping to IMDBMovie web scraper.
   Future<List> _scrapeMovieDetails(String webText) {
-    final movie = QueryIMDBTitleDetails();
-    movie.criteria = criteria;
+    final movie = QueryIMDBTitleDetails(criteria);
     return movie.myConvertWebTextToTraversableTree(webText);
   }
 

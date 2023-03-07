@@ -217,10 +217,10 @@ mixin ScrapeIMDBKeywordsDetails
   }
 
   Map _addNextPage(Element next) {
-    final keyword = criteria?.criteriaTitle ?? '';
+    final keyword = criteria.criteriaTitle;
     final baseURL = myConstructURI(keyword);
     final String extraURL = next.attributes['href'] ?? '';
-    final fullUrl = Uri.parse('$baseURL${extraURL.replaceAll('?', '&')}');
+    final fullUrl = baseURL.resolve(extraURL);
     final pageNumber = fullUrl.queryParameters['page'] ?? '1';
     return {
       keywordId: fullUrl.toString(),

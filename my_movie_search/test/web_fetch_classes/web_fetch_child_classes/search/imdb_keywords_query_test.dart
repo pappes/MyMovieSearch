@@ -15,6 +15,8 @@ Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
   return Future.value(Stream.value('not valid html'));
 }
 
+final criteria = SearchCriteriaDTO().fromString('dream');
+
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
@@ -23,16 +25,14 @@ void main() {
   group('imdb search unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryIMDBKeywords().myDataSourceName(), 'imdbKeywords');
+      expect(QueryIMDBKeywords(criteria).myDataSourceName(), 'imdbKeywords');
     });
 
     // Confirm simple criteria is displayed as expected.
     test('Run myFormatInputAsText() for simple keyword', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'testing';
       expect(
-        QueryIMDBKeywords().myFormatInputAsText(input),
-        'testing',
+        QueryIMDBKeywords(criteria).myFormatInputAsText(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -53,11 +53,11 @@ testing and punctuation
       );
       input.criteriaList.add(MovieResultDTO().init(description: jsonText));
       expect(
-        QueryIMDBKeywords().myFormatInputAsText(input),
+        QueryIMDBKeywords(input).myFormatInputAsText(),
         expectedKeyword,
       );
       expect(
-        QueryIMDBKeywords().myGetPageNumber(input),
+        QueryIMDBKeywords(input).myGetPageNumber(),
         expectedPage,
       );
     });
@@ -70,11 +70,11 @@ testing and punctuation
         MovieResultDTO().error('test2'),
       ];
       expect(
-        QueryIMDBKeywords().myFormatInputAsText(input),
+        QueryIMDBKeywords(input).myFormatInputAsText(),
         contains('test1'),
       );
       expect(
-        QueryIMDBKeywords().myFormatInputAsText(input),
+        QueryIMDBKeywords(input).myFormatInputAsText(),
         contains('test2'),
       );
     });
@@ -82,11 +82,11 @@ testing and punctuation
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
       const expectedResult =
-          'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=new%20query';
+          'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=new%20query&page=1';
 
       // Invoke the functionality.
       final actualResult =
-          QueryIMDBKeywords().myConstructURI('new query').toString();
+          QueryIMDBKeywords(criteria).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -103,7 +103,7 @@ testing and punctuation
 
       // Invoke the functionality.
       final actualResult =
-          QueryIMDBKeywords().myYieldError('new query').toMap();
+          QueryIMDBKeywords(criteria).myYieldError('new query').toMap();
       actualResult.remove('uniqueId');
 
       // Check the results.
@@ -112,9 +112,7 @@ testing and punctuation
 
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final testClass = QueryIMDBKeywords();
-      final criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = 'dream';
+      final testClass = QueryIMDBKeywords(criteria);
       testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
         imdbKeywordsHtmlSampleFull,
@@ -155,7 +153,7 @@ testing and punctuation
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final expectedValue = expectedDTOList;
-      final imdbKeywords = QueryIMDBKeywords();
+      final imdbKeywords = QueryIMDBKeywords(criteria);
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -175,7 +173,7 @@ testing and punctuation
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final imdbKeywords = QueryIMDBKeywords();
+      final imdbKeywords = QueryIMDBKeywords(criteria);
 
       // Invoke the functionality and collect results.
       final actualResult = imdbKeywords.myConvertTreeToOutputType('map');
@@ -199,12 +197,11 @@ testing and punctuation
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final imdbKeywords = QueryIMDBKeywords();
+      final imdbKeywords = QueryIMDBKeywords(criteria);
 
       // Invoke the functionality.
       await imdbKeywords
           .readList(
-            SearchCriteriaDTO().fromString('dream'),
             source: streamImdbKeywordsHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
@@ -226,15 +223,14 @@ testing and punctuation
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final imdbKeywords = QueryIMDBKeywords();
+      final imdbKeywords = QueryIMDBKeywords(criteria);
       const expectedException = '[QueryIMDBKeywords] Error in imdbKeywords '
-          'with criteria 123 interpreting web text as a map '
-          ':imdb keyword data not detected for criteria 123';
+          'with criteria dream interpreting web text as a map '
+          ':imdb keyword data not detected for criteria dream';
 
       // Invoke the functionality.
       await imdbKeywords
           .readList(
-            SearchCriteriaDTO().fromString('123'),
             source: _emitInvalidHtmlSample,
           )
           .then((values) => queryResult.addAll(values));
@@ -245,15 +241,14 @@ testing and punctuation
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[QueryIMDBKeywords] Error in imdbKeywords '
-          'with criteria 123 interpreting web text as a map '
-          ':imdb keyword data not detected for criteria 123';
+          'with criteria dream interpreting web text as a map '
+          ':imdb keyword data not detected for criteria dream';
       final queryResult = <MovieResultDTO>[];
-      final imdbKeywords = QueryIMDBKeywords();
+      final imdbKeywords = QueryIMDBKeywords(criteria);
 
       // Invoke the functionality.
       await imdbKeywords
           .readList(
-            SearchCriteriaDTO().fromString('123'),
             source: _emitUnexpectedHtmlSample,
           )
           .then((values) => queryResult.addAll(values));

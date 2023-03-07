@@ -20,7 +20,6 @@ mixin ThreadedCacheIMDBNameDetails
   /// Returns null if the request should be discarded.
   @override
   String? confirmThreadCachePriority(
-    SearchCriteriaDTO criteria,
     String priority,
     int? limit,
   ) {
@@ -43,7 +42,6 @@ mixin ThreadedCacheIMDBNameDetails
   /// Adds criteria to a collection of currently processing requests.
   @override
   void initialiseThreadCacheRequest(
-    SearchCriteriaDTO criteria,
     String priority,
     int? limit,
   ) {
@@ -60,7 +58,7 @@ mixin ThreadedCacheIMDBNameDetails
 
   /// Perform any class specific request tracking.
   @override
-  void completeThreadCacheRequest(SearchCriteriaDTO criteria, String priority) {
+  void completeThreadCacheRequest(String priority) {
     final text = criteria.toPrintableString();
     normalQueue.remove(text);
     verySlowQueue.remove(text);
@@ -77,9 +75,10 @@ mixin ThreadedCacheIMDBNameDetails
   /// return QueryIMDBNameDetails();
   /// ```
   @override
-  WebFetchBase<MovieResultDTO, SearchCriteriaDTO> myClone() {
-    return QueryIMDBNameDetails();
-  }
+  WebFetchBase<MovieResultDTO, SearchCriteriaDTO> myClone(
+    SearchCriteriaDTO criteria,
+  ) =>
+      QueryIMDBNameDetails(criteria);
 
   @override
   void clearThreadedCache() {
