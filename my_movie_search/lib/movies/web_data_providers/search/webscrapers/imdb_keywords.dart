@@ -136,8 +136,13 @@ mixin ScrapeIMDBKeywordsDetails
   String? _getDuration(Element? section) =>
       section?.querySelector('.runtime')?.text.trim();
 
-  String _getPopularityRating(Element? section) =>
-      splitter.convert(section?.text.trim() ?? '').first.trim();
+  String? _getPopularityRating(Element? section) {
+    final ratingText = splitter.convert(section?.text.trim() ?? '');
+    if (ratingText.isNotEmpty) {
+      return ratingText.first.trim();
+    }
+    return '';
+  }
 
   String? _getCensorRating(Element? section) =>
       section?.querySelector(".certificate")?.text.trim();
