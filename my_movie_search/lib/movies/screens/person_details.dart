@@ -23,6 +23,7 @@ class PersonDetailsPage extends StatefulWidget {
 class _PersonDetailsPageState extends State<PersonDetailsPage>
     with RestorationMixin {
   late MovieResultDTO _person;
+  bool _descriptionExpanded = false;
   bool _redrawRequired = true;
   final _restorablePerson = RestorableMovie();
   var _mobileLayout = true;
@@ -168,13 +169,28 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         // Only show poster in left column on mobile
         if (_mobileLayout) posterSection(),
 
-        Text(
-          '\nDescription: \n${_person.description} ',
-          style: biggerFont,
+        Align(
+          alignment: Alignment.topLeft,
+          child: BoldLabel('Description:'),
+        ),
+        Align(
+          alignment: Alignment.topLeft,
+          child: SelectableText(
+            _person.description,
+            style: biggerFont,
+            maxLines: _descriptionExpanded ? null : 5,
+            onTap: toggleDescription,
+          ),
         ),
         ...related(),
       ],
     );
+  }
+
+  void toggleDescription() {
+    setState(() {
+      _descriptionExpanded = !_descriptionExpanded;
+    });
   }
 
   Widget posterSection() {

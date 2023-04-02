@@ -25,6 +25,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     with RestorationMixin {
   late MovieResultDTO _movie;
   bool _redrawRequired = true;
+  bool _descriptionExpanded = false;
   final _restorableMovie = RestorableMovie();
   var _mobileLayout = true;
 
@@ -234,14 +235,23 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   List<Widget> description() {
     return [
       BoldLabel('Description:'),
-      Text(
+      SelectableText(
         _movie.description,
         style: biggerFont,
+        minLines: 1,
+        maxLines: _descriptionExpanded ? null : 5,
+        onTap: toggleDescription,
       ),
       Text('Languages: ${_movie.languages}'),
       Text('Genres: ${_movie.genres}'),
       keywords(),
     ];
+  }
+
+  void toggleDescription() {
+    setState(() {
+      _descriptionExpanded = !_descriptionExpanded;
+    });
   }
 
   final caseInsensativeSuggestion =
