@@ -446,7 +446,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
     this.type = bestValue(
       getMovieContentType(
-            genres.toString(),
+            '$genres $yearRange',
             IntHelper.fromText(runTime),
             this.uniqueId,
           ) ??
@@ -625,7 +625,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       getLanguageType();
       type = bestValue(
         getMovieContentType(
-              genres.toString(),
+              '$genres $yearRange',
               IntHelper.fromText(runTime),
               uniqueId,
             ) ??
@@ -816,13 +816,13 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (id.startsWith('nm')) return MovieContentType.person;
     if (id == "-1") return MovieContentType.none;
     if (id.startsWith(movieDTOMessagePrefix)) return MovieContentType.error;
-    if (seconds != null && seconds < 500 && seconds > 0) {
-      return MovieContentType.short;
-    }
     final String title = info.toLowerCase();
     if (title.lastIndexOf('game') > -1) return MovieContentType.custom;
     if (title.lastIndexOf('creativework') > -1) return MovieContentType.custom;
     if (title.lastIndexOf('music') > -1) return MovieContentType.custom;
+    if (seconds != null && seconds < (30 * 60) && seconds > 0) {
+      return MovieContentType.short;
+    }
     // mini includes TV Mini-series
     if (title.lastIndexOf('mini') > -1) return MovieContentType.miniseries;
     if (title.lastIndexOf('episode') > -1) return MovieContentType.episode;
@@ -831,8 +831,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (title.lastIndexOf('–') > -1) return MovieContentType.series;
     if (title.lastIndexOf('special') > -1) return MovieContentType.series;
     if (title.lastIndexOf('short') > -1) return MovieContentType.short;
-    if (seconds != null && seconds < 3600 && seconds > 0) {
-      return MovieContentType.short;
+    if (seconds != null && seconds < (60 * 60) && seconds > 0) {
+      return MovieContentType.episode;
     }
     if (title.lastIndexOf('movie') > -1) return MovieContentType.movie;
     if (title.lastIndexOf('video') > -1) return MovieContentType.movie;
@@ -949,20 +949,20 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     }
   }
 
-  /// Test framework matcher to compare current [MovieResultDTO] to [other]
+  /// Test framework matcher to compare current [MovieResultDTO] to [actualDTO]
   ///
   /// Explains any difference found.
   /// [matchState] allows information about mismatches to be passed back
   /// [related] allows exclusion of the related dto collection for comparison
   /// [fuzzy] allows volitile numeric data to have a 75% variation
   bool matches(
-    MovieResultDTO other, {
+    MovieResultDTO actualDTO, {
     Map? matchState,
     bool related = true,
     bool fuzzy = false,
     String prefix = '',
   }) {
-    if (title == other.title && title == 'unknown') return true;
+    if (title == actualDTO.title && title == 'unknown') return true;
 
     final mismatches = <String, String>{};
     void matchCompare<T>(String fieldName, T actual, T expected) =>
@@ -984,35 +984,36 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     ) =>
         _matchCompareIdMap(mismatches, '$prefix$fieldName', actual, expected);
 
-    matchCompare('bestSource', other.bestSource, bestSource);
-    matchCompareId('uniqueId', other.uniqueId, uniqueId);
+    matchCompare('bestSource', actualDTO.bestSource, bestSource);
+    matchCompareId('uniqueId', actualDTO.uniqueId, uniqueId);
     if (MovieContentType.error != type && sources.isNotEmpty) {
-      matchCompareIdMap('sources', other.sources, sources);
+      matchCompareIdMap('sources', actualDTO.sources, sources);
     }
-    matchCompare('title', other.title, title);
-    matchCompare('alternateTitle', other.alternateTitle, alternateTitle);
-    matchCompare('charactorName', other.charactorName, charactorName);
-    matchCompare('description', other.description, description);
-    matchCompare('type', other.type, type);
-    matchCompare('year', other.year, year);
-    matchCompare('creditsOrder', other.creditsOrder, creditsOrder);
-    matchCompare('yearRange', other.yearRange, yearRange);
-    matchCompare('userRating', other.userRating, userRating);
-    matchCompare('censorRating', other.censorRating, censorRating);
-    matchCompare('runTime', other.runTime, runTime);
-    matchCompare('imageUrl', other.imageUrl, imageUrl);
-    matchCompare('language', other.language, language);
+    matchCompare('title', actualDTO.title, title);
+    matchCompare('alternateTitle', actualDTO.alternateTitle, alternateTitle);
+    matchCompare('charactorName', actualDTO.charactorName, charactorName);
+    matchCompare('description', actualDTO.description, description);
+    matchCompare('type', actualDTO.type, type);
+    matchCompare('year', actualDTO.year, year);
+    matchCompare('creditsOrder', actualDTO.creditsOrder, creditsOrder);
+    matchCompare('yearRange', actualDTO.yearRange, yearRange);
+    matchCompare('userRating', actualDTO.userRating, userRating);
+    matchCompare('censorRating', actualDTO.censorRating, censorRating);
+    matchCompare('runTime', actualDTO.runTime, runTime);
+    matchCompare('imageUrl', actualDTO.imageUrl, imageUrl);
+    matchCompare('language', actualDTO.language, language);
     matchCompare(
       'languages',
       languages.toString(),
-      other.languages.toString(),
+      actualDTO.languages.toString(),
     );
-    matchCompare('genres', other.genres.toString(), genres.toString());
-    matchCompare('keywords', other.keywords.toString(), keywords.toString());
+    matchCompare('genres', actualDTO.genres.toString(), genres.toString());
+    matchCompare(
+        'keywords', actualDTO.keywords.toString(), keywords.toString());
 
     if (related) {
       final expected = this.related.toPrintableString();
-      final actual = other.related.toPrintableString();
+      final actual = actualDTO.related.toPrintableString();
       if (expected != actual) matchCompare('related', actual, expected);
     }
 

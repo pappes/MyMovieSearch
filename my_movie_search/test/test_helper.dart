@@ -148,8 +148,8 @@ class MovieResultDTOListMatcher extends Matcher {
 
     if (_actual.length != expected.length) return false;
     for (var i = 0; i < _actual.length; i++) {
-      final match = _actual[i].matches(
-        expected[i],
+      final match = expected[i].matches(
+        _actual[i],
         matchState: matchState,
         related: related,
         prefix: 'instance ${expected[i].uniqueId} -> ',

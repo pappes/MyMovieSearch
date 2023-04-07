@@ -19,7 +19,7 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt6123456","bestSource":"DataSourceType.imdb","title":"Scott And Sharlene <3","alternateTitle":"Aussieland","type":"MovieContentType.series","year":"1985","yearRange":"1985-2023","runTime":"1234","language":"LanguageType.allEnglish",
+{"uniqueId":"tt6123456","bestSource":"DataSourceType.imdb","title":"Scott And Sharlene <3","alternateTitle":"Aussieland","type":"MovieContentType.short","year":"1985","yearRange":"1985-2023","runTime":"1234","language":"LanguageType.allEnglish",
       "languages":"[\"English\"]",
       "genres":"[\"Horror\",\"Romance\"]",
       "keywords":"[\"exorcism\",\"boxer\",\"chihuahua\"]",
@@ -32,7 +32,7 @@ const expectedDtoJsonStringList = [
     "Suggestions:":{"tt0012370":{"uniqueId":"tt0012370","bestSource":"DataSourceType.imdbSuggestions","title":"Walk Skip Run","alternateTitle":"Run Forrest Run","type":"MovieContentType.series","year":"1973","yearRange":"1973-1974","runTime":"7140","languages":"[]",
       "genres":"[\"Western\",\"Romance\"]","keywords":"[]",
       "userRating":"8.6","userRatingCount":"4837","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0012370"},"related":{}},
-      "tt0123580":{"uniqueId":"tt0123580","bestSource":"DataSourceType.imdbSuggestions","title":"Scott And Sharlene","alternateTitle":"Aussieland","type":"MovieContentType.series","year":"1985","yearRange":"1985-2023","runTime":"1234","languages":"[]",
+      "tt0123580":{"uniqueId":"tt0123580","bestSource":"DataSourceType.imdbSuggestions","title":"Scott And Sharlene","alternateTitle":"Aussieland","type":"MovieContentType.short","year":"1985","yearRange":"1985-2023","runTime":"1234","languages":"[]",
       "genres":"[\"Horror\",\"Romance\"]","keywords":"[]",
       "userRating":"7.5","userRatingCount":"5123","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BYjAxMz.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0123580"},"related":{}}}}}
 ''',
