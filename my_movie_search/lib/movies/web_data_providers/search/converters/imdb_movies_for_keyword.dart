@@ -6,7 +6,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imdb_keywords.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 //query string https://sg.media-imdb.com/suggests/w/wonder%20woman.json
@@ -27,7 +27,7 @@ const innerElementYear = 'y';
 const innerElementType = 'q';
 const innerElementYearRange = 'yr';
 
-class ImdbKeywordsConverter {
+class ImdbMoviesForKeywordConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     return [dtoFromMap(map)];
   }

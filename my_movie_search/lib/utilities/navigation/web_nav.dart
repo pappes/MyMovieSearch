@@ -10,7 +10,7 @@ import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
 import 'package:my_movie_search/movies/screens/popup.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/imdb_keywords.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 void _invokeChromeCustomTabs(String url, BuildContext context) {
@@ -140,7 +140,8 @@ void resultDrillDown(
       context,
       MaterialPageRoute(
         builder: (context) => MovieSearchResultsNewPage(
-          criteria: QueryIMDBKeywords.convertMovieDtoToCriteriaDto(movie),
+          criteria:
+              QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
         ),
       ),
     );

@@ -9,7 +9,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/imdb_keywords.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const keywordId = 'id';
@@ -29,9 +29,9 @@ const keywordKeywords = 'keywords';
 /// Implements [WebFetchBase] for the IMDB Keywords html web scraper.
 ///
 /// ```dart
-/// QueryIMDBKeywords().readList(criteria, limit: 10)
+/// ScrapeIMDBMoviesForKeyword().readList(criteria, limit: 10)
 /// ```
-mixin ScrapeIMDBKeywordsDetails
+mixin ScrapeIMDBMoviesForKeyword
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final detailConverter = ImdbWebScraperConverter(
     DataSourceType.imdbKeywords,
@@ -231,7 +231,7 @@ mixin ScrapeIMDBKeywordsDetails
       keywordId: fullUrl.toString(),
       keywordName: next.text,
       keywordKeywords: keyword,
-      keywordDescription: QueryIMDBKeywords.encodeJson(
+      keywordDescription: QueryIMDBMoviesForKeyword.encodeJson(
         keyword,
         pageNumber,
         fullUrl.toString(),

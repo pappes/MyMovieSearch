@@ -3,9 +3,9 @@ import 'dart:convert';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_keywords.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_keywords.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imdb_keywords.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_movies_for_keyword.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_movies_for_keyword.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -16,15 +16,16 @@ const jsonPageKey = 'page';
 /// Implements [WebFetchBase] for the IMDB keywords html web scraper.
 ///
 /// ```dart
-/// QueryIMDBKeywords().readList(criteria, limit: 10)
+/// QueryIMDBMoviesForKeyword().readList(criteria, limit: 10)
 /// ```
-class QueryIMDBKeywords extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
-    with ScrapeIMDBKeywordsDetails {
+class QueryIMDBMoviesForKeyword
+    extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
+    with ScrapeIMDBMoviesForKeyword {
   static const _baseURL =
       'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=';
   static const _pageURL = '&page=';
 
-  QueryIMDBKeywords(SearchCriteriaDTO criteria) : super(criteria);
+  QueryIMDBMoviesForKeyword(SearchCriteriaDTO criteria) : super(criteria);
 
   /// Describe where the data is coming from.
   @override
@@ -43,7 +44,7 @@ class QueryIMDBKeywords extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
     if (map is Map) {
-      return ImdbKeywordsConverter.dtoFromCompleteJsonMap(map);
+      return ImdbMoviesForKeywordConverter.dtoFromCompleteJsonMap(map);
     }
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
@@ -66,7 +67,7 @@ class QueryIMDBKeywords extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryIMDBKeywords] $message',
+        '[QueryIMDBMoviesForKeyword] $message',
         DataSourceType.imdbKeywords,
       );
 
