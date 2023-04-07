@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
@@ -12,15 +13,32 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 
 void printTestData(
   List<MovieResultDTO> actualResult, {
-  bool excludeCopyrightedData = false,
+  bool includeRelated = true,
 }) {
+  actualResult.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+  if (includeRelated) {
+    for (final entry in actualResult) {
+      // sort categories by converting map to a SplayTreeMap
+      entry.related = SplayTreeMap.from(entry.related);
+      for (final category in entry.related.keys) {
+        // sort related DTOs by converting map to a SplayTreeMap
+        entry.related[category] = SplayTreeMap.from(
+          entry.related[category]!,
+          //DTOCompare.compare,
+        );
+      }
+    }
+  }
   // ignore: avoid_print
   print(
     actualResult.toListOfDartJsonStrings(
-      excludeCopyrightedData: excludeCopyrightedData,
+      includeRelated: includeRelated,
     ),
   );
-  expect('must be commented out', 'all call to printTestData');
+  expect(
+    'debug code has been left uncommented!',
+    'all call to printTestData must be commented out',
+  );
 }
 
 Matcher containsSubstring(String substring, {String startsWith = ''}) {
@@ -124,6 +142,8 @@ class MovieResultDTOListMatcher extends Matcher {
     } else {
       _actual = [MovieResultDTO().toUnknown()];
     }
+    _actual.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+    expected.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
     matchState['actual'] = _actual;
 
     if (_actual.length != expected.length) return false;
@@ -132,7 +152,7 @@ class MovieResultDTOListMatcher extends Matcher {
         expected[i],
         matchState: matchState,
         related: related,
-        prefix: 'instance(${i + 1}) AKA ${expected[i].uniqueId} -> ',
+        prefix: 'instance ${expected[i].uniqueId} -> ',
       );
       if (!match) {
         return false;
@@ -187,6 +207,8 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
     } else {
       _actual = [MovieResultDTO().toUnknown()];
     }
+    _actual.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+    expected.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
     matchState['actual'] = _actual;
 
     for (final actualDto in _actual) {

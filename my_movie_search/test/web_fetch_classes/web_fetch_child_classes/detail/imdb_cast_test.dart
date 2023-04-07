@@ -69,7 +69,6 @@ void main() {
         'bestSource': 'DataSourceType.imdb',
         'title': '[QueryIMDBCastDetails] new query',
         'type': 'MovieContentType.error',
-        'related': {}
       };
 
       // Invoke the functionality.

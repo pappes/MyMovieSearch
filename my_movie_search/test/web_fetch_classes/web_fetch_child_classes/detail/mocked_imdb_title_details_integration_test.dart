@@ -32,9 +32,11 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
   /// Returns a new [HttpClient] instance to allow mocking in tests.
   late int httpStatus;
   String? expectedCriteria;
-  QueryIMDBTitleDetailsMocked(SearchCriteriaDTO criteria, this.expectedCriteria,
-      {this.httpStatus = 200})
-      : super(criteria);
+  QueryIMDBTitleDetailsMocked(
+    SearchCriteriaDTO criteria,
+    this.expectedCriteria, {
+    this.httpStatus = 200,
+  }) : super(criteria);
 
   @override
   HttpClient myGetHttpClient() {

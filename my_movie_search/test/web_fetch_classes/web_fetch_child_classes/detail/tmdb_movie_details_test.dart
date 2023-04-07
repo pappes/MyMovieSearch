@@ -65,7 +65,6 @@ void main() {
         'bestSource': 'DataSourceType.tmdbMovie',
         'title': '[tmdbMovie] new query',
         'type': 'MovieContentType.error',
-        'related': {}
       };
       MovieResultDTOHelpers.resetError();
 

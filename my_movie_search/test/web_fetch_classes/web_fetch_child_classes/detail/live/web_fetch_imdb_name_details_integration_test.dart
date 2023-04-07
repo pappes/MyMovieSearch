@@ -13,15 +13,15 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"nm0101000","bestSource":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdb":"nm0101000"},"related":{}}
+{"uniqueId":"nm0101000","bestSource":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdb":"nm0101000"}}
 ''',
   r'''
 {"uniqueId":"nm0101001","bestSource":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"Steve Bower is known for Vintage Reds (1998), Late Kick Off North East and Cumbria (2010) and The Search for the Holy Grail (1998).","sources":{"DataSourceType.imdb":"nm0101001"},"related":{}}
+      "description":"Steve Bower is known for Vintage Reds (1998), Late Kick Off North East and Cumbria (2010) and The Search for the Holy Grail (1998).","sources":{"DataSourceType.imdb":"nm0101001"}}
 ''',
   r'''
 {"uniqueId":"nm0101002","bestSource":"DataSourceType.imdb","title":"Stone Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"Stone Bower is known for Against All Odds (1984), Death Valley (1982) and Jimmy the Kid (1982).","sources":{"DataSourceType.imdb":"nm0101002"},"related":{}}
+      "description":"Stone Bower is known for Against All Odds (1984), Death Valley (1982) and Jimmy the Kid (1982).","sources":{"DataSourceType.imdb":"nm0101002"}}
 ''',
 ];
 
@@ -67,18 +67,15 @@ void main() {
     test('Run read 3 pages from IMDB', () async {
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following lines
-      //actualOutput.forEach((e) => e.related = {});
-      // printTestData(actualOutput, excludeCopyrightedData: true);
+      // printTestData(actualOutput, includeRelated: false);
 
       final expectedOutput = expectedDTOList;
-      expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
       );

@@ -63,7 +63,6 @@ void main() {
         'bestSource': 'DataSourceType.tmdbPerson',
         'title': '[tmdbPerson] new query',
         'type': 'MovieContentType.error',
-        'related': {}
       };
       MovieResultDTOHelpers.resetError();
 

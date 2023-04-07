@@ -62,7 +62,6 @@ void main() {
         'bestSource': 'DataSourceType.omdb',
         'title': '[QueryOMDBMovies] new query',
         'type': 'MovieContentType.error',
-        'related': {}
       };
 
       // Invoke the functionality.

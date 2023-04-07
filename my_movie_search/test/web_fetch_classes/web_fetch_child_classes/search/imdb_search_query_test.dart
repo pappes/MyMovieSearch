@@ -90,7 +90,6 @@ void main() {
         'bestSource': 'DataSourceType.imdbSearch',
         'title': '[QueryIMDBSearch] new query',
         'type': 'MovieContentType.error',
-        'related': {}
       };
 
       // Invoke the functionality.

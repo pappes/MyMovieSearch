@@ -35,22 +35,6 @@ class RestorationTestParent extends State with RestorationMixin {
   }
 }
 
-void clearCopyright(MovieResultDTO dto) {
-  dto.description = '';
-  dto.imageUrl = '';
-  dto.userRating = 0;
-  dto.userRatingCount = 0;
-  dto.censorRating = CensorRatingType.none;
-  dto.languages.clear();
-  dto.genres.clear();
-  dto.keywords.clear();
-  for (final category in dto.related.keys) {
-    for (final uniqueId in dto.related[category]!.keys) {
-      clearCopyright(dto.related[category]![uniqueId]!);
-    }
-  }
-}
-
 MovieResultDTO fullDTO() {
   final dto = MovieResultDTO();
 
@@ -289,8 +273,7 @@ void main() {
 
     // Test list matcher error string.
     test('MovieResultDTOListMatcher different', () {
-      const expectedError =
-          '{instance(2) AKA def_uniqueId -> uniqueId: is different\n'
+      const expectedError = '{instance def_uniqueId -> uniqueId: is different\n'
           '  Expected: "xyz"\n'
           '    Actual: "def_uniqueId"\n'
           '}';
@@ -325,7 +308,7 @@ void main() {
           '{uniqueId: abc_uniqueId, bestSource: DataSourceType.wiki, title: abc_title, alternateTitle: abc_alternateTitle, charactorName: abc_charactorName, type: MovieContentType.custom, year: 123, yearRange: abc_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["abc_language1","abc_language2"], genres: ["abc_genre1","abc_genre2"], keywords: ["abc_keyword1","abc_keyword2"], description: abc_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: abc_imageUrl, sources: {DataSourceType.tmdbMovie: abc_alternateTitle, DataSourceType.wiki: abc_uniqueId}, related: {suggestions: {relabc 1_uniqueId: {uniqueId: relabc 1_uniqueId, bestSource: DataSourceType.wiki, title: relabc 1_title, alternateTitle: relabc 1_alternateTitle, charactorName: relabc 1_charactorName, type: MovieContentType.custom, year: 123, yearRange: relabc 1_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["relabc 1_language1","relabc 1_language2"], genres: ["relabc 1_genre1","relabc 1_genre2"], keywords: ["relabc 1_keyword1","relabc 1_keyword2"], description: relabc 1_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: relabc 1_imageUrl, sources: {DataSourceType.tmdbMovie: relabc 1_alternateTitle, DataSourceType.wiki: relabc 1_uniqueId}, related: {}}, relabc 2_uniqueId: {uniqueId: relabc 2_uniqueId, bestSource: DataSourceType.wiki, title: relabc 2_title, alternateTitle: relabc 2_alternateTitle, charactorName: relabc 2_charactorName, type: MovieContentType.custom, year: 123, yearRange: relabc 2_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["relabc 2_language1","relabc 2_language2"], genres: ["relabc 2_genre1","relabc 2_genre2"], keywords: ["relabc 2_keyword1","relabc 2_keyword2"], description: relabc 2_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: relabc 2_imageUrl, sources: {DataSourceType.tmdbMovie: relabc 2_alternateTitle, DataSourceType.wiki: relabc 2_uniqueId}, related: {}}, relabc 3_uniqueId: {uniqueId: relabc 3_uniqueId, bestSource: DataSourceType.wiki, title: relabc 3_title, alternateTitle: relabc 3_alternateTitle, charactorName: relabc 3_charactorName, type: MovieContentType.custom, year: 123, yearRange: relabc 3_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["relabc 3_language1","relabc 3_language2"], genres: ["relabc 3_genre1","relabc 3_genre2"], keywords: ["relabc 3_keyword1","relabc 3_keyword2"], description: relabc 3_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: relabc 3_imageUrl, sources: {DataSourceType.tmdbMovie: relabc 3_alternateTitle, DataSourceType.wiki: relabc 3_uniqueId}, related: {}}}, actors: {relabc a_uniqueId: {uniqueId: relabc a_uniqueId, bestSource: DataSourceType.wiki, title: relabc a_title, alternateTitle: relabc a_alternateTitle, charactorName: relabc a_charactorName, type: MovieContentType.custom, year: 123, yearRange: relabc a_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["relabc a_language1","relabc a_language2"], genres: ["relabc a_genre1","relabc a_genre2"], keywords: ["relabc a_keyword1","relabc a_keyword2"], description: relabc a_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: relabc a_imageUrl, sources: {DataSourceType.tmdbMovie: relabc a_alternateTitle, DataSourceType.wiki: relabc a_uniqueId}, related: {}}, relabc b_uniqueId: {uniqueId: relabc b_uniqueId, bestSource: DataSourceType.wiki, title: relabc b_title, alternateTitle: relabc b_alternateTitle, charactorName: relabc b_charactorName, type: MovieContentType.custom, year: 123, yearRange: relabc b_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["relabc b_language1","relabc b_language2"], genres: ["relabc b_genre1","relabc b_genre2"], keywords: ["relabc b_keyword1","relabc b_keyword2"], description: relabc b_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: relabc b_imageUrl, sources: {DataSourceType.tmdbMovie: relabc b_alternateTitle, DataSourceType.wiki: relabc b_uniqueId}, related: {}}, relabc c_uniqueId: {uniqueId: relabc c_uniqueId, bestSource: DataSourceType.wiki, title: relabc c_title, alternateTitle: relabc c_alternateTitle, charactorName: relabc c_charactorName, type: MovieContentType.custom, year: 123, yearRange: relabc c_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["relabc c_language1","relabc c_language2"], genres: ["relabc c_genre1","relabc c_genre2"], keywords: ["relabc c_keyword1","relabc c_keyword2"], description: relabc c_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: relabc c_imageUrl, sources: {DataSourceType.tmdbMovie: relabc c_alternateTitle, DataSourceType.wiki: relabc c_uniqueId}, related: {}}}}},\n'
           '{uniqueId: xyz, bestSource: DataSourceType.wiki, title: def_title, alternateTitle: def_alternateTitle, charactorName: def_charactorName, type: MovieContentType.custom, year: 123, yearRange: def_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["def_language1","def_language2"], genres: ["def_genre1","def_genre2"], keywords: ["def_keyword1","def_keyword2"], description: def_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: def_imageUrl, sources: {DataSourceType.tmdbMovie: def_alternateTitle, DataSourceType.wiki: def_uniqueId}, related: {suggestions: {reldef 1_uniqueId: {uniqueId: reldef 1_uniqueId, bestSource: DataSourceType.wiki, title: reldef 1_title, alternateTitle: reldef 1_alternateTitle, charactorName: reldef 1_charactorName, type: MovieContentType.custom, year: 123, yearRange: reldef 1_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["reldef 1_language1","reldef 1_language2"], genres: ["reldef 1_genre1","reldef 1_genre2"], keywords: ["reldef 1_keyword1","reldef 1_keyword2"], description: reldef 1_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: reldef 1_imageUrl, sources: {DataSourceType.tmdbMovie: reldef 1_alternateTitle, DataSourceType.wiki: reldef 1_uniqueId}, related: {}}, reldef 2_uniqueId: {uniqueId: reldef 2_uniqueId, bestSource: DataSourceType.wiki, title: reldef 2_title, alternateTitle: reldef 2_alternateTitle, charactorName: reldef 2_charactorName, type: MovieContentType.custom, year: 123, yearRange: reldef 2_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["reldef 2_language1","reldef 2_language2"], genres: ["reldef 2_genre1","reldef 2_genre2"], keywords: ["reldef 2_keyword1","reldef 2_keyword2"], description: reldef 2_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: reldef 2_imageUrl, sources: {DataSourceType.tmdbMovie: reldef 2_alternateTitle, DataSourceType.wiki: reldef 2_uniqueId}, related: {}}, reldef 3_uniqueId: {uniqueId: reldef 3_uniqueId, bestSource: DataSourceType.wiki, title: reldef 3_title, alternateTitle: reldef 3_alternateTitle, charactorName: reldef 3_charactorName, type: MovieContentType.custom, year: 123, yearRange: reldef 3_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["reldef 3_language1","reldef 3_language2"], genres: ["reldef 3_genre1","reldef 3_genre2"], keywords: ["reldef 3_keyword1","reldef 3_keyword2"], description: reldef 3_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: reldef 3_imageUrl, sources: {DataSourceType.tmdbMovie: reldef 3_alternateTitle, DataSourceType.wiki: reldef 3_uniqueId}, related: {}}}, actors: {reldef a_uniqueId: {uniqueId: reldef a_uniqueId, bestSource: DataSourceType.wiki, title: reldef a_title, alternateTitle: reldef a_alternateTitle, charactorName: reldef a_charactorName, type: MovieContentType.custom, year: 123, yearRange: reldef a_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["reldef a_language1","reldef a_language2"], genres: ["reldef a_genre1","reldef a_genre2"], keywords: ["reldef a_keyword1","reldef a_keyword2"], description: reldef a_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: reldef a_imageUrl, sources: {DataSourceType.tmdbMovie: reldef a_alternateTitle, DataSourceType.wiki: reldef a_uniqueId}, related: {}}, reldef b_uniqueId: {uniqueId: reldef b_uniqueId, bestSource: DataSourceType.wiki, title: reldef b_title, alternateTitle: reldef b_alternateTitle, charactorName: reldef b_charactorName, type: MovieContentType.custom, year: 123, yearRange: reldef b_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["reldef b_language1","reldef b_language2"], genres: ["reldef b_genre1","reldef b_genre2"], keywords: ["reldef b_keyword1","reldef b_keyword2"], description: reldef b_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: reldef b_imageUrl, sources: {DataSourceType.tmdbMovie: reldef b_alternateTitle, DataSourceType.wiki: reldef b_uniqueId}, related: {}}, reldef c_uniqueId: {uniqueId: reldef c_uniqueId, bestSource: DataSourceType.wiki, title: reldef c_title, alternateTitle: reldef c_alternateTitle, charactorName: reldef c_charactorName, type: MovieContentType.custom, year: 123, yearRange: reldef c_yearRange, runTime: 3723, language: LanguageType.mostlyEnglish, creditsOrder: 42, languages: ["reldef c_language1","reldef c_language2"], genres: ["reldef c_genre1","reldef c_genre2"], keywords: ["reldef c_keyword1","reldef c_keyword2"], description: reldef c_description, userRating: 456.0, userRatingCount: 789, censorRating: CensorRatingType.family, imageUrl: reldef c_imageUrl, sources: {DataSourceType.tmdbMovie: reldef c_alternateTitle, DataSourceType.wiki: reldef c_uniqueId}, related: {}}}}}\n'
           ']\n'
-          '{instance(2) AKA def_uniqueId -> uniqueId: is different\n'
+          '{instance def_uniqueId -> uniqueId: is different\n'
           '  Expected: "xyz"\n'
           '    Actual: "def_uniqueId"\n'
           '}';
@@ -463,17 +446,7 @@ void main() {
     test('single_DTO', () {
       final dto = makeResultDTO('abc');
 
-      final map = dto.toMap(excludeCopyrightedData: false);
-
-      testToMovieResultDTO(dto, map);
-    });
-
-    // Convert a dto to a map excluding copyrighted content.
-    test('no copyright data', () {
-      final dto = makeResultDTO('abc');
-
       final map = dto.toMap();
-      clearCopyright(dto);
 
       testToMovieResultDTO(dto, map);
     });
@@ -539,17 +512,7 @@ void main() {
     test('single_DTO', () {
       final dto = makeResultDTO('abc');
 
-      final map = dto.toMap(excludeCopyrightedData: false);
-
-      testToMovieResultDTO(dto, map);
-    });
-
-    // Convert a dto to a map excluding copyrighted content.
-    test('no copyright data', () {
-      final dto = makeResultDTO('abc');
-
       final map = dto.toMap();
-      clearCopyright(dto);
 
       testToMovieResultDTO(dto, map);
     });

@@ -98,7 +98,6 @@ testing and punctuation
         'bestSource': 'DataSourceType.imdbKeywords',
         'title': '[QueryIMDBKeywords] new query',
         'type': 'MovieContentType.error',
-        'related': {}
       };
 
       // Invoke the functionality.

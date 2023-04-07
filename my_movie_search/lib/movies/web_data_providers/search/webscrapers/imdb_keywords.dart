@@ -154,7 +154,7 @@ mixin ScrapeIMDBKeywordsDetails
       section?.querySelector('.lister-item-year')?.text.trim();
 
   String? _getKeywords(Element? section) {
-    return criteria?.criteriaTitle;
+    return criteria.criteriaTitle;
   }
 
   String? _getActors(Element? section) {

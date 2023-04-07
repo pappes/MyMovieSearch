@@ -72,7 +72,6 @@ void main() {
         'bestSource': 'DataSourceType.imdb',
         'title': '[QueryIMDBBibliographyDetails] new query',
         'type': 'MovieContentType.error',
-        'related': {}
       };
       final criteria = SearchCriteriaDTO();
       // Invoke the functionality.

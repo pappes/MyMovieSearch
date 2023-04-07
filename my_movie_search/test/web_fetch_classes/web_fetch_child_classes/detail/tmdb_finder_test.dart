@@ -58,7 +58,6 @@ void main() {
         'bestSource': 'DataSourceType.tmdbFinder',
         'title': '[tmdbFinder] new query',
         'type': 'MovieContentType.error',
-        'related': {}
       };
 
       // Invoke the functionality.

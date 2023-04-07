@@ -62,7 +62,6 @@ void main() {
         'bestSource': 'DataSourceType.google',
         'title': '[QueryGoogleMovies] new query',
         'type': 'MovieContentType.error',
-        'related': {}
       };
 
       // Invoke the functionality.

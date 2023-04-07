@@ -25,7 +25,9 @@ void main() {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
       expect(
-          QueryIMDBSuggestions(criteria).myDataSourceName(), 'imdbSuggestions');
+        QueryIMDBSuggestions(criteria).myDataSourceName(),
+        'imdbSuggestions',
+      );
     });
 
     // Confirm criteria is displayed as expected.
@@ -91,7 +93,6 @@ void main() {
         'bestSource': 'DataSourceType.imdbSuggestions',
         'title': '[QueryIMDBSuggestions] new query',
         'type': 'MovieContentType.error',
-        'related': {}
       };
 
       // Invoke the functionality.

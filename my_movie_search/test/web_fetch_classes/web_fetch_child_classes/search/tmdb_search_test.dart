@@ -62,7 +62,6 @@ void main() {
         'bestSource': 'DataSourceType.tmdbSearch',
         'title': '[QueryTMDBMovies] new query',
         'type': 'MovieContentType.error',
-        'related': {}
       };
 
       // Invoke the functionality.

@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_raw_strings
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -12,24 +14,13 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt0101000","bestSource":"DataSourceType.imdb","title":"Zacátek dlouhého podzimu","type":"MovieContentType.title","year":"1990","yearRange":"1990","runTime":"4860","language":"LanguageType.foreign",
-      "languages":"[\"Czech\"]",
-      "genres":"[\"Drama\"]","keywords":"[]",
-      "userRating":"5.0","userRatingCount":"8","sources":{"DataSourceType.imdb":"tt0101000"},"related":{}}
+{"uniqueId":"tt0101000","bestSource":"DataSourceType.imdb","title":"Zacátek dlouhého podzimu","type":"MovieContentType.title","year":"1990","yearRange":"1990","runTime":"4860","language":"LanguageType.foreign","sources":{"DataSourceType.imdb":"tt0101000"}}
 ''',
   r'''
-{"uniqueId":"tt0101001","bestSource":"DataSourceType.imdb","title":"Zai shi feng liu jie","alternateTitle":"A Haunted Romance","type":"MovieContentType.title","year":"1985","yearRange":"1985","runTime":"5340","language":"LanguageType.foreign",
-      "languages":"[\"Cantonese\"]",
-      "genres":"[\"Horror\"]",
-      "keywords":"[\"ghost\"]","imageUrl":"https://m.media-amazon.com/images/M/MV5BYjJkYzRkNzMtZWVkYy00MmRjLWE1YTQtYmIwOWE4MTkyZWFmXkEyXkFqcGdeQXVyNzc5MjA3OA@@._V1_.jpg","sources":{"DataSourceType.imdb":"tt0101001"},"related":{}}
+{"uniqueId":"tt0101001","bestSource":"DataSourceType.imdb","title":"Zai shi feng liu jie","alternateTitle":"A Haunted Romance","type":"MovieContentType.title","year":"1985","yearRange":"1985","runTime":"5340","language":"LanguageType.foreign","sources":{"DataSourceType.imdb":"tt0101001"}}
 ''',
   r'''
-{"uniqueId":"tt0101002","bestSource":"DataSourceType.imdb","title":"Joi jin gong woo","alternateTitle":"Hong Kong Corruptor","type":"MovieContentType.title","year":"1990","yearRange":"1990","runTime":"6480","language":"LanguageType.someEnglish",
-      "languages":"[\"Cantonese\",\"English\"]",
-      "genres":"[\"Action\",\"Drama\"]",
-      "keywords":"[\"gangster\"]",
-      "description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.",
-      "userRating":"6.5","userRatingCount":"159","censorRating":"CensorRatingType.restricted","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjM0MDE5NGYtZDQ1ZC00ZDU5LWFjMmUtOTNiN2RmMTJkMjM2XkEyXkFqcGdeQXVyMzU0NzkwMDg@._V1_.jpg","sources":{"DataSourceType.imdb":"tt0101002"},"related":{}}
+{"uniqueId":"tt0101002","bestSource":"DataSourceType.imdb","title":"Joi jin gong woo","alternateTitle":"Hong Kong Corruptor","type":"MovieContentType.title","year":"1990","yearRange":"1990","runTime":"6480","language":"LanguageType.someEnglish","censorRating":"CensorRatingType.restricted","sources":{"DataSourceType.imdb":"tt0101002"}}
 ''',
 ];
 
@@ -75,13 +66,12 @@ void main() {
     test('Run read 3 pages from IMDB', () async {
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
       final expectedOutput = expectedDTOList;
-      expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+      expectedDTOList.clearCopyrightedData();
+      actualOutput.clearCopyrightedData();
 
       // To update expected data, uncomment the following line
-      // actualOutput.forEach((e) => e.related = {});
-      // printTestData(actualOutput, excludeCopyrightedData: true);
+      // printTestData(actualOutput, includeRelated: false);
 
       // Check the results.
       expect(

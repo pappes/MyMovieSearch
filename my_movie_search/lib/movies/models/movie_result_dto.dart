@@ -121,8 +121,7 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
 
   @override
   Object toPrimitives() => dtoToPrimitives(value);
-  Object dtoToPrimitives(MovieResultDTO dto) =>
-      jsonEncode(dto.toMap(excludeCopyrightedData: false));
+  Object dtoToPrimitives(MovieResultDTO dto) => jsonEncode(dto.toMap());
 }
 
 class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
@@ -172,7 +171,7 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   List<String> encodeList() {
     final result = <String>[];
     for (final dto in this) {
-      result.add(dto.toJson(excludeCopyrightedData: false));
+      result.add(dto.toJson());
     }
     return result;
   }
@@ -466,15 +465,15 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Convert a [MovieResultDTO] to a json [String].
   ///
-  String toJson({bool excludeCopyrightedData = true}) {
-    return jsonEncode(toMap(excludeCopyrightedData: excludeCopyrightedData));
+  String toJson({bool includeRelated = true}) {
+    return jsonEncode(toMap(includeRelated: includeRelated));
   }
 
   /// Convert a [MovieResultDTO] object into a [Map].
   ///
   /// All returned objects are compatible with the [StandardMessageCodec] class.
   /// i.e. only contain string, number, bool, map or list.
-  Map<String, Object> toMap({bool excludeCopyrightedData = true}) {
+  Map<String, Object> toMap({bool includeRelated = true}) {
     final result = <String, Object>{};
     final defaultValues = MovieResultDTO();
     result[movieDTOUniqueId] = uniqueId;
@@ -508,31 +507,29 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       result[movieDTOcreditsOrder] = creditsOrder.toString();
     }
 
-    if (!excludeCopyrightedData) {
-      if (languages != defaultValues.languages) {
-        result[movieDTOLanguages] = json.encode(languages.toList());
-      }
-      if (genres != defaultValues.genres) {
-        result[movieDTOGenres] = json.encode(genres.toList());
-      }
-      if (keywords != defaultValues.keywords) {
-        result[movieDTOKeywords] = json.encode(keywords.toList());
-      }
-      if (description != defaultValues.description) {
-        result[movieDTODescription] = description;
-      }
-      if (userRating != defaultValues.userRating) {
-        result[movieDTOUserRating] = userRating.toString();
-      }
-      if (userRatingCount != defaultValues.userRatingCount) {
-        result[movieDTOUserRatingCount] = userRatingCount.toString();
-      }
-      if (censorRating != defaultValues.censorRating) {
-        result[movieDTOCensorRating] = censorRating.toString();
-      }
-      if (imageUrl != defaultValues.imageUrl) {
-        result[movieDTOImageUrl] = imageUrl;
-      }
+    if (languages != defaultValues.languages && languages.isNotEmpty) {
+      result[movieDTOLanguages] = json.encode(languages.toList());
+    }
+    if (genres != defaultValues.genres && genres.isNotEmpty) {
+      result[movieDTOGenres] = json.encode(genres.toList());
+    }
+    if (keywords != defaultValues.keywords && keywords.isNotEmpty) {
+      result[movieDTOKeywords] = json.encode(keywords.toList());
+    }
+    if (description != defaultValues.description) {
+      result[movieDTODescription] = description;
+    }
+    if (userRating != defaultValues.userRating) {
+      result[movieDTOUserRating] = userRating.toString();
+    }
+    if (userRatingCount != defaultValues.userRatingCount) {
+      result[movieDTOUserRatingCount] = userRatingCount.toString();
+    }
+    if (censorRating != defaultValues.censorRating) {
+      result[movieDTOCensorRating] = censorRating.toString();
+    }
+    if (imageUrl != defaultValues.imageUrl) {
+      result[movieDTOImageUrl] = imageUrl;
     }
 
     if (sources.isNotEmpty) {
@@ -543,19 +540,19 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       result[movieDTOSources] = sourcesMap;
     }
 
-    // convert each related dto to a string
-    final relatedMap = <String, Object>{};
-    for (final category in related.entries) {
-      final Map movies = {};
-      for (final dto in category.value.entries) {
-        final movieMap = dto.value.toMap(
-          excludeCopyrightedData: excludeCopyrightedData,
-        );
-        movies[dto.value.uniqueId] = movieMap;
+    if (includeRelated && related.isNotEmpty) {
+      // convert each related dto to a string
+      final relatedMap = <String, Object>{};
+      for (final category in related.entries) {
+        final Map movies = {};
+        for (final dto in category.value.entries) {
+          final movieMap = dto.value.toMap();
+          movies[dto.value.uniqueId] = movieMap;
+        }
+        relatedMap[category.key] = movies;
       }
-      relatedMap[category.key] = movies;
+      result[movieDTORelated] = relatedMap;
     }
-    result[movieDTORelated] = relatedMap;
     return result;
   }
 
@@ -740,7 +737,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Create a string representation of a [MovieResultDTO].
   ///
   String toPrintableString() {
-    return toMap(excludeCopyrightedData: false).toString();
+    return toMap().toString();
   }
 
   /// Create a placeholder for a value that can not be easily represented
@@ -911,7 +908,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Test framework matcher to compare current [MovieResultDTO] to [other]
   ///
   /// Explains any difference found.
-  /// [matchState] allows ifformation about mismatches to be passed back
+  /// [matchState] allows information about mismatches to be passed back
   /// [related] allows exclusion of the related dto collection for comparison
   /// [fuzzy] allows volitile numeric data to have a 75% variation
   bool matches(
@@ -1013,6 +1010,29 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     }
     return language;
   }
+
+  /// Remove data that should only be held transiently.
+  ///
+  /// Some data can be help in memory but should not be saved to source code.
+  /// Other data is not owned by the source and can be considered public domain.
+  void clearCopyrightedData() {
+    description = '';
+    imageUrl = '';
+    userRating = 0;
+    userRatingCount = 0;
+    languages.clear();
+    genres.clear();
+    keywords.clear();
+    for (final category in related.keys) {
+      for (final dto in related[category]!.values) {
+        dto.clearCopyrightedData();
+      }
+    }
+  }
+
+  MovieResultDTO clone() {
+    return toMap().toMovieResultDTO();
+  }
 }
 
 extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
@@ -1042,10 +1062,10 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
   /// Return a list of strings containing valid json
   ///
   /// used for constructing test data
-  String toListOfDartJsonStrings({bool excludeCopyrightedData = true}) {
+  String toListOfDartJsonStrings({bool includeRelated = true}) {
     final listContents = StringBuffer();
     for (final entry in this) {
-      final json = entry.toJson(excludeCopyrightedData: excludeCopyrightedData);
+      final json = entry.toJson(includeRelated: includeRelated);
       final dartString = "r'''\n${json.replaceAll("'", "'")}\n''',\n";
       listContents.write(formatDtoJson(dartString));
     }
@@ -1095,9 +1115,15 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
   String toJson() {
     final listContents = <String>[];
     for (final key in this) {
-      listContents.add(jsonEncode(key.toMap(excludeCopyrightedData: false)));
+      listContents.add(jsonEncode(key.toMap()));
     }
     return jsonEncode(listContents);
+  }
+
+  void clearCopyrightedData() {
+    for (final entry in this) {
+      entry.clearCopyrightedData();
+    }
   }
 }
 

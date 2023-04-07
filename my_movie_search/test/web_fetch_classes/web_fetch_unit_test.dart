@@ -39,9 +39,9 @@ typedef ConvertTreeToOutputType = Future<List<MovieResultDTO>> Function(
 class QueryUnknownSourceMocked
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   int httpReturnCode = 200;
-  SearchCriteriaDTO criteria;
+  SearchCriteriaDTO mockedCriteria;
 
-  QueryUnknownSourceMocked(this.criteria) : super(criteria);
+  QueryUnknownSourceMocked(this.mockedCriteria) : super(mockedCriteria);
 
   /// Returns a new [HttpClient] instance to allow mocking in tests.
   @override
@@ -55,10 +55,11 @@ class QueryUnknownSourceMocked
     // provided HttpClient.
     when(clientResponse.statusCode).thenAnswer((_) => httpReturnCode);
     when(clientResponse.transform(utf8.decoder)).thenAnswer(
-        (_) => Stream.value(_getOfflineJson(criteria.criteriaTitle)));
+      (_) => Stream.value(_getOfflineJson(mockedCriteria.criteriaTitle)),
+    );
 
     when(clientRequest.close()).thenAnswer((_) async {
-      if (criteria.criteriaTitle == 'EXCEPTION') throw 'go away!';
+      if (mockedCriteria.criteriaTitle == 'EXCEPTION') throw 'go away!';
       return clientResponse;
     });
 
@@ -68,11 +69,11 @@ class QueryUnknownSourceMocked
     return client;
   }
 
-  // Remember criteria for later
+  // Remember mockedCriteria for later
   @override
   String myFormatInputAsText() {
-    if (criteria.criteriaTitle == 'HTTP404') httpReturnCode = 404;
-    return criteria.criteriaTitle;
+    if (mockedCriteria.criteriaTitle == 'HTTP404') httpReturnCode = 404;
+    return mockedCriteria.criteriaTitle;
   }
 
   // Default myConvertTreeToOutputType to
