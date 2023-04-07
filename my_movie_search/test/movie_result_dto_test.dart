@@ -646,7 +646,7 @@ void main() {
   });
 
   group('merge', () {
-    // Check that language list is categorised corectly.
+    // Check that merge combines 2 DTOs corectly.
     test('empty_DTO', () {
       final dto1 = MovieResultDTO();
       final dto2 = MovieResultDTO();
@@ -655,21 +655,29 @@ void main() {
       expect(dto1.description, '');
     });
     test('some details', () {
-      final dto1 = MovieResultDTO();
-      final dto2 = MovieResultDTO();
-      final dto3 = MovieResultDTO();
-      dto1.title = 'merge into me';
-      dto2.description = 'merge me';
-      dto3.title = 'related dto';
-      dto2.related = {
-        'suggestions': {dto3.uniqueId: dto3}
-      };
+      final dto1related = MovieResultDTO().init(title: 'related dto 1');
+      final dto2related = MovieResultDTO().init(title: 'related dto 2');
+      final dto1 = MovieResultDTO().init(
+        title: 'merge into me',
+        related: {
+          'suggestions': {'123': dto1related}
+        },
+      );
+      final dto2 = MovieResultDTO().init(
+        description: 'merge me',
+        related: {
+          'suggestions': {'456': dto2related}
+        },
+      );
+
       dto1.merge(dto2);
+
       expect(dto1.title, 'merge into me');
       expect(dto1.description, 'merge me');
       expect(dto1.related.length, 1);
       expect(dto1.related.keys.first, 'suggestions');
-      expect(dto1.related.values.first.values.first.title, 'related dto');
+      expect(dto1.related.values.first.values.first.title, 'related dto 1');
+      expect(dto1.related.values.first.values.last.title, 'related dto 2');
     });
     test('exclude related', () {
       final dto1 = MovieResultDTO();
@@ -685,6 +693,66 @@ void main() {
       expect(dto1.title, 'merge into me');
       expect(dto1.description, 'merge me');
       expect(dto1.related.length, 0);
+    });
+
+    group('full DTO', () {
+      final betterValues = makeResultDTO('abc');
+      betterValues.setSource(newSource: DataSourceType.omdb);
+      betterValues.sources[DataSourceType.imdb] = 'good data';
+      betterValues.languages = {'English', 'French', 'Italian'};
+      betterValues.getLanguageType();
+      final otherValues = MovieResultDTO();
+      otherValues.sources[DataSourceType.imdb] = 'good data';
+      otherValues.setSource(newSource: DataSourceType.wiki);
+      otherValues.languages = {'French', 'English'};
+      otherValues.getLanguageType();
+
+      test('no merge required', () {
+        final expected = betterValues.clone();
+
+        final output = betterValues.clone();
+        output.userRatingCount = otherValues.userRatingCount;
+        output.merge(otherValues);
+
+        expect(output, MovieResultDTOMatcher(expected));
+      });
+
+      test('merge required', () {
+        final expected = betterValues.clone();
+        expected.uniqueId = otherValues.uniqueId;
+        expected.sources.addAll(otherValues.sources);
+        expected.bestSource = otherValues.bestSource;
+        expected.languages = otherValues.languages;
+        expected.languages.addAll(betterValues.languages);
+        expected.getLanguageType();
+
+        final output = otherValues.clone();
+        output.userRatingCount = betterValues.userRatingCount;
+        output.merge(betterValues);
+
+        expect(output, MovieResultDTOMatcher(expected));
+      });
+
+      test('truncated description', () {
+        const shortDescription =
+            'Short but sweet.  More than 100 chars long but does not end in . . . unlike the other string.  This string should win.';
+        const longDescription =
+            'Longer description text.  More than 100 chars long and does end in . . . unlike the other string.  This string should lose...';
+        final worseDescription = betterValues.clone();
+        worseDescription.description = longDescription;
+        final betterDescription = otherValues.clone();
+        betterDescription.description = shortDescription;
+        final expected = betterValues.clone();
+        expected.description = shortDescription;
+        expected.sources.addAll(betterDescription.sources);
+        expected.bestSource = worseDescription.bestSource;
+
+        final output = worseDescription.clone();
+        output.userRatingCount = betterDescription.userRatingCount;
+        output.merge(betterDescription);
+
+        expect(output, MovieResultDTOMatcher(expected));
+      });
     });
   });
 }

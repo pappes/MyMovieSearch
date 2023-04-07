@@ -1,3 +1,4 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:math' show max;
 
@@ -42,12 +43,12 @@ enum MovieContentType {
   none,
   error,
   person,
-  title, //      unknow movie type
   movie, //      includes "tv movie"
   series, //     anything less that an hour long that does repeat or repeats more than 4 times
   miniseries, // anything more that an hour long that does repeat
   short, //      anything less that an hour long that does not repeat
   episode, //    anything that is part of a series or mini-series
+  title, //      unknown movie type
   custom,
 }
 
@@ -577,7 +578,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (newValue.userRatingCount >= userRatingCount ||
         0 == userRatingCount ||
         newValue.sources.containsKey(DataSourceType.imdb)) {
-      bestSource = bestValue(newValue.bestSource, bestSource);
+      bestSource = bestValue(bestSource, newValue.bestSource);
 
       final oldTitle = title;
       if (DataSourceType.imdb == newValue.bestSource && '' != newValue.title) {
@@ -673,24 +674,58 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   ///
   /// [a] and [b] can be numbers, strings, durations, enums
   T bestValue<T>(T a, T b) {
-    if (a is MovieContentType && b is MovieContentType) bestType(a, b);
-    if (a is CensorRatingType && b is CensorRatingType) bestCensorRating(a, b);
-    if (a is DataSourceType && b is DataSourceType) bestBestSource(a, b);
-    if (a is LanguageType && b is LanguageType) bestLanguage(a, b);
-    if (a is num && b is num && a < b) return b;
-    if (a is Duration && b is Duration && a < b) return b;
-    if (a is String && b is String) {
-      final aStr = _htmlDecode.convert(a);
-      final bStr = _htmlDecode.convert(b);
-      if (aStr.length < bStr.length) return bStr as T;
-      return aStr as T;
+    if (a is MovieContentType && b is MovieContentType) {
+      return bestType(a, b) as T;
     }
-    if (a.toString().length < b.toString().length) return b;
+    if (a is CensorRatingType && b is CensorRatingType) {
+      return bestCensorRating(a, b) as T;
+    }
+    if (a is DataSourceType && b is DataSourceType) {
+      return bestBestSource(a, b) as T;
+    }
+    if (a is LanguageType && b is LanguageType) {
+      return bestLanguage(a, b) as T;
+    }
+    if (a is num && b is num && a < b) {
+      return b;
+    }
+    if (a is Duration && b is Duration && a < b) {
+      return b;
+    }
+    if (a is String && b is String) {
+      return bestString(a, b) as T;
+    }
+    if (a.toString().length < b.toString().length) {
+      return b;
+    }
     if (lastNumberFromString(a.toString()) <
         lastNumberFromString(b.toString())) {
       return b;
     }
     return a;
+  }
+
+  /// Compare [a] with [b] and return the most relevant value.
+  ///
+  /// The string with the longest length is the best string
+  /// unless it ends in ...
+  String bestString(String a, String b) {
+    final aStr = _htmlDecode.convert(a);
+    final bStr = _htmlDecode.convert(b);
+
+    var longest = aStr;
+    var shortest = bStr;
+    if (aStr.length < bStr.length) {
+      shortest = aStr;
+      longest = bStr;
+    }
+
+    if (shortest.length > 100 &&
+        longest.substring(longest.length - 10).contains('...')) {
+      // other string longer but contains an incomplete description!
+      return shortest;
+    }
+    return longest;
   }
 
   /// Compare [rating1] with [rating2] and return the most relevant value.
@@ -886,21 +921,30 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   ) {
     if (expected.length != actual.length) {
       _matchCompare(mismatches, '$fieldName length', actual, expected);
+      return;
     }
+    final actualSorted = SplayTreeMap<DataSourceType, String>.from(
+      actual,
+      Enum.compareByIndex,
+    );
+    final expectedSorted = SplayTreeMap<DataSourceType, String>.from(
+      expected,
+      Enum.compareByIndex,
+    );
     for (var index = 0; index < expected.length; index++) {
       // Compare source name
       _matchCompare(
         mismatches,
         fieldName,
-        actual.keys.elementAt(index),
-        expected.keys.elementAt(index),
+        actualSorted.keys.elementAt(index),
+        expectedSorted.keys.elementAt(index),
       );
       // Compare source identifier
       _matchCompareId(
         mismatches,
         fieldName,
-        actual.values.elementAt(index),
-        expected.values.elementAt(index),
+        actualSorted.values.elementAt(index),
+        expectedSorted.values.elementAt(index),
       );
     }
   }
@@ -940,7 +984,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     ) =>
         _matchCompareIdMap(mismatches, '$prefix$fieldName', actual, expected);
 
-    matchCompare('source', other.bestSource, bestSource);
+    matchCompare('bestSource', other.bestSource, bestSource);
     matchCompareId('uniqueId', other.uniqueId, uniqueId);
     if (MovieContentType.error != type && sources.isNotEmpty) {
       matchCompareIdMap('sources', other.sources, sources);
