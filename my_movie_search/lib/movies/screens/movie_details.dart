@@ -320,10 +320,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   }
 
   List<Widget> externalSearch() {
+    final year = _movie.year > 1900 ? _movie.year : null;
     return <Widget>[
       ElevatedButton(
         onPressed: () => viewWebPage(
-          'https://tpb.party/search/${_movie.title} ${_movie.year}',
+          'https://tpb.party/search/${_movie.title} $year',
           context,
         ),
         child: Text(_movie.title),
@@ -331,7 +332,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       if (_movie.alternateTitle.isNotEmpty)
         ElevatedButton(
           onPressed: () => viewWebPage(
-            'https://tpb.party/search/${_movie.alternateTitle} ${_movie.year}',
+            'https://tpb.party/search/${_movie.alternateTitle} $year',
             context,
           ),
           child: Text(_movie.alternateTitle),
