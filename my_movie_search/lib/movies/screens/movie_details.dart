@@ -218,7 +218,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       Wrap(
         children: <Widget>[
           Text('Source: ${_movie.bestSource.name}      '),
-          Text('UniqueId: ${_movie.uniqueId}'),
+          SelectableText('UniqueId: ${_movie.uniqueId}'),
           ElevatedButton(
             onPressed: () => viewWebPage(
               makeImdbUrl(_movie.uniqueId),
@@ -239,7 +239,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         _movie.description,
         style: biggerFont,
         minLines: 1,
-        maxLines: _descriptionExpanded ? null : 5,
+        maxLines: _descriptionExpanded ? null : 8,
         onTap: toggleDescription,
       ),
       Text('Languages: ${_movie.languages}'),
@@ -320,7 +320,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   }
 
   List<Widget> externalSearch() {
-    final year = _movie.year > 1900 ? _movie.year : null;
+    final year = _movie.year > 1900 ? _movie.year : "";
     return <Widget>[
       ElevatedButton(
         onPressed: () => viewWebPage(

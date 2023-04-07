@@ -156,7 +156,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     return Wrap(
       children: <Widget>[
         Text('Source: ${_person.bestSource.name}      '),
-        Text('UniqueId: ${_person.uniqueId}      '),
+        SelectableText('UniqueId: ${_person.uniqueId}      '),
         Text('Popularity: ${_person.userRatingCount}'),
         ElevatedButton(
           onPressed: () => viewWebPage(
@@ -178,7 +178,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
           child: SelectableText(
             _person.description,
             style: biggerFont,
-            maxLines: _descriptionExpanded ? null : 5,
+            maxLines: _descriptionExpanded ? null : 8,
             onTap: toggleDescription,
           ),
         ),

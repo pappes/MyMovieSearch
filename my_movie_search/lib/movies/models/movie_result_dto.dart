@@ -721,7 +721,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     }
 
     if (shortest.length > 100 &&
-        longest.substring(longest.length - 10).contains('...')) {
+        longest.substring(longest.length - 25).contains('...')) {
       // other string longer but contains an incomplete description!
       return shortest;
     }

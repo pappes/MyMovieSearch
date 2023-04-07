@@ -31,7 +31,7 @@ class MovieSearchRepository extends MovieListRepository {
   late QueryTMDBMovies _tmdbSearch;
   late QueryGoogleMovies _googleSearch;
 
-  /// Initiates a search for the provied [criteria].
+  /// Initiates a search for the provided [criteria].
   ///
   /// [searchUID] is a unique correlation ID identifying this search request
   @override

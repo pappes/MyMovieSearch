@@ -23,7 +23,7 @@ class SearchFunctions {
 class MovieKeywordRepository extends MovieListRepository {
   late QueryIMDBKeywords _imdbKeywords;
 
-  /// Initiates a search for the provied [criteria].
+  /// Initiates a search for the provided [criteria].
   ///
   /// [searchUID] is a unique correlation ID identifying this search request
   @override

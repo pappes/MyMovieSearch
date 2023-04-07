@@ -56,7 +56,7 @@ class BaseMovieRepository {
     _movieStreamController = null;
   }
 
-  /// Initinalise the class for a new search with all known movie search providers.
+  /// Initialise the class for a new search with all known movie search providers.
   /// To be overridden by specific implementations, calling:
   ///   initProvider() before requesting data for a source.
   ///   addResults(searchUID,dto) for matching data.
