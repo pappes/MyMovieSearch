@@ -1066,6 +1066,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     imageUrl = '';
     userRating = 0;
     userRatingCount = 0;
+    creditsOrder = 0;
     languages.clear();
     genres.clear();
     keywords.clear();

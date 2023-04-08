@@ -1,28 +1,16 @@
-import 'dart:convert';
-
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
 import 'package:html_unescape/html_unescape_small.dart';
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/tpb_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-const keywordId = 'id';
-const keywordName = 'titleNameText';
-const keywordDescription = 'titleDescription';
-const keywordImage = 'titleImage';
-const keywordYearRange = 'titleReleaseText';
-const keywordTypeInfo = 'titleInfo';
-const keywordCensorRating = 'titleCensorRating';
-const keywordPopularityRating = 'titlePopulartyRating';
-const keywordPopularityRatingCount = 'titlePopulartyRatingCount';
-const keywordDuration = 'titleDuration';
-const keywordDirectors = 'directors';
-const keywordActors = 'topCredits';
-const keywordKeywords = 'keywords';
+const resultTableSelector = '#searchResult';
+const magnetSelector = "[href^='magnet:']";
+const nameSelector = '.detName';
+const detailSelector = '.detDesc';
 
 /// Implements [WebFetchBase] for the Tpb search html web scraper.
 ///
@@ -31,7 +19,8 @@ const keywordKeywords = 'keywords';
 /// ```
 mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final htmlDecode = HtmlUnescape();
-  static const splitter = LineSplitter();
+  final movieData = [];
+  bool validPage = false;
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
@@ -40,192 +29,53 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     String webText,
   ) async {
     final document = parse(webText);
-    return _scrapeWebPage(document);
+    _scrapeWebPage(document);
+    if (validPage) {
+      return movieData;
+    }
+    throw 'tpb results data not detected for criteria $getCriteriaText in html:$webText';
+  }
+
+  /// extract each row from the table.
+  void _scrapeWebPage(Document document) {
+    final rows = document.querySelector(resultTableSelector);
+    if (null != rows) {
+      validPage = true;
+      for (final row in rows.querySelectorAll('tr')) {
+        _processRow(row);
+      }
+    }
   }
 
   /// Collect webpage text to construct a map of the movie data.
-  List _scrapeWebPage(Document document) {
-    final movieData = [];
+  void _processRow(Element row) {
+    final columns = row.querySelectorAll('td');
+    if (4 == columns.length) {
+      final result = {};
+      result[jsonCategoryKey] = cleanText(columns[0].text);
+      result[jsonMagnetKey] =
+          columns[1].querySelector(magnetSelector)?.attributes['href'] ?? "";
+      result[jsonNameKey] =
+          cleanText(columns[1].querySelector(nameSelector)?.text);
+      result[jsonDescriptionKey] =
+          cleanText(columns[1].querySelector(detailSelector)?.text);
+      result[jsonSeedersKey] = cleanText(columns[2].text);
+      result[jsonLeechersKey] = cleanText(columns[3].text);
 
-    final children = document.querySelector('.lister-list')?.children;
-    if (null != children) {
-      for (final row in children) {
-        final movie = _getMovie(row);
-        final id = movie[keywordId];
-
-        movieData.add(movie);
-      }
-      final next = document.querySelector('.lister-page-next');
-      if (null != next) {
-        movieData.add(_addNextPage(next));
-      }
-    } else {
-      throw 'tpb search data not detected for criteria $getCriteriaText';
-    }
-    return movieData;
-  }
-
-  Map _getMovie(Element row) {
-    final sections = _getSections(row);
-    final map = {};
-    map[keywordId] = _getId(sections['header']);
-
-    map[keywordName] = _getTitle(sections['header']);
-    map[keywordDescription] = _getDescription(sections['description']);
-    map[keywordImage] = _getImage(sections['image']);
-    map[keywordYearRange] = _getYearRange(sections['header']);
-    map[keywordTypeInfo] = _getTypeInfo(sections['header']);
-    map[keywordCensorRating] = _getCensorRating(sections['subheading']);
-    map[keywordPopularityRating] = _getPopularityRating(sections['ratings']);
-    map[keywordPopularityRatingCount] = _getRatingCount(sections['votes']);
-    map[keywordDuration] = _getDuration(sections['subheading']);
-    map[keywordDirectors] = _getDirectors(sections['related']);
-    map[keywordActors] = _getActors(sections['related']);
-    map[keywordKeywords] = _getKeywords(row);
-
-    return map;
-  }
-
-  String? _getId(Element? section) {
-    if (null != section) {
-      return section.querySelector('a')?.attributes['href'];
-    }
-    return null;
-  }
-
-  String? _getTitle(Element? section) {
-    if (null != section) {
-      final anchor = section.querySelector('a');
-      return htmlDecode.convert(anchor?.text.trim() ?? '');
-    }
-    return null;
-  }
-
-  String? _getDescription(Element? section) =>
-      htmlDecode.convert(section?.text.trim() ?? '');
-
-  String? _getImage(Element? section) {
-    final imageAttributes = section?.querySelector('img')?.attributes;
-    if (null != imageAttributes) {
-      final loadlate = imageAttributes['loadlate']?.length ?? 0;
-      if (loadlate > 10) {
-        return imageAttributes['loadlate'];
-      }
-      if (imageAttributes['src'] ==
-          'https://m.media-amazon.com/images/S/sash/4FyxwxECzL-U1J8.pn') {
-        return null;
-      }
-      return imageAttributes['src'];
-    }
-    return null;
-  }
-
-  String? _getRatingCount(Element? section) =>
-      section?.querySelector("span[name='nv']")?.text.trim();
-
-  String? _getDuration(Element? section) =>
-      section?.querySelector('.runtime')?.text.trim();
-
-  String? _getPopularityRating(Element? section) {
-    final ratingText = splitter.convert(section?.text.trim() ?? '');
-    if (ratingText.isNotEmpty) {
-      return ratingText.first.trim();
-    }
-    return '';
-  }
-
-  String? _getCensorRating(Element? section) =>
-      section?.querySelector(".certificate")?.text.trim();
-
-  String? _getTypeInfo(Element? section) =>
-      section?.querySelector('.lister-item-year')?.text.trim();
-
-  String? _getYearRange(Element? section) =>
-      section?.querySelector('.lister-item-year')?.text.trim();
-
-  String? _getKeywords(Element? section) {
-    return criteria.criteriaTitle;
-  }
-
-  String? _getActors(Element? section) {
-    final cast = {};
-    var skipDirectors = section?.innerHtml.contains('Director') ?? false;
-    if (section?.innerHtml.contains('Stars') ?? false) {
-      for (final element in section!.children) {
-        if (!skipDirectors) {
-          if (null != element.attributes['href']) {
-            cast[element.text] = element.attributes['href'];
-          }
-        } else if (element.text == '|') {
-          skipDirectors = false;
-        }
+      if (result[jsonMagnetKey]!.toString().isNotEmpty &&
+          result[jsonNameKey]!.toString().isNotEmpty &&
+          result[jsonSeedersKey]!.toString().isNotEmpty) {
+        movieData.add(result);
       }
     }
-    return json.encode(cast);
   }
 
-  String? _getDirectors(Element? section) {
-    final directors = {};
-    if (section?.innerHtml.contains('Director') ?? false) {
-      for (final element in section!.children) {
-        if (element.text == '|') {
-          break;
-        }
-        if (null != element.attributes['href']) {
-          directors[element.text] = element.attributes['href'];
-        }
-      }
-    }
-    return json.encode(directors);
-  }
-
-  Map<String, Element> _getSections(Element row) {
-    final sections = <String, Element>{};
-    for (final section in row.children) {
-      if (section.className.contains('lister-item-image')) {
-        sections['image'] = section;
-      }
-      if (section.className.contains('lister-item-content')) {
-        for (final subsection in section.children) {
-          if (subsection.className.contains('lister-item-header')) {
-            sections['header'] = subsection;
-          } else if (subsection.className.contains('text-muted') &&
-              !sections.containsKey('subheading')) {
-            sections['subheading'] = subsection;
-          } else if (subsection.className.contains('ratings-bar')) {
-            sections['ratings'] = subsection;
-          } else if (subsection.className.contains('text-muted') &&
-              subsection.text.contains('Votes')) {
-            sections['votes'] = subsection;
-          } else if (subsection.className.contains('text-muted') &&
-              (subsection.text.contains('Director') ||
-                  subsection.text.contains('Stars'))) {
-            sections['related'] = subsection;
-          } else if (!sections.containsKey('description')) {
-            sections['description'] = subsection;
-          }
-        }
-      }
-    }
-
-    return sections;
-  }
-
-  Map _addNextPage(Element next) {
-    final keyword = criteria.criteriaTitle;
-    final baseURL = myConstructURI(keyword);
-    final String extraURL = next.attributes['href'] ?? '';
-    final fullUrl = baseURL.resolve(extraURL);
-    final pageNumber = fullUrl.queryParameters['page'] ?? '1';
-    return {
-      keywordId: fullUrl.toString(),
-      keywordName: next.text,
-      keywordKeywords: keyword,
-      keywordDescription: QueryTpbSearch.encodeJson(
-        keyword,
-        pageNumber,
-        fullUrl.toString(),
-      ),
-    };
+  String cleanText(dynamic text) {
+    final str = text?.toString() ?? "";
+    final cleanStr = str
+        .replaceAll('\n', '')
+        .replaceAll('\t', '')
+        .replaceAll('\u{00a0}', '');
+    return htmlDecode.convert(cleanStr);
   }
 }

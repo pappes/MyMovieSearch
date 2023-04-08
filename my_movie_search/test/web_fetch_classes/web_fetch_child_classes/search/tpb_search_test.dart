@@ -225,7 +225,7 @@ testing and punctuation
       final tpbSearch = QueryTpbSearch(criteria);
       const expectedException = '[QueryTpbSearch] Error in tpb '
           'with criteria dream interpreting web text as a map '
-          ':tpb search data not detected for criteria dream';
+          ':tpb results data not detected for criteria dream in html:not valid html';
 
       // Invoke the functionality.
       await tpbSearch
@@ -241,7 +241,7 @@ testing and punctuation
       // Set up the test data.
       const expectedException = '[QueryTpbSearch] Error in tpb '
           'with criteria dream interpreting web text as a map '
-          ':tpb search data not detected for criteria dream';
+          ':tpb results data not detected for criteria dream in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final tpbSearch = QueryTpbSearch(criteria);
 

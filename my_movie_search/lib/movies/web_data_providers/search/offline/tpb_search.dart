@@ -6,15 +6,8 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"/title/tt0218354/?ref_=kw_li_tt","bestSource":"DataSourceType.tpb","title":"The Catgirl<3","type":"MovieContentType.series","year":"2010","yearRange":"2003–2010",
-      "keywords":"[\"dream\"]",
-      "description":"Then Kramer said, \"Everybody is Mescalon Smoochington\"<3",
-      "userRating":"5.999","userRatingCount":"374","imageUrl":"https://m.media-amazon.com/images/M/MV5BOWI5MzNiY2QyNTA4NzExMDg@._V1_UY98_CR32,0,67,98_AL_.jpg","sources":{"DataSourceType.tpb":"/title/tt0218354/?ref_=kw_li_tt"}}
-''',
-  r'''
-{"uniqueId":"https://tpb.party/search/dream/1/99/0?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main","bestSource":"DataSourceType.tpb","title":"Next »",
-      "keywords":"[\"dream\"]",
-      "description":"{ \"keyword\":\"dream\", \"page\":\"2\", \"url\":\"https://tpb.party/search/dream/1/99/0?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main\"}","sources":{"DataSourceType.tpb":"https://tpb.party/search/dream/1/99/0?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"}}
+{"uniqueId":"123","bestSource":"DataSourceType.tpb","title":"Gangnam Zombie2023 720p Korean HDRip H264 BONE","charactorName":"Video(Movies)","creditsOrder":"34",
+      "description":"Uploaded 01-1403:33, Size 699.41MiB, ULed by.BONE.","userRatingCount":"5","sources":{"DataSourceType.tpb":"123"}}
 ''',
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
@@ -50,86 +43,42 @@ const tpbHtmlSampleEnd = '''
 
 const intermediateMapList = [
   {
-    'id': '/title/tt0218354/?ref_=kw_li_tt',
-    'titleNameText': 'The Catgirl<3',
-    'titleDescription':
-        'Then Kramer said, "Everybody is Mescalon Smoochington"<3',
-    'titleImage':
-        'https://m.media-amazon.com/images/M/MV5BOWI5MzNiY2QyNTA4NzExMDg@._V1_UY98_CR32,0,67,98_AL_.jpg',
-    'titleReleaseText': '(2003–2010)',
-    'titleInfo': '(2003–2010)',
-    'titleCensorRating': 'M',
-    'titlePopulartyRating': '5.999',
-    'titlePopulartyRatingCount': '374',
-    'titleDuration': '61 min',
-    'directors':
-        '{"Vonuck Heint\\n            ":"/name/nm0311837/?ref_=kw_li_dr_0"}',
-    'topCredits':
-        '{"Rano Romino\\n            ":"/name/nm0718931/?ref_=kw_li_st_0","Eara Sabvan\\n            ":"/name/nm0714533/?ref_=kw_li_st_1","Ataircan Dunlas\\n            ":"/name/nm0211835/?ref_=kw_li_st_2","Tnny Keom \\n            ":"/name/nm0414736/?ref_=kw_li_st_3"}',
-    'keywords': 'dream'
-  },
-  {
-    'id':
-        'https://tpb.party/search/dream/1/99/0?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main',
-    'titleNameText': 'Next »',
-    'keywords': 'dream',
-    'titleDescription':
-        '{ "keyword":"dream", "page":"2", "url":"https://tpb.party/search/dream/1/99/0?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"}'
-  },
+    'category': 'Video(Movies)',
+    'magnet':
+        'magnet:?xt=urn:btih:0FB175C5B10BE4B874E0AD60FF8155639013C316&dn=Gangnam+Zombie+2023+720p+Korean+HDRip+H264+BONE&tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2F47.ip-51-68-199.eu%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce',
+    'name': 'Gangnam Zombie2023 720p Korean HDRip H264 BONE',
+    'description': 'Uploaded 01-1403:33, Size 699.41MiB, ULed by.BONE.',
+    'seeders': '34',
+    'leechers': '5'
+  }
 ];
 
 const tpbSampleMid = r'''
-<div class="lister-item mode-advanced">
-    <div class="lister-item-image float-left">
-          <img src="https://m.media-amazon.com/images/M/MV5BOWI5MzNiY2QyNTA4NzExMDg@._V1_UY98_CR32,0,67,98_AL_.jpg">
-    </div>
-    <div class="lister-item-content">
-        <h3 class="lister-item-header">
-            <a href="/title/tt0218354/?ref_=kw_li_tt"> The Catgirl&lt;3
-            </a>
-            <span class="lister-item-year text-muted unbold">(2003–2010)
-            </span>
-        </h3>
-        <p class="text-muted ">
-            <span class="certificate">M
-            </span>
-            <span class="runtime">61 min
-            </span>
-            <span class="genre">
-                Horror, Action, Comedy
-            </span>
-        </p>
-        <div class="ratings-bar">
-              <strong>5.999
-              </strong>
-        </div>
-        <p class="">
-            Then Kramer said, "Everybody is Mescalon Smoochington"&lt;3
-        </p>
-
-        <p class="text-muted">
-            Director:
-            <a href="/name/nm0311837/?ref_=kw_li_dr_0">Vonuck Heint
-            </a>
-            <span class="ghost">|</span>
-            Stars:
-            <a href="/name/nm0718931/?ref_=kw_li_st_0">Rano Romino
-            </a>,
-            <a href="/name/nm0714533/?ref_=kw_li_st_1">Eara Sabvan
-            </a>,
-            <a href="/name/nm0211835/?ref_=kw_li_st_2">Ataircan Dunlas
-            </a>,
-            <a href="/name/nm0414736/?ref_=kw_li_st_3">Tnny Keom 
-            </a>
-        </p>
-        <p class="text-muted text-small">
-                <span class="text-muted">Votes:</span>
-                <span name="nv" data-value="374">374</span>
-                <span class="ghost">|</span>                
-                <span class="text-muted">Gross:</span>
-                <span name="nv" data-value="9,600">$9.6K</span>
-            
-        </p>
-    </div>
-    <a href="?page=2&amp;sort=moviemeter,asc&amp;keywords=dream&amp;explore=keywords&amp;mode=detail&amp;ref_=kw_nxt#main" class="lister-page-next next-page" ref-marker="kw_nxt">Next »</a>
-</div>''';
+<table id="searchResult">
+<tbody>
+	<tr>
+		<td class="vertTh">
+			<a href="https://tpb.party/browse/200" title="More from this category">Video</a><br>
+			(<a href="https://tpb.party/browse/201" title="More from this category">Movies</a>)
+		</td>
+		<td>
+			<div class="detName">
+				<a href="https://tpb.party/torrent/65314273/Gangnam_Zombie_2023_720p_Korean_HDRip_H264_BONE"
+					class="detLink" title="Details for Gangnam Zombie 2023 720p Korean HDRip H264 BONE">Gangnam Zombie
+					2023 720p Korean HDRip H264 BONE
+				</a>
+			</div>
+			<a
+				href="magnet:?xt=urn:btih:0FB175C5B10BE4B874E0AD60FF8155639013C316&amp;dn=Gangnam+Zombie+2023+720p+Korean+HDRip+H264+BONE&amp;tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&amp;tr=udp%3A%2F%2F47.ip-51-68-199.eu%3A6969%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&amp;tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce">
+			</a>
+			<font class="detDesc">Uploaded 01-14&nbsp;03:33, Size 699.41&nbsp;MiB, ULed by
+				<a class="detDesc" href="https://tpb.party/user/.BONE./" title="Browse .BONE.">.BONE.
+				</a>
+			</font>
+		</td>
+		<td align="right">34</td>
+		<td align="right">5</td>
+	</tr>
+</tbody>
+</table>
+''';

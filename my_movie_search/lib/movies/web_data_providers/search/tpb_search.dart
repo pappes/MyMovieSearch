@@ -12,6 +12,12 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const jsonKeywordKey = 'keyword';
 const jsonPageKey = 'page';
+const jsonCategoryKey = 'category';
+const jsonMagnetKey = 'magnet';
+const jsonNameKey = 'name';
+const jsonDescriptionKey = 'description';
+const jsonSeedersKey = 'seeders';
+const jsonLeechersKey = 'leechers';
 
 /// Implements [WebFetchBase] for the tpb search html web scraper.
 ///
