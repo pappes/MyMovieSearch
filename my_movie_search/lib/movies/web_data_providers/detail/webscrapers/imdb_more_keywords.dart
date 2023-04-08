@@ -29,7 +29,7 @@ mixin ScrapeIMDBMoreKeywordsDetails
     return movieData;
   }
 
-  /// Extract the bibliography for the current movie.
+  /// Extract the keywords for the current movie.
   void _scrapeRelated(Document document, Map movieData) {
     String? roleText;
     final children = document.querySelector('#filmography')?.children;
@@ -43,7 +43,7 @@ mixin ScrapeIMDBMoreKeywordsDetails
         }
       }
     } else {
-      throw 'imdb bibliography data not detected for criteria $getCriteriaText';
+      throw 'imdb more keywords data not detected for criteria $getCriteriaText';
     }
   }
 

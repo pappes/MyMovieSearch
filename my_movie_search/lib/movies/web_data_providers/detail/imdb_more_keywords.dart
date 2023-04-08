@@ -15,8 +15,8 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryIMDBMoreKeywordsDetails
     extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBMoreKeywordsDetails {
-  static const _baseURL = 'https://www.imdb.com/name/';
-  static const _baseURLsuffix = '/fullcredits/';
+  static const _baseURL = 'https://www.imdb.com/title/';
+  static const _baseURLsuffix = '/keywords/';
 
   QueryIMDBMoreKeywordsDetails(SearchCriteriaDTO criteria) : super(criteria);
 
