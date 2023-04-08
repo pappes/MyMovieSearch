@@ -42,10 +42,10 @@ void main() {
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'nmtesting';
+      input.criteriaTitle = 'tttesting';
       expect(
         QueryIMDBMoreKeywordsDetails(input).myFormatInputAsText(),
-        'nmtesting',
+        'tttesting',
       );
     });
 
@@ -53,8 +53,8 @@ void main() {
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO();
       input.criteriaList = [
-        makeResultDTO('nmtest1'),
-        makeResultDTO('nmtest2'),
+        makeResultDTO('tttest1'),
+        makeResultDTO('tttest2'),
       ];
       expect(
         QueryIMDBMoreKeywordsDetails(input).myFormatInputAsText(),
@@ -86,7 +86,7 @@ void main() {
     // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBMoreKeywordsDetails(criteria);
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
         imdbHtmlSampleFull,
@@ -111,7 +111,6 @@ void main() {
       // printTestData(actualResult);
 
       final expectedValue = expectedDTOList;
-      expectedValue.first.uniqueId = 'nm7602562';
       // Check the results.
       expect(
         actualResult,
@@ -142,7 +141,7 @@ void main() {
     });
 
     test('add to cache via readPrioritisedCachedList', () async {
-      final criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBMoreKeywordsDetails(criteria);
       testClass.clearThreadedCache();
       await testClass.readPrioritisedCachedList(
@@ -165,7 +164,7 @@ void main() {
     });
 
     test('fetch result from cache', () async {
-      final criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBMoreKeywordsDetails(criteria);
       testClass.clearThreadedCache();
       await testClass.readPrioritisedCachedList(
@@ -181,7 +180,7 @@ void main() {
     });
 
     test('clear cache', () async {
-      final criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBMoreKeywordsDetails(criteria);
       testClass.clearThreadedCache();
       await testClass.readPrioritisedCachedList(
@@ -270,7 +269,7 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final criteria = SearchCriteriaDTO().fromString('nm7602562');
+      final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBMoreKeywordsDetails(criteria);
       testClass.myClearCache();
 
@@ -292,17 +291,6 @@ void main() {
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
-      // Explicitly check related because MovieResultDTOListMatcher won't
-      expect(
-        queryResult.first.related.length,
-        2,
-        reason: 'Related should list 2 actress and 2 director credits',
-      );
-      expect(
-        queryResult.first.related['Director']!.length,
-        2,
-        reason: 'Related should list 2 actress and 2 director credits',
-      );
     });
 
     // Read imdb search results from a simulated byte stream and report error due to invalid html.
@@ -310,10 +298,10 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryIMDBMoreKeywordsDetails] Error in imdb_more_keywords '
-          'with criteria nm123 interpreting web text as a map '
-          ':imdb more keywords data not detected for criteria nm123';
+          'with criteria tt123 interpreting web text as a map '
+          ':imdb more keywords data not detected for criteria tt123';
       final queryResult = <MovieResultDTO>[];
-      final criteria = SearchCriteriaDTO().fromString('nm123');
+      final criteria = SearchCriteriaDTO().fromString('tt123');
       final testClass = QueryIMDBMoreKeywordsDetails(criteria);
       testClass.myClearCache();
 
@@ -331,10 +319,10 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryIMDBMoreKeywordsDetails] Error in imdb_more_keywords with '
-          'criteria nm123 interpreting web text as a map '
-          ':imdb more keywords data not detected for criteria nm123';
+          'criteria tt123 interpreting web text as a map '
+          ':imdb more keywords data not detected for criteria tt123';
       final queryResult = <MovieResultDTO>[];
-      final criteria = SearchCriteriaDTO().fromString('nm123');
+      final criteria = SearchCriteriaDTO().fromString('tt123');
       final testClass = QueryIMDBMoreKeywordsDetails(criteria);
       testClass.myClearCache();
 

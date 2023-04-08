@@ -14,13 +14,10 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"-2","bestSource":"DataSourceType.imdb","title":"[QueryIMDBMoreKeywordsDetails] Error in imdb_more_keywords with criteria nm0101000 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://www.imdb.com/title/nm0101000/keywords/","type":"MovieContentType.error"}
+{"uniqueId":"gangster","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"gangster"}}
 ''',
   r'''
-{"uniqueId":"-3","bestSource":"DataSourceType.imdb","title":"[QueryIMDBMoreKeywordsDetails] Error in imdb_more_keywords with criteria nm0101002 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://www.imdb.com/title/nm0101002/keywords/","type":"MovieContentType.error"}
-''',
-  r'''
-{"uniqueId":"-4","bestSource":"DataSourceType.imdb","title":"[QueryIMDBMoreKeywordsDetails] Error in imdb_more_keywords with criteria nm0101001 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://www.imdb.com/title/nm0101001/keywords/","type":"MovieContentType.error"}
+{"uniqueId":"ghost","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"ghost"}}
 ''',
 ];
 
@@ -28,7 +25,7 @@ const expectedDtoJsonStringList = [
 List<String> _makeQueries(int qty) {
   final results = <String>[];
   for (int i = 0; i < qty; i++) {
-    results.add('nm010${1000 + i}');
+    results.add('tt010${1000 + i}');
   }
   return results;
 }

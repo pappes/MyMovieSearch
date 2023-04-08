@@ -42,6 +42,7 @@ class MovieResultDTO {
 enum MovieContentType {
   none,
   error,
+  keyword,
   person,
   movie, //      includes "tv movie"
   series, //     anything less that an hour long that does repeat or repeats more than 4 times

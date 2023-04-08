@@ -9,48 +9,38 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"nm7602562","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"nm7602562"},
-  "related":{"Actress":{"tt1234567":{"uniqueId":"tt1234567","bestSource":"DataSourceType.imdbSuggestions","title":"Land of the fill","type":"MovieContentType.title","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt1234567"},"related":{}},
-      "tt1234568":{"uniqueId":"tt1234568","bestSource":"DataSourceType.imdbSuggestions","title":"Fill the land","type":"MovieContentType.title","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt1234568"},"related":{}}},
-    "Director":{"tt2234567":{"uniqueId":"tt2234567","bestSource":"DataSourceType.imdbSuggestions","title":"Land of the turtle","type":"MovieContentType.title","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt2234567"},"related":{}},
-      "tt2234568":{"uniqueId":"tt2234568","bestSource":"DataSourceType.imdbSuggestions","title":"Turtle the land","type":"MovieContentType.title","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt2234568"},"related":{}}}}}
+{"uniqueId":"batman character","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"batman character"}}
+''',
+  r'''
+{"uniqueId":"dc comics","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"dc comics"}}
+''',
+  r'''
+{"uniqueId":"gotham city","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"gotham city"}}
+''',
+  r'''
+{"uniqueId":"masked superhero","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"masked superhero"}}
+''',
+  r'''
+{"uniqueId":"superhero","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"superhero"}}
 ''',
 ];
 
 const intermediateMapList = [
   {
-    "Actress": [
-      {
-        "name": "Land of the fill",
-        "url": "/title/tt1234567/?ref_=nm_flmg_act_1"
-      },
-      {"name": "Fill the land", "url": "/title/tt1234568/?ref_=nm_flmg_act_1"},
-    ],
-    "Director": [
-      {
-        "name": "Land of the turtle",
-        "url": "/title/tt2234567/?ref_=nm_flmg_act_1"
-      },
-      {"name": "Turtle the land", "url": "/title/tt2234568/?ref_=nm_flmg_act_1"}
-    ],
-    "id": "nm7602562"
+    'batman character': 'keyword',
+    'gotham city': 'keyword',
+    'dc comics': 'keyword',
+    'masked superhero': 'keyword',
+    'superhero': 'keyword',
   }
 ];
 
 const imdbHtmlSampleInner = '''
-  <div id="filmography" class="header">
-
-    <div class="head"><a name="actress">Actress</a></div>
-    <div class="filmo-category-section" style="">
-        <b><a href="/title/tt1234567/?ref_=nm_flmg_act_1">Land of the fill</a></b>
-        <b><a href="/title/tt1234568/?ref_=nm_flmg_act_1">Fill the land</a></b>
-    </div>
-    <div class="head"><a name="director">Director</a></div>
-    <div class="filmo-category-section" style="">
-        <b><a href="/title/tt2234567/?ref_=nm_flmg_act_1">Land of the turtle</a></b>
-        <b><a href="/title/tt2234568/?ref_=nm_flmg_act_1">Turtle the land</a></b>
-    </div>
-  </div>
+  <a href="/search/keyword?keywords=batman-character">batman character</a>
+  <a href="/search/keyword?keywords=gotham-city">gotham city</a>
+  <a href="/search/keyword?keywords=dc-comics">dc comics</a>
+  <a href="/search/keyword?keywords=masked-superhero">masked superhero</a>
+  <a href="/search/keyword?keywords=superhero">superhero</a>
 ''';
 
 const imdbHtmlSampleStart = ' <!DOCTYPE html> <html     <head>'
