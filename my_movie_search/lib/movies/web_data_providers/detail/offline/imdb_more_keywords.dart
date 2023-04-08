@@ -9,19 +9,19 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"batman character","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"batman character"}}
+{"uniqueId":"batman character","bestSource":"DataSourceType.imdbKeywords","title":"batman character","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"batman character"}}
 ''',
   r'''
-{"uniqueId":"dc comics","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"dc comics"}}
+{"uniqueId":"dc comics","bestSource":"DataSourceType.imdbKeywords","title":"dc comics","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"dc comics"}}
 ''',
   r'''
-{"uniqueId":"gotham city","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"gotham city"}}
+{"uniqueId":"gotham city","bestSource":"DataSourceType.imdbKeywords","title":"gotham city","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"gotham city"}}
 ''',
   r'''
-{"uniqueId":"masked superhero","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"masked superhero"}}
+{"uniqueId":"masked superhero","bestSource":"DataSourceType.imdbKeywords","title":"masked superhero","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"masked superhero"}}
 ''',
   r'''
-{"uniqueId":"superhero","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"superhero"}}
+{"uniqueId":"superhero","bestSource":"DataSourceType.imdbKeywords","title":"superhero","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"superhero"}}
 ''',
 ];
 

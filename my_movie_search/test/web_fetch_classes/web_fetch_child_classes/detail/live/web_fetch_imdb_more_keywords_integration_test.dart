@@ -14,10 +14,10 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"gangster","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"gangster"}}
+{"uniqueId":"gangster","bestSource":"DataSourceType.imdbKeywords","title":"gangster","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"gangster"}}
 ''',
   r'''
-{"uniqueId":"ghost","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"ghost"}}
+{"uniqueId":"ghost","bestSource":"DataSourceType.imdbKeywords","title":"ghost","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"ghost"}}
 ''',
 ];
 

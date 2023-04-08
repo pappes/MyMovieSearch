@@ -1,21 +1,10 @@
 import 'package:my_movie_search/movies/blocs/repositories/movie_list_repository.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/google.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
-
-typedef SearchFunction = Future<List<MovieResultDTO>> Function(
-  MovieResultDTO criteria,
-);
-
-class SearchFunctions {
-  List<SearchFunction> fastSearch = [];
-  List<SearchFunction> supplementarySearch = [];
-  List<SearchFunction> slowSearch = [];
-}
 
 /// Search for movie data from multiple online search sources.
 ///

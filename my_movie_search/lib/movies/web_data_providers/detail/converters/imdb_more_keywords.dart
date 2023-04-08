@@ -10,6 +10,7 @@ class ImdbMoreKeywordsConverter {
       final dto = MovieResultDTO().init(
         bestSource: DataSourceType.imdbKeywords,
         uniqueId: entry.toString(),
+        title: entry.toString(),
       );
       dto.type = MovieContentType.keyword;
       dtos.add(dto);
