@@ -164,6 +164,9 @@ void resultDrillDown(
         ),
       ),
     );
+  } else if (movie.type == MovieContentType.keyword) {
+    // Search for movies that match the keyword.
+    searchForKeyword(movie.title, context);
   } else {
     // Show details screen (movie details or person details)
     Navigator.push(
