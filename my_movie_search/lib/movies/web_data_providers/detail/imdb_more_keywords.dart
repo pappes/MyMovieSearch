@@ -42,7 +42,7 @@ class QueryIMDBMoreKeywordsDetails
   /// converts <INPUT_TYPE> to a string representation.
   @override
   String myFormatInputAsText() {
-    final text = criteria.toPrintableString();
+    final text = criteria.criteriaTitle;
     if (text.startsWith(imdbTitlePrefix)) {
       return text;
     }

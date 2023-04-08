@@ -280,7 +280,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     final label = InkWell(
       child: const Text('Keywords: '),
       onTap: () => getMoreKeywords(
-        _movie.uniqueId,
+        _movie,
         context,
       ),
     );

@@ -18,9 +18,9 @@ import 'package:flutter/material.dart'
         Widget;
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
 import 'package:my_movie_search/movies/blocs/repositories/base_movie_repository.dart';
-import 'package:my_movie_search/movies/blocs/repositories/movies_for_keyword_repository.dart';
-
+import 'package:my_movie_search/movies/blocs/repositories/more_keywords_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/movies_for_keyword_repository.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -55,6 +55,10 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     if (SearchCriteriaSource.moviesForKeyword ==
         widget.criteria.criteriaSource) {
       dataSource = MoviesForKeywordRepository();
+    } else if (SearchCriteriaSource.moreKeywords ==
+        widget.criteria.criteriaSource) {
+      dataSource = MoreKeywordsRepository();
+      _title = 'Keywords for ${widget.criteria.criteriaList.first.title}';
     } else {
       dataSource = MovieSearchRepository();
     }

@@ -131,12 +131,13 @@ void searchForKeyword(
 /// Navigates to a search results page populated with keywords for the movie.
 ///
 void getMoreKeywords(
-  String uniqueId,
+  MovieResultDTO movie,
   BuildContext context,
 ) {
   // Fetch first batch of movies that match the keyword.
   final criteria = SearchCriteriaDTO().init(SearchCriteriaSource.moreKeywords);
-  criteria.criteriaTitle = uniqueId;
+  criteria.criteriaTitle = movie.uniqueId;
+  criteria.criteriaList = [movie];
   Navigator.push(
     context,
     MaterialPageRoute(
