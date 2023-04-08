@@ -76,6 +76,6 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         .replaceAll('\n', '')
         .replaceAll('\t', '')
         .replaceAll('\u{00a0}', '');
-    return htmlDecode.convert(cleanStr);
+    return htmlDecode.convert(cleanStr.trim());
   }
 }

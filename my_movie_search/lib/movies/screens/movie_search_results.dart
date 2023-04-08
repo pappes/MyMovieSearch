@@ -15,6 +15,8 @@ import 'package:flutter/material.dart'
         State,
         StatefulWidget,
         Text,
+        TextEditingController,
+        TextField,
         Widget;
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
 import 'package:my_movie_search/movies/blocs/repositories/base_movie_repository.dart';
@@ -24,6 +26,7 @@ import 'package:my_movie_search/movies/blocs/repositories/movies_for_keyword_rep
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/movie_card_small.dart';
 
 class MovieSearchResultsNewPage extends StatefulWidget {
@@ -98,12 +101,21 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     return Scaffold(
       appBar: AppBar(
         // Use the search criteria to set our appbar title.
-        title: Text(_title),
+        title: TextField(
+          controller: TextEditingController(text: _title),
+          style: hugeFont,
+          onSubmitted: newSearch,
+        ),
       ),
       body: Center(
         child: _buildMovieResults(),
       ),
     );
+  }
+
+  void newSearch(String text) {
+    widget.criteria.criteriaTitle = text;
+    _searchBloc!.add(SearchRequested(widget.criteria));
   }
 
   Widget _buildMovieResults() {
