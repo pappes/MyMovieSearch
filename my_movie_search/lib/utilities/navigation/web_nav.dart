@@ -117,8 +117,26 @@ void searchForKeyword(
   BuildContext context,
 ) {
   // Fetch first batch of movies that match the keyword.
-  final criteria = SearchCriteriaDTO().init(SearchCriteriaSource.movieKeyword);
+  final criteria =
+      SearchCriteriaDTO().init(SearchCriteriaSource.moviesForKeyword);
   criteria.criteriaTitle = keyword;
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => MovieSearchResultsNewPage(criteria: criteria),
+    ),
+  );
+}
+
+/// Navigates to a search results page populated with keywords for the movie.
+///
+void getMoreKeywords(
+  String uniqueId,
+  BuildContext context,
+) {
+  // Fetch first batch of movies that match the keyword.
+  final criteria = SearchCriteriaDTO().init(SearchCriteriaSource.moreKeywords);
+  criteria.criteriaTitle = uniqueId;
   Navigator.push(
     context,
     MaterialPageRoute(

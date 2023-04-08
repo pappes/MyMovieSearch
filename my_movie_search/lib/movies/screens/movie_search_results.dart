@@ -52,7 +52,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     _title = widget.criteria.criteriaTitle;
     _searchId = widget.criteria.searchId;
     BaseMovieRepository dataSource;
-    if (SearchCriteriaSource.movieKeyword == widget.criteria.criteriaSource) {
+    if (SearchCriteriaSource.moviesForKeyword ==
+        widget.criteria.criteriaSource) {
       dataSource = MoviesForKeywordRepository();
     } else {
       dataSource = MovieSearchRepository();

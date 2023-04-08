@@ -22,7 +22,8 @@ enum SearchStatus { awaitingInput, searching, cacheDirty, displayingResults }
 enum SearchCriteriaSource {
   none,
   movieTitle,
-  movieKeyword,
+  moviesForKeyword,
+  moreKeywords,
   movieDTOList,
   tpb,
   lime,

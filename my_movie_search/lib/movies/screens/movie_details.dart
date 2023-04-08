@@ -276,9 +276,18 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     for (final keyword in _movie.keywords) {
       hyperlinks.add(makeHyperlink(keyword));
     }
+
+    final label = InkWell(
+      child: const Text('Keywords: '),
+      onTap: () => getMoreKeywords(
+        _movie.uniqueId,
+        context,
+      ),
+    );
+
     return Wrap(
       children: <Widget>[
-        const Text('Keywords: '),
+        label,
         ...hyperlinks,
       ],
     );
