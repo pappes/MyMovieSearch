@@ -122,10 +122,15 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     return dto;
   }
 
-  SearchCriteriaDTO init(SearchCriteriaSource source) {
-    final dto = SearchCriteriaDTO();
-    dto.criteriaSource = source;
-    return dto;
+  SearchCriteriaDTO init(
+    SearchCriteriaSource source, {
+    String title = "",
+    List<MovieResultDTO> list = const [],
+  }) {
+    criteriaSource = source;
+    criteriaTitle = title;
+    criteriaList = list;
+    return this;
   }
 }
 

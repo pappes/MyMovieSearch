@@ -15,7 +15,7 @@ class MovieTile extends ListTile {
           leading: _getImage(movie.imageUrl),
           title: _getTitle(movie),
           subtitle: _getDescription(movie, hidePersonType),
-          onTap: () => resultDrillDown(movie, context),
+          onTap: () => MMSNav(context).resultDrillDown(movie),
         );
 
   static Widget _getTitle(MovieResultDTO movie) {

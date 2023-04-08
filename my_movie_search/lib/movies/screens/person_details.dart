@@ -159,10 +159,8 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         SelectableText('UniqueId: ${_person.uniqueId}      '),
         Text('Popularity: ${_person.userRatingCount}'),
         ElevatedButton(
-          onPressed: () => viewWebPage(
-            makeImdbUrl(_person.uniqueId),
-            context,
-          ),
+          onPressed: () =>
+              MMSNav(context).viewWebPage(makeImdbUrl(_person.uniqueId)),
           child: const Text('IMDB'),
         ),
 
@@ -198,10 +196,8 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       children: [
         Poster(
           url: _person.imageUrl,
-          onTap: () => viewWebPage(
-            makeImdbUrl(_person.uniqueId, photos: true),
-            context,
-          ),
+          onTap: () => MMSNav(context)
+              .viewWebPage(makeImdbUrl(_person.uniqueId, photos: true)),
         )
       ],
     );
@@ -217,11 +213,10 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       categories.add(
         Center(
           child: InkWell(
-            onTap: () => searchForRelated(
+            onTap: () => MMSNav(context).searchForRelated(
               // Open search details when tapped.
               '$rolesLabel: ${_person.title}',
               rolesMap.values.toList(),
-              context,
             ),
             child: Text(
               description,

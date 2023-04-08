@@ -13,94 +13,83 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
-void _invokeChromeCustomTabs(String url, BuildContext context) {
-  tabs
-      .launch(
-        url,
-        customTabsOption: tabs.CustomTabsOption(
-          toolbarColor: Theme.of(context).primaryColor,
-          enableDefaultShare: true,
-          enableUrlBarHiding: true,
-          showPageTitle: true,
-        ),
-      )
-      .onError((error, stackTrace) => _customTabsError(error, url, context));
-}
+class MMSNav {
+  final BuildContext context;
+  MMSNav(this.context);
 
-void _customTabsError(
-  Object? e,
-  String url,
-  BuildContext context,
-) {
-  // An exception is thrown if browser app is not installed on Android device.
-  debugPrint(e.toString());
-  showPopup(context, url);
-}
+  void _invokeChromeCustomTabs(String url) {
+    tabs
+        .launch(
+          url,
+          customTabsOption: tabs.CustomTabsOption(
+            toolbarColor: Theme.of(context).primaryColor,
+            enableDefaultShare: true,
+            enableUrlBarHiding: true,
+            showPageTitle: true,
+          ),
+        )
+        .onError((error, stackTrace) => _customTabsError(error, url));
+  }
 
-void _openBrowser(String url, BuildContext context) {
-  launcher.launchUrl(Uri.parse(url)).then(
-        (bool success) => _browserError(success, url, context),
-      );
-}
-
-void _browserError(
-  bool success,
-  String url,
-  BuildContext context,
-) {
-  // An exception is thrown if browser app is not installed on Android device.
-  if (!success) {
+  void _customTabsError(Object? e, String url) {
+    // An exception is thrown if browser app is not installed on Android device.
+    debugPrint(e.toString());
     showPopup(context, url);
   }
-}
 
-/// Render web page [url] in a child page of the current screen.
-///
-/// For platforms that don't support CustomTabs, the URL is displayed to the user.
-void viewWebPage(String url, BuildContext context) {
-  if (Platform.isAndroid) {
-    _invokeChromeCustomTabs(url, context);
-  } else {
+  void _openBrowser(String url, BuildContext context) {
+    launcher.launchUrl(Uri.parse(url)).then(
+          (bool success) => _browserError(success, url),
+        );
+  }
+
+  void _browserError(bool success, String url) {
+    // An exception is thrown if browser app is not installed on Android device.
+    if (!success) {
+      showPopup(context, url);
+    }
+  }
+
+  /// Render web page [url] in a child page of the current screen.
+  ///
+  /// For platforms that don't support CustomTabs, the URL is displayed to the user.
+  void viewWebPage(String url) {
+    if (Platform.isAndroid) {
+      _invokeChromeCustomTabs(url);
+    }
     _openBrowser(url, context);
   }
-}
 
-/// Construct route to Material user interface page as appropriate for the dto.
-///
-/// Chooses a MovieDetailsPage or PersonDetailsPage based on the IMDB unique ID.
-MaterialPageRoute<dynamic> getRoute(
-  BuildContext context,
-  MovieResultDTO movie,
-) {
-  if (movie.uniqueId.startsWith(imdbPersonPrefix)) {
-    // Open person details.
-    return MaterialPageRoute(
-      builder: (context) => PersonDetailsPage(person: movie),
-    );
-  } else {
-    // Open Movie details.
-    return MaterialPageRoute(
-      builder: (context) => MovieDetailsPage(movie: movie),
-    );
+  /// Construct route to Material user interface page as appropriate for the dto.
+  ///
+  /// Chooses a MovieDetailsPage or PersonDetailsPage based on the IMDB unique ID.
+  void showDetailsPage(
+    MovieResultDTO movie,
+  ) {
+    if (movie.uniqueId.startsWith(imdbPersonPrefix)) {
+      // Open person details.
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => PersonDetailsPage(person: movie),
+        ),
+      );
+    } else {
+      // Open Movie details.
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => MovieDetailsPage(movie: movie),
+        ),
+      );
+    }
   }
-}
 
-/// Navigates to a search results page populated with a predefined list of dtos.
-///
-void searchForRelated(
-  String description,
-  List<MovieResultDTO> movies,
-  BuildContext context,
-) {
-  if (movies.length == 1) {
-    // Only one result so open details screen.
-    Navigator.push(context, getRoute(context, movies[0]));
-  } else {
-    // Multiple results so show them as individual cards.
-    final criteria =
-        SearchCriteriaDTO().init(SearchCriteriaSource.movieDTOList);
-    criteria.criteriaList.addAll(movies);
-    criteria.criteriaTitle = description;
+  /// Navigates to a search results page populated with a movie list.
+  ///
+  void showResultsPage(SearchCriteriaDTO criteria) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -108,70 +97,65 @@ void searchForRelated(
       ),
     );
   }
-}
 
-/// Navigates to a search results page populated with movie for the keyword.
-///
-void searchForKeyword(
-  String keyword,
-  BuildContext context,
-) {
-  // Fetch first batch of movies that match the keyword.
-  final criteria =
-      SearchCriteriaDTO().init(SearchCriteriaSource.moviesForKeyword);
-  criteria.criteriaTitle = keyword;
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => MovieSearchResultsNewPage(criteria: criteria),
-    ),
-  );
-}
-
-/// Navigates to a search results page populated with keywords for the movie.
-///
-void getMoreKeywords(
-  MovieResultDTO movie,
-  BuildContext context,
-) {
-  // Fetch first batch of movies that match the keyword.
-  final criteria = SearchCriteriaDTO().init(SearchCriteriaSource.moreKeywords);
-  criteria.criteriaTitle = movie.uniqueId;
-  criteria.criteriaList = [movie];
-  Navigator.push(
-    context,
-    MaterialPageRoute(
-      builder: (context) => MovieSearchResultsNewPage(criteria: criteria),
-    ),
-  );
-}
-
-/// Display more details for the selected card.
-///
-void resultDrillDown(
-  MovieResultDTO movie,
-  BuildContext context,
-) {
-  if (movie.sources.containsKey(DataSourceType.imdbKeywords) &&
-      movie.uniqueId.startsWith('http')) {
-    // Search for next batch of movies that match the keyword.
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MovieSearchResultsNewPage(
-          criteria:
-              QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
+  /// Navigates to a search results page populated with a predefined list of dtos.
+  ///
+  void searchForRelated(String description, List<MovieResultDTO> movies) {
+    if (movies.length == 1) {
+      // Only one result so open details screen.
+      showDetailsPage(movies[0]);
+    } else {
+      // Multiple results so show them as individual cards.
+      showResultsPage(
+        SearchCriteriaDTO().init(
+          SearchCriteriaSource.movieDTOList,
+          title: description,
+          list: movies,
         ),
+      );
+    }
+  }
+
+  /// Navigates to a search results page populated with movie for the keyword.
+  ///
+  void getMoviesForKeyword(String keyword) {
+    // Fetch first batch of movies that match the keyword.
+    showResultsPage(
+      SearchCriteriaDTO().init(
+        SearchCriteriaSource.moviesForKeyword,
+        title: keyword,
       ),
     );
-  } else if (movie.type == MovieContentType.keyword) {
-    // Search for movies that match the keyword.
-    searchForKeyword(movie.title, context);
-  } else {
-    // Show details screen (movie details or person details)
-    Navigator.push(
-      context,
-      getRoute(context, movie),
+  }
+
+  /// Navigates to a search results page populated with keywords for the movie.
+  ///
+  void getMoreKeywords(MovieResultDTO movie) {
+    // Fetch first batch of movies that match the keyword.
+    showResultsPage(
+      SearchCriteriaDTO().init(
+        SearchCriteriaSource.moreKeywords,
+        title: movie.uniqueId,
+        list: [movie],
+      ),
     );
+  }
+
+  /// Display more details for the selected card.
+  ///
+  void resultDrillDown(MovieResultDTO movie) {
+    if (movie.sources.containsKey(DataSourceType.imdbKeywords) &&
+        movie.uniqueId.startsWith('http')) {
+      // Search for next batch of movies that match the keyword.
+      showResultsPage(
+        QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
+      );
+    } else if (movie.type == MovieContentType.keyword) {
+      // Search for movies that match the keyword.
+      getMoviesForKeyword(movie.title);
+    } else {
+      // Show details screen (movie details or person details)
+      showDetailsPage(movie);
+    }
   }
 }

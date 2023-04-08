@@ -178,10 +178,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       children: [
         Poster(
           url: _movie.imageUrl,
-          onTap: () => viewWebPage(
-            makeImdbUrl(_movie.uniqueId, photos: true),
-            context,
-          ),
+          onTap: () => MMSNav(context)
+              .viewWebPage(makeImdbUrl(_movie.uniqueId, photos: true)),
         ),
       ],
     );
@@ -210,9 +208,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     return [
       InkWell(
         child: movieFacts(),
-        onTap: () => viewWebPage(
+        onTap: () => MMSNav(context).viewWebPage(
           makeImdbUrl(_movie.uniqueId, parentalGuide: true),
-          context,
         ),
       ),
       Wrap(
@@ -220,10 +217,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           Text('Source: ${_movie.bestSource.name}      '),
           SelectableText('UniqueId: ${_movie.uniqueId}'),
           ElevatedButton(
-            onPressed: () => viewWebPage(
-              makeImdbUrl(_movie.uniqueId),
-              context,
-            ),
+            onPressed: () =>
+                MMSNav(context).viewWebPage(makeImdbUrl(_movie.uniqueId)),
             child: const Text('IMDB'),
           ),
           ...externalSearch(),
@@ -265,10 +260,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     Widget makeHyperlink(String keyword) {
       return InkWell(
         child: Text('  $keyword  '),
-        onTap: () => searchForKeyword(
-          keyword,
-          context,
-        ),
+        onTap: () => MMSNav(context).getMoviesForKeyword(keyword),
       );
     }
 
@@ -279,10 +271,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
     final label = InkWell(
       child: const Text('Keywords: '),
-      onTap: () => getMoreKeywords(
-        _movie,
-        context,
-      ),
+      onTap: () => MMSNav(context).getMoreKeywords(_movie),
     );
 
     return Wrap(
@@ -311,10 +300,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         categories.add(
           Center(
             child: InkWell(
-              onTap: () => searchForRelated(
+              onTap: () => MMSNav(context).searchForRelated(
                 '$rolesLabel ${_movie.title}',
                 rolesMap.values.toList(),
-                context,
               ),
               child: Text(
                 description,
@@ -332,17 +320,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     final year = _movie.year > 1900 ? _movie.year : "";
     return <Widget>[
       ElevatedButton(
-        onPressed: () => viewWebPage(
+        onPressed: () => MMSNav(context).viewWebPage(
           'https://tpb.party/search/${_movie.title} $year',
-          context,
         ),
         child: Text(_movie.title),
       ),
       if (_movie.alternateTitle.isNotEmpty)
         ElevatedButton(
-          onPressed: () => viewWebPage(
+          onPressed: () => MMSNav(context).viewWebPage(
             'https://tpb.party/search/${_movie.alternateTitle} $year',
-            context,
           ),
           child: Text(_movie.alternateTitle),
         ),
