@@ -20,6 +20,7 @@ enum DataSourceType {
   tmdbFinder,
   google,
   wiki,
+  tpb,
   other,
   custom,
 }

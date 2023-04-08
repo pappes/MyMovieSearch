@@ -13,33 +13,32 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 const jsonKeywordKey = 'keyword';
 const jsonPageKey = 'page';
 
-/// Implements [WebFetchBase] for the IMDB keywords html web scraper.
+/// Implements [WebFetchBase] for the tpb search html web scraper.
 ///
 /// ```dart
 /// QueryTpbSearch().readList(criteria, limit: 10)
 /// ```
 class QueryTpbSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeTpbSearch {
-  static const _baseURL =
-      'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=';
-  static const _pageURL = '&page=';
+  static const _baseURL = 'https://tpb.party/search/';
+  static const _pageURL = '/99/0';
 
   QueryTpbSearch(SearchCriteriaDTO criteria) : super(criteria);
 
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
-    return DataSourceType.imdbKeywords.name;
+    return DataSourceType.tpb.name;
   }
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
   DataSourceFn myOfflineData() {
-    return streamImdbKeywordsHtmlOfflineData;
+    return streamTpbHtmlOfflineData;
   }
 
-  /// Convert IMDB map to MovieResultDTO records.
+  /// Convert TPB map to MovieResultDTO records.
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
     if (map is Map) {
@@ -67,14 +66,14 @@ class QueryTpbSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
         '[QueryTpbSearch] $message',
-        DataSourceType.imdbKeywords,
+        DataSourceType.tpb,
       );
 
-  /// API call to IMDB keywords returning the top matching results for [keywordsText].
+  /// API call to tpb search returning the top matching results for [encodedCriteria].
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
     searchResultsLimit = WebFetchLimiter(55);
-    final url = '$_baseURL$encodedCriteria$_pageURL$pageNumber';
+    final url = '$_baseURL$encodedCriteria/$pageNumber$_pageURL';
     return Uri.parse(url);
   }
 

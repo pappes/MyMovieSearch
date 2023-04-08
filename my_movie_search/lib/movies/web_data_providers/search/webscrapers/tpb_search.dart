@@ -7,8 +7,6 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/tpb_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -26,15 +24,12 @@ const keywordDirectors = 'directors';
 const keywordActors = 'topCredits';
 const keywordKeywords = 'keywords';
 
-/// Implements [WebFetchBase] for the IMDB Keywords html web scraper.
+/// Implements [WebFetchBase] for the Tpb search html web scraper.
 ///
 /// ```dart
 /// ScrapeTpbSearch().readList(criteria, limit: 10)
 /// ```
 mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final detailConverter = ImdbWebScraperConverter(
-    DataSourceType.imdbKeywords,
-  );
   static final htmlDecode = HtmlUnescape();
   static const splitter = LineSplitter();
 
@@ -58,16 +53,14 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         final movie = _getMovie(row);
         final id = movie[keywordId];
 
-        if (null != id && id.toString().startsWith(imdbTitlePrefix)) {
-          movieData.add(movie);
-        }
+        movieData.add(movie);
       }
       final next = document.querySelector('.lister-page-next');
       if (null != next) {
         movieData.add(_addNextPage(next));
       }
     } else {
-      throw 'imdb keyword data not detected for criteria $getCriteriaText';
+      throw 'tpb search data not detected for criteria $getCriteriaText';
     }
     return movieData;
   }
@@ -95,9 +88,7 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   String? _getId(Element? section) {
     if (null != section) {
-      final anchor = section.querySelector('a')?.attributes['href'];
-      final id = getIdFromIMDBLink(anchor);
-      if (id.startsWith(imdbTitlePrefix)) return id;
+      return section.querySelector('a')?.attributes['href'];
     }
     return null;
   }

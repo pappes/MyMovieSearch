@@ -6,35 +6,29 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt0218354","bestSource":"DataSourceType.imdbKeywords","title":"The Catgirl<3","type":"MovieContentType.series","year":"2010","yearRange":"2003–2010","languages":"[]","genres":"[]",
+{"uniqueId":"/title/tt0218354/?ref_=kw_li_tt","bestSource":"DataSourceType.tpb","title":"The Catgirl<3","type":"MovieContentType.series","year":"2010","yearRange":"2003–2010",
       "keywords":"[\"dream\"]",
       "description":"Then Kramer said, \"Everybody is Mescalon Smoochington\"<3",
-      "userRating":"5.999","userRatingCount":"374","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BOWI5MzNiY2QyNTA4NzExMDg@._V1_UY98_CR32,0,67,98_AL_.jpg","sources":{"DataSourceType.imdbKeywords":"tt0218354"},
-  "related":{"Directed by:":{"nm0311837":{"uniqueId":"nm0311837","title":"Vonuck Heint\n            ","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0311837"},"related":{}}},
-    "Cast:":{"nm0718931":{"uniqueId":"nm0718931","title":"Rano Romino\n            ","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0718931"},"related":{}},
-      "nm0714533":{"uniqueId":"nm0714533","title":"Eara Sabvan\n            ","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0714533"},"related":{}},
-      "nm0211835":{"uniqueId":"nm0211835","title":"Ataircan Dunlas\n            ","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0211835"},"related":{}},
-      "nm0414736":{"uniqueId":"nm0414736","title":"Tnny Keom \n            ","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.none":"nm0414736"},"related":{}}}}}
+      "userRating":"5.999","userRatingCount":"374","imageUrl":"https://m.media-amazon.com/images/M/MV5BOWI5MzNiY2QyNTA4NzExMDg@._V1_UY98_CR32,0,67,98_AL_.jpg","sources":{"DataSourceType.tpb":"/title/tt0218354/?ref_=kw_li_tt"}}
 ''',
   r'''
-{"uniqueId":"https://www.imdb.com/search/keyword/?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main","bestSource":"DataSourceType.imdbKeywords","title":"Next »","languages":"[]","genres":"[]",
+{"uniqueId":"https://tpb.party/search/dream/1/99/0?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main","bestSource":"DataSourceType.tpb","title":"Next »",
       "keywords":"[\"dream\"]",
-      "description":"{ \"keyword\":\"dream\", \"page\":\"2\", \"url\":\"https://www.imdb.com/search/keyword/?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main\"}","sources":{"DataSourceType.imdbKeywords":"https://www.imdb.com/search/keyword/?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"},"related":{}}
+      "description":"{ \"keyword\":\"dream\", \"page\":\"2\", \"url\":\"https://tpb.party/search/dream/1/99/0?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main\"}","sources":{"DataSourceType.tpb":"https://tpb.party/search/dream/1/99/0?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"}}
 ''',
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamImdbKeywordsHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitImdbKeywordsHtmlSample(dummy));
+Future<Stream<String>> streamTpbHtmlOfflineData(dynamic dummy) {
+  return Future.value(_emitTpbHtmlSample(dummy));
 }
 
-Stream<String> _emitImdbKeywordsHtmlSample(_) async* {
-  yield imdbKeywordsHtmlSampleFull;
+Stream<String> _emitTpbHtmlSample(_) async* {
+  yield tpbSampleFull;
 }
 
-const imdbKeywordsHtmlSampleFull =
-    '$imdbKeywordsHtmlSampleStart$imdbSampleMid$imdbKeywordsHtmlSampleEnd';
-const imdbKeywordsHtmlSampleStart = '''
+const tpbSampleFull = '$tpbHtmlSampleStart$tpbSampleMid$tpbHtmlSampleEnd';
+const tpbHtmlSampleStart = '''
 
 <!DOCTYPE html>
 <html
@@ -45,7 +39,7 @@ const imdbKeywordsHtmlSampleStart = '''
   <body id="styleguide-v2" class="fixed">
   
    <div class="lister-list">''';
-const imdbKeywordsHtmlSampleEnd = '''
+const tpbHtmlSampleEnd = '''
 
 </div>
     
@@ -56,7 +50,7 @@ const imdbKeywordsHtmlSampleEnd = '''
 
 const intermediateMapList = [
   {
-    'id': 'tt0218354',
+    'id': '/title/tt0218354/?ref_=kw_li_tt',
     'titleNameText': 'The Catgirl<3',
     'titleDescription':
         'Then Kramer said, "Everybody is Mescalon Smoochington"<3',
@@ -76,15 +70,15 @@ const intermediateMapList = [
   },
   {
     'id':
-        'https://www.imdb.com/search/keyword/?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main',
+        'https://tpb.party/search/dream/1/99/0?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main',
     'titleNameText': 'Next »',
     'keywords': 'dream',
     'titleDescription':
-        '{ "keyword":"dream", "page":"2", "url":"https://www.imdb.com/search/keyword/?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"}'
+        '{ "keyword":"dream", "page":"2", "url":"https://tpb.party/search/dream/1/99/0?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"}'
   },
 ];
 
-const imdbSampleMid = r'''
+const tpbSampleMid = r'''
 <div class="lister-item mode-advanced">
     <div class="lister-item-image float-left">
           <img src="https://m.media-amazon.com/images/M/MV5BOWI5MzNiY2QyNTA4NzExMDg@._V1_UY98_CR32,0,67,98_AL_.jpg">

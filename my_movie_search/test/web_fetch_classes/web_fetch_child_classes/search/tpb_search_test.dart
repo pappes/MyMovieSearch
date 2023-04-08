@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/tpb_search.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/tpb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/tpb_search.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/tpb_search.dart';
 
 import '../../../test_helper.dart';
 
@@ -22,10 +22,10 @@ void main() {
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('imdb search unit tests', () {
+  group('tpb search unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryTpbSearch(criteria).myDataSourceName(), 'imdbKeywords');
+      expect(QueryTpbSearch(criteria).myDataSourceName(), 'tpb');
     });
 
     // Confirm simple criteria is displayed as expected.
@@ -81,8 +81,7 @@ testing and punctuation
 
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expectedResult =
-          'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=new%20query&page=1';
+      const expectedResult = 'https://tpb.party/search/new%20query/1/99/0';
 
       // Invoke the functionality.
       final actualResult =
@@ -95,7 +94,7 @@ testing and punctuation
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'bestSource': 'DataSourceType.imdbKeywords',
+        'bestSource': 'DataSourceType.tpb',
         'title': '[QueryTpbSearch] new query',
         'type': 'MovieContentType.error',
       };
@@ -114,12 +113,12 @@ testing and punctuation
       final testClass = QueryTpbSearch(criteria);
       testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
-        imdbKeywordsHtmlSampleFull,
+        tpbSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
     });
   });
-  group('ImdbSearchConverter unit tests', () {
+  group('TpbSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
@@ -145,20 +144,20 @@ testing and punctuation
     });
   });
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using ImdbSearchConverter
+  /// Integration tests using TpbSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('ImdbSearchConverter integration tests', () {
+  group('TpbSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final expectedValue = expectedDTOList;
-      final imdbKeywords = QueryTpbSearch(criteria);
+      final tpbSearch = QueryTpbSearch(criteria);
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          await imdbKeywords.myConvertTreeToOutputType(map),
+          await tpbSearch.myConvertTreeToOutputType(map),
         );
       }
 
@@ -172,10 +171,10 @@ testing and punctuation
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final imdbKeywords = QueryTpbSearch(criteria);
+      final tpbSearch = QueryTpbSearch(criteria);
 
       // Invoke the functionality and collect results.
-      final actualResult = imdbKeywords.myConvertTreeToOutputType('map');
+      final actualResult = tpbSearch.myConvertTreeToOutputType('map');
 
       // Check the results.
       //NOTE: Using expect on an async result only works as the last line of the test!
@@ -187,48 +186,49 @@ testing and punctuation
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and ScrapeIMDBSearchDetails and ImdbSearchConverter
+  /// Integration tests using WebFetchBase and ScrapeTpbSearchDetails and TpbSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('imdb search query', () {
-    // Read IMDB search results from a simulated byte stream and convert JSON to dtos.
+  group('tpb search query', () {
+    // Read Tpb search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final imdbKeywords = QueryTpbSearch(criteria);
+      final tpbSearch = QueryTpbSearch(criteria);
 
       // Invoke the functionality.
-      await imdbKeywords
+      await tpbSearch
           .readList(
-            source: streamImdbKeywordsHtmlOfflineData,
+            source: streamTpbHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
+      // printTestData(queryResult);
 
       // Check the results.
       expect(
         queryResult,
-        MovieResultDTOListMatcher(expectedValue),
+        MovieResultDTOListMatcher(expectedValue, related: false),
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
 
-    // Read IMDB search results from a simulated byte stream and report error due to invalid html.
+    // Read Tpb search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final imdbKeywords = QueryTpbSearch(criteria);
-      const expectedException = '[QueryTpbSearch] Error in imdbKeywords '
+      final tpbSearch = QueryTpbSearch(criteria);
+      const expectedException = '[QueryTpbSearch] Error in tpb '
           'with criteria dream interpreting web text as a map '
-          ':imdb keyword data not detected for criteria dream';
+          ':tpb search data not detected for criteria dream';
 
       // Invoke the functionality.
-      await imdbKeywords
+      await tpbSearch
           .readList(
             source: _emitInvalidHtmlSample,
           )
@@ -236,17 +236,17 @@ testing and punctuation
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read IMDB search results from a simulated byte stream and report error due to unexpected html.
+    // Read Tpb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException = '[QueryTpbSearch] Error in imdbKeywords '
+      const expectedException = '[QueryTpbSearch] Error in tpb '
           'with criteria dream interpreting web text as a map '
-          ':imdb keyword data not detected for criteria dream';
+          ':tpb search data not detected for criteria dream';
       final queryResult = <MovieResultDTO>[];
-      final imdbKeywords = QueryTpbSearch(criteria);
+      final tpbSearch = QueryTpbSearch(criteria);
 
       // Invoke the functionality.
-      await imdbKeywords
+      await tpbSearch
           .readList(
             source: _emitUnexpectedHtmlSample,
           )
