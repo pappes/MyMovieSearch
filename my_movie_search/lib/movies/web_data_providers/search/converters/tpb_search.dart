@@ -12,10 +12,11 @@ class TpbSearchConverter {
   static MovieResultDTO dtoFromMap(Map map) {
     return MovieResultDTO().init(
       bestSource: DataSourceType.tpb,
-      uniqueId: '123',
+      uniqueId: map[jsonMagnetKey]?.toString(),
       title: map[jsonNameKey]?.toString(),
       charactorName: map[jsonCategoryKey]?.toString(),
       description: map[jsonDescriptionKey]?.toString(),
+      imageUrl: map[jsonMagnetKey]?.toString(),
       creditsOrder: map[jsonSeedersKey]?.toString(),
       userRatingCount: map[jsonLeechersKey]?.toString(),
     );

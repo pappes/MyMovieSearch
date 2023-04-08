@@ -141,6 +141,18 @@ class MMSNav {
     );
   }
 
+  /// Navigates to a search results page populated with downloads for the movie.
+  ///
+  void getDownloads(String text) {
+    // Fetch first batch of movies that match the keyword.
+    showResultsPage(
+      SearchCriteriaDTO().init(
+        SearchCriteriaSource.tpb,
+        title: text,
+      ),
+    );
+  }
+
   /// Display more details for the selected card.
   ///
   void resultDrillDown(MovieResultDTO movie) {

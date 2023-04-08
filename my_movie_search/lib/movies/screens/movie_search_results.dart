@@ -23,6 +23,7 @@ import 'package:my_movie_search/movies/blocs/repositories/base_movie_repository.
 import 'package:my_movie_search/movies/blocs/repositories/more_keywords_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movies_for_keyword_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/tor_repository.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -54,22 +55,25 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     super.initState();
     _title = widget.criteria.criteriaTitle;
     _searchId = widget.criteria.searchId;
-    BaseMovieRepository dataSource;
-    if (SearchCriteriaSource.moviesForKeyword ==
-        widget.criteria.criteriaSource) {
-      dataSource = MoviesForKeywordRepository();
-    } else if (SearchCriteriaSource.moreKeywords ==
-        widget.criteria.criteriaSource) {
-      dataSource = MoreKeywordsRepository();
-      _title = 'Keywords for ${widget.criteria.criteriaList.first.title}';
-    } else {
-      dataSource = MovieSearchRepository();
-    }
     //TODO: use a factory in inject search bloc instances _searchBloc = BlocProvider.of<SearchBloc>(context);
-    _searchBloc = SearchBloc(movieRepository: dataSource);
+    _searchBloc = SearchBloc(movieRepository: getDatasource());
     if (_searchBloc != null && !_searchBloc!.isClosed) {
       _searchBloc!.add(SearchRequested(widget.criteria));
     }
+  }
+
+  BaseMovieRepository getDatasource() {
+    if (SearchCriteriaSource.moviesForKeyword ==
+        widget.criteria.criteriaSource) {
+      return MoviesForKeywordRepository();
+    } else if (SearchCriteriaSource.moreKeywords ==
+        widget.criteria.criteriaSource) {
+      _title = 'Keywords for ${widget.criteria.criteriaList.first.title}';
+      return MoreKeywordsRepository();
+    } else if (SearchCriteriaSource.tpb == widget.criteria.criteriaSource) {
+      return TorRepository();
+    }
+    return MovieSearchRepository();
   }
 
   @override

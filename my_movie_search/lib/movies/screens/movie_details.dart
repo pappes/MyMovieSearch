@@ -320,6 +320,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     final year = _movie.year > 1900 ? _movie.year : "";
     return <Widget>[
       ElevatedButton(
+        onPressed: () => MMSNav(context).getDownloads(_movie.title),
+        child: const Text('tpb'),
+      ),
+      ElevatedButton(
         onPressed: () => MMSNav(context).viewWebPage(
           'https://tpb.party/search/${_movie.title} $year',
         ),
