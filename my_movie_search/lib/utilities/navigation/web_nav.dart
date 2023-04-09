@@ -37,7 +37,7 @@ class MMSNav {
     showPopup(context, url);
   }
 
-  void _openBrowser(String url, BuildContext context) {
+  void _openBrowser(String url) {
     launcher.launchUrl(Uri.parse(url)).then(
           (bool success) => _browserError(success, url),
         );
@@ -57,7 +57,7 @@ class MMSNav {
     if (Platform.isAndroid) {
       _invokeChromeCustomTabs(url);
     }
-    _openBrowser(url, context);
+    _openBrowser(url);
   }
 
   /// Construct route to Material user interface page as appropriate for the dto.
@@ -144,11 +144,13 @@ class MMSNav {
   /// Navigates to a search results page populated with downloads for the movie.
   ///
   void getDownloads(String text) {
+    // replace space with . for more specific searching
+    final criteria = text.replaceAll(' ', '.');
     // Fetch first batch of movies that match the keyword.
     showResultsPage(
       SearchCriteriaDTO().init(
         SearchCriteriaSource.tpb,
-        title: text,
+        title: criteria,
       ),
     );
   }
@@ -156,18 +158,27 @@ class MMSNav {
   /// Display more details for the selected card.
   ///
   void resultDrillDown(MovieResultDTO movie) {
-    if (movie.sources.containsKey(DataSourceType.imdbKeywords) &&
-        movie.uniqueId.startsWith('http')) {
-      // Search for next batch of movies that match the keyword.
-      showResultsPage(
-        QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
-      );
-    } else if (movie.type == MovieContentType.keyword) {
-      // Search for movies that match the keyword.
-      getMoviesForKeyword(movie.title);
-    } else {
-      // Show details screen (movie details or person details)
-      showDetailsPage(movie);
+    switch (movie.type) {
+      case MovieContentType.keyword:
+        // Search for movies that match the keyword.
+        getMoviesForKeyword(movie.title);
+
+        break;
+      case MovieContentType.navigation:
+        // Search for more movies that match the keyword.
+        showResultsPage(
+          QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
+        );
+
+        break;
+      case MovieContentType.download:
+        // Open magnet link.
+        viewWebPage(movie.imageUrl);
+
+        break;
+      default:
+        // Show details screen (movie details or person details)
+        showDetailsPage(movie);
     }
   }
 }

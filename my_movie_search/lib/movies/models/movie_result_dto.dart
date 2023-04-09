@@ -45,6 +45,7 @@ enum MovieContentType {
   keyword,
   person,
   download, //   e.g. magnet from tpb
+  navigation, // e.g. next page
   movie, //      includes "tv movie"
   series, //     anything less that an hour long that does repeat or repeats more than 4 times
   miniseries, // anything more that an hour long that does repeat
@@ -1278,7 +1279,7 @@ extension DTOCompare on MovieResultDTO {
     }
   }
 
-  /// Compare people based returened oreder and populatrity.
+  /// Compare people based returned order and populatrity.
   int personCompare(MovieResultDTO other) {
     if (creditsOrder != other.creditsOrder ||
         userRatingCount != other.userRatingCount) {
@@ -1289,11 +1290,12 @@ extension DTOCompare on MovieResultDTO {
 
   /// Compare downloads based availability.
   int downloadCompare(MovieResultDTO other) {
-    if (creditsOrder != other.creditsOrder ||
-        userRatingCount != other.userRatingCount) {
-      return personPopularityCompare(other);
+    if (creditsOrder != other.creditsOrder) {
+      // Compare seeders
+      return creditsOrder.compareTo(other.creditsOrder);
     }
-    return title.compareTo(other.title) * -1;
+    // Compare Leachers
+    return userRatingCount.compareTo(other.userRatingCount);
   }
 
   /// Compare movies based on popularity, type, language, year, etc.

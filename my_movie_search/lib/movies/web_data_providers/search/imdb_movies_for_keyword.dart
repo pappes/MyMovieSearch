@@ -102,7 +102,7 @@ class QueryIMDBMoviesForKeyword
   static SearchCriteriaDTO convertMovieDtoToCriteriaDto(MovieResultDTO card) {
     final newCriteria =
         SearchCriteriaDTO().init(SearchCriteriaSource.moviesForKeyword);
-    newCriteria.criteriaList.add(card);
+    newCriteria.criteriaList = [card];
     newCriteria.criteriaTitle =
         _getCriteriaJsonValue(newCriteria, jsonKeywordKey);
     return newCriteria;

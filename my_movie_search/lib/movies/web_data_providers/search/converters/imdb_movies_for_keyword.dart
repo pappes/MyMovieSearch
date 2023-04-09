@@ -46,11 +46,14 @@ class ImdbMoviesForKeywordConverter {
         ?.toString()
         .replaceAll('(', '')
         .replaceAll(')', '');
-    final movieType = MovieResultDTOHelpers.getMovieContentType(
+    var movieType = MovieResultDTOHelpers.getMovieContentType(
       "${map[keywordTypeInfo]} $yearRange",
       seconds,
       uniqueId,
     )?.toString();
+    if (uniqueId.startsWith('http')) {
+      movieType = MovieContentType.navigation.name;
+    }
 
     final RelatedMovieCategories related = {};
     final directors = _getRelatedPeople(map[keywordDirectors]?.toString());
