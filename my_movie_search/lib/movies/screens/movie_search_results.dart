@@ -115,7 +115,6 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
         // Use the search criteria to set our appbar title.
         title: TextField(
           controller: TextEditingController(text: _title),
-          style: hugeFont,
           onSubmitted: newSearch,
           showCursor: true,
         ),
