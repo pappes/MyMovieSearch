@@ -44,6 +44,7 @@ enum MovieContentType {
   error,
   keyword,
   person,
+  download, //   e.g. magnet from tpb
   movie, //      includes "tv movie"
   series, //     anything less that an hour long that does repeat or repeats more than 4 times
   miniseries, // anything more that an hour long that does repeat
@@ -1267,14 +1268,36 @@ extension DTOCompare on MovieResultDTO {
     if (contentCategory() != other.contentCategory()) {
       return contentCategory().compareTo(other.contentCategory());
     }
-    // For people sort by popularity
-    if (MovieContentType.person == type) {
-      if (creditsOrder != other.creditsOrder ||
-          userRatingCount != other.userRatingCount) {
-        return personPopularityCompare(other);
-      }
-      return title.compareTo(other.title) * -1;
+    switch (type) {
+      case MovieContentType.person:
+        return personCompare(other);
+      case MovieContentType.download:
+        return downloadCompare(other);
+      default:
+        return movieCompare(other);
     }
+  }
+
+  /// Compare people based returened oreder and populatrity.
+  int personCompare(MovieResultDTO other) {
+    if (creditsOrder != other.creditsOrder ||
+        userRatingCount != other.userRatingCount) {
+      return personPopularityCompare(other);
+    }
+    return title.compareTo(other.title) * -1;
+  }
+
+  /// Compare downloads based availability.
+  int downloadCompare(MovieResultDTO other) {
+    if (creditsOrder != other.creditsOrder ||
+        userRatingCount != other.userRatingCount) {
+      return personPopularityCompare(other);
+    }
+    return title.compareTo(other.title) * -1;
+  }
+
+  /// Compare movies based on popularity, type, language, year, etc.
+  int movieCompare(MovieResultDTO other) {
     // See how many people have rated this movie.
     if (userRatingCategory() != other.userRatingCategory()) {
       return userRatingCategory().compareTo(other.userRatingCategory());

@@ -63,17 +63,25 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   }
 
   BaseMovieRepository getDatasource() {
-    if (SearchCriteriaSource.moviesForKeyword ==
-        widget.criteria.criteriaSource) {
-      return MoviesForKeywordRepository();
-    } else if (SearchCriteriaSource.moreKeywords ==
-        widget.criteria.criteriaSource) {
-      _title = 'Keywords for ${widget.criteria.criteriaList.first.title}';
-      return MoreKeywordsRepository();
-    } else if (SearchCriteriaSource.tpb == widget.criteria.criteriaSource) {
-      return TorRepository();
+    switch (widget.criteria.criteriaSource) {
+      case SearchCriteriaSource.tpb:
+        {
+          return TorRepository();
+        }
+      case SearchCriteriaSource.moviesForKeyword:
+        {
+          return MoviesForKeywordRepository();
+        }
+      case SearchCriteriaSource.moreKeywords:
+        {
+          _title = 'Keywords for ${widget.criteria.criteriaList.first.title}';
+          return MoreKeywordsRepository();
+        }
+      default:
+        {
+          return MovieSearchRepository();
+        }
     }
-    return MovieSearchRepository();
   }
 
   @override
@@ -109,6 +117,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
           controller: TextEditingController(text: _title),
           style: hugeFont,
           onSubmitted: newSearch,
+          showCursor: true,
         ),
       ),
       body: Center(
@@ -146,14 +155,9 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
         title: Text("More widgets than available data to populate them!"),
       );
     }
-    var hidePersonType = false;
-    if (SearchCriteriaSource.movieDTOList == widget.criteria.criteriaSource) {
-      hidePersonType = true;
-    }
     return MovieTile(
       context,
       _sortedList[listIndex],
-      hidePersonType: hidePersonType,
     );
   }
 }

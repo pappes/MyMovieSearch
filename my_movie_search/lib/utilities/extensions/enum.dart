@@ -14,3 +14,7 @@ T? getEnumValue<T extends Enum>(dynamic stringValue, List<T> enumClass) {
   }
   return null;
 }
+
+extension DescribeEnum on Enum {
+  String get excludeNone => ('none' == name) ? '' : name;
+}

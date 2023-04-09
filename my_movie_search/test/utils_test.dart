@@ -582,6 +582,27 @@ Future main() async {
   });
 
   group('ListHelper', () {
+    group('trimJoin', () {
+      // Find timJoin removes trailing whitepsace.
+      test('empty collection', () {
+        expect([].trimJoin(), '');
+      });
+      test('just whitespace', () {
+        expect([' ', ' '].trimJoin(), '');
+      });
+      test('no whitespace', () {
+        expect(['a', ' ', 'b'].trimJoin(), 'a b');
+      });
+      test('separator whitespace', () {
+        expect(['a', ' ', 'b'].trimJoin(' '), 'a   b');
+      });
+      test('begining whitespace', () {
+        expect([' - ', 'a', ' ', 'b'].trimJoin(' ', ' -'), 'a   b');
+      });
+      test('end whitespace', () {
+        expect(['a', ' ', 'b', ' - '].trimJoin(' ', ' -'), 'a   b');
+      });
+    });
     group('fromJson', () {
       /// Convert JSON [input] to a [List] of [String] and compare to [expectedOutput]
       void testFromJson(String? input, List<String> expectedOutput) {
@@ -823,7 +844,7 @@ Future main() async {
       });
     });
 
-    group('extensions', () {
+    group('TreeHelper extensions', () {
       // Test map, list and set extension helper classes.
       test('searchForString map extension', () {
         expect(simpleMap.searchForString(key: 'marco'), 'polo');

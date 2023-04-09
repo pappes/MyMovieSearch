@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+
 /// Extend [List]<[String]> or [Set]<[String]> to provide convenience functions.
 ///
 extension StringIterableHelper on Iterable<String> {
@@ -78,5 +80,22 @@ extension ListHelper<T> on List<T> {
       }
     }
     return this;
+  }
+
+  String trimJoin([String separator = '', String whitespace = ' ']) {
+    final joined = join(separator);
+    int start = 0;
+    int end = 0;
+    int current = 0;
+    final trimable = whitespace.characters;
+    if (joined.isEmpty) return joined;
+    for (final char in joined.characters) {
+      if (current == start && trimable.contains(char)) start++;
+      if (!trimable.contains(char)) end = current + 1;
+      current++;
+    }
+    if (start == joined.length) return '';
+
+    return joined.substring(start, end);
   }
 }
