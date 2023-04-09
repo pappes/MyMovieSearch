@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as tabs;
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/movie_details.dart';
@@ -56,8 +55,9 @@ class MMSNav {
   void viewWebPage(String url) {
     if (Platform.isAndroid) {
       _invokeChromeCustomTabs(url);
+    } else {
+      _openBrowser(url);
     }
-    _openBrowser(url);
   }
 
   /// Construct route to Material user interface page as appropriate for the dto.
