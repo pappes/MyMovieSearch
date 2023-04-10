@@ -11,13 +11,13 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 /// Helper functions
 ////////////////////////////////////////////////////////////////////////////////
 
-void printTestData(
-  List<MovieResultDTO> actualResult, {
+void sortDtoList(
+  List<MovieResultDTO> dtos, {
   bool includeRelated = true,
 }) {
-  actualResult.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+  dtos.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
   if (includeRelated) {
-    for (final entry in actualResult) {
+    for (final entry in dtos) {
       // sort categories by converting map to a SplayTreeMap
       entry.related = SplayTreeMap.from(entry.related);
       for (final category in entry.related.keys) {
@@ -29,6 +29,13 @@ void printTestData(
       }
     }
   }
+}
+
+void printTestData(
+  List<MovieResultDTO> actualResult, {
+  bool includeRelated = true,
+}) {
+  sortDtoList(actualResult, includeRelated: includeRelated);
   // ignore: avoid_print
   print(
     actualResult.toListOfDartJsonStrings(
@@ -92,6 +99,8 @@ class MovieResultDTOMatcher extends Matcher {
   bool matches(dynamic actual, Map matchState) {
     if (actual is MovieResultDTO) {
       _actual = actual;
+      sortDtoList([_actual]);
+      sortDtoList([expected]);
     } else {
       _actual = MovieResultDTO().toUnknown();
     }
@@ -139,11 +148,11 @@ class MovieResultDTOListMatcher extends Matcher {
   bool matches(dynamic actual, Map matchState) {
     if (actual is List<MovieResultDTO>) {
       _actual = actual;
+      sortDtoList(_actual);
+      sortDtoList(expected);
     } else {
       _actual = [MovieResultDTO().toUnknown()];
     }
-    _actual.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-    expected.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
     matchState['actual'] = _actual;
 
     if (_actual.length != expected.length) return false;
@@ -206,9 +215,9 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
       _actual = actual;
     } else {
       _actual = [MovieResultDTO().toUnknown()];
+      sortDtoList(_actual);
+      sortDtoList(expected);
     }
-    _actual.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-    expected.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
     matchState['actual'] = _actual;
 
     for (final actualDto in _actual) {
