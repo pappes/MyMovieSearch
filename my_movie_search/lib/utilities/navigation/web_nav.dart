@@ -173,7 +173,8 @@ class MMSNav {
         break;
       case MovieContentType.download:
         // Open magnet link.
-        viewWebPage(movie.imageUrl);
+        //viewWebPage(movie.imageUrl);
+        _openBrowser(movie.imageUrl);
 
         break;
       default:
