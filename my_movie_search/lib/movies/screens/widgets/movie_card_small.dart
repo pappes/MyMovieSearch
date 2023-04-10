@@ -30,6 +30,8 @@ class MovieTile extends ListTile {
     final end = [];
     switch (movie.type) {
       case MovieContentType.download:
+        middle.add(movie.bestSource.excludeNone);
+        break;
       case MovieContentType.person:
         break;
       default:

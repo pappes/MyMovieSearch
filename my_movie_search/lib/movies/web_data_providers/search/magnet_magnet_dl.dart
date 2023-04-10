@@ -53,7 +53,7 @@ class QueryMagnetDlSearch
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String myFormatInputAsText() => criteria.toPrintableString();
+  String myFormatInputAsText() => criteria.toPrintableString().toLowerCase();
 
   /// Include entire map in the movie title when an error occurs.
   @override

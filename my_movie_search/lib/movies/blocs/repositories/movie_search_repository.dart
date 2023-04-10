@@ -1,10 +1,12 @@
 import 'package:my_movie_search/movies/blocs/repositories/movie_list_repository.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/google.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
+import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Search for movie data from multiple online search sources.
 ///
@@ -14,22 +16,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
 /// [Search] provides a stream of incomplete and complete results.
 /// [Close] can be used to cancel a search.
 class MovieSearchRepository extends MovieListRepository {
-  late QueryIMDBSuggestions _imdbSuggestions;
-  late QueryIMDBSearch _imdbSearch;
-  late QueryOMDBMovies _omdbSearch;
-  late QueryTMDBMovies _tmdbSearch;
-  late QueryGoogleMovies _googleSearch;
-
   /// Initiates a search for the provided [criteria].
   ///
   /// [searchUID] is a unique correlation ID identifying this search request
   @override
   void initSearch(int searchUID, SearchCriteriaDTO criteria) {
-    _imdbSuggestions = QueryIMDBSuggestions(criteria);
-    _imdbSearch = QueryIMDBSearch(criteria);
-    _omdbSearch = QueryOMDBMovies(criteria);
-    _tmdbSearch = QueryTMDBMovies(criteria);
-    _googleSearch = QueryGoogleMovies(criteria);
     if (criteria.criteriaList.isEmpty) {
       _searchText(searchUID);
     } else {
@@ -40,13 +31,14 @@ class MovieSearchRepository extends MovieListRepository {
   /// Initiates a search with all known movie "search" providers.
   /// Requests details retrieval for all returned search results.
   void _searchText(int searchUID) {
-    for (final provider in [
-      _imdbSearch,
-      _imdbSuggestions,
-      _googleSearch,
-      _omdbSearch,
-      _tmdbSearch,
-    ]) {
+    final providers = <WebFetchBase<MovieResultDTO, SearchCriteriaDTO>>[
+      QueryIMDBSuggestions(criteria),
+      QueryIMDBSearch(criteria),
+      QueryOMDBMovies(criteria),
+      QueryTMDBMovies(criteria),
+      QueryGoogleMovies(criteria),
+    ];
+    for (final provider in providers) {
       initProvider();
       provider
           .readList(limit: 10)
