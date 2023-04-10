@@ -55,7 +55,7 @@ void main() {
 
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expectedResult = 'https://www.magnetdl.com/s/new%20query/1/';
+      const expectedResult = 'https://www.magnetdl.com/n/new%20query/1/';
 
       // Invoke the functionality.
       final actualResult =
