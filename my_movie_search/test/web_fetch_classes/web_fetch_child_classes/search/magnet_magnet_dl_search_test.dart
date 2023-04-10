@@ -2,8 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/magnet_magnet_dl.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/offline/magnet_magnet_dl.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_magnet_dl.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/magnet_magnet_dl.dart';
 
 import '../../../test_helper.dart';
 
@@ -22,7 +22,7 @@ void main() {
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('tpb search unit tests', () {
+  group('magnetDl search unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
       expect(QueryMagnetDlSearch(criteria).myDataSourceName(), 'magnetDl');
@@ -81,7 +81,7 @@ testing and punctuation
 
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expectedResult = 'https://tpb.party/search/new%20query/1/99/0';
+      const expectedResult = 'https://www.magnetdl.com/s/new%20query/1/';
 
       // Invoke the functionality.
       final actualResult =
@@ -94,7 +94,7 @@ testing and punctuation
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'bestSource': 'DataSourceType.tpb',
+        'bestSource': 'DataSourceType.magnetDl',
         'title': '[QueryMagnetDlSearch] new query',
         'type': 'MovieContentType.error',
       };
@@ -113,7 +113,7 @@ testing and punctuation
       final testClass = QueryMagnetDlSearch(criteria);
       testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
-        tpbSampleFull,
+        mdlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
     });
@@ -189,8 +189,8 @@ testing and punctuation
   /// Integration tests using WebFetchBase and ScrapeMagnetDlSearchDetails and MagnetDlSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('tpb search query', () {
-    // Read Tpb search results from a simulated byte stream and convert JSON to dtos.
+  group('magnetDl search query', () {
+    // Read search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
@@ -218,14 +218,14 @@ testing and punctuation
       );
     });
 
-    // Read Tpb search results from a simulated byte stream and report error due to invalid html.
+    // Read search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final magnetDlSearch = QueryMagnetDlSearch(criteria);
       const expectedException = '[QueryMagnetDlSearch] Error in magnetDl '
           'with criteria dream interpreting web text as a map '
-          ':tpb results data not detected for criteria dream in html:not valid html';
+          ':magnetDl results data not detected for criteria dream in html:not valid html';
 
       // Invoke the functionality.
       await magnetDlSearch
@@ -236,12 +236,12 @@ testing and punctuation
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read Tpb search results from a simulated byte stream and report error due to unexpected html.
+    // Read search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[QueryMagnetDlSearch] Error in magnetDl '
           'with criteria dream interpreting web text as a map '
-          ':tpb results data not detected for criteria dream in html:<html><body>stuff</body></html>';
+          ':magnetDl results data not detected for criteria dream in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final magnetDlSearch = QueryMagnetDlSearch(criteria);
 

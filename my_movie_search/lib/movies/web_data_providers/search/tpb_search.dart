@@ -53,20 +53,9 @@ class QueryTpbSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
 
-  /// Extract plain text or dto encoded keyword.
+  /// converts <INPUT_TYPE> to a string representation.
   @override
-  String myFormatInputAsText() {
-    String keyword = _getCriteriaJsonValue(criteria, jsonKeywordKey);
-    if (keyword.isEmpty) {
-      keyword = criteria.toPrintableString();
-    }
-    return keyword;
-  }
-
-  /// Extract page number from dto encoded data
-  @override
-  int myGetPageNumber() =>
-      IntHelper.fromText(_getCriteriaJsonValue(criteria, jsonPageKey)) ?? 1;
+  String myFormatInputAsText() => criteria.toPrintableString();
 
   /// Include entire map in the movie title when an error occurs.
   @override
@@ -81,34 +70,5 @@ class QueryTpbSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     searchResultsLimit = WebFetchLimiter(55);
     final url = '$_baseURL$encodedCriteria/$pageNumber$_pageURL';
     return Uri.parse(url);
-  }
-
-  static String _getCriteriaJsonValue(SearchCriteriaDTO criteria, String key) {
-    try {
-      final jsonText = criteria.criteriaList.first.description;
-      if (jsonText.isNotEmpty) {
-        final map = jsonDecode(jsonText) as Map;
-        return map[key] as String;
-      }
-    } catch (_) {}
-    return '';
-  }
-
-  static String encodeJson(String keyword, String pageNumber, String url) {
-    final jsonText = '{'
-        ' "$jsonKeywordKey":${json.encode(keyword)},'
-        ' "$jsonPageKey":${json.encode(pageNumber)},'
-        ' "url":${json.encode(url)}'
-        '}';
-    return jsonText;
-  }
-
-  static SearchCriteriaDTO convertMovieDtoToCriteriaDto(MovieResultDTO card) {
-    final newCriteria =
-        SearchCriteriaDTO().init(SearchCriteriaSource.moviesForKeyword);
-    newCriteria.criteriaList.add(card);
-    newCriteria.criteriaTitle =
-        _getCriteriaJsonValue(newCriteria, jsonKeywordKey);
-    return newCriteria;
   }
 }

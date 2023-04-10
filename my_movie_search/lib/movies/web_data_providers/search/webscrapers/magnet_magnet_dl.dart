@@ -1,24 +1,25 @@
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
-import 'package:html_unescape/html_unescape_small.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_magnet_dl.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-const resultTableSelector = '#searchResult';
+const resultTableSelector = '.download';
 const magnetSelector = "[href^='magnet:']";
-const nameSelector = '.detName';
-const detailSelector = '.detDesc';
+const nameSelector = '.n';
+const detailSelector = '.t2';
+const seedSelector = '.s';
+const leechSelector = '.l';
 
-/// Implements [WebFetchBase] for the Tpb search html web scraper.
+/// Implements [WebFetchBase] for the MagnetDl search html web scraper.
 ///
 /// ```dart
-/// ScrapeTpbSearch().readList(criteria, limit: 10)
+/// ScrapeMagnetDlSearch().readList(criteria, limit: 10)
 /// ```
 mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final htmlDecode = HtmlUnescape();
   final movieData = [];
   bool validPage = false;
 
@@ -33,7 +34,7 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     if (validPage) {
       return movieData;
     }
-    throw 'tpb results data not detected for criteria $getCriteriaText in html:$webText';
+    throw 'magnetDl results data not detected for criteria $getCriteriaText in html:$webText';
   }
 
   /// extract each row from the table.
@@ -49,33 +50,20 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Collect webpage text to construct a map of the movie data.
   void _processRow(Element row) {
-    final columns = row.querySelectorAll('td');
-    if (4 == columns.length) {
-      final result = {};
-      result[jsonCategoryKey] = cleanText(columns[0].text);
-      result[jsonMagnetKey] =
-          columns[1].querySelector(magnetSelector)?.attributes['href'] ?? "";
-      result[jsonNameKey] =
-          cleanText(columns[1].querySelector(nameSelector)?.text);
-      result[jsonDescriptionKey] =
-          cleanText(columns[1].querySelector(detailSelector)?.text);
-      result[jsonSeedersKey] = cleanText(columns[2].text);
-      result[jsonLeechersKey] = cleanText(columns[3].text);
+    final result = {};
+    result[jsonCategoryKey] = row.querySelector(detailSelector)?.cleanText;
+    result[jsonMagnetKey] =
+        row.querySelector(magnetSelector)?.attributes['href'] ?? "";
+    result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;
+    result[jsonDescriptionKey] =
+        row.querySelector(seedSelector)?.previousElementSibling?.cleanText;
+    result[jsonSeedersKey] = row.querySelector(seedSelector)?.cleanText;
+    result[jsonLeechersKey] = row.querySelector(leechSelector)?.cleanText;
 
-      if (result[jsonMagnetKey]!.toString().isNotEmpty &&
-          result[jsonNameKey]!.toString().isNotEmpty &&
-          result[jsonSeedersKey]!.toString().isNotEmpty) {
-        movieData.add(result);
-      }
+    if (result[jsonMagnetKey]!.toString().isNotEmpty &&
+        result[jsonNameKey]!.toString().isNotEmpty &&
+        result[jsonSeedersKey]!.toString().isNotEmpty) {
+      movieData.add(result);
     }
-  }
-
-  String cleanText(dynamic text) {
-    final str = text?.toString() ?? "";
-    final cleanStr = str
-        .replaceAll('\n', '')
-        .replaceAll('\t', '')
-        .replaceAll('\u{00a0}', '');
-    return htmlDecode.convert(cleanStr.trim());
   }
 }

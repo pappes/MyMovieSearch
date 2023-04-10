@@ -1,10 +1,10 @@
 import 'package:html/dom.dart' show Document, Element;
 import 'package:html/parser.dart' show parse;
-import 'package:html_unescape/html_unescape_small.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/tpb_search.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const resultTableSelector = '#searchResult';
@@ -18,7 +18,6 @@ const detailSelector = '.detDesc';
 /// ScrapeTpbSearch().readList(criteria, limit: 10)
 /// ```
 mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final htmlDecode = HtmlUnescape();
   final movieData = [];
   bool validPage = false;
 
@@ -52,15 +51,14 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     final columns = row.querySelectorAll('td');
     if (4 == columns.length) {
       final result = {};
-      result[jsonCategoryKey] = cleanText(columns[0].text);
+      result[jsonCategoryKey] = columns[0].cleanText;
       result[jsonMagnetKey] =
           columns[1].querySelector(magnetSelector)?.attributes['href'] ?? "";
-      result[jsonNameKey] =
-          cleanText(columns[1].querySelector(nameSelector)?.text);
+      result[jsonNameKey] = columns[1].querySelector(nameSelector)?.cleanText;
       result[jsonDescriptionKey] =
-          cleanText(columns[1].querySelector(detailSelector)?.text);
-      result[jsonSeedersKey] = cleanText(columns[2].text);
-      result[jsonLeechersKey] = cleanText(columns[3].text);
+          columns[1].querySelector(detailSelector)?.cleanText;
+      result[jsonSeedersKey] = columns[2].cleanText;
+      result[jsonLeechersKey] = columns[3].cleanText;
 
       if (result[jsonMagnetKey]!.toString().isNotEmpty &&
           result[jsonNameKey]!.toString().isNotEmpty &&
@@ -68,14 +66,5 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         movieData.add(result);
       }
     }
-  }
-
-  String cleanText(dynamic text) {
-    final str = text?.toString() ?? "";
-    final cleanStr = str
-        .replaceAll('\n', '')
-        .replaceAll('\t', '')
-        .replaceAll('\u{00a0}', '');
-    return htmlDecode.convert(cleanStr.trim());
   }
 }

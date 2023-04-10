@@ -1,4 +1,5 @@
 import 'package:html/dom.dart' show Element, Node;
+import 'package:html_unescape/html_unescape_small.dart';
 
 // Extend standard dart library to use enums instead of hard coded strings
 enum ElementType { anchor, image, text, table, row }
@@ -46,6 +47,8 @@ extension NodeHelper on Node {
 /// Extend html DOM [Element] to provide convenience functions.
 ///
 extension ElementHelper on Element {
+  static final htmlDecode = HtmlUnescape();
+
   /// Search the DOM for child elements of type [etype].
   ///
   /// ```dart
@@ -61,4 +64,18 @@ extension ElementHelper on Element {
   /// ```
   String? getAttribute(AttributeType atype) =>
       attributes[_attributeNames[atype]!];
+
+  String get cleanText {
+    return _cleanHtmlText(text);
+  }
+
+  String _cleanHtmlText(dynamic text) {
+    final str = text?.toString() ?? "";
+    final cleanStr = str
+        .replaceAll('\n', ' ')
+        .replaceAll('\t', ' ')
+        .replaceAll('\u{00a0}', ' ')
+        .replaceAll(RegExp(r'\s+'), ' ');
+    return htmlDecode.convert(cleanStr.trim());
+  }
 }
