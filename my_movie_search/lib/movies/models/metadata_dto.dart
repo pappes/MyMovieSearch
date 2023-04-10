@@ -21,6 +21,7 @@ enum DataSourceType {
   google,
   wiki,
   tpb,
+  magnetDl,
   other,
   custom,
 }

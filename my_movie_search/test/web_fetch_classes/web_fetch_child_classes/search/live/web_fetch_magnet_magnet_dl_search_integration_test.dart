@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/tpb_search.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/magnet_magnet_dl.dart';
 
 import '../../../../test_helper.dart';
 
@@ -113,7 +113,8 @@ void main() {
     // Search for a rare movie.
     test('Run a search on Tpb that is likely to have static results', () async {
       final criteria = SearchCriteriaDTO().fromString('enigma');
-      final actualOutput = await QueryTpbSearch(criteria).readList(limit: 10);
+      final actualOutput =
+          await QueryMagnetDlSearch(criteria).readList(limit: 10);
       final expectedOutput = expectedDTOList;
       expectedDTOList.clearCopyrightedData();
       actualOutput.clearCopyrightedData();
