@@ -47,6 +47,7 @@ class MovieTile extends ListTile {
     return Text(
       combined,
       textScaleFactor: 1.0,
+      maxLines: 2,
     );
   }
 
@@ -83,6 +84,7 @@ class MovieTile extends ListTile {
     return Text(
       combined,
       textScaleFactor: 1.0,
+      maxLines: 2,
     );
   }
 

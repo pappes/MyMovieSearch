@@ -26,6 +26,10 @@ mixin ScrapeGloTorrentsSearch
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
+    if (webText
+        .contains('No torrents were found based on your search criteria.')) {
+      return [];
+    }
     final document = parse(webText);
     _scrapeWebPage(document);
     if (validPage) {

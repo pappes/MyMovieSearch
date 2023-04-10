@@ -29,6 +29,9 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
+    if (webText.contains('Your search has returned <strong>0</strong>')) {
+      return [];
+    }
     final document = parse(webText);
     _scrapeWebPage(document);
     if (validPage) {
