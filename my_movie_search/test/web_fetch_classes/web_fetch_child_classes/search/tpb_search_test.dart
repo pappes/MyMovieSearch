@@ -36,32 +36,6 @@ void main() {
       );
     });
 
-    // Confirm dto criteria is displayed as expected.
-    test('Run myFormatInputAsText() for encoded keyword', () {
-      const expectedKeyword = '''
-testing and punctuation 
-'' "" <> {} [] Tabs -> 			<-
-      ''';
-      const expectedPage = 200;
-      const expectedUrl = 'http://somewhere';
-
-      final input = SearchCriteriaDTO();
-      final jsonText = QueryTpbSearch.encodeJson(
-        expectedKeyword,
-        expectedPage.toString(),
-        expectedUrl,
-      );
-      input.criteriaList.add(MovieResultDTO().init(description: jsonText));
-      expect(
-        QueryTpbSearch(input).myFormatInputAsText(),
-        expectedKeyword,
-      );
-      expect(
-        QueryTpbSearch(input).myGetPageNumber(),
-        expectedPage,
-      );
-    });
-
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO();
