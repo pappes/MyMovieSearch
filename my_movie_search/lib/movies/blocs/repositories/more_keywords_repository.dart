@@ -11,7 +11,7 @@ class MoreKeywordsRepository extends MovieListRepository {
   void initSearch(int searchUID, SearchCriteriaDTO criteria) {
     initProvider();
     QueryIMDBMoreKeywordsDetails(criteria)
-        .readList(limit: 10)
+        .readList(limit: 1000)
         .then((values) => addResults(searchUID, values))
         .whenComplete(finishProvider);
   }
