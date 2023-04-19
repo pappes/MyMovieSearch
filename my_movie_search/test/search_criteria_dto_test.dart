@@ -31,7 +31,7 @@ class RestorationTestParent extends State with RestorationMixin {
 }
 
 void compareCriteria(SearchCriteriaDTO actual, SearchCriteriaDTO matcher) {
-  expect(actual.criteriaSource, matcher.criteriaSource);
+  expect(actual.criteriaType, matcher.criteriaType);
   expect(actual.criteriaTitle, matcher.criteriaTitle);
   expect(actual.searchId, matcher.searchId);
   expect(

@@ -108,7 +108,7 @@ class MMSNav {
       // Multiple results so show them as individual cards.
       showResultsPage(
         SearchCriteriaDTO().init(
-          SearchCriteriaSource.movieDTOList,
+          SearchCriteriaType.movieDTOList,
           title: description,
           list: movies,
         ),
@@ -122,7 +122,7 @@ class MMSNav {
     // Fetch first batch of movies that match the keyword.
     showResultsPage(
       SearchCriteriaDTO().init(
-        SearchCriteriaSource.moviesForKeyword,
+        SearchCriteriaType.moviesForKeyword,
         title: keyword,
       ),
     );
@@ -134,7 +134,7 @@ class MMSNav {
     // Fetch first batch of movies that match the keyword.
     showResultsPage(
       SearchCriteriaDTO().init(
-        SearchCriteriaSource.moreKeywords,
+        SearchCriteriaType.moreKeywords,
         title: movie.uniqueId,
         list: [movie],
       ),
@@ -149,7 +149,7 @@ class MMSNav {
     // Fetch first batch of movies that match the keyword.
     showResultsPage(
       SearchCriteriaDTO().init(
-        SearchCriteriaSource.tpb,
+        SearchCriteriaType.download,
         title: criteria,
       ),
     );

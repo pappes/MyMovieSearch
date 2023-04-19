@@ -63,16 +63,16 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   }
 
   BaseMovieRepository getDatasource() {
-    switch (widget.criteria.criteriaSource) {
-      case SearchCriteriaSource.tpb:
+    switch (widget.criteria.criteriaType) {
+      case SearchCriteriaType.download:
         {
           return TorRepository();
         }
-      case SearchCriteriaSource.moviesForKeyword:
+      case SearchCriteriaType.moviesForKeyword:
         {
           return MoviesForKeywordRepository();
         }
-      case SearchCriteriaSource.moreKeywords:
+      case SearchCriteriaType.moreKeywords:
         {
           _title = 'Keywords for ${widget.criteria.criteriaList.first.title}';
           return MoreKeywordsRepository();

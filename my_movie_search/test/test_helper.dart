@@ -359,7 +359,7 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
 SearchCriteriaDTO makeCriteriaDTO(String sample) {
   final dto = SearchCriteriaDTO();
 
-  dto.criteriaSource = SearchCriteriaSource.movieDTOList;
+  dto.criteriaType = SearchCriteriaType.movieDTOList;
   dto.criteriaTitle = '${sample}_criteriaTitle';
   dto.searchId = '${sample}_searchId';
   dto.criteriaList = [
