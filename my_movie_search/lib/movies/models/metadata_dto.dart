@@ -23,6 +23,8 @@ enum DataSourceType {
   tpb,
   magnetDl,
   gloTorrents,
+  ytsSearch,
+  ytsDetails,
   other,
   custom,
 }

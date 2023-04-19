@@ -143,7 +143,7 @@ class MMSNav {
 
   /// Navigates to a search results page populated with downloads for the movie.
   ///
-  void getDownloads(String text) {
+  void getDownloads(String text, MovieResultDTO dto) {
     // replace space with . for more specific searching
     final criteria = text.replaceAll(' ', '.');
     // Fetch first batch of movies that match the keyword.
@@ -151,6 +151,7 @@ class MMSNav {
       SearchCriteriaDTO().init(
         SearchCriteriaType.download,
         title: criteria,
+        list: [dto],
       ),
     );
   }

@@ -328,6 +328,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       ElevatedButton(
         onPressed: () => MMSNav(context).getDownloads(
           '${_movie.title} ${_movie.year}',
+          _movie,
         ),
         child: Text(_movie.title),
       ),
@@ -335,6 +336,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         ElevatedButton(
           onPressed: () => MMSNav(context).getDownloads(
             '${_movie.alternateTitle} ${_movie.year}',
+            _movie,
           ),
           child: Text(_movie.alternateTitle),
         ),

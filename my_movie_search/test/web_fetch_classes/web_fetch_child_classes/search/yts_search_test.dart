@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
-import '../../../test_data/imdb_suggestion_converter_data.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/yts_search.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/yts_search.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonPSample(dynamic dummy) {
@@ -14,7 +16,11 @@ Future<Stream<String>> _emitInvalidJsonPSample(dynamic dummy) {
   return Future.value(Stream.value('imdbJsonPFunction({not valid json})'));
 }
 
-final criteria = SearchCriteriaDTO().fromString('123');
+final criteria = SearchCriteriaDTO().init(
+  SearchCriteriaType.download,
+  title: '123',
+  list: [MovieResultDTO().init(uniqueId: 'tt123')],
+);
 
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
@@ -25,8 +31,8 @@ void main() {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
       expect(
-        QueryIMDBSuggestions(criteria).myDataSourceName(),
-        'imdbSuggestions',
+        QueryYtsSearch(criteria).myDataSourceName(),
+        'ytsSearch',
       );
     });
 
@@ -35,36 +41,19 @@ void main() {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
-        QueryIMDBSuggestions(criteria).myFormatInputAsText(),
+        QueryYtsSearch(criteria).myFormatInputAsText(),
         criteria.criteriaTitle,
-      );
-    });
-
-    // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaList = [
-        MovieResultDTO().error('test1'),
-        MovieResultDTO().error('test2'),
-      ];
-      expect(
-        QueryIMDBSuggestions(input).myFormatInputAsText(),
-        contains('test1'),
-      );
-      expect(
-        QueryIMDBSuggestions(input).myFormatInputAsText(),
-        contains('test2'),
       );
     });
 
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () {
       final expectedValue = expectedDTOList;
-      final imdbSuggestions = QueryIMDBSuggestions(criteria);
+      final ytsSearch = QueryYtsSearch(criteria);
 
       // Invoke the functionality and collect results.
       final actualResult =
-          imdbSuggestions.myConvertTreeToOutputType({'d': expectedDTOMap});
+          ytsSearch.myConvertTreeToOutputType(jsonDecode(ytsJsonSampleFull));
 
       // Check the results.
       expect(
@@ -75,12 +64,11 @@ void main() {
 
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expectedResult =
-          'https://sg.media-imdb.com/suggests/n/new%20query.json';
+      const expectedResult = 'https://yts.mx/ajax/search?query=/new%20query';
 
       // Invoke the functionality.
       final actualResult =
-          QueryIMDBSuggestions(criteria).myConstructURI('new query').toString();
+          QueryYtsSearch(criteria).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -90,14 +78,14 @@ void main() {
     test('Run myYieldError()', () {
       const expectedResult = {
         'uniqueId': '-',
-        'bestSource': 'DataSourceType.imdbSuggestions',
-        'title': '[QueryIMDBSuggestions] new query',
+        'bestSource': 'DataSourceType.ytsSearch',
+        'title': '[QueryYtsSearch] new query',
         'type': 'MovieContentType.error',
       };
 
       // Invoke the functionality.
       final actualResult =
-          QueryIMDBSuggestions(criteria).myYieldError('new query').toMap();
+          QueryYtsSearch(criteria).myYieldError('new query').toMap();
       // Exact id does not need to match as long as it is negative number
       actualResult['uniqueId'] =
           actualResult['uniqueId'].toString().substring(0, 1);
@@ -116,18 +104,19 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final imdbSuggestions = QueryIMDBSuggestions(criteria);
+      final ytsSearch = QueryYtsSearch(criteria);
 
       // Invoke the functionality.
-      await imdbSuggestions
+      await ytsSearch
           .readList(
-            source: emitImdbSuggestionJsonPSample,
+            source: streamJsonOfflineData,
           )
           .then((values) => queryResult.addAll(values))
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
+      // printTestData(queryResult);
 
       // Check the results.
       expect(
@@ -142,15 +131,15 @@ void main() {
     test('invalid jsonp', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final imdbSuggestions = QueryIMDBSuggestions(criteria);
+      final ytsSearch = QueryYtsSearch(criteria);
       const expectedException = '''
-[QueryIMDBSuggestions] Error in imdbSuggestions with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 2)
+[QueryYtsSearch] Error in ytsSearch with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 2)
 {not valid json}
  ^
 ''';
 
       // Invoke the functionality.
-      await imdbSuggestions
+      await ytsSearch
           .readList(
             source: _emitInvalidJsonPSample,
           )
@@ -161,15 +150,14 @@ void main() {
     // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
     test('unexpected json contents', () async {
       // Set up the test data.
-      const expectedException =
-          '[QueryIMDBSuggestions] Error in imdbSuggestions '
+      const expectedException = '[QueryYtsSearch] Error in ytsSearch '
           'with criteria 123 translating page map to objects '
           ':expected map got Null unable to interpret data null';
       final queryResult = <MovieResultDTO>[];
-      final imdbSuggestions = QueryIMDBSuggestions(criteria);
+      final ytsSearch = QueryYtsSearch(criteria);
 
       // Invoke the functionality.
-      await imdbSuggestions
+      await ytsSearch
           .readList(
             source: _emitUnexpectedJsonPSample,
           )
