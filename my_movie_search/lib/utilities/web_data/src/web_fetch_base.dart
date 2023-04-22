@@ -49,8 +49,11 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   INPUT_TYPE criteria;
   WebFetchLimiter searchResultsLimit = WebFetchLimiter();
   bool transformJsonP = false;
-  late DataSourceFn selectedDataSource =
-      baseFetchWebText; // Online data source or offline data source.
+  // retry with exponential backoff 0.5 second -> 1 -> 2 -> 4 -> 8 seconds
+  int retryDelay = 500;
+  int maxDelay = 8000;
+  // Online data source or offline data source.
+  late DataSourceFn selectedDataSource = baseFetchWebText;
 
   WebFetchBase(this.criteria);
 
@@ -485,7 +488,14 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       );
       return Stream.error(errorMessage);
     }
+
     // Check for successful HTTP status before transforming (avoid HTTP 404)
+    if (response.statusCode >= 500 && retryDelay <= maxDelay) {
+      final oldDelay = retryDelay;
+      retryDelay = retryDelay * 2;
+      return Future.delayed(Duration(milliseconds: oldDelay))
+          .then((value) => baseFetchWebText(criteria));
+    }
     if (200 != response.statusCode) {
       final errorMsg = 'Error in http read, '
           'HTTP status code : ${response.statusCode} for $address';
