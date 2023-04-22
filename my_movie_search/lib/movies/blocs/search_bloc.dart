@@ -3,7 +3,7 @@ import 'dart:async' show StreamSubscription;
 import 'package:bloc/bloc.dart' show Bloc, Emitter;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:equatable/equatable.dart';
-import 'package:my_movie_search/movies/blocs/repositories/base_movie_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';

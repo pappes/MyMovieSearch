@@ -1,4 +1,4 @@
-import 'package:my_movie_search/movies/blocs/repositories/base_movie_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_glo_torrents.dart';

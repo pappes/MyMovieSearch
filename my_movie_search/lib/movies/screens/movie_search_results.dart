@@ -19,7 +19,7 @@ import 'package:flutter/material.dart'
         TextField,
         Widget;
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
-import 'package:my_movie_search/movies/blocs/repositories/base_movie_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/more_keywords_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movies_for_keyword_repository.dart';
