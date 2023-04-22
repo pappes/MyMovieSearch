@@ -7,16 +7,25 @@ import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_ti
 import 'package:my_movie_search/movies/web_data_providers/detail/webscrapers/yts_detail.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
+const jsonKeywordKey = 'keyword';
+const jsonPageKey = 'page';
+const jsonCategoryKey = 'category';
+const jsonMagnetKey = 'magnet';
+const jsonNameKey = 'name';
+const jsonImageKey = 'image';
+const jsonYearKey = 'year';
+const jsonDescriptionKey = 'description';
+const jsonSeedersKey = 'seeders';
+const jsonLeechersKey = 'leechers';
+
 /// Implements [WebFetchBase] for retrieving full list of keywords for a movie from IMDB.
 ///
 /// ```dart
 /// QueryYtsDetails().readList(criteria);
 /// ```
-class QueryYtsDetails
-    extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO>
+class QueryYtsDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeYtsDetails {
-  static const _baseURL = 'https://www.imdb.com/title/';
-  static const _baseURLsuffix = '/keywords/';
+  static const _baseURL = 'https://yts.mx/movies/';
 
   QueryYtsDetails(SearchCriteriaDTO criteria) : super(criteria);
 
@@ -25,12 +34,6 @@ class QueryYtsDetails
   String myDataSourceName() {
     return 'yts_detail';
   }
-
-  @override
-  WebFetchBase<MovieResultDTO, SearchCriteriaDTO> myClone(
-    SearchCriteriaDTO criteria,
-  ) =>
-      QueryYtsDetails(criteria);
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
@@ -43,16 +46,16 @@ class QueryYtsDetails
   @override
   String myFormatInputAsText() {
     final text = criteria.criteriaTitle;
-    if (text.startsWith(imdbTitlePrefix)) {
+    if (!text.startsWith(imdbTitlePrefix)) {
       return text;
     }
-    return ''; // do not allow searches for non-imdb IDs
+    return ''; // do not allow searches for imdb IDs
   }
 
   /// API call to IMDB returning all keywords for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final url = '$_baseURL$searchCriteria$_baseURLsuffix';
+    final url = '$_baseURL$searchCriteria';
     return Uri.parse(url);
   }
 

@@ -42,10 +42,10 @@ void main() {
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'tttesting';
+      input.criteriaTitle = 'testing';
       expect(
         QueryYtsDetails(input).myFormatInputAsText(),
-        'tttesting',
+        'testing',
       );
     });
 
@@ -53,13 +53,8 @@ void main() {
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO();
       input.criteriaList = [
-        makeResultDTO('tttest1'),
-        makeResultDTO('tttest2'),
+        makeResultDTO('test1'),
       ];
-      expect(
-        QueryYtsDetails(input).myFormatInputAsText(),
-        '',
-      );
       expect(
         QueryYtsDetails(input).myFormatInputAsText(),
         '',
@@ -85,7 +80,7 @@ void main() {
     // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      final criteria = SearchCriteriaDTO().fromString('batman');
       final testClass = QueryYtsDetails(criteria);
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
         htmlSampleFull,
@@ -121,86 +116,13 @@ void main() {
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchThreadedCache
-////////////////////////////////////////////////////////////////////////////////
-
-  group('WebFetchThreadedCache unit tests', () {
-    test('empty cache', () async {
-      final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryYtsDetails(criteria);
-      testClass.clearThreadedCache();
-      final listResult = await testClass.readCachedList(
-        source: (_) => Future.value(Stream.value('Polo')),
-      );
-      expect(listResult, []);
-      final resultIsCached = testClass.isThreadedResultCached();
-      expect(resultIsCached, false);
-      final resultIsStale = testClass.isThreadedCacheStale();
-      expect(resultIsStale, false);
-    });
-
-    test('add to cache via readPrioritisedCachedList', () async {
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final testClass = QueryYtsDetails(criteria);
-      testClass.clearThreadedCache();
-      await testClass.readPrioritisedCachedList(
-        source: streamhtmlOfflineData,
-      );
-      final listResult = await testClass.readPrioritisedCachedList(
-        source: StaticJsonGenerator
-            .stuff, // Return some random junk that will not get used do to caching
-      );
-      expect(
-        listResult,
-        MovieResultDTOListMatcher(expectedDTOList),
-        reason: 'Emitted DTO list ${listResult.toPrintableString()} '
-            'needs to match expected DTO List${expectedDTOList.toPrintableString()}',
-      );
-      final resultIsCached = testClass.isThreadedResultCached();
-      expect(resultIsCached, true);
-      final resultIsStale = testClass.isThreadedCacheStale();
-      expect(resultIsStale, false);
-    });
-
-    test('fetch result from cache', () async {
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final testClass = QueryYtsDetails(criteria);
-      testClass.clearThreadedCache();
-      await testClass.readPrioritisedCachedList(
-        source: streamhtmlOfflineData,
-      );
-      final listResult =
-          await testClass.fetchResultFromThreadedCache().toList();
-      expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
-      final resultIsCached = testClass.isThreadedResultCached();
-      expect(resultIsCached, true);
-      final resultIsStale = testClass.isThreadedCacheStale();
-      expect(resultIsStale, false);
-    });
-
-    test('clear cache', () async {
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final testClass = QueryYtsDetails(criteria);
-      testClass.clearThreadedCache();
-      await testClass.readPrioritisedCachedList(
-        source: streamhtmlOfflineData,
-      );
-      testClass.clearThreadedCache();
-      final resultIsCached = testClass.isThreadedResultCached();
-      expect(resultIsCached, false);
-      final resultIsStale = testClass.isThreadedCacheStale();
-      expect(resultIsStale, false);
-    });
-  });
-
-////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
 ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryYtsDetails integration tests', () {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expected = 'https://www.imdb.com/title/1234/keywords/';
+      const expected = 'https://yts.mx/movies/1234';
       final criteria = SearchCriteriaDTO();
 
       // Invoke the functionality.
@@ -267,7 +189,7 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
+      final criteria = SearchCriteriaDTO().fromString('7602562');
       final testClass = QueryYtsDetails(criteria);
       testClass.myClearCache();
 
@@ -295,10 +217,10 @@ void main() {
     test('invalid html', () async {
       // Set up the test data.
       const expectedException = '[QueryYtsDetails] Error in yts_detail '
-          'with criteria tt123 interpreting web text as a map '
-          ':yts data not detected for criteria tt123';
+          'with criteria 123 interpreting web text as a map '
+          ':yts data not detected for criteria 123';
       final queryResult = <MovieResultDTO>[];
-      final criteria = SearchCriteriaDTO().fromString('tt123');
+      final criteria = SearchCriteriaDTO().fromString('123');
       final testClass = QueryYtsDetails(criteria);
       testClass.myClearCache();
 
@@ -315,10 +237,10 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[QueryYtsDetails] Error in yts_detail with '
-          'criteria tt123 interpreting web text as a map '
-          ':yts data not detected for criteria tt123';
+          'criteria 123 interpreting web text as a map '
+          ':yts data not detected for criteria 123';
       final queryResult = <MovieResultDTO>[];
-      final criteria = SearchCriteriaDTO().fromString('tt123');
+      final criteria = SearchCriteriaDTO().fromString('123');
       final testClass = QueryYtsDetails(criteria);
       testClass.myClearCache();
 
