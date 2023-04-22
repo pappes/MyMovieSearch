@@ -40,17 +40,18 @@ void main() {
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO();
+      input.criteriaTitle = 'List of errors';
       input.criteriaList = [
         MovieResultDTO().error('test1'),
         MovieResultDTO().error('test2'),
       ];
       expect(
         QueryGloTorrentsSearch(input).myFormatInputAsText(),
-        contains('test1'),
+        input.criteriaTitle.toLowerCase(),
       );
       expect(
         QueryGloTorrentsSearch(input).myFormatInputAsText(),
-        contains('test2'),
+        input.criteriaTitle.toLowerCase(),
       );
     });
 

@@ -92,10 +92,23 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
 }
 
 extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
-  /// Create a human readable version of SearchCriteriaDTO.
+  /// Create a human readable version of [SearchCriteriaDTO].
   String toPrintableString() {
     if (criteriaList.isEmpty) return criteriaTitle;
     return criteriaList.toJson();
+  }
+
+  /// Create an ID search for [SearchCriteriaDTO] if available.
+  String toSearchId() {
+    final ids = <String>[];
+    for (final dto in criteriaList) {
+      if (!dto.uniqueId.startsWith(movieDTOMessagePrefix)) {
+        ids.add(dto.uniqueId);
+      }
+    }
+    if (ids.isEmpty) return criteriaTitle;
+    if (ids.length == 1) return ids.first;
+    return ids.join(',');
   }
 
   /// Convert a [Map] into a [SearchCriteriaDTO] object.
@@ -130,6 +143,10 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     criteriaTitle = title;
     criteriaList = list;
     return this;
+  }
+
+  SearchCriteriaDTO clone() {
+    return toMap().toSearchCriteriaDTO();
   }
 }
 

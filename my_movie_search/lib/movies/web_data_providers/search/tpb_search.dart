@@ -55,7 +55,7 @@ class QueryTpbSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String myFormatInputAsText() => criteria.toPrintableString();
+  String myFormatInputAsText() => criteria.toSearchId();
 
   /// Include entire map in the movie title when an error occurs.
   @override

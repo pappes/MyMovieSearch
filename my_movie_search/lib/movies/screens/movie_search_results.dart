@@ -27,7 +27,6 @@ import 'package:my_movie_search/movies/blocs/repositories/tor_repository.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/movie_card_small.dart';
 
 class MovieSearchResultsNewPage extends StatefulWidget {
