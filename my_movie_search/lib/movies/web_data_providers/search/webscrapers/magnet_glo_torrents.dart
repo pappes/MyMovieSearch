@@ -55,7 +55,6 @@ mixin ScrapeGloTorrentsSearch
     if (9 == columns.length) {
       final result = {};
 
-      //result[jsonCategoryKey] = columns[0].cleanText;
       result[jsonMagnetKey] =
           row.querySelector(magnetSelector)?.attributes['href'] ?? "";
       result[jsonNameKey] = columns[1].children.last.attributes['title'];
