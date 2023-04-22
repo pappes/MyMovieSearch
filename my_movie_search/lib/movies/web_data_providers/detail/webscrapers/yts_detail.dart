@@ -109,7 +109,7 @@ List<Map> _getDescriptions(Document document) {
   for (final row in descriptionRows) {
     try {
       final text = row.children.first.cleanText;
-      final stats = row.children.last.cleanText;
+      final stats = row.children.last.children.last.cleanText;
       var leechers = 0;
       var seeders = 0;
       if (stats.startsWith('P/S')) {

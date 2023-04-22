@@ -55,6 +55,10 @@ class QueryYtsDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   /// API call to IMDB returning all keywords for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
+    final decodedCriteria = Uri.decodeComponent(searchCriteria);
+    if (decodedCriteria.startsWith(_baseURL)) {
+      return Uri.parse(decodedCriteria);
+    }
     final url = '$_baseURL$searchCriteria';
     return Uri.parse(url);
   }

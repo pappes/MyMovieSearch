@@ -29,9 +29,7 @@ class MovieListRepository extends BaseMovieRepository {
   /// and request retrieval if the fetch is not already in progress.
   @override
   void getExtraDetails(int originalSearchUID, MovieResultDTO dto) {
-    if ("null" !=
-            dto.uniqueId && /*
-        !_requestedDetails.containsKey(dto.uniqueId) &&*/
+    if ("null" != dto.uniqueId &&
         !dto.uniqueId.startsWith(movieDTOMessagePrefix)) {
       final functions = SearchFunctions();
       _getDetailSources(dto, functions);
@@ -57,7 +55,7 @@ class MovieListRepository extends BaseMovieRepository {
     }
   }
 
-  /// Only call TMDB find to get tmdbID is no TMDB request has completed
+  /// Only call TMDB find to get tmdbID if no TMDB request has completed
   bool _readyForTmdbFinder(MovieResultDTO dto) {
     if (!dto.sources.containsKey(DataSourceType.tmdbFinder) &&
         !dto.sources.containsKey(DataSourceType.tmdbSearch) &&

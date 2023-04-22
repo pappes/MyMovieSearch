@@ -3,6 +3,7 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_glo_torrents.dart';
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 class GloTorrentsSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
@@ -10,6 +11,9 @@ class GloTorrentsSearchConverter {
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
+    // Compensate for gloTorrents overrestimation
+    final seeders = DoubleHelper.fromText(map[jsonSeedersKey]) ?? 0 / 10;
+    final leechers = DoubleHelper.fromText(map[jsonLeechersKey]) ?? 0 / 10;
     return MovieResultDTO().init(
       bestSource: DataSourceType.gloTorrents,
       type: MovieContentType.download.toString(),
@@ -18,8 +22,8 @@ class GloTorrentsSearchConverter {
       charactorName: map[jsonCategoryKey]?.toString(),
       description: map[jsonDescriptionKey]?.toString(),
       imageUrl: map[jsonMagnetKey]?.toString(),
-      creditsOrder: map[jsonSeedersKey]?.toString(),
-      userRatingCount: map[jsonLeechersKey]?.toString(),
+      creditsOrder: seeders.toString(),
+      userRatingCount: leechers.toString(),
     );
   }
 }
