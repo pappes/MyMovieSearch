@@ -2,6 +2,7 @@ import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/magnet_torrent_download_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/yts_detail.dart';
 
 typedef SearchFunction = Future<List<MovieResultDTO>> Function(
@@ -46,11 +47,23 @@ class TorMultiSearchRepository extends BaseMovieRepository {
     return false;
   }
 
+  /// Call TorrentDownload details when TorrentDownload search has completed
+  bool _readyForTDDetails(MovieResultDTO dto) {
+    if (dto.sources.containsKey(DataSourceType.torrentDownloadSearch) &&
+        !dto.sources.containsKey(DataSourceType.torrentDownloadDetail)) {
+      return true;
+    }
+    return false;
+  }
+
   /// Maintain a map of unique movie detail requests
   /// and request retrieval if the fetch is not already in progress.
   void _getDetailSources(MovieResultDTO dto, SearchFunctions functions) {
     if (_readyForYtsDetails(dto)) {
       functions.supplementarySearch.add(_getYtsDetails);
+    }
+    if (_readyForTDDetails(dto)) {
+      functions.supplementarySearch.add(_getTDDetails);
     }
   }
 
@@ -58,6 +71,12 @@ class TorMultiSearchRepository extends BaseMovieRepository {
   static Future<List<MovieResultDTO>> _getYtsDetails(MovieResultDTO dto) {
     final detailCriteria = SearchCriteriaDTO().fromString(dto.uniqueId);
     return QueryYtsDetails(detailCriteria).readList();
+  }
+
+  /// Fetch TorrentDownload details from the url.
+  static Future<List<MovieResultDTO>> _getTDDetails(MovieResultDTO dto) {
+    final detailCriteria = SearchCriteriaDTO().fromString(dto.uniqueId);
+    return QueryTorrentDownloadDetail(detailCriteria).readList();
   }
 
   /// Add fetched torrent details into the stream and search for more details.

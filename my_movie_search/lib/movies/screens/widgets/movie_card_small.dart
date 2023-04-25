@@ -11,7 +11,7 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 class MovieTile extends ListTile {
   MovieTile(BuildContext context, MovieResultDTO movie)
       : super(
-          leading: _getImage(movie.imageUrl),
+          leading: _getImage(movie),
           title: _getTitle(movie),
           subtitle: _getDescription(movie),
           onTap: () => MMSNav(context).resultDrillDown(movie),
@@ -88,10 +88,12 @@ class MovieTile extends ListTile {
     );
   }
 
-  static Widget _getImage(String url) {
-    if (url == '' || !url.startsWith('http')) {
+  static Widget _getImage(MovieResultDTO movie) {
+    if (movie.imageUrl == '' ||
+        !movie.imageUrl.startsWith('http') ||
+        MovieContentType.download == movie.type) {
       return const Text('NoImage');
     }
-    return Image(image: NetworkImage(url));
+    return Image(image: NetworkImage(movie.imageUrl));
   }
 }

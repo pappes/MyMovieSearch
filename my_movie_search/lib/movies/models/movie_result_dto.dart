@@ -580,7 +580,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   MovieResultDTO merge(MovieResultDTO newValue, {bool excludeRelated = false}) {
     if (newValue.userRatingCount >= userRatingCount ||
         0 == userRatingCount ||
-        newValue.sources.containsKey(DataSourceType.imdb)) {
+        newValue.sources.containsKey(DataSourceType.imdb) ||
+        newValue.sources.containsKey(DataSourceType.torrentDownloadDetail)) {
       bestSource = bestValue(bestSource, newValue.bestSource);
 
       final oldTitle = title;

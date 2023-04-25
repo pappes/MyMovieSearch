@@ -4,7 +4,6 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/magnet_torrent_download_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/magnet_torrent_download_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/magnet_torrent_download_search.dart';
-import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const jsonKeywordKey = 'keyword';
@@ -24,6 +23,7 @@ const jsonLeechersKey = 'leechers';
 class QueryTorrentDownloadSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeTorrentDownloadSearch {
+  // Note url /search/ will order by peers but /searchr/ will order by relevance
   static const _baseURL = 'https://www.torrentdownload.info/search?q=';
   static const _pageURL = '&p=';
 
@@ -65,7 +65,6 @@ class QueryTorrentDownloadSearch
   /// API call to search returning the top matching results for [encodedCriteria].
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
-    searchResultsLimit = WebFetchLimiter(55);
     final convertedCriteria = encodedCriteria.replaceAll('.', '+');
 
     final url = '$_baseURL$convertedCriteria$_pageURL$pageNumber';
