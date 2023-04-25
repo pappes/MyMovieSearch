@@ -44,7 +44,8 @@ class QueryTorrentDownloadDetail
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
     if (map is Map) {
-      return TorrentDownloadDetailConverter.dtoFromCompleteJsonMap(map);
+      return TorrentDownloadDetailConverter(criteria)
+          .dtoFromCompleteJsonMap(map);
     }
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }

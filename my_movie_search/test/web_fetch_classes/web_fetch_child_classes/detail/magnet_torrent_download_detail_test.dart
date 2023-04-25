@@ -15,7 +15,7 @@ Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
   return Future.value(Stream.value('not valid html'));
 }
 
-final criteria = SearchCriteriaDTO().fromString('dream');
+final criteria = SearchCriteriaDTO().fromString('https://address');
 
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
@@ -106,7 +106,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          TorrentDownloadDetailConverter.dtoFromCompleteJsonMap(map),
+          TorrentDownloadDetailConverter(criteria).dtoFromCompleteJsonMap(map),
         );
       }
 
@@ -228,8 +228,8 @@ void main() {
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);
       const expectedException =
           '[QueryTorrentDownloadDetail] Error in torrentDownloadDetail '
-          'with criteria dream interpreting web text as a map '
-          ':TorrentDownload results data not detected for criteria dream in html:not valid html';
+          'with criteria https://address interpreting web text as a map '
+          ':TorrentDownload results data not detected for criteria https://address in html:not valid html';
 
       // Invoke the functionality.
       await torrentDownloadDetail
@@ -245,8 +245,8 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryTorrentDownloadDetail] Error in torrentDownloadDetail '
-          'with criteria dream interpreting web text as a map '
-          ':TorrentDownload results data not detected for criteria dream in html:<html><body>stuff</body></html>';
+          'with criteria https://address interpreting web text as a map '
+          ':TorrentDownload results data not detected for criteria https://address in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);
 
