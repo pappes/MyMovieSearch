@@ -59,8 +59,7 @@ void main() {
 
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expectedResult =
-          'https://www.torrentdownload.info/search?q=new%20query&p=1';
+      const expectedResult = 'https://www.torrentdownload.info/new%20query';
 
       // Invoke the functionality.
       final actualResult = QueryTorrentDownloadDetail(criteria)
@@ -122,6 +121,28 @@ void main() {
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
+    });
+  });
+
+////////////////////////////////////////////////////////////////////////////////
+  /// Integration tests using env
+////////////////////////////////////////////////////////////////////////////////
+
+  group('QueryTorrentDownloadDetail integration tests', () {
+    // Confirm URL is constructed as expected.
+    test('Run myConstructURI()', () {
+      const expected =
+          'https://www.torrentdownload.info/B9F89CFDF8E74E9ACE0E58528932FCC437AD0D0E/Space-Jam-A-New-Legacy-+2021+-+1080p+-+WEBRip+-+5-1+-+YTS-MX+';
+      final criteria = SearchCriteriaDTO();
+
+      // Invoke the functionality.
+      final actualResult = QueryTorrentDownloadDetail(criteria)
+          .myConstructURI(
+              'https://www.torrentdownload.info/B9F89CFDF8E74E9ACE0E58528932FCC437AD0D0E/Space-Jam-A-New-Legacy-+2021+-+1080p+-+WEBRip+-+5-1+-+YTS-MX+')
+          .toString();
+
+      // Check the results.
+      expect(actualResult, expected);
     });
   });
 ////////////////////////////////////////////////////////////////////////////////

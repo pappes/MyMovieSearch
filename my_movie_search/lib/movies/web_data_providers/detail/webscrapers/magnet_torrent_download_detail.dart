@@ -1,4 +1,4 @@
-import 'package:html/dom.dart' show Document, Element;
+import 'package:html/dom.dart' show Document;
 import 'package:html/parser.dart' show parse;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -7,12 +7,8 @@ import 'package:my_movie_search/movies/web_data_providers/detail/magnet_torrent_
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-const resultTableSelector = '.table2';
-const detailLinkSelector = "a";
-const nameSelector = '.tdleft';
-const seedSelector = '.tdseed';
-const leechSelector = '.tdleech';
-const descriptionSelector = '.tdnormal';
+const magnetSelector = "[href^='magnet:']";
+const resultTableSelector = '.torrentcontent';
 
 /// Implements [WebFetchBase] for the TorrentDownload search html web scraper.
 ///
@@ -41,37 +37,17 @@ mixin ScrapeTorrentDownloadDetail
     throw 'TorrentDownload results data not detected for criteria $getCriteriaText in html:$webText';
   }
 
-  /// extract each row from the table.
+  /// extract each row from the page.
   void _scrapeWebPage(Document document) {
-    final tables = document.querySelectorAll(resultTableSelector);
-    for (final table in tables) {
-      for (final row in table.querySelectorAll('tr')) {
-        if (row.children.length > 4) {
-          validPage = true;
-          _processRow(row);
-        }
-      }
-    }
-  }
-
-  /// Collect webpage text to construct a map of the movie data.
-  void _processRow(Element row) {
     final result = {};
-    result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;
-    result[jsonSeedersKey] = row.querySelector(seedSelector)?.cleanText;
-    result[jsonLeechersKey] = row.querySelector(leechSelector)?.cleanText;
-
-    final path = row.querySelector(detailLinkSelector)?.attributes['href'];
-    if (null != path) {
-      result[jsonDetailLink] =
-          myConstructURI('sample').resolve(path).toString();
-    }
-
-    result[jsonDescriptionKey] =
-        row.querySelectorAll(descriptionSelector).last.cleanText;
-    if (result[jsonDetailLink]!.toString().isNotEmpty &&
-        result[jsonNameKey]!.toString().isNotEmpty &&
-        result[jsonSeedersKey]!.toString().isNotEmpty) {
+    final links = document.querySelectorAll(magnetSelector);
+    if (links.isNotEmpty) {
+      validPage = true;
+      result[jsonDetailLink] = links.first.attributes['href'];
+      final fileTable = document.querySelectorAll(resultTableSelector);
+      if (1 == fileTable.length) {
+        result[jsonDescriptionKey] = fileTable.first.cleanText;
+      }
       movieData.add(result);
     }
   }

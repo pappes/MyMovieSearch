@@ -6,8 +6,8 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"https://www.torrentdownload.info/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7/2001-A-Space-Odyssey-+1968+-+BluRay+-+1080p+-+YTS-AM+","bestSource":"DataSourceType.torrentDownloadDetail","title":"2001 A Space Odyssey (1968) [BluRay] [1080p] [YTS AM] � Movies","type":"MovieContentType.download","creditsOrder":"578",
-      "description":"placeholder: 2.38 GB","userRatingCount":"248","imageUrl":"https://www.torrentdownload.info/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7/2001-A-Space-Odyssey-+1968+-+BluRay+-+1080p+-+YTS-AM+","sources":{"DataSourceType.torrentDownloadDetail":"https://www.torrentdownload.info/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7/2001-A-Space-Odyssey-+1968+-+BluRay+-+1080p+-+YTS-AM+"}}
+{"uniqueId":"magnet:?xt=urn:btih:B9F89CFDF8E74E9ACE0E58528932FCC437AD0D0E&dn=&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=http%3A%2F%2Ftracker.ipv6tracker.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.hotplug.ru%3A2710%2Fannounce&tr=https%3A%2F%2Ftracker.fastdownload.xyz%3A443%2Fannounce&tr=https%3A%2F%2Fopentracker.xyz%3A443%2Fannounce&tr=http%3A%2F%2Fopen.trackerlist.xyz%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.birkenwald.de%3A6969%2Fannounce&tr=https%3A%2F%2Ft.quic.ws%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.parrotsec.org%3A443%2Fannounce&tr=udp%3A%2F%2Ftracker.supertracker.net%3A1337%2Fannounce&tr=http%3A%2F%2Fgwp2-v19.rinet.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fbigfoot1942.sektori.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcarapax.net%3A6969%2Fannounce&tr=udp%3A%2F%2Fretracker.akado-ural.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.maxnet.ua%3A80%2Fannounce&tr=udp%3A%2F%2Fbt.dy20188.com%3A80%2Fannounce&tr=http%3A%2F%2F0d.kebhana.mx%3A443%2Fannounce&tr=http%3A%2F%2Ftracker.files.fm%3A6969%2Fannounce&tr=http%3A%2F%2Fretracker.joxnet.ru%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.moxing.party%3A6969%2Fannounce","bestSource":"DataSourceType.torrentDownloadDetail","type":"MovieContentType.download",
+      "description":"placeholder: Torrent Files Size: 2.13 GB Space Jam A New Legacy (2021) [1080p] [WEBRip] [5.1] [YTS.MX] Space.Jam.A.New.Legacy.2021.1080p.WEBRip.x264.AAC5.1-[YTS.MX].mp4 - 2.13 GB Space.Jam.A.New.Legacy.2021.1080p.WEBRip.x264.AAC5.1-[YTS.MX].srt - 137.77 KB /div> www.YTS.MX.jpg - 51.98 KB/div> Subs English [SDH].eng.srt - 169.9 KB English.eng.srt - 137.77 KB","imageUrl":"magnet:?xt=urn:btih:B9F89CFDF8E74E9ACE0E58528932FCC437AD0D0E&dn=&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=http%3A%2F%2Ftracker.ipv6tracker.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.hotplug.ru%3A2710%2Fannounce&tr=https%3A%2F%2Ftracker.fastdownload.xyz%3A443%2Fannounce&tr=https%3A%2F%2Fopentracker.xyz%3A443%2Fannounce&tr=http%3A%2F%2Fopen.trackerlist.xyz%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.birkenwald.de%3A6969%2Fannounce&tr=https%3A%2F%2Ft.quic.ws%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.parrotsec.org%3A443%2Fannounce&tr=udp%3A%2F%2Ftracker.supertracker.net%3A1337%2Fannounce&tr=http%3A%2F%2Fgwp2-v19.rinet.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fbigfoot1942.sektori.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcarapax.net%3A6969%2Fannounce&tr=udp%3A%2F%2Fretracker.akado-ural.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.maxnet.ua%3A80%2Fannounce&tr=udp%3A%2F%2Fbt.dy20188.com%3A80%2Fannounce&tr=http%3A%2F%2F0d.kebhana.mx%3A443%2Fannounce&tr=http%3A%2F%2Ftracker.files.fm%3A6969%2Fannounce&tr=http%3A%2F%2Fretracker.joxnet.ru%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.moxing.party%3A6969%2Fannounce","sources":{"DataSourceType.torrentDownloadDetail":"magnet:?xt=urn:btih:B9F89CFDF8E74E9ACE0E58528932FCC437AD0D0E&dn=&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=http%3A%2F%2Ftracker.ipv6tracker.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.hotplug.ru%3A2710%2Fannounce&tr=https%3A%2F%2Ftracker.fastdownload.xyz%3A443%2Fannounce&tr=https%3A%2F%2Fopentracker.xyz%3A443%2Fannounce&tr=http%3A%2F%2Fopen.trackerlist.xyz%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.birkenwald.de%3A6969%2Fannounce&tr=https%3A%2F%2Ft.quic.ws%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.parrotsec.org%3A443%2Fannounce&tr=udp%3A%2F%2Ftracker.supertracker.net%3A1337%2Fannounce&tr=http%3A%2F%2Fgwp2-v19.rinet.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fbigfoot1942.sektori.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcarapax.net%3A6969%2Fannounce&tr=udp%3A%2F%2Fretracker.akado-ural.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.maxnet.ua%3A80%2Fannounce&tr=udp%3A%2F%2Fbt.dy20188.com%3A80%2Fannounce&tr=http%3A%2F%2F0d.kebhana.mx%3A443%2Fannounce&tr=http%3A%2F%2Ftracker.files.fm%3A6969%2Fannounce&tr=http%3A%2F%2Fretracker.joxnet.ru%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.moxing.party%3A6969%2Fannounce"}}
 ''',
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
@@ -43,31 +43,42 @@ const htmlSampleEnd = '''
 
 const intermediateMapList = [
   {
-    'name': '2001 A Space Odyssey (1968) [BluRay] [1080p] [YTS AM] � Movies',
     'url':
-        'https://www.torrentdownload.info/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7/2001-A-Space-Odyssey-+1968+-+BluRay+-+1080p+-+YTS-AM+',
-    'description': '2.38 GB',
-    'seeders': '578',
-    'leechers': '248'
+        'magnet:?xt=urn:btih:B9F89CFDF8E74E9ACE0E58528932FCC437AD0D0E&dn=&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=http%3A%2F%2Ftracker.ipv6tracker.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.hotplug.ru%3A2710%2Fannounce&tr=https%3A%2F%2Ftracker.fastdownload.xyz%3A443%2Fannounce&tr=https%3A%2F%2Fopentracker.xyz%3A443%2Fannounce&tr=http%3A%2F%2Fopen.trackerlist.xyz%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.birkenwald.de%3A6969%2Fannounce&tr=https%3A%2F%2Ft.quic.ws%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.parrotsec.org%3A443%2Fannounce&tr=udp%3A%2F%2Ftracker.supertracker.net%3A1337%2Fannounce&tr=http%3A%2F%2Fgwp2-v19.rinet.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fbigfoot1942.sektori.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcarapax.net%3A6969%2Fannounce&tr=udp%3A%2F%2Fretracker.akado-ural.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.maxnet.ua%3A80%2Fannounce&tr=udp%3A%2F%2Fbt.dy20188.com%3A80%2Fannounce&tr=http%3A%2F%2F0d.kebhana.mx%3A443%2Fannounce&tr=http%3A%2F%2Ftracker.files.fm%3A6969%2Fannounce&tr=http%3A%2F%2Fretracker.joxnet.ru%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.moxing.party%3A6969%2Fannounce',
+    'description':
+        'Torrent Files Size: 2.13 GB Space Jam A New Legacy (2021) [1080p] [WEBRip] [5.1] [YTS.MX] Space.Jam.A.New.Legacy.2021.1080p.WEBRip.x264.AAC5.1-[YTS.MX].mp4 - 2.13 GB Space.Jam.A.New.Legacy.2021.1080p.WEBRip.x264.AAC5.1-[YTS.MX].srt - 137.77 KB /div> www.YTS.MX.jpg - 51.98 KB/div> Subs English [SDH].eng.srt - 169.9 KB English.eng.srt - 137.77 KB'
   }
 ];
 
 const htmlSampleMid = r'''
-<table class="table2" cellspacing="0">
-    <tbody>
+<a class="tosa" href="magnet:?xt=urn:btih:B9F89CFDF8E74E9ACE0E58528932FCC437AD0D0E&dn=&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=http%3A%2F%2Ftracker.ipv6tracker.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.hotplug.ru%3A2710%2Fannounce&tr=https%3A%2F%2Ftracker.fastdownload.xyz%3A443%2Fannounce&tr=https%3A%2F%2Fopentracker.xyz%3A443%2Fannounce&tr=http%3A%2F%2Fopen.trackerlist.xyz%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.birkenwald.de%3A6969%2Fannounce&tr=https%3A%2F%2Ft.quic.ws%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.parrotsec.org%3A443%2Fannounce&tr=udp%3A%2F%2Ftracker.supertracker.net%3A1337%2Fannounce&tr=http%3A%2F%2Fgwp2-v19.rinet.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fbigfoot1942.sektori.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fcarapax.net%3A6969%2Fannounce&tr=udp%3A%2F%2Fretracker.akado-ural.ru%3A80%2Fannounce&tr=udp%3A%2F%2Fretracker.maxnet.ua%3A80%2Fannounce&tr=udp%3A%2F%2Fbt.dy20188.com%3A80%2Fannounce&tr=http%3A%2F%2F0d.kebhana.mx%3A443%2Fannounce&tr=http%3A%2F%2Ftracker.files.fm%3A6969%2Fannounce&tr=http%3A%2F%2Fretracker.joxnet.ru%3A80%2Fannounce&tr=http%3A%2F%2Ftracker.moxing.party%3A6969%2Fannounce"> STUFF </a>
+
+
+
+      <table class="table3 torrentcontent" cellspacing="0">
         <tr>
-            <td class="tdleft">
-                <div class="tt-name"><a
-                        href="/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7/2001-A-Space-Odyssey-+1968+-+BluRay+-+1080p+-+YTS-AM+">2001
-                        A <span class="na">Space</span> Odyssey (1968) [BluRay] [1080p] [YTS AM]</a> <span
-                        class="smallish"> � Movies</span></div>
-                <div class="tt-options"></div>
-            </td>
-            <td class="tdnormal">1 Year+</td>
-            <td class="tdnormal">2.38 GB</td>
-            <td class="tdseed">578</td>
-            <td class="tdleech">248</td>
+          <th class="thleft">
+            <div class="left"><b>Torrent Files</b></div>
+            <div class="right">Size: 2.13 GB</div>
+          </th>
         </tr>
-    </tbody>
-</table>
+        <tr>
+          <td>
+            <div class="fileline"> Space Jam A New Legacy (2021) [1080p] [WEBRip]
+              [5.1] [YTS.MX] 
+              Space.Jam.A.New.Legacy.2021.1080p.WEBRip.x264.AAC5.1-[YTS.MX].mp4 -  2.13 GB
+              </div>
+            <div class="fileline">
+              Space.Jam.A.New.Legacy.2021.1080p.WEBRip.x264.AAC5.1-[YTS.MX].srt -  137.77 KB
+               /div>
+            <div class="fileline"> www.YTS.MX.jpg - 51.98 KB/div>
+            <div class="fileline">
+              Subs
+              English [SDH].eng.srt - 169.9 KB</div>
+            <div class="fileline"> English.eng.srt - 137.77 KB
+            </div>
+          </td>
+        </tr>
+      </table>
+
 ''';
