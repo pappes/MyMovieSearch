@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_glo_torrents.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_magnet_dl.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_solid_torrents.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/magnet_torrent_download.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_torrentz2.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/tpb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/yts_search.dart';
@@ -40,6 +41,7 @@ class TorRepository extends TorMultiSearchRepository {
       QueryGloTorrentsSearch(criteria),
       QueryTorrentz2Search(criteria),
       QuerySolidTorrentsSearch(criteria),
+      QueryTorrentDownloadSearch(criteria),
     ];
   }
 }
