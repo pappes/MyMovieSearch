@@ -22,6 +22,7 @@ enum DataSourceType {
   wiki,
   tpb,
   magnetDl,
+  solidTorrents,
   torrentz2,
   gloTorrents,
   ytsSearch,

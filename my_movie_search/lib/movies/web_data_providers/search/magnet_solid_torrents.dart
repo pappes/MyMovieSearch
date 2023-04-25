@@ -1,9 +1,9 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/converters/magnet_idope.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/offline/magnet_idope.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/magnet_idope.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/magnet_solid_torrents.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/magnet_solid_torrents.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/magnet_solid_torrents.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -16,23 +16,23 @@ const jsonDescriptionKey = 'description';
 const jsonSeedersKey = 'seeders';
 const jsonLeechersKey = 'leechers';
 
-/// Implements [WebFetchBase] for the MagnetDl search html web scraper.
+/// Implements [WebFetchBase] for the SolidTorrents search html web scraper.
 ///
 /// ```dart
-/// QueryMagnetDlSearch().readList(criteria, limit: 10)
+/// QuerySolidTorrentsSearch().readList(criteria, limit: 10)
 /// ```
-class QueryMagnetDlSearch
+class QuerySolidTorrentsSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
-    with ScrapeMagnetDlSearch {
-  static const _baseURL = 'https://www.magnetdl.com/';
-  static const _pageURL = '/';
+    with ScrapeSolidTorrentsSearch {
+  static const _baseURL = 'https://solidtorrents.to/search?q=';
+  static const _pageURL = '&sort=seeders&page=';
 
-  QueryMagnetDlSearch(SearchCriteriaDTO criteria) : super(criteria);
+  QuerySolidTorrentsSearch(SearchCriteriaDTO criteria) : super(criteria);
 
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
-    return DataSourceType.magnetDl.name;
+    return DataSourceType.solidTorrents.name;
   }
 
   /// Static snapshot of data for offline operation.
@@ -46,7 +46,7 @@ class QueryMagnetDlSearch
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
     if (map is Map) {
-      return MagnetDlSearchConverter.dtoFromCompleteJsonMap(map);
+      return SolidTorrentsSearchConverter.dtoFromCompleteJsonMap(map);
     }
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
@@ -58,18 +58,17 @@ class QueryMagnetDlSearch
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryMagnetDlSearch] $message',
-        DataSourceType.magnetDl,
+        '[QuerySolidTorrentsSearch] $message',
+        DataSourceType.solidTorrents,
       );
 
   /// API call to search returning the top matching results for [encodedCriteria].
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
     searchResultsLimit = WebFetchLimiter(55);
-    final prefix =
-        encodedCriteria.isEmpty ? '' : encodedCriteria.substring(0, 1);
+    final convertedCriteria = encodedCriteria.replaceAll('.', '+');
 
-    final url = '$_baseURL$prefix/$encodedCriteria/$pageNumber$_pageURL';
+    final url = '$_baseURL$convertedCriteria$_pageURL$pageNumber';
     return Uri.parse(url);
   }
 }

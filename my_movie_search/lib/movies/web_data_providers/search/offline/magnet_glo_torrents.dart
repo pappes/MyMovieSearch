@@ -47,8 +47,8 @@ const intermediateMapList = [
         'magnet:?xt=urn:btih:AC8C26D936B1DA5CE94D415FB07A71384DB7CB80&dn=Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS%5BTGx%5D&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.tiny-vps.com:6969/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.cyberia.is:6969/announce&tr=udp://ipv4.tracker.harry.lu:80/announce&tr=udp://p4p.arenabg.com:1337/announce&tr=udp://tracker.birkenwald.de:6969/announce&tr=udp://tracker.moeking.me:6969/announce&tr=udp://opentor.org:2710/announce&tr=udp://tracker.dler.org:6969/announce&tr=udp://9.rarbg.me:2970/announce&tr=https://tracker.foreverpirates.co:443/announce&tr=http://vps02.net.orel.ru:80/announce',
     'name': 'Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS[TGx]',
     'description': '857.09 MB',
-    'seeders': '0',
-    'leechers': '0'
+    'seeders': 0.0,
+    'leechers': 0.0
   }
 ];
 

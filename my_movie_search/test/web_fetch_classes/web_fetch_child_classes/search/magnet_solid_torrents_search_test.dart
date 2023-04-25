@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/converters/magnet_idope.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/magnet_idope.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/offline/magnet_idope.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/magnet_solid_torrents.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/magnet_solid_torrents.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/magnet_solid_torrents.dart';
 
 import '../../../test_helper.dart';
 
@@ -22,16 +22,19 @@ void main() {
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('magnetDl search unit tests', () {
+  group('SolidTorrents search unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryMagnetDlSearch(criteria).myDataSourceName(), 'magnetDl');
+      expect(
+        QuerySolidTorrentsSearch(criteria).myDataSourceName(),
+        'solidTorrents',
+      );
     });
 
     // Confirm simple criteria is displayed as expected.
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
-        QueryMagnetDlSearch(criteria).myFormatInputAsText(),
+        QuerySolidTorrentsSearch(criteria).myFormatInputAsText(),
         criteria.criteriaTitle,
       );
     });
@@ -45,22 +48,24 @@ void main() {
         MovieResultDTO().error('test2'),
       ];
       expect(
-        QueryMagnetDlSearch(input).myFormatInputAsText(),
+        QuerySolidTorrentsSearch(input).myFormatInputAsText(),
         input.criteriaTitle.toLowerCase(),
       );
       expect(
-        QueryMagnetDlSearch(input).myFormatInputAsText(),
+        QuerySolidTorrentsSearch(input).myFormatInputAsText(),
         input.criteriaTitle.toLowerCase(),
       );
     });
 
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expectedResult = 'https://www.magnetdl.com/n/new%20query/1/';
+      const expectedResult =
+          'https://solidtorrents.to/search?q=new%20query&sort=seeders&page=1';
 
       // Invoke the functionality.
-      final actualResult =
-          QueryMagnetDlSearch(criteria).myConstructURI('new query').toString();
+      final actualResult = QuerySolidTorrentsSearch(criteria)
+          .myConstructURI('new query')
+          .toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -69,14 +74,14 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'bestSource': 'DataSourceType.magnetDl',
-        'title': '[QueryMagnetDlSearch] new query',
+        'bestSource': 'DataSourceType.solidTorrents',
+        'title': '[QuerySolidTorrentsSearch] new query',
         'type': 'MovieContentType.error',
       };
 
       // Invoke the functionality.
       final actualResult =
-          QueryMagnetDlSearch(criteria).myYieldError('new query').toMap();
+          QuerySolidTorrentsSearch(criteria).myYieldError('new query').toMap();
       actualResult.remove('uniqueId');
 
       // Check the results.
@@ -85,15 +90,15 @@ void main() {
 
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final testClass = QueryMagnetDlSearch(criteria);
+      final testClass = QuerySolidTorrentsSearch(criteria);
       testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
-        mdlSampleFull,
+        htmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
     });
   });
-  group('MagnetDlSearchConverter unit tests', () {
+  group('SolidTorrentsSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
@@ -101,7 +106,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          MagnetDlSearchConverter.dtoFromCompleteJsonMap(map),
+          SolidTorrentsSearchConverter.dtoFromCompleteJsonMap(map),
         );
       }
 
@@ -119,20 +124,20 @@ void main() {
     });
   });
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using MagnetDlSearchConverter
+  /// Integration tests using SolidTorrentsSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('MagnetDlSearchConverter integration tests', () {
+  group('SolidTorrentsSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final expectedValue = expectedDTOList;
-      final magnetDlSearch = QueryMagnetDlSearch(criteria);
+      final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          await magnetDlSearch.myConvertTreeToOutputType(map),
+          await solidTorrentsSearch.myConvertTreeToOutputType(map),
         );
       }
 
@@ -146,10 +151,10 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final magnetDlSearch = QueryMagnetDlSearch(criteria);
+      final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);
 
       // Invoke the functionality and collect results.
-      final actualResult = magnetDlSearch.myConvertTreeToOutputType('map');
+      final actualResult = solidTorrentsSearch.myConvertTreeToOutputType('map');
 
       // Check the results.
       //NOTE: Using expect on an async result only works as the last line of the test!
@@ -161,19 +166,19 @@ void main() {
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and ScrapeMagnetDlSearchDetails and MagnetDlSearchConverter
+  /// Integration tests using WebFetchBase and ScrapeSolidTorrentsSearchDetails and SolidTorrentsSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('magnetDl search query', () {
+  group('SolidTorrents search query', () {
     // Read search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final magnetDlSearch = QueryMagnetDlSearch(criteria);
+      final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);
 
       // Invoke the functionality.
-      await magnetDlSearch
+      await solidTorrentsSearch
           .readList(
             source: streamHtmlOfflineData,
           )
@@ -197,13 +202,14 @@ void main() {
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final magnetDlSearch = QueryMagnetDlSearch(criteria);
-      const expectedException = '[QueryMagnetDlSearch] Error in magnetDl '
+      final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);
+      const expectedException =
+          '[QuerySolidTorrentsSearch] Error in solidTorrents '
           'with criteria dream interpreting web text as a map '
-          ':magnetDl results data not detected for criteria dream in html:not valid html';
+          ':SolidTorrents results data not detected for criteria dream in html:not valid html';
 
       // Invoke the functionality.
-      await magnetDlSearch
+      await solidTorrentsSearch
           .readList(
             source: _emitInvalidHtmlSample,
           )
@@ -214,14 +220,15 @@ void main() {
     // Read search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException = '[QueryMagnetDlSearch] Error in magnetDl '
+      const expectedException =
+          '[QuerySolidTorrentsSearch] Error in solidTorrents '
           'with criteria dream interpreting web text as a map '
-          ':magnetDl results data not detected for criteria dream in html:<html><body>stuff</body></html>';
+          ':SolidTorrents results data not detected for criteria dream in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
-      final magnetDlSearch = QueryMagnetDlSearch(criteria);
+      final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);
 
       // Invoke the functionality.
-      await magnetDlSearch
+      await solidTorrentsSearch
           .readList(
             source: _emitUnexpectedHtmlSample,
           )

@@ -2,16 +2,16 @@
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/magnet_idope.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/magnet_solid_torrents.dart';
 
-class MagnetDlSearchConverter {
+class SolidTorrentsSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     return [dtoFromMap(map)];
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
     return MovieResultDTO().init(
-      bestSource: DataSourceType.magnetDl,
+      bestSource: DataSourceType.solidTorrents,
       type: MovieContentType.download.toString(),
       uniqueId: map[jsonMagnetKey]?.toString(),
       title: map[jsonNameKey]?.toString(),
