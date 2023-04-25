@@ -5,6 +5,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_glo_torrents.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const resultTableSelector = '.ttable_headinner';
@@ -59,8 +60,12 @@ mixin ScrapeGloTorrentsSearch
           row.querySelector(magnetSelector)?.attributes['href'] ?? "";
       result[jsonNameKey] = columns[1].children.last.attributes['title'];
       result[jsonDescriptionKey] = columns[4].cleanText;
-      result[jsonSeedersKey] = columns[5].cleanText;
-      result[jsonLeechersKey] = columns[6].cleanText;
+
+      // Compensate for gloTorrents lies.
+      final seeders = DoubleHelper.fromText(columns[5].cleanText) ?? 0;
+      final leechers = DoubleHelper.fromText(columns[6].cleanText) ?? 0;
+      result[jsonSeedersKey] = seeders / 10;
+      result[jsonLeechersKey] = leechers / 10;
 
       if (result[jsonMagnetKey]!.toString().isNotEmpty &&
           result[jsonNameKey]!.toString().isNotEmpty &&
