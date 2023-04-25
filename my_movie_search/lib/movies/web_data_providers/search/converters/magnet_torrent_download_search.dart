@@ -2,7 +2,7 @@
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/magnet_torrent_download.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/magnet_torrent_download_search.dart';
 
 class TorrentDownloadSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
@@ -16,7 +16,7 @@ class TorrentDownloadSearchConverter {
       uniqueId: map[jsonDetailLink]?.toString(),
       title: map[jsonNameKey]?.toString(),
       charactorName: map[jsonCategoryKey]?.toString(),
-      description: map[jsonDescriptionKey]?.toString(),
+      description: 'placeholder: ${map[jsonDescriptionKey]}',
       imageUrl: map[jsonDetailLink]?.toString(),
       creditsOrder: map[jsonSeedersKey]?.toString(),
       userRatingCount: map[jsonLeechersKey]?.toString(),
