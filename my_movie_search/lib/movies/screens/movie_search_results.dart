@@ -19,10 +19,10 @@ import 'package:flutter/material.dart'
         TextField,
         Widget;
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
-import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/more_keywords_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movies_for_keyword_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/tor_repository.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -126,6 +126,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
 
   void newSearch(String text) {
     widget.criteria.criteriaTitle = text;
+    widget.criteria.criteriaList.clear();
     _searchBloc!.add(SearchRequested(widget.criteria));
   }
 

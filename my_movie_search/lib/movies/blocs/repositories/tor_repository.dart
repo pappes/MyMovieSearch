@@ -15,26 +15,29 @@ class TorRepository extends TorMultiSearchRepository {
   /// [searchUID] is a unique correlation ID identifying this search request
   @override
   void initSearch(int searchUID, SearchCriteriaDTO criteria) {
-    final textCriteria = criteria.clone();
-    textCriteria.criteriaList = [];
-    final providers = <WebFetchBase<MovieResultDTO, SearchCriteriaDTO>>[
-      QueryTpbSearch(criteria),
-      QueryMagnetDlSearch(criteria),
-      QueryGloTorrentsSearch(criteria),
-      QueryYtsSearch(criteria),
-      QueryTorrentz2Search(criteria),
-      QueryTpbSearch(textCriteria),
-      QueryMagnetDlSearch(textCriteria),
-      QueryGloTorrentsSearch(textCriteria),
-      QueryYtsSearch(textCriteria),
-      QueryTorrentz2Search(textCriteria),
-    ];
-    for (final provider in providers) {
+    for (final provider in _getProviders(criteria)) {
       initProvider();
       provider
           .readList(limit: 10)
           .then((values) => addResults(searchUID, values))
           .whenComplete(finishProvider);
     }
+  }
+
+  /// Determine best provider(s) for the supplied criteria.
+  List<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>> _getProviders(
+    SearchCriteriaDTO criteria,
+  ) {
+    if (criteria.criteriaList.isNotEmpty) {
+      // Yts searches based on IMDB ID
+      return [QueryYtsSearch(criteria)];
+    }
+    return [
+      // Other providers search based on movie title
+      QueryTpbSearch(criteria),
+      QueryMagnetDlSearch(criteria),
+      QueryGloTorrentsSearch(criteria),
+      QueryTorrentz2Search(criteria),
+    ];
   }
 }
