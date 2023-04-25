@@ -23,6 +23,7 @@ enum DataSourceType {
   tpb,
   magnetDl,
   solidTorrents,
+  torrentDownloadSearch,
   torrentz2,
   gloTorrents,
   ytsSearch,

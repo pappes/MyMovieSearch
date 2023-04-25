@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_movies_for_keyword.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_movies_for_keyword.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/magnet_torrent_download.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/magnet_torrent_download.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/magnet_torrent_download.dart';
 
 import '../../../test_helper.dart';
 
@@ -22,73 +22,48 @@ void main() {
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('imdb search unit tests', () {
+  group('TorrentDownload search unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
       expect(
-        QueryIMDBMoviesForKeyword(criteria).myDataSourceName(),
-        'imdbKeywords',
+        QueryTorrentDownloadSearch(criteria).myDataSourceName(),
+        'torrentDownloadSearch',
       );
     });
 
     // Confirm simple criteria is displayed as expected.
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
-        QueryIMDBMoviesForKeyword(criteria).myFormatInputAsText(),
+        QueryTorrentDownloadSearch(criteria).myFormatInputAsText(),
         criteria.criteriaTitle,
-      );
-    });
-
-    // Confirm dto criteria is displayed as expected.
-    test('Run myFormatInputAsText() for encoded keyword', () {
-      const expectedKeyword = '''
-testing and punctuation 
-'' "" <> {} [] Tabs -> 			<-
-      ''';
-      const expectedPage = 200;
-      const expectedUrl = 'http://somewhere';
-
-      final input = SearchCriteriaDTO();
-      final jsonText = QueryIMDBMoviesForKeyword.encodeJson(
-        expectedKeyword,
-        expectedPage.toString(),
-        expectedUrl,
-      );
-      input.criteriaList.add(MovieResultDTO().init(description: jsonText));
-      expect(
-        QueryIMDBMoviesForKeyword(input).myFormatInputAsText(),
-        expectedKeyword,
-      );
-      expect(
-        QueryIMDBMoviesForKeyword(input).myGetPageNumber(),
-        expectedPage,
       );
     });
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO();
+      input.criteriaTitle = 'List of errors';
       input.criteriaList = [
         MovieResultDTO().error('test1'),
         MovieResultDTO().error('test2'),
       ];
       expect(
-        QueryIMDBMoviesForKeyword(input).myFormatInputAsText(),
-        contains('test1'),
+        QueryTorrentDownloadSearch(input).myFormatInputAsText(),
+        input.criteriaTitle.toLowerCase(),
       );
       expect(
-        QueryIMDBMoviesForKeyword(input).myFormatInputAsText(),
-        contains('test2'),
+        QueryTorrentDownloadSearch(input).myFormatInputAsText(),
+        input.criteriaTitle.toLowerCase(),
       );
     });
 
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
       const expectedResult =
-          'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=new%20query&page=1';
+          'https://www.torrentdownload.info/search?q=new%20query&p=1';
 
       // Invoke the functionality.
-      final actualResult = QueryIMDBMoviesForKeyword(criteria)
+      final actualResult = QueryTorrentDownloadSearch(criteria)
           .myConstructURI('new query')
           .toString();
 
@@ -99,14 +74,15 @@ testing and punctuation
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'bestSource': 'DataSourceType.imdbKeywords',
-        'title': '[QueryIMDBMoviesForKeyword] new query',
+        'bestSource': 'DataSourceType.torrentDownloadSearch',
+        'title': '[QueryTorrentDownloadSearch] new query',
         'type': 'MovieContentType.error',
       };
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBMoviesForKeyword(criteria).myYieldError('new query').toMap();
+      final actualResult = QueryTorrentDownloadSearch(criteria)
+          .myYieldError('new query')
+          .toMap();
       actualResult.remove('uniqueId');
 
       // Check the results.
@@ -115,15 +91,15 @@ testing and punctuation
 
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final testClass = QueryIMDBMoviesForKeyword(criteria);
+      final testClass = QueryTorrentDownloadSearch(criteria);
       testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
-        imdbKeywordsHtmlSampleFull,
+        htmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
     });
   });
-  group('ImdbSearchConverter unit tests', () {
+  group('TorrentDownloadSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
@@ -131,7 +107,7 @@ testing and punctuation
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          ImdbMoviesForKeywordConverter.dtoFromCompleteJsonMap(map),
+          TorrentDownloadSearchConverter.dtoFromCompleteJsonMap(map),
         );
       }
 
@@ -149,20 +125,20 @@ testing and punctuation
     });
   });
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using ImdbSearchConverter
+  /// Integration tests using TorrentDownloadSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('ImdbSearchConverter integration tests', () {
+  group('TorrentDownloadSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final expectedValue = expectedDTOList;
-      final imdbKeywords = QueryIMDBMoviesForKeyword(criteria);
+      final torrentDownloadSearch = QueryTorrentDownloadSearch(criteria);
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          await imdbKeywords.myConvertTreeToOutputType(map),
+          await torrentDownloadSearch.myConvertTreeToOutputType(map),
         );
       }
 
@@ -176,10 +152,11 @@ testing and punctuation
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final imdbKeywords = QueryIMDBMoviesForKeyword(criteria);
+      final torrentDownloadSearch = QueryTorrentDownloadSearch(criteria);
 
       // Invoke the functionality and collect results.
-      final actualResult = imdbKeywords.myConvertTreeToOutputType('map');
+      final actualResult =
+          torrentDownloadSearch.myConvertTreeToOutputType('map');
 
       // Check the results.
       //NOTE: Using expect on an async result only works as the last line of the test!
@@ -191,49 +168,50 @@ testing and punctuation
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and ScrapeIMDBSearchDetails and ImdbSearchConverter
+  /// Integration tests using WebFetchBase and ScrapeTorrentDownloadSearchDetails and TorrentDownloadSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('imdb search query', () {
-    // Read IMDB search results from a simulated byte stream and convert JSON to dtos.
+  group('TorrentDownload search query', () {
+    // Read search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final imdbKeywords = QueryIMDBMoviesForKeyword(criteria);
+      final torrentDownloadSearch = QueryTorrentDownloadSearch(criteria);
 
       // Invoke the functionality.
-      await imdbKeywords
+      await torrentDownloadSearch
           .readList(
-            source: streamImdbKeywordsHtmlOfflineData,
+            source: streamHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
+      // printTestData(queryResult);
 
       // Check the results.
       expect(
         queryResult,
-        MovieResultDTOListMatcher(expectedValue),
+        MovieResultDTOListMatcher(expectedValue, related: false),
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
 
-    // Read IMDB search results from a simulated byte stream and report error due to invalid html.
+    // Read search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final imdbKeywords = QueryIMDBMoviesForKeyword(criteria);
+      final torrentDownloadSearch = QueryTorrentDownloadSearch(criteria);
       const expectedException =
-          '[QueryIMDBMoviesForKeyword] Error in imdbKeywords '
+          '[QueryTorrentDownloadSearch] Error in torrentDownloadSearch '
           'with criteria dream interpreting web text as a map '
-          ':imdb keyword data not detected for criteria dream';
+          ':TorrentDownload results data not detected for criteria dream in html:not valid html';
 
       // Invoke the functionality.
-      await imdbKeywords
+      await torrentDownloadSearch
           .readList(
             source: _emitInvalidHtmlSample,
           )
@@ -241,18 +219,18 @@ testing and punctuation
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read IMDB search results from a simulated byte stream and report error due to unexpected html.
+    // Read search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =
-          '[QueryIMDBMoviesForKeyword] Error in imdbKeywords '
+          '[QueryTorrentDownloadSearch] Error in torrentDownloadSearch '
           'with criteria dream interpreting web text as a map '
-          ':imdb keyword data not detected for criteria dream';
+          ':TorrentDownload results data not detected for criteria dream in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
-      final imdbKeywords = QueryIMDBMoviesForKeyword(criteria);
+      final torrentDownloadSearch = QueryTorrentDownloadSearch(criteria);
 
       // Invoke the functionality.
-      await imdbKeywords
+      await torrentDownloadSearch
           .readList(
             source: _emitUnexpectedHtmlSample,
           )

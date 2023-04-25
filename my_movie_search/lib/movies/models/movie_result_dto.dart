@@ -1012,7 +1012,10 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     );
     matchCompare('genres', actualDTO.genres.toString(), genres.toString());
     matchCompare(
-        'keywords', actualDTO.keywords.toString(), keywords.toString());
+      'keywords',
+      actualDTO.keywords.toString(),
+      keywords.toString(),
+    );
 
     if (related) {
       final expected = this.related.toPrintableString();

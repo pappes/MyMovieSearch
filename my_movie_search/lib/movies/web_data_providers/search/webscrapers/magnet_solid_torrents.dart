@@ -54,7 +54,7 @@ mixin ScrapeSolidTorrentsSearch
     final details = row.querySelectorAll(detailSelector);
     if (details.isNotEmpty) {
       final stats = details.first;
-      if (5 == stats!.children.length) {
+      if (5 == stats.children.length) {
         result[jsonDescriptionKey] = stats.cleanText;
         result[jsonCategoryKey] =
             row.querySelector(categorySelector)?.cleanText;

@@ -294,7 +294,11 @@ void main() {
       const bool verbose = false;
       matcher.matches(actualDTOList, matchState);
       matcher.describeMismatch(
-          expectedDTOList, mismatchDescription, matchState, verbose);
+        expectedDTOList,
+        mismatchDescription,
+        matchState,
+        verbose,
+      );
 
       expect(mismatchDescription.toString(), expectedError);
     });
@@ -330,7 +334,11 @@ void main() {
       const bool verbose = true;
       matcher.matches(actualDTOList, matchState);
       matcher.describeMismatch(
-          expectedDTOList, mismatchDescription, matchState, verbose);
+        expectedDTOList,
+        mismatchDescription,
+        matchState,
+        verbose,
+      );
 
       expect(mismatchDescription.toString(), expectedError);
     });

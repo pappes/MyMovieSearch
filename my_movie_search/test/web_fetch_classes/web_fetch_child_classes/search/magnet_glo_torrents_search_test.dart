@@ -26,7 +26,9 @@ void main() {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
       expect(
-          QueryGloTorrentsSearch(criteria).myDataSourceName(), 'gloTorrents');
+        QueryGloTorrentsSearch(criteria).myDataSourceName(),
+        'gloTorrents',
+      );
     });
 
     // Confirm simple criteria is displayed as expected.
