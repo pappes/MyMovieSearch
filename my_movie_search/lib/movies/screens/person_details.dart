@@ -119,6 +119,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
   ScrollView bodySection() {
     return ListView(
+      primary: true, //attach scrollbar controller to primary view
       children: <Widget>[
         SelectableText(_person.title, style: hugeFont),
         Row(
