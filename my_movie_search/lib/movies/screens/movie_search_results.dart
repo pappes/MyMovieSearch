@@ -1,23 +1,4 @@
-import 'package:flutter/material.dart'
-    show
-        AppBar,
-        BuildContext,
-        Center,
-        EdgeInsets,
-        Key,
-        ListTile,
-        ListView,
-        RestorableString,
-        RestorationBucket,
-        RestorationMixin,
-        Scaffold,
-        Scrollbar,
-        State,
-        StatefulWidget,
-        Text,
-        TextEditingController,
-        TextField,
-        Widget;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
 import 'package:my_movie_search/movies/blocs/repositories/more_keywords_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
@@ -46,6 +27,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   final _restorableList = RestorableMovieList();
   var _restorableId = RestorableString('');
   var _title = 'Results';
+  late final _textController = TextEditingController(text: _title);
 
   _MovieSearchResultsPageState();
 
@@ -100,6 +82,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     // Restorables must be disposed when no longer used.
     _restorableId.dispose();
     _restorableList.dispose();
+    _textController.dispose();
     super.dispose();
   }
 
@@ -109,13 +92,27 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     _restorableList.value = _sortedList;
     _restorableId = _restorableId;
 
+    final criteriaText = TextField(
+      controller: _textController,
+      onSubmitted: newSearch,
+      showCursor: true,
+    );
+
     return Scaffold(
       appBar: AppBar(
         // Use the search criteria to set our appbar title.
-        title: TextField(
-          controller: TextEditingController(text: _title),
-          onSubmitted: newSearch,
-          showCursor: true,
+        title: Align(
+          alignment: Alignment.centerLeft,
+          child: Row(
+            children: [
+              Expanded(child: criteriaText),
+              ElevatedButton.icon(
+                onPressed: () => newSearch(_textController.text),
+                icon: const Icon(Icons.search),
+                label: const Text(''),
+              ),
+            ],
+          ),
         ),
       ),
       body: Center(
@@ -126,7 +123,9 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
 
   void newSearch(String text) {
     widget.criteria.criteriaTitle = text;
-    widget.criteria.criteriaList.clear();
+    if (widget.criteria.criteriaList.isNotEmpty) {
+      widget.criteria.criteriaList.clear();
+    }
     _searchBloc!.add(SearchRequested(widget.criteria));
   }
 
