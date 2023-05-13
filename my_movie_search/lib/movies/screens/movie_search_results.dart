@@ -29,6 +29,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   var _title = 'Results';
   late final _textController = TextEditingController(text: _title);
   late final FocusNode _criteriaFocusNode = FocusNode();
+  late final FocusNode _searchFocusNode = FocusNode();
 
   _MovieSearchResultsPageState();
 
@@ -86,6 +87,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     _textController.dispose();
     // Clean up the focus node when the Form is disposed.
     _criteriaFocusNode.dispose();
+    _searchFocusNode.dispose();
     super.dispose();
   }
 
@@ -123,6 +125,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
               IconButton(
                 onPressed: () => _newSearch(_textController.text),
                 icon: const Icon(Icons.search),
+                focusNode: _searchFocusNode,
               ),
             ],
           ),
@@ -140,6 +143,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
       widget.criteria.criteriaList.clear();
     }
     _searchBloc!.add(SearchRequested(widget.criteria));
+    _searchFocusNode.requestFocus();
   }
 
   Widget _buildMovieResults() {
