@@ -64,7 +64,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called.
     _restorableCriteria.value = _criteria;
-    return Scaffold(
+    final page = Scaffold(
       appBar: AppBar(
         // Get title from the StatefulWidget MovieSearchCriteriaPage.
         title: const Text(MovieSearchCriteriaPage.title),
@@ -81,6 +81,8 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
         child: const Icon(Icons.search),
       ),
     );
+    criteriaFocusNode.requestFocus();
+    return page;
   }
 }
 
