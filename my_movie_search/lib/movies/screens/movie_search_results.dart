@@ -28,6 +28,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   var _restorableId = RestorableString('');
   var _title = 'Results';
   late final _textController = TextEditingController(text: _title);
+  late final FocusNode _criteriaFocusNode = FocusNode();
 
   _MovieSearchResultsPageState();
 
@@ -83,6 +84,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     _restorableId.dispose();
     _restorableList.dispose();
     _textController.dispose();
+    // Clean up the focus node when the Form is disposed.
+    _criteriaFocusNode.dispose();
     super.dispose();
   }
 
@@ -94,13 +97,17 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
 
     final criteriaText = TextField(
       controller: _textController,
+      focusNode: _criteriaFocusNode,
       onSubmitted: _newSearch,
       showCursor: true,
       decoration: InputDecoration(
         hintText: 'search text',
         suffixIcon: IconButton(
           icon: const Icon(Icons.clear),
-          onPressed: () => _textController.clear(),
+          onPressed: () {
+            _textController.clear();
+            _criteriaFocusNode.requestFocus();
+          },
         ),
       ),
     );

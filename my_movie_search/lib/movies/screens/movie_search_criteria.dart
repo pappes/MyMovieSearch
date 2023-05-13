@@ -27,6 +27,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
 
   var _currentCriteria = '';
   late final textController = TextEditingController(text: _currentCriteria);
+  late final FocusNode criteriaFocusNode = FocusNode();
 
   void searchForMovie() {
     Navigator.push(
@@ -54,6 +55,8 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     // Restorables must be disposed when no longer used.
     _restorableCriteria.dispose();
     textController.dispose();
+    // Clean up the focus node when the Form is disposed.
+    criteriaFocusNode.dispose();
     super.dispose();
   }
 
@@ -86,6 +89,7 @@ class _CriteriaInput extends Center {
       : super(
           child: TextField(
             controller: state.textController,
+            focusNode: state.criteriaFocusNode,
             textInputAction: TextInputAction.search,
             autofocus: true,
             autofillHints: const [AutofillHints.sublocality],
@@ -95,7 +99,10 @@ class _CriteriaInput extends Center {
               hintText: "Enter movie or tv series to search for",
               suffixIcon: IconButton(
                 icon: const Icon(Icons.clear),
-                onPressed: state.textController.clear,
+                onPressed: () {
+                  state.textController.clear();
+                  state.criteriaFocusNode.requestFocus();
+                },
               ),
             ),
             onChanged: (text) {
