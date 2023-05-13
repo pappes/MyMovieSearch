@@ -1,28 +1,4 @@
-import 'package:flutter/material.dart'
-    show
-        AppBar,
-        AutofillHints,
-        BuildContext,
-        Center,
-        Column,
-        FloatingActionButton,
-        Icon,
-        Icons,
-        InputDecoration,
-        Key,
-        MainAxisAlignment,
-        MaterialPageRoute,
-        Navigator,
-        RestorationBucket,
-        RestorationMixin,
-        Route,
-        Scaffold,
-        State,
-        StatefulWidget,
-        Text,
-        TextField,
-        TextInputAction,
-        Widget;
+import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/movie_search_results.dart'
     show MovieSearchResultsNewPage;
@@ -48,6 +24,10 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     with RestorationMixin {
   final _criteria = SearchCriteriaDTO().init(SearchCriteriaType.movieTitle);
   final _restorableCriteria = RestorableSearchCriteria();
+
+  var _currentCriteria = '';
+  late final textController = TextEditingController(text: _currentCriteria);
+
   void searchForMovie() {
     Navigator.push(
       context,
@@ -73,6 +53,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
   void dispose() {
     // Restorables must be disposed when no longer used.
     _restorableCriteria.dispose();
+    textController.dispose();
     super.dispose();
   }
 
@@ -104,13 +85,18 @@ class _CriteriaInput extends Center {
   _CriteriaInput(_MovieSearchCriteriaPageState state)
       : super(
           child: TextField(
+            controller: state.textController,
             textInputAction: TextInputAction.search,
             autofocus: true,
             autofillHints: const [AutofillHints.sublocality],
             style: hugeFont,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Movie",
               hintText: "Enter movie or tv series to search for",
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.clear),
+                onPressed: state.textController.clear,
+              ),
             ),
             onChanged: (text) {
               state._criteria.criteriaTitle = text;

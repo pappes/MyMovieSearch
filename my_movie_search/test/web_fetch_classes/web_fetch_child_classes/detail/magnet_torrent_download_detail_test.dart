@@ -138,7 +138,8 @@ void main() {
       // Invoke the functionality.
       final actualResult = QueryTorrentDownloadDetail(criteria)
           .myConstructURI(
-              'https://www.torrentdownload.info/B9F89CFDF8E74E9ACE0E58528932FCC437AD0D0E/Space-Jam-A-New-Legacy-+2021+-+1080p+-+WEBRip+-+5-1+-+YTS-MX+')
+            'https://www.torrentdownload.info/B9F89CFDF8E74E9ACE0E58528932FCC437AD0D0E/Space-Jam-A-New-Legacy-+2021+-+1080p+-+WEBRip+-+5-1+-+YTS-MX+',
+          )
           .toString();
 
       // Check the results.

@@ -94,8 +94,15 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
 
     final criteriaText = TextField(
       controller: _textController,
-      onSubmitted: newSearch,
+      onSubmitted: _newSearch,
       showCursor: true,
+      decoration: InputDecoration(
+        hintText: 'search text',
+        suffixIcon: IconButton(
+          icon: const Icon(Icons.clear),
+          onPressed: () => _textController.clear(),
+        ),
+      ),
     );
 
     return Scaffold(
@@ -106,10 +113,9 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
           child: Row(
             children: [
               Expanded(child: criteriaText),
-              ElevatedButton.icon(
-                onPressed: () => newSearch(_textController.text),
+              IconButton(
+                onPressed: () => _newSearch(_textController.text),
                 icon: const Icon(Icons.search),
-                label: const Text(''),
               ),
             ],
           ),
@@ -121,7 +127,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     );
   }
 
-  void newSearch(String text) {
+  void _newSearch(String text) {
     widget.criteria.criteriaTitle = text;
     if (widget.criteria.criteriaList.isNotEmpty) {
       widget.criteria.criteriaList.clear();
