@@ -42,6 +42,7 @@ class MovieResultDTO {
 enum MovieContentType {
   none,
   error,
+  information,
   keyword,
   person,
   download, //   e.g. magnet from tpb

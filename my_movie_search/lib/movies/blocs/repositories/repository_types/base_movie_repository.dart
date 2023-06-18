@@ -31,6 +31,7 @@ class BaseMovieRepository {
     ++_searchUID;
     final feedback = MovieResultDTO();
     feedback.title = 'Searching ...';
+    feedback.type = MovieContentType.information;
     yield feedback;
 
     _movieStreamController = StreamController<MovieResultDTO>(sync: true);
@@ -49,6 +50,7 @@ class BaseMovieRepository {
 
     final feedback = MovieResultDTO();
     feedback.title = 'Search completed ...';
+    feedback.type = MovieContentType.information;
     yieldResult(feedback);
 
     logger.v('closing stream');

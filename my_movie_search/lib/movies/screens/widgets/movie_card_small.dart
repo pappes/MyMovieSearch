@@ -1,5 +1,14 @@
 import 'package:flutter/material.dart'
-    show Widget, Text, ListTile, BuildContext, Image, NetworkImage;
+    show
+        BuildContext,
+        Icon,
+        IconData,
+        Icons,
+        Image,
+        ListTile,
+        NetworkImage,
+        Text,
+        Widget;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
@@ -89,11 +98,24 @@ class MovieTile extends ListTile {
   }
 
   static Widget _getImage(MovieResultDTO movie) {
-    if (movie.imageUrl == '' ||
-        !movie.imageUrl.startsWith('http') ||
-        MovieContentType.download == movie.type) {
-      return const Text('NoImage');
+    switch (movie.type) {
+      // See available icons at https://fonts.google.com/icons
+      case MovieContentType.error:
+        return const Icon(Icons.unfold_more);
+      case MovieContentType.information:
+        return const Icon(Icons.info);
+      case MovieContentType.navigation:
+        return const Icon(Icons.skip_next);
+      case MovieContentType.person:
+        return const Icon(Icons.person);
+      case MovieContentType.download:
+        return movie.imageUrl == ''
+            ? const Icon(Icons.block)
+            : const Icon(Icons.download);
+      default:
+        return movie.imageUrl == ''
+            ? const Icon(Icons.question_mark)
+            : Image(image: NetworkImage(movie.imageUrl));
     }
-    return Image(image: NetworkImage(movie.imageUrl));
   }
 }
