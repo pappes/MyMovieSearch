@@ -17,7 +17,7 @@ class YtsDetailConverter {
       title: map[jsonNameKey]?.toString(),
       charactorName: map[jsonCategoryKey]?.toString(),
       description: map[jsonDescriptionKey]?.toString(),
-      imageUrl: map[jsonImageKey]?.toString(),
+      imageUrl: map[jsonMagnetKey]?.toString(),
       creditsOrder: map[jsonSeedersKey]?.toString(),
       userRatingCount: map[jsonLeechersKey]?.toString(),
       year: map[jsonYearKey]?.toString(),
