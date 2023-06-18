@@ -114,7 +114,7 @@ class MovieTile extends ListTile {
             : const Icon(Icons.download);
       default:
         return movie.imageUrl == ''
-            ? const Icon(Icons.question_mark)
+            ? const Icon(Icons.theaters)
             : Image(image: NetworkImage(movie.imageUrl));
     }
   }

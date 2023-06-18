@@ -42,7 +42,6 @@ class YtsSearchConverter {
       bestSource: DataSourceType.ytsSearch,
       uniqueId: map[innerElementUrl]?.toString(),
       title: map[innerElementTitle]?.toString(),
-      imageUrl: map[innerElementImage]?.toString(),
       year: map[innerElementYear]?.toString(),
       type: MovieContentType.download.toString(),
     );

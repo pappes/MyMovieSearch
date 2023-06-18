@@ -17,7 +17,7 @@ in test('Run dtoFromCompleteJsonMap()'*/
 
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"https://yts.mx/movies/space-babes-from-outer-space-2017","bestSource":"DataSourceType.ytsSearch","title":"Space Babes from Outer Space","type":"MovieContentType.download","year":"2017","imageUrl":"https://yts.mx/assets/images/movies/space_babes_from_outer_space_2017/small-cover.jpg","sources":{"DataSourceType.ytsSearch":"https://yts.mx/movies/space-babes-from-outer-space-2017"}}
+{"uniqueId":"https://yts.mx/movies/space-babes-from-outer-space-2017","bestSource":"DataSourceType.ytsSearch","title":"Space Babes from Outer Space","type":"MovieContentType.download","year":"2017","sources":{"DataSourceType.ytsSearch":"https://yts.mx/movies/space-babes-from-outer-space-2017"}}
 ''',
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
