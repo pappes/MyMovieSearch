@@ -17,7 +17,6 @@ class TorrentDownloadSearchConverter {
       title: map[jsonNameKey]?.toString(),
       charactorName: map[jsonCategoryKey]?.toString(),
       description: 'placeholder: ${map[jsonDescriptionKey]}',
-      imageUrl: map[jsonDetailLink]?.toString(),
       creditsOrder: map[jsonSeedersKey]?.toString(),
       userRatingCount: map[jsonLeechersKey]?.toString(),
     );
