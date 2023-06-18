@@ -6,7 +6,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"https://www.torrentdownload.info/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7/2001-A-Space-Odyssey-+1968+-+BluRay+-+1080p+-+YTS-AM+","bestSource":"DataSourceType.torrentDownloadSearch","title":"2001 A Space Odyssey (1968) [BluRay] [1080p] [YTS AM] � Movies","type":"MovieContentType.download","creditsOrder":"578",
+{"uniqueId":"https://www.torrentdownload.info/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7/2001-A-Space-Odyssey-+1968+-+BluRay+-+1080p+-+YTS-AM+","bestSource":"DataSourceType.torrentDownloadSearch","title":"2001 A Space Odyssey (1968) [BluRay] [1080p] [YTS AM] � Movies","type":"MovieContentType.download","creditsOrder":"6",
       "description":"placeholder: 2.38 GB","userRatingCount":"248","sources":{"DataSourceType.torrentDownloadSearch":"https://www.torrentdownload.info/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7/2001-A-Space-Odyssey-+1968+-+BluRay+-+1080p+-+YTS-AM+"}}
 ''',
 ];
