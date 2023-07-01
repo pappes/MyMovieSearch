@@ -144,7 +144,7 @@ class MMSNav {
   /// Navigates to a search results page populated with downloads for the movie.
   ///
   void getDownloads(String text, MovieResultDTO dto) {
-    // replace space with . for more specific searching
+    // replace space with . for more matches
     final criteria = text.replaceAll(' ', '.');
     // Fetch first batch of movies that match the keyword.
     showResultsPage(
@@ -166,15 +166,27 @@ class MMSNav {
 
         break;
       case MovieContentType.navigation:
-        // Search for more movies that match the keyword.
-        showResultsPage(
-          QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
-        );
+        if (movie.uniqueId.startsWith('http')) {
+          // Search for more movies that match the keyword.
+          showResultsPage(
+            QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
+          );
+        } else {
+          // replace space with . for more specific searching
+          final criteria = movie.uniqueId;
+          // Fetch first batch of movies that match the keyword.
+          showResultsPage(
+            SearchCriteriaDTO().init(
+              SearchCriteriaType.downloadAdvanced,
+              title: criteria,
+              list: [movie],
+            ),
+          );
+        }
 
         break;
       case MovieContentType.download:
         // Open magnet link.
-        //viewWebPage(movie.imageUrl);
         _openBrowser(movie.imageUrl);
 
         break;

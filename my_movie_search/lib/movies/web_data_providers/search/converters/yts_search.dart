@@ -43,7 +43,7 @@ class YtsSearchConverter {
       uniqueId: map[innerElementUrl]?.toString(),
       title: map[innerElementTitle]?.toString(),
       year: map[innerElementYear]?.toString(),
-      type: MovieContentType.download.toString(),
+      type: MovieContentType.information.toString(),
     );
     return detailsPage;
   }
