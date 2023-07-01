@@ -1265,12 +1265,7 @@ extension DTOCompare on MovieResultDTO {
   /// Rank movies against each other for sorting.
   ///
   int compareTo(MovieResultDTO other) {
-    // Treat null and negative numbers as lower than any other value
-    if (uniqueId == movieDTOUninitialized &&
-        other.uniqueId != movieDTOUninitialized) return -1;
-    if (uniqueId != movieDTOUninitialized &&
-        other.uniqueId == movieDTOUninitialized) return 1;
-    // Preference people > movies.
+    // Preference people > movies > information.
     if (contentCategory() != other.contentCategory()) {
       return contentCategory().compareTo(other.contentCategory());
     }
@@ -1355,10 +1350,28 @@ extension DTOCompare on MovieResultDTO {
   ///
   /// person > movie
   int contentCategory() {
-    if (type == MovieContentType.person) {
-      return 1;
+    switch (type) {
+      case MovieContentType.person:
+        return 99;
+      case MovieContentType.episode:
+        return 7;
+      case MovieContentType.short:
+        return 6;
+      case MovieContentType.custom:
+        return 5;
+      case MovieContentType.keyword:
+        return 4;
+      case MovieContentType.download:
+        return 3;
+      case MovieContentType.error:
+        return 2;
+      case MovieContentType.information:
+        return 1;
+      case MovieContentType.navigation:
+        return 0;
+      default:
+        return 90;
     }
-    return 0;
   }
 
   /// Rank movies based on spoken language.
