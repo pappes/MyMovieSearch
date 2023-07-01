@@ -179,6 +179,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     return Row(
       children: [
         Poster(
+          context,
           url: _movie.imageUrl,
           onTap: () => MMSNav(context)
               .viewWebPage(makeImdbUrl(_movie.uniqueId, photos: true)),

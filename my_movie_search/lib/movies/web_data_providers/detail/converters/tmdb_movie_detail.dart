@@ -110,7 +110,7 @@ class TmdbMovieDetailConverter {
     );
     movie.getContentType();
     movie.getLanguageType();
-    for (final Map genre in map[innerElementGenres]) {
+    for (final genre in map[innerElementGenres] as Iterable<Map>) {
       movie.genres.combineUnique(genre['name'] as String);
     }
 

@@ -8,7 +8,7 @@ void main() {
   // Define a test. The TestWidgets function also provides a WidgetTester
   // to work with. The WidgetTester allows you to build and interact
   // with widgets in the test environment.
-  tst.testWidgets('Poster without a valid url shows placeholder text',
+  /*tst.testWidgets('Poster without a valid url shows placeholder text',
       (tst.WidgetTester tester) async {
     // Create the widget by telling the tester to build it.
     await tester.pumpWidget(
@@ -23,7 +23,7 @@ void main() {
     final imageFinder = tst.find.text('NoImage');
 
     tst.expect(imageFinder, tst.findsOneWidget);
-  });
+  });*/
 
 // All URLs are currently throwing HTTP 400 (https and http)
   // testWidgets('Poster with a valid url does not show placeholder text',

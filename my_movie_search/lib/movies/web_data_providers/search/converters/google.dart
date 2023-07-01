@@ -49,7 +49,7 @@ class GoogleMovieSearchConverter {
       if ((int.tryParse(resultCount.toString()) ?? 0) == 0) {
         return _searchError(map);
       }
-      for (final Map movie in map[outerElementResultsCollection]) {
+      for (final movie in map[outerElementResultsCollection] as Iterable<Map>) {
         if (!isImdbChildPage(movie)) {
           searchResults.add(dtoFromMap(movie));
         }

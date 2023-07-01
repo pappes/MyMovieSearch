@@ -26,6 +26,9 @@ dependencies:
   
   # Note: use "dart pub outdated" to find libraries that should be upgraded
   bloc: ^8.0.3
+  cupertino_icons: ^1.0.4               # iOS style icons.
+  easy_debounce: ^2.0.3
+  easy_image_viewer: ^1.2.1
   equatable: ^2.0.3                     # Simplify object comparisons.
   flutter_bloc: ^8.0.1                  # Assist with the BLoC design pattern.
   flutter_custom_tabs: ^1.0.4           # replace webview with andorid chrome browser
@@ -33,26 +36,20 @@ dependencies:
   html: ^0.15.0                         # Dart dom and html utilities.
   html_unescape: ^2.0.0                 # decode &apos;
   intl: ^0.18.0                         # internationalisation including number and data formatting.
+  lint: ^2.0.1
   logger: ^1.1.0                        # Log trace messages to console.
-  path_provider: ^2.0.9                  # Device filesystem access for accessing database files.
-  path: ^1.8.0                           # File path manipulation library
+  path_provider: ^2.0.9                 # Device filesystem access for accessing database files.
+  path: ^1.8.0                          # File path manipulation library
   pinch_zoom_image_last: ^0.4.1         # pinch to zoom on images
   sqflite: ^2.0.2                       # Database storage for persisting state across sessions.
   ####logger_flutter: ^0.7.1            # Shake device to see trace messages.
   universal_io: ^2.0.4                  # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
   url_launcher: ^6.0.20                  # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
-  webview_flutter: ^4.0.1                # Show web page (Note V3.0.0 availoable but needs testing)
+  webview_flutter: ^4.0.1               # Show web page (Note V3.0.0 availoable but needs testing)
 
   #firebase_core: ^1.0.3                # Firebase initialisation
   #firebase_auth: ^3.0.1                 # Authenticate users against Firebase
   #cloud_firestore: ^2.4.0               # Store data in Firebase Firestore cloud database
-
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.4
-  lint: ^2.0.1
-  easy_debounce: ^2.0.3
 
 dev_dependencies:
   build_runner: ^2.1.7

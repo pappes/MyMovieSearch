@@ -196,6 +196,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     return Row(
       children: [
         Poster(
+          context,
           url: _person.imageUrl,
           onTap: () => MMSNav(context)
               .viewWebPage(makeImdbUrl(_person.uniqueId, photos: true)),

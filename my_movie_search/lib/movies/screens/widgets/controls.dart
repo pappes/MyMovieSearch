@@ -1,6 +1,8 @@
+import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:path/path.dart';
 import 'package:pinch_zoom_image_last/pinch_zoom_image_last.dart';
 
 /// Determines if the screen is narrow enough to require a condenced layout.
@@ -17,12 +19,17 @@ bool useMobileLayout(BuildContext context) {
 /// An [onTap] handler can be supplied to allow drilldown on the image.
 ///
 class Poster extends Widget {
-  Poster({
+  Poster(
+    BuildContext context, {
     required this.url,
     this.onTap,
     Key? key,
   }) : super(key: key) {
-    urlText = SelectableText(url, style: tinyFont);
+    urlText = SelectableText(
+      url,
+      style: tinyFont,
+      onTap: () => showImageViewer(context, NetworkImage(getBigImage(url))),
+    );
     controls = makeControls();
   }
 
@@ -51,14 +58,10 @@ class Poster extends Widget {
   }
 
   Widget showImage(String location) {
-    return PinchZoomImage(
-      image: Image(
-        image: NetworkImage(getBigImage(location)),
-        alignment: Alignment.topCenter,
-        fit: BoxFit.fitWidth,
-      ),
-      zoomedBackgroundColor: const Color.fromRGBO(240, 240, 240, 1.0),
-      hideStatusBarWhileZooming: true,
+    return Image(
+      image: NetworkImage(getBigImage(location)),
+      alignment: Alignment.topCenter,
+      fit: BoxFit.fitWidth,
     );
   }
 }
