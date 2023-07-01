@@ -14,7 +14,7 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"https://yts.mx/movies/sharon-1-2-3-2018","bestSource":"DataSourceType.ytsSearch","title":"Sharon 1.2.3.","type":"MovieContentType.download","year":"2018","sources":{"DataSourceType.ytsSearch":"https://yts.mx/movies/sharon-1-2-3-2018"}}
+{"uniqueId":"https://yts.mx/movies/sharon-1-2-3-2018","bestSource":"DataSourceType.ytsSearch","title":"Sharon 1.2.3.","type":"MovieContentType.information","year":"2018","sources":{"DataSourceType.ytsSearch":"https://yts.mx/movies/sharon-1-2-3-2018"}}
 ''',
 ];
 
@@ -22,7 +22,7 @@ final expectedTitleList =
     ListDTOConversion.decodeList(expectedTitleJsonStringList);
 const expectedTitleJsonStringList = [
   r'''
-{"uniqueId":"https://yts.mx/movies/rize-2005","bestSource":"DataSourceType.ytsSearch","title":"Rize","type":"MovieContentType.download","year":"2005","sources":{"DataSourceType.ytsSearch":"https://yts.mx/movies/rize-2005"}}
+{"uniqueId":"https://yts.mx/movies/rize-2005","bestSource":"DataSourceType.ytsSearch","title":"Rize","type":"MovieContentType.information","year":"2005","sources":{"DataSourceType.ytsSearch":"https://yts.mx/movies/rize-2005"}}
 ''',
 ];
 
