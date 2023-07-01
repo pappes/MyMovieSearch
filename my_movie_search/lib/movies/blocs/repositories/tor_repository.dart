@@ -30,7 +30,7 @@ class TorRepository extends TorMultiSearchRepository {
   List<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>> _getProviders(
     SearchCriteriaDTO criteria,
   ) {
-    if (criteria.criteriaList.isNotEmpty) {
+    if (criteria.criteriaType == SearchCriteriaType.downloadSimple) {
       // Yts searches based on IMDB ID
       return [QueryYtsSearch(criteria)];
     }

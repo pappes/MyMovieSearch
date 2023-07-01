@@ -16,10 +16,19 @@ Future<Stream<String>> _emitInvalidJsonPSample(dynamic dummy) {
   return Future.value(Stream.value('imdbJsonPFunction({not valid json})'));
 }
 
-final criteria = SearchCriteriaDTO().init(
-  SearchCriteriaType.download,
-  title: '123',
+final fullCriteria = SearchCriteriaDTO().init(
+  SearchCriteriaType.downloadSimple,
   list: [MovieResultDTO().init(uniqueId: 'tt123')],
+);
+
+final partialCriteria = SearchCriteriaDTO().init(
+  SearchCriteriaType.downloadSimple,
+  title: '123',
+);
+
+final ignoreCriteria = SearchCriteriaDTO().init(
+  SearchCriteriaType.downloadSimple,
+  title: 'ignore this',
 );
 
 void main() {
@@ -31,25 +40,35 @@ void main() {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
       expect(
-        QueryYtsSearch(criteria).myDataSourceName(),
+        QueryYtsSearch(fullCriteria).myDataSourceName(),
         'ytsSearch',
       );
     });
 
-    // Confirm criteria is displayed as expected.
+    // Confirm dto criteria is displayed as expected.
+    test('Run myFormatInputAsText() for SearchCriteriaDTO list', () {
+      final input = SearchCriteriaDTO();
+      input.criteriaTitle = 'testing';
+      expect(
+        QueryYtsSearch(fullCriteria).myFormatInputAsText(),
+        fullCriteria.criteriaList.first.uniqueId,
+      );
+    });
+
+    // Confirm text criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'testing';
       expect(
-        QueryYtsSearch(criteria).myFormatInputAsText(),
-        criteria.criteriaList.first.uniqueId,
+        QueryYtsSearch(partialCriteria).myFormatInputAsText(),
+        partialCriteria.criteriaTitle,
       );
     });
 
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () {
       final expectedValue = expectedDTOList;
-      final ytsSearch = QueryYtsSearch(criteria);
+      final ytsSearch = QueryYtsSearch(ignoreCriteria);
 
       // Invoke the functionality and collect results.
       final actualResult =
@@ -68,7 +87,7 @@ void main() {
 
       // Invoke the functionality.
       final actualResult =
-          QueryYtsSearch(criteria).myConstructURI('new query').toString();
+          QueryYtsSearch(ignoreCriteria).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -85,7 +104,7 @@ void main() {
 
       // Invoke the functionality.
       final actualResult =
-          QueryYtsSearch(criteria).myYieldError('new query').toMap();
+          QueryYtsSearch(ignoreCriteria).myYieldError('new query').toMap();
       // Exact id does not need to match as long as it is negative number
       actualResult['uniqueId'] =
           actualResult['uniqueId'].toString().substring(0, 1);
@@ -104,7 +123,7 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final ytsSearch = QueryYtsSearch(criteria);
+      final ytsSearch = QueryYtsSearch(ignoreCriteria);
 
       // Invoke the functionality.
       await ytsSearch
@@ -131,7 +150,7 @@ void main() {
     test('invalid jsonp', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final ytsSearch = QueryYtsSearch(criteria);
+      final ytsSearch = QueryYtsSearch(fullCriteria);
       const expectedException = '''
 [QueryYtsSearch] Error in ytsSearch with criteria tt123 interpreting web text as a map :FormatException: Unexpected character (at character 2)
 {not valid json}
@@ -154,7 +173,7 @@ void main() {
           'with criteria tt123 translating page map to objects '
           ':expected map got Null unable to interpret data null';
       final queryResult = <MovieResultDTO>[];
-      final ytsSearch = QueryYtsSearch(criteria);
+      final ytsSearch = QueryYtsSearch(fullCriteria);
 
       // Invoke the functionality.
       await ytsSearch

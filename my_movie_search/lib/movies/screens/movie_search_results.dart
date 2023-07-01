@@ -47,7 +47,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
 
   BaseMovieRepository getDatasource() {
     switch (widget.criteria.criteriaType) {
-      case SearchCriteriaType.download:
+      case SearchCriteriaType.downloadSimple:
+      case SearchCriteriaType.downloadAdvanced:
         {
           return TorRepository();
         }

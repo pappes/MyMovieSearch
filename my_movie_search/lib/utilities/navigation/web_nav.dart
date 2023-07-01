@@ -149,7 +149,7 @@ class MMSNav {
     // Fetch first batch of movies that match the keyword.
     showResultsPage(
       SearchCriteriaDTO().init(
-        SearchCriteriaType.download,
+        SearchCriteriaType.downloadSimple,
         title: criteria,
         list: [dto],
       ),

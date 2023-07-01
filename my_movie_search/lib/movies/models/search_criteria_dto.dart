@@ -25,7 +25,8 @@ enum SearchCriteriaType {
   moviesForKeyword,
   moreKeywords,
   movieDTOList,
-  download,
+  downloadSimple,
+  downloadAdvanced,
   custom,
 }
 

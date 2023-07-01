@@ -18,6 +18,14 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
+final expectedTitleList =
+    ListDTOConversion.decodeList(expectedTitleJsonStringList);
+const expectedTitleJsonStringList = [
+  r'''
+{"uniqueId":"https://yts.mx/movies/rize-2005","bestSource":"DataSourceType.ytsSearch","title":"Rize","type":"MovieContentType.download","year":"2005","sources":{"DataSourceType.ytsSearch":"https://yts.mx/movies/rize-2005"}}
+''',
+];
+
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
@@ -25,11 +33,32 @@ void main() {
 
   group('live QueryYtsSearch test', () {
     // Search for a rare movie.
-    test('Run read 3 pages from IMDB', () async {
+    test('Run read from YTS using imbd id', () async {
       final criteria = SearchCriteriaDTO().fromString('tt3127016');
       final actualOutput = await QueryYtsSearch(criteria).readList(limit: 10);
       final expectedOutput = expectedDTOList;
-      expectedDTOList.clearCopyrightedData();
+      expectedOutput.clearCopyrightedData();
+      actualOutput.clearCopyrightedData();
+
+      // To update expected data, uncomment the following line
+      // printTestData(actualOutput);
+
+      // Check the results.
+      expect(
+        actualOutput,
+        MovieResultDTOListFuzzyMatcher(
+          expectedOutput,
+          percentMatch: 60,
+        ),
+        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
+      );
+    });
+    test('Run read from YTS using title', () async {
+      final criteria = SearchCriteriaDTO().fromString('rize 2005');
+      final actualOutput = await QueryYtsSearch(criteria).readList(limit: 10);
+      final expectedOutput = expectedTitleList;
+      expectedOutput.clearCopyrightedData();
       actualOutput.clearCopyrightedData();
 
       // To update expected data, uncomment the following line
