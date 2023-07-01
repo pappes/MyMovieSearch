@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as tabs;
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/screens/error_details.dart';
 import 'package:my_movie_search/movies/screens/movie_details.dart';
 import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
@@ -62,7 +63,8 @@ class MMSNav {
 
   /// Construct route to Material user interface page as appropriate for the dto.
   ///
-  /// Chooses a MovieDetailsPage or PersonDetailsPage based on the IMDB unique ID.
+  /// Chooses a MovieDetailsPage or PersonDetailsPage
+  /// based on the IMDB unique ID or ErrorDetailsPage otherwise
   void showDetailsPage(
     MovieResultDTO movie,
   ) {
@@ -75,13 +77,22 @@ class MMSNav {
           builder: (context) => PersonDetailsPage(person: movie),
         ),
       );
-    } else {
+    } else if (movie.uniqueId.startsWith(imdbTitlePrefix)) {
       // Open Movie details.
 
       Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => MovieDetailsPage(movie: movie),
+        ),
+      );
+    } else {
+      // Open error details.
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ErrorDetailsPage(errorDto: movie),
         ),
       );
     }

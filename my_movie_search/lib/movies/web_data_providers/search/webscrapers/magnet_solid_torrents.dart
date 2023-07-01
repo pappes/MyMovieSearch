@@ -28,7 +28,7 @@ mixin ScrapeSolidTorrentsSearch
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    if (webText.contains('Your search has returned <strong>0</strong>')) {
+    if (webText.contains('Found <b>0</b> results')) {
       return [];
     }
     final document = parse(webText);
