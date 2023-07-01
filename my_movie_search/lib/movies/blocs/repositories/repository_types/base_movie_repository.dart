@@ -68,13 +68,14 @@ class BaseMovieRepository {
   /// Initiates a secondary data fetch.
   /// To be overridden by specific implementations, calling:
   ///   yieldResult() for any returned data.
-  void getExtraDetails(int originalSearchUID, MovieResultDTO dto) {}
+  /// Returns number of extra fetches requested.
+  int getExtraDetails(int originalSearchUID, MovieResultDTO dto) => 0;
 
   /// Cease waiting for data provider to complete.
   /// Close the stream if all WebFetch operations have completed.
   void finishProvider() {
     _awaitingProviders = _awaitingProviders - 1;
-    if (_awaitingProviders == 0 && !_awaitingDetails) close();
+    if (_awaitingProviders == 0) close();
   }
 
   /// Begin waiting for another data provider to complete.
@@ -99,14 +100,9 @@ class BaseMovieRepository {
       // Ensure a new search has not been started.
       results.forEach(yieldResult);
       for (final dto in results) {
-        getExtraDetails(originalSearchUID, dto);
-        _requestedDetails[dto.uniqueId] = null;
+        _awaitingProviders =
+            _awaitingProviders + getExtraDetails(originalSearchUID, dto);
       }
     }
-  }
-
-  /// Check to see if any movie detail fetch is in progress.
-  bool get _awaitingDetails {
-    return _requestedDetails.values.contains(null);
   }
 }

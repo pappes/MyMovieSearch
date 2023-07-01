@@ -28,7 +28,8 @@ class MovieListRepository extends BaseMovieRepository {
   /// Maintain a map of unique movie detail requests
   /// and request retrieval if the fetch is not already in progress.
   @override
-  void getExtraDetails(int originalSearchUID, MovieResultDTO dto) {
+  int getExtraDetails(int originalSearchUID, MovieResultDTO dto) {
+    int searchesRequested = 0;
     if ("null" != dto.uniqueId &&
         !dto.uniqueId.startsWith(movieDTOMessagePrefix)) {
       final functions = SearchFunctions();
@@ -39,12 +40,14 @@ class MovieListRepository extends BaseMovieRepository {
         function(dto).then(
           (searchResults) => _addExtraDetails(originalSearchUID, searchResults),
         );
+        searchesRequested = searchesRequested + 1;
       }
       // Load supplementary results into list for display on screen
       for (final function in functions.supplementarySearch) {
         function(dto).then(
           (searchResults) => _addExtraDetails(originalSearchUID, searchResults),
         );
+        searchesRequested = searchesRequested + 1;
       }
       // Load slow results into cache for access on details screen in a seperate thread
       for (final function in functions.slowSearch) {
@@ -53,6 +56,7 @@ class MovieListRepository extends BaseMovieRepository {
         }
       }
     }
+    return searchesRequested;
   }
 
   /// Only call TMDB find to get tmdbID if no TMDB request has completed
@@ -152,7 +156,9 @@ class MovieListRepository extends BaseMovieRepository {
     if (!searchInterrupted(originalSearchUID)) {
       for (final dto in values) {
         yieldResult(dto);
-        getExtraDetails(originalSearchUID, dto);
+        if (0 == getExtraDetails(originalSearchUID, dto)) {
+          finishProvider();
+        }
       }
     }
   }

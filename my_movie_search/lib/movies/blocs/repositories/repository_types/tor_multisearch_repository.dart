@@ -24,18 +24,21 @@ class TorMultiSearchRepository extends BaseMovieRepository {
   /// Maintain a map of unique movie detail requests
   /// and request retrieval if the fetch is not already in progress.
   @override
-  void getExtraDetails(int originalSearchUID, MovieResultDTO dto) {
+  int getExtraDetails(int originalSearchUID, MovieResultDTO dto) {
+    int searchesRequested = 0;
     if ("null" != dto.uniqueId &&
         !dto.uniqueId.startsWith(movieDTOMessagePrefix)) {
       final functions = SearchFunctions();
       _getDetailSources(dto, functions);
       // Load supplementary results into list for display on screen
       for (final function in functions.supplementarySearch) {
+        searchesRequested = searchesRequested + 1;
         function(dto).then(
           (searchResults) => _addExtraDetails(originalSearchUID, searchResults),
         );
       }
     }
+    return searchesRequested;
   }
 
   /// Call YTS details when YTS search has completed
@@ -89,6 +92,7 @@ class TorMultiSearchRepository extends BaseMovieRepository {
         yieldResult(dto);
         getExtraDetails(originalSearchUID, dto);
       }
+      finishProvider();
     }
   }
 }

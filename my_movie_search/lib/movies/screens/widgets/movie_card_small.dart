@@ -113,9 +113,9 @@ class MovieTile extends ListTile {
             ? const Icon(Icons.block)
             : const Icon(Icons.download);
       default:
-        return movie.imageUrl == ''
-            ? const Icon(Icons.theaters)
-            : Image(image: NetworkImage(movie.imageUrl));
+        return movie.imageUrl.startsWith('http')
+            ? Image(image: NetworkImage(movie.imageUrl))
+            : const Icon(Icons.theaters);
     }
   }
 }
