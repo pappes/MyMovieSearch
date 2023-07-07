@@ -7,7 +7,6 @@ import 'package:flutter/material.dart'
         Image,
         ListTile,
         NetworkImage,
-        SizedBox,
         Text,
         Widget;
 
@@ -125,16 +124,14 @@ class MovieTile extends ListTile {
     }
   }
 
-  static Widget _getButton(BuildContext context, MovieResultDTO movie) {
+  static Widget? _getButton(BuildContext context, MovieResultDTO movie) {
     switch (movie.type) {
       case MovieContentType.navigation:
         return _navigateButton(context, movie);
       case MovieContentType.keyword:
         return _navigateButton(context, movie);
       case MovieContentType.download:
-        return movie.imageUrl == ''
-            ? const SizedBox.shrink()
-            : _navigateButton(context, movie);
+        return movie.imageUrl == '' ? null : _navigateButton(context, movie);
       default:
         return const Text('');
     }
