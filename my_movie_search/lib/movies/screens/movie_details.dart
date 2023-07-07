@@ -111,12 +111,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       ),
       body: Scrollbar(
         thumbVisibility: true,
-        child: bodySection(),
+        child: _bodySection(),
       ),
     );
   }
 
-  ScrollView bodySection() {
+  ScrollView _bodySection() {
     return ListView(
       primary: true, //attach scrollbar controller to primary view
       children: <Widget>[
@@ -142,11 +142,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  ExpandedColumn(children: <Widget>[leftColumn()]),
+                  ExpandedColumn(children: <Widget>[_leftColumn()]),
 
                   // Only show right column on tablet
                   if (!_mobileLayout)
-                    ExpandedColumn(children: [posterSection()]),
+                    ExpandedColumn(children: [_posterSection()]),
                 ],
               ),
             ),
@@ -156,39 +156,39 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     );
   }
 
-  Widget leftColumn() {
+  Widget _leftColumn() {
     return Wrap(
       children: [
-        ...leftHeader(),
+        ..._leftHeader(),
         // Only show poster in left column on mobile
-        if (_mobileLayout) posterSection(),
+        if (_mobileLayout) _posterSection(),
 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ...description(),
-            ...suggestions(),
-            ...cast(),
+            ..._description(),
+            ..._suggestions(),
+            ..._cast(),
           ],
         ),
       ],
     );
   }
 
-  Widget posterSection() {
+  Widget _posterSection() {
     return Row(
       children: [
         Poster(
           context,
           url: _movie.imageUrl,
-          onTap: () => MMSNav(context)
+          showImages: () => MMSNav(context)
               .viewWebPage(makeImdbUrl(_movie.uniqueId, photos: true)),
         ),
       ],
     );
   }
 
-  Widget movieFacts() {
+  Widget _movieFacts() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -207,10 +207,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     );
   }
 
-  List<Widget> leftHeader() {
+  List<Widget> _leftHeader() {
     return [
       InkWell(
-        child: movieFacts(),
+        child: _movieFacts(),
         onTap: () => MMSNav(context).viewWebPage(
           makeImdbUrl(_movie.uniqueId, parentalGuide: true),
         ),
@@ -224,13 +224,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
                 MMSNav(context).viewWebPage(makeImdbUrl(_movie.uniqueId)),
             child: const Text('IMDB'),
           ),
-          ...externalSearch(),
+          ..._externalSearchButtons(),
         ],
       ),
     ];
   }
 
-  List<Widget> description() {
+  List<Widget> _description() {
     return [
       BoldLabel('Description:'),
       SelectableText(
@@ -238,15 +238,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         style: biggerFont,
         minLines: 1,
         maxLines: _descriptionExpanded ? null : 8,
-        onTap: toggleDescription,
+        onTap: _toggleDescription,
       ),
       Text('Languages: ${_movie.languages}'),
       Text('Genres: ${_movie.genres}'),
-      keywords(),
+      _keywords(),
     ];
   }
 
-  void toggleDescription() {
+  void _toggleDescription() {
     setState(() {
       _descriptionExpanded = !_descriptionExpanded;
     });
@@ -255,11 +255,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   final caseInsensativeSuggestion =
       RegExp('[sS][uU][gG][gG][eE][sS][tT][iI][oO][nN]');
 
-  List<Widget> suggestions() => related(caseInsensativeSuggestion);
+  List<Widget> _suggestions() => _related(caseInsensativeSuggestion);
 
-  List<Widget> cast() => related(caseInsensativeSuggestion, invertFilter: true);
+  List<Widget> _cast() =>
+      _related(caseInsensativeSuggestion, invertFilter: true);
 
-  Widget keywords() {
+  Widget _keywords() {
     Widget makeHyperlink(String keyword) {
       return InkWell(
         child: Text('  $keyword  '),
@@ -285,7 +286,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     );
   }
 
-  List<Widget> related(RegExp filter, {bool invertFilter = false}) {
+  List<Widget> _related(RegExp filter, {bool invertFilter = false}) {
     bool filterIncludes(String text) {
       if (invertFilter && !filter.hasMatch(text)) return true;
       if (!invertFilter && filter.hasMatch(text)) return true;
@@ -319,30 +320,21 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     return categories;
   }
 
-  List<Widget> externalSearch() {
-    final year = _movie.year > 1900 ? _movie.year : "";
+  List<Widget> _externalSearchButtons() {
     return <Widget>[
-      ElevatedButton(
-        onPressed: () => MMSNav(context).viewWebPage(
-          'https://tpb.party/search/${_movie.title} $year',
-        ),
-        child: const Text('tpb'),
-      ),
-      ElevatedButton(
-        onPressed: () => MMSNav(context).getDownloads(
-          '${_movie.title} ${_movie.year}',
-          _movie,
-        ),
-        child: Text(_movie.title),
-      ),
+      _externalSearchButton(_movie.title),
       if (_movie.alternateTitle.isNotEmpty)
-        ElevatedButton(
-          onPressed: () => MMSNav(context).getDownloads(
-            '${_movie.alternateTitle} ${_movie.year}',
-            _movie,
-          ),
-          child: Text(_movie.alternateTitle),
-        ),
+        _externalSearchButton(_movie.alternateTitle),
     ];
+  }
+
+  Widget _externalSearchButton(String title) {
+    return ElevatedButton(
+      onPressed: () => MMSNav(context).getDownloads(
+        '$title ${_movie.year}',
+        _movie,
+      ),
+      child: Text(title),
+    );
   }
 }

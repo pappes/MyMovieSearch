@@ -16,54 +16,56 @@ bool useMobileLayout(BuildContext context) {
 ///
 /// Diplayed image has pinch to zoom enabled.
 ///
-/// An [onTap] handler can be supplied to allow drilldown on the image.
+/// An [showImages] handler can be supplied to allow drilldown on the image source.
 ///
 class Poster extends Widget {
   Poster(
-    BuildContext context, {
+    this.context, {
     required this.url,
-    this.onTap,
+    void Function()? showImages,
     Key? key,
   }) : super(key: key) {
-    urlText = SelectableText(
-      url,
-      style: tinyFont,
-      onTap: () => showImageViewer(context, NetworkImage(getBigImage(url))),
+    final displayedImage = Image(
+      image: NetworkImage(getBigImage(url)),
+      alignment: Alignment.topCenter,
+      fit: BoxFit.fitWidth,
     );
-    controls = makeControls();
-  }
+    final tapableImage = GestureDetector(
+      onTap: _pinchToZoom,
+      child: displayedImage,
+    );
 
-  static const placeholderMessage = Text('NoImage');
-  final String url;
-  late final SelectableText urlText;
-  late final Widget controls;
-  final void Function()? onTap;
+    final imageText = SelectableText(
+      url,
+      onTap: _pinchToZoom,
+      style: tinyFont,
+    );
+    final imageSearch = ElevatedButton(
+      onPressed: showImages,
+      child: imageSearchIcon,
+    );
 
-  @override
-  Element createElement() {
-    return controls.createElement();
-  }
-
-  ExpandedColumn makeControls() {
-    return ExpandedColumn(
+    controls = ExpandedColumn(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        if (url.startsWith('http'))
-          GestureDetector(onTap: onTap, child: showImage(url))
-        else
-          placeholderMessage,
-        urlText,
+        if (url.startsWith('http')) tapableImage else placeholderMessage,
+        imageText,
+        if (showImages != null) imageSearch
       ],
     );
   }
 
-  Widget showImage(String location) {
-    return Image(
-      image: NetworkImage(getBigImage(location)),
-      alignment: Alignment.topCenter,
-      fit: BoxFit.fitWidth,
-    );
-  }
+  static const placeholderMessage = Text('NoImage');
+  final imageSearchIcon = const Icon(Icons.image_search);
+  final BuildContext context;
+  late final Widget controls;
+  late final String url;
+
+  @override
+  Element createElement() => controls.createElement();
+
+  Future<Dialog?> _pinchToZoom() =>
+      showImageViewer(context, NetworkImage(getBigImage(url)));
 }
 
 /// A [Widget] that includes a [Column] that expands so that it

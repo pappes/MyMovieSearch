@@ -112,12 +112,12 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       ),
       body: Scrollbar(
         thumbVisibility: true,
-        child: bodySection(),
+        child: _bodySection(),
       ),
     );
   }
 
-  ScrollView bodySection() {
+  ScrollView _bodySection() {
     return ListView(
       primary: true, //attach scrollbar controller to primary view
       children: <Widget>[
@@ -139,7 +139,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  ExpandedColumn(children: <Widget>[leftColumn()]),
+                  ExpandedColumn(children: <Widget>[_leftColumn()]),
 
                   // Only show right column on tablet
                   if (!_mobileLayout)
@@ -153,7 +153,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     );
   }
 
-  Widget leftColumn() {
+  Widget _leftColumn() {
     return Wrap(
       children: <Widget>[
         Text('Source: ${_person.bestSource.name}      '),
@@ -178,15 +178,15 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
             _person.description,
             style: biggerFont,
             maxLines: _descriptionExpanded ? null : 8,
-            onTap: toggleDescription,
+            onTap: _toggleDescription,
           ),
         ),
-        ...related(),
+        ..._related(),
       ],
     );
   }
 
-  void toggleDescription() {
+  void _toggleDescription() {
     setState(() {
       _descriptionExpanded = !_descriptionExpanded;
     });
@@ -198,14 +198,14 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         Poster(
           context,
           url: _person.imageUrl,
-          onTap: () => MMSNav(context)
+          showImages: () => MMSNav(context)
               .viewWebPage(makeImdbUrl(_person.uniqueId, photos: true)),
         )
       ],
     );
   }
 
-  List<Widget> related() {
+  List<Widget> _related() {
     final categories = <Widget>[];
     for (final category in _person.related.entries) {
       final rolesMap = category.value;
