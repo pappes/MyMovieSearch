@@ -44,6 +44,7 @@ enum MovieContentType {
   error,
   information,
   keyword,
+  barcode,
   person,
   download, //   e.g. magnet from tpb
   navigation, // e.g. next page

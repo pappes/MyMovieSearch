@@ -29,6 +29,7 @@ enum DataSourceType {
   gloTorrents,
   ytsSearch,
   ytsDetails,
+  uhttBarcode,
   other,
   custom,
 }

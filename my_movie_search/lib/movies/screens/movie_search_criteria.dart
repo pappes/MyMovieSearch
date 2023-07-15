@@ -3,6 +3,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/movie_search_results.dart'
     show MovieSearchResultsNewPage;
 import 'package:my_movie_search/movies/screens/styles.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
   const MovieSearchCriteriaPage({Key? key}) : super(key: key);
@@ -36,6 +37,22 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
         builder: (context) => MovieSearchResultsNewPage(criteria: _criteria),
       ),
     );
+  }
+
+  void searchBarcode(dynamic barcode) {
+    if (barcode is String && barcode.isNotEmpty) {
+      _criteria.criteriaTitle = barcode;
+      searchForMovie();
+    }
+  }
+
+  void scanBarcode() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SimpleBarcodeScannerPage(),
+      ),
+    ).then(searchBarcode);
   }
 
   @override
@@ -101,6 +118,13 @@ class _CriteriaInput extends Center {
               hintText: "Enter movie or tv series to search for",
               suffixIcon: IconButton(
                 icon: const Icon(Icons.clear),
+                onPressed: () {
+                  state.textController.clear();
+                  state.scanBarcode();
+                },
+              ),
+              prefixIcon: IconButton(
+                icon: const Icon(Icons.qr_code_2),
                 onPressed: () {
                   state.textController.clear();
                   state.criteriaFocusNode.requestFocus();
