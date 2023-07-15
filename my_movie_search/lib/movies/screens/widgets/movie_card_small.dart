@@ -113,6 +113,8 @@ class MovieTile extends ListTile {
         return const Icon(Icons.person);
       case MovieContentType.keyword:
         return const Icon(Icons.manage_search);
+      case MovieContentType.barcode:
+        return const Icon(Icons.skip_next);
       case MovieContentType.download:
         return movie.imageUrl == ''
             ? const Icon(Icons.block)
@@ -129,6 +131,8 @@ class MovieTile extends ListTile {
       case MovieContentType.navigation:
         return _navigateButton(context, movie);
       case MovieContentType.keyword:
+        return _navigateButton(context, movie);
+      case MovieContentType.barcode:
         return _navigateButton(context, movie);
       case MovieContentType.download:
         return movie.imageUrl == '' ? null : _navigateButton(context, movie);

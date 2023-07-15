@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/screens/movie_search_results.dart'
     show MovieSearchResultsNewPage;
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+import 'package:universal_io/io.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
   const MovieSearchCriteriaPage({Key? key}) : super(key: key);
@@ -42,17 +43,23 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
   void searchBarcode(dynamic barcode) {
     if (barcode is String && barcode.isNotEmpty) {
       _criteria.criteriaTitle = barcode;
+      _criteria.criteriaType = SearchCriteriaType.barcode;
       searchForMovie();
     }
   }
 
   void scanBarcode() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SimpleBarcodeScannerPage(),
-      ),
-    ).then(searchBarcode);
+    if (Platform.isAndroid) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SimpleBarcodeScannerPage(),
+        ),
+      ).then(searchBarcode);
+    } else {
+      searchBarcode(
+          '9324915073425'); // Hard code known barcode for linux testing
+    }
   }
 
   @override
@@ -120,14 +127,14 @@ class _CriteriaInput extends Center {
                 icon: const Icon(Icons.clear),
                 onPressed: () {
                   state.textController.clear();
-                  state.scanBarcode();
+                  state.criteriaFocusNode.requestFocus();
                 },
               ),
               prefixIcon: IconButton(
                 icon: const Icon(Icons.qr_code_2),
                 onPressed: () {
                   state.textController.clear();
-                  state.criteriaFocusNode.requestFocus();
+                  state.scanBarcode();
                 },
               ),
             ),
@@ -136,6 +143,7 @@ class _CriteriaInput extends Center {
             },
             onSubmitted: (text) {
               state._criteria.criteriaTitle = text;
+              state._criteria.criteriaType = SearchCriteriaType.movieTitle;
               state.searchForMovie();
             },
           ),

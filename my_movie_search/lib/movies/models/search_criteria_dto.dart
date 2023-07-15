@@ -27,6 +27,7 @@ enum SearchCriteriaType {
   movieDTOList,
   downloadSimple,
   downloadAdvanced,
+  barcode,
   custom,
 }
 

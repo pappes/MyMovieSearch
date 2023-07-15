@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
+import 'package:my_movie_search/movies/blocs/repositories/barcode_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/more_keywords_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movies_for_keyword_repository.dart';
@@ -55,6 +56,10 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
       case SearchCriteriaType.moviesForKeyword:
         {
           return MoviesForKeywordRepository();
+        }
+      case SearchCriteriaType.barcode:
+        {
+          return BarcodeRepository();
         }
       case SearchCriteriaType.moreKeywords:
         {

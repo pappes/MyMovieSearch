@@ -4,7 +4,6 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/uhtt_barcode.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/uhtt_barcode.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/uhtt_barcode.dart';
-import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const jsonDescriptionKey = 'description';

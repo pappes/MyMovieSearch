@@ -182,6 +182,16 @@ class MMSNav {
         getMoviesForKeyword(movie.title);
 
         break;
+      case MovieContentType.barcode:
+        // Search for movies that match the keyword.
+        showResultsPage(
+          SearchCriteriaDTO().init(
+            SearchCriteriaType.movieTitle,
+            title: movie.title,
+          ),
+        );
+
+        break;
       case MovieContentType.navigation:
         if (movie.uniqueId.startsWith('http')) {
           // Search for more movies that match the keyword.
