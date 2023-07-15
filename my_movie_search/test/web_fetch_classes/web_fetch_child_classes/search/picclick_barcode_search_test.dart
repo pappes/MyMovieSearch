@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/converters/uhtt_barcode.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/offline/uhtt_barcode.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/uhtt_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/picclick_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/picclick_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/picclick_barcode.dart';
 
 import '../../../test_helper.dart';
 
@@ -22,17 +22,17 @@ void main() {
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('UhttBarcode search unit tests', () {
+  group('PicclickBarcode search unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(
-          QueryUhttBarcodeSearch(criteria).myDataSourceName(), 'uhttBarcode');
+      expect(QueryPicclickBarcodeSearch(criteria).myDataSourceName(),
+          'picclickBarcode');
     });
 
     // Confirm simple criteria is displayed as expected.
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
-        QueryUhttBarcodeSearch(criteria).myFormatInputAsText(),
+        QueryPicclickBarcodeSearch(criteria).myFormatInputAsText(),
         criteria.criteriaTitle,
       );
     });
@@ -46,22 +46,21 @@ void main() {
         MovieResultDTO().error('test2'),
       ];
       expect(
-        QueryUhttBarcodeSearch(input).myFormatInputAsText(),
+        QueryPicclickBarcodeSearch(input).myFormatInputAsText(),
         input.criteriaTitle.toLowerCase(),
       );
       expect(
-        QueryUhttBarcodeSearch(input).myFormatInputAsText(),
+        QueryPicclickBarcodeSearch(input).myFormatInputAsText(),
         input.criteriaTitle.toLowerCase(),
       );
     });
 
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expectedResult =
-          'http://uhtt.ru/dispatcher/?query=SELECT%20GOODS%20BY%20CODE(new%20query)%20FORMAT.TDDO(VIEW_GOODS)';
+      const expectedResult = 'https://picclick.com.au/?q=new%20query+';
 
       // Invoke the functionality.
-      final actualResult = QueryUhttBarcodeSearch(criteria)
+      final actualResult = QueryPicclickBarcodeSearch(criteria)
           .myConstructURI('new query')
           .toString();
 
@@ -72,14 +71,15 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'bestSource': 'DataSourceType.uhttBarcode',
-        'title': '[QueryUhttBarcodeSearch] new query',
+        'bestSource': 'DataSourceType.picclickBarcode',
+        'title': '[QueryPicclickBarcodeSearch] new query',
         'type': 'MovieContentType.error',
       };
 
       // Invoke the functionality.
-      final actualResult =
-          QueryUhttBarcodeSearch(criteria).myYieldError('new query').toMap();
+      final actualResult = QueryPicclickBarcodeSearch(criteria)
+          .myYieldError('new query')
+          .toMap();
       actualResult.remove('uniqueId');
 
       // Check the results.
@@ -88,7 +88,7 @@ void main() {
 
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final testClass = QueryUhttBarcodeSearch(criteria);
+      final testClass = QueryPicclickBarcodeSearch(criteria);
       testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
         htmlSampleFull,
@@ -96,7 +96,7 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
   });
-  group('UhttBarcodeSearchConverter unit tests', () {
+  group('PicclickBarcodeSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
@@ -104,7 +104,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          UhttBarcodeSearchConverter.dtoFromCompleteJsonMap(map),
+          PicclickBarcodeSearchConverter.dtoFromCompleteJsonMap(map),
         );
       }
 
@@ -122,14 +122,14 @@ void main() {
     });
   });
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using UhttBarcodeSearchConverter
+  /// Integration tests using PicclickBarcodeSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('UhttBarcodeSearchConverter integration tests', () {
+  group('PicclickBarcodeSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final expectedValue = expectedDTOList;
-      final webfetch = QueryUhttBarcodeSearch(criteria);
+      final webfetch = QueryPicclickBarcodeSearch(criteria);
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -149,7 +149,7 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final webfetch = QueryUhttBarcodeSearch(criteria);
+      final webfetch = QueryPicclickBarcodeSearch(criteria);
 
       // Invoke the functionality and collect results.
       final actualResult = webfetch.myConvertTreeToOutputType('map');
@@ -164,16 +164,16 @@ void main() {
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and ScrapeUhttBarcodeSearchDetails and UhttBarcodeSearchConverter
+  /// Integration tests using WebFetchBase and ScrapePicclickBarcodeSearchDetails and PicclickBarcodeSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('UhttBarcode search query', () {
+  group('PicclickBarcode search query', () {
     // Read search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final webfetch = QueryUhttBarcodeSearch(criteria);
+      final webfetch = QueryPicclickBarcodeSearch(criteria);
 
       // Invoke the functionality.
       await webfetch
@@ -199,8 +199,12 @@ void main() {
     // Read search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
+      const expectedException =
+          '[QueryPicclickBarcodeSearch] Error in picclickBarcode '
+          'with criteria dream interpreting web text as a map '
+          ':PicclickBarcode results data not detected for criteria dream in html:not valid html';
       final queryResult = <MovieResultDTO>[];
-      final webfetch = QueryUhttBarcodeSearch(criteria);
+      final webfetch = QueryPicclickBarcodeSearch(criteria);
 
       // Invoke the functionality.
       await webfetch
@@ -208,14 +212,19 @@ void main() {
             source: _emitInvalidHtmlSample,
           )
           .then((values) => queryResult.addAll(values));
-      expect(queryResult, []);
+      expect(queryResult.first.title, expectedException);
     });
 
     // Read search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
+      const expectedException =
+          '[QueryPicclickBarcodeSearch] Error in picclickBarcode '
+          'with criteria dream interpreting web text as a map '
+          ':PicclickBarcode results data not detected for criteria dream '
+          'in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
-      final webfetch = QueryUhttBarcodeSearch(criteria);
+      final webfetch = QueryPicclickBarcodeSearch(criteria);
 
       // Invoke the functionality.
       await webfetch
@@ -223,7 +232,7 @@ void main() {
             source: _emitUnexpectedHtmlSample,
           )
           .then((values) => queryResult.addAll(values));
-      expect(queryResult, []);
+      expect(queryResult.first.title, expectedException);
 
       // Check the results.
     });

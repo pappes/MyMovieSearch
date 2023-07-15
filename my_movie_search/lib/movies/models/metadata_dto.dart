@@ -30,6 +30,7 @@ enum DataSourceType {
   ytsSearch,
   ytsDetails,
   uhttBarcode,
+  picclickBarcode,
   other,
   custom,
 }

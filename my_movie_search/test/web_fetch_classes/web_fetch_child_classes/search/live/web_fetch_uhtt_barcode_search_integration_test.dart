@@ -22,7 +22,7 @@ void main() {
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('live QueryTpbSearch test', () {
+  group('live QueryUhttBarcodeSearch test', () {
     // Search for a known movie.
     test('Run a search on Tpb that is likely to have static results', () async {
       final criteria = SearchCriteriaDTO().fromString('9324915073425');

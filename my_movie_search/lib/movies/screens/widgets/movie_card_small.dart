@@ -100,9 +100,11 @@ class MovieTile extends ListTile {
     );
   }
 
-  static Widget _getImage(MovieResultDTO movie) {
+  static Widget _getIcon(MovieResultDTO movie) {
     switch (movie.type) {
       // See available icons at https://fonts.google.com/icons
+      case MovieContentType.barcode:
+        return const Icon(Icons.skip_next);
       case MovieContentType.error:
         return const Icon(Icons.unfold_more);
       case MovieContentType.information:
@@ -113,17 +115,21 @@ class MovieTile extends ListTile {
         return const Icon(Icons.person);
       case MovieContentType.keyword:
         return const Icon(Icons.manage_search);
-      case MovieContentType.barcode:
-        return const Icon(Icons.skip_next);
       case MovieContentType.download:
         return movie.imageUrl == ''
             ? const Icon(Icons.block)
             : const Icon(Icons.download);
       default:
-        return movie.imageUrl.startsWith('http')
-            ? Image(image: NetworkImage(movie.imageUrl))
-            : const Icon(Icons.theaters);
+        return const Icon(Icons.theaters);
     }
+  }
+
+  static Widget _getImage(MovieResultDTO movie) {
+    if (movie.type != MovieContentType.download &&
+        movie.imageUrl.startsWith('http')) {
+      return Image(image: NetworkImage(movie.imageUrl));
+    }
+    return _getIcon(movie);
   }
 
   static Widget? _getButton(BuildContext context, MovieResultDTO movie) {
@@ -150,7 +156,7 @@ class MovieTile extends ListTile {
   ) {
     return ElevatedButton(
       onPressed: () => _navigate(context, movie),
-      child: _getImage(movie),
+      child: _getIcon(movie),
     );
   }
 }

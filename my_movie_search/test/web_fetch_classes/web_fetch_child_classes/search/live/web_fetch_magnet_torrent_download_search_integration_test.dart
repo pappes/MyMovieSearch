@@ -49,7 +49,7 @@ void main() {
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('live QueryTpbSearch test', () {
+  group('live QueryTorrentDownloadSearch test', () {
     // Search for a rare movie.
     test('Run a search on Tpb that is likely to have static results', () async {
       final criteria = SearchCriteriaDTO().fromString('rize');
