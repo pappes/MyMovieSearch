@@ -77,7 +77,13 @@ class MMSNav {
           builder: (context) => PersonDetailsPage(person: movie),
         ),
       );
-    } else if (movie.uniqueId.startsWith(imdbTitlePrefix)) {
+    } else if (movie.uniqueId.startsWith(imdbTitlePrefix) ||
+        movie.type == MovieContentType.movie ||
+        movie.type == MovieContentType.series ||
+        movie.type == MovieContentType.miniseries ||
+        movie.type == MovieContentType.short ||
+        movie.type == MovieContentType.episode ||
+        movie.type == MovieContentType.title) {
       // Open Movie details.
 
       Navigator.push(
