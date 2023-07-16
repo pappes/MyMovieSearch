@@ -7,7 +7,8 @@ import 'package:my_movie_search/movies/web_data_providers/search/picclick_barcod
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-const resultTableSelector = 'div ul.items li';
+const resultTableSelector = '.items';
+const resultRowsSelector = 'li';
 const jpgPictureSelector = 'picture source[type="image/jpeg"]';
 const jpgDescriptionSelector = 'h3';
 
@@ -20,6 +21,7 @@ mixin ScrapePicclickBarcodeSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   final movieData = [];
   bool validPage = false;
+  final searchLog = StringBuffer();
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
@@ -35,15 +37,20 @@ mixin ScrapePicclickBarcodeSearch
     if (validPage) {
       return movieData;
     }
-    throw 'PicclickBarcode results data not detected for criteria $getCriteriaText in html:$webText';
+    throw 'PicclickBarcode results data not detected log: $searchLog for criteria $getCriteriaText in html:$webText';
   }
 
   /// extract each row from the table.
   void _scrapeWebPage(Document document) {
-    final table = document.querySelectorAll(resultTableSelector);
-    for (final row in table) {
-      validPage = true;
-      _processRow(row);
+    final tables = document.querySelectorAll(resultTableSelector);
+    searchLog.writeln('tableSelector found ${tables.length} tables');
+    for (final table in tables) {
+      final rows = table.querySelectorAll(resultRowsSelector);
+      searchLog.writeln('rowSelector found ${rows.length} rows');
+      for (final row in rows) {
+        validPage = true;
+        _processRow(row);
+      }
     }
   }
 
