@@ -3,6 +3,7 @@ import 'package:html/parser.dart' show parse;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/picclick_barcode.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -57,8 +58,11 @@ mixin ScrapePicclickBarcodeSearch
   /// Collect webpage text to construct a map of the movie data.
   void _processRow(Element row) {
     final result = {};
-    result[jsonDescriptionKey] =
-        row.querySelector(jpgDescriptionSelector)?.cleanText;
+    final rawDescription =
+        row.querySelector(jpgDescriptionSelector)?.cleanText ?? '';
+    result[jsonRawDescriptionKey] = rawDescription;
+    result[jsonCleanDescriptionKey] = getCleanDvdTitle(rawDescription);
+    row.querySelector(jpgDescriptionSelector)?.cleanText;
     result[jsonIdKey] = row.attributes['id'];
     result[jsonUrlKey] =
         row.querySelector(jpgPictureSelector)?.attributes['srcset'];

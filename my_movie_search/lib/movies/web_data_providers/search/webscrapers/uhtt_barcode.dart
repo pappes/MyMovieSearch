@@ -3,6 +3,7 @@ import 'package:html/parser.dart' show parse;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/uhtt_barcode.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -50,7 +51,8 @@ mixin ScrapeUhttBarcodeSearch
     final result = {};
     final columns = row.children;
     if (4 == columns.length) {
-      result[jsonDescriptionKey] = columns[1].cleanText;
+      result[jsonRawDescriptionKey] = columns[1].cleanText;
+      result[jsonCleanDescriptionKey] = getCleanDvdTitle(columns[1].cleanText);
       result[jsonIdKey] = columns[3].cleanText;
       movieData.add(result);
     }

@@ -7,7 +7,8 @@ import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/pic
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-const jsonDescriptionKey = 'description';
+const jsonRawDescriptionKey = 'description';
+const jsonCleanDescriptionKey = 'cleanDescription';
 const jsonIdKey = 'barcode';
 const jsonUrlKey = 'url';
 
@@ -60,7 +61,6 @@ class QueryPicclickBarcodeSearch
   /// API call to search returning the top matching results for [encodedCriteria].
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
-    searchResultsLimit = WebFetchLimiter(100);
     final url = '$_baseURL$encodedCriteria$_suffixURL';
     return Uri.parse(url);
   }

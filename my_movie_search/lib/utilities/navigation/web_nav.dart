@@ -183,11 +183,11 @@ class MMSNav {
 
         break;
       case MovieContentType.barcode:
-        // Search for movies that match the keyword.
+        // Search for movies based on the data fetched for the barcode.
         showResultsPage(
           SearchCriteriaDTO().init(
             SearchCriteriaType.movieTitle,
-            title: movie.title,
+            title: movie.alternateTitle,
           ),
         );
 

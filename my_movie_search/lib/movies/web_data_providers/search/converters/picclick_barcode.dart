@@ -14,7 +14,8 @@ class PicclickBarcodeSearchConverter {
       bestSource: DataSourceType.picclickBarcode,
       type: MovieContentType.barcode.toString(),
       uniqueId: map[jsonIdKey]?.toString(),
-      title: map[jsonDescriptionKey]?.toString(),
+      title: map[jsonRawDescriptionKey]?.toString(),
+      alternateTitle: map[jsonCleanDescriptionKey]?.toString(),
       description: map[jsonIdKey]?.toString(),
       imageUrl: map[jsonUrlKey]?.toString(),
     );

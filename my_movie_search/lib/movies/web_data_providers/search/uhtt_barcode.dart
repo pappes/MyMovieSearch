@@ -6,7 +6,8 @@ import 'package:my_movie_search/movies/web_data_providers/search/offline/uhtt_ba
 import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/uhtt_barcode.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-const jsonDescriptionKey = 'description';
+const jsonRawDescriptionKey = 'description';
+const jsonCleanDescriptionKey = 'cleandescription';
 const jsonIdKey = 'barcode';
 
 /// Implements [WebFetchBase] for the UhttBarcode search html web scraper.

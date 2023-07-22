@@ -1275,6 +1275,8 @@ extension DTOCompare on MovieResultDTO {
         return personCompare(other);
       case MovieContentType.download:
         return downloadCompare(other);
+      case MovieContentType.barcode:
+        return barcodeCompare(other);
       default:
         return movieCompare(other);
     }
@@ -1297,6 +1299,22 @@ extension DTOCompare on MovieResultDTO {
     }
     // Compare Leachers
     return userRatingCount.compareTo(other.userRatingCount);
+  }
+
+  /// Compare downloads based availability.
+  int barcodeCompare(MovieResultDTO other) {
+    final hasYear = alternateTitle.contains(RegExp(r'.*\s\d\d\d\d\s.*'));
+    final otherHasYear =
+        other.alternateTitle.contains(RegExp(r'.*\s\d\d\d\d\s.*'));
+    // Prefer whichever has a year
+    if (hasYear && !otherHasYear) {
+      return 1;
+    }
+    if (otherHasYear && !hasYear) {
+      return -1;
+    }
+    // Compare normal movie fields
+    return movieCompare(other);
   }
 
   /// Compare movies based on popularity, type, language, year, etc.
