@@ -9,7 +9,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scrape
 import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
-//query string https://sg.media-imdb.com/suggests/w/wonder%20woman.json
+//query string https://sg.media-imdb.com/suggestion/x/wonder%20woman.json
 //json format
 //1 = title/name
 //id = unique  key (tt=tile/nm=name/vi=video)

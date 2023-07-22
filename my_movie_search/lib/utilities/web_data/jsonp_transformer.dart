@@ -29,6 +29,7 @@ class JsonPConversionSink extends Sink<String> {
 ///
 /// When used as a [StreamTransformer], the input stream may emit
 /// multiple strings. Where necesary streamed input will be buffered.
+/// If the JS function name is not supplied it is inferred from syntax.
 ///
 /// ```dart
 /// // Strip JSONP if required
@@ -42,8 +43,10 @@ class JsonPConversionSink extends Sink<String> {
 class JsonPDecoder extends Converter<String, String> {
   final _state = JsonPState();
 
+  final String? _jsFunction;
+
   /// Constructs a new JsonPEncoder.
-  JsonPDecoder();
+  JsonPDecoder([this._jsFunction]);
 
   /// Converts the given JSONP-string [input] to its corresponding json.
   @override
@@ -52,20 +55,23 @@ class JsonPDecoder extends Converter<String, String> {
     if (_state.activated) {
       output = input;
     } else {
-      output = stripPrefix(input);
+      output = stripPrefix(stripCriteria(input));
     }
     if (_state.buffering) output = bufferSuffix(output);
     return output;
   }
 
-  // Internal function to Strip FunctionName( from the start of the string stream.
+  // Internal function to strip [_criteria] from the start of the string stream.
+  String stripCriteria(String input) {
+    if (null != _jsFunction) {
+      return input.replaceFirst(_jsFunction!, '');
+    }
+    return input;
+  }
+
+  // Internal function to strip FunctionName( from the start of the string stream.
   // Strips nothing if [ or { is encountered before (
   String stripPrefix(String input) {
-    if (_state.activated) {
-      // Prefix has already been stripped (or did not need to be stripped.)
-      return input;
-    }
-
     final firstRound = input.indexOf("(");
     final firstCurly = input.indexOf("{");
     final firstSquare = input.indexOf("[");

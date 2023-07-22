@@ -17,7 +17,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryIMDBSuggestions
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ThreadedCacheIMDBSuggestions {
-  static const _baseURL = 'https://sg.media-imdb.com/suggests';
+  static const _baseURL = 'https://sg.media-imdb.com/suggestion/x/';
   static const defaultSearchResultsLimit = 10;
 
   /// Limit results to 10 most relevant by default.
@@ -56,8 +56,7 @@ class QueryIMDBSuggestions
   /// API call to IMDB search returning the top matching results for [searchText].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final prefix = searchCriteria.isEmpty ? '' : searchCriteria.substring(0, 1);
-    final url = '$_baseURL/$prefix/$searchCriteria.json';
+    final url = '$_baseURL$searchCriteria.json';
     return Uri.parse(url);
   }
 }

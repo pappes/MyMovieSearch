@@ -28,8 +28,9 @@ void main() {
     }
 
     /// Confirm removal is prefix and suffix even across multiple line of input.
-    void testMultiLineConversion(List<String> lines, String expectedOutput) {
-      final decoder = JsonPDecoder();
+    void testMultiLineConversion(List<String> lines, String expectedOutput,
+        [String? criteria]) {
+      final decoder = JsonPDecoder(criteria);
       final actualOutput = StringBuffer();
       for (final line in lines) {
         actualOutput.write(decoder.convert(line));
@@ -153,13 +154,25 @@ void main() {
       testMultiLineConversion(['jsfunction(', '(', 'abc', ')', ')\n'], '(abc)');
       testMultiLineConversion(['jsfunction(', '()', 'abc', '', ')\n'], '()abc');
     });
+    // Strip criteria, opening parenthesis and closing parenthesis
+    // even across multiple lines.
+    test('JsonPDecoder criteria change required', () {
+      const complexFunction = 'Avengers : \$eason 1 (DVD Box Set) Ml C. Hl';
+      final encoded = Uri.encodeComponent(complexFunction).replaceAll(' ', '+');
+      final jsFunction = 'imdb\$$encoded';
+      testMultiLineConversion(
+        ['$jsFunction({[abc]}'],
+        '{[abc]}',
+        jsFunction,
+      );
+    });
   });
   group('stream test', () {
     // Test the internal workings of the transformer.
     test('transformer', () async {
       // Set up the test data.
-      const testInput = imdbJsonPSampleFull;
-      const expectedString = imdbJsonSampleOuter;
+      const testInput = 'functionName($imdbJsonSampleFull)';
+      const expectedString = imdbJsonSampleFull;
       var emittedString = '';
 
       // Compare the stream output to the expected output.
@@ -173,8 +186,8 @@ void main() {
             );
           }
         },
-        count: imdbJsonPSampleFull.length,
-        max: imdbJsonPSampleFull.length,
+        count: testInput.length,
+        max: testInput.length,
       );
 
       void doneFn() {

@@ -5,7 +5,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb
 /// Test Data
 ////////////////////////////////////////////////////////////////////////////////
 
-//query string https://sg.media-imdb.com/suggests/w/wonder%20woman.json
+//query string https://sg.media-imdb.com/suggestion/x/wonder%20woman.json
 //json format
 //1 = title/name
 //id = unique  key (tt=tile/nm=name/vi=video)
@@ -238,13 +238,17 @@ const String imdbJsonSampleInner = '''
   {"l":"Jennifer Wenger","id":"nm2128254","s":"Actress, Jimmy Kimmel Live! (2006-2007)"
       ,"i":["https://m.media-amazon.com/images/M/MV5B...cxNQ@@._V1_.jpg",640,428]}
 ''';
-const String imdbJsonPFunction = r'imdb$wonder_woman';
 const String imdbCustomKeyName = 'Cust';
-const String imdbCustomKeyVal = 'jsonpPTest';
-const String imdbJsonSampleOuter =
+const String imdbCustomKeyVal = 'jsonPTest';
+const String imdbJsonSampleFull =
     '{"v":1,"q":"imdb_offline_suggestions","d":[ $imdbJsonSampleInner ],"$imdbCustomKeyName":"$imdbCustomKeyVal"}';
-const String imdbJsonPSampleFull = '$imdbJsonPFunction($imdbJsonSampleOuter)';
+const String imdbJsonSampleEmpty =
+    '{"d":[],"q":"Dexter%2B%3A%2BSeason%2B1%2B(Box%2BSet%2C%2BDVD%2C%2B2006)%2BRegion%2B4%2BMichael%2BC.%2BHall","v":1}';
 
-Future<Stream<String>> emitImdbSuggestionJsonPSample(dynamic dummy) {
-  return Future.value(Stream.value(imdbJsonPSampleFull));
+Future<Stream<String>> emitImdbSuggestionJsonSample(dynamic dummy) {
+  return Future.value(Stream.value(imdbJsonSampleFull));
+}
+
+Future<Stream<String>> emitEmptyImdbSuggestionJsonSample(dynamic dummy) {
+  return Future.value(Stream.value(imdbJsonSampleEmpty));
 }

@@ -1,4 +1,4 @@
-//query string https://sg.media-imdb.com/suggests/w/wonder%20woman.json
+//query string https://sg.media-imdb.com/suggestion/x/wonder%20woman.json
 //json format
 //1 = title/name
 //id = unique  key (tt=tile/nm=name/vi=video)

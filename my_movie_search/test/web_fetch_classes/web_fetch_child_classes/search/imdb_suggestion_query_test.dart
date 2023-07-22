@@ -6,12 +6,12 @@ import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestion
 import '../../../test_data/imdb_suggestion_converter_data.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedJsonPSample(dynamic dummy) {
-  return Future.value(Stream.value('imdbJsonPFunction(null)'));
+Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
+  return Future.value(Stream.value('imdbJsonFunction(null)'));
 }
 
-Future<Stream<String>> _emitInvalidJsonPSample(dynamic dummy) {
-  return Future.value(Stream.value('imdbJsonPFunction({not valid json})'));
+Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
+  return Future.value(Stream.value('imdbJsonFunction({not valid json})'));
 }
 
 final criteria = SearchCriteriaDTO().fromString('123');
@@ -76,7 +76,7 @@ void main() {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
       const expectedResult =
-          'https://sg.media-imdb.com/suggests/n/new%20query.json';
+          'https://sg.media-imdb.com/suggestion/x/new%20query.json';
 
       // Invoke the functionality.
       final actualResult =
@@ -121,7 +121,34 @@ void main() {
       // Invoke the functionality.
       await imdbSuggestions
           .readList(
-            source: emitImdbSuggestionJsonPSample,
+            source: emitImdbSuggestionJsonSample,
+          )
+          .then((values) => queryResult.addAll(values))
+          .onError(
+            // ignore: avoid_print
+            (error, stackTrace) => print('$error, $stackTrace'),
+          );
+
+      // Check the results.
+      expect(
+        queryResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+      );
+    });
+
+    // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
+    test('empty readList()', () async {
+      // Set up the test data.
+      final expectedValue = <MovieResultDTO>[];
+      final queryResult = <MovieResultDTO>[];
+      final imdbSuggestions = QueryIMDBSuggestions(criteria);
+
+      // Invoke the functionality.
+      await imdbSuggestions
+          .readList(
+            source: emitEmptyImdbSuggestionJsonSample,
           )
           .then((values) => queryResult.addAll(values))
           .onError(
@@ -152,7 +179,7 @@ void main() {
       // Invoke the functionality.
       await imdbSuggestions
           .readList(
-            source: _emitInvalidJsonPSample,
+            source: _emitInvalidJsonSample,
           )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);
@@ -171,7 +198,7 @@ void main() {
       // Invoke the functionality.
       await imdbSuggestions
           .readList(
-            source: _emitUnexpectedJsonPSample,
+            source: _emitUnexpectedJsonSample,
           )
           .then((values) => queryResult.addAll(values));
       expect(queryResult.first.title, expectedException);

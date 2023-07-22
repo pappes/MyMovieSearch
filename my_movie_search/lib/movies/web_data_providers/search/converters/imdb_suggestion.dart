@@ -3,7 +3,7 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
-//query string https://sg.media-imdb.com/suggests/w/wonder%20woman.json
+//query string https://sg.media-imdb.com/suggestion/x/wonder%20woman.json
 //json format
 //1 = title/name
 //id = unique  key (tt=tile/nm=name/vi=video)
