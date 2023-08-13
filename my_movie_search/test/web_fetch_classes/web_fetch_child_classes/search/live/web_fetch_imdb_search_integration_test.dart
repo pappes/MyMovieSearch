@@ -73,5 +73,27 @@ void main() {
             'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
       );
     });
+    // Search for a rare movie.
+    test('Run a search on IMDB that has no results', () async {
+      final criteria = SearchCriteriaDTO()
+          .fromString('while we re young 2014 ben stiller comedy');
+      final actualOutput = await QueryIMDBSearch(criteria).readList(limit: 10);
+      final expectedOutput = <MovieResultDTO>[];
+      expectedDTOList.clearCopyrightedData();
+      actualOutput.clearCopyrightedData();
+
+      // To update expected data, uncomment the following line
+      // printTestData(actualOutput);
+
+      // Check the results.
+      expect(
+        actualOutput,
+        MovieResultDTOListMatcher(
+          expectedOutput,
+        ),
+        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
+      );
+    });
   });
 }

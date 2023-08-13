@@ -3,6 +3,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/movie_search_results.dart'
     show MovieSearchResultsNewPage;
 import 'package:my_movie_search/movies/screens/styles.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import 'package:universal_io/io.dart';
 
@@ -57,8 +58,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
         ),
       ).then(searchBarcode);
     } else {
-      searchBarcode(
-          '9324915073425'); // Hard code known barcode for linux testing
+      searchBarcode(testingBarcode);
     }
   }
 

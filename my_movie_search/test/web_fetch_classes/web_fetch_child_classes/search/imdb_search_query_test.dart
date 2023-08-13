@@ -209,6 +209,33 @@ void main() {
       );
     });
 
+    // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
+    test('empty readList()', () async {
+      // Set up the test data.
+      final expectedValue = <MovieResultDTO>[];
+      final queryResult = <MovieResultDTO>[];
+      final imdbSuggestions = QueryIMDBSearch(criteria);
+
+      // Invoke the functionality.
+      await imdbSuggestions
+          .readList(
+            source: emitEmptyImdbSearchSample,
+          )
+          .then((values) => queryResult.addAll(values))
+          .onError(
+            // ignore: avoid_print
+            (error, stackTrace) => print('$error, $stackTrace'),
+          );
+
+      // Check the results.
+      expect(
+        queryResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+      );
+    });
+
     // Read IMDB search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
@@ -254,7 +281,7 @@ void main() {
     const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
         'with criteria 123 interpreting web text as a map '
         ':Possible IMDB site update, no search result found for search query, '
-        'json contents:[{found: [{id: nm0152436, displayNameText:';
+        'json contents:[{props: {pageProps: {nameResults: {found: [{id: nm0152436, displayNameText:';
     final queryResult = <MovieResultDTO>[];
     final imdbSearch = QueryIMDBSearch(criteria);
 
@@ -274,7 +301,8 @@ void main() {
     // Set up the test data.
     const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
         'with criteria 123 interpreting web text as a map '
-        ':No search results found in json:{}';
+        ':Possible IMDB site update, no search result found for search query, '
+        'json contents:{}';
     final queryResult = <MovieResultDTO>[];
     final imdbSearch = QueryIMDBSearch(criteria);
 

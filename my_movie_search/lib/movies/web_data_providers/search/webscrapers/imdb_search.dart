@@ -39,7 +39,8 @@ mixin ScrapeIMDBSearchDetails
   ) async {
     try {
       final json = fastParse(webText);
-      return _scrapeSearchResult(json, 'N/A', webText);
+      final result = _scrapeSearchResult(webText, json);
+      return result;
     } catch (_) {
       return _slowConvertWebTextToTraversableTree(webText);
     }
@@ -54,29 +55,32 @@ mixin ScrapeIMDBSearchDetails
     if (resultScriptElement?.innerHtml.isNotEmpty ?? false) {
       final jsonText = resultScriptElement!.innerHtml;
       final jsonTree = json.decode(jsonText);
-      return _scrapeSearchResult(jsonTree, jsonText, webText);
+      return _scrapeSearchResult(webText, jsonTree, jsonText);
     }
     throw 'No search results found in html:$webText';
   }
 
   /// Extract search content from json
   Future<List> _scrapeSearchResult(
-    dynamic jsonTree,
-    String jsonText,
     String webText,
-  ) async {
+    dynamic jsonTree, [
+    String? jsonText,
+  ]) async {
     final contents = TreeHelper(jsonTree).deepSearch(
       deepJsonResultsSuffix, // nameResults or titleResults
       multipleMatch: true,
       suffixMatch: true,
     );
     if (null != contents) {
-      final list = _extractSearchResults(contents);
-      return list;
+      try {
+        final list = _extractSearchResults(contents);
+        return list;
+      } catch (_) {}
     } else if (null != TreeHelper(jsonTree).deepSearch(deepRelatedHeader)) {
       return _scrapeMovieDetails(webText);
     }
-    throw 'No search results found in json:$jsonText';
+    throw 'Possible IMDB site update, no search result found for search query, '
+        'json contents:${jsonText ?? jsonTree.toString()}';
   }
 
   /// Delegate web scraping to IMDBMovie web scraper.
@@ -93,6 +97,9 @@ mixin ScrapeIMDBSearchDetails
           multipleMatch: true,
         ) ??
         [];
+    if (resultNodes.isEmpty) {
+      throw 'No results';
+    }
     for (final resultNode in resultNodes) {
       if (resultNode is List) {
         for (final result in resultNode) {
@@ -106,9 +113,6 @@ mixin ScrapeIMDBSearchDetails
           }
         }
       }
-    }
-    if (results.isEmpty) {
-      throw 'Possible IMDB site update, no search result found for search query, json contents:$searchResult';
     }
     return results;
   }

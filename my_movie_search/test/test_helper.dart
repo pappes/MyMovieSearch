@@ -219,6 +219,9 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
       sortDtoList(expected);
     }
     matchState['actual'] = _actual;
+    if (_actual.isEmpty && expected.isEmpty) {
+      return true;
+    }
 
     for (final actualDto in _actual) {
       bool resultMatched = false;

@@ -14,6 +14,13 @@ Stream<String> _emitImdbSearchHtmlSample(_) async* {
   yield imdbSearchHtmlSampleFull;
 }
 
+Future<Stream<String>> emitEmptyImdbSearchSample(dynamic dummy) {
+  return Future.value(Stream.value(imdbSearchHtmlSampleEmpty));
+}
+
+const imdbSearchHtmlSampleEmpty = '$imdbSearchHtmlSampleStart$imdbSearchJsonSampleEmpty$imdbSearchHtmlSampleEnd';
+const imdbSearchJsonSampleEmpty = '{"props":{"pageProps":{"nameResults":{"results":[]},"titleResults":{"results":[],"hasExactMatches":false},"companyResults":{"results":[]},"keywordResults":{"results":[]}}}}';
+
 const imdbSearchHtmlSampleFull =
     '$imdbSearchHtmlSampleStart$imdbSampleJson$imdbSearchHtmlSampleEnd';
 const imdbSearchHtmlSampleStart = '''
