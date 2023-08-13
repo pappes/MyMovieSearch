@@ -1,3 +1,9 @@
+// Default hard coded known barcode for linux testing
+// defaults to dexter season 1
+//const dexterSeason1 = '9324915073425';
+//const whileWereYoung = '9398711522494';
+const testingBarcode = '9324915073425';
+
 /// Extract the DVDtitle from a sales pitch.
 ///
 /// ```dart
