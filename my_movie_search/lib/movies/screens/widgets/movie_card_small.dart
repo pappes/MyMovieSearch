@@ -126,7 +126,7 @@ class MovieTile extends ListTile {
 
   static Widget _getImage(MovieResultDTO movie) {
     if (movie.type != MovieContentType.download &&
-        movie.imageUrl.startsWith('http')) {
+        movie.imageUrl.startsWith(webAddressPrefix)) {
       return Image(image: NetworkImage(movie.imageUrl));
     }
     return _getIcon(movie);

@@ -1,8 +1,67 @@
+import 'package:flutter/material.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+import 'package:universal_io/io.dart';
+
+typedef BarcodeAction = void Function(String barcode);
+
 // Default hard coded known barcode for linux testing
 // defaults to dexter season 1
 //const dexterSeason1 = '9324915073425';
 //const whileWereYoung = '9398711522494';
 const testingBarcode = '9324915073425';
+
+class DVDBarcodeScanner {
+  late BuildContext context;
+  late BarcodeAction action;
+
+  bool _useBarcode(dynamic barcode) {
+    if (barcode == null || barcode.toString().isEmpty) {
+      // Assume the user requested cancelation
+      return true;
+    } else if (barcode is String && !barcode.startsWith(webAddressPrefix)) {
+      action(barcode);
+      return true;
+    }
+    return false;
+  }
+
+  Future<dynamic> _showScanner() {
+    return Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SimpleBarcodeScannerPage(),
+      ),
+    );
+  }
+
+  void _retryScanIfFailed(bool success) {
+    if (!success) {
+      _scan();
+    }
+  }
+
+  void _scan() {
+    _showScanner()
+        .then((scannedBarcode) => _useBarcode(scannedBarcode))
+        .then(_retryScanIfFailed);
+  }
+
+  /// Uses camera to read 2D Barcodes.
+  ///
+  /// Ignores any detected QRcodes
+  /// Requires [context] to draw the page with the camera contents and cancel button.
+  /// Invokes callback [action] with the string encoded in the barcode.
+  void scanBarcode(BuildContext context, BarcodeAction action) {
+    this.context = context;
+    this.action = action;
+    if (Platform.isAndroid) {
+      _scan();
+    } else {
+      _useBarcode(testingBarcode);
+    }
+  }
+}
 
 /// Extract the DVDtitle from a sales pitch.
 ///

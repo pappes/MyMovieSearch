@@ -2,6 +2,7 @@ import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:path/path.dart';
 import 'package:pinch_zoom_image_last/pinch_zoom_image_last.dart';
 
@@ -48,7 +49,10 @@ class Poster extends Widget {
     controls = ExpandedColumn(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        if (url.startsWith('http')) tapableImage else placeholderMessage,
+        if (url.startsWith(webAddressPrefix))
+          tapableImage
+        else
+          placeholderMessage,
         imageText,
         if (showImages != null) imageSearch
       ],

@@ -4,8 +4,6 @@ import 'package:my_movie_search/movies/screens/movie_search_results.dart'
     show MovieSearchResultsNewPage;
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
-import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
-import 'package:universal_io/io.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
   const MovieSearchCriteriaPage({Key? key}) : super(key: key);
@@ -41,25 +39,10 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     );
   }
 
-  void searchBarcode(dynamic barcode) {
-    if (barcode is String && barcode.isNotEmpty) {
-      _criteria.criteriaTitle = barcode;
-      _criteria.criteriaType = SearchCriteriaType.barcode;
-      searchForMovie();
-    }
-  }
-
-  void scanBarcode() {
-    if (Platform.isAndroid) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SimpleBarcodeScannerPage(),
-        ),
-      ).then(searchBarcode);
-    } else {
-      searchBarcode(testingBarcode);
-    }
+  void useBarcode(String barcode) {
+    _criteria.criteriaTitle = barcode;
+    _criteria.criteriaType = SearchCriteriaType.barcode;
+    searchForMovie();
   }
 
   @override
@@ -134,7 +117,8 @@ class _CriteriaInput extends Center {
                 icon: const Icon(Icons.qr_code_2),
                 onPressed: () {
                   state.textController.clear();
-                  state.scanBarcode();
+                  DVDBarcodeScanner()
+                      .scanBarcode(state.context, state.useBarcode);
                 },
               ),
             ),

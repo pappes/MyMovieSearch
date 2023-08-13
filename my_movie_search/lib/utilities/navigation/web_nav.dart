@@ -13,6 +13,8 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
+const webAddressPrefix = 'http';
+
 class MMSNav {
   final BuildContext context;
   MMSNav(this.context);
@@ -193,7 +195,7 @@ class MMSNav {
 
         break;
       case MovieContentType.navigation:
-        if (movie.uniqueId.startsWith('http')) {
+        if (movie.uniqueId.startsWith(webAddressPrefix)) {
           // Search for more movies that match the keyword.
           showResultsPage(
             QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),

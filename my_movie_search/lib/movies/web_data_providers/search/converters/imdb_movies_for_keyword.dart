@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 //query string https://sg.media-imdb.com/suggestion/x/wonder%20woman.json
 //json format
@@ -51,7 +52,7 @@ class ImdbMoviesForKeywordConverter {
       seconds,
       uniqueId,
     )?.toString();
-    if (uniqueId.startsWith('http')) {
+    if (uniqueId.startsWith(webAddressPrefix)) {
       movieType = MovieContentType.navigation.name;
     }
 
