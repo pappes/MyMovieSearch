@@ -202,7 +202,9 @@ void main() {
       const expectedException =
           '[QueryPicclickBarcodeSearch] Error in picclickBarcode '
           'with criteria dream interpreting web text as a map '
-          ':PicclickBarcode results data not detected for criteria dream in html:not valid html';
+          ':PicclickBarcode results data not detected '
+          'log: tableSelector found 0 tables\n '
+          'for criteria dream in html:not valid html';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryPicclickBarcodeSearch(criteria);
 
@@ -221,8 +223,9 @@ void main() {
       const expectedException =
           '[QueryPicclickBarcodeSearch] Error in picclickBarcode '
           'with criteria dream interpreting web text as a map '
-          ':PicclickBarcode results data not detected for criteria dream '
-          'in html:<html><body>stuff</body></html>';
+          ':PicclickBarcode results data not detected '
+          'log: tableSelector found 0 tables\n '
+          'for criteria dream in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryPicclickBarcodeSearch(criteria);
 

@@ -6,8 +6,8 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"item-331233484","bestSource":"DataSourceType.picclickBarcode","title":"The Pink Panther Film Collection DVD Box Set - 6 Disc - Peter Sellers RARE Set","type":"MovieContentType.barcode",
-      "description":"item-331233484","sources":{"DataSourceType.picclickBarcode":"item-331233484"}}
+{"uniqueId":"item-331233484","bestSource":"DataSourceType.picclickBarcode","title":"The Pink Panther Film Collection DVD Box Set - 6 Disc - Peter Sellers RARE Set","alternateTitle":"the pink panther film collection 6 peter sellers rare set ","type":"MovieContentType.barcode",
+      "description":"item-331233484","imageUrl":"https://www.picclickimg.com/bv123456789O9j~TH2/The-Pink-Panther-Film-Collection-DVD-Box-Set.jpg","sources":{"DataSourceType.picclickBarcode":"item-331233484"}}
 ''',
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
@@ -59,6 +59,8 @@ const intermediateMapList = [
     'description':
         'The Pink Panther Film Collection DVD Box Set - 6 Disc - Peter Sellers RARE Set',
     'barcode': 'item-331233484',
+    'cleanDescription':
+        'the pink panther film collection 6 peter sellers rare set ',
     'url':
         'https://www.picclickimg.com/bv123456789O9j~TH2/The-Pink-Panther-Film-Collection-DVD-Box-Set.jpg'
   }

@@ -13,7 +13,7 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"9324915073425","bestSource":"DataSourceType.uhttBarcode","title":"Dexter DVD the first season","type":"MovieContentType.barcode","sources":{"DataSourceType.uhttBarcode":"9324915073425"}}
+{"uniqueId":"9324915073425","bestSource":"DataSourceType.uhttBarcode","title":"Dexter DVD the first season","alternateTitle":"dexter the ","type":"MovieContentType.barcode","sources":{"DataSourceType.uhttBarcode":"9324915073425"}}
 ''',
 ];
 
