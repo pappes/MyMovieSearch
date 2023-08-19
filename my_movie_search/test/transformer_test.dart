@@ -28,8 +28,11 @@ void main() {
     }
 
     /// Confirm removal is prefix and suffix even across multiple line of input.
-    void testMultiLineConversion(List<String> lines, String expectedOutput,
-        [String? criteria]) {
+    void testMultiLineConversion(
+      List<String> lines,
+      String expectedOutput, [
+      String? criteria,
+    ]) {
       final decoder = JsonPDecoder(criteria);
       final actualOutput = StringBuffer();
       for (final line in lines) {

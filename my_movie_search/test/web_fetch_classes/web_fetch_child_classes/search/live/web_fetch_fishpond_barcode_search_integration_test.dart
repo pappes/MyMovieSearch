@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/uhtt_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/fishpond_barcode.dart';
 
 import '../../../../test_helper.dart';
 
@@ -13,7 +13,7 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"9324915073425","bestSource":"DataSourceType.uhttBarcode","title":"dexter the","alternateTitle":"Dexter DVD the first season","type":"MovieContentType.barcode","sources":{"DataSourceType.uhttBarcode":"9324915073425"}}
+{"uniqueId":"https://dbari23r2svog.cloudfront.net/frontend/images/icons/classifications/med-au/Mature~7fb2979a.gif","bestSource":"DataSourceType.fishpondBarcode","title":"Love And Other Catastrophes 1996","alternateTitle":"Love And Other Catastrophes 1996","type":"MovieContentType.barcode","sources":{"DataSourceType.fishpondBarcode":"https://dbari23r2svog.cloudfront.net/frontend/images/icons/classifications/med-au/Mature~7fb2979a.gif"}}
 ''',
 ];
 
@@ -22,14 +22,15 @@ void main() {
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('live QueryUhttBarcodeSearch test', () {
+  group('live QueryFishpondBarcodeSearch test', () {
     // Search for a known movie.
-    test('Run a search on Tpb that is likely to have static results', () async {
-      final criteria = SearchCriteriaDTO().fromString('9324915073425');
+    test(
+        'Run a search on fishpond/mightyape that will hopefully have static results',
+        () async {
+      final criteria = SearchCriteriaDTO().fromString('9398710559194');
       final actualOutput =
-          await QueryUhttBarcodeSearch(criteria).readList(limit: 10);
+          await QueryFishpondBarcodeSearch(criteria).readList(limit: 10);
       final expectedOutput = expectedDTOList;
-      expectedDTOList.clearCopyrightedData();
       actualOutput.clearCopyrightedData();
 
       // Uncomment this line to update expectedOutput if sample data changes

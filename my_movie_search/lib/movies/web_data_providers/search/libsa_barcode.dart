@@ -1,33 +1,32 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/converters/picclick_barcode.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/offline/picclick_barcode.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/picclick_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/libsa_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/libsa_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/libsa_barcode.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-const jsonRawDescriptionKey = 'description';
 const jsonCleanDescriptionKey = 'cleanDescription';
-const jsonIdKey = 'barcode';
+const jsonRawDescriptionKey = 'rawDescription';
 const jsonUrlKey = 'url';
 
-/// Implements [WebFetchBase] for the PicclickBarcode search html web scraper.
+/// Implements [WebFetchBase] for the LibsaBarcode search html web scraper.
 ///
 /// ```dart
-/// QueryPicclickBarcodeSearch().readList(criteria, limit: 10)
+/// QueryLibsaBarcodeSearch().readList(criteria, limit: 10)
 /// ```
-class QueryPicclickBarcodeSearch
+class QueryLibsaBarcodeSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
-    with ScrapePicclickBarcodeSearch {
-  static const _baseURL = 'https://picclick.com.au/?q=';
-  static const _suffixURL = '+';
+    with ScrapeLibsaBarcodeSearch {
+  static const _baseURL =
+      'https://libraries.sa.gov.au/client/en_AU/sapubliclibraries/search/results?qu=';
 
-  QueryPicclickBarcodeSearch(SearchCriteriaDTO criteria) : super(criteria);
+  QueryLibsaBarcodeSearch(SearchCriteriaDTO criteria) : super(criteria);
 
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
-    return DataSourceType.picclickBarcode.name;
+    return DataSourceType.libsaBarcode.name;
   }
 
   /// Static snapshot of data for offline operation.
@@ -41,7 +40,7 @@ class QueryPicclickBarcodeSearch
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
     if (map is Map) {
-      return PicclickBarcodeSearchConverter.dtoFromCompleteJsonMap(map);
+      return LibsaBarcodeSearchConverter.dtoFromCompleteJsonMap(map);
     }
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
@@ -53,14 +52,14 @@ class QueryPicclickBarcodeSearch
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryPicclickBarcodeSearch] $message',
-        DataSourceType.picclickBarcode,
+        '[QueryLibsaBarcodeSearch] $message',
+        DataSourceType.libsaBarcode,
       );
 
   /// API call to search returning the top matching results for [encodedCriteria].
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
-    final url = '$_baseURL$encodedCriteria$_suffixURL';
+    final url = '$_baseURL$encodedCriteria';
     return Uri.parse(url);
   }
 }

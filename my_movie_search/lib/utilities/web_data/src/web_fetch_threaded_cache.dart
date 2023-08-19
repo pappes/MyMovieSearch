@@ -1,3 +1,5 @@
+/// This library provides a framework for fetching different types of web data
+/// in a concsistent manner.
 library web_fetch;
 
 import 'package:my_movie_search/persistence/tiered_cache.dart';

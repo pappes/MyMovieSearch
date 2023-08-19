@@ -1,5 +1,3 @@
-library pappes.utilites;
-
 import 'dart:convert' show Converter;
 
 class JsonPState {

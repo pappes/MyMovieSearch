@@ -5,10 +5,12 @@ import 'dart:math' show max;
 import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 
 typedef MovieCollection = Map<String, MovieResultDTO>;
 typedef RelatedMovieCategories = Map<String, MovieCollection>;
@@ -590,16 +592,17 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       if (DataSourceType.imdb == newValue.bestSource && '' != newValue.title) {
         title = _htmlDecode.convert(newValue.title);
       } else {
-        title = bestValue(newValue.title, title).trim();
+        title = bestValue(newValue.title, title).reduceWhitespace();
       }
       var newAlternateTitle = '';
-      if ('' != newValue.alternateTitle.trim() &&
-          title != newValue.alternateTitle.trim()) {
+      if ('' != newValue.alternateTitle.reduceWhitespace() &&
+          title != newValue.alternateTitle.reduceWhitespace()) {
         newAlternateTitle = newValue.alternateTitle;
-      } else if ('' != oldTitle.trim() && title != oldTitle.trim()) {
+      } else if ('' != oldTitle.reduceWhitespace() &&
+          title != oldTitle.reduceWhitespace()) {
         newAlternateTitle = oldTitle;
-      } else if ('' != alternateTitle.trim() &&
-          title != alternateTitle.trim()) {
+      } else if ('' != alternateTitle.reduceWhitespace() &&
+          title != alternateTitle.reduceWhitespace()) {
         newAlternateTitle = alternateTitle;
       }
 
@@ -1306,6 +1309,15 @@ extension DTOCompare on MovieResultDTO {
     final hasYear = alternateTitle.contains(RegExp(r'.*\s\d\d\d\d\s.*'));
     final otherHasYear =
         other.alternateTitle.contains(RegExp(r'.*\s\d\d\d\d\s.*'));
+
+    // Deprioritise Ebay results
+    if (isEbay(bestSource) && !isEbay(other.bestSource)) {
+      return -1;
+    }
+    if (isEbay(other.bestSource) && !isEbay(bestSource)) {
+      return 1;
+    }
+
     // Prefer whichever has a year
     if (hasYear && !otherHasYear) {
       return 1;

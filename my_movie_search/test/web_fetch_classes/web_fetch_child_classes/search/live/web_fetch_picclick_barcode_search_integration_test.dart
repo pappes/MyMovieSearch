@@ -13,34 +13,34 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"item-145194046428","bestSource":"DataSourceType.picclickBarcode","title":"Dexter : Season 1 2 Box Set DVD 8 discs","alternateTitle":"dexter 2 8 ","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-145194046428"}}
+{"uniqueId":"item-125778116610","bestSource":"DataSourceType.picclickBarcode","title":"dexter the first crime show series one","alternateTitle":"Dexter The First Season 1 DVD Region 4 Crime Show Series One","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-125778116610"}}
 ''',
   r'''
-{"uniqueId":"item-165644878767","bestSource":"DataSourceType.picclickBarcode","title":"Dexter The First Season DVD 4Disc","alternateTitle":"dexter the first ","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-165644878767"}}
+{"uniqueId":"item-186032632764","bestSource":"DataSourceType.picclickBarcode","title":"dexter 2006","alternateTitle":"Dexter : Season 1 (Box Set, DVD, 2006)","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-186032632764"}}
 ''',
   r'''
-{"uniqueId":"item-166207020874","bestSource":"DataSourceType.picclickBarcode","title":"Dexter Complete 1st and 2nd Season Region 4 PAL 2 DVD Box sets 8 Disc in Total","alternateTitle":"dexter 1st and 2 8 in total ","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-166207020874"}}
+{"uniqueId":"item-204379004407","bestSource":"DataSourceType.picclickBarcode","title":"dexter 2006","alternateTitle":"Dexter : Season 1 (Box Set, DVD, 2006)","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-204379004407"}}
 ''',
   r'''
-{"uniqueId":"item-204198538282","bestSource":"DataSourceType.picclickBarcode","title":"Dexter : Season 1 (Box Set, DVD, 2006)","alternateTitle":"dexter 2006 ","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-204198538282"}}
+{"uniqueId":"item-225586650908","bestSource":"DataSourceType.picclickBarcode","title":"dexter 4 set s013","alternateTitle":"DEXTER Season 1 DVD 4 Disc Set Region 4 (S013)","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-225586650908"}}
 ''',
   r'''
-{"uniqueId":"item-266369498252","bestSource":"DataSourceType.picclickBarcode","title":"Dexter DVD Season 1 Box Set 2006.Great Condition. Free Post","alternateTitle":"dexter 2006 great condition free post ","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-266369498252"}}
+{"uniqueId":"item-276005435412","bestSource":"DataSourceType.picclickBarcode","title":"dexter 4 r4 2008 2011","alternateTitle":"Dexter Season 1-4 (R4 DVD, 2008-2011) - Free Postage","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-276005435412"}}
 ''',
   r'''
-{"uniqueId":"item-304871470146","bestSource":"DataSourceType.picclickBarcode","title":"Dexter Season 1 DVD Region 4 PAL Free Postage","alternateTitle":"dexter ","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-304871470146"}}
+{"uniqueId":"item-295793525174","bestSource":"DataSourceType.picclickBarcode","title":"dexter 2006","alternateTitle":"Dexter : Season 1 (Box Set, DVD, 2006)","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-295793525174"}}
 ''',
   r'''
-{"uniqueId":"item-325770479158","bestSource":"DataSourceType.picclickBarcode","title":"Dexter : Season 1 (Box Set, DVD, 2006)","alternateTitle":"dexter 2006 ","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-325770479158"}}
+{"uniqueId":"item-325541861426","bestSource":"DataSourceType.picclickBarcode","title":"dexter 4 r4 2008 2011","alternateTitle":"Dexter Season 1-4 (R4 DVD, 2008-2011) - Free Postage","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-325541861426"}}
 ''',
   r'''
-{"uniqueId":"item-364404540844","bestSource":"DataSourceType.picclickBarcode","title":"Dexter The First Season 1 DVD Region 4 Crime Show Series One","alternateTitle":"dexter the first crime show series one ","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-364404540844"}}
+{"uniqueId":"item-325770479158","bestSource":"DataSourceType.picclickBarcode","title":"dexter 2006","alternateTitle":"Dexter : Season 1 (Box Set, DVD, 2006)","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-325770479158"}}
 ''',
   r'''
-{"uniqueId":"item-385813276653","bestSource":"DataSourceType.picclickBarcode","title":"Dexter : Season 1 (Box Set, DVD, 2006)","alternateTitle":"dexter 2006 ","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-385813276653"}}
+{"uniqueId":"item-364420476732","bestSource":"DataSourceType.picclickBarcode","title":"dexter the first crime show series one","alternateTitle":"Dexter The First Season 1 DVD Region 4 Crime Show Series One","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-364420476732"}}
 ''',
   r'''
-{"uniqueId":"item-404427909328","bestSource":"DataSourceType.picclickBarcode","title":"Dexter : Season 1 (Box Set, DVD, 2006)","alternateTitle":"dexter 2006 ","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-404427909328"}}
+{"uniqueId":"item-394673491716","bestSource":"DataSourceType.picclickBarcode","title":"dexter 2006","alternateTitle":"Dexter : Season 1 (Box Set, DVD, 2006)","type":"MovieContentType.barcode","sources":{"DataSourceType.picclickBarcode":"item-394673491716"}}
 ''',
 ];
 

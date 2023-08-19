@@ -26,7 +26,9 @@ void main() {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
       expect(
-          QueryUhttBarcodeSearch(criteria).myDataSourceName(), 'uhttBarcode');
+        QueryUhttBarcodeSearch(criteria).myDataSourceName(),
+        'uhttBarcode',
+      );
     });
 
     // Confirm simple criteria is displayed as expected.

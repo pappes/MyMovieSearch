@@ -15,6 +15,7 @@ import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieTile extends ListTile {
@@ -45,6 +46,7 @@ class MovieTile extends ListTile {
         middle.add(movie.bestSource.excludeNone);
         break;
       case MovieContentType.person:
+      case MovieContentType.barcode:
         break;
       default:
         middle.add(movie.bestSource.excludeNone);
@@ -52,9 +54,8 @@ class MovieTile extends ListTile {
     }
     final combined = [...start, '-', ...middle, '-', ...end]
         .trimJoin(' ', ' -')
-        .replaceAll('  ', ' ')
-        .replaceAll('- -', '-')
-        .trim();
+        .reduceWhitespace()
+        .replaceAll('- -', '-');
 
     return Text(
       combined,
@@ -79,6 +80,10 @@ class MovieTile extends ListTile {
         start.add(movie.charactorName);
         end.add(ratingCount);
         break;
+      case MovieContentType.barcode:
+        start.add(movie.bestSource.excludeNone);
+        end.add(movie.alternateTitle);
+        break;
       default:
         start.add(movie.runTime.toFormattedTime());
         middle.add(movie.censorRating.excludeNone);
@@ -90,9 +95,8 @@ class MovieTile extends ListTile {
     }
     final combined = [...start, '-', ...middle, '-', ...end]
         .trimJoin(' ', ' -')
-        .replaceAll('  ', ' ')
-        .replaceAll('- -', '-')
-        .trim();
+        .reduceWhitespace()
+        .replaceAll('- -', '-');
     return Text(
       combined,
       textScaleFactor: 1.0,

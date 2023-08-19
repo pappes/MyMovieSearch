@@ -1,33 +1,32 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/converters/picclick_barcode.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/offline/picclick_barcode.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/picclick_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/fishpond_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/fishpond_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/fishpond_barcode.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const jsonRawDescriptionKey = 'description';
 const jsonCleanDescriptionKey = 'cleanDescription';
-const jsonIdKey = 'barcode';
 const jsonUrlKey = 'url';
 
-/// Implements [WebFetchBase] for the PicclickBarcode search html web scraper.
+/// Implements [WebFetchBase] for the FishpondBarcode search html web scraper.
 ///
 /// ```dart
-/// QueryPicclickBarcodeSearch().readList(criteria, limit: 10)
+/// QueryFishpondBarcodeSearch().readList(criteria, limit: 10)
 /// ```
-class QueryPicclickBarcodeSearch
+class QueryFishpondBarcodeSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
-    with ScrapePicclickBarcodeSearch {
-  static const _baseURL = 'https://picclick.com.au/?q=';
+    with ScrapeFishpondBarcodeSearch {
+  static const _baseURL = 'https://www.mightyape.com.au/search?s=';
   static const _suffixURL = '+';
 
-  QueryPicclickBarcodeSearch(SearchCriteriaDTO criteria) : super(criteria);
+  QueryFishpondBarcodeSearch(SearchCriteriaDTO criteria) : super(criteria);
 
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() {
-    return DataSourceType.picclickBarcode.name;
+    return DataSourceType.fishpondBarcode.name;
   }
 
   /// Static snapshot of data for offline operation.
@@ -41,7 +40,7 @@ class QueryPicclickBarcodeSearch
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
     if (map is Map) {
-      return PicclickBarcodeSearchConverter.dtoFromCompleteJsonMap(map);
+      return FishpondBarcodeSearchConverter.dtoFromCompleteJsonMap(map);
     }
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
@@ -53,8 +52,8 @@ class QueryPicclickBarcodeSearch
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryPicclickBarcodeSearch] $message',
-        DataSourceType.picclickBarcode,
+        '[QueryFishpondBarcodeSearch] $message',
+        DataSourceType.fishpondBarcode,
       );
 
   /// API call to search returning the top matching results for [encodedCriteria].

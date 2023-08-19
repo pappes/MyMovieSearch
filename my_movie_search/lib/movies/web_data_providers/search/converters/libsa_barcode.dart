@@ -2,22 +2,21 @@
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/picclick_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/libsa_barcode.dart';
 
-class PicclickBarcodeSearchConverter {
+class LibsaBarcodeSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
     return [dtoFromMap(map)];
   }
 
   static MovieResultDTO dtoFromMap(Map map) {
     return MovieResultDTO().init(
-      bestSource: DataSourceType.picclickBarcode,
+      bestSource: DataSourceType.libsaBarcode,
       type: MovieContentType.barcode.toString(),
-      uniqueId: map[jsonIdKey]?.toString(),
-      alternateTitle: map[jsonRawDescriptionKey]?.toString(),
       title: map[jsonCleanDescriptionKey]?.toString(),
-      description: map[jsonIdKey]?.toString(),
+      alternateTitle: map[jsonRawDescriptionKey]?.toString(),
       imageUrl: map[jsonUrlKey]?.toString(),
+      uniqueId: map[jsonUrlKey]?.toString(),
     );
   }
 }

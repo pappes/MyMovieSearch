@@ -31,6 +31,8 @@ enum DataSourceType {
   ytsDetails,
   uhttBarcode,
   picclickBarcode,
+  libsaBarcode,
+  fishpondBarcode,
   other,
   custom,
 }

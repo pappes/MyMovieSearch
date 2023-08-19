@@ -14,8 +14,8 @@ class UhttBarcodeSearchConverter {
       bestSource: DataSourceType.uhttBarcode,
       type: MovieContentType.barcode.toString(),
       uniqueId: map[jsonIdKey]?.toString(),
-      title: map[jsonRawDescriptionKey]?.toString(),
-      alternateTitle: map[jsonCleanDescriptionKey]?.toString(),
+      alternateTitle: map[jsonRawDescriptionKey]?.toString(),
+      title: map[jsonCleanDescriptionKey]?.toString(),
       description: map[jsonIdKey]?.toString(),
     );
   }

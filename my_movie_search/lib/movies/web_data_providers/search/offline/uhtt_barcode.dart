@@ -6,7 +6,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"9324915073425","bestSource":"DataSourceType.uhttBarcode","title":"Dexter DVD the first season","alternateTitle":"dexter the ","type":"MovieContentType.barcode",
+{"uniqueId":"9324915073425","bestSource":"DataSourceType.uhttBarcode","title":"dexter the","alternateTitle":"Dexter DVD the first season","type":"MovieContentType.barcode",
       "description":"9324915073425","sources":{"DataSourceType.uhttBarcode":"9324915073425"}}
 ''',
 ];
@@ -45,7 +45,7 @@ const htmlSampleFull = '''
 const intermediateMapList = [
   {
     'description': 'Dexter DVD the first season',
-    'cleandescription': 'dexter the ',
+    'cleandescription': 'dexter the',
     'barcode': '9324915073425'
   }
 ];

@@ -1,10 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/yts_detail.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/offline/yts_detail.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/yts_detail.dart';
-import 'package:my_movie_search/utilities/settings.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/converters/fishpond_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/fishpond_barcode.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/offline/fishpond_barcode.dart';
 
 import '../../../test_helper.dart';
 
@@ -16,74 +15,91 @@ Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
   return Future.value(Stream.value('not valid html'));
 }
 
+final criteria = SearchCriteriaDTO().fromString('dream');
+
 void main() {
-  // Wait for api key to be initialised
-  setUpAll(() => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('QueryYtsDetails unit tests', () {
+  group('FishpondBarcode search unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      final criteria = SearchCriteriaDTO();
       expect(
-        QueryYtsDetails(criteria).myDataSourceName(),
-        'yts_detail',
+        QueryFishpondBarcodeSearch(criteria).myDataSourceName(),
+        'fishpondBarcode',
       );
     });
 
-    // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'testing';
+    // Confirm simple criteria is displayed as expected.
+    test('Run myFormatInputAsText() for simple keyword', () {
       expect(
-        QueryYtsDetails(input).myFormatInputAsText(),
-        'testing',
+        QueryFishpondBarcodeSearch(criteria).myFormatInputAsText(),
+        criteria.criteriaTitle,
       );
     });
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO();
+      input.criteriaTitle = 'List of errors';
       input.criteriaList = [
-        makeResultDTO('test1'),
+        MovieResultDTO().error('test1'),
+        MovieResultDTO().error('test2'),
       ];
       expect(
-        QueryYtsDetails(input).myFormatInputAsText(),
-        '',
+        QueryFishpondBarcodeSearch(input).myFormatInputAsText(),
+        input.criteriaTitle.toLowerCase(),
       );
+      expect(
+        QueryFishpondBarcodeSearch(input).myFormatInputAsText(),
+        input.criteriaTitle.toLowerCase(),
+      );
+    });
+
+    // Confirm URL is constructed as expected.
+    test('Run myConstructURI()', () {
+      const expectedResult =
+          'https://www.mightyape.com.au/search?s=new%20query+';
+
+      // Invoke the functionality.
+      final actualResult = QueryFishpondBarcodeSearch(criteria)
+          .myConstructURI('new query')
+          .toString();
+
+      // Check the results.
+      expect(actualResult, expectedResult);
     });
 
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'bestSource': 'DataSourceType.imdb',
-        'title': '[QueryYtsDetails] new query',
+        'bestSource': 'DataSourceType.fishpondBarcode',
+        'title': '[QueryFishpondBarcodeSearch] new query',
         'type': 'MovieContentType.error',
       };
-      final criteria = SearchCriteriaDTO();
+
       // Invoke the functionality.
-      final actualResult =
-          QueryYtsDetails(criteria).myYieldError('new query').toMap();
+      final actualResult = QueryFishpondBarcodeSearch(criteria)
+          .myYieldError('new query')
+          .toMap();
       actualResult.remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
     });
-    // Confirm web text is parsed  as expected.
+
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final criteria = SearchCriteriaDTO().fromString('batman');
-      final testClass = QueryYtsDetails(criteria);
+      final testClass = QueryFishpondBarcodeSearch(criteria);
+      testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
         htmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
     });
   });
-
-  group('YtsDetailConverter unit tests', () {
+  group('FishpondBarcodeSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
@@ -91,7 +107,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          YtsDetailConverter.dtoFromCompleteJsonMap(map),
+          FishpondBarcodeSearchConverter.dtoFromCompleteJsonMap(map),
         );
       }
 
@@ -108,42 +124,21 @@ void main() {
       );
     });
   });
-
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using env
-////////////////////////////////////////////////////////////////////////////////
-
-  group('QueryYtsDetails integration tests', () {
-    // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () {
-      const expected = 'https://yts.mx/movies/1234';
-      final criteria = SearchCriteriaDTO();
-
-      // Invoke the functionality.
-      final actualResult =
-          QueryYtsDetails(criteria).myConstructURI('1234').toString();
-
-      // Check the results.
-      expect(actualResult, expected);
-    });
-  });
-////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using QueryYtsDetails
+  /// Integration tests using FishpondBarcodeSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('QueryYtsDetails integration tests', () {
+  group('FishpondBarcodeSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final criteria = SearchCriteriaDTO();
-      final testClass = QueryYtsDetails(criteria);
-      testClass.myClearCache();
       final expectedValue = expectedDTOList;
+      final webfetch = QueryFishpondBarcodeSearch(criteria);
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
+          await webfetch.myConvertTreeToOutputType(map),
         );
       }
 
@@ -156,70 +151,68 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () {
-      final criteria = SearchCriteriaDTO();
-      final testClass = QueryYtsDetails(criteria);
-      testClass.myClearCache();
+    test('myConvertTreeToOutputType() errors', () async {
+      final webfetch = QueryFishpondBarcodeSearch(criteria);
 
       // Invoke the functionality and collect results.
-      final actualResult = testClass.myConvertTreeToOutputType('wrongData');
+      final actualResult = webfetch.myConvertTreeToOutputType('map');
 
       // Check the results.
       //NOTE: Using expect on an async result only works as the last line of the test!
       expect(
         actualResult,
-        throwsA('expected map got String unable to interpret data wrongData'),
+        throwsA('expected map got String unable to interpret data map'),
       );
     });
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and env and QueryYtsDetails
+  /// Integration tests using WebFetchBase and ScrapeFishpondBarcodeSearchDetails and FishpondBarcodeSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('imdb search query', () {
-    // Read imdb search results from a simulated byte stream and convert JSON to dtos.
+  group('FishpondBarcode search query', () {
+    // Read search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final criteria = SearchCriteriaDTO().fromString('7602562');
-      final testClass = QueryYtsDetails(criteria);
-      testClass.myClearCache();
+      final webfetch = QueryFishpondBarcodeSearch(criteria);
 
       // Invoke the functionality.
-      await testClass
+      await webfetch
           .readList(
-            source: streamhtmlOfflineData,
+            source: streamHtmlOfflineData,
           )
           .then((values) => queryResult.addAll(values))
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
+      // printTestData(queryResult);
 
       // Check the results.
       expect(
         queryResult,
-        MovieResultDTOListMatcher(expectedValue),
+        MovieResultDTOListMatcher(expectedValue, related: false),
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
 
-    // Read imdb search results from a simulated byte stream and report error due to invalid html.
+    // Read search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
-      const expectedException = '[QueryYtsDetails] Error in yts_detail '
-          'with criteria 123 interpreting web text as a map '
-          ':yts data not detected for criteria 123';
+      const expectedException =
+          '[QueryFishpondBarcodeSearch] Error in fishpondBarcode '
+          'with criteria dream interpreting web text as a map '
+          ':FishpondBarcode results data not detected '
+          'log: resultSelector found 0 result\n '
+          'for criteria dream in html:not valid html';
       final queryResult = <MovieResultDTO>[];
-      final criteria = SearchCriteriaDTO().fromString('123');
-      final testClass = QueryYtsDetails(criteria);
-      testClass.myClearCache();
+      final webfetch = QueryFishpondBarcodeSearch(criteria);
 
       // Invoke the functionality.
-      await testClass
+      await webfetch
           .readList(
             source: _emitInvalidHtmlSample,
           )
@@ -227,19 +220,20 @@ void main() {
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read imdb search results from a simulated byte stream and report error due to unexpected html.
+    // Read search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException = '[QueryYtsDetails] Error in yts_detail with '
-          'criteria 123 interpreting web text as a map '
-          ':yts data not detected for criteria 123';
+      const expectedException =
+          '[QueryFishpondBarcodeSearch] Error in fishpondBarcode '
+          'with criteria dream interpreting web text as a map '
+          ':FishpondBarcode results data not detected '
+          'log: resultSelector found 0 result\n '
+          'for criteria dream in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
-      final criteria = SearchCriteriaDTO().fromString('123');
-      final testClass = QueryYtsDetails(criteria);
-      testClass.myClearCache();
+      final webfetch = QueryFishpondBarcodeSearch(criteria);
 
       // Invoke the functionality.
-      await testClass
+      await webfetch
           .readList(
             source: _emitUnexpectedHtmlSample,
           )

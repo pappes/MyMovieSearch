@@ -82,6 +82,9 @@ extension ListHelper<T> on List<T> {
     return this;
   }
 
+  /// Extend [List]<dynamic> to concatenate strings with a seperator
+  /// and remove nominated whitespace from the start and end.
+  ///
   String trimJoin([String separator = '', String whitespace = ' ']) {
     final joined = join(separator);
     int start = 0;

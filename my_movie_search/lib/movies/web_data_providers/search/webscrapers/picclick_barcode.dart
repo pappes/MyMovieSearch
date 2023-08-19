@@ -62,7 +62,6 @@ mixin ScrapePicclickBarcodeSearch
         row.querySelector(jpgDescriptionSelector)?.cleanText ?? '';
     result[jsonRawDescriptionKey] = rawDescription;
     result[jsonCleanDescriptionKey] = getCleanDvdTitle(rawDescription);
-    row.querySelector(jpgDescriptionSelector)?.cleanText;
     result[jsonIdKey] = row.attributes['id'];
     result[jsonUrlKey] =
         row.querySelector(jpgPictureSelector)?.attributes['srcset'];

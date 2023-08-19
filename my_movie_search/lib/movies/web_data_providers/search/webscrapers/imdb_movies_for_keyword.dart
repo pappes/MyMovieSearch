@@ -10,6 +10,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const keywordId = 'id';
@@ -106,13 +107,13 @@ mixin ScrapeIMDBMoviesForKeyword
   String? _getTitle(Element? section) {
     if (null != section) {
       final anchor = section.querySelector('a');
-      return htmlDecode.convert(anchor?.text.trim() ?? '');
+      return htmlDecode.convert(anchor?.text.reduceWhitespace() ?? '');
     }
     return null;
   }
 
   String? _getDescription(Element? section) =>
-      htmlDecode.convert(section?.text.trim() ?? '');
+      htmlDecode.convert(section?.text.reduceWhitespace() ?? '');
 
   String? _getImage(Element? section) {
     final imageAttributes = section?.querySelector('img')?.attributes;
@@ -131,27 +132,27 @@ mixin ScrapeIMDBMoviesForKeyword
   }
 
   String? _getRatingCount(Element? section) =>
-      section?.querySelector("span[name='nv']")?.text.trim();
+      section?.querySelector("span[name='nv']")?.text.reduceWhitespace();
 
   String? _getDuration(Element? section) =>
-      section?.querySelector('.runtime')?.text.trim();
+      section?.querySelector('.runtime')?.text.reduceWhitespace();
 
   String? _getPopularityRating(Element? section) {
-    final ratingText = splitter.convert(section?.text.trim() ?? '');
+    final ratingText = splitter.convert(section?.text.reduceWhitespace() ?? '');
     if (ratingText.isNotEmpty) {
-      return ratingText.first.trim();
+      return ratingText.first.reduceWhitespace();
     }
     return '';
   }
 
   String? _getCensorRating(Element? section) =>
-      section?.querySelector(".certificate")?.text.trim();
+      section?.querySelector(".certificate")?.text.reduceWhitespace();
 
   String? _getTypeInfo(Element? section) =>
-      section?.querySelector('.lister-item-year')?.text.trim();
+      section?.querySelector('.lister-item-year')?.text.reduceWhitespace();
 
   String? _getYearRange(Element? section) =>
-      section?.querySelector('.lister-item-year')?.text.trim();
+      section?.querySelector('.lister-item-year')?.text.reduceWhitespace();
 
   String? _getKeywords(Element? section) {
     return criteria.criteriaTitle;

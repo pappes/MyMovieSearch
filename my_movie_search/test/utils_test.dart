@@ -8,6 +8,7 @@ import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -564,7 +565,7 @@ Future main() async {
     test('getYear()', () {
       void testToNumber(String? input, expectedOutput) {
         final number = getYear(input);
-        expect(number, expectedOutput);
+        expect(number, expectedOutput, reason: 'input = $input');
       }
 
       testToNumber('0000', 0);
@@ -577,7 +578,115 @@ Future main() async {
       testToNumber('(2015-)', 2015);
       testToNumber('(2015- )', 2015);
       testToNumber('number', null);
+      testToNumber('2011\r\n2014', 2014);
+      testToNumber('2011\n2014', 2014);
+      testToNumber('2011\r2014', 2014);
       testToNumber(null, null);
+    });
+  });
+
+  group('StringHelper', () {
+    test('removeYear()', () {
+      void testRemoveYear(
+        String input,
+        expectedOutput, {
+        String substitution = 'none',
+      }) {
+        if ('none' == substitution) {
+          final number = input.removeYear();
+          expect(number, expectedOutput, reason: 'input = $input');
+        } else {
+          final number = input.removeYear(substitution);
+          expect(
+            number,
+            expectedOutput,
+            reason: "input = $input, '$substitution'",
+          );
+        }
+      }
+
+      testRemoveYear('2001 a space odyssey', '  a space odyssey');
+      testRemoveYear(
+        '2010: The year we made contact (sequal to 2001 a space odyssey)',
+        ' : The year we made contact (sequal to   a space odyssey)',
+      );
+      testRemoveYear('2010', ' ');
+      testRemoveYear('(2010)', '( )');
+      testRemoveYear('2011-2014', ' - ');
+      testRemoveYear('(2011-2014)', '( - )');
+      testRemoveYear('2015-', ' -');
+      testRemoveYear('(2015-)', '( -)');
+      testRemoveYear('(2015- )', '( - )');
+      testRemoveYear('number', 'number');
+      testRemoveYear('2011\r\n2014', ' \r\n ');
+      testRemoveYear('2011\n2014', ' \n ');
+      testRemoveYear('2011\r2014', ' \r ');
+      testRemoveYear('(2001)', '( )');
+      testRemoveYear('', '', substitution: 'null');
+      testRemoveYear('', '', substitution: '');
+      testRemoveYear('', '', substitution: ' ');
+      testRemoveYear('(2001)', '( )', substitution: ' ');
+      testRemoveYear('(2001)', '()', substitution: '');
+    });
+    test('removePunctuation()', () {
+      void testRemovePunctuation(
+        String input,
+        expectedOutput, {
+        String substitution = 'none',
+      }) {
+        if ('none' == substitution) {
+          final number = input.removePunctuation();
+          expect(number, expectedOutput, reason: 'input = $input');
+        } else {
+          final number = input.removePunctuation(substitution);
+          expect(
+            number,
+            expectedOutput,
+            reason: "input = $input, '$substitution'",
+          );
+        }
+      }
+
+      testRemovePunctuation(' 2001 a space odyssey ', ' 2001 a space odyssey ');
+      testRemovePunctuation(
+        '2010: The year we made contact (sequal to 2001 a space odyssey)',
+        '2010  The year we made contact  sequal to 2001 a space odyssey ',
+      );
+      testRemovePunctuation(r'~`!@#$%^&*()_+-=', '                ');
+      testRemovePunctuation(r'~`!@#$%^&*()_+-=', '', substitution: '');
+      testRemovePunctuation('\r\n\t', '   ');
+      testRemovePunctuation('\r\n\t', '---', substitution: '-');
+    });
+    test('reduceWhitespace()', () {
+      void testReduceWhitespace(
+        String input,
+        expectedOutput, {
+        String substitution = 'none',
+      }) {
+        if ('none' == substitution) {
+          final number = input.reduceWhitespace();
+          expect(number, expectedOutput, reason: 'input = $input');
+        } else {
+          final number = input.reduceWhitespace(substitution);
+          expect(
+            number,
+            expectedOutput,
+            reason: "input = $input, '$substitution'",
+          );
+        }
+      }
+
+      testReduceWhitespace(' .       . ', '. .');
+      testReduceWhitespace(' .  . ', '.-.', substitution: '-');
+      testReduceWhitespace(' 2001 a space odyssey ', '2001 a space odyssey');
+      testReduceWhitespace(
+        '2010  The year we made contact  sequal to 2001 a space odyssey ',
+        '2010 The year we made contact sequal to 2001 a space odyssey',
+      );
+      testReduceWhitespace(
+        ' .\r\n\t\v\u{00a0}  \r\n\t\v\u{00a0}  \r\n\t\v\u{00a0}  . ',
+        '. .',
+      );
     });
   });
 

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import 'package:universal_io/io.dart';
@@ -63,6 +66,29 @@ class DVDBarcodeScanner {
   }
 }
 
+/// Determin if the barcode search site sources data from Ebay.
+///
+/// ```dart
+/// isEbay(DataSourceType.picclickBarcode);
+/// ```
+bool isEbay(DataSourceType source) {
+  return DataSourceType.picclickBarcode == source ||
+      DataSourceType.uhttBarcode == source;
+}
+
+/// Extract the DVDtitle from a DTO.
+///
+/// ```dart
+/// getCleanDvdTitle('Dexter : Season 1 2006 Box Set DVD 8 discs Like New');
+/// //returns 'Dexter 2006 8 '
+/// ```
+String getSearchTitle(MovieResultDTO movie) {
+  if (movie.title.isEmpty) {
+    return movie.alternateTitle;
+  }
+  return '${movie.title} ${movie.year}';
+}
+
 /// Extract the DVDtitle from a sales pitch.
 ///
 /// ```dart
@@ -101,6 +127,7 @@ String getCleanDvdTitle(String? title) {
       .replaceAll(' box set ', '')
       .replaceAll(' boxed sets ', '')
       .replaceAll(' season ', ' ')
+      .replaceAll(' seasons ', ' ')
       .replaceAll(' tv series ', ' ')
       .replaceAll(' collectors edition ', ' ')
       .replaceAll(' pal ', ' ')
@@ -112,5 +139,5 @@ String getCleanDvdTitle(String? title) {
       .replaceAll(' excellent condition ', ' ')
       .replaceAll(' new ', ' ')
       .replaceAll(' free postage ', ' ')
-      .replaceAll(RegExp(r'\s+'), ' '); // remove repeated spaces.
+      .reduceWhitespace(); // remove repeated spaces.
 }

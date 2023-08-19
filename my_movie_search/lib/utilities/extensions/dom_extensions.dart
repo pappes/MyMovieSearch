@@ -1,5 +1,6 @@
 import 'package:html/dom.dart' show Element, Node;
 import 'package:html_unescape/html_unescape_small.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 
 // Extend standard dart library to use enums instead of hard coded strings
 enum ElementType { anchor, image, text, table, row }
@@ -76,6 +77,6 @@ extension ElementHelper on Element {
         .replaceAll('\t', ' ')
         .replaceAll('\u{00a0}', ' ')
         .replaceAll(RegExp(r'\s+'), ' ');
-    return htmlDecode.convert(cleanStr.trim());
+    return htmlDecode.convert(cleanStr.reduceWhitespace());
   }
 }

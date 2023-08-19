@@ -1,4 +1,4 @@
-import 'package:bloc/bloc.dart' show BlocObserver, BlocBase, Change;
+import 'package:bloc/bloc.dart';
 
 /// {@template my_movie_search_observer}
 /// [BlocObserver] for the MyMovieSearch application which

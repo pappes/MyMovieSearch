@@ -313,6 +313,7 @@ void main() {
           .then(
             (html) => testClass.myConvertWebTextToTraversableTree(html.first),
           )
+          // ignore: avoid_dynamic_calls
           .then((element) => element.first.outerHtml);
 
       expect(actualResult, completion(expectedResult));

@@ -1,5 +1,3 @@
-library pappes.utilites;
-
 import 'package:logger/logger.dart' show Logger;
 
 final logger = Logger();

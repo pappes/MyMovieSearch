@@ -25,8 +25,10 @@ void main() {
   group('PicclickBarcode search unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryPicclickBarcodeSearch(criteria).myDataSourceName(),
-          'picclickBarcode');
+      expect(
+        QueryPicclickBarcodeSearch(criteria).myDataSourceName(),
+        'picclickBarcode',
+      );
     });
 
     // Confirm simple criteria is displayed as expected.
