@@ -9,7 +9,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const resultSelector = 'div .summary-top';
 const resultHeaderSelector = 'header';
-const jpgPictureSelector = 'img';
+const jpgPictureSelector = '.thumbnail img';
 const titleSelector = 'h1';
 const yearSelector = '.year';
 

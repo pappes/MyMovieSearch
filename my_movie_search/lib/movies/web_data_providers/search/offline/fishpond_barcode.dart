@@ -38,8 +38,10 @@ const htmlSampleMid = r'''
       <h1>Love And Other Catastrophes</h1>
       <span class="year">1996</span>
   </header>
-  <img width="170" height="246" 
-    src="https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg">
+    <a class="thumbnail"">
+      <img width="170" height="246" 
+        src="https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg">
+    </a>
 </div>
   <script type="application/ld+json">
   {
