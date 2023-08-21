@@ -49,7 +49,7 @@ class QueryTMDBFinder extends QueryTMDBCommon {
     }
     final results = <MovieResultDTO>[];
     for (final movie
-        in TmdbFinderConverter(imdbId).dtoFromCompleteJsonMap(map)) {
+        in TmdbFinderConverter.dtoFromCompleteJsonMap(map, imdbId)) {
       results.add(movie);
     }
     return results;

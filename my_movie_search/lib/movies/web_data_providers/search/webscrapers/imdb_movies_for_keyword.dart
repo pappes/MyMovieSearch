@@ -8,7 +8,6 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -34,9 +33,6 @@ const keywordKeywords = 'keywords';
 /// ```
 mixin ScrapeIMDBMoviesForKeyword
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final detailConverter = ImdbWebScraperConverter(
-    DataSourceType.imdbKeywords,
-  );
   static final htmlDecode = HtmlUnescape();
   static const splitter = LineSplitter();
 

@@ -87,7 +87,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          TmdbFinderConverter('ttImdbId123').dtoFromCompleteJsonMap(map as Map),
+          TmdbFinderConverter.dtoFromCompleteJsonMap(map as Map, 'ttImdbId123'),
         );
       }
 

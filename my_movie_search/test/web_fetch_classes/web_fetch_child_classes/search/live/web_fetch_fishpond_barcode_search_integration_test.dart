@@ -13,7 +13,7 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"https://dbari23r2svog.cloudfront.net/frontend/images/icons/classifications/med-au/Mature~7fb2979a.gif","bestSource":"DataSourceType.fishpondBarcode","title":"Love And Other Catastrophes 1996","alternateTitle":"Love And Other Catastrophes 1996","type":"MovieContentType.barcode","sources":{"DataSourceType.fishpondBarcode":"https://dbari23r2svog.cloudfront.net/frontend/images/icons/classifications/med-au/Mature~7fb2979a.gif"}}
+{"uniqueId":"DataSourceType.fishpondBarcode 9398710559194","bestSource":"DataSourceType.fishpondBarcode","title":"Love And Other Catastrophes 1996","alternateTitle":"Love And Other Catastrophes 1996","type":"MovieContentType.barcode","sources":{"DataSourceType.fishpondBarcode":"DataSourceType.fishpondBarcode 9398710559194"}}
 ''',
 ];
 

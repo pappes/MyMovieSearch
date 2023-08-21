@@ -106,7 +106,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          TorrentDownloadDetailConverter(criteria).dtoFromCompleteJsonMap(map),
+          TorrentDownloadDetailConverter.dtoFromCompleteJsonMap(map, criteria),
         );
       }
 

@@ -6,7 +6,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg","bestSource":"DataSourceType.fishpondBarcode","title":"Love And Other Catastrophes 1996","alternateTitle":"Love And Other Catastrophes 1996","type":"MovieContentType.barcode","imageUrl":"https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg","sources":{"DataSourceType.fishpondBarcode":"https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg"}}
+{"uniqueId":"DataSourceType.fishpondBarcode dream","bestSource":"DataSourceType.fishpondBarcode","title":"Love And Other Catastrophes 1996","alternateTitle":"Love And Other Catastrophes 1996","type":"MovieContentType.barcode","imageUrl":"https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg","sources":{"DataSourceType.fishpondBarcode":"DataSourceType.fishpondBarcode dream"}}
 ''',
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);

@@ -54,20 +54,17 @@ const personElementPosterPath = 'profile_path';
 const personElementPopularity = 'popularity';
 
 class TmdbFinderConverter {
-  String imdbId;
-  TmdbFinderConverter(this.imdbId);
-
-  List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map, String imdbId) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
 
     final failureIndicator = map[outerElementFailureIndicator];
     if (null == failureIndicator) {
       for (final movie in map[outerElementMovies] as Iterable) {
-        searchResults.add(dtoFromMovieMap(movie as Map));
+        searchResults.add(dtoFromMovieMap(movie as Map, imdbId));
       }
       for (final person in map[outerElementPeople] as Iterable) {
-        searchResults.add(dtoFromPersonMap(person as Map));
+        searchResults.add(dtoFromPersonMap(person as Map, imdbId));
       }
     } else {
       final error = MovieResultDTO();
@@ -78,7 +75,7 @@ class TmdbFinderConverter {
     return searchResults;
   }
 
-  MovieResultDTO dtoFromMovieMap(Map map) {
+  static MovieResultDTO dtoFromMovieMap(Map map, String imdbId) {
     final movie = MovieResultDTO().setSource(
       newSource: DataSourceType.tmdbFinder,
       newUniqueId: map[movieElementTMDBIdentity]?.toString(),
@@ -129,7 +126,7 @@ class TmdbFinderConverter {
     return movie;
   }
 
-  MovieResultDTO dtoFromPersonMap(Map map) {
+  static MovieResultDTO dtoFromPersonMap(Map map, String imdbId) {
     final person = MovieResultDTO().init(
       bestSource: DataSourceType.tmdbFinder,
       uniqueId: map[movieElementTMDBIdentity]?.toString(),

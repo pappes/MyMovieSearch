@@ -20,15 +20,15 @@ const relatedDirectorsLabel = 'Directed by:';
 /// Using IMDB to search for a string returns a list.
 /// Using IMDB search on an IMDBID redirects to the details page for that ID.
 class ImdbWebScraperConverter {
-  final DataSourceType source;
-  ImdbWebScraperConverter(this.source);
-  List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
-    final dto = dtoFromMap(map);
+  late final DataSourceType source;
+  List<MovieResultDTO> dtoFromCompleteJsonMap(Map map, DataSourceType source) {
+    this.source = source;
+    final dto = dtoFromMap(map, '');
     return [dto];
   }
 
   /// Take a [Map] of IMDB data and create a [MovieResultDTO] from it.
-  MovieResultDTO dtoFromMap(Map map) {
+  MovieResultDTO dtoFromMap(Map map, String a) {
     final movie = MovieResultDTO().init();
     if (map.containsKey(outerElementIdentity)) {
       _shallowConvert(movie, map);
@@ -458,12 +458,12 @@ class ImdbWebScraperConverter {
   void _getRelated(MovieResultDTO movie, related, String label) {
     // Do nothing if related is null
     if (related is Map) {
-      final dto = dtoFromMap(related);
+      final dto = dtoFromMap(related, '');
       movie.addRelated(label, dto);
     } else if (related is Iterable) {
       for (final relatedMap in related) {
         if (relatedMap is Map) {
-          final dto = dtoFromMap(relatedMap);
+          final dto = dtoFromMap(relatedMap, '');
           movie.addRelated(label, dto);
         }
       }
