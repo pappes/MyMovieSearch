@@ -16,105 +16,61 @@ import 'package:url_launcher/url_launcher.dart' as launcher;
 
 const webAddressPrefix = 'http';
 
+/// Performs page navigation
+///
+/// Headless testing can have a null context (no page navigation)
+/// or an alternate canvas implementation using the _headless constructor.
 class MMSNav {
-  final BuildContext context;
-  MMSNav(this.context);
+  late MMSFlutterCanvas canvas;
 
-  void _invokeChromeCustomTabs(String url) {
-    tabs
-        .launch(
-          url,
-          customTabsOption: tabs.CustomTabsOption(
-            toolbarColor: Theme.of(context).primaryColor,
-            enableDefaultShare: true,
-            enableUrlBarHiding: true,
-            showPageTitle: true,
-          ),
-        )
-        .onError((error, stackTrace) => _customTabsError(error, url));
+  MMSNav(BuildContext? context) {
+    canvas = MMSFlutterCanvas(context);
   }
 
-  void _customTabsError(Object? e, String url) {
-    // An exception is thrown if browser app is not installed on Android device.
-    debugPrint(e.toString());
-    showPopup(context, url);
-  }
-
-  void _openBrowser(String url) {
-    launcher.launchUrl(Uri.parse(url)).then(
-          (bool success) => _browserError(success, url),
-        );
-  }
-
-  void _browserError(bool success, String url) {
-    // An exception is thrown if browser app is not installed on Android device.
-    if (!success) {
-      showPopup(context, url);
-    }
-  }
+  MMSNav.headless(this.canvas);
 
   /// Render web page [url] in a child page of the current screen.
   ///
   /// For platforms that don't support CustomTabs, the URL is displayed to the user.
   void viewWebPage(String url) {
-    if (Platform.isAndroid) {
-      _invokeChromeCustomTabs(url);
-    } else {
-      _openBrowser(url);
-    }
+    canvas.viewWebPage(url);
   }
 
   /// Construct route to Material user interface page as appropriate for the dto.
   ///
   /// Chooses a MovieDetailsPage or PersonDetailsPage
   /// based on the IMDB unique ID or ErrorDetailsPage otherwise
-  void showDetailsPage(
+  Widget getDetailsPage(
     MovieResultDTO movie,
   ) {
-    if (movie.uniqueId.startsWith(imdbPersonPrefix)) {
+    if (movie.uniqueId.startsWith(imdbPersonPrefix) ||
+        movie.type == MovieContentType.person) {
       // Open person details.
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PersonDetailsPage(person: movie),
-        ),
-      );
+      return PersonDetailsPage(person: movie);
     } else if (movie.uniqueId.startsWith(imdbTitlePrefix) ||
         movie.type == MovieContentType.movie ||
         movie.type == MovieContentType.series ||
         movie.type == MovieContentType.miniseries ||
         movie.type == MovieContentType.short ||
+        movie.type == MovieContentType.series ||
         movie.type == MovieContentType.episode ||
         movie.type == MovieContentType.title) {
       // Open Movie details.
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => MovieDetailsPage(movie: movie),
-        ),
-      );
+      return MovieDetailsPage(movie: movie);
     } else {
       // Open error details.
 
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => ErrorDetailsPage(errorDto: movie),
-        ),
-      );
+      return ErrorDetailsPage(errorDto: movie);
     }
   }
 
   /// Navigates to a search results page populated with a movie list.
   ///
-  void showResultsPage(SearchCriteriaDTO criteria) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MovieSearchResultsNewPage(criteria: criteria),
-      ),
+  void _showResultsPage(SearchCriteriaDTO criteria) {
+    canvas.viewFlutterPage(
+      MovieSearchResultsNewPage(criteria: criteria),
     );
   }
 
@@ -123,10 +79,10 @@ class MMSNav {
   void searchForRelated(String description, List<MovieResultDTO> movies) {
     if (movies.length == 1) {
       // Only one result so open details screen.
-      showDetailsPage(movies[0]);
+      canvas.viewFlutterPage(getDetailsPage(movies[0]));
     } else {
       // Multiple results so show them as individual cards.
-      showResultsPage(
+      _showResultsPage(
         SearchCriteriaDTO().init(
           SearchCriteriaType.movieDTOList,
           title: description,
@@ -140,7 +96,7 @@ class MMSNav {
   ///
   void getMoviesForKeyword(String keyword) {
     // Fetch first batch of movies that match the keyword.
-    showResultsPage(
+    _showResultsPage(
       SearchCriteriaDTO().init(
         SearchCriteriaType.moviesForKeyword,
         title: keyword,
@@ -152,7 +108,7 @@ class MMSNav {
   ///
   void getMoreKeywords(MovieResultDTO movie) {
     // Fetch first batch of movies that match the keyword.
-    showResultsPage(
+    _showResultsPage(
       SearchCriteriaDTO().init(
         SearchCriteriaType.moreKeywords,
         title: movie.uniqueId,
@@ -167,7 +123,7 @@ class MMSNav {
     // replace space with . for more matches
     final criteria = text.replaceAll(' ', '.');
     // Fetch first batch of movies that match the keyword.
-    showResultsPage(
+    _showResultsPage(
       SearchCriteriaDTO().init(
         SearchCriteriaType.downloadSimple,
         title: criteria,
@@ -187,7 +143,7 @@ class MMSNav {
         break;
       case MovieContentType.barcode:
         // Search for movies based on the data fetched for the barcode.
-        showResultsPage(
+        _showResultsPage(
           SearchCriteriaDTO().init(
             SearchCriteriaType.movieTitle,
             title: getSearchTitle(movie),
@@ -198,14 +154,14 @@ class MMSNav {
       case MovieContentType.navigation:
         if (movie.uniqueId.startsWith(webAddressPrefix)) {
           // Search for more movies that match the keyword.
-          showResultsPage(
+          _showResultsPage(
             QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
           );
         } else {
           // replace space with . for more specific searching
           final criteria = movie.uniqueId;
           // Fetch first batch of movies that match the keyword.
-          showResultsPage(
+          _showResultsPage(
             SearchCriteriaDTO().init(
               SearchCriteriaType.downloadAdvanced,
               title: criteria,
@@ -217,12 +173,73 @@ class MMSNav {
         break;
       case MovieContentType.download:
         // Open magnet link.
-        _openBrowser(movie.imageUrl);
+        canvas.viewWebPage(movie.imageUrl);
 
         break;
       default:
         // Show details screen (movie details or person details)
-        showDetailsPage(movie);
+        canvas.viewFlutterPage(getDetailsPage(movie));
+    }
+  }
+}
+
+class MMSFlutterCanvas {
+  BuildContext? context;
+  MMSFlutterCanvas(this.context);
+
+  /// Render web page [url] in a child page of the current screen.
+  ///
+  /// For platforms that don't support CustomTabs, the URL is displayed to the user.
+  void viewWebPage(String url) {
+    if (null != context) {
+      if (Platform.isAndroid) {
+        _invokeChromeCustomTabs(url);
+      } else {
+        _openBrowser(url);
+      }
+    }
+  }
+
+  /// Construct route to Material user interface page as appropriate for the dto.
+  ///
+  /// Chooses a MovieDetailsPage or PersonDetailsPage
+  /// based on the IMDB unique ID or ErrorDetailsPage otherwise
+  void viewFlutterPage(Widget page) {
+    if (null != context) {
+      Navigator.push(context!, MaterialPageRoute(builder: (context) => page));
+    }
+  }
+
+  void _invokeChromeCustomTabs(String url) {
+    tabs
+        .launch(
+          url,
+          customTabsOption: tabs.CustomTabsOption(
+            toolbarColor: Theme.of(context!).primaryColor,
+            enableDefaultShare: true,
+            enableUrlBarHiding: true,
+            showPageTitle: true,
+          ),
+        )
+        .onError((error, stackTrace) => _customTabsError(error, url));
+  }
+
+  void _customTabsError(Object? e, String url) {
+    // An exception is thrown if browser app is not installed on Android device.
+    debugPrint(e.toString());
+    showPopup(context!, url);
+  }
+
+  void _openBrowser(String url) {
+    launcher.launchUrl(Uri.parse(url)).then(
+          (bool success) => _browserError(success, url),
+        );
+  }
+
+  void _browserError(bool success, String url) {
+    // An exception is thrown if browser app is not installed on Android device.
+    if (!success) {
+      showPopup(context!, url);
     }
   }
 }

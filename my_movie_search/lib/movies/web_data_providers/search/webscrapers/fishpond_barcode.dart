@@ -7,7 +7,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/fishpond_barcod
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-const resultSelector = 'div .summary-top';
+const resultSelector = 'main[data-product]';
 const resultHeaderSelector = 'header';
 const jpgPictureSelector = '.thumbnail img';
 const titleSelector = 'h1';
