@@ -18,7 +18,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     extends WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   static final _cache = TieredCache();
 
-  WebFetchThreadedCache(INPUT_TYPE criteria) : super(criteria);
+  WebFetchThreadedCache(super.criteria);
 
   /// Return a list with data matching [criteria].
   ///

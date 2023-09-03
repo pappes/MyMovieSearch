@@ -15,7 +15,7 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBSearchDetails {
   static const _baseURL = 'https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=';
 
-  QueryIMDBSearch(SearchCriteriaDTO criteria) : super(criteria);
+  QueryIMDBSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

@@ -27,7 +27,7 @@ class QueryTorrentDownloadSearch
   static const _baseURL = 'https://www.torrentdownload.info/search?q=';
   static const _pageURL = '&p=';
 
-  QueryTorrentDownloadSearch(SearchCriteriaDTO criteria) : super(criteria);
+  QueryTorrentDownloadSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

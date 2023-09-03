@@ -43,21 +43,21 @@ const intermediateMapList = [
           'id': 'nm0123456',
           'nameText': {'text': 'Mescalon Smoochington <3'},
           'primaryImage': {
-            'url': 'https://www.microsoft.com/images/M/MV5BNjdhNz.jpg'
+            'url': 'https://www.microsoft.com/images/M/MV5BNjdhNz.jpg',
           },
           'bio': {
             'text': {
               'plainText':
-                  'THen Kramer said, "Everybody is Mescalon Smoochington".'
-            }
+                  'THen Kramer said, "Everybody is Mescalon Smoochington".',
+            },
           },
           'birthDate': {
-            'dateComponents': {'year': 1933}
+            'dateComponents': {'year': 1933},
           },
           'deathDate': {
-            'dateComponents': {'year': 1977}
+            'dateComponents': {'year': 1977},
           },
-          'meterRanking': {'currentRank': 184}
+          'meterRanking': {'currentRank': 184},
         },
         'mainColumnData': {
           'releasedPrimaryCredits': [
@@ -69,7 +69,7 @@ const intermediateMapList = [
                     'node': {
                       'category': {'text': 'Actor'},
                       'characters': [
-                        {'name': 'Willy Rutter'}
+                        {'name': 'Willy Rutter'},
                       ],
                       'title': {
                         'id': 'tt0012370',
@@ -77,29 +77,29 @@ const intermediateMapList = [
                         'titleText': {'text': 'Walk Skip Run'},
                         'titleType': {'text': 'Movie'},
                         'primaryImage': {
-                          'url': 'https://www.microsoft.com/images/M/MV5BM.jpg'
+                          'url': 'https://www.microsoft.com/images/M/MV5BM.jpg',
                         },
                         'ratingsSummary': {
                           'aggregateRating': 8.6,
-                          'voteCount': 4837
+                          'voteCount': 4837,
                         },
                         'releaseYear': {'year': 1973, 'endYear': null},
                         'runtime': {'seconds': 7140},
                         'genres': {
                           'genres': [
                             {'text': 'Western'},
-                            {'text': 'Romance'}
-                          ]
-                        }
-                      }
-                    }
+                            {'text': 'Romance'},
+                          ],
+                        },
+                      },
+                    },
                   },
                   {
                     'node': {
                       'category': {'text': 'Actress'},
                       'characters': [
                         {'name': 'Nom da Plume'},
-                        {'name': 'Other Charactor'}
+                        {'name': 'Other Charactor'},
                       ],
                       'title': {
                         'id': 'tt0123580',
@@ -109,25 +109,25 @@ const intermediateMapList = [
                         'titleType': {'text': 'TV Series'},
                         'primaryImage': {
                           'url':
-                              'https://www.microsoft.com/images/M/MV5BYjAxMz.jpg'
+                              'https://www.microsoft.com/images/M/MV5BYjAxMz.jpg',
                         },
                         'ratingsSummary': {
                           'aggregateRating': 7.5,
-                          'voteCount': 5123
+                          'voteCount': 5123,
                         },
                         'releaseYear': {'year': 1985, 'endYear': 2023},
                         'runtime': {'seconds': 1234},
                         'genres': {
                           'genres': [
                             {'text': 'Horror'},
-                            {'text': 'Romance'}
-                          ]
-                        }
-                      }
-                    }
+                            {'text': 'Romance'},
+                          ],
+                        },
+                      },
+                    },
                   }
-                ]
-              }
+                ],
+              },
             }
           ],
           'unreleasedPrimaryCredits': [],
@@ -136,22 +136,22 @@ const intermediateMapList = [
               {
                 'node': {
                   'displayableProperty': {
-                    'value': {'plainText': 'Spongebob'}
-                  }
-                }
+                    'value': {'plainText': 'Spongebob'},
+                  },
+                },
               },
               {
                 'node': {
                   'displayableProperty': {
-                    'value': {'plainText': 'Squarepants'}
-                  }
-                }
-              }
-            ]
-          }
-        }
-      }
-    }
+                    'value': {'plainText': 'Squarepants'},
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
   }
 ];
 

@@ -53,6 +53,6 @@ const intermediateMapList = [
     'cleanDescription': 'Summer in February 2013',
     'rawDescription': 'Summer in February [DVD]. 2014 2013',
     'url':
-        'https://secure.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=/LC.JPG'
+        'https://secure.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=/LC.JPG',
   }
 ];

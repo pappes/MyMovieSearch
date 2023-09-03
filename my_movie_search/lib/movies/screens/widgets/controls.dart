@@ -22,8 +22,8 @@ class Poster extends Widget {
     this.context, {
     required this.url,
     void Function()? showImages,
-    Key? key,
-  }) : super(key: key) {
+    super.key,
+  }) {
     final displayedImage = Image(
       image: NetworkImage(getBigImage(url)),
       alignment: Alignment.topCenter,
@@ -52,7 +52,7 @@ class Poster extends Widget {
         else
           placeholderMessage,
         imageText,
-        if (showImages != null) imageSearch
+        if (showImages != null) imageSearch,
       ],
     );
   }

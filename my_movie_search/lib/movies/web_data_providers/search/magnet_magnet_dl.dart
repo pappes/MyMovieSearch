@@ -27,7 +27,7 @@ class QueryMagnetDlSearch
   static const _baseURL = 'https://www.magnetdl.com/';
   static const _pageURL = '/';
 
-  QueryMagnetDlSearch(SearchCriteriaDTO criteria) : super(criteria);
+  QueryMagnetDlSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

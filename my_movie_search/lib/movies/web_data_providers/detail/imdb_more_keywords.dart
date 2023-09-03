@@ -18,7 +18,7 @@ class QueryIMDBMoreKeywordsDetails
   static const _baseURL = 'https://www.imdb.com/title/';
   static const _baseURLsuffix = '/keywords/';
 
-  QueryIMDBMoreKeywordsDetails(SearchCriteriaDTO criteria) : super(criteria);
+  QueryIMDBMoreKeywordsDetails(super.criteria);
 
   /// Describe where the data is coming from.
   @override

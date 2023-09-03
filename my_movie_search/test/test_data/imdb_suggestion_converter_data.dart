@@ -38,7 +38,7 @@ final expectedDTOMap = [
     "i": [
       "https://m.media-amazon.com/images/M/MV5B...Q3MTUy._V1_.jpg",
       2764,
-      4096
+      4096,
     ],
     "v": [
       {
@@ -48,8 +48,8 @@ final expectedDTOMap = [
         "i": [
           "https://m.media-amazon.com/images/M/MV5B...Rvb2xpbmhk._V1_.jpg",
           1404,
-          790
-        ]
+          790,
+        ],
       },
       {
         "l": "Opening Scene",
@@ -58,8 +58,8 @@ final expectedDTOMap = [
         "i": [
           "https://m.media-amazon.com/images/M/MV5B...QWRvb2xpbmhk._V1_.jpg",
           1343,
-          756
-        ]
+          756,
+        ],
       },
       {
         "l": "Imdb Offline Suggestions 1984",
@@ -68,10 +68,10 @@ final expectedDTOMap = [
         "i": [
           "https://m.media-amazon.com/images/M/MV5B...Zmxvdw@@._V1_.jpg",
           1920,
-          1080
-        ]
-      }
-    ]
+          1080,
+        ],
+      },
+    ],
   },
   {
     "l": "Imdb Offline Suggestions",
@@ -83,7 +83,7 @@ final expectedDTOMap = [
     "i": [
       "https://m.media-amazon.com/images/M/MV5B...zE3OTE@._V1_.jpg",
       2025,
-      3000
+      3000,
     ],
     "v": [
       {
@@ -93,8 +93,8 @@ final expectedDTOMap = [
         "i": [
           "https://m.media-amazon.com/images/M/MV5B...NzZXI@._V1_.jpg",
           1492,
-          788
-        ]
+          788,
+        ],
       },
       {
         "l": "Meet Maxwell Lord: The 'Imdb Offline Suggestions 1984' Big Bad",
@@ -103,8 +103,8 @@ final expectedDTOMap = [
         "i": [
           "https://m.media-amazon.com/images/M/MV5B...ZWxvZw@@._V1_.jpg",
           1920,
-          1080
-        ]
+          1080,
+        ],
       },
       {
         "l": "Official Suggestion Trailer",
@@ -113,10 +113,10 @@ final expectedDTOMap = [
         "i": [
           "https://m.media-amazon.com/images/M/MV5B...TI2MTU@._V1_.jpg",
           1280,
-          720
-        ]
-      }
-    ]
+          720,
+        ],
+      },
+    ],
   },
   {
     "l": "Imdb Offline Suggestions",
@@ -127,8 +127,8 @@ final expectedDTOMap = [
     "i": [
       "https://m.media-amazon.com/images/M/MV5B...DM4NA@@._V1_.jpg",
       761,
-      1800
-    ]
+      1800,
+    ],
   },
   {
     "l": "Imdb Offline Suggestions",
@@ -140,8 +140,8 @@ final expectedDTOMap = [
     "i": [
       "https://m.media-amazon.com/images/M/MV5B...ODE1MDc@._V1_.jpg",
       702,
-      998
-    ]
+      998,
+    ],
   },
   {
     "l": "Imdb Offline Suggestions: Bloodlines",
@@ -152,8 +152,8 @@ final expectedDTOMap = [
     "i": [
       "https://m.media-amazon.com/images/M/MV5BZ...UxMzE@._V1_.jpg",
       1365,
-      2048
-    ]
+      2048,
+    ],
   },
   {
     "l": "Imdb Offline Suggestions",
@@ -164,8 +164,8 @@ final expectedDTOMap = [
     "i": [
       "https://m.media-amazon.com/images/M/MV5B...kwMDE@._V1_.jpg",
       353,
-      500
-    ]
+      500,
+    ],
   },
   {
     "l": "Imdb Offline Suggestions",
@@ -176,8 +176,8 @@ final expectedDTOMap = [
     "i": [
       "https://m.media-amazon.com/images/M/MV5B...xODE1MDc@._V1_.jpg",
       500,
-      741
-    ]
+      741,
+    ],
   },
   {
     "l": "Imdb Offline Suggestions",
@@ -189,8 +189,8 @@ final expectedDTOMap = [
     "i": [
       "https://m.media-amazon.com/images/M/MV5B...xODE1MDc@._V1_.jpg",
       500,
-      741
-    ]
+      741,
+    ],
   },
   {
     "l": "Jennifer Wenger",
@@ -199,9 +199,9 @@ final expectedDTOMap = [
     "i": [
       "https://m.media-amazon.com/images/M/MV5B...cxNQ@@._V1_.jpg",
       640,
-      428
-    ]
-  }
+      428,
+    ],
+  },
 ];
 
 const String imdbJsonSampleInner = '''

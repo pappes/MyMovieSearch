@@ -338,7 +338,7 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
   dto.keywords = {'${sample}_keyword1', '${sample}_keyword2'};
   dto.sources = {
     DataSourceType.tmdbMovie: '${sample}_alternateTitle',
-    DataSourceType.wiki: '${sample}_uniqueId'
+    DataSourceType.wiki: '${sample}_uniqueId',
   };
   if (makeRelated) {
     final ref = 'rel$sample';
@@ -374,13 +374,13 @@ SearchCriteriaDTO makeCriteriaDTO(String sample) {
 
 class TestApp extends StatelessWidget {
   const TestApp({
-    Key? key,
+    super.key,
     required this.children,
-  }) : super(key: key);
+  });
   const TestApp.con({
-    Key? key,
+    super.key,
     required this.children,
-  }) : super(key: key);
+  });
 
   final List<Widget> children;
 

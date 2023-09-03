@@ -19,7 +19,7 @@ class QueryIMDBNameDetails
   static const _baseURL = 'https://www.imdb.com/name/';
   static const defaultSearchResultsLimit = 100;
 
-  QueryIMDBNameDetails(SearchCriteriaDTO criteria) : super(criteria);
+  QueryIMDBNameDetails(super.criteria);
 
   /// Describe where the data is coming from.
   @override

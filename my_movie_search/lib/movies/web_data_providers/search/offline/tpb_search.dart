@@ -49,7 +49,7 @@ const intermediateMapList = [
     'name': 'Gangnam Zombie 2023 720p Korean HDRip H264 BONE',
     'description': 'Uploaded 01-14 03:33, Size 699.41 MiB, ULed by .BONE.',
     'seeders': '34',
-    'leechers': '5'
+    'leechers': '5',
   }
 ];
 

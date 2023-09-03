@@ -13,7 +13,7 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 
 class MovieDetailsPage extends StatefulWidget {
-  const MovieDetailsPage({Key? key, required this.movie}) : super(key: key);
+  const MovieDetailsPage({super.key, required this.movie});
 
   final MovieResultDTO movie;
 

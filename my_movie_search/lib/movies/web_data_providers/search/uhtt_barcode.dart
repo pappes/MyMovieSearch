@@ -22,7 +22,7 @@ class QueryUhttBarcodeSearch
       'http://uhtt.ru/dispatcher/?query=SELECT%20GOODS%20BY%20CODE(';
   static const _suffixURL = ')%20FORMAT.TDDO(VIEW_GOODS)';
 
-  QueryUhttBarcodeSearch(SearchCriteriaDTO criteria) : super(criteria);
+  QueryUhttBarcodeSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

@@ -18,8 +18,10 @@ Future<Stream<String>> emitEmptyImdbSearchSample(dynamic dummy) {
   return Future.value(Stream.value(imdbSearchHtmlSampleEmpty));
 }
 
-const imdbSearchHtmlSampleEmpty = '$imdbSearchHtmlSampleStart$imdbSearchJsonSampleEmpty$imdbSearchHtmlSampleEnd';
-const imdbSearchJsonSampleEmpty = '{"props":{"pageProps":{"nameResults":{"results":[]},"titleResults":{"results":[],"hasExactMatches":false},"companyResults":{"results":[]},"keywordResults":{"results":[]}}}}';
+const imdbSearchHtmlSampleEmpty =
+    '$imdbSearchHtmlSampleStart$imdbSearchJsonSampleEmpty$imdbSearchHtmlSampleEnd';
+const imdbSearchJsonSampleEmpty =
+    '{"props":{"pageProps":{"nameResults":{"results":[]},"titleResults":{"results":[],"hasExactMatches":false},"companyResults":{"results":[]},"keywordResults":{"results":[]}}}}';
 
 const imdbSearchHtmlSampleFull =
     '$imdbSearchHtmlSampleStart$imdbSampleJson$imdbSearchHtmlSampleEnd';
@@ -75,21 +77,21 @@ const intermediateMapList = [
     'name': 'Hye NDace',
     'image': 'https://www.microsoft.com/gx@.jpg',
     'description': 'known for Superman(1994)',
-    '@type': MovieContentType.person
+    '@type': MovieContentType.person,
   },
   {
     'id': 'nm2122834',
     'name': 'ifdhKoliHeDene Her',
     'image': 'https://www.microsoft.com/k0MTRlNmU@.jpg',
     'description': 'known for Catwoman!(1993- )',
-    '@type': MovieContentType.person
+    '@type': MovieContentType.person,
   },
   {
     'id': 'nm5122134',
     'name': 'nrnKge K-sDHmu',
     'image': 'https://www.microsoft.com/Q0ZGExNj@.jpg',
     'description': 'known for Batman',
-    '@type': MovieContentType.person
+    '@type': MovieContentType.person,
   },
   {
     'id': 'tt0152239',
@@ -97,7 +99,7 @@ const intermediateMapList = [
     'yearRange': '1997',
     'image': 'https://www.microsoft.com/YzODQzYj@.jpg',
     'description': 'staring [dot GaGal, s CarLyn]',
-    '@type': MovieContentType.movie
+    '@type': MovieContentType.movie,
   },
   {
     'id': 'tt0172034',
@@ -105,7 +107,7 @@ const intermediateMapList = [
     'yearRange': '1975-1979',
     'image': 'https://www.microsoft.com/AxYTcxMD@.jpg',
     'description': 'staring [terda PiChrine, ggoe WaLylner]',
-    '@type': MovieContentType.series
+    '@type': MovieContentType.series,
   },
   {
     'id': 'tt1142838',
@@ -113,7 +115,7 @@ const intermediateMapList = [
     'yearRange': '1991-',
     'image': 'https://www.microsoft.com/M4NTRlZjAtzgwMDUw.jpg',
     'description': 'staring [calro FNation, aliianne PAdrcki]',
-    '@type': MovieContentType.series
+    '@type': MovieContentType.series,
   },
   {
     'id': 'tt1182333',
@@ -121,7 +123,7 @@ const intermediateMapList = [
     'yearRange': '1999',
     'image': 'https://www.microsoft.com/U1NmNmNT@.jpg',
     'description': 'staring [elli illhan, RussKer PasPed]',
-    '@type': MovieContentType.movie
+    '@type': MovieContentType.movie,
   }
 ];
 

@@ -12,8 +12,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/movie_card_small.dart';
 
 class MovieSearchResultsNewPage extends StatefulWidget {
-  const MovieSearchResultsNewPage({Key? key, required this.criteria})
-      : super(key: key);
+  const MovieSearchResultsNewPage({super.key, required this.criteria});
   final SearchCriteriaDTO criteria;
 
   @override

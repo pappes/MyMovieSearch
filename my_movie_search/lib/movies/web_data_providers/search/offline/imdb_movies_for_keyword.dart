@@ -72,7 +72,7 @@ const intermediateMapList = [
         '{"Vonuck Heint\\n            ":"/name/nm0311837/?ref_=kw_li_dr_0"}',
     'topCredits':
         '{"Rano Romino\\n            ":"/name/nm0718931/?ref_=kw_li_st_0","Eara Sabvan\\n            ":"/name/nm0714533/?ref_=kw_li_st_1","Ataircan Dunlas\\n            ":"/name/nm0211835/?ref_=kw_li_st_2","Tnny Keom \\n            ":"/name/nm0414736/?ref_=kw_li_st_3"}',
-    'keywords': 'dream'
+    'keywords': 'dream',
   },
   {
     'id':
@@ -80,7 +80,7 @@ const intermediateMapList = [
     'titleNameText': 'Next »',
     'keywords': 'dream',
     'titleDescription':
-        '{ "keyword":"dream", "page":"2", "url":"https://www.imdb.com/search/keyword/?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"}'
+        '{ "keyword":"dream", "page":"2", "url":"https://www.imdb.com/search/keyword/?page=2&sort=moviemeter,asc&keywords=dream&explore=keywords&mode=detail&ref_=kw_nxt#main"}',
   },
 ];
 

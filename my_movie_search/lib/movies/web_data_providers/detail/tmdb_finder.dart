@@ -1,7 +1,6 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_finder.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_finder.dart';
@@ -17,7 +16,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// QueryTMDBFinder().readList(criteria);
 /// ```
 class QueryTMDBFinder extends QueryTMDBCommon {
-  QueryTMDBFinder(SearchCriteriaDTO criteria) : super(criteria) {
+  QueryTMDBFinder(super.criteria) {
     baseURL = 'https://api.themoviedb.org/3/find/';
     midURL = '?language=en-US&external_source=imdb_id&api_key=';
     source = DataSourceType.tmdbFinder;

@@ -670,13 +670,13 @@ void main() {
       final dto1 = MovieResultDTO().init(
         title: 'merge into me',
         related: {
-          'suggestions': {'123': dto1related}
+          'suggestions': {'123': dto1related},
         },
       );
       final dto2 = MovieResultDTO().init(
         description: 'merge me',
         related: {
-          'suggestions': {'456': dto2related}
+          'suggestions': {'456': dto2related},
         },
       );
 
@@ -697,7 +697,7 @@ void main() {
       dto2.description = 'merge me';
       dto3.title = 'related dto';
       dto2.related = {
-        'suggestions': {dto3.uniqueId: dto3}
+        'suggestions': {dto3.uniqueId: dto3},
       };
       dto1.merge(dto2, excludeRelated: true);
       expect(dto1.title, 'merge into me');

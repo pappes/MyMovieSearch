@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mockito/annotations.dart';
@@ -183,8 +182,11 @@ void main() {
           imageUrl: 'http://something.com',
         );
         testClass.resultDrillDown(movie);
-        expect(testCanvas.result, expected,
-            reason: 'criteria: id=$id type=$type');
+        expect(
+          testCanvas.result,
+          expected,
+          reason: 'criteria: id=$id type=$type',
+        );
       }
 
       checkCalledPage('${imdbTitlePrefix}12345', 'MovieDetailsPage');

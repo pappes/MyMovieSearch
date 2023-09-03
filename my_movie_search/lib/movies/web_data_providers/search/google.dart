@@ -22,7 +22,7 @@ class QueryGoogleMovies
   static const _baseURL =
       'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
 
-  QueryGoogleMovies(SearchCriteriaDTO criteria) : super(criteria);
+  QueryGoogleMovies(super.criteria);
 
   /// Describe where the data is coming from.
   @override

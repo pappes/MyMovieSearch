@@ -21,7 +21,7 @@ class QueryLibsaBarcodeSearch
   static const _baseURL =
       'https://libraries.sa.gov.au/client/en_AU/sapubliclibraries/search/results?qu=';
 
-  QueryLibsaBarcodeSearch(SearchCriteriaDTO criteria) : super(criteria);
+  QueryLibsaBarcodeSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

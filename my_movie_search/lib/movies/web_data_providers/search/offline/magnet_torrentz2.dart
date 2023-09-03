@@ -52,7 +52,7 @@ const intermediateMapList = [
         'magnet:?xt=urn:btih:799625568D3F7419095C2BA1B0CFA11607B1B259&tr=udp%3A%2F%2Ftracker.bitsearch.to%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.zerobytes.xyz%3A1337%2Fannounce&tr=udp%3A%2F%2Fwww.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.0x.tf%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.com%3A2920%2Fannounce&dn=%5BBitsearch.to%5D+Space.Babes.from.Outer.Space.2017.1080p.BluRay.x265-RARBG',
     'description': '1.36 GB',
     'seeders': '19',
-    'leechers': '14'
+    'leechers': '14',
   },
   {
     'name': 'Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS[rarbg]',
@@ -60,7 +60,7 @@ const intermediateMapList = [
         'magnet:?xt=urn:btih:C84EF9E1D665729C7BC899BD37652572D84B03C1&tr=udp%3A%2F%2Ftracker.bitsearch.to%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.zerobytes.xyz%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.breizh.pm%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.com%3A2920%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&dn=%5BBitsearch.to%5D+Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS%5Brarbg%5D',
     'description': '880 MB',
     'seeders': '13',
-    'leechers': '12'
+    'leechers': '12',
   }
 ];
 

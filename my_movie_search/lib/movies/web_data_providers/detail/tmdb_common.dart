@@ -22,7 +22,7 @@ abstract class QueryTMDBCommon
   late String baseURL;
   String midURL = '?api_key=';
 
-  QueryTMDBCommon(SearchCriteriaDTO criteria) : super(criteria);
+  QueryTMDBCommon(super.criteria);
 
   /// Must be orerridden by child classes.
   /// Static snapshot of data for offline operation.

@@ -22,7 +22,7 @@ class QueryPicclickBarcodeSearch
   static const _baseURL = 'https://picclick.com.au/?q=';
   static const _suffixURL = '+';
 
-  QueryPicclickBarcodeSearch(SearchCriteriaDTO criteria) : super(criteria);
+  QueryPicclickBarcodeSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

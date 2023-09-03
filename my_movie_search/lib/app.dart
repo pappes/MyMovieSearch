@@ -4,7 +4,6 @@ import 'package:flutter/material.dart'
     show
         BuildContext,
         GlobalKey,
-        Key,
         MaterialApp,
         NavigatorState,
         State,
@@ -23,10 +22,7 @@ import 'package:my_movie_search/movies/screens/movie_search_criteria.dart';
 /// {@endtemplate}
 class MMSearchApp extends StatelessWidget {
   /// {@macro mmsearch_app}
-  const MMSearchApp({Key? key, required this.movieRepository})
-      : super(
-          key: key,
-        );
+  const MMSearchApp({super.key, required this.movieRepository});
   final MovieSearchRepository movieRepository;
 
   /// Set up information for the bloc design pattern

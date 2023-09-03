@@ -21,7 +21,7 @@ class QueryFishpondBarcodeSearch
   static const _baseURL = 'https://www.mightyape.com.au/search?s=';
   static const _suffixURL = '+';
 
-  QueryFishpondBarcodeSearch(SearchCriteriaDTO criteria) : super(criteria);
+  QueryFishpondBarcodeSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

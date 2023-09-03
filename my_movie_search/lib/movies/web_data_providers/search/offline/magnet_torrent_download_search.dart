@@ -48,7 +48,7 @@ const intermediateMapList = [
         'https://www.torrentdownload.info/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7/2001-A-Space-Odyssey-+1968+-+BluRay+-+1080p+-+YTS-AM+',
     'description': '2.38 GB',
     'seeders': '578',
-    'leechers': '248'
+    'leechers': '248',
   }
 ];
 

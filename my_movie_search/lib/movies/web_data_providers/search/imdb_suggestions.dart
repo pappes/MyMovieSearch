@@ -21,7 +21,7 @@ class QueryIMDBSuggestions
   static const defaultSearchResultsLimit = 10;
 
   /// Limit results to 10 most relevant by default.
-  QueryIMDBSuggestions(SearchCriteriaDTO criteria) : super(criteria) {
+  QueryIMDBSuggestions(super.criteria) {
     searchResultsLimit = WebFetchLimiter(defaultSearchResultsLimit);
     transformJsonP = true;
   }

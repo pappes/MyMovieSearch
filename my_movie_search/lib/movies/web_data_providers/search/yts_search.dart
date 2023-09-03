@@ -16,7 +16,7 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static const _baseURL = 'https://yts.mx/ajax/search?query=';
 
   /// Limit results to 10 most relevant by default.
-  QueryYtsSearch(SearchCriteriaDTO criteria) : super(criteria) {
+  QueryYtsSearch(super.criteria) {
     transformJsonP = true;
   }
 

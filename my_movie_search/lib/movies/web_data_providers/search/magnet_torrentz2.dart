@@ -27,7 +27,7 @@ class QueryTorrentz2Search
   static const _baseURL = 'https://torrentz2.nz/search?q=';
   static const _pageURL = '&page=';
 
-  QueryTorrentz2Search(SearchCriteriaDTO criteria) : super(criteria);
+  QueryTorrentz2Search(super.criteria);
 
   /// Describe where the data is coming from.
   @override

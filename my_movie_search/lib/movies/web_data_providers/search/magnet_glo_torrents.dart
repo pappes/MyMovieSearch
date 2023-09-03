@@ -27,7 +27,7 @@ class QueryGloTorrentsSearch
   static const _baseURL = 'https://www.gtdb.to/search_results.php?search=';
   static const _pageURL = '&sort=seeders&order=desc&page=';
 
-  QueryGloTorrentsSearch(SearchCriteriaDTO criteria) : super(criteria);
+  QueryGloTorrentsSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

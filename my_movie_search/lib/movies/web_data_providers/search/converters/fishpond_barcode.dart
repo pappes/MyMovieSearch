@@ -18,7 +18,7 @@ class FishpondBarcodeSearchConverter {
         alternateTitle: map[jsonRawDescriptionKey]?.toString(),
         title: map[jsonCleanDescriptionKey]?.toString(),
         imageUrl: map[jsonUrlKey]?.toString(),
-      )
+      ),
     ];
   }
 }

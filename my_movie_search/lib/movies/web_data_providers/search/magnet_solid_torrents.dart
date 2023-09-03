@@ -27,7 +27,7 @@ class QuerySolidTorrentsSearch
   static const _baseURL = 'https://solidtorrents.to/search?q=';
   static const _pageURL = '&sort=seeders&page=';
 
-  QuerySolidTorrentsSearch(SearchCriteriaDTO criteria) : super(criteria);
+  QuerySolidTorrentsSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

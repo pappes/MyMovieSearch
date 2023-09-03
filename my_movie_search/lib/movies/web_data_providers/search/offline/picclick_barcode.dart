@@ -62,6 +62,6 @@ const intermediateMapList = [
     'cleanDescription':
         'the pink panther film collection 6 peter sellers rare set',
     'url':
-        'https://www.picclickimg.com/bv123456789O9j~TH2/The-Pink-Panther-Film-Collection-DVD-Box-Set.jpg'
+        'https://www.picclickimg.com/bv123456789O9j~TH2/The-Pink-Panther-Film-Collection-DVD-Box-Set.jpg',
   }
 ];

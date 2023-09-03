@@ -34,14 +34,16 @@ const htmlSampleEnd = '''
 
 const htmlSampleMid = r'''
 <div class="summary-top">
-  <header>
-      <h1>Love And Other Catastrophes</h1>
-      <span class="year">1996</span>
-  </header>
+  <main data-product="1234">
+    <header>
+        <h1>Love And Other Catastrophes</h1>
+        <span class="year">1996</span>
+    </header>
     <a class="thumbnail"">
       <img width="170" height="246" 
         src="https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg">
     </a>
+  </main>
 </div>
   <script type="application/ld+json">
   {
@@ -59,6 +61,6 @@ const htmlSampleMid = r'''
 const intermediateMapList = [
   {
     'description': 'Love And Other Catastrophes 1996',
-    'url': 'https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg'
+    'url': 'https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg',
   }
 ];

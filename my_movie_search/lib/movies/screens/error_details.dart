@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 class ErrorDetailsPage extends StatefulWidget {
-  const ErrorDetailsPage({Key? key, required this.errorDto}) : super(key: key);
+  const ErrorDetailsPage({super.key, required this.errorDto});
 
   final MovieResultDTO errorDto;
 

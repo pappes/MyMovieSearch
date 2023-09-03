@@ -19,7 +19,7 @@ class TorrentDownloadDetailConverter {
         imageUrl: map[jsonDetailLink]?.toString(),
         creditsOrder: map[jsonSeedersKey]?.toString(),
         userRatingCount: map[jsonLeechersKey]?.toString(),
-      )
+      ),
     ];
   }
 }

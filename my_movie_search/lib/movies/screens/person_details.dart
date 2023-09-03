@@ -12,7 +12,7 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 
 class PersonDetailsPage extends StatefulWidget {
-  const PersonDetailsPage({Key? key, required this.person}) : super(key: key);
+  const PersonDetailsPage({super.key, required this.person});
 
   final MovieResultDTO person;
 
@@ -143,12 +143,14 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
                   // Only show right column on tablet
                   if (!_mobileLayout)
-                    ExpandedColumn(children: [posterSection()])
+                    ExpandedColumn(
+                      children: [posterSection()],
+                    ),
                 ],
               ),
             ),
           ],
-        )
+        ),
       ],
     );
   }
@@ -198,9 +200,10 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         Poster(
           context,
           url: _person.imageUrl,
-          showImages: () => MMSNav(context)
-              .viewWebPage(makeImdbUrl(_person.uniqueId, photos: true)),
-        )
+          showImages: () => MMSNav(context).viewWebPage(
+            makeImdbUrl(_person.uniqueId, photos: true),
+          ),
+        ),
       ],
     );
   }

@@ -23,32 +23,32 @@ const expectedDtoJsonStringList = [
 const intermediateMapList = [
   {
     "Directed by:": [
-      {"name": "Andrew Davis", "url": "/name/nm0001112/?ref_=ttfc_fc_dr1"}
+      {"name": "Andrew Davis", "url": "/name/nm0001112/?ref_=ttfc_fc_dr1"},
     ],
     "Writing Credits:": [
       {"name": "Jeb Stuart", "url": "/name/nm0835732/?ref_=ttfc_fc_wr1"},
       {"name": "David Twohy", "url": "/name/nm0878638/?ref_=ttfc_fc_wr2"},
       {"name": "David Twohy", "url": '''/name/nm0878638/?ref_=ttfc_fc_wr3'''},
-      {"name": "Roy Huggins", "url": "/name/nm0400403/?ref_=ttfc_fc_wr4"}
+      {"name": "Roy Huggins", "url": "/name/nm0400403/?ref_=ttfc_fc_wr4"},
     ],
     "Cast:": [
       {
         "name": "Harrison Ford",
         "url": "/name/nm0000148/?ref_=ttfc_fc_cl_t1",
-        "charactorName": "Dr. Richard Kimble"
+        "charactorName": "Dr. Richard Kimble",
       },
       {
         "name": "Tommy Lee Jones",
         "url": "/name/nm0000169/?ref_=ttfc_fc_cl_t2",
-        "charactorName": "Samuel Gerard"
+        "charactorName": "Samuel Gerard",
       },
       {
         "name": "Sela Ward",
         "url": "/name/nm0000688/?ref_=ttfc_fc_cl_t3",
-        "charactorName": "Helen Kimble"
-      }
+        "charactorName": "Helen Kimble",
+      },
     ],
-    "id": "tt7602562"
+    "id": "tt7602562",
   }
 ];
 

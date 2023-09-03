@@ -25,7 +25,7 @@ class QueryTorrentDownloadDetail
     with ScrapeTorrentDownloadDetail {
   static const _baseURL = 'https://www.torrentdownload.info/';
 
-  QueryTorrentDownloadDetail(SearchCriteriaDTO criteria) : super(criteria);
+  QueryTorrentDownloadDetail(super.criteria);
 
   /// Describe where the data is coming from.
   @override
@@ -45,7 +45,9 @@ class QueryTorrentDownloadDetail
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
     if (map is Map) {
       return TorrentDownloadDetailConverter.dtoFromCompleteJsonMap(
-          map, criteria);
+        map,
+        criteria,
+      );
     }
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }

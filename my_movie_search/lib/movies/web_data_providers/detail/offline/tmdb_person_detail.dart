@@ -49,7 +49,7 @@ const tmdbTree = {
   "name": "Fred Abraham",
   "place_of_birth": null,
   "popularity": 0.6,
-  "profile_path": "/kU3B75TyRiCfivoq.jpg"
+  "profile_path": "/kU3B75TyRiCfivoq.jpg",
 };
 
 final tmdbJsonSearchInner = jsonEncode(tmdbTree);

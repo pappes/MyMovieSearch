@@ -834,9 +834,9 @@ Future main() async {
           {'vac': 'polio'},
           {'a': 'b', 'needle': 2, 123: 456, 'needle123': 'haystack456'},
           {
-            'needle': {'haystacks': 'haystack3'}
+            'needle': {'haystacks': 'haystack3'},
           },
-        ]
+        ],
       },
       {
         'pond',
@@ -844,8 +844,8 @@ Future main() async {
           'barn': {
             'horse': 'stall',
             'needle': {'haystack4'},
-            'dog': 'house'
-          }
+            'dog': 'house',
+          },
         },
         'tree',
       },
@@ -899,7 +899,7 @@ Future main() async {
             'haystack1',
             2,
             {'haystacks': 'haystack3'},
-            {'haystack4'}
+            {'haystack4'},
           ],
         );
       });
@@ -908,7 +908,7 @@ Future main() async {
         expect(
           TreeHelper(complexMap).deepSearch('needle', suffixMatch: true),
           [
-            ['thisisahaystack']
+            ['thisisahaystack'],
           ],
         );
       });
@@ -922,7 +922,7 @@ Future main() async {
             'haystack1', // string result
             2, // int result
             {'haystacks': 'haystack3'}, // Map result
-            {'haystack4'} // Set result
+            {'haystack4'}, // Set result
           ],
         );
       });

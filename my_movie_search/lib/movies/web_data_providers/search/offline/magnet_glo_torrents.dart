@@ -48,7 +48,7 @@ const intermediateMapList = [
     'name': 'Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS[TGx]',
     'description': '857.09 MB',
     'seeders': 0.0,
-    'leechers': 0.0
+    'leechers': 0.0,
   }
 ];
 

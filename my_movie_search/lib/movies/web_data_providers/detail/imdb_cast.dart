@@ -18,7 +18,7 @@ class QueryIMDBCastDetails
   static const _baseURL = 'https://www.imdb.com/title/';
   static const _baseURLsuffix = '/fullcredits/';
 
-  QueryIMDBCastDetails(SearchCriteriaDTO criteria) : super(criteria);
+  QueryIMDBCastDetails(super.criteria);
 
   /// Describe where the data is coming from.
   @override

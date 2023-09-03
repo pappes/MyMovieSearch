@@ -25,7 +25,7 @@ class QueryIMDBMoviesForKeyword
       'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=';
   static const _pageURL = '&page=';
 
-  QueryIMDBMoviesForKeyword(SearchCriteriaDTO criteria) : super(criteria);
+  QueryIMDBMoviesForKeyword(super.criteria);
 
   /// Describe where the data is coming from.
   @override

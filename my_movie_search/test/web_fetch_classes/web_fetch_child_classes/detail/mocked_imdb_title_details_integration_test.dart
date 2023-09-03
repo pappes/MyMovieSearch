@@ -33,10 +33,10 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
   late int httpStatus;
   String? expectedCriteria;
   QueryIMDBTitleDetailsMocked(
-    SearchCriteriaDTO criteria,
+    super.criteria,
     this.expectedCriteria, {
     this.httpStatus = 200,
-  }) : super(criteria);
+  });
 
   @override
   HttpClient myGetHttpClient() {
@@ -110,8 +110,8 @@ Map offlineMapList(String id) => {
           'aboveTheFold': {
             "titleText": {"text": "$id."},
           },
-        }
-      }
+        },
+      },
     };
 
 /// Make dummy html results for offline queries.

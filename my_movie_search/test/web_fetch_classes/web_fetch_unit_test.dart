@@ -130,7 +130,7 @@ class QueryUnknownSourceMocked
 typedef ConvertTreeToOutputTypeFn = Future<List<String>> Function(dynamic m);
 
 class WebFetchBasic extends WebFetchBase<String, String> {
-  WebFetchBasic(String criteria) : super(criteria) {
+  WebFetchBasic(super.criteria) {
     selectedDataSource = loopBackDataSource;
   }
   Future<Stream<String>> loopBackDataSource(dynamic s) =>
@@ -160,7 +160,7 @@ class WebFetchCached extends WebFetchBasic {
   String lastCriteria = '';
   String lastResult = '';
 
-  WebFetchCached(String criteria) : super(criteria);
+  WebFetchCached(super.criteria);
 
   @override
   bool myIsResultCached() => criteria == lastCriteria;
@@ -323,11 +323,13 @@ void main() {
           testClass.myConvertWebTextToTraversableTree('[{"key":"val"}]');
       expect(
         actualResult,
-        completion([
+        completion(
           [
-            {'key': 'val'}
-          ]
-        ]),
+            [
+              {'key': 'val'},
+            ],
+          ],
+        ),
       );
     });
     test('invalid string', () {
@@ -679,12 +681,14 @@ void main() {
       expectLater(
         actualOutput, //.printStream(input),
         completion(
-          emitsInOrder([
-            containsSubstring(
-              expectedValue,
-              startsWith: input == '' ? '' : '[{"id": "',
-            )
-          ]),
+          emitsInOrder(
+            [
+              containsSubstring(
+                expectedValue,
+                startsWith: input == '' ? '' : '[{"id": "',
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -720,12 +724,14 @@ void main() {
       expect(
         actualOutput,
         completion(
-          emitsInOrder([
-            containsSubstring(
-              expectedValue,
-              startsWith: input == '' ? '' : '[{"id": "',
-            )
-          ]),
+          emitsInOrder(
+            [
+              containsSubstring(
+                expectedValue,
+                startsWith: input == '' ? '' : '[{"id": "',
+              ),
+            ],
+          ),
         ),
       );
     }
