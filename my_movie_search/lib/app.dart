@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart'
     show
         BuildContext,
+        Colors,
         GlobalKey,
         MaterialApp,
         NavigatorState,
@@ -65,6 +66,8 @@ class _AppViewState extends State<AppView> {
       title: 'My Movie Search',
       theme: ThemeData(
         //brightness: Brightness.light,
+        useMaterial3: true,
+        colorSchemeSeed: Colors.blue,
         fontFamily: 'Lato',
       ),
       darkTheme: ThemeData(brightness: Brightness.dark),
