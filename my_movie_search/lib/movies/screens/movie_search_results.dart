@@ -49,26 +49,16 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     switch (widget.criteria.criteriaType) {
       case SearchCriteriaType.downloadSimple:
       case SearchCriteriaType.downloadAdvanced:
-        {
-          return TorRepository();
-        }
+        return TorRepository();
       case SearchCriteriaType.moviesForKeyword:
-        {
-          return MoviesForKeywordRepository();
-        }
+        return MoviesForKeywordRepository();
       case SearchCriteriaType.barcode:
-        {
-          return BarcodeRepository();
-        }
+        return BarcodeRepository();
       case SearchCriteriaType.moreKeywords:
-        {
-          _title = 'Keywords for ${widget.criteria.criteriaList.first.title}';
-          return MoreKeywordsRepository();
-        }
+        _title = 'Keywords for ${widget.criteria.criteriaList.first.title}';
+        return MoreKeywordsRepository();
       default:
-        {
-          return MovieSearchRepository();
-        }
+        return MovieSearchRepository();
     }
   }
 

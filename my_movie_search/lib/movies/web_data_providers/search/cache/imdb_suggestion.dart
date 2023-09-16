@@ -27,7 +27,7 @@ mixin ThreadedCacheIMDBSuggestions
 
     // if cached and not stale yield from cache
     if (await _isResultCached() && !await _isCacheStale()) {
-      logger.v(
+      logger.t(
         '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
         'value was pre cached ${myFormatInputAsText()}',
       );
@@ -36,13 +36,13 @@ mixin ThreadedCacheIMDBSuggestions
 
     final newPriority = _enqueueRequest(priority);
     if (null == newPriority) {
-      logger.v(
+      logger.t(
         '${ThreadRunner.currentThreadName}($priority) '
         'discarded ${myFormatInputAsText()}',
       );
       return [];
     }
-    logger.v(
+    logger.t(
       '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
       'requesting ${myFormatInputAsText()}',
     );
@@ -86,7 +86,7 @@ mixin ThreadedCacheIMDBSuggestions
   /// Insert transformed data into cache.
   Future<void> _addResultToCache(MovieResultDTO fetchedResult) async {
     final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
-    logger.v(
+    logger.t(
       '${ThreadRunner.currentThreadName} cache add '
       '${fetchedResult.uniqueId} size:${_cache.cachedSize()}',
     );

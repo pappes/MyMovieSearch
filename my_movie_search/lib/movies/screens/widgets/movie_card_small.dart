@@ -44,7 +44,6 @@ class MovieTile extends ListTile {
     switch (movie.type) {
       case MovieContentType.download:
         middle.add(movie.bestSource.excludeNone);
-        break;
       case MovieContentType.person:
       case MovieContentType.barcode:
         break;
@@ -75,15 +74,12 @@ class MovieTile extends ListTile {
         start.add(seeders);
         middle.add(movie.charactorName);
         end.add(movie.description);
-        break;
       case MovieContentType.person:
         start.add(movie.charactorName);
         end.add(ratingCount);
-        break;
       case MovieContentType.barcode:
         start.add(movie.bestSource.excludeNone);
         end.add(movie.alternateTitle);
-        break;
       default:
         start.add(movie.runTime.toFormattedTime());
         middle.add(movie.censorRating.excludeNone);

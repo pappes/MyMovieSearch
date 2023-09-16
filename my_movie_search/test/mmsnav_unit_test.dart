@@ -4,7 +4,6 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
-import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
@@ -31,19 +30,8 @@ class TestMMSFlutterCanvas {
       result = inv.positionalArguments[0]?.toString();
     });
   }
-
-  /*String? viewWebPage(String? url) {
-    mockCanvas.viewWebPage(url);
-    return result;
-  }
-
-  String? viewFlutterPage(Widget? page) {
-    mockCanvas.viewFlutterPage(page);
-    return result;
-  }*/
 }
 
-final criteriaDto = SearchCriteriaDTO().fromString('criteria');
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Non Mocked Unit tests

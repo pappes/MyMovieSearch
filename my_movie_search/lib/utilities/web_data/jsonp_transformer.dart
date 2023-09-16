@@ -12,7 +12,7 @@ class JsonPState {
   }
 }
 
-class JsonPConversionSink extends Sink<String> {
+class JsonPConversionSink implements Sink<String> {
   final Sink<Object> _sink;
   final JsonPDecoder _jsonPDecoder;
 

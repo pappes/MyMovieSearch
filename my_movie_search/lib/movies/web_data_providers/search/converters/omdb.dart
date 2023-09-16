@@ -65,16 +65,12 @@ class OmdbMovieSearchConverter {
     switch (map[innerElementType]) {
       case omdbResultTypeMovie:
         movie.type = MovieContentType.movie;
-        break;
       case omdbResultTypeSeries:
         movie.type = MovieContentType.series;
-        break;
       case omdbResultTypeEpisode:
         movie.type = MovieContentType.episode;
-        break;
       default:
         movie.type = MovieContentType.none;
-        break;
     }
 
     final year = getYear(map[innerElementYear]?.toString());

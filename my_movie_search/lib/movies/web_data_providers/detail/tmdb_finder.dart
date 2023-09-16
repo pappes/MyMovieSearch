@@ -36,7 +36,7 @@ class QueryTMDBFinder extends QueryTMDBCommon {
     if (text.startsWith(imdbPersonPrefix) || text.startsWith(imdbTitlePrefix)) {
       return text;
     }
-    logger.v('surpressed $source search for non IMDB id $text');
+    logger.t('surpressed $source search for non IMDB id $text');
     return ''; // do not allow searches for non-imdb IDs
   }
 

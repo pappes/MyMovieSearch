@@ -34,7 +34,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
 
     // if cached and not stale yield from cache
     if (isThreadedResultCached() && !isThreadedCacheStale()) {
-      logger.v(
+      logger.t(
         '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
         'value was pre-cached ${myFormatInputAsText()}',
       );
@@ -43,14 +43,14 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     final newPriority = confirmThreadCachePriority(priority, limit);
 
     if (null == newPriority) {
-      logger.v(
+      logger.t(
         '${ThreadRunner.currentThreadName}($priority) '
         'discarded ${myFormatInputAsText()}',
       );
       completeThreadCacheRequest(priority);
       return [];
     }
-    logger.v(
+    logger.t(
       '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
       'requesting ${myFormatInputAsText()}',
     );

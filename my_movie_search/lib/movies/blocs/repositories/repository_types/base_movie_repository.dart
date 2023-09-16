@@ -53,7 +53,7 @@ class BaseMovieRepository {
     feedback.type = MovieContentType.information;
     yieldResult(feedback);
 
-    logger.v('closing stream');
+    logger.t('closing stream');
     _movieStreamController?.close();
     _movieStreamController = null;
   }

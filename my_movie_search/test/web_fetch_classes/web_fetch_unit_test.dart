@@ -148,12 +148,6 @@ class WebFetchBasic extends WebFetchBase<String, String> {
       overriddenMyConvertTreeToOutputType(map);
   @override
   String myYieldError(String contents) => contents;
-
-  ConvertTreeToOutputTypeFn get convertTreeToOutputTypeFunction =>
-      overriddenMyConvertTreeToOutputType;
-  set convertTreeToOutputTypeFunction(ConvertTreeToOutputTypeFn fn) {
-    overriddenMyConvertTreeToOutputType = fn;
-  }
 }
 
 class WebFetchCached extends WebFetchBasic {

@@ -140,7 +140,6 @@ class MMSNav {
         // Search for movies that match the keyword.
         getMoviesForKeyword(movie.title);
 
-        break;
       case MovieContentType.barcode:
         // Search for movies based on the data fetched for the barcode.
         _showResultsPage(
@@ -150,7 +149,6 @@ class MMSNav {
           ),
         );
 
-        break;
       case MovieContentType.navigation:
         if (movie.uniqueId.startsWith(webAddressPrefix)) {
           // Search for more movies that match the keyword.
@@ -170,12 +168,10 @@ class MMSNav {
           );
         }
 
-        break;
       case MovieContentType.download:
         // Open magnet link.
         canvas.viewWebPage(movie.imageUrl);
 
-        break;
       default:
         // Show details screen (movie details or person details)
         canvas.viewFlutterPage(getDetailsPage(movie));

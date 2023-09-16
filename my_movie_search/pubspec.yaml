@@ -18,7 +18,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.17.0 <3.0.0'
+  sdk: '>=3.1.2 <4.0.0'
 
 dependencies:
   flutter:
@@ -37,7 +37,7 @@ dependencies:
   html_unescape: ^2.0.0                 # decode &apos;
   intl: ^0.18.0                         # internationalisation including number and data formatting.
   lint: ^2.0.1
-  logger: ^1.1.0                        # Log trace messages to console.
+  logger: ^2.0.2                        # Log trace messages to console.
   path_provider: ^2.0.9                 # Device filesystem access for accessing database files.
   path: ^1.8.0                          # File path manipulation library
   pinch_zoom_image_last: ^0.4.1         # pinch to zoom on images

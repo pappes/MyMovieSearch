@@ -36,8 +36,8 @@ class Settings {
     // and to ensure tests are not prevented from calling real http enpoints
     WidgetsFlutterBinding.ensureInitialized();
     final map = await loadFile();
-    logger?.v('settings loaded : $map');
+    logger?.t('settings loaded : $map');
     final secrets = await loadFile('assets/secrets.json');
-    logger?.v('secrets loaded : $secrets');
+    logger?.t('secrets loaded : $secrets');
   }
 }
