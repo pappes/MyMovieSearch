@@ -40,13 +40,12 @@ dependencies:
   logger: ^2.0.2                        # Log trace messages to console.
   path_provider: ^2.0.9                 # Device filesystem access for accessing database files.
   path: ^1.8.0                          # File path manipulation library
-  pinch_zoom_image_last: ^0.4.1         # pinch to zoom on images
   simple_barcode_scanner: ^0.0.8
   sqflite: ^2.0.2                       # Database storage for persisting state across sessions.
   ####logger_flutter: ^0.7.1            # Shake device to see trace messages.
   universal_io: ^2.0.4                  # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
-  url_launcher: ^6.0.20                  # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
-  webview_flutter: ^4.0.1               # Show web page (Note V3.0.0 availoable but needs testing)
+  url_launcher: ^6.0.20                 # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
+  webview_flutter: ^4.0.1               # Show web page
 
   #firebase_core: ^1.0.3                # Firebase initialisation
   #firebase_auth: ^3.0.1                 # Authenticate users against Firebase
