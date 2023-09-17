@@ -21,46 +21,40 @@ class MovieSearchCriteriaPage extends StatefulWidget {
   }
 }
 
-class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
-    with RestorationMixin {
-  final _criteria = SearchCriteriaDTO().init(SearchCriteriaType.movieTitle);
-  final _restorableCriteria = RestorableSearchCriteria();
+class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage> {
+  final textController = TextEditingController();
+  final FocusNode criteriaFocusNode = FocusNode();
 
-  var _currentCriteria = '';
-  late final textController = TextEditingController(text: _currentCriteria);
-  late final FocusNode criteriaFocusNode = FocusNode();
-
-  void searchForMovie() {
+  void performSearch(SearchCriteriaDTO criteria) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => MovieSearchResultsNewPage(criteria: _criteria),
+        builder: (context) => MovieSearchResultsNewPage(criteria: criteria),
       ),
     );
   }
 
-  void useBarcode(String barcode) {
-    _criteria.criteriaTitle = barcode;
-    _criteria.criteriaType = SearchCriteriaType.barcode;
-    searchForMovie();
+  void searchForBarcode(String barcode) {
+    performSearch(
+      SearchCriteriaDTO().init(
+        SearchCriteriaType.barcode,
+        title: barcode,
+      ),
+    );
   }
 
-  @override
-  // The restoration bucket id for this page.
-  String get restorationId =>
-      'MovieSearchCriteria'; //+ _criteria.value.criteriaTitle;
-
-  @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    // Register our property to be saved every time it changes,
-    // and to be restored every time our app is killed by the OS!
-    registerForRestoration(_restorableCriteria, 'criteria');
+  void searchForMovie() {
+    performSearch(
+      SearchCriteriaDTO().init(
+        SearchCriteriaType.movieTitle,
+        title: textController.text,
+      ),
+    );
   }
 
   @override
   void dispose() {
     // Restorables must be disposed when no longer used.
-    _restorableCriteria.dispose();
     textController.dispose();
     // Clean up the focus node when the Form is disposed.
     criteriaFocusNode.dispose();
@@ -70,7 +64,6 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called.
-    _restorableCriteria.value = _criteria;
     final page = Scaffold(
       appBar: AppBar(
         // Get title from the StatefulWidget MovieSearchCriteriaPage.
@@ -118,16 +111,11 @@ class _CriteriaInput extends Center {
                 onPressed: () {
                   state.textController.clear();
                   DVDBarcodeScanner()
-                      .scanBarcode(state.context, state.useBarcode);
+                      .scanBarcode(state.context, state.searchForBarcode);
                 },
               ),
             ),
-            onChanged: (text) {
-              state._criteria.criteriaTitle = text;
-            },
-            onSubmitted: (text) {
-              state._criteria.criteriaTitle = text;
-              state._criteria.criteriaType = SearchCriteriaType.movieTitle;
+            onSubmitted: (_) {
               state.searchForMovie();
             },
           ),
