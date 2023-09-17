@@ -38,13 +38,15 @@ class _ErrorDetailsPageState extends State<ErrorDetailsPage>
   @override
   Widget build(BuildContext context) {
     _restorableMovie.value = widget.errorDto;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.errorDto.title),
-      ),
-      body: Scrollbar(
-        thumbVisibility: true,
-        child: bodySection(),
+    return SelectionArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.errorDto.title),
+        ),
+        body: Scrollbar(
+          thumbVisibility: true,
+          child: bodySection(),
+        ),
       ),
     );
   }
@@ -53,7 +55,7 @@ class _ErrorDetailsPageState extends State<ErrorDetailsPage>
     return ListView(
       primary: true, //attach scrollbar controller to primary view
       children: <Widget>[
-        SelectableText(widget.errorDto.title),
+        Text(widget.errorDto.title),
       ],
     );
   }

@@ -105,14 +105,16 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   Widget build(BuildContext context) {
     _mobileLayout = useMobileLayout(context);
     _restorablePerson.value = _person;
-    return Scaffold(
-      appBar: AppBar(
-        // Get title from the StatefulWidget PersonDetailsPage.
-        title: Text(_person.title),
-      ),
-      body: Scrollbar(
-        thumbVisibility: true,
-        child: _bodySection(),
+    return SelectionArea(
+      child: Scaffold(
+        appBar: AppBar(
+          // Get title from the StatefulWidget PersonDetailsPage.
+          title: Text(_person.title),
+        ),
+        body: Scrollbar(
+          thumbVisibility: true,
+          child: _bodySection(),
+        ),
       ),
     );
   }
@@ -121,7 +123,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     return ListView(
       primary: true, //attach scrollbar controller to primary view
       children: <Widget>[
-        SelectableText(_person.title, style: hugeFont),
+        Text(_person.title, style: hugeFont),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -159,7 +161,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     return Wrap(
       children: <Widget>[
         Text('Source: ${_person.bestSource.name}      '),
-        SelectableText('UniqueId: ${_person.uniqueId}      '),
+        Text('UniqueId: ${_person.uniqueId}      '),
         Text('Popularity: ${_person.userRatingCount}'),
         ElevatedButton(
           onPressed: () =>
@@ -176,11 +178,14 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         ),
         Align(
           alignment: Alignment.topLeft,
-          child: SelectableText(
-            _person.description,
-            style: biggerFont,
-            maxLines: _descriptionExpanded ? null : 8,
+          child: InkWell(
             onTap: _toggleDescription,
+            child: Text(
+              _person.description,
+              style: biggerFont,
+              overflow: _descriptionExpanded ? null : TextOverflow.ellipsis,
+              maxLines: _descriptionExpanded ? null : 8,
+            ),
           ),
         ),
         ..._related(),

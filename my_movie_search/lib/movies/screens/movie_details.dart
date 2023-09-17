@@ -105,13 +105,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   Widget build(BuildContext context) {
     _restorableMovie.value = _movie;
     _mobileLayout = useMobileLayout(context);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(_movie.title),
-      ),
-      body: Scrollbar(
-        thumbVisibility: true,
-        child: _bodySection(),
+    return SelectionArea(
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(_movie.title),
+        ),
+        body: Scrollbar(
+          thumbVisibility: true,
+          child: _bodySection(),
+        ),
       ),
     );
   }
@@ -120,7 +122,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     return ListView(
       primary: true, //attach scrollbar controller to primary view
       children: <Widget>[
-        SelectableText(_movie.title, style: hugeFont),
+        Text(_movie.title, style: hugeFont),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
@@ -218,7 +220,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       Wrap(
         children: <Widget>[
           Text('Source: ${_movie.bestSource.name}      '),
-          SelectableText('UniqueId: ${_movie.uniqueId}'),
+          Text('UniqueId: ${_movie.uniqueId}'),
           ElevatedButton(
             onPressed: () =>
                 MMSNav(context).viewWebPage(makeImdbUrl(_movie.uniqueId)),
@@ -233,12 +235,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   List<Widget> _description() {
     return [
       BoldLabel('Description:'),
-      SelectableText(
-        _movie.description,
-        style: biggerFont,
-        minLines: 1,
-        maxLines: _descriptionExpanded ? null : 8,
+      InkWell(
         onTap: _toggleDescription,
+        child: Text(
+          _movie.description,
+          style: biggerFont,
+          overflow: _descriptionExpanded ? null : TextOverflow.ellipsis,
+          maxLines: _descriptionExpanded ? null : 8,
+        ),
       ),
       Text('Languages: ${_movie.languages}'),
       Text('Genres: ${_movie.genres}'),
