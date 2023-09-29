@@ -211,7 +211,7 @@ void main() {
     test('invalid html', () async {
       // Set up the test data.
       const expectedException = '[QueryYtsDetails] Error in yts_detail '
-          'with criteria 123 interpreting web text as a map '
+          'with criteria 123 convert error interpreting web text as a map '
           ':yts data not detected for criteria 123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('123');
@@ -231,7 +231,7 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[QueryYtsDetails] Error in yts_detail with '
-          'criteria 123 interpreting web text as a map '
+          'criteria 123 convert error interpreting web text as a map '
           ':yts data not detected for criteria 123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('123');

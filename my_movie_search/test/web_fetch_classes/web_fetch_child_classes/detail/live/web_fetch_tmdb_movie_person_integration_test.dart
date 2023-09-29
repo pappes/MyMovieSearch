@@ -14,22 +14,22 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"-2","bestSource":"DataSourceType.tmdbPerson","title":"[tmdbPerson] Error in tmdbPerson with criteria 000 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/person/000?api_key=a13","type":"MovieContentType.error"}
+{"uniqueId":"-2","bestSource":"DataSourceType.tmdbPerson","title":"[tmdbPerson] Error in tmdbPerson with criteria 000 stream error interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/person/00","type":"MovieContentType.error"}
 ''',
   r'''
 {"uniqueId":"nm0001323","bestSource":"DataSourceType.tmdbPerson","title":"Debbie Harry","type":"MovieContentType.person","year":"1945",
       "description":"An American singer, songwriter, and actress, known as the lead singer of the new wave band Blondie.",
-      "userRating":"8.758","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/pASovJqjDaaHGs08jQs9FBOuWW6.jpg","sources":{"DataSourceType.tmdbPerson":"102"}}
+      "userRating":"17.36","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/pASovJqjDaaHGs08jQs9FBOuWW6.jpg","sources":{"DataSourceType.tmdbPerson":"102"}}
 ''',
   r'''
 {"uniqueId":"nm0005454","bestSource":"DataSourceType.tmdbPerson","title":"Scott Speedman","type":"MovieContentType.person","year":"1975",
       "description":"Scott Speedman (born September 1, 1975) is a British-born Canadian film and television actor. He is best known for playing Ben Covington in the coming-of-age television drama Felicity and Lycan-Vampire hybrid Michael Corvin in the gothic horror/action Underworld films.\n\nDescription above from the Wikipedia article Scott Speedman, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
-      "userRating":"28.555","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/tGgD96WOhmuQU4e6ZTU5IEx4W9E.jpg","sources":{"DataSourceType.tmdbPerson":"100"}}
+      "userRating":"18.128","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/tGgD96WOhmuQU4e6ZTU5IEx4W9E.jpg","sources":{"DataSourceType.tmdbPerson":"100"}}
 ''',
   r'''
 {"uniqueId":"nm0914455","bestSource":"DataSourceType.tmdbPerson","title":"Leonor Watling","type":"MovieContentType.person","year":"1975",
       "description":"Leonor Elizabeth Ceballos Watling (born July 28, 1975) is an award-winning Spanish film actress and singer.",
-      "userRating":"16.487","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/uyEM3c37lL90by5vmuOk0XZQ83O.jpg","sources":{"DataSourceType.tmdbPerson":"101"}}
+      "userRating":"12.251","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/uyEM3c37lL90by5vmuOk0XZQ83O.jpg","sources":{"DataSourceType.tmdbPerson":"101"}}
 ''',
 ];
 

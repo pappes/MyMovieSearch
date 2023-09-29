@@ -2,6 +2,8 @@
 /// in a concsistent manner.
 library web_fetch;
 
+import 'package:flutter/material.dart';
+
 const _defaultSearchResultsLimit = 100;
 
 /// Constrain the number of records that can be fetched from the web.
@@ -17,6 +19,7 @@ class WebFetchLimiter {
 
   WebFetchLimiter([this._classLimit = _defaultSearchResultsLimit]);
 
+  @mustCallSuper
   int consume([int quantity = 1]) {
     currentUsage += quantity;
     if (limit >= currentUsage) return quantity;
@@ -25,6 +28,7 @@ class WebFetchLimiter {
     return quantity - excess;
   }
 
+  @mustCallSuper
   void reset() {
     currentUsage = 0;
   }

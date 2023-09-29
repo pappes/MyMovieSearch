@@ -242,7 +242,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final imdbSearch = QueryIMDBSearch(criteria);
       const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
-          'with criteria 123 interpreting web text as a map '
+          'with criteria 123 convert error interpreting web text as a map '
           ':No search results found in html:not valid html';
 
       // Invoke the functionality.
@@ -258,7 +258,7 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
-          'with criteria 123 interpreting web text as a map '
+          'with criteria 123 convert error interpreting web text as a map '
           ':No search results found in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final imdbSearch = QueryIMDBSearch(criteria);
@@ -279,7 +279,7 @@ void main() {
   test('unexpected json contents', () async {
     // Set up the test data.
     const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
-        'with criteria 123 interpreting web text as a map '
+        'with criteria 123 convert error interpreting web text as a map '
         ':Possible IMDB site update, no search result found for search query, '
         'json contents:[{props: {pageProps: {nameResults: {found: [{id: nm0152436, displayNameText:';
     final queryResult = <MovieResultDTO>[];
@@ -300,7 +300,7 @@ void main() {
   test('no json results', () async {
     // Set up the test data.
     const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
-        'with criteria 123 interpreting web text as a map '
+        'with criteria 123 convert error interpreting web text as a map '
         ':Possible IMDB site update, no search result found for search query, '
         'json contents:{}';
     final queryResult = <MovieResultDTO>[];

@@ -203,7 +203,7 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryLibsaBarcodeSearch] Error in libsaBarcode '
-          'with criteria dream interpreting web text as a map '
+          'with criteria dream convert error interpreting web text as a map '
           ':LibsaBarcode results data not detected '
           'for criteria dream in html:not valid html';
       final queryResult = <MovieResultDTO>[];
@@ -223,7 +223,7 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryLibsaBarcodeSearch] Error in libsaBarcode '
-          'with criteria dream interpreting web text as a map '
+          'with criteria dream convert error interpreting web text as a map '
           ':LibsaBarcode results data not detected '
           'for criteria dream in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];

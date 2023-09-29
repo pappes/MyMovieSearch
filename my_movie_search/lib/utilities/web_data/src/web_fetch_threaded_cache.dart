@@ -2,6 +2,7 @@
 /// in a concsistent manner.
 library web_fetch;
 
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -25,6 +26,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   /// Optionally override the [priority] to push slow operations to another thread.
   /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
+  @useResult
   Future<List<OUTPUT_TYPE>> readPrioritisedCachedList({
     String priority = ThreadRunner.slow,
     DataSourceFn? source,
@@ -76,6 +78,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   ///
   /// Returns new priority for the request.
   /// Returns null if the request should be discarded.
+  @visibleForOverriding
   String? confirmThreadCachePriority(
     String priority,
     int? limit,
@@ -83,12 +86,14 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
       priority;
 
   /// Perform any class specific request tracking.
+  @visibleForOverriding
   void initialiseThreadCacheRequest(
     String priority,
     int? limit,
   ) {}
 
   /// Perform any class specific request tracking.
+  @visibleForOverriding
   void completeThreadCacheRequest(String priority) {}
 
   /// Returns new instance of the child class.
@@ -101,6 +106,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   /// ```dart
   /// return QueryIMDBNameDetails();
   /// ```
+  @factory
   WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> myClone(INPUT_TYPE criteria);
 
   /// static wrapper to readList() for compatibility with ThreadRunner.
@@ -112,18 +118,23 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     );
   }
 
+  @visibleForTesting
+  @mustCallSuper
   void clearThreadedCache() => _cache.clear();
 
   /// Check cache to see if data has already been fetched.
+  @useResult
   bool isThreadedResultCached() => _cache.isCached(_getCacheKey());
 
   /// Check cache to see if data in cache should be refreshed.
+  @useResult
   bool isThreadedCacheStale() {
     return false;
     //return _cache.isCached(_getCacheKey());
   }
 
   /// Retrieve cached result.
+  @useResult
   Stream<OUTPUT_TYPE> fetchResultFromThreadedCache() async* {
     final value = _cache.get(_getCacheKey());
     if (value is List<OUTPUT_TYPE>) {

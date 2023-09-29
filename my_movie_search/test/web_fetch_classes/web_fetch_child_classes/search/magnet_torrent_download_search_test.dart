@@ -207,7 +207,7 @@ void main() {
       final torrentDownloadSearch = QueryTorrentDownloadSearch(criteria);
       const expectedException =
           '[QueryTorrentDownloadSearch] Error in torrentDownloadSearch '
-          'with criteria dream interpreting web text as a map '
+          'with criteria dream convert error interpreting web text as a map '
           ':TorrentDownload results data not detected for criteria dream in html:not valid html';
 
       // Invoke the functionality.
@@ -224,7 +224,7 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryTorrentDownloadSearch] Error in torrentDownloadSearch '
-          'with criteria dream interpreting web text as a map '
+          'with criteria dream convert error interpreting web text as a map '
           ':TorrentDownload results data not detected for criteria dream in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final torrentDownloadSearch = QueryTorrentDownloadSearch(criteria);

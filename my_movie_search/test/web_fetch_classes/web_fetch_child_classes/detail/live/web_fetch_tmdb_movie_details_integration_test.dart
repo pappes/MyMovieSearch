@@ -14,19 +14,20 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"-1","bestSource":"DataSourceType.tmdbMovie","title":"[tmdbMovie] Error in tmdbMovie with criteria tt0101001 interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/movie/tt0101001?api_key=a134ed10","type":"MovieContentType.error","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.tmdbMovie":"-1"},"related":{}}
+{"uniqueId":"-1","bestSource":"DataSourceType.tmdbMovie","title":"[tmdbMovie] Error in tmdbMovie with criteria tt0101001 stream error interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/movie/tt0101001?api","type":"MovieContentType.error","sources":{"DataSourceType.tmdbMovie":"-1"}}
 ''',
   r'''
 {"uniqueId":"tt0101000","bestSource":"DataSourceType.tmdbMovie","title":"Začátek dlouhého podzimu","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
       "languages":"[\"Czech\"]",
-      "genres":"[\"Drama\",\"Family\"]","keywords":"[]","sources":{"DataSourceType.tmdbMovie":"913986"},"related":{}}
+      "genres":"[\"Drama\",\"Family\"]",
+      "userRating":"6.0","userRatingCount":"1","sources":{"DataSourceType.tmdbMovie":"913986"}}
 ''',
   r'''
 {"uniqueId":"tt0101002","bestSource":"DataSourceType.tmdbMovie","title":"Return Engagement","alternateTitle":"再戰江湖","type":"MovieContentType.title","year":"1990","runTime":"6480","language":"LanguageType.foreign",
       "languages":"[\"Cantonese\"]",
-      "genres":"[\"Crime\",\"Action\",\"Drama\"]","keywords":"[]",
+      "genres":"[\"Crime\",\"Action\",\"Drama\"]",
       "description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.",
-      "userRating":"6.0","userRatingCount":"4","imageUrl":"https://image.tmdb.org/t/p/w500/7zwS6ttVbgHXpgehTCcVg1f8nbM.jpg","sources":{"DataSourceType.tmdbMovie":"230839"},"related":{}}
+      "userRating":"6.643","userRatingCount":"7","imageUrl":"https://image.tmdb.org/t/p/w500/7zwS6ttVbgHXpgehTCcVg1f8nbM.jpg","sources":{"DataSourceType.tmdbMovie":"230839"}}
 ''',
 ];
 

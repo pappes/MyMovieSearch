@@ -203,7 +203,7 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryPicclickBarcodeSearch] Error in picclickBarcode '
-          'with criteria dream interpreting web text as a map '
+          'with criteria dream convert error interpreting web text as a map '
           ':PicclickBarcode results data not detected '
           'log: tableSelector found 0 tables\n '
           'for criteria dream in html:not valid html';
@@ -224,7 +224,7 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryPicclickBarcodeSearch] Error in picclickBarcode '
-          'with criteria dream interpreting web text as a map '
+          'with criteria dream convert error interpreting web text as a map '
           ':PicclickBarcode results data not detected '
           'log: tableSelector found 0 tables\n '
           'for criteria dream in html:<html><body>stuff</body></html>';

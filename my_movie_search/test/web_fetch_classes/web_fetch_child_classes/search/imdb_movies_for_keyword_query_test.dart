@@ -229,7 +229,7 @@ testing and punctuation
       final imdbKeywords = QueryIMDBMoviesForKeyword(criteria);
       const expectedException =
           '[QueryIMDBMoviesForKeyword] Error in imdbKeywords '
-          'with criteria dream interpreting web text as a map '
+          'with criteria dream convert error interpreting web text as a map '
           ':imdb keyword data not detected for criteria dream';
 
       // Invoke the functionality.
@@ -246,7 +246,7 @@ testing and punctuation
       // Set up the test data.
       const expectedException =
           '[QueryIMDBMoviesForKeyword] Error in imdbKeywords '
-          'with criteria dream interpreting web text as a map '
+          'with criteria dream convert error interpreting web text as a map '
           ':imdb keyword data not detected for criteria dream';
       final queryResult = <MovieResultDTO>[];
       final imdbKeywords = QueryIMDBMoviesForKeyword(criteria);

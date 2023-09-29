@@ -142,6 +142,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBCastDetails(criteria);
       testClass.clearThreadedCache();
+      // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
@@ -165,6 +166,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBCastDetails(criteria);
       testClass.clearThreadedCache();
+      // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
@@ -181,6 +183,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBCastDetails(criteria);
       testClass.clearThreadedCache();
+      // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
@@ -305,7 +308,7 @@ void main() {
     test('invalid html', () async {
       // Set up the test data.
       const expectedException = '[QueryIMDBCastDetails] Error in imdb_cast '
-          'with criteria tt123 interpreting web text as a map '
+          'with criteria tt123 convert error interpreting web text as a map '
           ':imdb cast data not detected for criteria tt123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('tt123');
@@ -325,7 +328,7 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[QueryIMDBCastDetails] Error in imdb_cast '
-          'with criteria tt123 interpreting web text as a map '
+          'with criteria tt123 convert error interpreting web text as a map '
           ':imdb cast data not detected for criteria tt123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('tt123');

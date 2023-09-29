@@ -171,7 +171,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final imdbSuggestions = QueryIMDBSuggestions(criteria);
       const expectedException = '''
-[QueryIMDBSuggestions] Error in imdbSuggestions with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 2)
+[QueryIMDBSuggestions] Error in imdbSuggestions with criteria 123 convert error interpreting web text as a map :FormatException: Unexpected character (at character 2)
 {not valid json}
  ^
 ''';
@@ -190,7 +190,7 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryIMDBSuggestions] Error in imdbSuggestions '
-          'with criteria 123 translating page map to objects '
+          'with criteria 123 convert error translating page map to objects '
           ':expected map got Null unable to interpret data null';
       final queryResult = <MovieResultDTO>[];
       final imdbSuggestions = QueryIMDBSuggestions(criteria);

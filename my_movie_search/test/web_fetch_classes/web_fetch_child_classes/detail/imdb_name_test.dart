@@ -184,6 +184,7 @@ void main() {
       QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
       final testClass = QueryIMDBNameDetails(criteria);
+      // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
@@ -207,6 +208,7 @@ void main() {
       QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
       final testClass = QueryIMDBNameDetails(criteria);
+      // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
@@ -223,6 +225,7 @@ void main() {
       QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
       final testClass = QueryIMDBNameDetails(criteria);
+      // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
@@ -239,6 +242,7 @@ void main() {
         final criteria = SearchCriteriaDTO().fromString('nm$iteration');
         final testClass = QueryIMDBNameDetails(criteria);
         // Enqueue requests but do not wait for result.
+        // ignore: unused_result
         testClass.readPrioritisedCachedList(
           source: StaticJsonGenerator.stuffDelayed,
         );
@@ -352,7 +356,7 @@ void main() {
     test('invalid html', () async {
       // Set up the test data.
       const expectedException = '[QueryIMDBNameDetails] Error in imdb_person '
-          'with criteria nm7602562 interpreting web text as a map '
+          'with criteria nm7602562 convert error interpreting web text as a map '
           ':imdb web scraper data not detected for criteria nm7602562 in not valid html';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm7602562');
@@ -370,7 +374,7 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[QueryIMDBNameDetails] Error in imdb_person '
-          'with criteria nm7602562 interpreting web text as a map '
+          'with criteria nm7602562 convert error interpreting web text as a map '
           ':imdb web scraper data not detected for criteria nm7602562 in <html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm7602562');

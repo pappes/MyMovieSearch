@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_overriding_member
+
 import 'dart:async' show StreamController;
 import 'dart:convert';
 
@@ -45,7 +47,7 @@ class QueryUnknownSourceMocked
 
   /// Returns a new [HttpClient] instance to allow mocking in tests.
   @override
-  HttpClient myGetHttpClient() {
+  HttpClient baseGetHttpClient() {
     final client = MockHttpClient();
     final clientRequest = MockHttpClientRequest();
     final clientResponse = MockHttpClientResponse();
@@ -110,7 +112,8 @@ class QueryUnknownSourceMocked
 
   static Future<List<MovieResultDTO>> treeToDto(dynamic tree) {
     if (tree is Map) return Future.value([mapToDto(tree)]);
-    return Future.value(listToDto(tree as List));
+    if (tree is List) return Future.value(listToDto(tree));
+    throw 'Unknown: $tree';
   }
 
   static MovieResultDTO mapToDto(Map map) => MovieResultDTO().init(
@@ -377,7 +380,7 @@ void main() {
       expect(
           actualResult,
           'Error in unknown with criteria $jsonpText '
-          'fetching web text :$jsonpText');
+          'fetching web text :$jsonpText\n');
     });
   });
 
@@ -509,9 +512,40 @@ void main() {
       timeout: const Timeout(Duration(seconds: 5)),
     );
 
+    test(
+      'exception handling1',
+      () {
+        final testClass = QueryUnknownSourceMocked(criteriaDto);
+        final actualOutput = testClass.baseConvertTreeToOutputType(
+          Stream.fromIterable(['Conversion Failed1', 'Conversion Failed2']),
+        );
+        final expectedOutput = [
+          testClass.myYieldError('Error in unknown with criteria '
+              '${criteriaDto.criteriaTitle} convert error translating page map '
+              'to objects :Unknown: Conversion Failed1'),
+          testClass.myYieldError(
+            'Error in unknown with criteria '
+            '${criteriaDto.criteriaTitle} convert error translating page map '
+            'to objects :Unknown: Conversion Failed2',
+          ),
+        ];
+        final newId = int.parse(expectedOutput.first.uniqueId) - 1;
+        expectedOutput.first.uniqueId = newId.toString();
+
+        expect(
+          actualOutput,
+          emitsInOrder([
+            MovieResultDTOMatcher(expectedOutput.first),
+            MovieResultDTOMatcher(expectedOutput.last),
+          ]),
+        );
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+
     //override myConvertTreeToOutputType to throw an exception
     test(
-      'exception handling',
+      'exception handling2',
       () {
         final testClass = QueryUnknownSourceMocked(criteriaDto);
         testClass.overriddenConvertTreeToOutputType =
@@ -519,19 +553,25 @@ void main() {
         final actualOutput = testClass.baseConvertTreeToOutputType(
           Stream.fromIterable(_makeMaps(2)),
         );
-        final expectedOutput = testClass.myYieldError(
-          'Error in unknown with criteria '
-          '${criteriaDto.criteriaTitle} translating page map '
-          'to objects :Conversion Failed',
-        );
-        final newId = int.parse(expectedOutput.uniqueId) - 1;
-        expectedOutput.uniqueId = newId.toString();
+        final expectedOutput = [
+          testClass.myYieldError('Error in unknown with criteria '
+              '${criteriaDto.criteriaTitle} convert error translating page map '
+              'to objects :Conversion Failed'),
+          testClass.myYieldError(
+            'Error in unknown with criteria '
+            '${criteriaDto.criteriaTitle} convert error translating page map '
+            'to objects :Conversion Failed',
+          ),
+        ];
+        final newId = int.parse(expectedOutput.first.uniqueId) - 1;
+        expectedOutput.first.uniqueId = newId.toString();
 
         expect(
           actualOutput,
-          emitsInOrder(
-            [MovieResultDTOMatcher(expectedOutput)],
-          ),
+          emitsInOrder([
+            MovieResultDTOMatcher(expectedOutput.first),
+            MovieResultDTOMatcher(expectedOutput.last),
+          ]),
         );
       },
       timeout: const Timeout(Duration(seconds: 5)),
@@ -544,7 +584,7 @@ void main() {
         final testClass = QueryUnknownSourceMocked(criteriaDto);
         final expectedError =
             '[QueryIMDBTitleDetails] Error in unknown with criteria '
-            '${criteriaDto.criteriaTitle} translating page map '
+            '${criteriaDto.criteriaTitle} stream error translating page map '
             'to objects :more exception handling';
         final actualOutput = testClass.baseConvertTreeToOutputType(
           Stream.error('more exception handling'),
@@ -555,6 +595,68 @@ void main() {
       timeout: const Timeout(Duration(seconds: 5)),
     );
   });
+
+  test(
+    'success + exception handling',
+    () {
+      final testClass = QueryUnknownSourceMocked(criteriaDto);
+      final actualOutput = testClass.baseConvertTreeToOutputType(
+        Stream.fromIterable([
+          ..._makeMaps(1),
+          'Conversion Failed2',
+        ]),
+      );
+      final expectedOutput = [
+        ..._makeDTOs(1),
+        testClass.myYieldError(
+          'Error in unknown with criteria '
+          '${criteriaDto.criteriaTitle} convert error translating page map '
+          'to objects :Unknown: Conversion Failed2',
+        ),
+      ];
+
+      expect(
+        actualOutput,
+        emitsInOrder([
+          MovieResultDTOMatcher(expectedOutput.first),
+          MovieResultDTOMatcher(expectedOutput.last),
+        ]),
+      );
+    },
+    timeout: const Timeout(Duration(seconds: 5)),
+  );
+
+  test(
+    'exception handling + success',
+    () {
+      final testClass = QueryUnknownSourceMocked(criteriaDto);
+      final actualOutput = testClass.baseConvertTreeToOutputType(
+        Stream.fromIterable([
+          'Conversion Failed2',
+          ..._makeMaps(1),
+        ]),
+      );
+      final expectedOutput = [
+        ..._makeDTOs(1),
+        testClass.myYieldError(
+          'Error in unknown with criteria '
+          '${criteriaDto.criteriaTitle} convert error translating page map '
+          'to objects :Unknown: Conversion Failed2',
+        ),
+      ];
+      final newId = int.parse(expectedOutput.last.uniqueId) - 1;
+      expectedOutput.last.uniqueId = newId.toString();
+
+      expect(
+        actualOutput,
+        emitsInOrder([
+          MovieResultDTOMatcher(expectedOutput.first),
+          MovieResultDTOMatcher(expectedOutput.last),
+        ]),
+      );
+    },
+    timeout: const Timeout(Duration(seconds: 5)),
+  );
 
   group('WebFetchBase mocked baseConvertWebTextToTraversableTree', () {
     void testConvert(
@@ -632,7 +734,7 @@ void main() {
           actualOutput,
           emitsError(
             'Error in unknown with criteria ${criteriaDto.criteriaTitle} '
-            'interpreting web text as a map :Search Failed',
+            'convert error interpreting web text as a map :Search Failed',
           ),
         );
       },
@@ -654,7 +756,7 @@ void main() {
           actualOutput,
           emitsError(
             'Error in unknown with criteria ${criteriaDto.criteriaTitle} '
-            'interpreting web text as a map :more exception handling',
+            'stream error interpreting web text as a map :more exception handling',
           ),
         );
       },
@@ -794,7 +896,7 @@ void main() {
           actualOutput,
           emitsError(
             'Error in unknown with criteria ${criteriaDto.criteriaTitle} '
-            'fetching web text :Convert Failed',
+            'fetching web text chunks :Convert Failed',
           ),
         );
       },
@@ -873,7 +975,9 @@ void main() {
       () {
         const input = 'HTTP404';
         const output =
-            '[QueryIMDBTitleDetails] Error in unknown with criteria $input interpreting web text as a map :Error in http read, HTTP status code : 404 for https://www.unknown.com/title/HTTP404/?ref_=fn_tt_tt_1';
+            '[QueryIMDBTitleDetails] Error in unknown with criteria $input '
+            'stream error interpreting web text as a map :Error in http read, '
+            'HTTP status code : 404 for https://www.unknown.com/title/HTTP404/?ref_=fn_tt_tt_1';
         testTransform(input, null, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
@@ -883,7 +987,8 @@ void main() {
       () {
         const input = 'EXCEPTION';
         const output =
-            '[QueryIMDBTitleDetails] Error in unknown with criteria $input fetching web text: :go away!';
+            '[QueryIMDBTitleDetails] Error in unknown with criteria $input '
+            'fetching web text: :go away!';
         testTransform(input, null, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),

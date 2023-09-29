@@ -1,3 +1,5 @@
+// ignore_for_file: invalid_use_of_visible_for_overriding_member
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -207,7 +209,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryOMDBMovies(criteria);
       const expectedException = '''
-[QueryOMDBMovies] Error in omdb with criteria 123 interpreting web text as a map :FormatException: Unexpected character (at character 1)
+[QueryOMDBMovies] Error in omdb with criteria 123 convert error interpreting web text as a map :FormatException: Unexpected character (at character 1)
 not valid json
 ^
 ''';
@@ -225,7 +227,7 @@ not valid json
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[QueryOMDBMovies] Error in omdb '
-          'with criteria 123 translating page map to objects '
+          'with criteria 123 convert error translating page map to objects '
           ':expected map got List<dynamic> unable to interpret data [{hello: world}]';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryOMDBMovies(criteria);

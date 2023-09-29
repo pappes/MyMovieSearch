@@ -14,13 +14,14 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0101000","bestSource":"DataSourceType.tmdbFinder","title":"Začátek dlouhého podzimu","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
-      "languages":"[\"cs\"]","genres":"[]","keywords":"[]","sources":{"DataSourceType.tmdbFinder":"913986"},"related":{}}
+      "languages":"[\"cs\"]",
+      "userRating":"6.0","userRatingCount":"1","sources":{"DataSourceType.tmdbFinder":"913986"}}
 ''',
   r'''
 {"uniqueId":"tt0101002","bestSource":"DataSourceType.tmdbFinder","title":"Return Engagement","alternateTitle":"再戰江湖","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
-      "languages":"[\"cn\"]","genres":"[]","keywords":"[]",
+      "languages":"[\"cn\"]",
       "description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.",
-      "userRating":"6.0","userRatingCount":"4","sources":{"DataSourceType.tmdbFinder":"230839"},"related":{}}
+      "userRating":"6.643","userRatingCount":"7","sources":{"DataSourceType.tmdbFinder":"230839"}}
 ''',
 ];
 

@@ -39,7 +39,7 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
   });
 
   @override
-  HttpClient myGetHttpClient() {
+  HttpClient baseGetHttpClient() {
     final client = MockHttpClient();
     final clientRequest = MockHttpClientRequest();
     final clientResponse = MockHttpClientResponse();
@@ -254,7 +254,7 @@ void main() {
         final queries = _makeQueries(startId, 1);
         final errorMessage = MovieResultDTO().error(
           '[QueryIMDBTitleDetails] Error in imdb '
-          'with criteria tt$startId interpreting web text as a map '
+          'with criteria tt$startId stream error interpreting web text as a map '
           ':Error in http read, HTTP status code : 404 for '
           'https://www.imdb.com/title/tt$startId/?ref_=fn_tt_tt_1',
           DataSourceType.imdb,

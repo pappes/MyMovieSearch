@@ -152,7 +152,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final ytsSearch = QueryYtsSearch(fullCriteria);
       const expectedException = '''
-[QueryYtsSearch] Error in ytsSearch with criteria tt123 interpreting web text as a map :FormatException: Unexpected character (at character 2)
+[QueryYtsSearch] Error in ytsSearch with criteria tt123 convert error interpreting web text as a map :FormatException: Unexpected character (at character 2)
 {not valid json}
  ^
 ''';
@@ -170,7 +170,7 @@ void main() {
     test('unexpected json contents', () async {
       // Set up the test data.
       const expectedException = '[QueryYtsSearch] Error in ytsSearch '
-          'with criteria tt123 translating page map to objects '
+          'with criteria tt123 convert error translating page map to objects '
           ':expected map got Null unable to interpret data null';
       final queryResult = <MovieResultDTO>[];
       final ytsSearch = QueryYtsSearch(fullCriteria);

@@ -199,7 +199,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final tpbSearch = QueryTpbSearch(criteria);
       const expectedException = '[QueryTpbSearch] Error in tpb '
-          'with criteria dream interpreting web text as a map '
+          'with criteria dream convert error interpreting web text as a map '
           ':tpb results data not detected for criteria dream in html:not valid html';
 
       // Invoke the functionality.
@@ -215,7 +215,7 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[QueryTpbSearch] Error in tpb '
-          'with criteria dream interpreting web text as a map '
+          'with criteria dream convert error interpreting web text as a map '
           ':tpb results data not detected for criteria dream in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final tpbSearch = QueryTpbSearch(criteria);

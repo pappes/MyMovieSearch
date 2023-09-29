@@ -145,6 +145,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('nm7602562');
       final testClass = QueryIMDBBibliographyDetails(criteria);
       testClass.clearThreadedCache();
+      // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
@@ -168,6 +169,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('nm7602562');
       final testClass = QueryIMDBBibliographyDetails(criteria);
       testClass.clearThreadedCache();
+      // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
@@ -184,6 +186,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('nm7602562');
       final testClass = QueryIMDBBibliographyDetails(criteria);
       testClass.clearThreadedCache();
+      // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
@@ -310,7 +313,7 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryIMDBBibliographyDetails] Error in imdb_bibliography '
-          'with criteria nm123 interpreting web text as a map '
+          'with criteria nm123 convert error interpreting web text as a map '
           ':imdb bibliography data not detected for criteria nm123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm123');
@@ -331,7 +334,7 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryIMDBBibliographyDetails] Error in imdb_bibliography with '
-          'criteria nm123 interpreting web text as a map '
+          'criteria nm123 convert error interpreting web text as a map '
           ':imdb bibliography data not detected for criteria nm123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm123');

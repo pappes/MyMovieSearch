@@ -190,6 +190,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBTitleDetails(criteria);
       testClass.myClearCache();
+      // ignore: unused_result
       await testClass.readList(
         source: streamImdbHtmlOfflineData,
       );
@@ -334,7 +335,7 @@ void main() {
     test('invalid html', () async {
       // Set up the test data.
       const expectedException = '[QueryIMDBTitleDetails] Error in imdb '
-          'with criteria tt123 interpreting web text as a map '
+          'with criteria tt123 convert error interpreting web text as a map '
           ':imdb web scraper data not detected for criteria tt123 in not valid html';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails(
@@ -353,7 +354,7 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[QueryIMDBTitleDetails] Error in imdb '
-          'with criteria tt123 interpreting web text as a map '
+          'with criteria tt123 convert error interpreting web text as a map '
           ':imdb web scraper data not detected for criteria tt123 in <html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails(

@@ -229,7 +229,7 @@ void main() {
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);
       const expectedException =
           '[QueryTorrentDownloadDetail] Error in torrentDownloadDetail '
-          'with criteria https://address interpreting web text as a map '
+          'with criteria https://address convert error interpreting web text as a map '
           ':TorrentDownload results data not detected for criteria https://address in html:not valid html';
 
       // Invoke the functionality.
@@ -246,7 +246,7 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryTorrentDownloadDetail] Error in torrentDownloadDetail '
-          'with criteria https://address interpreting web text as a map '
+          'with criteria https://address convert error interpreting web text as a map '
           ':TorrentDownload results data not detected for criteria https://address in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);

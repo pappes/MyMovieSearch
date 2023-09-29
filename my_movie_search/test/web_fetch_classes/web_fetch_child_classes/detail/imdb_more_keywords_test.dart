@@ -144,6 +144,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBMoreKeywordsDetails(criteria);
       testClass.clearThreadedCache();
+      // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
@@ -167,6 +168,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBMoreKeywordsDetails(criteria);
       testClass.clearThreadedCache();
+      // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
@@ -183,6 +185,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBMoreKeywordsDetails(criteria);
       testClass.clearThreadedCache();
+      // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
@@ -298,7 +301,7 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryIMDBMoreKeywordsDetails] Error in imdb_more_keywords '
-          'with criteria tt123 interpreting web text as a map '
+          'with criteria tt123 convert error interpreting web text as a map '
           ':imdb more keywords data not detected for criteria tt123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('tt123');
@@ -319,7 +322,7 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QueryIMDBMoreKeywordsDetails] Error in imdb_more_keywords with '
-          'criteria tt123 interpreting web text as a map '
+          'criteria tt123 convert error interpreting web text as a map '
           ':imdb more keywords data not detected for criteria tt123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('tt123');

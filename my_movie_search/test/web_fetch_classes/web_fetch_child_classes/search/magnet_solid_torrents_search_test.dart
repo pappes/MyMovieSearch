@@ -205,7 +205,7 @@ void main() {
       final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);
       const expectedException =
           '[QuerySolidTorrentsSearch] Error in solidTorrents '
-          'with criteria dream interpreting web text as a map '
+          'with criteria dream convert error interpreting web text as a map '
           ':SolidTorrents results data not detected for criteria dream in html:not valid html';
 
       // Invoke the functionality.
@@ -222,7 +222,7 @@ void main() {
       // Set up the test data.
       const expectedException =
           '[QuerySolidTorrentsSearch] Error in solidTorrents '
-          'with criteria dream interpreting web text as a map '
+          'with criteria dream convert error interpreting web text as a map '
           ':SolidTorrents results data not detected for criteria dream in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);

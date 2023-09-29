@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
@@ -81,7 +82,9 @@ mixin ThreadedCacheIMDBNameDetails
       QueryIMDBNameDetails(criteria);
 
   @override
+  @visibleForTesting
   void clearThreadedCache() {
+    // ignore: invalid_use_of_visible_for_testing_member
     super.clearThreadedCache();
     normalQueue.clear();
     verySlowQueue.clear();
