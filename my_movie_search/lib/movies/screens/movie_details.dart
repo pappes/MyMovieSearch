@@ -28,7 +28,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   bool _descriptionExpanded = false;
   final _restorableMovie = RestorableMovie();
   var _mobileLayout = true;
-  final _scrollController = ScrollController();
 
   _MovieDetailsPageState();
 

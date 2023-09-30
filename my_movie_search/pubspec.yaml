@@ -21,8 +21,6 @@ environment:
   sdk: '>=3.1.2 <4.0.0'
 
 dependencies:
-  flutter:
-    sdk: flutter
   
   # Note: use "dart pub outdated" to find libraries that should be upgraded
   bloc: ^8.0.3
@@ -30,6 +28,10 @@ dependencies:
   easy_debounce: ^2.0.3
   easy_image_viewer: ^1.2.1
   equatable: ^2.0.3                     # Simplify object comparisons.
+
+  flutter:
+    sdk: flutter
+
   flutter_bloc: ^8.0.1                  # Assist with the BLoC design pattern.
   flutter_custom_tabs: ^1.0.4           # replace webview with andorid chrome browser
   flutter_dotenv: ^5.0.2                # Read secrests and settings from .env file.
@@ -38,15 +40,15 @@ dependencies:
   intl: ^0.18.0                         # internationalisation including number and data formatting.
   lint: ^2.0.1
   logger: ^2.0.2                        # Log trace messages to console.
-  path_provider: ^2.0.9                 # Device filesystem access for accessing database files.
+  meta: ^1.9.1                          # extended annotations
   path: ^1.8.0                          # File path manipulation library
+  path_provider: ^2.0.9                 # Device filesystem access for accessing database files.
   simple_barcode_scanner: ^0.0.8
   sqflite: ^2.0.2                       # Database storage for persisting state across sessions.
   ####logger_flutter: ^0.7.1            # Shake device to see trace messages.
   universal_io: ^2.0.4                  # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
   url_launcher: ^6.0.20                 # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
   webview_flutter: ^4.0.1               # Show web page
-  meta: ^1.9.1                          # extended annotations
 
   #firebase_core: ^1.0.3                # Firebase initialisation
   #firebase_auth: ^3.0.1                 # Authenticate users against Firebase
