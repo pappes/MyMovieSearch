@@ -1,22 +1,10 @@
-import 'dart:ui';
-
-import 'package:flutter/material.dart'
-    show
-        BuildContext,
-        Colors,
-        GlobalKey,
-        MaterialApp,
-        NavigatorState,
-        State,
-        StatefulWidget,
-        StatelessWidget,
-        ThemeData,
-        Widget;
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
 import 'package:my_movie_search/movies/screens/movie_search_criteria.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 /// {@template mmsearch_app}
 /// A [MaterialApp] which sets the `home` to [MovieSearchCriteriaPage].
@@ -48,52 +36,22 @@ class AppView extends StatefulWidget {
 }
 
 class _AppViewState extends State<AppView> {
-  final _navigatorKey = GlobalKey<NavigatorState>();
-
-  //NavigatorState get _navigator => _navigatorKey.currentState!;
-
   /// Initialise the Material app with app specific settings.
   ///
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       restorationScopeId: 'root',
-      navigatorKey: _navigatorKey,
-      //home: const MovieSearchCriteriaPage(movieRepository),
-      //   home: MovieHomePage(),
-      home: const MovieSearchCriteriaPage(),
-      //onGenerateRoute: (_) => MovieSearchCriteriaPage.route(),
       title: 'My Movie Search',
+      routerConfig: GoRouter(
+        routes: MMSNav().getRoutes(),
+      ),
       theme: ThemeData(
-        //brightness: Brightness.light,
         useMaterial3: true,
         colorSchemeSeed: Colors.blue,
         fontFamily: 'Lato',
       ),
       darkTheme: ThemeData(brightness: Brightness.dark),
-      //themeMode: ThemeMode.system, //dark or light or system
-      /*builder: (context, child) {
-        return BlocListener<SearchBloc, SearchState>(
-          listener: (context, state) {
-            switch (state.status) {
-              /*case SearchStatus.searching:
-                _navigator.pushAndRemoveUntil<void>(
-                  HomePage.route(),
-                  (route) => false,
-                );
-              case SearchStatus.awaitingInput:
-                _navigator.pushAndRemoveUntil<void>(
-                  LoginPage.route(),
-                  (route) => false,
-                );
-                */
-              default:
-                break;
-            }
-          },
-          child: child,
-        );
-      },*/
     );
   }
 }

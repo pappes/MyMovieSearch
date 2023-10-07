@@ -43,7 +43,7 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
         returnValueForMissingStub: null,
       );
   @override
-  void viewFlutterPage(_i3.Widget? page) => super.noSuchMethod(
+  void viewFlutterPage(_i2.RouteInfo? page) => super.noSuchMethod(
         Invocation.method(
           #viewFlutterPage,
           [page],

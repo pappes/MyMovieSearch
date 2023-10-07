@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/screens/movie_search_results.dart'
-    show MovieSearchResultsNewPage;
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
   const MovieSearchCriteriaPage({super.key});
@@ -26,12 +25,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage> {
   final FocusNode criteriaFocusNode = FocusNode();
 
   void performSearch(SearchCriteriaDTO criteria) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => MovieSearchResultsNewPage(criteria: criteria),
-      ),
-    );
+    MMSNav(context).showResultsPage(criteria);
   }
 
   void searchForBarcode(String barcode) {
