@@ -24,18 +24,18 @@ class MMSearchApp extends StatelessWidget {
       value: movieRepository,
       child: BlocProvider(
         create: (_) => SearchBloc(movieRepository: movieRepository),
-        child: AppView(),
+        child: MMSearchAppView(),
       ),
     );
   }
 }
 
-class AppView extends StatefulWidget {
+class MMSearchAppView extends StatefulWidget {
   @override
-  _AppViewState createState() => _AppViewState();
+  _MMSearchAppViewState createState() => _MMSearchAppViewState();
 }
 
-class _AppViewState extends State<AppView> {
+class _MMSearchAppViewState extends State<MMSearchAppView> {
   /// Initialise the Material app with app specific settings.
   ///
   @override
@@ -44,7 +44,10 @@ class _AppViewState extends State<AppView> {
       restorationScopeId: 'root',
       title: 'My Movie Search',
       routerConfig: GoRouter(
-        routes: MMSNav().getRoutes(),
+        routes: [
+          ...MMSNav.getRoutes(),
+          //...FirebaseApplicationState().getRoutes(),
+        ],
       ),
       theme: ThemeData(
         useMaterial3: true,

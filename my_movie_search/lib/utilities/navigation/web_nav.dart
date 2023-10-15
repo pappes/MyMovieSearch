@@ -14,6 +14,8 @@ import 'package:my_movie_search/movies/screens/popup.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
+import 'package:my_movie_search/persistence/nav_log.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 const webAddressPrefix = 'http';
@@ -28,8 +30,9 @@ const routeErrorDetails = 'errordetails';
 class RouteInfo {
   final String routePath;
   final Object params;
+  final String reference;
 
-  RouteInfo(this.routePath, this.params);
+  RouteInfo(this.routePath, this.params, this.reference);
 }
 
 /// Performs page navigation
@@ -62,7 +65,7 @@ class MMSNav {
     if (movie.uniqueId.startsWith(imdbPersonPrefix) ||
         movie.type == MovieContentType.person) {
       // Open person details.
-      return RouteInfo(routePersonDetails, movie);
+      return RouteInfo(routePersonDetails, movie, movie.uniqueId);
     } else if (movie.uniqueId.startsWith(imdbTitlePrefix) ||
         movie.type == MovieContentType.movie ||
         movie.type == MovieContentType.series ||
@@ -72,17 +75,26 @@ class MMSNav {
         movie.type == MovieContentType.episode ||
         movie.type == MovieContentType.title) {
       // Open Movie details.
-      return RouteInfo(routeMovieDetails, movie);
+      return RouteInfo(routeMovieDetails, movie, movie.uniqueId);
     } else {
       // Open error details.
-      return RouteInfo(routeErrorDetails, movie);
+      return RouteInfo(
+        routeErrorDetails,
+        movie,
+        MovieContentType.error.toString(),
+      );
     }
   }
 
   /// Navigates to a search results page populated with a movie list.
   ///
-  void showResultsPage(SearchCriteriaDTO criteria) =>
-      canvas.viewFlutterPage(RouteInfo(routeSearchResults, criteria));
+  void showResultsPage(SearchCriteriaDTO criteria) => canvas.viewFlutterPage(
+        RouteInfo(
+          routeSearchResults,
+          criteria,
+          criteria.toSearchId(),
+        ),
+      );
 
   /// Navigates to a search results page populated with a predefined list of dtos.
   ///
@@ -190,7 +202,7 @@ class MMSNav {
 
   /// Defines known routes handled by MMSNav.
   ///
-  List<RouteBase> getRoutes() => [
+  static List<RouteBase> getRoutes() => [
         GoRoute(
           path: '/',
           builder: (context, state) => const MovieSearchCriteriaPage(),
@@ -229,71 +241,6 @@ class MMSNav {
           ),
         ),
       ];
-  /*
-    GoRoute(
-      path: 'sign-in',
-      builder: (context, state) {
-        return SignInScreen(
-          actions: [
-            ForgotPasswordAction((context, email) {
-              final uri = Uri(
-                path: '/sign-in/forgot-password',
-                queryParameters: <String, String?>{
-                  'email': email,
-                },
-              );
-              context.push(uri.toString());
-            }),
-            AuthStateChangeAction((context, state) {
-              final user = switch (state) {
-                final SignedIn state => state.user,
-                final UserCreated state => state.credential.user,
-                _ => null
-              };
-              if (user == null) {
-                return;
-              }
-              if (state is UserCreated) {
-                user.updateDisplayName(user.email!.split('@')[0]);
-              }
-              if (!user.emailVerified) {
-                user.sendEmailVerification();
-                const snackBar = SnackBar(
-                    content: Text(
-                        'Please check your email to verify your email address'));
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
-              context.pushReplacement('/');
-            }),
-          ],
-        );
-      },
-      routes: [
-        GoRoute(
-          path: 'forgot-password',
-          builder: (context, state) {
-            final arguments = state.uri.queryParameters;
-            return ForgotPasswordScreen(
-              email: arguments['email'],
-              headerMaxExtent: 200,
-            );
-          },
-        ),
-      ],
-    ),
-    GoRoute(
-      path: 'profile',
-      builder: (context, state) {
-        return ProfileScreen(
-          providers: const [],
-          actions: [
-            SignedOutAction((context) {
-              context.pushReplacement('/');
-            }),
-          ],
-        );
-      },
-    ),*/
 }
 
 class MMSFlutterCanvas {
@@ -319,7 +266,12 @@ class MMSFlutterCanvas {
   /// based on the IMDB unique ID or ErrorDetailsPage otherwise
   void viewFlutterPage(RouteInfo page) {
     if (null != context) {
-      context!.pushNamed(page.routePath, extra: page.params);
+      NavLog(context!).log(page.routePath, page.reference);
+      try {
+        context!.pushNamed(page.routePath, extra: page.params);
+      } catch (e) {
+        logger.t(e);
+      }
     }
   }
 
