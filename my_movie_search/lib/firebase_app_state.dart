@@ -178,16 +178,19 @@ class _NativeFirebaseApplicationState extends FirebaseApplicationState {
 
         if (id == null) {
           // Generate random ID
-          final fbrecord = await fbcollection.add(map);
+          final fbrecord = fbcollection.add(map);
+          await fbrecord;
           return true;
         } else {
           // Get reference to supplied ID
           final doc = fbcollection.doc(id);
-          await doc.update(map);
+          await doc.set(map, SetOptions(merge: true));
           return true;
         }
       }
-    } catch (_) {}
+    } catch (exception) {
+      logger.t('Unable to add record to Firebase exception: $exception');
+    }
     return false;
   }
 }

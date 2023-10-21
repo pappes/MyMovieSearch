@@ -11,6 +11,6 @@ class NavLog extends ChangeNotifier {
 
   void log(String destination, String request) {
     final record = getFirestoreProvider()
-        ?.addRecord('MMSNavLog\\$destination', id: request);
+        ?.addRecord('MMSNavLog/screen/$destination', id: request);
   }
 }
