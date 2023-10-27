@@ -19,6 +19,7 @@ enum DataSourceType {
   tmdbSearch,
   tmdbFinder,
   google,
+  fbmmsnavlog,
   wiki,
   tpb,
   magnetDl,

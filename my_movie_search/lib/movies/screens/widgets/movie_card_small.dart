@@ -9,6 +9,7 @@ import 'package:flutter/material.dart'
         NetworkImage,
         Text,
         Widget;
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
@@ -142,8 +143,11 @@ class MovieTile extends ListTile {
         return _navigateButton(context, movie);
       case MovieContentType.download:
         return movie.imageUrl == '' ? null : _navigateButton(context, movie);
+
       default:
-        return const Text('');
+        return movie.sources.containsKey(DataSourceType.fbmmsnavlog)
+            ? const Icon(Icons.visibility)
+            : const Text('');
     }
   }
 
@@ -151,12 +155,11 @@ class MovieTile extends ListTile {
       MMSNav(context).resultDrillDown(movie);
 
   static ElevatedButton _navigateButton(
-    BuildContext context,
-    MovieResultDTO movie,
-  ) {
+      BuildContext context, MovieResultDTO movie,
+      {Widget? icon}) {
     return ElevatedButton(
       onPressed: () => _navigate(context, movie),
-      child: _getIcon(movie),
+      child: icon ?? _getIcon(movie),
     );
   }
 }

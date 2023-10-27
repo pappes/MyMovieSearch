@@ -35,10 +35,10 @@ void main() {
     });
     test('update', () async {
       final fb = FirebaseApplicationState();
-      await fb.addRecord('testing', id: '123456', message: 'addme');
+      await fb.addRecord('testing', id: '123456', message: 'startme');
       var result = fb.fetchRecord('testing', id: '123456');
 
-      expect(result, completion('addme'));
+      expect(result, completion('startme'));
 
       await fb.addRecord('testing', id: '123456', message: 'updateme');
       result = fb.fetchRecord('testing', id: '123456');

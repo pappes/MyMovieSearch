@@ -3,6 +3,7 @@ import 'dart:async' show StreamSubscription;
 import 'package:bloc/bloc.dart' show Bloc, Emitter;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:equatable/equatable.dart';
+import 'package:my_movie_search/firebase_app_state.dart';
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -84,6 +85,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
   }
 
+  // Annotate the DTO with a read inidicator
+  void addReadIndicator(MovieResultDTO dto, dynamic value) {
+    if (null != value) {
+      dto.sources[DataSourceType.fbmmsnavlog] = value.toString();
+    }
+  }
+
   /// Maintain map of fetched movie snippets and details.
   /// Update bloc state to indicate that new data is available.
   void _receiveDTO(MovieResultDTO newValue) {
@@ -95,14 +103,19 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       // Merge value with existing information and insert value into list
 
       _allResults[key] = DtoCache.singleton().merge(newValue);
+      FirebaseApplicationState()
+          .fetchRecord(
+            'MMSNavLog/screen/moviedetails',
+            id: newValue.uniqueId,
+          )
+          .then((value) => addReadIndicator(newValue, value));
     }
 
     _findTemporaryDTO(_allResults, newValue);
     _throttleUpdates();
   }
 
-  /// Reinsert record into the map because we cant update the key directly.
-  /// Update bloc state to indicate that new data is available.
+  /// update record into the map with new key and values
   void _findTemporaryDTO(MovieCollection collection, MovieResultDTO newValue) {
     final tmdbSources = [
       DataSourceType.tmdbFinder,
@@ -123,7 +136,6 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   /// Reinsert record into the map because we cant update the key directly.
-  /// Update bloc state to indicate that new data is available.
   void _replaceTemporaryDTO(
     MovieCollection collection,
     String imdbId,

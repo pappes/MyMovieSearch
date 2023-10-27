@@ -15,13 +15,16 @@ import 'package:provider/provider.dart';
 
 abstract class FirebaseApplicationState extends ChangeNotifier {
   factory FirebaseApplicationState() {
-    return Platform.isLinux
+    instance ??= Platform.isLinux
         ? _WebFirebaseApplicationState()
         : _NativeFirebaseApplicationState();
+    return instance!;
   }
+
   FirebaseApplicationState._internal() {
     init();
   }
+  static FirebaseApplicationState? instance;
 
   Future<bool> _loggedIn = Future.value(false);
   String? _userDisplayName;
@@ -47,7 +50,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
 
   Future<bool> login();
 
-  Future<dynamic>? fetchRecord(
+  Future<dynamic> fetchRecord(
     String collectionPath, {
     required String id,
   }) async {
@@ -56,7 +59,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
       return false;
     }
 
-    logger.t('Logged Message $id from collection $collectionPath');
+    logger.t('Fetching Message $id from collection $collectionPath');
     return true;
   }
 
@@ -70,7 +73,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
       return false;
     }
 
-    logger.t('Logged Message $message to collection $collectionPath');
+    logger.t('Logging Message $message to collection $collectionPath');
     return true;
   }
 
@@ -112,7 +115,7 @@ class _WebFirebaseApplicationState extends FirebaseApplicationState {
   }
 
   @override
-  Future<String> fetchRecord(
+  Future<String?> fetchRecord(
     String collectionPath, {
     required String id,
   }) async {
@@ -125,8 +128,10 @@ class _WebFirebaseApplicationState extends FirebaseApplicationState {
         final msg = await doc.get();
         return msg['text']?.toString() ?? '';
       }
-    } catch (_) {}
-    return '';
+    } catch (exception) {
+      logger.t('Unable to fetch record to Firebase exception: $exception');
+    }
+    return null;
   }
 
   @override
@@ -203,7 +208,7 @@ class _NativeFirebaseApplicationState extends FirebaseApplicationState {
   }
 
   @override
-  Future<String> fetchRecord(
+  Future<String?> fetchRecord(
     String collectionPath, {
     required String id,
   }) async {
@@ -216,8 +221,10 @@ class _NativeFirebaseApplicationState extends FirebaseApplicationState {
         final msg = await doc.get();
         return msg['text']?.toString() ?? '';
       }
-    } catch (_) {}
-    return '';
+    } catch (exception) {
+      logger.t('Unable to fetch record to Firebase exception: $exception');
+    }
+    return null;
   }
 
   @override
