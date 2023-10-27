@@ -30,9 +30,6 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   Future<bool> get loggedIn => _loggedIn;
   String? get userDisplayName => _userDisplayName;
   String? get userId => _userId;
-  // TODO: To keep token across sessions create a TokenStore
-  // that persists the token e.g. using hive
-  final _sessionStore = firedart.VolatileStore();
 
   Future<void> init() async {
     _loggedIn = _login();
@@ -49,6 +46,19 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   }
 
   Future<bool> login();
+
+  Future<dynamic>? fetchRecord(
+    String collectionPath, {
+    required String id,
+  }) async {
+    if (!await _loggedIn) {
+      logger.t('Must be logged in');
+      return false;
+    }
+
+    logger.t('Logged Message $id from collection $collectionPath');
+    return true;
+  }
 
   Future<dynamic>? addRecord(
     String collectionPath, {
@@ -75,22 +85,48 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
 class _WebFirebaseApplicationState extends FirebaseApplicationState {
   _WebFirebaseApplicationState() : super._internal();
 
+  // TODO: To keep token across sessions create a TokenStore
+  // that persists the token e.g. using hive
+  final _sessionStore = firedart.VolatileStore();
+
   @override
   Future<bool> login() async {
     // When native firebase APIs are unavailable due to plaform
     // falling back to https://pub.dev/packages/firedart
-    firedart.FirebaseAuth.initialize(
-      DefaultFirebaseOptions.web.apiKey,
-      _sessionStore,
-    );
+    if (!firedart.FirebaseAuth.initialized) {
+      firedart.FirebaseAuth.initialize(
+        DefaultFirebaseOptions.web.apiKey,
+        _sessionStore,
+      );
+    }
     await firedart.FirebaseAuth.instance.signInAnonymously();
     // await firedart.FirebaseAuth.instance.signIn(email, password);
     final user = await firedart.FirebaseAuth.instance.getUser();
-    firedart.Firestore.initialize(DefaultFirebaseOptions.web.projectId);
+    if (!firedart.Firestore.initialized) {
+      firedart.Firestore.initialize(DefaultFirebaseOptions.web.projectId);
+    }
     _userDisplayName = user.displayName;
     _userId = user.id;
 
     return true;
+  }
+
+  @override
+  Future<String> fetchRecord(
+    String collectionPath, {
+    required String id,
+  }) async {
+    try {
+      if (await super.fetchRecord(collectionPath, id: id) as bool) {
+        final fbcollection =
+            firedart.Firestore.instance.collection(collectionPath);
+        // Get reference to supplied ID
+        final doc = fbcollection.document(id);
+        final msg = await doc.get();
+        return msg['text']?.toString() ?? '';
+      }
+    } catch (_) {}
+    return '';
   }
 
   @override
@@ -107,16 +143,19 @@ class _WebFirebaseApplicationState extends FirebaseApplicationState {
             firedart.Firestore.instance.collection(collectionPath);
         if (id == null) {
           // Generate random ID
-          final fbrecord = await fbcollection.add(map);
-          return false;
+          final fbrecord = fbcollection.add(map);
+          await fbrecord;
+          return true;
         } else {
           // Get reference to supplied ID
           final doc = fbcollection.document(id);
           await doc.update(map);
-          return false;
+          return true;
         }
       }
-    } catch (_) {}
+    } catch (exception) {
+      logger.t('Unable to add record to Firebase exception: $exception');
+    }
     return false;
   }
 }
@@ -161,6 +200,24 @@ class _NativeFirebaseApplicationState extends FirebaseApplicationState {
       _userId = null;
     }
     notifyListeners();
+  }
+
+  @override
+  Future<String> fetchRecord(
+    String collectionPath, {
+    required String id,
+  }) async {
+    try {
+      if (await super.fetchRecord(collectionPath, id: id) as bool) {
+        final fbcollection =
+            FirebaseFirestore.instance.collection(collectionPath);
+        // Get reference to supplied ID
+        final doc = fbcollection.doc(id);
+        final msg = await doc.get();
+        return msg['text']?.toString() ?? '';
+      }
+    } catch (_) {}
+    return '';
   }
 
   @override
