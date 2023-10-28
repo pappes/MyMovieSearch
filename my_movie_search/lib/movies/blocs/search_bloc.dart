@@ -105,7 +105,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
       final subsequentFetch = _allResults.containsKey(key);
       _allResults[key] = DtoCache.singleton().merge(newValue);
-      if (subsequentFetch) {
+      if (!subsequentFetch) {
         // Check navigation history to see if this result has been viewed
         FirebaseApplicationState()
             .fetchRecord(

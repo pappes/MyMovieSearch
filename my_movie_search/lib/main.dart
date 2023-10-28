@@ -18,6 +18,7 @@ Future main() async {
       .init(logger: Logger())
       .then((_) => OnlineOfflineSelector.init(settings.get('OFFLINE')));
   Bloc.observer = MMSearchObserver();
+  FirebaseApplicationState().login();
 
   runApp(
     ChangeNotifierProvider(
