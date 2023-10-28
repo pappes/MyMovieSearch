@@ -89,6 +89,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   void addReadIndicator(MovieResultDTO dto, dynamic value) {
     if (null != value) {
       dto.sources[DataSourceType.fbmmsnavlog] = value.toString();
+      _throttleUpdates();
     }
   }
 
@@ -102,13 +103,17 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     } else {
       // Merge value with existing information and insert value into list
 
+      final subsequentFetch = _allResults.containsKey(key);
       _allResults[key] = DtoCache.singleton().merge(newValue);
-      FirebaseApplicationState()
-          .fetchRecord(
-            'MMSNavLog/screen/moviedetails',
-            id: newValue.uniqueId,
-          )
-          .then((value) => addReadIndicator(newValue, value));
+      if (subsequentFetch) {
+        // Check navigation history to see if this result has been viewed
+        FirebaseApplicationState()
+            .fetchRecord(
+              'MMSNavLog/screen/moviedetails',
+              id: newValue.uniqueId,
+            )
+            .then((value) => addReadIndicator(_allResults[key]!, value));
+      }
     }
 
     _findTemporaryDTO(_allResults, newValue);
