@@ -51,9 +51,9 @@ enum MovieContentType {
   download, //   e.g. magnet from tpb
   navigation, // e.g. next page
   movie, //      includes "tv movie"
+  short, //      anything less that an hour long that does not repeat
   series, //     anything less that an hour long that does repeat or repeats more than 4 times
   miniseries, // anything more that an hour long that does repeat
-  short, //      anything less that an hour long that does not repeat
   episode, //    anything that is part of a series or mini-series
   title, //      unknown movie type
   custom,
