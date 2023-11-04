@@ -26,13 +26,15 @@ mixin ScrapeUhttBarcodeSearch
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    if (!webText.contains('class="uhtt-view--goods-table-item"')) {
-      return [];
-    }
-    final document = parse(webText);
-    _scrapeWebPage(document);
-    if (validPage) {
-      return movieData;
+    if (webText.contains('class="tablesorter"')) {
+      if (!webText.contains('class="uhtt-view--goods-table-item"')) {
+        return [];
+      }
+      final document = parse(webText);
+      _scrapeWebPage(document);
+      if (validPage) {
+        return movieData;
+      }
     }
     throw 'UhttBarcode results data not detected for criteria $getCriteriaText in html:$webText';
   }

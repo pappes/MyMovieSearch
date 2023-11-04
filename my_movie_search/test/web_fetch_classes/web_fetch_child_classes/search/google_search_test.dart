@@ -10,11 +10,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/offline/google.
 import 'package:my_movie_search/utilities/settings.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedJsonSample(_) {
   return Future.value(Stream.value('[{"hello":"world"}]'));
 }
 
-Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidJsonSample(_) {
   return Future.value(Stream.value('not valid json'));
 }
 
@@ -74,12 +74,29 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
-    // Confirm web text is parsed  as expected.
+
+    // Confirm web text is parsed as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           QueryGoogleMovies(criteria).myConvertWebTextToTraversableTree(
-        googleMoviesJsonSearchFull,
+        jsonSampleFull,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final expectedOutput = intermediateEmptyMapList;
+      final actualOutput =
+          QueryGoogleMovies(criteria).myConvertWebTextToTraversableTree(
+        jsonSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput = intermediateErrorMapList;
+      final actualOutput =
+          QueryGoogleMovies(criteria).myConvertWebTextToTraversableTree(
+        jsonSampleError,
       );
       expect(actualOutput, completion(expectedOutput));
     });
@@ -143,6 +160,46 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
+        actualResult.addAll(
+          await testClass.myConvertTreeToOutputType(map),
+        );
+      }
+
+      // Check the results.
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+      );
+    });
+    test('Run myConvertTreeToOutputType() with empty search results', () async {
+      final expectedValue = <MovieResultDTO>[];
+      final testClass = QueryGoogleMovies(criteria);
+      final actualResult = <MovieResultDTO>[];
+
+      // Invoke the functionality and collect results.
+      for (final map in intermediateEmptyMapList) {
+        actualResult.addAll(
+          await testClass.myConvertTreeToOutputType(map),
+        );
+      }
+
+      // Check the results.
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+      );
+    });
+    test('Run myConvertTreeToOutputType() with error results', () async {
+      final expectedValue = expectedErrorDTOList;
+      final testClass = QueryGoogleMovies(criteria);
+      final actualResult = <MovieResultDTO>[];
+
+      // Invoke the functionality and collect results.
+      for (final map in intermediateErrorMapList) {
         actualResult.addAll(
           await testClass.myConvertTreeToOutputType(map),
         );

@@ -27,6 +27,10 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
+    if (webText
+        .contains('No hits. Try adding an asterisk in you search phrase')) {
+      return [];
+    }
     final document = parse(webText);
     _scrapeWebPage(document);
     if (validPage) {

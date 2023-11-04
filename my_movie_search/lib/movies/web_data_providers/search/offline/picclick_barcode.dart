@@ -12,15 +12,12 @@ const expectedDtoJsonStringList = [
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitHtmlSample(dummy));
-}
-
-Stream<String> _emitHtmlSample(_) async* {
-  yield htmlSampleFull;
-}
+Future<Stream<String>> streamHtmlOfflineData(_) =>
+    Future.value(Stream.value(htmlSampleFull));
 
 const htmlSampleFull = '$htmlSampleStart$tpbSampleMid$htmlSampleEnd';
+const htmlSampleEmpty = '$htmlSampleStart$tpbSampleEmptyMid$htmlSampleEnd';
+const htmlSampleError = '$htmlSampleStart$htmlSampleEnd';
 const htmlSampleStart = '''
 
 <!DOCTYPE html>
@@ -32,6 +29,8 @@ const htmlSampleEnd = '''
   </body>
 </html>
 ''';
+const tpbSampleEmptyMid = 'Your search - <strong>newzzzzzzzzzzzzzquery</strong>'
+    ' - did not match any items.<br>';
 
 const tpbSampleMid = '''
 <ul class="items">

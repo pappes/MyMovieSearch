@@ -11,15 +11,34 @@ const expectedDtoJsonStringList = [
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitHtmlSample(dummy));
-}
+Future<Stream<String>> streamHtmlOfflineData(_) =>
+    Future.value(Stream.value(htmlSampleFull));
 
-Stream<String> _emitHtmlSample(_) async* {
-  yield htmlSampleFull;
-}
+const intermediateMapList = [
+  {
+    'description': 'Love And Other Catastrophes 1996',
+    'url': 'https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg',
+  }
+];
 
+const htmlSampleEmpty = '''
+<!DOCTYPE html>
+<body">
+    <main>
+        <div class="main">
+            <div class="products">
+                <p class="no-results">
+                    Sorry, your search for
+                    <strong>sdfsdfsdfsd</strong>
+                    did not match any items.
+                </p>
+            </div>
+        </div>
+    </main>
+</body>
+</html>''';
 const htmlSampleFull = '$htmlSampleStart$htmlSampleMid$htmlSampleEnd';
+const htmlSampleError = '$htmlSampleStart$htmlSampleEnd';
 const htmlSampleStart = '''
 
 <!DOCTYPE html>
@@ -57,10 +76,3 @@ const htmlSampleMid = r'''
 }
     </script>
 ''';
-
-const intermediateMapList = [
-  {
-    'description': 'Love And Other Catastrophes 1996',
-    'url': 'https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg',
-  }
-];

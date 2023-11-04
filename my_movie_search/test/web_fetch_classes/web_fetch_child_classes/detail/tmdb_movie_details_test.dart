@@ -10,11 +10,11 @@ import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_deta
 import 'package:my_movie_search/utilities/settings.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedJsonSample(_) {
   return Future.value(Stream.value('[{"hello":"world"}]'));
 }
 
-Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidJsonSample(_) {
   return Future.value(Stream.value('not valid json'));
 }
 

@@ -56,10 +56,14 @@ class TmdbMovieDetailConverter {
     if (null == failureIndicator) {
       searchResults.add(dtoFromMap(map));
     } else {
-      final error = MovieResultDTO();
-      error.title = map[outerElementFailureReason]?.toString() ??
-          'No failure reason provided in results $map';
-      searchResults.add(error);
+      final error = map[outerElementFailureReason]?.toString() ??
+          "No failure reason provided in results $map";
+      searchResults.add(
+        MovieResultDTO().error(
+          '[TmdbMovieDetailConverter] $error',
+          DataSourceType.omdb,
+        ),
+      );
     }
     return searchResults;
   }

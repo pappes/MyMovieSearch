@@ -6,33 +6,27 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 in test('Run dtoFromCompleteJsonMap()'*/
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamImdbSearchHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitImdbSearchHtmlSample(dummy));
-}
+Future<Stream<String>> streamImdbSearchHtmlOfflineData(_) =>
+    Future.value(Stream.value(htmlSampleFull));
 
-Stream<String> _emitImdbSearchHtmlSample(_) async* {
-  yield imdbSearchHtmlSampleFull;
-}
+Future<Stream<String>> emitEmptyImdbSearchSample(_) =>
+    Future.value(Stream.value(htmlSampleEmpty));
 
-Future<Stream<String>> emitEmptyImdbSearchSample(dynamic dummy) {
-  return Future.value(Stream.value(imdbSearchHtmlSampleEmpty));
-}
-
-const imdbSearchHtmlSampleEmpty =
-    '$imdbSearchHtmlSampleStart$imdbSearchJsonSampleEmpty$imdbSearchHtmlSampleEnd';
+const htmlSampleEmpty =
+    '$htmlSampleStart$imdbSearchJsonSampleEmpty$htmlSampleEnd';
 const imdbSearchJsonSampleEmpty =
     '{"props":{"pageProps":{"nameResults":{"results":[]},"titleResults":{"results":[],"hasExactMatches":false},"companyResults":{"results":[]},"keywordResults":{"results":[]}}}}';
 
-const imdbSearchHtmlSampleFull =
-    '$imdbSearchHtmlSampleStart$imdbSampleJson$imdbSearchHtmlSampleEnd';
-const imdbSearchHtmlSampleStart = '''
+const htmlSampleError = '$htmlSampleStart$htmlSampleEnd';
+const htmlSampleFull = '$htmlSampleStart$imdbSampleJson$htmlSampleEnd';
+const htmlSampleStart = '''
 <!DOCTYPE html>
 <html
     xmlns:snip=true>
     </snip>
   <body id="styleguide-v2" class="fixed">
   <script id="__NEXT_DATA__" type="application/json">''';
-const imdbSearchHtmlSampleEnd = '''
+const htmlSampleEnd = '''
 </script>
     <div id="wrapper">
     </div>

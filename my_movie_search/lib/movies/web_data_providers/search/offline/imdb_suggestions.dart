@@ -48,14 +48,5 @@ const imdbJsonPSampleFull = '''
     $imdbJsonSampleFull
   ) ''';
 
-Future<Stream<String>> streamImdbJsonPOfflineData(dynamic dummy) {
-  return Future.value(emitImdbJsonOfflineData(dummy));
-}
-
-Stream<String> emitImdbJsonOfflineData(_) async* {
-  yield imdbJsonPSampleFull;
-}
-
-Stream<String> emitImdbJsonSample(_) async* {
-  yield imdbJsonSampleFull;
-}
+Future<Stream<String>> streamImdbJsonPOfflineData(_) =>
+    Future.value(Stream.value(imdbJsonPSampleFull));

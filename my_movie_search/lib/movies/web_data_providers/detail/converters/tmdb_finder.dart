@@ -67,10 +67,14 @@ class TmdbFinderConverter {
         searchResults.add(dtoFromPersonMap(person as Map, imdbId));
       }
     } else {
-      final error = MovieResultDTO();
-      error.title = map[outerElementFailureReason]?.toString() ??
-          'No failure reason provided in results $map';
-      searchResults.add(error);
+      final error = map[outerElementFailureReason]?.toString() ??
+          "No failure reason provided in results $map";
+      searchResults.add(
+        MovieResultDTO().error(
+          '[TmdbFinderConverter] $error',
+          DataSourceType.omdb,
+        ),
+      );
     }
     return searchResults;
   }

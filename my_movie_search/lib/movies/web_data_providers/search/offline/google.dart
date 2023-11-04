@@ -46,7 +46,124 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-final intermediateMapList = [jsonDecode(googleMoviesJsonSearchFull)];
+final expectedErrorDTOList = ListDTOConversion.decodeList([
+  '''
+{
+  "uniqueId": "-1", 
+  "title": "Unknown google error - potential API change! type 'Null' is not a subtype of type 'Map<dynamic, dynamic>' in type cast {error: {code: 400, message: Request contains an invalid argument., errors: [{message: Request contains an invalid argument., domain: global, reason: badRequest}], status: INVALID_ARGUMENT}}"
+}
+'''
+]);
+
+final intermediateMapList = [jsonDecode(jsonSampleFull)];
+final intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
+final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
+
+const jsonSampleFull =
+    ' $googleMoviesJsonSearchPrefix $googleMoviesJsonSearchInner $googleMoviesJsonSearchSuffix';
+
+Future<Stream<String>> streamGoogleMoviesJsonOfflineData(_) =>
+    Future.value(Stream.value(jsonSampleFull));
+
+const googleMoviesJsonSearchSuffix = '''
+  ]
+}
+''';
+const googleMoviesJsonSearchPrefix = '''
+    {
+  "kind": "customsearch#search",
+  "url": {
+    "type": "application/json",
+    "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}...&imgDominantColor={imgDominantColor?}&alt=json"
+  },
+  "queries": {
+    "request": [
+      {
+        "title": "Google Custom Search - wonder",
+        "totalResults": "3280000",
+        "searchTerms": "wonder",
+        "count": 10,
+        "startIndex": 1,
+        "inputEncoding": "utf8",
+        "outputEncoding": "utf8",
+        "safe": "off",
+        "cx": "821cd5ca4ed114a04"
+      }
+    ],
+    "nextPage": [
+      {
+        "title": "Google Custom Search - wonder",
+        "totalResults": "3280000",
+        "searchTerms": "wonder",
+        "count": 10,
+        "startIndex": 11,
+        "inputEncoding": "utf8",
+        "outputEncoding": "utf8",
+        "safe": "off",
+        "cx": "821cd5ca4ed114a04"
+      }
+    ]
+  },
+  "context": {
+    "title": "Imdb_title"
+  },
+  "searchInformation": {
+    "searchTime": 0.673036,
+    "formattedSearchTime": "0.67",
+    "totalResults": "3280000",
+    "formattedTotalResults": "3,280,000"
+  },
+  "items": [
+    ''';
+const jsonSampleError = '''
+{
+  "error": {
+    "code": 400,
+    "message": "Request contains an invalid argument.",
+    "errors": [
+      {
+        "message": "Request contains an invalid argument.",
+        "domain": "global",
+        "reason": "badRequest"
+      }
+    ],
+    "status": "INVALID_ARGUMENT"
+  }
+}
+''';
+const jsonSampleEmpty = r'''
+{
+  "kind": "customsearch#search",
+  "url": {
+    "type": "application/json",
+    "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}...&imgDominantColor={imgDominantColor?}&alt=json"
+  },
+  "queries": {
+    "request": [
+      {
+        "title": "Google Custom Search - therearenoresultszzzz",
+        "searchTerms": "therearenoresultszzzz",
+        "count": 10,
+        "startIndex": 1,
+        "inputEncoding": "utf8",
+        "outputEncoding": "utf8",
+        "safe": "off",
+        "cx": "821cd5ca4ed114a04"
+      }
+    ]
+  },
+  "searchInformation": {
+    "searchTime": 0.429584,
+    "formattedSearchTime": "0.43",
+    "totalResults": "0",
+    "formattedTotalResults": "0"
+  },
+  "spelling": {
+    "correctedQuery": "therearenoresults zzz",
+    "htmlCorrectedQuery": "\u003cb\u003e\u003ci\u003etherearenoresults zzz\u003c/i\u003e\u003c/b\u003e"
+  }
+}
+''';
 
 const googleMoviesJsonSearchInner = r'''
     {
@@ -562,121 +679,3 @@ const googleMoviesJsonSearchInner = r'''
       }
     }
 ''';
-const googleMoviesJsonSearchPrefix = '''
-    {
-  "kind": "customsearch#search",
-  "url": {
-    "type": "application/json",
-    "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}...&imgDominantColor={imgDominantColor?}&alt=json"
-  },
-  "queries": {
-    "request": [
-      {
-        "title": "Google Custom Search - wonder",
-        "totalResults": "3280000",
-        "searchTerms": "wonder",
-        "count": 10,
-        "startIndex": 1,
-        "inputEncoding": "utf8",
-        "outputEncoding": "utf8",
-        "safe": "off",
-        "cx": "821cd5ca4ed114a04"
-      }
-    ],
-    "nextPage": [
-      {
-        "title": "Google Custom Search - wonder",
-        "totalResults": "3280000",
-        "searchTerms": "wonder",
-        "count": 10,
-        "startIndex": 11,
-        "inputEncoding": "utf8",
-        "outputEncoding": "utf8",
-        "safe": "off",
-        "cx": "821cd5ca4ed114a04"
-      }
-    ]
-  },
-  "context": {
-    "title": "Imdb_title"
-  },
-  "searchInformation": {
-    "searchTime": 0.673036,
-    "formattedSearchTime": "0.67",
-    "totalResults": "3280000",
-    "formattedTotalResults": "3,280,000"
-  },
-  "items": [
-    ''';
-const googleMoviesJsonSearchSuffix = '''
-  ]
-}
-''';
-const googleMoviesJsonSearchEmpty = r'''
-{
-  "kind": "customsearch#search",
-  "url": {
-    "type": "application/json",
-    "template": "https://www.googleapis.com/customsearch/v1?q={searchTerms}&num={count?}&start={startIndex?}&lr={language?}&safe={safe?}...&imgDominantColor={imgDominantColor?}&alt=json"
-  },
-  "queries": {
-    "request": [
-      {
-        "title": "Google Custom Search - therearenoresultszzzz",
-        "searchTerms": "therearenoresultszzzz",
-        "count": 10,
-        "startIndex": 1,
-        "inputEncoding": "utf8",
-        "outputEncoding": "utf8",
-        "safe": "off",
-        "cx": "821cd5ca4ed114a04"
-      }
-    ]
-  },
-  "searchInformation": {
-    "searchTime": 0.429584,
-    "formattedSearchTime": "0.43",
-    "totalResults": "0",
-    "formattedTotalResults": "0"
-  },
-  "spelling": {
-    "correctedQuery": "therearenoresults zzz",
-    "htmlCorrectedQuery": "\u003cb\u003e\u003ci\u003etherearenoresults zzz\u003c/i\u003e\u003c/b\u003e"
-  }
-}
-''';
-const googleMoviesJsonSearchError = '''
-{
-  "error": {
-    "code": 400,
-    "message": "Request contains an invalid argument.",
-    "errors": [
-      {
-        "message": "Request contains an invalid argument.",
-        "domain": "global",
-        "reason": "badRequest"
-      }
-    ],
-    "status": "INVALID_ARGUMENT"
-  }
-}
-''';
-
-const googleMoviesJsonSearchFull =
-    ' $googleMoviesJsonSearchPrefix $googleMoviesJsonSearchInner $googleMoviesJsonSearchSuffix';
-
-Future<Stream<String>> streamGoogleMoviesJsonOfflineData(dynamic dummy) {
-  return Future.value(emitGoogleMoviesJsonOfflineData(dummy));
-}
-
-Stream<String> emitGoogleMoviesJsonOfflineData(_) async* {
-  yield googleMoviesJsonSearchFull;
-}
-
-Stream<String> emitGoogleMoviesJsonEmpty(_) async* {
-  yield googleMoviesJsonSearchEmpty;
-}
-
-Stream<String> emitGoogleMoviesJsonError(_) async* {
-  yield googleMoviesJsonSearchError;
-}

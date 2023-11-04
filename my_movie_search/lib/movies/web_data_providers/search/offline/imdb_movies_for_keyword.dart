@@ -24,17 +24,12 @@ const expectedDtoJsonStringList = [
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamImdbKeywordsHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitImdbKeywordsHtmlSample(dummy));
-}
+Future<Stream<String>> streamImdbKeywordsHtmlOfflineData(_) =>
+    Future.value(Stream.value(htmlSampleFull));
 
-Stream<String> _emitImdbKeywordsHtmlSample(_) async* {
-  yield imdbKeywordsHtmlSampleFull;
-}
-
-const imdbKeywordsHtmlSampleFull =
-    '$imdbKeywordsHtmlSampleStart$imdbSampleMid$imdbKeywordsHtmlSampleEnd';
-const imdbKeywordsHtmlSampleStart = '''
+const htmlSampleEmpty = '$htmlSampleStart$imdbEmptySampleMid$htmlSampleEnd';
+const htmlSampleFull = '$htmlSampleStart$imdbSampleMid$htmlSampleEnd';
+const htmlSampleStart = '''
 
 <!DOCTYPE html>
 <html
@@ -45,7 +40,7 @@ const imdbKeywordsHtmlSampleStart = '''
   <body id="styleguide-v2" class="fixed">
   
    <div class="lister-list">''';
-const imdbKeywordsHtmlSampleEnd = '''
+const htmlSampleEnd = '''
 
 </div>
     
@@ -53,6 +48,9 @@ const imdbKeywordsHtmlSampleEnd = '''
   </body>
   </html>
 ''';
+const imdbEmptySampleMid = '<div class="lister-item"> '
+    'No results. Try removing genres, ratings, or other filters to see more. '
+    '</div>';
 
 const intermediateMapList = [
   {

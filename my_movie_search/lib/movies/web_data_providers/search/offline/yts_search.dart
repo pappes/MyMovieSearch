@@ -1,5 +1,7 @@
 // ignore_for_file: unnecessary_raw_strings
 
+import 'dart:convert';
+
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 // query string https://yts.mx/ajax/search?query=tt6644286
@@ -30,13 +32,12 @@ const ytsJsonSampleInner = '''
     "year":"2017"
   }
 ''';
-const ytsJsonSampleFull =
+const jsonSampleFull =
     ' {"status":"ok","data":[ $ytsJsonSampleInner ],"message":"a message"}';
+const jsonSampleEmpty = ' {"status":"false","message":"No results found."}';
 
-Future<Stream<String>> streamJsonOfflineData(dynamic dummy) {
-  return Future.value(emitJsonOfflineData(dummy));
-}
+final intermediateMapList = [json.decode(jsonSampleFull)];
+final intermediateEmptyMapList = [json.decode(jsonSampleEmpty)];
 
-Stream<String> emitJsonOfflineData(_) async* {
-  yield ytsJsonSampleFull;
-}
+Future<Stream<String>> streamJsonOfflineData(_) =>
+    Future.value(Stream.value(jsonSampleFull));

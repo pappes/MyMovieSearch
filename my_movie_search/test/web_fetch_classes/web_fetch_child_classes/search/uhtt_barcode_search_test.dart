@@ -7,11 +7,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/uhtt_barcode.da
 
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedHtmlSample(_) {
   return Future.value(Stream.value('<html><body>stuff</body></html>'));
 }
 
-Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidHtmlSample(_) {
   return Future.value(Stream.value('not valid html'));
 }
 
@@ -96,6 +96,28 @@ void main() {
         htmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final expectedOutput = [];
+      final actualOutput =
+          QueryUhttBarcodeSearch(criteria).myConvertWebTextToTraversableTree(
+        htmlSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput = throwsA(startsWith(
+        'UhttBarcode results data not detected for criteria dream in html',
+      ));
+      final actualOutput =
+          QueryUhttBarcodeSearch(criteria).myConvertWebTextToTraversableTree(
+        'htmlSampleError',
+      );
+      //NOTE: Using expect on an async result only works as the last line of the test!
+      expect(
+        actualOutput,
+        expectedOutput,
+      );
     });
   });
   group('UhttBarcodeSearchConverter unit tests', () {
@@ -203,6 +225,9 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryUhttBarcodeSearch(criteria);
+      const expectedException = '[QueryUhttBarcodeSearch] Error in uhttBarcode '
+          'with criteria dream convert error interpreting web text as a map '
+          ':UhttBarcode results data not detected for criteria dream in html:not valid html';
 
       // Invoke the functionality.
       await webfetch
@@ -210,7 +235,7 @@ void main() {
             source: _emitInvalidHtmlSample,
           )
           .then((values) => queryResult.addAll(values));
-      expect(queryResult, []);
+      expect(queryResult.first.title, expectedException);
     });
 
     // Read search results from a simulated byte stream and report error due to unexpected html.
@@ -218,6 +243,9 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryUhttBarcodeSearch(criteria);
+      const expectedException = '[QueryUhttBarcodeSearch] Error in uhttBarcode '
+          'with criteria dream convert error interpreting web text as a map '
+          ':UhttBarcode results data not detected for criteria dream in html:<html><body>stuff</body></html>';
 
       // Invoke the functionality.
       await webfetch
@@ -225,7 +253,7 @@ void main() {
             source: _emitUnexpectedHtmlSample,
           )
           .then((values) => queryResult.addAll(values));
-      expect(queryResult, []);
+      expect(queryResult.first.title, expectedException);
 
       // Check the results.
     });

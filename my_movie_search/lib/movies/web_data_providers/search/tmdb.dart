@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -65,5 +67,23 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     // Get key from the file assets/secrets.json (not source controlled)
     final tmdbKey = Settings.singleton().get('TMDB_KEY');
     headers.add('Authorization', ' Bearer $tmdbKey');
+  }
+
+  /// Convert web text to a traversable tree of [List] or [Map] data.
+  /// Scrape keyword data from rows in the html div named fullcredits_content.
+  @override
+  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+    String webText,
+  ) async {
+    if (webText.contains('The resource you requested could not be found')) {
+      return [];
+    }
+    try {
+      // Assume text is json encoded.
+      final tree = jsonDecode(webText);
+      return [tree];
+    } catch (jsonException) {
+      throw 'Invalid json returned from web call $webText';
+    }
   }
 }

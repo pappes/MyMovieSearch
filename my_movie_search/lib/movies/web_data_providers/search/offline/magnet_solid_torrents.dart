@@ -12,15 +12,13 @@ const expectedDtoJsonStringList = [
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitHtmlSample(dummy));
-}
-
-Stream<String> _emitHtmlSample(_) async* {
-  yield htmlSampleFull;
+Future<Stream<String>> streamHtmlOfflineData(_) {
+  return Future.value(Stream.value(htmlSampleFull));
 }
 
 const htmlSampleFull = '$htmlSampleStart$htmlSampleMid$htmlSampleEnd';
+const htmlSampleEmpty = '$htmlSampleStart$htmlSampleMidEmpty$htmlSampleEnd';
+const htmlSampleError = '$htmlSampleStart$htmlSampleEnd';
 const htmlSampleStart = '''
 
 <!DOCTYPE html>
@@ -41,6 +39,7 @@ const htmlSampleEnd = '''
   </html>
 ''';
 
+const intermediateErrorMapList = [];
 const intermediateMapList = [
   {
     'description': '125 1.36 GB 19 14 May 20, 2022',
@@ -52,6 +51,9 @@ const intermediateMapList = [
     'leechers': '14',
   }
 ];
+const htmlSampleMidEmpty =
+    '<span class="w3-bar-item">Found <b>0</b> results in 74ms for '
+    '<b>kjhkjhzzzzzzzzzzk</b></span>';
 
 const htmlSampleMid = r'''
         <li class="card search-result my-2">

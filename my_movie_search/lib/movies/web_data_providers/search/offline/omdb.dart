@@ -26,7 +26,16 @@ const expectedDtoJsonStringList = [
   '{"bestSource": "omdb", "uniqueId": "tt0293979", "title": "Wonder Woman: Who\'s Afraid of Diana Prince?", "type": "movie", "year": "1967", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BYzk4Y2NkNjItZWE1OC00MDc5LWEwNGMtZDFkOGM3MTQzY2YzXkEyXkFqcGdeQXVyMTU2MjI3NTk@._V1_SX300.jpg", "related": {}}',
 ];
 
-final intermediateMapList = [jsonDecode(omdbJsonSearchFull)];
+final intermediateMapList = [jsonDecode(jsonSampleFull)];
+final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
+
+const jsonSampleFull =
+    ' {"Search":[ $omdbJsonSearchInner ],"totalResults":"44","Response":"True"}';
+const jsonSampleEmpty = '{"Response":"False","Error":"Movie not found!"}';
+const jsonSampleError = '{"Response":"False","Error":"Invalid API key!"}';
+
+Future<Stream<String>> streamOmdbJsonOfflineData(_) =>
+    Future.value(Stream.value(jsonSampleFull));
 
 const omdbJsonSearchInner = '''
   {"Title":"Wonder Woman","Year":"2017","imdbID":"tt0451279","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMTYzODQzYjQtNTczNC00MzZhLTg1ZWYtZDUxYmQ3ZTY4NzA1XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg"},
@@ -40,23 +49,3 @@ const omdbJsonSearchInner = '''
   {"Title":"Wonder Woman","Year":"1974-","imdbID":"tt0072419","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMTQ3NDkxNjM0Ml5BMl5BanBnXkFtZTgwNzQxNTkwMDE@._V1_SX300.jpg"},
   {"Title":"Wonder Woman: Who's Afraid of Diana Prince?","Year":"1967","imdbID":"tt0293979","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BYzk4Y2NkNjItZWE1OC00MDc5LWEwNGMtZDFkOGM3MTQzY2YzXkEyXkFqcGdeQXVyMTU2MjI3NTk@._V1_SX300.jpg"}
 ''';
-const omdbJsonSearchFull =
-    ' {"Search":[ $omdbJsonSearchInner ],"totalResults":"44","Response":"True"}';
-const omdbJsonSearchEmpty = '{"Response":"False","Error":"Movie not found!"}';
-const omdbJsonSearchError = '{"Response":"False","Error":"Invalid API key!"}';
-
-Future<Stream<String>> streamOmdbJsonOfflineData(dynamic dummy) {
-  return Future.value(emitOmdbJsonOfflineData(dummy));
-}
-
-Stream<String> emitOmdbJsonOfflineData(_) async* {
-  yield omdbJsonSearchFull;
-}
-
-Stream<String> emitOmdbJsonEmpty(_) async* {
-  yield omdbJsonSearchEmpty;
-}
-
-Stream<String> emitOmdbJsonError(_) async* {
-  yield omdbJsonSearchError;
-}

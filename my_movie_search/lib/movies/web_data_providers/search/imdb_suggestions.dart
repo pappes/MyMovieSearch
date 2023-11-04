@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -58,5 +60,19 @@ class QueryIMDBSuggestions
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     final url = '$_baseURL$searchCriteria.json';
     return Uri.parse(url);
+  }
+
+  @override
+  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+    String webText,
+  ) async {
+    if ('' == webText) throw 'No content returned from web call';
+    try {
+      // Assume text is json encoded.
+      final tree = jsonDecode(webText);
+      return [tree];
+    } catch (jsonException) {
+      throw 'Invalid json returned from web call $webText';
+    }
   }
 }

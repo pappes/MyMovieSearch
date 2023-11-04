@@ -46,10 +46,14 @@ class OmdbMovieSearchConverter {
         searchResults.add(dtoFromMap(movie as Map));
       }
     } else {
-      final error = MovieResultDTO();
-      error.title = map[outerElementFailureReason]?.toString() ??
+      final error = map[outerElementFailureReason]?.toString() ??
           "No failure reason provided in results $map";
-      searchResults.add(error);
+      searchResults.add(
+        MovieResultDTO().error(
+          '[OmdbMovieSearchConverter] $error',
+          DataSourceType.omdb,
+        ),
+      );
     }
     return searchResults;
   }

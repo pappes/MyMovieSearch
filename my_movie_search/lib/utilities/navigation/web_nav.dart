@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -33,6 +34,12 @@ class RouteInfo {
   final String reference;
 
   RouteInfo(this.routePath, this.params, this.reference);
+  @override
+  String toString() => json.encode({
+        'path': routePath,
+        'params': params.toString(),
+        'ref': reference,
+      });
 }
 
 /// Performs page navigation

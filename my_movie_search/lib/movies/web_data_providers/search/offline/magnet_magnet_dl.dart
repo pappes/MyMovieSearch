@@ -12,15 +12,14 @@ const expectedDtoJsonStringList = [
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitHtmlSample(dummy));
+Future<Stream<String>> streamHtmlOfflineData(_) {
+  return Future.value(Stream.value(htmlSampleFull));
 }
 
-Stream<String> _emitHtmlSample(_) async* {
-  yield mdlSampleFull;
-}
-
-const mdlSampleFull = '$mdlHtmlSampleStart$mdlSampleMid$mdlHtmlSampleEnd';
+const htmlSampleFull = '$mdlHtmlSampleStart$mdlSampleMid$mdlHtmlSampleEnd';
+const htmlSampleEmpty =
+    '$mdlHtmlSampleStart$mdlSampleEmptyMid$mdlHtmlSampleEnd';
+const htmlSampleError = '$mdlHtmlSampleStart$mdlHtmlSampleEnd';
 const mdlHtmlSampleStart = '''
 
 <!DOCTYPE html>
@@ -41,6 +40,7 @@ const mdlHtmlSampleEnd = '''
   </html>
 ''';
 
+const intermediateErrorMapList = [];
 const intermediateMapList = [
   {
     'category': 'Movie',
@@ -52,6 +52,10 @@ const intermediateMapList = [
     'leechers': '0',
   }
 ];
+
+const mdlSampleEmptyMid = r'''
+<div id="center"><img src="/img/404.jpg" width="690" height="300" alt="Error 404"><br>The download may have been removed or search query blocked due to copyright complaint. We apologize for the inconvenience.<br><br>
+</div>''';
 
 const mdlSampleMid = r'''
 <table class="download">

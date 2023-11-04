@@ -8,11 +8,11 @@ import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_bi
 import 'package:my_movie_search/utilities/settings.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedHtmlSample(_) {
   return Future.value(Stream.value('<html><body>stuff</body></html>'));
 }
 
-Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidHtmlSample(_) {
   return Future.value(Stream.value('not valid html'));
 }
 

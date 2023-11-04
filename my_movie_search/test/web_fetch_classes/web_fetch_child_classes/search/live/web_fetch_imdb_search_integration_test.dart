@@ -73,17 +73,10 @@ void main() {
             'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
       );
     });
-    // Search for a rare movie.
-    test('Run a search on IMDB that has no results', () async {
-      final criteria = SearchCriteriaDTO()
-          .fromString('while we re young 2014 ben stiller comedy');
+    test('Run an empty search', () async {
+      final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
       final actualOutput = await QueryIMDBSearch(criteria).readList(limit: 10);
       final expectedOutput = <MovieResultDTO>[];
-      expectedDTOList.clearCopyrightedData();
-      actualOutput.clearCopyrightedData();
-
-      // To update expected data, uncomment the following line
-      // printTestData(actualOutput);
 
       // Check the results.
       expect(

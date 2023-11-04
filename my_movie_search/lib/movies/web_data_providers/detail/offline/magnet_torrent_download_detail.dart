@@ -12,8 +12,8 @@ const expectedDtoJsonStringList = [
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitHtmlSample(dummy));
+Future<Stream<String>> streamHtmlOfflineData(_) {
+  return Future.value(_emitHtmlSample(_));
 }
 
 Stream<String> _emitHtmlSample(_) async* {

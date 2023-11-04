@@ -9,8 +9,8 @@ const htmlSampleStart = ' <!DOCTYPE html> <html     <head>'
 const htmlSampleEnd = ' </body> </html>';
 const htmlSampleFull = '$htmlSampleStart $htmlSampleInner $htmlSampleEnd';
 
-Future<Stream<String>> streamhtmlOfflineData(dynamic dummy) {
-  return Future.value(emitHtmlSample(dummy));
+Future<Stream<String>> streamhtmlOfflineData(_) {
+  return Future.value(emitHtmlSample(_));
 }
 
 Stream<String> emitHtmlSample(_) async* {

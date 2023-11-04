@@ -7,11 +7,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/offline/libsa_b
 
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedHtmlSample(_) {
   return Future.value(Stream.value('<html><body>stuff</body></html>'));
 }
 
-Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidHtmlSample(_) {
   return Future.value(Stream.value('not valid html'));
 }
 
@@ -96,6 +96,25 @@ void main() {
         htmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      const expectedOutput = [];
+      final actualOutput =
+          QueryLibsaBarcodeSearch(criteria).myConvertWebTextToTraversableTree(
+        htmlSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput = throwsA(startsWith(
+        'LibsaBarcode results data not detected for criteria dream in html',
+      ));
+      final actualOutput =
+          QueryLibsaBarcodeSearch(criteria).myConvertWebTextToTraversableTree(
+        htmlSampleError,
+      );
+      //NOTE: Using expect on an async result only works as the last line of the test!
+      expect(actualOutput, expectedOutput);
     });
   });
   group('LibsaBarcodeSearchConverter unit tests', () {

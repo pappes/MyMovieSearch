@@ -6,11 +6,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestion
 import '../../../test_data/imdb_suggestion_converter_data.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedJsonSample(_) {
   return Future.value(Stream.value('imdbJsonFunction(null)'));
 }
 
-Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidJsonSample(_) {
   return Future.value(Stream.value('imdbJsonFunction({not valid json})'));
 }
 
@@ -32,8 +32,6 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'testing';
       expect(
         QueryIMDBSuggestions(criteria).myFormatInputAsText(),
         criteria.criteriaTitle,
@@ -72,6 +70,46 @@ void main() {
         completion(MovieResultDTOListMatcher(expectedValue)),
       );
     });
+    test('Run myConvertTreeToOutputType() with empty search results', () async {
+      final expectedValue = <MovieResultDTO>[];
+      final testClass = QueryIMDBSuggestions(criteria);
+      final actualResult = <MovieResultDTO>[];
+
+      // Invoke the functionality and collect results.
+      for (final map in intermediateEmptyMapList) {
+        actualResult.addAll(
+          await testClass.myConvertTreeToOutputType(map),
+        );
+      }
+
+      // Check the results.
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+      );
+    });
+    test('Run myConvertTreeToOutputType() with error results', () async {
+      final expectedValue = <MovieResultDTO>[];
+      final testClass = QueryIMDBSuggestions(criteria);
+      final actualResult = <MovieResultDTO>[];
+
+      // Invoke the functionality and collect results.
+      for (final map in intermediateErrorMapList) {
+        actualResult.addAll(
+          await testClass.myConvertTreeToOutputType(map),
+        );
+      }
+
+      // Check the results.
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+      );
+    });
 
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
@@ -104,6 +142,32 @@ void main() {
 
       // Check the results.
       expect(actualResult, expectedResult);
+    });
+    // Confirm web text is parsed as expected.
+    test('Run myConvertWebTextToTraversableTree()', () {
+      final expectedOutput = intermediateMapList;
+      final actualOutput =
+          QueryIMDBSuggestions(criteria).myConvertWebTextToTraversableTree(
+        jsonSampleFull,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final expectedOutput = intermediateEmptyMapList;
+      final actualOutput =
+          QueryIMDBSuggestions(criteria).myConvertWebTextToTraversableTree(
+        jsonSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput =
+          throwsA(startsWith('Invalid json returned from web call'));
+      final actualOutput =
+          QueryIMDBSuggestions(criteria).myConvertWebTextToTraversableTree(
+        imdbErrorSample,
+      );
+      expect(actualOutput, expectedOutput);
     });
   });
 ////////////////////////////////////////////////////////////////////////////////
@@ -170,11 +234,10 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final imdbSuggestions = QueryIMDBSuggestions(criteria);
-      const expectedException = '''
-[QueryIMDBSuggestions] Error in imdbSuggestions with criteria 123 convert error interpreting web text as a map :FormatException: Unexpected character (at character 2)
-{not valid json}
- ^
-''';
+      const expectedException =
+          '[QueryIMDBSuggestions] Error in imdbSuggestions with criteria 123 '
+          'convert error interpreting web text as a map '
+          ':Invalid json returned from web call {not valid json}';
 
       // Invoke the functionality.
       await imdbSuggestions

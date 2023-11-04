@@ -174,8 +174,8 @@ void main() {
     // Test the internal workings of the transformer.
     test('transformer', () async {
       // Set up the test data.
-      const testInput = 'functionName($imdbJsonSampleFull)';
-      const expectedString = imdbJsonSampleFull;
+      const testInput = 'functionName($jsonSampleFull)';
+      const expectedString = jsonSampleFull;
       var emittedString = '';
 
       // Compare the stream output to the expected output.

@@ -7,11 +7,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/offline/magnet_
 
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedHtmlSample(_) {
   return Future.value(Stream.value('<html><body>stuff</body></html>'));
 }
 
-Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidHtmlSample(_) {
   return Future.value(Stream.value('not valid html'));
 }
 
@@ -93,9 +93,28 @@ void main() {
       final testClass = QueryGloTorrentsSearch(criteria);
       testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
-        gtSampleFull,
+        htmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final expectedOutput = [];
+      final actualOutput =
+          QueryGloTorrentsSearch(criteria).myConvertWebTextToTraversableTree(
+        htmlSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput = throwsA(startsWith(
+        'gloTorrents results data not detected for criteria dream in html',
+      ));
+      final actualOutput =
+          QueryGloTorrentsSearch(criteria).myConvertWebTextToTraversableTree(
+        htmlSampleError,
+      );
+      //NOTE: Using expect on an async result only works as the last line of the test!
+      expect(actualOutput, expectedOutput);
     });
   });
   group('GloTorrentsSearchConverter unit tests', () {
@@ -152,16 +171,15 @@ void main() {
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
       final gloTorrentsSearch = QueryGloTorrentsSearch(criteria);
+      final expectedValue =
+          throwsA('expected map got String unable to interpret data map');
 
       // Invoke the functionality and collect results.
       final actualResult = gloTorrentsSearch.myConvertTreeToOutputType('map');
 
       // Check the results.
       //NOTE: Using expect on an async result only works as the last line of the test!
-      expect(
-        actualResult,
-        throwsA('expected map got String unable to interpret data map'),
-      );
+      expect(actualResult, expectedValue);
     });
   });
 

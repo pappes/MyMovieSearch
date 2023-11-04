@@ -12,15 +12,12 @@ const expectedDtoJsonStringList = [
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitHtmlSample(dummy));
-}
+Future<Stream<String>> streamHtmlOfflineData(_) =>
+    Future.value(Stream.value(htmlSampleFull));
 
-Stream<String> _emitHtmlSample(_) async* {
-  yield gtSampleFull;
-}
-
-const gtSampleFull = '$gtHtmlSampleStart$gtSampleMid$gtHtmlSampleEnd';
+const htmlSampleFull = '$gtHtmlSampleStart$gtSampleMid$gtHtmlSampleEnd';
+const htmlSampleEmpty = '$gtHtmlSampleStart$gtSampleMidEmpty$gtHtmlSampleEnd';
+const htmlSampleError = '$gtHtmlSampleStart$gtHtmlSampleEnd';
 const gtHtmlSampleStart = '''
 
 <!DOCTYPE html>
@@ -40,7 +37,11 @@ const gtHtmlSampleEnd = '''
   </body>
   </html>
 ''';
+const gtSampleMidEmpty = r'''
+<div class="f-border"><div class="f-cat" width="100%">Nothing Found</div><div>No torrents were found based on your search criteria.</div></div>
+''';
 
+const intermediateErrorMapList = [];
 const intermediateMapList = [
   {
     'magnet':

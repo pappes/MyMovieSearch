@@ -10,11 +10,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedJsonSample(_) {
   return Future.value(Stream.value('[{"hello":"world"}]'));
 }
 
-Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidJsonSample(_) {
   return Future.value(Stream.value('not valid json'));
 }
 
@@ -79,7 +79,23 @@ void main() {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           QueryOMDBMovies(criteria).myConvertWebTextToTraversableTree(
-        omdbJsonSearchFull,
+        jsonSampleFull,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final expectedOutput = [];
+      final actualOutput =
+          QueryOMDBMovies(criteria).myConvertWebTextToTraversableTree(
+        jsonSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput = intermediateErrorMapList;
+      final actualOutput =
+          QueryOMDBMovies(criteria).myConvertWebTextToTraversableTree(
+        jsonSampleError,
       );
       expect(actualOutput, completion(expectedOutput));
     });
@@ -208,11 +224,10 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryOMDBMovies(criteria);
-      const expectedException = '''
-[QueryOMDBMovies] Error in omdb with criteria 123 convert error interpreting web text as a map :FormatException: Unexpected character (at character 1)
-not valid json
-^
-''';
+      const expectedException =
+          '[QueryOMDBMovies] Error in omdb with criteria 123 '
+          'convert error interpreting web text as a map '
+          ':Invalid json returned from web call not valid json';
 
       // Invoke the functionality.
       await testClass

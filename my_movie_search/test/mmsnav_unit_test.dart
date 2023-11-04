@@ -24,10 +24,12 @@ class TestMMSFlutterCanvas {
   TestMMSFlutterCanvas() {
     // Use Mockito to return a string describing the parameters.
     when(mockCanvas.viewWebPage(any)).thenAnswer((Invocation inv) {
-      result = inv.positionalArguments[0]?.toString();
+      final url = inv.positionalArguments[0] as String;
+      result = url;
     });
     when(mockCanvas.viewFlutterPage(any)).thenAnswer((Invocation inv) {
-      result = inv.positionalArguments[0]?.toString();
+      final page = inv.positionalArguments[0] as RouteInfo;
+      result = page.routePath;
     });
   }
 }
@@ -48,116 +50,151 @@ void main() {
 
     test('searchForRelated()', () {
       testClass.searchForRelated('unknown', []);
-      expect(testCanvas.result, 'MovieSearchResultsNewPage');
+      expect(
+        testCanvas.result,
+        'searchresults',
+      );
     });
 
     test('getMoviesForKeyword()', () {
       testClass.getMoviesForKeyword('unknown');
-      expect(testCanvas.result, 'MovieSearchResultsNewPage');
+      expect(
+        testCanvas.result,
+        'searchresults',
+      );
     });
 
     test('getDownloads()', () {
       testClass.getDownloads('unknown', MovieResultDTO());
-      expect(testCanvas.result, 'MovieSearchResultsNewPage');
+      expect(
+        testCanvas.result,
+        'searchresults',
+      );
     });
 
     test('getMoreKeywords()', () {
       testClass.getMoviesForKeyword('unknown');
-      expect(testCanvas.result, 'MovieSearchResultsNewPage');
+      expect(
+        testCanvas.result,
+        'searchresults',
+      );
     });
 
     test('getDetailsPage()', () {
-      void checkCalledPage(String id, String expected, {String? type}) {
+      void checkCalledPage(
+        String id,
+        String route, {
+        String? type,
+      }) {
         final movie = MovieResultDTO().init(uniqueId: id, type: type);
-        final actual = testClass.getDetailsPage(movie).toString();
-        expect(actual, expected, reason: 'criteria: id=$id type=$type');
+        final actual = testClass.getDetailsPage(movie);
+        final dto = actual.params as MovieResultDTO;
+
+        expect(
+          actual.routePath,
+          route,
+          reason: 'criteria: id=$id , route = $route, type=$type',
+        );
+        expect(
+          dto.uniqueId,
+          id,
+          reason: 'criteria: id=$id , route = $route, type=$type',
+        );
+        if (type != null) {
+          expect(
+            dto.type.toString(),
+            type,
+            reason: 'criteria: id=$id , route = $route, type=$type',
+          );
+        }
+        //expect(actual.reference, ref, reason: 'criteria: id=$id type=$type');
       }
 
-      checkCalledPage('${imdbTitlePrefix}12345', 'MovieDetailsPage');
-      checkCalledPage('${imdbPersonPrefix}12345', 'PersonDetailsPage');
-      checkCalledPage('12345', 'ErrorDetailsPage');
+      checkCalledPage('${imdbTitlePrefix}12345', 'moviedetails');
+      checkCalledPage('${imdbPersonPrefix}12345', 'persondetails');
+      checkCalledPage('12345', 'errordetails');
 
       checkCalledPage(
         '12345',
-        'MovieDetailsPage',
+        'moviedetails',
         type: MovieContentType.movie.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'PersonDetailsPage',
+        'persondetails',
         type: MovieContentType.person.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'ErrorDetailsPage',
+        'errordetails',
         type: MovieContentType.custom.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'ErrorDetailsPage',
+        'errordetails',
         type: MovieContentType.download.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'MovieDetailsPage',
+        'moviedetails',
         type: MovieContentType.episode.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'ErrorDetailsPage',
+        'errordetails',
         type: MovieContentType.error.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'ErrorDetailsPage',
+        'errordetails',
         type: MovieContentType.information.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'ErrorDetailsPage',
+        'errordetails',
         type: MovieContentType.keyword.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'MovieDetailsPage',
+        'moviedetails',
         type: MovieContentType.miniseries.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'ErrorDetailsPage',
+        'errordetails',
         type: MovieContentType.navigation.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'ErrorDetailsPage',
+        'errordetails',
         type: MovieContentType.none.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'MovieDetailsPage',
+        'moviedetails',
         type: MovieContentType.series.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'MovieDetailsPage',
+        'moviedetails',
         type: MovieContentType.short.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'MovieDetailsPage',
+        'moviedetails',
         type: MovieContentType.title.toString(),
       );
     });
@@ -177,25 +214,25 @@ void main() {
         );
       }
 
-      checkCalledPage('${imdbTitlePrefix}12345', 'MovieDetailsPage');
-      checkCalledPage('${imdbPersonPrefix}12345', 'PersonDetailsPage');
-      checkCalledPage('12345', 'ErrorDetailsPage');
+      checkCalledPage('${imdbTitlePrefix}12345', 'moviedetails');
+      checkCalledPage('${imdbPersonPrefix}12345', 'persondetails');
+      checkCalledPage('12345', 'errordetails');
 
       checkCalledPage(
         '12345',
-        'MovieDetailsPage',
+        'moviedetails',
         type: MovieContentType.movie.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'PersonDetailsPage',
+        'persondetails',
         type: MovieContentType.person.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'ErrorDetailsPage',
+        'errordetails',
         type: MovieContentType.custom.toString(),
       );
 
@@ -207,61 +244,61 @@ void main() {
 
       checkCalledPage(
         '12345',
-        'MovieDetailsPage',
+        'moviedetails',
         type: MovieContentType.episode.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'ErrorDetailsPage',
+        'errordetails',
         type: MovieContentType.error.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'ErrorDetailsPage',
+        'errordetails',
         type: MovieContentType.information.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'MovieSearchResultsNewPage',
+        'searchresults',
         type: MovieContentType.keyword.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'MovieDetailsPage',
+        'moviedetails',
         type: MovieContentType.miniseries.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'MovieSearchResultsNewPage',
+        'searchresults',
         type: MovieContentType.navigation.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'ErrorDetailsPage',
+        'errordetails',
         type: MovieContentType.none.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'MovieDetailsPage',
+        'moviedetails',
         type: MovieContentType.series.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'MovieDetailsPage',
+        'moviedetails',
         type: MovieContentType.short.toString(),
       );
 
       checkCalledPage(
         '12345',
-        'MovieDetailsPage',
+        'moviedetails',
         type: MovieContentType.title.toString(),
       );
     });

@@ -12,24 +12,24 @@ import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_se
 
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedHtmlSample(_) {
   return Future.value(Stream.value('<html><body>stuff</body></html>'));
 }
 
-Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidHtmlSample(_) {
   return Future.value(Stream.value('not valid html'));
 }
 
-Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
-  final unexpectedJson = imdbSearchHtmlSampleFull.replaceAll(
+Future<Stream<String>> _emitUnexpectedJsonSample(_) {
+  final unexpectedJson = htmlSampleFull.replaceAll(
     '"results"',
     '"found"',
   );
   return Future.value(Stream.value(unexpectedJson));
 }
 
-Future<Stream<String>> _emitEmtpyJsonSample(dynamic dummy) {
-  const emptyJson = '$imdbSearchHtmlSampleStart{}$imdbSearchHtmlSampleEnd';
+Future<Stream<String>> _emitEmtpyJsonSample(_) {
+  const emptyJson = '$htmlSampleStart{}$htmlSampleEnd';
   return Future.value(Stream.value(emptyJson));
 }
 
@@ -104,9 +104,27 @@ void main() {
       const expectedOutput = intermediateMapList;
       final actualOutput =
           QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
-        imdbSearchHtmlSampleFull,
+        htmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      const expectedOutput = [];
+      final actualOutput =
+          QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
+        htmlSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput =
+          throwsA(startsWith('No search results found in html'));
+      final actualOutput =
+          QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
+        htmlSampleError,
+      );
+      //NOTE: Using expect on an async result only works as the last line of the test!
+      expect(actualOutput, expectedOutput);
     });
   });
   group('ImdbSearchConverter unit tests', () {

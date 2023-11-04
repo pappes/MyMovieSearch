@@ -12,15 +12,15 @@ const expectedDtoJsonStringList = [
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamTpbHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitTpbHtmlSample(dummy));
-}
+Future<Stream<String>> streamTpbHtmlOfflineData(_) =>
+    Future.value(Stream.value(htmlSampleFull));
 
-Stream<String> _emitTpbHtmlSample(_) async* {
-  yield tpbSampleFull;
-}
-
-const tpbSampleFull = '$tpbHtmlSampleStart$tpbSampleMid$tpbHtmlSampleEnd';
+const htmlSampleFull = '$tpbHtmlSampleStart$tpbSampleMid$tpbHtmlSampleEnd';
+const htmlSampleEmpty =
+    '$tpbHtmlSampleStart$tpbSampleErrorMid$tpbHtmlSampleEnd';
+const htmlSampleError = '$tpbHtmlSampleStart$tpbHtmlSampleEnd';
+const tpbSampleErrorMid = '<h2><span>Search results: newzzzquery</span> '
+    '&nbsp;No hits. Try adding an asterisk in you search phrase.</h2>';
 const tpbHtmlSampleStart = '''
 
 <!DOCTYPE html>

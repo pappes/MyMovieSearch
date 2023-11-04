@@ -7,11 +7,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/offline/magnet_
 
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedHtmlSample(_) {
   return Future.value(Stream.value('<html><body>stuff</body></html>'));
 }
 
-Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidHtmlSample(_) {
   return Future.value(Stream.value('not valid html'));
 }
 
@@ -88,9 +88,28 @@ void main() {
       final testClass = QueryMagnetDlSearch(criteria);
       testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
-        mdlSampleFull,
+        htmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final expectedOutput = [];
+      final actualOutput =
+          QueryMagnetDlSearch(criteria).myConvertWebTextToTraversableTree(
+        htmlSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput = throwsA(startsWith(
+        'magnetDl results data not detected for criteria dream in html:',
+      ));
+      final actualOutput =
+          QueryMagnetDlSearch(criteria).myConvertWebTextToTraversableTree(
+        htmlSampleError,
+      );
+      //NOTE: Using expect on an async result only works as the last line of the test!
+      expect(actualOutput, expectedOutput);
     });
   });
   group('MagnetDlSearchConverter unit tests', () {

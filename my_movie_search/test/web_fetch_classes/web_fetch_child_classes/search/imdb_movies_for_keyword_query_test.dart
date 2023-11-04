@@ -7,11 +7,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_mo
 
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedHtmlSample(_) {
   return Future.value(Stream.value('<html><body>stuff</body></html>'));
 }
 
-Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidHtmlSample(_) {
   return Future.value(Stream.value('not valid html'));
 }
 
@@ -113,14 +113,33 @@ testing and punctuation
       expect(actualResult, expectedResult);
     });
 
+    // Confirm error is constructed as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
       final testClass = QueryIMDBMoviesForKeyword(criteria);
       testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
-        imdbKeywordsHtmlSampleFull,
+        htmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      const expectedOutput = [];
+      final actualOutput =
+          QueryIMDBMoviesForKeyword(criteria).myConvertWebTextToTraversableTree(
+        htmlSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput =
+          throwsA('imdb keyword data not detected for criteria dream');
+      final actualOutput =
+          QueryIMDBMoviesForKeyword(criteria).myConvertWebTextToTraversableTree(
+        'htmlSampleError',
+      );
+      //NOTE: Using expect on an async result only works as the last line of the test!
+      expect(actualOutput, expectedOutput);
     });
   });
   group('ImdbSearchConverter unit tests', () {

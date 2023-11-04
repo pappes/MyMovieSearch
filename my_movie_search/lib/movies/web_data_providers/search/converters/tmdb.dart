@@ -42,15 +42,22 @@ class TmdbMovieSearchConverter {
     final searchResults = <MovieResultDTO>[];
 
     final resultsMatched = map[outerElementSearchSuccess];
-    if (IntHelper.fromText(resultsMatched, nullValueSubstitute: 0)! > 0) {
+    if (resultsMatched == 0) {
+      return [];
+    } else if (IntHelper.fromText(resultsMatched, nullValueSubstitute: 0)! >
+        0) {
       for (final movie in map[outerElementResultsCollection] as Iterable) {
         searchResults.add(dtoFromMap(movie as Map));
       }
     } else {
-      final error = MovieResultDTO();
-      error.title = map[outerElementFailureReason]?.toString() ??
-          'No failure reason provided in results $map';
-      searchResults.add(error);
+      final error = map[outerElementFailureReason]?.toString() ??
+          "No failure reason provided in results $map";
+      searchResults.add(
+        MovieResultDTO().error(
+          '[TmdbMovieSearchConverter] $error',
+          DataSourceType.omdb,
+        ),
+      );
     }
     return searchResults;
   }

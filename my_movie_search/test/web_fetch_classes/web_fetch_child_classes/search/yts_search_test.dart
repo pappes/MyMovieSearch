@@ -8,11 +8,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/offline/yts_sea
 import 'package:my_movie_search/movies/web_data_providers/search/yts_search.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedJsonPSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedJsonPSample(_) {
   return Future.value(Stream.value('imdbJsonPFunction(null)'));
 }
 
-Future<Stream<String>> _emitInvalidJsonPSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidJsonPSample(_) {
   return Future.value(Stream.value('imdbJsonPFunction({not valid json})'));
 }
 
@@ -68,16 +68,44 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () {
       final expectedValue = expectedDTOList;
-      final ytsSearch = QueryYtsSearch(ignoreCriteria);
+      final webfetch = QueryYtsSearch(ignoreCriteria);
 
       // Invoke the functionality and collect results.
       final actualResult =
-          ytsSearch.myConvertTreeToOutputType(jsonDecode(ytsJsonSampleFull));
+          webfetch.myConvertTreeToOutputType(jsonDecode(jsonSampleFull));
 
       // Check the results.
       expect(
         actualResult,
         completion(MovieResultDTOListMatcher(expectedValue)),
+      );
+    });
+    test('Run myConvertTreeToOutputType() with empty search results', () async {
+      final expectedValue = <MovieResultDTO>[];
+      final webfetch = QueryYtsSearch(ignoreCriteria);
+
+      // Invoke the functionality and collect results.
+      final actualResult =
+          webfetch.myConvertTreeToOutputType(jsonDecode(jsonSampleEmpty));
+
+      // Check the results.
+      expect(
+        actualResult,
+        completion(MovieResultDTOListMatcher(expectedValue)),
+      );
+    });
+    // Test error detection.
+    test('myConvertTreeToOutputType() errors', () async {
+      final webfetch = QueryYtsSearch(ignoreCriteria);
+
+      // Invoke the functionality and collect results.
+      final actualResult = webfetch.myConvertTreeToOutputType('map');
+
+      // Check the results.
+      //NOTE: Using expect on an async result only works as the last line of the test!
+      expect(
+        actualResult,
+        throwsA('expected map got String unable to interpret data map'),
       );
     });
 
@@ -112,21 +140,47 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
+    // Confirm web text is parsed as expected.
+    test('Run myConvertWebTextToTraversableTree()', () {
+      final expectedOutput = intermediateMapList;
+      final actualOutput =
+          QueryYtsSearch(ignoreCriteria).myConvertWebTextToTraversableTree(
+        jsonSampleFull,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final expectedOutput = intermediateEmptyMapList;
+      final actualOutput =
+          QueryYtsSearch(ignoreCriteria).myConvertWebTextToTraversableTree(
+        jsonSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput =
+          throwsA(startsWith('Invalid json returned from web call'));
+      final actualOutput =
+          QueryYtsSearch(ignoreCriteria).myConvertWebTextToTraversableTree(
+        'imdbErrorSample',
+      );
+      expect(actualOutput, expectedOutput);
+    });
   });
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('imdb suggestion query', () {
-    // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
+  group('yts suggestion query', () {
+    // Read search results from a simulated byte stream and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final ytsSearch = QueryYtsSearch(ignoreCriteria);
+      final webfetch = QueryYtsSearch(ignoreCriteria);
 
       // Invoke the functionality.
-      await ytsSearch
+      await webfetch
           .readList(
             source: streamJsonOfflineData,
           )
@@ -146,19 +200,18 @@ void main() {
       );
     });
 
-    // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
-    test('invalid jsonp', () async {
+    // Read search results from a simulated byte stream and report error due to invalid html.
+    test('invalid json', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final ytsSearch = QueryYtsSearch(fullCriteria);
-      const expectedException = '''
-[QueryYtsSearch] Error in ytsSearch with criteria tt123 convert error interpreting web text as a map :FormatException: Unexpected character (at character 2)
-{not valid json}
- ^
-''';
+      final webfetch = QueryYtsSearch(fullCriteria);
+      const expectedException =
+          '[QueryYtsSearch] Error in ytsSearch with criteria tt123 '
+          'convert error interpreting web text as a map '
+          ':Invalid json returned from web call {not valid json}';
 
       // Invoke the functionality.
-      await ytsSearch
+      await webfetch
           .readList(
             source: _emitInvalidJsonPSample,
           )
@@ -166,17 +219,17 @@ void main() {
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
+    // Read search results from a simulated byte stream and convert JSON to dtos.
     test('unexpected json contents', () async {
       // Set up the test data.
       const expectedException = '[QueryYtsSearch] Error in ytsSearch '
           'with criteria tt123 convert error translating page map to objects '
           ':expected map got Null unable to interpret data null';
       final queryResult = <MovieResultDTO>[];
-      final ytsSearch = QueryYtsSearch(fullCriteria);
+      final webfetch = QueryYtsSearch(fullCriteria);
 
       // Invoke the functionality.
-      await ytsSearch
+      await webfetch
           .readList(
             source: _emitUnexpectedJsonPSample,
           )

@@ -39,7 +39,21 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-final intermediateMapList = [jsonDecode(tmdbJsonSearchFull)];
+final intermediateMapList = [jsonDecode(jsonSampleFull)];
+final intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
+final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
+
+const jsonSampleFull =
+    ' { "page": 1, "results": [ $tmdbJsonSearchInner ], "total_pages": 12, "total_results": 340 } ';
+const jsonSampleEmpty =
+    '{"page": 1, "results": [], "total_pages": 1, "total_results": 0}';
+const jsonSampleEmptyx =
+    '{ "status_message": "The resource you requested could not be found.", "status_code": 34 }';
+const jsonSampleError =
+    '{ "status_message": "Invalid API key: You must be granted a valid key.", "success": false, "status_code": 7 }';
+
+Future<Stream<String>> streamTmdbJsonOfflineData(_) =>
+    Future.value(Stream.value(jsonSampleFull));
 
 const tmdbJsonSearchInner = '''
   {"adult":false,"backdrop_path":"/8XiTPUQJf.jpg","genre_ids":[28,12,878],"id":429617,"original_language":"en",
@@ -59,26 +73,3 @@ const tmdbJsonSearchInner = '''
    "popularity":2.5,"poster_path":"/9Wbtkxnw.jpg","release_date":"2016-02-02",
    "title":"Home Invasion","video":false,"vote_average":5.2,"vote_count":105}
 ''';
-
-const tmdbJsonSearchFull =
-    ' { "page": 1, "results": [ $tmdbJsonSearchInner ], "total_pages": 12, "total_results": 340 } ';
-const tmdbJsonSearchEmpty =
-    '{ "status_message": "The resource you requested could not be found.", "status_code": 34 }';
-const tmdbJsonSearchError =
-    '{ "status_message": "Invalid API key: You must be granted a valid key.", "success": false, "status_code": 7 }';
-
-Future<Stream<String>> streamTmdbJsonOfflineData(dynamic dummy) {
-  return Future.value(emitTmdbJsonOfflineData(dummy));
-}
-
-Stream<String> emitTmdbJsonOfflineData(_) async* {
-  yield tmdbJsonSearchFull;
-}
-
-Stream<String> emitTmdbJsonEmpty(_) async* {
-  yield tmdbJsonSearchEmpty;
-}
-
-Stream<String> emitTmdbJsonError(_) async* {
-  yield tmdbJsonSearchError;
-}

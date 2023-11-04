@@ -64,8 +64,8 @@ const tmdbJsonSearchEmpty =
 const tmdbJsonSearchError =
     '{"success":false,"status_code":34,"status_message":"The resource you requested could not be found."}';
 
-Future<Stream<String>> streamTmdbJsonOfflineData(dynamic dummy) {
-  return Future.value(emitTmdbJsonOfflineData(dummy));
+Future<Stream<String>> streamTmdbJsonOfflineData(_) {
+  return Future.value(emitTmdbJsonOfflineData(_));
 }
 
 Stream<String> emitTmdbJsonOfflineData(_) async* {

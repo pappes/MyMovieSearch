@@ -11,15 +11,12 @@ const expectedDtoJsonStringList = [
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitHtmlSample(dummy));
-}
-
-Stream<String> _emitHtmlSample(_) async* {
-  yield htmlSampleFull;
-}
+Future<Stream<String>> streamHtmlOfflineData(_) =>
+    Future.value(Stream.value(htmlSampleFull));
 
 const htmlSampleFull = '$htmlSampleStart$htmlSampleMid$htmlSampleEnd';
+const htmlSampleError = '$htmlSampleStart$htmlSampleEnd';
+const htmlSampleEmpty = '$htmlSampleStart$htmlEmptySampleMid$htmlSampleEnd';
 const htmlSampleStart = '''
 
 <!DOCTYPE html>
@@ -31,6 +28,8 @@ const htmlSampleEnd = '''
   </body>
 </html>
 ''';
+
+const htmlEmptySampleMid = 'No results found in Search Results.';
 
 const htmlSampleMid = '''
 <div class="cell_wrapper bgcolor-white nm-bgcolor-white has-hover DIRECT border-v">

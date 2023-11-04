@@ -44,9 +44,12 @@ class GoogleMovieSearchConverter {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
     try {
-      final resultCount = (map[outerElementSearchInformation]
+      final resultCountString = (map[outerElementSearchInformation]
           as Map)[innerElementSearchInfoCount];
-      if ((int.tryParse(resultCount.toString()) ?? 0) == 0) {
+      final resultCount = int.tryParse(resultCountString.toString());
+      if (resultCount == 0) {
+        return [];
+      } else if (resultCount == null) {
         return _searchError(map);
       }
       for (final movie in map[outerElementResultsCollection] as Iterable) {
@@ -66,18 +69,23 @@ class GoogleMovieSearchConverter {
   }
 
   static List<MovieResultDTO> _searchError(Map map) {
-    // deserialise outer json from map then iterate inner json
-    final error = MovieResultDTO();
+    // construct an error message
+    String error = '';
     final resultsError = map[outerElementErrorFailure];
     if (resultsError != null) {
       // ignore: avoid_dynamic_calls
-      error.title = resultsError[innerElementErrorFailureReason]?.toString() ??
+      error = resultsError[innerElementErrorFailureReason]?.toString() ??
           'No failure reason provided in results';
     } else {
-      error.title = 'Google found no matching results $map';
+      error = 'Google found no matching results $map';
     }
-    error.title += ' $map';
-    return [error];
+    error += ' $map';
+    return [
+      MovieResultDTO().error(
+        '[GoogleMovieSearchConverter] $error',
+        DataSourceType.omdb,
+      )
+    ];
   }
 
   static MovieResultDTO dtoFromMap(Map map) {

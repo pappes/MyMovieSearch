@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -5,6 +7,8 @@ import 'package:my_movie_search/movies/web_data_providers/search/converters/omdb
 import 'package:my_movie_search/movies/web_data_providers/search/offline/omdb.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
+
+const omdbJsonSearchEmpty = '{"Response":"False","Error":"Movie not found!"}';
 
 /// Implements [WebFetchBase] for searching the Open Movie Database.
 ///
@@ -57,5 +61,19 @@ class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     return Uri.parse(
       '$_baseURL$omdbKey&s=$searchCriteria&page=$pageNumber',
     );
+  }
+
+  @override
+  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+    String webText,
+  ) async {
+    if (omdbJsonSearchEmpty == webText) return [];
+    try {
+      // Assume text is json encoded.
+      final tree = jsonDecode(webText);
+      return [tree];
+    } catch (jsonException) {
+      throw 'Invalid json returned from web call $webText';
+    }
   }
 }

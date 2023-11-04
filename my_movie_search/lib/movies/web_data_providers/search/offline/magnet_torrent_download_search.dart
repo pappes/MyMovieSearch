@@ -12,15 +12,12 @@ const expectedDtoJsonStringList = [
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitHtmlSample(dummy));
-}
-
-Stream<String> _emitHtmlSample(_) async* {
-  yield htmlSampleFull;
-}
+Future<Stream<String>> streamHtmlOfflineData(_) =>
+    Future.value(Stream.value(htmlSampleFull));
 
 const htmlSampleFull = '$htmlSampleStart$htmlSampleMid$htmlSampleEnd';
+const htmlSampleEmpty = '$htmlSampleStart$htmlSampleMidEmpty$htmlSampleEnd';
+const htmlSampleError = '$htmlSampleStart$htmlSampleEnd';
 const htmlSampleStart = '''
 
 <!DOCTYPE html>
@@ -52,6 +49,7 @@ const intermediateMapList = [
   }
 ];
 
+const htmlSampleMidEmpty = '<br><h2>No Results Found</h2><br>';
 const htmlSampleMid = r'''
 <table class="table2" cellspacing="0">
     <tbody>

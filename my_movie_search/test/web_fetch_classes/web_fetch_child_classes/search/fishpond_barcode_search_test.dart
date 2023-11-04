@@ -7,11 +7,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/offline/fishpon
 
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedHtmlSample(_) {
   return Future.value(Stream.value('<html><body>stuff</body></html>'));
 }
 
-Future<Stream<String>> _emitInvalidHtmlSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidHtmlSample(_) {
   return Future.value(Stream.value('not valid html'));
 }
 
@@ -89,6 +89,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
 
+    // Confirm web text is parsed as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
       final testClass = QueryFishpondBarcodeSearch(criteria);
@@ -97,6 +98,27 @@ void main() {
         htmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final expectedOutput = [];
+      final actualOutput = QueryFishpondBarcodeSearch(criteria)
+          .myConvertWebTextToTraversableTree(
+        htmlSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput =
+          throwsA(startsWith('FishpondBarcode results data not detected log'));
+      final actualOutput = QueryFishpondBarcodeSearch(criteria)
+          .myConvertWebTextToTraversableTree(
+        htmlSampleError,
+      );
+      //NOTE: Using expect on an async result only works as the last line of the test!
+      expect(
+        actualOutput,
+        expectedOutput,
+      );
     });
   });
   group('FishpondBarcodeSearchConverter unit tests', () {

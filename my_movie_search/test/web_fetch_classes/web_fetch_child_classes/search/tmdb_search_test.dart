@@ -10,11 +10,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedJsonSample(dynamic dummy) {
+Future<Stream<String>> _emitUnexpectedJsonSample(_) {
   return Future.value(Stream.value('[{"hello":"world"}]'));
 }
 
-Future<Stream<String>> _emitInvalidJsonSample(dynamic dummy) {
+Future<Stream<String>> _emitInvalidJsonSample(_) {
   return Future.value(Stream.value('not valid json'));
 }
 
@@ -79,7 +79,23 @@ void main() {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           QueryTMDBMovies(criteria).myConvertWebTextToTraversableTree(
-        tmdbJsonSearchFull,
+        jsonSampleFull,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final expectedOutput = intermediateEmptyMapList;
+      final actualOutput =
+          QueryTMDBMovies(criteria).myConvertWebTextToTraversableTree(
+        jsonSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput = intermediateErrorMapList;
+      final actualOutput =
+          QueryTMDBMovies(criteria).myConvertWebTextToTraversableTree(
+        jsonSampleError,
       );
       expect(actualOutput, completion(expectedOutput));
     });
@@ -156,6 +172,26 @@ void main() {
             'needs to match expected DTO list ${expectedValue.toPrintableString()}',
       );
     });
+    test('Run myConvertTreeToOutputType() with empty search results', () async {
+      final expectedValue = <MovieResultDTO>[];
+      final testClass = QueryTMDBMovies(criteria);
+      final actualResult = <MovieResultDTO>[];
+
+      // Invoke the functionality and collect results.
+      for (final map in intermediateEmptyMapList) {
+        actualResult.addAll(
+          await testClass.myConvertTreeToOutputType(map),
+        );
+      }
+
+      // Check the results.
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+      );
+    });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
       final testClass = QueryTMDBMovies(criteria);
@@ -209,11 +245,10 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBMovies(criteria);
-      const expectedException = '''
-[QueryTMDBMovies] Error in tmdbSearch with criteria 123 convert error interpreting web text as a map :FormatException: Unexpected character (at character 1)
-not valid json
-^
-''';
+      const expectedException =
+          '[QueryTMDBMovies] Error in tmdbSearch with criteria 123 '
+          'convert error interpreting web text as a map '
+          ':Invalid json returned from web call not valid json';
 
       // Invoke the functionality.
       await testClass

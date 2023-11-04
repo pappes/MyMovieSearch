@@ -10,7 +10,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imd
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
-//query string https://sg.media-imdb.com/suggestion/x/wonder%20woman.json
+//query string https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=love
 //json format
 //1 = title/name
 //id = unique  key (tt=tile/nm=name/vi=video)

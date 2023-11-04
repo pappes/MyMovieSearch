@@ -8,8 +8,8 @@ const imdbHtmlSampleEnd = ' </body> </html>';
 const imdbHtmlSampleFull =
     '$imdbHtmlSampleStart $imdbJsonSampleInner $imdbHtmlSampleMiddle $imdbHtmlSampleInner $imdbHtmlSampleEnd';
 
-Future<Stream<String>> streamImdbHtmlOfflineData(dynamic dummy) {
-  return Future.value(emitImdbHtmlSample(dummy));
+Future<Stream<String>> streamImdbHtmlOfflineData(_) {
+  return Future.value(emitImdbHtmlSample(_));
 }
 
 Stream<String> emitImdbHtmlSample(_) async* {

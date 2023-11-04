@@ -16,15 +16,12 @@ const expectedDtoJsonStringList = [
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamHtmlOfflineData(dynamic dummy) {
-  return Future.value(_emitHtmlSample(dummy));
-}
-
-Stream<String> _emitHtmlSample(_) async* {
-  yield htmlSampleFull;
-}
+Future<Stream<String>> streamHtmlOfflineData(_) =>
+    Future.value(Stream.value(htmlSampleFull));
 
 const htmlSampleFull = '$htmlSampleStart$htmlSampleMid$htmlSampleEnd';
+const htmlSampleError = '$htmlSampleStart$htmlSampleEnd';
+const htmlSampleEmpty = '$htmlSampleStart$htmlSampleEmptyMid$htmlSampleEnd';
 const htmlSampleStart = '''
 
 <!DOCTYPE html>
@@ -63,6 +60,8 @@ const intermediateMapList = [
     'leechers': '12',
   }
 ];
+
+const htmlSampleEmptyMid = '<h2>0+ Torrents </h2>';
 
 const htmlSampleMid = r'''
 <div class="results">

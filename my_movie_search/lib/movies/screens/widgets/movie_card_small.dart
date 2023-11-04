@@ -155,8 +155,10 @@ class MovieTile extends ListTile {
       MMSNav(context).resultDrillDown(movie);
 
   static ElevatedButton _navigateButton(
-      BuildContext context, MovieResultDTO movie,
-      {Widget? icon}) {
+    BuildContext context,
+    MovieResultDTO movie, {
+    Widget? icon,
+  }) {
     return ElevatedButton(
       onPressed: () => _navigate(context, movie),
       child: icon ?? _getIcon(movie),
