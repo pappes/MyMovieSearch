@@ -82,9 +82,27 @@ void main() {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           QueryTMDBMovieDetails(criteria).myConvertWebTextToTraversableTree(
-        tmdbJsonSearchFull,
+        jsonSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final expectedOutput = throwsA('tmdb call for criteria 123 returned '
+          'error:The resource you requested could not be found.');
+      final actualOutput =
+          QueryTMDBMovieDetails(criteria).myConvertWebTextToTraversableTree(
+        jsonSampleEmpty,
+      );
+      expect(actualOutput, expectedOutput);
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput = throwsA('tmdb call for criteria 123 returned '
+          'error:Invalid API key: You must be granted a valid key.');
+      final actualOutput =
+          QueryTMDBMovieDetails(criteria).myConvertWebTextToTraversableTree(
+        jsonSampleError,
+      );
+      expect(actualOutput, expectedOutput);
     });
   });
 
@@ -208,16 +226,15 @@ void main() {
       );
     });
 
-    // Read tmdb search results from a simulated byte stream and report error due to invalid html.
-    test('invalid html', () async {
+    // Read tmdb search results from a simulated byte stream and report error due to invalid json.
+    test('invalid json', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBMovieDetails(criteria);
-      const expectedException = '''
-[tmdbMovie] Error in tmdbMovie with criteria 123 convert error interpreting web text as a map :FormatException: Unexpected character (at character 1)
-not valid json
-^
-''';
+      const expectedException =
+          '[tmdbMovie] Error in tmdbMovie with criteria 123 '
+          'convert error interpreting web text as a map '
+          ':Invalid json returned from web call not valid json';
 
       // Invoke the functionality.
       await testClass
@@ -228,12 +245,13 @@ not valid json
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read tmdb search results from a simulated byte stream and report error due to unexpected html.
-    test('unexpected html contents', () async {
+    // Read tmdb search results from a simulated byte stream and report error due to unexpected json.
+    test('unexpected json contents', () async {
       // Set up the test data.
-      const expectedException = '[tmdbMovie] Error in tmdbMovie '
-          'with criteria 123 convert error translating page map to objects '
-          ':expected map got List<dynamic> unable to interpret data [{hello: world}]';
+      const expectedException =
+          '[tmdbMovie] Error in tmdbMovie with criteria 123 '
+          'convert error interpreting web text as a map '
+          ':tmdb results data not detected for criteria 123 in json:[{"hello":"world"}]';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBMovieDetails(criteria);
 

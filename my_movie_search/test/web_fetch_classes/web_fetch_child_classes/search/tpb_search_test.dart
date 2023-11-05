@@ -101,9 +101,11 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA(startsWith(
-        'tpb results data not detected for criteria dream in html',
-      ));
+      final expectedOutput = throwsA(
+        startsWith(
+          'tpb results data not detected for criteria dream in html',
+        ),
+      );
       final actualOutput =
           QueryTpbSearch(criteria).myConvertWebTextToTraversableTree(
         htmlSampleError,

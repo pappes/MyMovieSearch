@@ -38,7 +38,8 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-final intermediateMapList = [jsonDecode(tmdbJsonSearchFull)];
+final intermediateMapList = [jsonDecode(jsonSampleFull)];
+final intermediateMapListError = [jsonDecode(jsonSampleError)];
 
 const tmdbJsonSearchInner = '''
   {"adult":false,
@@ -57,25 +58,12 @@ const tmdbJsonSearchInner = '''
   "popularity":14.28}
 ''';
 
-const tmdbJsonSearchFull =
+const jsonSampleFull =
     ' { "movie_results": [ $tmdbJsonSearchInner ],"person_results":[],"tv_results":[],"tv_episode_results":[],"tv_season_results":[]} ';
-const tmdbJsonSearchEmpty =
+const jsonSampleEmpty =
     '{"movie_results":[],"person_results":[],"tv_results":[],"tv_episode_results":[],"tv_season_results":[]}';
-const tmdbJsonSearchError =
+const jsonSampleError =
     '{"success":false,"status_code":34,"status_message":"The resource you requested could not be found."}';
 
-Future<Stream<String>> streamTmdbJsonOfflineData(_) {
-  return Future.value(emitTmdbJsonOfflineData(_));
-}
-
-Stream<String> emitTmdbJsonOfflineData(_) async* {
-  yield tmdbJsonSearchFull;
-}
-
-Stream<String> emitTmdbJsonEmpty(_) async* {
-  yield tmdbJsonSearchEmpty;
-}
-
-Stream<String> emitTmdbJsonError(_) async* {
-  yield tmdbJsonSearchError;
-}
+Future<Stream<String>> streamTmdbJsonOfflineData(_) =>
+    Future.value(Stream.value(jsonSampleFull));

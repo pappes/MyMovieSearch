@@ -26,7 +26,7 @@ mixin ScrapeTorrentDownloadDetail
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    if (webText.contains('<h2>No Results Found</h2>')) {
+    if (webText.contains('<b>TOP torrents last week</b>')) {
       return [];
     }
     final document = parse(webText);

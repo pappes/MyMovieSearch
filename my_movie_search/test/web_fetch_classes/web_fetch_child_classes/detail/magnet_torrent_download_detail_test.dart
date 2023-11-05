@@ -92,10 +92,23 @@ void main() {
       const expectedOutput = intermediateMapList;
       final testClass = QueryTorrentDownloadDetail(criteria);
       testClass.criteria = criteria;
-      final actualOutput = testClass.myConvertWebTextToTraversableTree(
-        htmlSampleFull,
-      );
+      final actualOutput =
+          testClass.myConvertWebTextToTraversableTree(htmlSampleFull);
       expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final expectedOutput = [];
+      final actualOutput = QueryTorrentDownloadDetail(criteria)
+          .myConvertWebTextToTraversableTree(htmlSampleEmpty);
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput = throwsA(
+        startsWith('TorrentDownload results data not detected for criteria'),
+      );
+      final actualOutput = QueryTorrentDownloadDetail(criteria)
+          .myConvertWebTextToTraversableTree(htmlSampleError);
+      expect(actualOutput, expectedOutput);
     });
   });
   group('TorrentDownloadDetailConverter unit tests', () {

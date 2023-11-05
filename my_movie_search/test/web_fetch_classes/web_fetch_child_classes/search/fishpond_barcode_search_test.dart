@@ -94,31 +94,23 @@ void main() {
       const expectedOutput = intermediateMapList;
       final testClass = QueryFishpondBarcodeSearch(criteria);
       testClass.criteria = criteria;
-      final actualOutput = testClass.myConvertWebTextToTraversableTree(
-        htmlSampleFull,
-      );
+      final actualOutput =
+          testClass.myConvertWebTextToTraversableTree(htmlSampleFull);
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = [];
       final actualOutput = QueryFishpondBarcodeSearch(criteria)
-          .myConvertWebTextToTraversableTree(
-        htmlSampleEmpty,
-      );
+          .myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput =
           throwsA(startsWith('FishpondBarcode results data not detected log'));
       final actualOutput = QueryFishpondBarcodeSearch(criteria)
-          .myConvertWebTextToTraversableTree(
-        htmlSampleError,
-      );
+          .myConvertWebTextToTraversableTree(htmlSampleError);
       //NOTE: Using expect on an async result only works as the last line of the test!
-      expect(
-        actualOutput,
-        expectedOutput,
-      );
+      expect(actualOutput, expectedOutput);
     });
   });
   group('FishpondBarcodeSearchConverter unit tests', () {

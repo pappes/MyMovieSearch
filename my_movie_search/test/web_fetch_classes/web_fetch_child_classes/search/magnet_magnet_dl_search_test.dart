@@ -101,9 +101,11 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA(startsWith(
-        'magnetDl results data not detected for criteria dream in html:',
-      ));
+      final expectedOutput = throwsA(
+        startsWith(
+          'magnetDl results data not detected for criteria dream in html:',
+        ),
+      );
       final actualOutput =
           QueryMagnetDlSearch(criteria).myConvertWebTextToTraversableTree(
         htmlSampleError,

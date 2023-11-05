@@ -33,7 +33,7 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-final intermediateMapList = [jsonDecode(tmdbJsonSearchFull)];
+final intermediateMapList = [jsonDecode(jsonSampleFull)];
 
 const tmdbTree = {
   "adult": false,
@@ -52,26 +52,14 @@ const tmdbTree = {
   "profile_path": "/kU3B75TyRiCfivoq.jpg",
 };
 
-final tmdbJsonSearchInner = jsonEncode(tmdbTree);
+final jsonSampleInner = jsonEncode(tmdbTree);
 
-final tmdbJsonSearchFull = tmdbJsonSearchInner;
-const tmdbJsonSearchEmpty =
+final jsonSampleFull = jsonSampleInner;
+const jsonSampleEmpty =
     '{"success":false,"status_code":34,"status_message":"The resource you requested could not be found."}';
-const tmdbJsonSearchError =
+const jsonSampleError =
     '{"status_code":7,"status_message":"Invalid API key: You must be granted a valid key.","success":false}';
 
 Future<Stream<String>> streamTmdbJsonOfflineData(_) {
-  return Future.value(emitTmdbJsonOfflineData(_));
-}
-
-Stream<String> emitTmdbJsonOfflineData(_) async* {
-  yield tmdbJsonSearchFull;
-}
-
-Stream<String> emitTmdbJsonEmpty(_) async* {
-  yield tmdbJsonSearchEmpty;
-}
-
-Stream<String> emitTmdbJsonError(_) async* {
-  yield tmdbJsonSearchError;
+  return Future.value(Stream.value(jsonSampleFull));
 }

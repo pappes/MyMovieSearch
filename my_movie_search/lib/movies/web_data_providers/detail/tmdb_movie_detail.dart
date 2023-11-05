@@ -26,7 +26,10 @@ class QueryTMDBMovieDetails extends QueryTMDBCommon {
   /// Convert TMDB map to MovieResultDTO records.
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
-    if (map is Map) return TmdbMovieDetailConverter.dtoFromCompleteJsonMap(map);
+    if (map is Map) {
+      final dto = TmdbMovieDetailConverter.dtoFromCompleteJsonMap(map);
+      return dto;
+    }
     throw 'expected map got ${map.runtimeType} unable to interpret data $map';
   }
 }

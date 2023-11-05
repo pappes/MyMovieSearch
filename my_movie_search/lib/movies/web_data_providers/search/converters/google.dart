@@ -81,10 +81,8 @@ class GoogleMovieSearchConverter {
     }
     error += ' $map';
     return [
-      MovieResultDTO().error(
-        '[GoogleMovieSearchConverter] $error',
-        DataSourceType.omdb,
-      )
+      MovieResultDTO()
+          .error('[GoogleMovieSearchConverter] $error', DataSourceType.omdb),
     ];
   }
 

@@ -106,9 +106,11 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA(startsWith(
-        'UhttBarcode results data not detected for criteria dream in html',
-      ));
+      final expectedOutput = throwsA(
+        startsWith(
+          'UhttBarcode results data not detected for criteria dream in html',
+        ),
+      );
       final actualOutput =
           QueryUhttBarcodeSearch(criteria).myConvertWebTextToTraversableTree(
         'htmlSampleError',

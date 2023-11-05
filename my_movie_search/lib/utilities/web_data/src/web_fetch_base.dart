@@ -275,6 +275,26 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   @visibleForTesting // and for override!
   void myClearCache() {}
 
+  /// Prevent response parsing for http errors.
+  ///
+  /// Returning null will allow standard processing.
+  ///
+  /// Can be overridden by child classes if required.
+  @visibleForTesting // and for override!
+  Stream<String>? myHttpError(
+    Uri address,
+    int statusCode,
+    HttpClientResponse response,
+  ) {
+    if (200 != statusCode) {
+      final errorMsg =
+          'Error in http read, HTTP status code : $statusCode for $address';
+      logger.e(errorMsg);
+      return Stream.error(errorMsg);
+    }
+    return null;
+  }
+
   /// Retrieve cached result.
   ///
   /// Can be overridden by child classes if required.
@@ -290,7 +310,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     try {
       final tree = baseConvertCriteriaToWebText();
       final map = baseConvertWebTextToTraversableTree(tree).printStream(
-        '${myDataSourceName()}:${myFormatInputAsText()}->',
+        'Output from ${myDataSourceName()}:${myFormatInputAsText()}->',
       );
       yield* baseConvertTreeToOutputType(map);
     } catch (error) {
@@ -483,22 +503,17 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return Stream.error(errorMessage);
     }
 
-    // Check for successful HTTP status before transforming (avoid HTTP 404)
+    // Retry with exponential backoff for server errors
     if (response.statusCode >= 500 && retryDelay <= maxDelay) {
       final oldDelay = retryDelay;
       retryDelay = retryDelay * 2;
       return Future.delayed(Duration(milliseconds: oldDelay))
           .then((value) => baseFetchWebText(criteria));
     }
-    if (200 != response.statusCode) {
-      final errorMsg = 'Error in http read, '
-          'HTTP status code : ${response.statusCode} for $address';
-      logger.e(
-        errorMsg,
-      );
-      return Stream.error(errorMsg);
-    }
-    return response.transform(utf8.decoder);
+
+    // Check for successful HTTP status before transforming (avoid HTTP 404)
+    return myHttpError(address, response.statusCode, response) ??
+        response.transform(utf8.decoder);
   }
 
   /// Wrap raw error message in web_fetch context.

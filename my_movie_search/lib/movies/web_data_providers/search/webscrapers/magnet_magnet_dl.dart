@@ -33,7 +33,8 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       return [];
     }
     if (webText.contains(
-        'The download may have been removed or search query blocked due to copyright complaint. We apologize for the inconvenience')) {
+        'The download may have been removed or search query blocked '
+        'due to copyright complaint. We apologize for the inconvenience')) {
       return [];
     }
     final document = parse(webText);

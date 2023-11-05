@@ -30,15 +30,15 @@ final expectedErrorDTOList = jsonMapToDto(expectedDTOMap);
 final expectedDTOStream = Stream.value(expectedDTOList);
 
 final intermediateMapList = [
-  {'v': 1, 'q': 'imdb_offline_suggestions', 'd': expectedDTOMap}
+  {'v': 1, 'q': 'imdb_offline_suggestions', 'd': expectedDTOMap},
 ];
 final intermediateEmptyMapList = [
   {
     "d": [],
     "q":
         "Dexter%2B%3A%2BSeason%2B1%2B(Box%2BSet%2C%2BDVD%2C%2B2006)%2BRegion%2B4%2BMichael%2BC.%2BHall",
-    "v": 1
-  }
+    "v": 1,
+  },
 ];
 final intermediateErrorMapList =
     intermediateEmptyMapList; //['[jsonDecode(jsonSampleError)]'];
@@ -289,6 +289,6 @@ final expectedDTOMap = [
       "https://m.media-amazon.com/images/M/MV5B...cxNQ@@._V1_.jpg",
       640,
       428,
-    ]
+    ],
   },
 ];

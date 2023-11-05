@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:html/dom.dart' show Document;
 import 'package:html/parser.dart' show parse;
 
@@ -24,12 +26,28 @@ mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    if (webText.contains("The page you're looking for does not exist")) {
+    if (webText.contains('404, Oops! This page could not be found')) {
       return [];
     }
     final document = parse(webText);
     return _scrapeWebPage(document);
   }
+
+  /// Allow response parsing for http 404
+  @override
+  Stream<String>? myHttpError(
+    Uri address,
+    int statusCode,
+    HttpClientResponse response,
+  ) =>
+      (404 == statusCode)
+          ? null
+          // ignore: invalid_use_of_visible_for_testing_member
+          : super.myHttpError(
+              address,
+              statusCode,
+              response,
+            );
 
   /// Collect webpage text to construct a map of the movie data.
   List<Map> _scrapeWebPage(Document document) {

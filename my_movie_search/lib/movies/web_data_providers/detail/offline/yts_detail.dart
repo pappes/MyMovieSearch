@@ -8,14 +8,16 @@ const htmlSampleStart = ' <!DOCTYPE html> <html     <head>'
     ' </head> <body id="styleguide-v2" class="fixed">';
 const htmlSampleEnd = ' </body> </html>';
 const htmlSampleFull = '$htmlSampleStart $htmlSampleInner $htmlSampleEnd';
+const htmlSampleEmpty = '$htmlSampleStart $htmlSampleEmptyInner $htmlSampleEnd';
+const htmlSampleError = '$htmlSampleStart $htmlSampleErrorInner $htmlSampleEnd';
 
-Future<Stream<String>> streamhtmlOfflineData(_) {
-  return Future.value(emitHtmlSample(_));
-}
+Future<Stream<String>> streamhtmlOfflineData(_) =>
+    Future.value(Stream.value(htmlSampleFull));
 
-Stream<String> emitHtmlSample(_) async* {
-  yield htmlSampleFull;
-}
+const htmlSampleEmptyInner =
+    '<h2 class="heading-center">404, Oops! This page could not be found</h2>';
+const htmlSampleErrorInner =
+    '<h2 class="heading-center">Error! Not found (this page does not exist).</h2>';
 
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
@@ -34,6 +36,7 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
+const intermediateMapListError = [];
 const intermediateMapList = [
   {
     'name': '2001: A Space Odyssey',

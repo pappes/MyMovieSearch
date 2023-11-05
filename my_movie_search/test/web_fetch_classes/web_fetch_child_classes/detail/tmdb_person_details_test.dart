@@ -80,9 +80,27 @@ void main() {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           QueryTMDBPersonDetails(criteria).myConvertWebTextToTraversableTree(
-        tmdbJsonSearchFull,
+        jsonSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final expectedOutput = throwsA('tmdb call for criteria 123 returned '
+          'error:The resource you requested could not be found.');
+      final actualOutput =
+          QueryTMDBPersonDetails(criteria).myConvertWebTextToTraversableTree(
+        jsonSampleEmpty,
+      );
+      expect(actualOutput, expectedOutput);
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput = throwsA('tmdb call for criteria 123 returned '
+          'error:Invalid API key: You must be granted a valid key.');
+      final actualOutput =
+          QueryTMDBPersonDetails(criteria).myConvertWebTextToTraversableTree(
+        jsonSampleError,
+      );
+      expect(actualOutput, expectedOutput);
     });
   });
 
@@ -211,11 +229,10 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBPersonDetails(criteria);
-      const expectedException = '''
-[tmdbPerson] Error in tmdbPerson with criteria 123 convert error interpreting web text as a map :FormatException: Unexpected character (at character 1)
-not valid json
-^
-''';
+      const expectedException =
+          '[tmdbPerson] Error in tmdbPerson with criteria 123 '
+          'convert error interpreting web text as a map '
+          ':Invalid json returned from web call not valid json';
 
       // Invoke the functionality.
       await testClass
@@ -229,9 +246,10 @@ not valid json
     // Read tmdb search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException = '[tmdbPerson] Error in tmdbPerson '
-          'with criteria 123 convert error translating page map to objects '
-          ':expected map got List<dynamic> unable to interpret data [{hello: world}]';
+      const expectedException =
+          '[tmdbPerson] Error in tmdbPerson with criteria 123 '
+          'convert error interpreting web text as a map '
+          ':tmdb results data not detected for criteria 123 in json:[{"hello":"world"}]';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBPersonDetails(criteria);
 

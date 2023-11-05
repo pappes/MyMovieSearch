@@ -14,9 +14,6 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"-1","bestSource":"DataSourceType.tmdbMovie","title":"[tmdbMovie] Error in tmdbMovie with criteria tt0101001 stream error interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/movie/tt0101001?api","type":"MovieContentType.error","sources":{"DataSourceType.tmdbMovie":"-1"}}
-''',
-  r'''
 {"uniqueId":"tt0101000","bestSource":"DataSourceType.tmdbMovie","title":"Začátek dlouhého podzimu","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
       "languages":"[\"Czech\"]",
       "genres":"[\"Drama\",\"Family\"]",
@@ -28,6 +25,13 @@ const expectedDtoJsonStringList = [
       "genres":"[\"Crime\",\"Action\",\"Drama\"]",
       "description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.",
       "userRating":"6.643","userRatingCount":"7","imageUrl":"https://image.tmdb.org/t/p/w500/7zwS6ttVbgHXpgehTCcVg1f8nbM.jpg","sources":{"DataSourceType.tmdbMovie":"230839"}}
+''',
+];
+final expectedEmptyDTOList =
+    ListDTOConversion.decodeList(expectedEmptyDtoJsonStringList);
+const expectedEmptyDtoJsonStringList = [
+  r'''
+{"uniqueId":"-1","bestSource":"DataSourceType.tmdbMovie","title":"[tmdbMovie] Error in tmdbMovie with criteria 0 convert error interpreting web text as a map :tmdb call for criteria 0 returned error:The resource you requested could not be found.","type":"MovieContentType.error"}
 ''',
 ];
 
@@ -79,8 +83,8 @@ void main() {
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
 
-      actualOutput[1].title = actualOutput[1].title.substring(0, 195);
-      actualOutput[1].setSource(newUniqueId: "-1");
+      //actualOutput[1].title = actualOutput[1].title.substring(0, 195);
+      //actualOutput[1].setSource(newUniqueId: "-1");
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
@@ -90,6 +94,23 @@ void main() {
       expect(
         actualOutput,
         MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
+        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
+      );
+    });
+    test('Run an empty search', () async {
+      final criteria = SearchCriteriaDTO().fromString('0');
+      final actualOutput =
+          await QueryTMDBMovieDetails(criteria).readList(limit: 10);
+      final expectedOutput = expectedEmptyDTOList;
+      expectedOutput[0].uniqueId = '-1';
+
+      // Check the results.
+      expect(
+        actualOutput,
+        MovieResultDTOListMatcher(
+          expectedOutput,
+        ),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
       );

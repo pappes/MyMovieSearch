@@ -73,13 +73,32 @@ void main() {
     });
     // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
-      const expectedOutput = intermediateMapList;
       final criteria = SearchCriteriaDTO().fromString('batman');
+      const expectedOutput = intermediateMapList;
       final testClass = QueryYtsDetails(criteria);
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
         htmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+      final criteria = SearchCriteriaDTO().fromString('batman');
+      final expectedOutput = [];
+      final actualOutput =
+          QueryYtsDetails(criteria).myConvertWebTextToTraversableTree(
+        htmlSampleEmpty,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final criteria = SearchCriteriaDTO().fromString('batman');
+      final expectedOutput =
+          throwsA('yts data not detected for criteria batman');
+      final actualOutput =
+          QueryYtsDetails(criteria).myConvertWebTextToTraversableTree(
+        htmlSampleError,
+      );
+      expect(actualOutput, expectedOutput);
     });
   });
 

@@ -19,7 +19,6 @@ const htmlSampleFull = '$htmlSampleStart$htmlSampleMid$htmlSampleEnd';
 const htmlSampleEmpty = '$htmlSampleStart$htmlSampleMidEmpty$htmlSampleEnd';
 const htmlSampleError = '$htmlSampleStart$htmlSampleEnd';
 const htmlSampleStart = '''
-
 <!DOCTYPE html>
 <html
     xmlns:snip=true>
@@ -30,10 +29,7 @@ const htmlSampleStart = '''
   
    <div class="lister-list">''';
 const htmlSampleEnd = '''
-
 </div>
-    
-  
   </body>
   </html>
 ''';

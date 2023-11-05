@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -5,7 +7,7 @@ import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 import 'package:universal_io/io.dart'
-    show HttpHeaders; // limit inclusions to reduce size
+    show HttpClientResponse, HttpHeaders; // limit inclusions to reduce size
 
 const tmdbPosterPathPrefix = 'https://image.tmdb.org/t/p/w500';
 
@@ -66,4 +68,51 @@ abstract class QueryTMDBCommon
     final omdbKey = Settings.singleton().get('TMDB_KEY');
     headers.add('Authorization', ' Bearer $omdbKey');
   }
+
+  /// Convert web text to a traversable tree of [List] or [Map] data.
+  /// Scrape keyword data from rows in the html div named fullcredits_content.
+  @override
+  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+    String webText,
+  ) async {
+    if (webText.contains(
+      'movie_results":[],"person_results":[],"tv_results":[],"tv_episode_results":[],"tv_season_results":[]',
+    )) {
+      return [];
+    }
+    dynamic tree;
+    try {
+      // Assume text is json encoded.
+      tree = jsonDecode(webText);
+    } catch (jsonException) {
+      throw 'Invalid json returned from web call $webText';
+    }
+
+    if (tree is Map) {
+      if (tree.containsKey('movie_results') || tree.containsKey('imdb_id')) {
+        return [tree];
+      }
+      if (tree.containsKey('status_message')) {
+        throw 'tmdb call for criteria $getCriteriaText returned error:${tree['status_message']}';
+      }
+    }
+
+    throw 'tmdb results data not detected for criteria $getCriteriaText in json:$webText';
+  }
+
+  /// Allow response parsing for http 404
+  @override
+  Stream<String>? myHttpError(
+    Uri address,
+    int statusCode,
+    HttpClientResponse response,
+  ) =>
+      (404 == statusCode)
+          ? null
+          // ignore: invalid_use_of_visible_for_testing_member
+          : super.myHttpError(
+              address,
+              statusCode,
+              response,
+            );
 }

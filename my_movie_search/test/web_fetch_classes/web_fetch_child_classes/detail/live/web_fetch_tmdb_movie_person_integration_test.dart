@@ -14,9 +14,6 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"-2","bestSource":"DataSourceType.tmdbPerson","title":"[tmdbPerson] Error in tmdbPerson with criteria 000 stream error interpreting web text as a map :Error in http read, HTTP status code : 404 for https://api.themoviedb.org/3/person/00","type":"MovieContentType.error"}
-''',
-  r'''
 {"uniqueId":"nm0001323","bestSource":"DataSourceType.tmdbPerson","title":"Debbie Harry","type":"MovieContentType.person","year":"1945",
       "description":"An American singer, songwriter, and actress, known as the lead singer of the new wave band Blondie.",
       "userRating":"13.077","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/pASovJqjDaaHGs08jQs9FBOuWW6.jpg","sources":{"DataSourceType.tmdbPerson":"102"}}
@@ -30,6 +27,13 @@ const expectedDtoJsonStringList = [
 {"uniqueId":"nm0914455","bestSource":"DataSourceType.tmdbPerson","title":"Leonor Watling","type":"MovieContentType.person","year":"1975",
       "description":"Leonor Elizabeth Ceballos Watling (born July 28, 1975) is an award-winning Spanish film actress and singer.",
       "userRating":"9.466","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/uyEM3c37lL90by5vmuOk0XZQ83O.jpg","sources":{"DataSourceType.tmdbPerson":"101"}}
+''',
+];
+final expectedEmptyDTOList =
+    ListDTOConversion.decodeList(expectedEmptyDtoJsonStringList);
+const expectedEmptyDtoJsonStringList = [
+  r'''
+{"uniqueId":"-1","bestSource":"DataSourceType.tmdbPerson","title":"[tmdbPerson] Error in tmdbPerson with criteria 0 convert error interpreting web text as a map :tmdb call for criteria 0 returned error:The resource you requested could not be found.","type":"MovieContentType.error"}
 ''',
 ];
 
@@ -96,6 +100,23 @@ void main() {
       expect(
         actualOutput,
         MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
+        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
+      );
+    });
+    test('Run an empty search', () async {
+      final criteria = SearchCriteriaDTO().fromString('0');
+      final actualOutput =
+          await QueryTMDBPersonDetails(criteria).readList(limit: 10);
+      final expectedOutput = expectedEmptyDTOList;
+      expectedOutput[0].uniqueId = '-1';
+
+      // Check the results.
+      expect(
+        actualOutput,
+        MovieResultDTOListMatcher(
+          expectedOutput,
+        ),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
       );
