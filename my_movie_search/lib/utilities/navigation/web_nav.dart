@@ -300,7 +300,10 @@ class MMSFlutterCanvas {
     // An exception is thrown if browser app is not installed on Android device.
     debugPrint(e.toString());
     showPopup(
-        context!, 'Received error $e \nwhen opening $url', 'Navigation error');
+      context!,
+      'Received error $e\nwhen opening $url',
+      'Navigation error',
+    );
   }
 
   void _openBrowser(String url) {

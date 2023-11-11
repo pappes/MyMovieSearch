@@ -71,10 +71,9 @@ class DVDBarcodeScanner {
 /// ```dart
 /// isEbay(DataSourceType.picclickBarcode);
 /// ```
-bool isEbay(DataSourceType source) {
-  return DataSourceType.picclickBarcode == source ||
-      DataSourceType.uhttBarcode == source;
-}
+bool isEbay(DataSourceType source) =>
+    DataSourceType.picclickBarcode == source ||
+    DataSourceType.uhttBarcode == source;
 
 /// Extract the DVDtitle from a DTO.
 ///

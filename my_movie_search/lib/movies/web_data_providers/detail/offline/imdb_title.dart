@@ -6,13 +6,8 @@ const imdbHtmlSampleEnd = ' </body> </html>';
 const imdbHtmlSampleFull =
     '$imdbHtmlSampleStart $imdbJsonSampleInner $imdbHtmlSampleMiddle $imdbHtmlSampleInner $imdbHtmlSampleEnd';
 
-Future<Stream<String>> streamImdbHtmlOfflineData(_) {
-  return Future.value(emitImdbHtmlSample(_));
-}
-
-Stream<String> emitImdbHtmlSample(_) async* {
-  yield imdbHtmlSampleFull;
-}
+Future<Stream<String>> streamImdbHtmlOfflineData(_) =>
+    Future.value(Stream.value(imdbHtmlSampleFull));
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 /* To update this data, uncomment printTestData(actualResult);

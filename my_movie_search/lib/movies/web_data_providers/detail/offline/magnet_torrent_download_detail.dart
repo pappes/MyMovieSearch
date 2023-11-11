@@ -12,13 +12,8 @@ const expectedDtoJsonStringList = [
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-Future<Stream<String>> streamHtmlOfflineData(_) {
-  return Future.value(_emitHtmlSample(_));
-}
-
-Stream<String> _emitHtmlSample(_) async* {
-  yield htmlSampleFull;
-}
+Future<Stream<String>> streamHtmlOfflineData(_) =>
+    Future.value(Stream.value(htmlSampleFull));
 
 const htmlSampleFull = '$htmlSampleStart$htmlSampleMid$htmlSampleEnd';
 const htmlSampleEmpty = '$htmlSampleStart$htmlSampleMidEmpty$htmlSampleEnd';

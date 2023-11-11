@@ -60,6 +60,5 @@ const jsonSampleEmpty =
 const jsonSampleError =
     '{"status_code":7,"status_message":"Invalid API key: You must be granted a valid key.","success":false}';
 
-Future<Stream<String>> streamTmdbJsonOfflineData(_) {
-  return Future.value(Stream.value(jsonSampleFull));
-}
+Future<Stream<String>> streamTmdbJsonOfflineData(_) =>
+    Future.value(Stream.value(jsonSampleFull));

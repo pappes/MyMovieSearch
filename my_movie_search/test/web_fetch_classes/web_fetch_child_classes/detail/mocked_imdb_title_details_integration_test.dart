@@ -115,8 +115,7 @@ Map offlineMapList(String id) => {
     };
 
 /// Make dummy html results for offline queries.
-Stream<String> _getOfflineHTML(String id) {
-  return Stream.value('''
+Stream<String> _getOfflineHTML(String id) => Stream.value('''
 <!DOCTYPE html>
 <html
     <head>
@@ -127,7 +126,6 @@ Stream<String> _getOfflineHTML(String id) {
     </body>
 </html>
 ''');
-}
 
 /// Make dummy html results for offline queries.
 Future<Stream<String>> _offlineSearch(dynamic criteria) {

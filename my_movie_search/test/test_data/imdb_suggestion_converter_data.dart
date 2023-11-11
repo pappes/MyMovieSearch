@@ -50,13 +50,11 @@ const String jsonSampleFull =
 const String jsonSampleEmpty =
     '{"d":[],"q":"Dexter%2B%3A%2BSeason%2B1%2B(Box%2BSet%2C%2BDVD%2C%2B2006)%2BRegion%2B4%2BMichael%2BC.%2BHall","v":1}';
 
-Future<Stream<String>> emitImdbSuggestionJsonSample(_) {
-  return Future.value(Stream.value(jsonSampleFull));
-}
+Future<Stream<String>> emitImdbSuggestionJsonSample(_) =>
+    Future.value(Stream.value(jsonSampleFull));
 
-Future<Stream<String>> emitEmptyImdbSuggestionJsonSample(_) {
-  return Future.value(Stream.value(jsonSampleEmpty));
-}
+Future<Stream<String>> emitEmptyImdbSuggestionJsonSample(_) =>
+    Future.value(Stream.value(jsonSampleEmpty));
 
 const String imdbErrorSample = '''
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">

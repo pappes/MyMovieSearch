@@ -5,9 +5,8 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 /// Determines if the screen is narrow enough to require a condenced layout.
-bool useMobileLayout(BuildContext context) {
-  return MediaQuery.of(context).size.width < 600;
-}
+bool useMobileLayout(BuildContext context) =>
+    MediaQuery.of(context).size.width < 600;
 
 /// A [Widget] that displays a network image and image address.
 ///

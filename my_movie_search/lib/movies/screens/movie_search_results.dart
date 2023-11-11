@@ -25,7 +25,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   List<MovieResultDTO> _sortedList = [];
   late String _searchId;
   final _restorableList = RestorableMovieList();
-  var _restorableId = RestorableString('');
+  final _restorableId = RestorableString('');
   var _title = 'Results';
   late final _textController = TextEditingController(text: _title);
   late final FocusNode _criteriaFocusNode = FocusNode();
@@ -90,7 +90,6 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   Widget build(BuildContext context) {
     // Save state for restoration in case app is put to sleep.
     _restorableList.value = _sortedList;
-    _restorableId = _restorableId;
 
     final criteriaText = TextField(
       controller: _textController,

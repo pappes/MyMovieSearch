@@ -12,13 +12,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_se
 
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedHtmlSample(_) {
-  return Future.value(Stream.value('<html><body>stuff</body></html>'));
-}
+Future<Stream<String>> _emitUnexpectedHtmlSample(_) =>
+    Future.value(Stream.value('<html><body>stuff</body></html>'));
 
-Future<Stream<String>> _emitInvalidHtmlSample(_) {
-  return Future.value(Stream.value('not valid html'));
-}
+Future<Stream<String>> _emitInvalidHtmlSample(_) =>
+    Future.value(Stream.value('not valid html'));
 
 Future<Stream<String>> _emitUnexpectedJsonSample(_) {
   final unexpectedJson = htmlSampleFull.replaceAll(

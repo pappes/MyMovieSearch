@@ -11,7 +11,7 @@ import 'package:flutter/material.dart';
 
 import 'package:my_movie_search/firebase_options.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
-import 'package:provider/provider.dart';
+//import 'package:provider/provider.dart';
 
 abstract class FirebaseApplicationState extends ChangeNotifier {
   factory FirebaseApplicationState() {
@@ -327,4 +327,3 @@ class _NativeFirebaseApplicationState extends FirebaseApplicationState {
       },
     ),
       ];*/
-

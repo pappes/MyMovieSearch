@@ -8,13 +8,11 @@ import 'package:my_movie_search/movies/web_data_providers/search/offline/yts_sea
 import 'package:my_movie_search/movies/web_data_providers/search/yts_search.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedJsonPSample(_) {
-  return Future.value(Stream.value('imdbJsonPFunction(null)'));
-}
+Future<Stream<String>> _emitUnexpectedJsonPSample(_) =>
+    Future.value(Stream.value('imdbJsonPFunction(null)'));
 
-Future<Stream<String>> _emitInvalidJsonPSample(_) {
-  return Future.value(Stream.value('imdbJsonPFunction({not valid json})'));
-}
+Future<Stream<String>> _emitInvalidJsonPSample(_) =>
+    Future.value(Stream.value('imdbJsonPFunction({not valid json})'));
 
 final fullCriteria = SearchCriteriaDTO().init(
   SearchCriteriaType.downloadSimple,
