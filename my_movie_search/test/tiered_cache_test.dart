@@ -16,11 +16,10 @@ void main() {
           void testCache(List<Map> input, Map expectedOutput) {
             final cache = TieredCache();
 
-            void addMapContentsToCache(Map listItem) {
-              listItem.forEach((key, value) {
-                cache.add(key, value);
-              });
-            }
+            void addMapContentsToCache(Map listItem) =>
+                listItem.forEach((key, value) {
+                  cache.add(key, value);
+                });
 
             input.forEach(addMapContentsToCache);
             for (final keyValuePair in expectedOutput.entries) {

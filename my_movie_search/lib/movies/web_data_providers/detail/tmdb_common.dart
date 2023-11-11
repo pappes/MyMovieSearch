@@ -38,9 +38,7 @@ abstract class QueryTMDBCommon
 
   /// Describe where the data is coming from.
   @override
-  String myDataSourceName() {
-    return source.name;
-  }
+  String myDataSourceName() => source.name;
 
   /// converts SearchCriteriaDTO to a string representation.
   @override

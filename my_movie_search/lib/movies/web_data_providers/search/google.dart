@@ -26,16 +26,12 @@ class QueryGoogleMovies
 
   /// Describe where the data is coming from.
   @override
-  String myDataSourceName() {
-    return DataSourceType.google.name;
-  }
+  String myDataSourceName() => DataSourceType.google.name;
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
-  DataSourceFn myOfflineData() {
-    return streamGoogleMoviesJsonOfflineData;
-  }
+  DataSourceFn myOfflineData() => streamGoogleMoviesJsonOfflineData;
 
   /// Convert google map to MovieResultDTO records.
   @override

@@ -24,16 +24,12 @@ class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Describe where the data is coming from.
   @override
-  String myDataSourceName() {
-    return DataSourceType.omdb.name;
-  }
+  String myDataSourceName() => DataSourceType.omdb.name;
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
-  DataSourceFn myOfflineData() {
-    return streamOmdbJsonOfflineData;
-  }
+  DataSourceFn myOfflineData() => streamOmdbJsonOfflineData;
 
   /// Convert OMDB map to MovieResultDTO records.
   @override

@@ -22,13 +22,11 @@ class MovieModel {
   MovieModel({required this.id, required this.uniqueId, required this.dtoJson});
 
   // convenience method to create a Map from this MovieModel object
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      _colMovieUniqueId: uniqueId,
-      _colMovieJson: dtoJson,
-      _colMovieId: id,
-    };
-  }
+  Map<String, dynamic> toMap() => <String, dynamic>{
+        _colMovieUniqueId: uniqueId,
+        _colMovieJson: dtoJson,
+        _colMovieId: id,
+      };
 
   MovieResultDTO? toMovieResultDTO() {
     final decoded = json.decode(dtoJson);

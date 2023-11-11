@@ -34,9 +34,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   String? get userDisplayName => _userDisplayName;
   String? get userId => _userId;
 
-  Future<void> init() async {
-    _loggedIn = _login();
-  }
+  Future<void> init() async => _loggedIn = _login();
 
   Future<bool> _login() async {
     try {

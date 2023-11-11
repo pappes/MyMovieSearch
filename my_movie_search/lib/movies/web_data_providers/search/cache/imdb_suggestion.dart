@@ -63,13 +63,11 @@ mixin ThreadedCacheIMDBSuggestions
   }
 
   /// static wrapper to readList() for compatability with ThreadRunner.
-  static Future<List<MovieResultDTO>> runReadList(Map input) {
-    return QueryIMDBSuggestions(input['criteria'] as SearchCriteriaDTO)
-        .readList(
-      source: input['source'] as DataSourceFn?,
-      limit: input['limit'] as int?,
-    );
-  }
+  static Future<List<MovieResultDTO>> runReadList(Map input) =>
+      QueryIMDBSuggestions(input['criteria'] as SearchCriteriaDTO).readList(
+        source: input['source'] as DataSourceFn?,
+        limit: input['limit'] as int?,
+      );
 
   /// Check cache to see if data has already been fetched.
   Future<bool> _isResultCached() async {
@@ -78,10 +76,8 @@ mixin ThreadedCacheIMDBSuggestions
   }
 
   /// Check cache to see if data in cache should be refreshed.
-  Future<bool> _isCacheStale() async {
-    return false;
-    //return _cache.isCached(criteria.criteriaTitle);
-  }
+  Future<bool> _isCacheStale() async => false;
+  //=> _cache.isCached(criteria.criteriaTitle);
 
   /// Insert transformed data into cache.
   Future<void> _addResultToCache(MovieResultDTO fetchedResult) async {

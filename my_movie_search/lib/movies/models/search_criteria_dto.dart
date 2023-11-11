@@ -115,14 +115,12 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
 
   /// Convert a [Map] into a [SearchCriteriaDTO] object.
   ///
-  Map<String, String> toMap() {
-    return <String, String>{
-      movieCriteriaDTOSearchId: searchId,
-      movieCriteriaDTOCriteriaTitle: criteriaTitle,
-      movieCriteriaDTOCriteriaType: criteriaType.toString(),
-      movieCriteriaDTOCriteriaList: criteriaList.toJson(),
-    };
-  }
+  Map<String, String> toMap() => <String, String>{
+        movieCriteriaDTOSearchId: searchId,
+        movieCriteriaDTOCriteriaTitle: criteriaTitle,
+        movieCriteriaDTOCriteriaType: criteriaType.toString(),
+        movieCriteriaDTOCriteriaList: criteriaList.toJson(),
+      };
 
   static List<MovieResultDTO> getMovieList(dynamic inputString) {
     final converter = RestorableMovieList();
@@ -147,14 +145,16 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     return this;
   }
 
-  SearchCriteriaDTO clone() {
-    return toMap().toSearchCriteriaDTO();
-  }
+  @factory
+  // ignore: invalid_factory_method_impl
+  SearchCriteriaDTO clone() => toMap().toSearchCriteriaDTO();
 }
 
 extension MapCriteriaDTOConversion on Map {
   /// Convert a [Map] into a [SearchCriteriaDTO] object.
   ///
+  @factory
+  // ignore: invalid_factory_method_impl
   SearchCriteriaDTO toSearchCriteriaDTO() {
     final dto = SearchCriteriaDTO();
     dto.searchId = dynamicToString(this[movieCriteriaDTOSearchId]);

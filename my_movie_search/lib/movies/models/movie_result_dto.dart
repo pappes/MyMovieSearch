@@ -106,6 +106,7 @@ const String movieDTOMessagePrefix = '-';
 
 class RestorableMovie extends RestorableValue<MovieResultDTO> {
   @override
+  @factory
   MovieResultDTO createDefaultValue() => MovieResultDTO();
 
   @override
@@ -116,7 +117,10 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   }
 
   @override
+  @factory
+  // ignore: invalid_factory_method_impl
   MovieResultDTO fromPrimitives(Object? data) => dtoFromPrimitives(data);
+  @factory
   MovieResultDTO dtoFromPrimitives(Object? data) {
     if (data is String) {
       final decoded = jsonDecode(data);
@@ -145,7 +149,11 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
   }
 
   @override
+  @factory
+  // ignore: invalid_factory_method_impl
   List<MovieResultDTO> fromPrimitives(Object? data) => dtoFromPrimitives(data);
+  @factory
+  // ignore: invalid_factory_method_impl
   List<MovieResultDTO> dtoFromPrimitives(Object? data) {
     if (data is String) {
       final decoded = jsonDecode(data);
@@ -165,6 +173,8 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
 extension ListDTOConversion on Iterable<MovieResultDTO> {
   /// Convert a [List] of json encoded [String]s into a [List] of [MovieResultDTO] objects
   ///
+  @factory
+  // ignore: invalid_factory_method_impl
   static List<MovieResultDTO> decodeList(Iterable<dynamic> encoded) {
     final result = <MovieResultDTO>[];
     for (final json in encoded) {
@@ -188,6 +198,8 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
 extension MapResultDTOConversion on Map {
   /// Convert a [Map] into a [MovieResultDTO] object
   ///
+  @factory
+  // ignore: invalid_factory_method_impl
   MovieResultDTO toMovieResultDTO() {
     final dto = MovieResultDTO();
     dto.uniqueId = dynamicToString(this[movieDTOUniqueId]);
@@ -298,9 +310,7 @@ class DtoCache {
   DtoCache();
   DtoCache._internal();
 
-  factory DtoCache.singleton() {
-    return _singleton;
-  }
+  factory DtoCache.singleton() => _singleton;
 
   static final DtoCache _singleton = DtoCache._internal();
 
@@ -312,9 +322,8 @@ class DtoCache {
 
   /// remove [newValue] from the cache.
   ///
-  void remove(MovieResultDTO newValue) {
-    _globalDtoCache.remove(_key(newValue));
-  }
+  void remove(MovieResultDTO newValue) =>
+      _globalDtoCache.remove(_key(newValue));
 
   /// Store information from [newValue] into a cache and
   /// merge with any existing record.
@@ -465,6 +474,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Convert a json [String] to a [MovieResultDTO].
   ///
+  @factory
+  // ignore: invalid_factory_method_impl
   MovieResultDTO fromJson(dynamic json) {
     final decoded = jsonDecode(json.toString());
     if (decoded is Map) return decoded.toMovieResultDTO();
@@ -473,9 +484,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Convert a [MovieResultDTO] to a json [String].
   ///
-  String toJson({bool includeRelated = true}) {
-    return jsonEncode(toMap(includeRelated: includeRelated));
-  }
+  String toJson({bool includeRelated = true}) =>
+      jsonEncode(toMap(includeRelated: includeRelated));
 
   /// Convert a [MovieResultDTO] object into a [Map].
   ///
@@ -780,9 +790,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Create a string representation of a [MovieResultDTO].
   ///
-  String toPrintableString() {
-    return toMap().toString();
-  }
+  String toPrintableString() => toMap().toString();
 
   /// Create a placeholder for a value that can not be easily represented
   /// as a [MovieResultDTO].
@@ -1088,9 +1096,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     }
   }
 
-  MovieResultDTO clone() {
-    return toMap().toMovieResultDTO();
-  }
+  @factory
+  // ignore: invalid_factory_method_impl
+  MovieResultDTO clone() => toMap().toMovieResultDTO();
 }
 
 extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
@@ -1444,15 +1452,11 @@ extension DTOCompare on MovieResultDTO {
 
   /// Extract year release or year of most recent episode.
   ///
-  int maxYear() {
-    return max(year, yearRangeAsNumber());
-  }
+  int maxYear() => max(year, yearRangeAsNumber());
 
   /// Extract year of most recent episode.
   ///
-  int yearRangeAsNumber() {
-    return lastNumberFromString(yearRange);
-  }
+  int yearRangeAsNumber() => lastNumberFromString(yearRange);
 
   /// Extract numeric digits from end of string.
   ///

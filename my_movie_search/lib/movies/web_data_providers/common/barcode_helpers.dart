@@ -29,14 +29,12 @@ class DVDBarcodeScanner {
     return false;
   }
 
-  Future<dynamic> _showScanner() {
-    return Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SimpleBarcodeScannerPage(),
-      ),
-    );
-  }
+  Future<dynamic> _showScanner() => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SimpleBarcodeScannerPage(),
+        ),
+      );
 
   void _retryScanIfFailed(bool success) {
     if (!success) {
@@ -44,11 +42,9 @@ class DVDBarcodeScanner {
     }
   }
 
-  void _scan() {
-    _showScanner()
-        .then((scannedBarcode) => _useBarcode(scannedBarcode))
-        .then(_retryScanIfFailed);
-  }
+  void _scan() => _showScanner()
+      .then((scannedBarcode) => _useBarcode(scannedBarcode))
+      .then(_retryScanIfFailed);
 
   /// Uses camera to read 2D Barcodes.
   ///

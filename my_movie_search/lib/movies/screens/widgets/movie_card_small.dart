@@ -158,10 +158,9 @@ class MovieTile extends ListTile {
     BuildContext context,
     MovieResultDTO movie, {
     Widget? icon,
-  }) {
-    return ElevatedButton(
-      onPressed: () => _navigate(context, movie),
-      child: icon ?? _getIcon(movie),
-    );
-  }
+  }) =>
+      ElevatedButton(
+        onPressed: () => _navigate(context, movie),
+        child: icon ?? _getIcon(movie),
+      );
 }

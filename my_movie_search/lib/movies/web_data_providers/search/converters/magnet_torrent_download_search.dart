@@ -6,9 +6,8 @@ import 'package:my_movie_search/movies/web_data_providers/search/magnet_torrent_
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 
 class TorrentDownloadSearchConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
-    return [dtoFromMap(map)];
-  }
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) =>
+      [dtoFromMap(map)];
 
   static MovieResultDTO dtoFromMap(Map map) {
     // TorrentDownloadSearch always overestimates the number of seeders

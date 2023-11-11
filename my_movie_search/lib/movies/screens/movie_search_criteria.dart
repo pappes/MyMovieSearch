@@ -13,38 +13,31 @@ class MovieSearchCriteriaPage extends StatefulWidget {
   _MovieSearchCriteriaPageState createState() =>
       _MovieSearchCriteriaPageState();
 
-  static Route route() {
-    return MaterialPageRoute<void>(
-      builder: (_) => const MovieSearchCriteriaPage(),
-    );
-  }
+  static Route route() => MaterialPageRoute<void>(
+        builder: (_) => const MovieSearchCriteriaPage(),
+      );
 }
 
 class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage> {
   final textController = TextEditingController();
   final FocusNode criteriaFocusNode = FocusNode();
 
-  void performSearch(SearchCriteriaDTO criteria) {
-    MMSNav(context).showResultsPage(criteria);
-  }
+  void performSearch(SearchCriteriaDTO criteria) =>
+      MMSNav(context).showResultsPage(criteria);
 
-  void searchForBarcode(String barcode) {
-    performSearch(
-      SearchCriteriaDTO().init(
-        SearchCriteriaType.barcode,
-        title: barcode,
-      ),
-    );
-  }
+  void searchForBarcode(String barcode) => performSearch(
+        SearchCriteriaDTO().init(
+          SearchCriteriaType.barcode,
+          title: barcode,
+        ),
+      );
 
-  void searchForMovie() {
-    performSearch(
-      SearchCriteriaDTO().init(
-        SearchCriteriaType.movieTitle,
-        title: textController.text,
-      ),
-    );
-  }
+  void searchForMovie() => performSearch(
+        SearchCriteriaDTO().init(
+          SearchCriteriaType.movieTitle,
+          title: textController.text,
+        ),
+      );
 
   @override
   void dispose() {

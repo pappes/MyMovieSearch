@@ -372,10 +372,8 @@ Future main() async {
   group('DynamicHelper', () {
     // Convert a value to a string - non static version.
     test('dynamicToString()', () {
-      void testToString(input, expectedOutput) {
-        final text = DynamicHelperTest().callToString(input);
-        expect(text, expectedOutput);
-      }
+      void testToString(input, expectedOutput) =>
+          expect(DynamicHelperTest().callToString(input), expectedOutput);
 
       testToString('9', '9');
       testToString(1, '');
@@ -384,10 +382,8 @@ Future main() async {
     });
     // Convert a value to a string - static version.
     test('dynamicToString_()', () {
-      void testToString(input, expectedOutput) {
-        final text = DynamicHelperTest.callToString_(input);
-        expect(text, expectedOutput);
-      }
+      void testToString(input, expectedOutput) =>
+          expect(DynamicHelperTest.callToString_(input), expectedOutput);
 
       testToString('9', '9');
       testToString(1, '');
@@ -397,10 +393,8 @@ Future main() async {
 
     // Convert a value to List<string> - non static version.
     test('dynamicToString()', () {
-      void testToStringList(input, expectedOutput) {
-        final text = DynamicHelperTest().callToStringList(input);
-        expect(text, expectedOutput);
-      }
+      void testToStringList(input, expectedOutput) =>
+          expect(DynamicHelperTest().callToStringList(input), expectedOutput);
 
       testToStringList(['9'], ['9']);
       testToStringList(['9', '8'], ['9', '8']);
@@ -411,10 +405,8 @@ Future main() async {
     });
     // Convert a value to List<string> - static version.
     test('dynamicToString_()', () {
-      void testToStringList(input, expectedOutput) {
-        final text = DynamicHelperTest.callToStringList_(input);
-        expect(text, expectedOutput);
-      }
+      void testToStringList(input, expectedOutput) =>
+          expect(DynamicHelperTest.callToStringList_(input), expectedOutput);
 
       testToStringList(['9'], ['9']);
       testToStringList(['9', '8'], ['9', '8']);
@@ -426,10 +418,8 @@ Future main() async {
 
     // Convert a value to a int - non static version.
     test('dynamicToInt()', () {
-      void testToInt(input, expectedOutput) {
-        final text = DynamicHelperTest().callToInt(input);
-        expect(text, expectedOutput);
-      }
+      void testToInt(input, expectedOutput) =>
+          expect(DynamicHelperTest().callToInt(input), expectedOutput);
 
       testToInt('9', 9);
       testToInt(1, 1);
@@ -438,10 +428,8 @@ Future main() async {
     });
     // Convert a value to a int - static version.
     test('dynamicToInt_()', () {
-      void testToInt(input, expectedOutput) {
-        final text = DynamicHelperTest.callToInt_(input);
-        expect(text, expectedOutput);
-      }
+      void testToInt(input, expectedOutput) =>
+          expect(DynamicHelperTest.callToInt_(input), expectedOutput);
 
       testToInt('9', 9);
       testToInt(1, 1);
@@ -451,10 +439,8 @@ Future main() async {
 
     // Convert a value to a double - non static version.
     test('dynamicToDouble()', () {
-      void testToDouble(input, expectedOutput) {
-        final text = DynamicHelperTest().callToDouble(input);
-        expect(text, expectedOutput);
-      }
+      void testToDouble(input, expectedOutput) =>
+          expect(DynamicHelperTest().callToDouble(input), expectedOutput);
 
       testToDouble('9', 9);
       testToDouble(1, 1);
@@ -463,10 +449,8 @@ Future main() async {
     });
     // Convert a value to a double - static version.
     test('dynamicToDouble_()', () {
-      void testToDouble(input, expectedOutput) {
-        final text = DynamicHelperTest.callToDouble_(input);
-        expect(text, expectedOutput);
-      }
+      void testToDouble(input, expectedOutput) =>
+          expect(DynamicHelperTest.callToDouble_(input), expectedOutput);
 
       testToDouble('9', 9);
       testToDouble(1, 1);
@@ -479,10 +463,8 @@ Future main() async {
     // Convert a string to a number, stripping comma seperators,
     // rounding decimals and ignoring non numeric input.
     test('fromText()', () {
-      void testToNumber(input, expectedOutput) {
-        final number = IntHelper.fromText(input);
-        expect(number, expectedOutput);
-      }
+      void testToNumber(input, expectedOutput) =>
+          expect(IntHelper.fromText(input), expectedOutput);
 
       testToNumber('0', 0);
       testToNumber('1', 1);
@@ -498,10 +480,8 @@ Future main() async {
     // Convert a string to a number, stripping comma seperators and
     // ignoring non numeric input.
     test('fromText()', () {
-      void testToNumber(input, expectedOutput) {
-        final number = DoubleHelper.fromText(input);
-        expect(number, expectedOutput);
-      }
+      void testToNumber(input, expectedOutput) =>
+          expect(DoubleHelper.fromText(input), expectedOutput);
 
       testToNumber('0', 0);
       testToNumber('1', 1);
@@ -513,10 +493,10 @@ Future main() async {
     });
     // Convert a string to a number, substituting num values where required.
     test('fromText() null substitution', () {
-      void testToNumber(input, expectedOutput) {
-        final number = DoubleHelper.fromText(input, nullValueSubstitute: -1);
-        expect(number, expectedOutput);
-      }
+      void testToNumber(input, expectedOutput) => expect(
+            DoubleHelper.fromText(input, nullValueSubstitute: -1),
+            expectedOutput,
+          );
 
       testToNumber('0', 0);
       testToNumber('1', 1);
@@ -527,10 +507,10 @@ Future main() async {
     });
     // Convert a string to a number, substituting 0 values where required.
     test('fromText() zero substitution', () {
-      void testToNumber(input, expectedOutput) {
-        final number = DoubleHelper.fromText(input, zeroValueSubstitute: null);
-        expect(number, expectedOutput);
-      }
+      void testToNumber(input, expectedOutput) => expect(
+            DoubleHelper.fromText(input, zeroValueSubstitute: null),
+            expectedOutput,
+          );
 
       testToNumber('1', 1);
       testToNumber('9,999', 9999);
@@ -540,10 +520,8 @@ Future main() async {
     });
     // Convert a string to a number, rounding decimal values where required.
     test('fromText() int', () {
-      void testToNumber(input, expectedOutput) {
-        final number = DoubleHelper.fromText(input)?.round();
-        expect(number, expectedOutput);
-      }
+      void testToNumber(input, expectedOutput) =>
+          expect(DoubleHelper.fromText(input)?.round(), expectedOutput);
 
       testToNumber('0', 0);
       testToNumber('1', 1);
@@ -558,10 +536,8 @@ Future main() async {
     // Convert a string to a numeric year, stripping comma seperators and
     // ignoring non numeric input.
     test('getYear()', () {
-      void testToNumber(String? input, expectedOutput) {
-        final number = getYear(input);
-        expect(number, expectedOutput, reason: 'input = $input');
-      }
+      void testToNumber(String? input, expectedOutput) =>
+          expect(getYear(input), expectedOutput, reason: 'input = $input');
 
       testToNumber('0000', 0);
       testToNumber('0001', 1);
@@ -709,10 +685,9 @@ Future main() async {
     });
     group('fromJson', () {
       /// Convert JSON [input] to a [List] of [String] and compare to [expectedOutput]
-      void testFromJson(String? input, List<String> expectedOutput) {
-        final actual = StringIterableHelper.fromJson(input);
-        expect(actual, expectedOutput, reason: 'input $input');
-      }
+      void testFromJson(String? input, List<String> expectedOutput) =>
+          expect(StringIterableHelper.fromJson(input), expectedOutput,
+              reason: 'input $input');
 
       //Convert a JSON encoded array to List<String>
       test('string array', () {

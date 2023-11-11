@@ -18,16 +18,13 @@ class RestorationTestParent extends State with RestorationMixin {
   String get restorationId => 'abc';
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    // Register our property to be saved every time it changes,
-    // and to be restored every time our app is killed by the OS!
-    registerForRestoration(criteria, '${uniqueId}criteria');
-  }
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) =>
+      // Register our property to be saved every time it changes,
+      // and to be restored every time our app is killed by the OS!
+      registerForRestoration(criteria, '${uniqueId}criteria');
 
   @override
-  Widget build(BuildContext context) {
-    return const Text('');
-  }
+  Widget build(BuildContext context) => const Text('');
 }
 
 void compareCriteria(SearchCriteriaDTO actual, SearchCriteriaDTO matcher) {

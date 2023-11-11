@@ -140,23 +140,21 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     _searchFocusNode.requestFocus();
   }
 
-  Widget _buildMovieResults() {
-    return BlocBuilder<SearchBloc, SearchState>(
-      bloc: _searchBloc,
-      builder: (context, state) {
-        _sortedList = _searchBloc!.sortedResults;
-        return Scrollbar(
-          thumbVisibility: true,
-          child: ListView.builder(
-            padding: const EdgeInsets.all(16.0),
-            itemCount: _sortedList.length,
-            itemBuilder: _movieListBuilder,
-            primary: true, //attach scrollbar controller to primary view
-          ),
-        );
-      },
-    );
-  }
+  Widget _buildMovieResults() => BlocBuilder<SearchBloc, SearchState>(
+        bloc: _searchBloc,
+        builder: (context, state) {
+          _sortedList = _searchBloc!.sortedResults;
+          return Scrollbar(
+            thumbVisibility: true,
+            child: ListView.builder(
+              padding: const EdgeInsets.all(16.0),
+              itemCount: _sortedList.length,
+              itemBuilder: _movieListBuilder,
+              primary: true, //attach scrollbar controller to primary view
+            ),
+          );
+        },
+      );
 
   Widget _movieListBuilder(BuildContext context, int listIndex) {
     if (listIndex >= _sortedList.length) {

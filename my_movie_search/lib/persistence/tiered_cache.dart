@@ -22,15 +22,11 @@ class TieredCache<T> {
 
   /// Remove an item from the cache.
   ///
-  void remove(dynamic key) {
-    memoryCache.remove(key);
-  }
+  void remove(dynamic key) => memoryCache.remove(key);
 
   /// Remove all items from the cache.
   ///
-  void clear() {
-    memoryCache.clear();
-  }
+  void clear() => memoryCache.clear();
 
   /// Check the cache to see if the item is present.
   ///
@@ -41,9 +37,7 @@ class TieredCache<T> {
 
   /// Check the cache to see how many items are present.
   ///
-  int cachedSize() {
-    return memoryCache.length;
-  }
+  int cachedSize() => memoryCache.length;
 
   /// Get data from the cache.
   ///

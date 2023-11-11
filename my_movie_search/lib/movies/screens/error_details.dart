@@ -22,11 +22,10 @@ class _ErrorDetailsPageState extends State<ErrorDetailsPage>
   String get restorationId => 'ErrorDetails${widget.errorDto.uniqueId}';
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    // Register our property to be saved every time it changes,
-    // and to be restored every time our app is killed by the OS!
-    registerForRestoration(_restorableMovie, widget.errorDto.uniqueId);
-  }
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) =>
+      // Register our property to be saved every time it changes,
+      // and to be restored every time our app is killed by the OS!
+      registerForRestoration(_restorableMovie, widget.errorDto.uniqueId);
 
   @override
   void dispose() {
@@ -51,12 +50,10 @@ class _ErrorDetailsPageState extends State<ErrorDetailsPage>
     );
   }
 
-  ScrollView bodySection() {
-    return ListView(
-      primary: true, //attach scrollbar controller to primary view
-      children: <Widget>[
-        Text(widget.errorDto.title),
-      ],
-    );
-  }
+  ScrollView bodySection() => ListView(
+        primary: true, //attach scrollbar controller to primary view
+        children: <Widget>[
+          Text(widget.errorDto.title),
+        ],
+      );
 }

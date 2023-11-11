@@ -87,11 +87,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   String get restorationId => 'MovieDetails${_movie.uniqueId}';
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    // Register our property to be saved every time it changes,
-    // and to be restored every time our app is killed by the OS!
-    registerForRestoration(_restorableMovie, _movie.uniqueId);
-  }
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) =>
+      // Register our property to be saved every time it changes,
+      // and to be restored every time our app is killed by the OS!
+      registerForRestoration(_restorableMovie, _movie.uniqueId);
 
   @override
   void dispose() {
@@ -117,143 +116,129 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     );
   }
 
-  ScrollView _bodySection() {
-    return ListView(
-      primary: true, //attach scrollbar controller to primary view
-      children: <Widget>[
-        Text(_movie.title, style: hugeFont),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            if (_movie.yearRange.isEmpty)
-              Text('Year: ${_movie.year}')
-            else
-              Text('Year Range: ${_movie.yearRange}'),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Text('Run Time: ${_movie.runTime.toFormattedTime()}'),
-            ),
-          ],
-        ),
-        Flex(
-          direction: Axis.horizontal,
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ExpandedColumn(children: <Widget>[_leftColumn()]),
-
-                  // Only show right column on tablet
-                  if (!_mobileLayout)
-                    ExpandedColumn(children: [_posterSection()]),
-                ],
+  ScrollView _bodySection() => ListView(
+        primary: true, //attach scrollbar controller to primary view
+        children: <Widget>[
+          Text(_movie.title, style: hugeFont),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              if (_movie.yearRange.isEmpty)
+                Text('Year: ${_movie.year}')
+              else
+                Text('Year Range: ${_movie.yearRange}'),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Text('Run Time: ${_movie.runTime.toFormattedTime()}'),
               ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
+            ],
+          ),
+          Flex(
+            direction: Axis.horizontal,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ExpandedColumn(children: <Widget>[_leftColumn()]),
 
-  Widget _leftColumn() {
-    return Wrap(
-      children: [
-        ..._leftHeader(),
-        // Only show poster in left column on mobile
-        if (_mobileLayout) _posterSection(),
+                    // Only show right column on tablet
+                    if (!_mobileLayout)
+                      ExpandedColumn(children: [_posterSection()]),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
 
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ..._description(),
-            ..._suggestions(),
-            ..._cast(),
-          ],
-        ),
-      ],
-    );
-  }
+  Widget _leftColumn() => Wrap(
+        children: [
+          ..._leftHeader(),
+          // Only show poster in left column on mobile
+          if (_mobileLayout) _posterSection(),
 
-  Widget _posterSection() {
-    return Row(
-      children: [
-        Poster(
-          context,
-          url: _movie.imageUrl,
-          showImages: () => MMSNav(context)
-              .viewWebPage(makeImdbUrl(_movie.uniqueId, photos: true)),
-        ),
-      ],
-    );
-  }
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ..._description(),
+              ..._suggestions(),
+              ..._cast(),
+            ],
+          ),
+        ],
+      );
 
-  Widget _movieFacts() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text('Type: ${_movie.type.name}'),
-        Text(
-          'User Rating: ${_movie.userRating} '
-          '(${formatter.format(_movie.userRatingCount)})',
+  Widget _posterSection() => Row(
+        children: [
+          Poster(
+            context,
+            url: _movie.imageUrl,
+            showImages: () => MMSNav(context)
+                .viewWebPage(makeImdbUrl(_movie.uniqueId, photos: true)),
+          ),
+        ],
+      );
+
+  Widget _movieFacts() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Text('Type: ${_movie.type.name}'),
+          Text(
+            'User Rating: ${_movie.userRating} '
+            '(${formatter.format(_movie.userRatingCount)})',
+          ),
+          Wrap(
+            children: <Widget>[
+              Text('Censor Rating: ${_movie.censorRating.name}     '),
+              Text('Language: ${_movie.language.name}'),
+            ],
+          ),
+        ],
+      );
+
+  List<Widget> _leftHeader() => [
+        InkWell(
+          child: _movieFacts(),
+          onTap: () => MMSNav(context).viewWebPage(
+            makeImdbUrl(_movie.uniqueId, parentalGuide: true),
+          ),
         ),
         Wrap(
           children: <Widget>[
-            Text('Censor Rating: ${_movie.censorRating.name}     '),
-            Text('Language: ${_movie.language.name}'),
+            Text('Source: ${_movie.bestSource.name}      '),
+            Text('UniqueId: ${_movie.uniqueId}'),
+            ElevatedButton(
+              onPressed: () =>
+                  MMSNav(context).viewWebPage(makeImdbUrl(_movie.uniqueId)),
+              child: const Text('IMDB'),
+            ),
+            ..._externalSearchButtons(),
           ],
         ),
-      ],
-    );
-  }
+      ];
 
-  List<Widget> _leftHeader() {
-    return [
-      InkWell(
-        child: _movieFacts(),
-        onTap: () => MMSNav(context).viewWebPage(
-          makeImdbUrl(_movie.uniqueId, parentalGuide: true),
-        ),
-      ),
-      Wrap(
-        children: <Widget>[
-          Text('Source: ${_movie.bestSource.name}      '),
-          Text('UniqueId: ${_movie.uniqueId}'),
-          ElevatedButton(
-            onPressed: () =>
-                MMSNav(context).viewWebPage(makeImdbUrl(_movie.uniqueId)),
-            child: const Text('IMDB'),
+  List<Widget> _description() => [
+        BoldLabel('Description:'),
+        InkWell(
+          onTap: _toggleDescription,
+          child: Text(
+            _movie.description,
+            style: biggerFont,
+            overflow: _descriptionExpanded ? null : TextOverflow.ellipsis,
+            maxLines: _descriptionExpanded ? null : 8,
           ),
-          ..._externalSearchButtons(),
-        ],
-      ),
-    ];
-  }
-
-  List<Widget> _description() {
-    return [
-      BoldLabel('Description:'),
-      InkWell(
-        onTap: _toggleDescription,
-        child: Text(
-          _movie.description,
-          style: biggerFont,
-          overflow: _descriptionExpanded ? null : TextOverflow.ellipsis,
-          maxLines: _descriptionExpanded ? null : 8,
         ),
-      ),
-      Text('Languages: ${_movie.languages}'),
-      Text('Genres: ${_movie.genres}'),
-      _keywords(),
-    ];
-  }
+        Text('Languages: ${_movie.languages}'),
+        Text('Genres: ${_movie.genres}'),
+        _keywords(),
+      ];
 
-  void _toggleDescription() {
-    setState(() {
-      _descriptionExpanded = !_descriptionExpanded;
-    });
-  }
+  void _toggleDescription() => setState(() {
+        _descriptionExpanded = !_descriptionExpanded;
+      });
 
   final caseInsensativeSuggestion =
       RegExp('[sS][uU][gG][gG][eE][sS][tT][iI][oO][nN]');
@@ -264,12 +249,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       _related(caseInsensativeSuggestion, invertFilter: true);
 
   Widget _keywords() {
-    Widget makeHyperlink(String keyword) {
-      return InkWell(
-        child: Text('  $keyword  '),
-        onTap: () => MMSNav(context).getMoviesForKeyword(keyword),
-      );
-    }
+    Widget makeHyperlink(String keyword) => InkWell(
+          child: Text('  $keyword  '),
+          onTap: () => MMSNav(context).getMoviesForKeyword(keyword),
+        );
 
     final hyperlinks = <Widget>[];
     for (final keyword in _movie.keywords) {
@@ -323,21 +306,17 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     return categories;
   }
 
-  List<Widget> _externalSearchButtons() {
-    return <Widget>[
-      _externalSearchButton(_movie.title),
-      if (_movie.alternateTitle.isNotEmpty)
-        _externalSearchButton(_movie.alternateTitle),
-    ];
-  }
+  List<Widget> _externalSearchButtons() => <Widget>[
+        _externalSearchButton(_movie.title),
+        if (_movie.alternateTitle.isNotEmpty)
+          _externalSearchButton(_movie.alternateTitle),
+      ];
 
-  Widget _externalSearchButton(String title) {
-    return ElevatedButton(
-      onPressed: () => MMSNav(context).getDownloads(
-        '$title ${_movie.year}',
-        _movie,
-      ),
-      child: Text(title),
-    );
-  }
+  Widget _externalSearchButton(String title) => ElevatedButton(
+        onPressed: () => MMSNav(context).getDownloads(
+          '$title ${_movie.year}',
+          _movie,
+        ),
+        child: Text(title),
+      );
 }

@@ -31,18 +31,14 @@ extension NodeHelper on Node {
   /// ```dart
   /// ElementType.image;  // returns 'img'
   /// ```
-  String element(ElementType et) {
-    return _htmlTags[et]!;
-  }
+  String element(ElementType et) => _htmlTags[et]!;
 
   /// Convert [AttributeType] element tag to html attribute tag.
   ///
   /// ```dart
   /// AttributeType.address; // returns 'href'
   /// ```
-  String attribute(AttributeType at) {
-    return _attributeNames[at]!;
-  }
+  String attribute(AttributeType at) => _attributeNames[at]!;
 }
 
 /// Extend html DOM [Element] to provide convenience functions.
@@ -66,9 +62,7 @@ extension ElementHelper on Element {
   String? getAttribute(AttributeType atype) =>
       attributes[_attributeNames[atype]!];
 
-  String get cleanText {
-    return _cleanHtmlText(text);
-  }
+  String get cleanText => _cleanHtmlText(text);
 
   String _cleanHtmlText(dynamic text) {
     final str = text?.toString() ?? "";

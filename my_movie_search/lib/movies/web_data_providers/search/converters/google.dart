@@ -129,11 +129,10 @@ class GoogleMovieSearchConverter {
     return lastOpen > 1 ? title.substring(0, lastOpen) : title;
   }
 
-  static String getID(Map map) {
-    return map[innerElementIdentity]?.toString() ??
-        map[innerElementPageconst]?.toString() ??
-        movieDTOUninitialized;
-  }
+  static String getID(Map map) =>
+      map[innerElementIdentity]?.toString() ??
+      map[innerElementPageconst]?.toString() ??
+      movieDTOUninitialized;
 
   static String getYearRange(Map map) {
     // Extract year range from 'title (TV Series 1988–1993)'
@@ -160,23 +159,18 @@ class GoogleMovieSearchConverter {
     }
   }
 
-  static String getImage(Map map) {
-    return DynamicHelper.toString_(map[innerElementImage]);
-  }
+  static String getImage(Map map) =>
+      DynamicHelper.toString_(map[innerElementImage]);
 
-  static double getRatingValue(Map map) {
-    return DoubleHelper.fromText(
-      map[innerElementRatingValue],
-      nullValueSubstitute: 0,
-    )!;
-  }
+  static double getRatingValue(Map map) => DoubleHelper.fromText(
+        map[innerElementRatingValue],
+        nullValueSubstitute: 0,
+      )!;
 
-  static int getRatingCount(Map map) {
-    return IntHelper.fromText(
-      map[innerElementRatingCount],
-      nullValueSubstitute: 0,
-    )!;
-  }
+  static int getRatingCount(Map map) => IntHelper.fromText(
+        map[innerElementRatingCount],
+        nullValueSubstitute: 0,
+      )!;
 
   // Ignore duplicated child pages. Page sub type is: main
   // or reviews or fullcredits or trivia or locations or plotsummary or ...

@@ -29,9 +29,8 @@ const innerElementType = 'q';
 const innerElementYearRange = 'yr';
 
 class ImdbMoviesForKeywordConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
-    return [dtoFromMap(map)];
-  }
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) =>
+      [dtoFromMap(map)];
 
   static MovieResultDTO dtoFromMap(Map map) {
     final uniqueId = map[keywordId]!.toString();

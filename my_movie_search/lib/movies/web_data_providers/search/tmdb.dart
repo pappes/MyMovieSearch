@@ -24,9 +24,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Describe where the data is coming from.
   @override
-  String myDataSourceName() {
-    return DataSourceType.tmdbSearch.name;
-  }
+  String myDataSourceName() => DataSourceType.tmdbSearch.name;
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.

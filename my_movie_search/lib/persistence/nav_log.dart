@@ -9,8 +9,6 @@ class NavLog extends ChangeNotifier {
   FirebaseApplicationState? getFirestoreProvider() =>
       Provider.of<FirebaseApplicationState>(_context, listen: false);
 
-  void log(String destination, String request) {
-    getFirestoreProvider()
-        ?.addRecord('MMSNavLog/screen/$destination', id: request);
-  }
+  void log(String destination, String request) => getFirestoreProvider()
+      ?.addRecord('MMSNavLog/screen/$destination', id: request);
 }

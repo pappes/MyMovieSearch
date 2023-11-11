@@ -5,9 +5,8 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
 class ImdbCastConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
-    return [_dtoFromMap(map)];
-  }
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) =>
+      [_dtoFromMap(map)];
 
   static MovieResultDTO _dtoFromMap(Map map) {
     final movie = MovieResultDTO().init(

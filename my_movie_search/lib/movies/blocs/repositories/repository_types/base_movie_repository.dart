@@ -79,19 +79,15 @@ class BaseMovieRepository {
   }
 
   /// Begin waiting for another data provider to complete.
-  void initProvider() {
-    _awaitingProviders = _awaitingProviders + 1;
-  }
+  void initProvider() => _awaitingProviders = _awaitingProviders + 1;
 
   /// Yields incomplete or completed results in the stream.
-  void yieldResult(MovieResultDTO result) {
-    _movieStreamController?.add(result);
-  }
+  void yieldResult(MovieResultDTO result) =>
+      _movieStreamController?.add(result);
 
   /// Determines if a new search has been initatatd since originalSearchUID.
-  bool searchInterrupted(int originalSearchUID) {
-    return originalSearchUID != _searchUID;
-  }
+  bool searchInterrupted(int originalSearchUID) =>
+      originalSearchUID != _searchUID;
 
   /// Yields incomplete or completed results in the stream
   /// and initiates retrieval of movie details.

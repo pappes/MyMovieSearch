@@ -11,9 +11,7 @@ class Settings {
   }
   Settings._internal();
 
-  factory Settings.singleton() {
-    return _singleton;
-  }
+  factory Settings.singleton() => _singleton;
 
   static final Settings _singleton = Settings._internal();
   final Map<String, String> _settingsMap = {};

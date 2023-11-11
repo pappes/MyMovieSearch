@@ -58,9 +58,7 @@ class MMSNav {
   /// Render web page [url] in a child page of the current screen.
   ///
   /// For platforms that don't support CustomTabs, the URL is displayed to the user.
-  void viewWebPage(String url) {
-    canvas.viewWebPage(url);
-  }
+  void viewWebPage(String url) => canvas.viewWebPage(url);
 
   /// Construct route to Material user interface page as appropriate for the dto.
   ///
@@ -123,28 +121,26 @@ class MMSNav {
 
   /// Navigates to a search results page populated with movie for the keyword.
   ///
-  void getMoviesForKeyword(String keyword) {
-    // Fetch first batch of movies that match the keyword.
-    showResultsPage(
-      SearchCriteriaDTO().init(
-        SearchCriteriaType.moviesForKeyword,
-        title: keyword,
-      ),
-    );
-  }
+  void getMoviesForKeyword(String keyword) =>
+      // Fetch first batch of movies that match the keyword.
+      showResultsPage(
+        SearchCriteriaDTO().init(
+          SearchCriteriaType.moviesForKeyword,
+          title: keyword,
+        ),
+      );
 
   /// Navigates to a search results page populated with keywords for the movie.
   ///
-  void getMoreKeywords(MovieResultDTO movie) {
-    // Fetch first batch of movies that match the keyword.
-    showResultsPage(
-      SearchCriteriaDTO().init(
-        SearchCriteriaType.moreKeywords,
-        title: movie.uniqueId,
-        list: [movie],
-      ),
-    );
-  }
+  void getMoreKeywords(MovieResultDTO movie) =>
+      // Fetch first batch of movies that match the keyword.
+      showResultsPage(
+        SearchCriteriaDTO().init(
+          SearchCriteriaType.moreKeywords,
+          title: movie.uniqueId,
+          list: [movie],
+        ),
+      );
 
   /// Navigates to a search results page populated with downloads for the movie.
   ///
@@ -282,19 +278,17 @@ class MMSFlutterCanvas {
     }
   }
 
-  void _invokeChromeCustomTabs(String url) {
-    tabs
-        .launch(
-          url,
-          customTabsOption: tabs.CustomTabsOption(
-            toolbarColor: Theme.of(context!).primaryColor,
-            enableDefaultShare: true,
-            enableUrlBarHiding: true,
-            showPageTitle: true,
-          ),
-        )
-        .onError((error, stackTrace) => _customTabsError(error, url));
-  }
+  void _invokeChromeCustomTabs(String url) => tabs
+      .launch(
+        url,
+        customTabsOption: tabs.CustomTabsOption(
+          toolbarColor: Theme.of(context!).primaryColor,
+          enableDefaultShare: true,
+          enableUrlBarHiding: true,
+          showPageTitle: true,
+        ),
+      )
+      .onError((error, stackTrace) => _customTabsError(error, url));
 
   void _customTabsError(Object? e, String url) {
     // An exception is thrown if browser app is not installed on Android device.
@@ -306,11 +300,9 @@ class MMSFlutterCanvas {
     );
   }
 
-  void _openBrowser(String url) {
-    launcher.launchUrl(Uri.parse(url)).then(
-          (bool success) => _browserError(success, url),
-        );
-  }
+  void _openBrowser(String url) => launcher.launchUrl(Uri.parse(url)).then(
+        (bool success) => _browserError(success, url),
+      );
 
   void _browserError(bool success, String url) {
     // An exception is thrown if browser app is not installed on Android device.

@@ -12,16 +12,12 @@ mixin ThreadedCacheIMDBTitleDetails
 
   /// Check cache to see if data has already been fetched.
   @override
-  bool myIsResultCached() {
-    return _cache.isCached(_makeKey(criteria));
-  }
+  bool myIsResultCached() => _cache.isCached(_makeKey(criteria));
 
   /// Check cache to see if data in cache should be refreshed.
   @override
-  bool myIsCacheStale() {
-    return false;
-    //return _cache.isCached(criteria.criteriaTitle);
-  }
+  bool myIsCacheStale() => false;
+  //return _cache.isCached(criteria.criteriaTitle);
 
   /// Insert transformed data into cache.
   @override
@@ -43,9 +39,7 @@ mixin ThreadedCacheIMDBTitleDetails
 
   /// Flush all data from the cache.
   @override
-  void myClearCache() {
-    return _cache.clear();
-  }
+  void myClearCache() => _cache.clear();
 
   /// Retrieve cached result.
   String _makeKey(SearchCriteriaDTO criteria) =>

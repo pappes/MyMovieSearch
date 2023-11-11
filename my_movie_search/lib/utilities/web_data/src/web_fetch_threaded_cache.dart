@@ -128,10 +128,8 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
 
   /// Check cache to see if data in cache should be refreshed.
   @useResult
-  bool isThreadedCacheStale() {
-    return false;
-    //return _cache.isCached(_getCacheKey());
-  }
+  bool isThreadedCacheStale() => false;
+  //=> _cache.isCached(_getCacheKey());
 
   /// Retrieve cached result.
   @useResult

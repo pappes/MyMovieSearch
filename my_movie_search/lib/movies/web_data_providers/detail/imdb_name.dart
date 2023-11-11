@@ -23,16 +23,12 @@ class QueryIMDBNameDetails
 
   /// Describe where the data is coming from.
   @override
-  String myDataSourceName() {
-    return 'imdb_person';
-  }
+  String myDataSourceName() => 'imdb_person';
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
-  DataSourceFn myOfflineData() {
-    return streamImdbHtmlOfflineData;
-  }
+  DataSourceFn myOfflineData() => streamImdbHtmlOfflineData;
 
   /// converts <INPUT_TYPE> to a string representation.
   @override

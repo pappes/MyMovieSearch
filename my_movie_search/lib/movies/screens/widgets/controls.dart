@@ -124,7 +124,6 @@ class BoldLabel extends Text {
     return newString.toString();
   }
 
-  static String _initCap(String string) {
-    return '${string[0].toUpperCase()}${string.substring(1)}';
-  }
+  static String _initCap(String string) =>
+      '${string[0].toUpperCase()}${string.substring(1)}';
 }

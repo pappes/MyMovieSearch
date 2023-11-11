@@ -30,9 +30,7 @@ class RestorationTestParent extends State with RestorationMixin {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return const Text('');
-  }
+  Widget build(BuildContext context) => const Text('');
 }
 
 MovieResultDTO fullDTO() {
@@ -113,9 +111,8 @@ void main() {
     // A rating of 2/5 is better than a rating of less than 2/5.
     // A movie after 2000 is better than a movie before 2000.
     test('popularityCategory', () {
-      void testPopularityCategory(MovieResultDTO input, expectedOutput) {
-        expect(input.popularityCategory(), expectedOutput);
-      }
+      void testPopularityCategory(MovieResultDTO input, expectedOutput) =>
+          expect(input.popularityCategory(), expectedOutput);
 
       final testInput = MovieResultDTO();
       // Any movie with a super low rating is probably bad.

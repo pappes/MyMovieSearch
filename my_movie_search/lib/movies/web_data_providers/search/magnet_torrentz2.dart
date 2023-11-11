@@ -31,16 +31,12 @@ class QueryTorrentz2Search
 
   /// Describe where the data is coming from.
   @override
-  String myDataSourceName() {
-    return DataSourceType.torrentz2.name;
-  }
+  String myDataSourceName() => DataSourceType.torrentz2.name;
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
-  DataSourceFn myOfflineData() {
-    return streamHtmlOfflineData;
-  }
+  DataSourceFn myOfflineData() => streamHtmlOfflineData;
 
   /// Convert map to MovieResultDTO records.
   @override

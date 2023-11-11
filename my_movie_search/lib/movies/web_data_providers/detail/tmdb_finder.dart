@@ -56,7 +56,6 @@ class QueryTMDBFinder extends QueryTMDBCommon {
 
   /// API call to TMDB returning the movie details for [searchCriteria].
   @override
-  Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    return super.myConstructURI(searchCriteria, pageNumber: pageNumber);
-  }
+  Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) =>
+      super.myConstructURI(searchCriteria, pageNumber: pageNumber);
 }

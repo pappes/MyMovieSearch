@@ -39,22 +39,20 @@ class _MMSearchAppViewState extends State<MMSearchAppView> {
   /// Initialise the Material app with app specific settings.
   ///
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp.router(
-      restorationScopeId: 'root',
-      title: 'My Movie Search',
-      routerConfig: GoRouter(
-        routes: [
-          ...MMSNav.getRoutes(),
-          //...FirebaseApplicationState().getRoutes(),
-        ],
-      ),
-      theme: ThemeData(
-        useMaterial3: true,
-        colorSchemeSeed: Colors.blue,
-        fontFamily: 'Lato',
-      ),
-      darkTheme: ThemeData(brightness: Brightness.dark),
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp.router(
+        restorationScopeId: 'root',
+        title: 'My Movie Search',
+        routerConfig: GoRouter(
+          routes: [
+            ...MMSNav.getRoutes(),
+            //...FirebaseApplicationState().getRoutes(),
+          ],
+        ),
+        theme: ThemeData(
+          useMaterial3: true,
+          colorSchemeSeed: Colors.blue,
+          fontFamily: 'Lato',
+        ),
+        darkTheme: ThemeData(brightness: Brightness.dark),
+      );
 }

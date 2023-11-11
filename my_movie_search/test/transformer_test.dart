@@ -46,9 +46,8 @@ void main() {
     }
 
     /// Confirm removal is prefix and suffix fior a single line of input.
-    void testSingleLineConversion(String input, String expectedOutput) {
-      testMultiLineConversion([input], expectedOutput);
-    }
+    void testSingleLineConversion(String input, String expectedOutput) =>
+        testMultiLineConversion([input], expectedOutput);
 
     // No change made where JSON text encoutered before opening Parenthesis.
     test('stripPrefix no change', () {

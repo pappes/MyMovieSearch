@@ -88,11 +88,10 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   String get restorationId => 'PersonDetails${_person.uniqueId}';
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
-    // Register our property to be saved every time it changes,
-    // and to be restored every time our app is killed by the OS!
-    registerForRestoration(_restorablePerson, _person.uniqueId);
-  }
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) =>
+      // Register our property to be saved every time it changes,
+      // and to be restored every time our app is killed by the OS!
+      registerForRestoration(_restorablePerson, _person.uniqueId);
 
   @override
   void dispose() {
@@ -119,99 +118,90 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     );
   }
 
-  ScrollView _bodySection() {
-    return ListView(
-      primary: true, //attach scrollbar controller to primary view
-      children: <Widget>[
-        Text(_person.title, style: hugeFont),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            if (_person.yearRange.isEmpty)
-              Text('Born: ${_person.year}')
-            else
-              Text('Lifespan: ${_person.yearRange}'),
-          ],
-        ),
-        Flex(
-          direction: Axis.horizontal,
-          children: [
-            Expanded(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  ExpandedColumn(children: <Widget>[_leftColumn()]),
+  ScrollView _bodySection() => ListView(
+        primary: true, //attach scrollbar controller to primary view
+        children: <Widget>[
+          Text(_person.title, style: hugeFont),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              if (_person.yearRange.isEmpty)
+                Text('Born: ${_person.year}')
+              else
+                Text('Lifespan: ${_person.yearRange}'),
+            ],
+          ),
+          Flex(
+            direction: Axis.horizontal,
+            children: [
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    ExpandedColumn(children: <Widget>[_leftColumn()]),
 
-                  // Only show right column on tablet
-                  if (!_mobileLayout)
-                    ExpandedColumn(
-                      children: [posterSection()],
-                    ),
-                ],
+                    // Only show right column on tablet
+                    if (!_mobileLayout)
+                      ExpandedColumn(
+                        children: [posterSection()],
+                      ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      );
+
+  Widget _leftColumn() => Wrap(
+        children: <Widget>[
+          Text('Source: ${_person.bestSource.name}      '),
+          Text('UniqueId: ${_person.uniqueId}      '),
+          Text('Popularity: ${_person.userRatingCount}'),
+          ElevatedButton(
+            onPressed: () =>
+                MMSNav(context).viewWebPage(makeImdbUrl(_person.uniqueId)),
+            child: const Text('IMDB'),
+          ),
+
+          // Only show poster in left column on mobile
+          if (_mobileLayout) posterSection(),
+
+          Align(
+            alignment: Alignment.topLeft,
+            child: BoldLabel('Description:'),
+          ),
+          Align(
+            alignment: Alignment.topLeft,
+            child: InkWell(
+              onTap: _toggleDescription,
+              child: Text(
+                _person.description,
+                style: biggerFont,
+                overflow: _descriptionExpanded ? null : TextOverflow.ellipsis,
+                maxLines: _descriptionExpanded ? null : 8,
               ),
             ),
-          ],
-        ),
-      ],
-    );
-  }
+          ),
+          ..._related(),
+        ],
+      );
 
-  Widget _leftColumn() {
-    return Wrap(
-      children: <Widget>[
-        Text('Source: ${_person.bestSource.name}      '),
-        Text('UniqueId: ${_person.uniqueId}      '),
-        Text('Popularity: ${_person.userRatingCount}'),
-        ElevatedButton(
-          onPressed: () =>
-              MMSNav(context).viewWebPage(makeImdbUrl(_person.uniqueId)),
-          child: const Text('IMDB'),
-        ),
+  void _toggleDescription() =>
+      setState(() => _descriptionExpanded = !_descriptionExpanded);
 
-        // Only show poster in left column on mobile
-        if (_mobileLayout) posterSection(),
-
-        Align(
-          alignment: Alignment.topLeft,
-          child: BoldLabel('Description:'),
-        ),
-        Align(
-          alignment: Alignment.topLeft,
-          child: InkWell(
-            onTap: _toggleDescription,
-            child: Text(
-              _person.description,
-              style: biggerFont,
-              overflow: _descriptionExpanded ? null : TextOverflow.ellipsis,
-              maxLines: _descriptionExpanded ? null : 8,
+  Widget posterSection() => Row(
+        children: [
+          Poster(
+            context,
+            url: _person.imageUrl,
+            showImages: () => MMSNav(context).viewWebPage(
+              makeImdbUrl(_person.uniqueId, photos: true),
             ),
           ),
-        ),
-        ..._related(),
-      ],
-    );
-  }
-
-  void _toggleDescription() {
-    setState(() {
-      _descriptionExpanded = !_descriptionExpanded;
-    });
-  }
-
-  Widget posterSection() {
-    return Row(
-      children: [
-        Poster(
-          context,
-          url: _person.imageUrl,
-          showImages: () => MMSNav(context).viewWebPage(
-            makeImdbUrl(_person.uniqueId, photos: true),
-          ),
-        ),
-      ],
-    );
-  }
+        ],
+      );
 
   List<Widget> _related() {
     final categories = <Widget>[];

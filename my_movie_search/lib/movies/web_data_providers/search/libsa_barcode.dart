@@ -25,16 +25,12 @@ class QueryLibsaBarcodeSearch
 
   /// Describe where the data is coming from.
   @override
-  String myDataSourceName() {
-    return DataSourceType.libsaBarcode.name;
-  }
+  String myDataSourceName() => DataSourceType.libsaBarcode.name;
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
-  DataSourceFn myOfflineData() {
-    return streamHtmlOfflineData;
-  }
+  DataSourceFn myOfflineData() => streamHtmlOfflineData;
 
   /// Convert map to MovieResultDTO records.
   @override

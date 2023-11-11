@@ -149,9 +149,7 @@ mixin ScrapeIMDBMoviesForKeyword
   String? _getYearRange(Element? section) =>
       section?.querySelector('.lister-item-year')?.text.reduceWhitespace();
 
-  String? _getKeywords(Element? section) {
-    return criteria.criteriaTitle;
-  }
+  String? _getKeywords(Element? section) => criteria.criteriaTitle;
 
   String? _getActors(Element? section) {
     final cast = {};

@@ -189,9 +189,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Describe where the data is coming from.
   ///
   /// Should be overridden by child classes.
-  String myDataSourceName() {
-    return 'unknown';
-  }
+  String myDataSourceName() => 'unknown';
 
   /// Define alternate [Stream] of data for offline operation.
   ///
@@ -226,17 +224,13 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Can be overridden by child classes.
   /// If this is blank the query will not run!
-  String myFormatInputAsText() {
-    return criteria?.toString() ?? '';
-  }
+  String myFormatInputAsText() => criteria?.toString() ?? '';
 
   /// Extracts page number from [criteria]
   ///
   /// Can be overridden by child classes.
   /// If this is blank the query will not run!
-  int myGetPageNumber() {
-    return 1;
-  }
+  int myGetPageNumber() => 1;
 
   /// Define the http headers to be passed to the web server.
   /// Returns a [Map] of header -> value.
@@ -249,17 +243,13 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Can be overridden by child classes if required.
   @visibleForOverriding
-  bool myIsResultCached() {
-    return false;
-  }
+  bool myIsResultCached() => false;
 
   /// Check cache to see if data in cache should be refreshed.
   ///
   /// Can be overridden by child classes if required.
   @visibleForOverriding
-  bool myIsCacheStale() {
-    return false;
-  }
+  bool myIsCacheStale() => false;
 
   /// Insert transformed data into cache.
   ///
@@ -533,7 +523,5 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Should not be be overridden by child classes.
   @visibleForTesting
-  HttpClient baseGetHttpClient() {
-    return HttpClient();
-  }
+  HttpClient baseGetHttpClient() => HttpClient();
 }

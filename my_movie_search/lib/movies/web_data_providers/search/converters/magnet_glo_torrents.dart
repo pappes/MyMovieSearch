@@ -6,9 +6,8 @@ import 'package:my_movie_search/movies/web_data_providers/search/magnet_glo_torr
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 class GloTorrentsSearchConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
-    return [dtoFromMap(map)];
-  }
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) =>
+      [dtoFromMap(map)];
 
   static MovieResultDTO dtoFromMap(Map map) {
     // Compensate for gloTorrents overrestimation

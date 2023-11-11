@@ -29,7 +29,5 @@ class WebFetchLimiter {
   }
 
   @mustCallSuper
-  void reset() {
-    currentUsage = 0;
-  }
+  void reset() => currentUsage = 0;
 }

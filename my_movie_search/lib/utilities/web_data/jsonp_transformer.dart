@@ -7,9 +7,8 @@ class JsonPState {
   String buffer = ''; // Stream content that has not been released.
 
   @override
-  String toString() {
-    return "activated=$activated buffering=$buffering buffer=$buffer";
-  }
+  String toString() =>
+      "activated=$activated buffering=$buffering buffer=$buffer";
 }
 
 class JsonPConversionSink implements Sink<String> {
@@ -141,15 +140,12 @@ class JsonPDecoder extends Converter<String, String> {
 
   // Helper function to see inside the decoder state.
   @override
-  String toString() {
-    return _state.toString();
-  }
+  String toString() => _state.toString();
 
   /// Starts a conversion from a chunked JSONP string to its corresponding JSON string.
   ///
   /// The output [sink] receives one string element per input element through `add`.
   @override
-  Sink<String> startChunkedConversion(Sink<Object> sink) {
-    return JsonPConversionSink(sink, this);
-  }
+  Sink<String> startChunkedConversion(Sink<Object> sink) =>
+      JsonPConversionSink(sink, this);
 }

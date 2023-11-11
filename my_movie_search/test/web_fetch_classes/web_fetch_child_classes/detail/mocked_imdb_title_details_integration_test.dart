@@ -48,9 +48,8 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
       'https://www.imdb.com/title/$expectedCriteria/?ref_=fn_tt_tt_1',
     );
 
-    Future<MockHttpClientResponse> getClientResponse(_) {
-      return Future.value(clientResponse);
-    }
+    Future<MockHttpClientResponse> getClientResponse(_) =>
+        Future.value(clientResponse);
 
     // Use Mockito to return a successful response when it calls the
     // provided HttpClient.
@@ -69,9 +68,7 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
     return client;
   }
 
-  int getHttpStatus(_) {
-    return httpStatus;
-  }
+  int getHttpStatus(_) => httpStatus;
 }
 
 /// Make dummy dto results for offline queries.

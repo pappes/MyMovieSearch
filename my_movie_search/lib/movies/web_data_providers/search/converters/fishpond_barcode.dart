@@ -9,16 +9,16 @@ class FishpondBarcodeSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map map,
     SearchCriteriaDTO criteria,
-  ) {
-    return [
-      MovieResultDTO().init(
-        bestSource: DataSourceType.fishpondBarcode,
-        type: MovieContentType.barcode.toString(),
-        uniqueId: '${DataSourceType.fishpondBarcode} ${criteria.criteriaTitle}',
-        alternateTitle: map[jsonRawDescriptionKey]?.toString(),
-        title: map[jsonCleanDescriptionKey]?.toString(),
-        imageUrl: map[jsonUrlKey]?.toString(),
-      ),
-    ];
-  }
+  ) =>
+      [
+        MovieResultDTO().init(
+          bestSource: DataSourceType.fishpondBarcode,
+          type: MovieContentType.barcode.toString(),
+          uniqueId:
+              '${DataSourceType.fishpondBarcode} ${criteria.criteriaTitle}',
+          alternateTitle: map[jsonRawDescriptionKey]?.toString(),
+          title: map[jsonCleanDescriptionKey]?.toString(),
+          imageUrl: map[jsonUrlKey]?.toString(),
+        ),
+      ];
 }

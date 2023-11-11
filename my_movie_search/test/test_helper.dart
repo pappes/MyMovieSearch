@@ -186,9 +186,8 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
 
   @override
   // Tell test framework what content was expected.
-  Description describe(Description description) {
-    return description.add('has expected ${expected.toPrintableString()}');
-  }
+  Description describe(Description description) =>
+      description.add('has expected ${expected.toPrintableString()}');
 
   @override
   // Tell test framework what difference was found.
@@ -385,17 +384,15 @@ class TestApp extends StatelessWidget {
   final List<Widget> children;
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Testing',
-      home: Scaffold(
-        body: Center(
-          child: Flex(
-            direction: Axis.vertical,
-            children: children,
+  Widget build(BuildContext context) => MaterialApp(
+        title: 'Flutter Testing',
+        home: Scaffold(
+          body: Center(
+            child: Flex(
+              direction: Axis.vertical,
+              children: children,
+            ),
           ),
         ),
-      ),
-    );
-  }
+      );
 }
