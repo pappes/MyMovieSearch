@@ -14,6 +14,6 @@ class PicclickBarcodeSearchConverter {
           title: map[jsonCleanDescriptionKey]?.toString(),
           description: map[jsonIdKey]?.toString(),
           imageUrl: map[jsonUrlKey]?.toString(),
-        )
+        ),
       ];
 }

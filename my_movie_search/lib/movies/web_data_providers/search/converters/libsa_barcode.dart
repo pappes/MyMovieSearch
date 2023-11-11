@@ -13,6 +13,6 @@ class LibsaBarcodeSearchConverter {
           alternateTitle: map[jsonRawDescriptionKey]?.toString(),
           imageUrl: map[jsonUrlKey]?.toString(),
           uniqueId: map[jsonUrlKey]?.toString(),
-        )
+        ),
       ];
 }

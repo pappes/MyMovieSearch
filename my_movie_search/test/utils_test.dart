@@ -685,9 +685,11 @@ Future main() async {
     });
     group('fromJson', () {
       /// Convert JSON [input] to a [List] of [String] and compare to [expectedOutput]
-      void testFromJson(String? input, List<String> expectedOutput) =>
-          expect(StringIterableHelper.fromJson(input), expectedOutput,
-              reason: 'input $input');
+      void testFromJson(String? input, List<String> expectedOutput) => expect(
+            StringIterableHelper.fromJson(input),
+            expectedOutput,
+            reason: 'input $input',
+          );
 
       //Convert a JSON encoded array to List<String>
       test('string array', () {

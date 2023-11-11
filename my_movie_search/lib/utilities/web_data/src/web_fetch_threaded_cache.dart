@@ -107,7 +107,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   /// return QueryIMDBNameDetails();
   /// ```
   @factory
-  WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> myClone(INPUT_TYPE criteria);
+  WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE> myClone(INPUT_TYPE criteria);
 
   /// static wrapper to readList() for compatibility with ThreadRunner.
   static Future<List> runReadList(Map input) {

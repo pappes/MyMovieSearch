@@ -1,3 +1,4 @@
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -25,7 +26,8 @@ class QueryIMDBCastDetails
   String myDataSourceName() => 'imdb_cast';
 
   @override
-  WebFetchBase<MovieResultDTO, SearchCriteriaDTO> myClone(
+  @factory
+  WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
     SearchCriteriaDTO criteria,
   ) =>
       QueryIMDBCastDetails(criteria);

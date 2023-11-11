@@ -16,6 +16,6 @@ class Torrentz2SearchConverter {
           imageUrl: map[jsonMagnetKey]?.toString(),
           creditsOrder: map[jsonSeedersKey]?.toString(),
           userRatingCount: map[jsonLeechersKey]?.toString(),
-        )
+        ),
       ];
 }

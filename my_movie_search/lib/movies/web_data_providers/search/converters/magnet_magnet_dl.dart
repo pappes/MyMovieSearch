@@ -16,6 +16,6 @@ class MagnetDlSearchConverter {
           imageUrl: map[jsonMagnetKey]?.toString(),
           creditsOrder: map[jsonSeedersKey]?.toString(),
           userRatingCount: map[jsonLeechersKey]?.toString(),
-        )
+        ),
       ];
 }

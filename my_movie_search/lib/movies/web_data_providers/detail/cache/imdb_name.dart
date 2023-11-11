@@ -76,7 +76,8 @@ mixin ThreadedCacheIMDBNameDetails
   /// return QueryIMDBNameDetails();
   /// ```
   @override
-  WebFetchBase<MovieResultDTO, SearchCriteriaDTO> myClone(
+  @factory
+  WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
     SearchCriteriaDTO criteria,
   ) =>
       QueryIMDBNameDetails(criteria);
