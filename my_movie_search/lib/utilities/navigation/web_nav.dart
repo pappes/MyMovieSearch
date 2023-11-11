@@ -259,7 +259,7 @@ class MMSFlutterCanvas {
   /// For platforms that don't support CustomTabs, the URL is displayed to the user.
   void viewWebPage(String url) {
     if (null != context) {
-      if (Platform.isAndroid) {
+      if (Platform.isAndroid && url.startsWith('http')) {
         _invokeChromeCustomTabs(url);
       } else {
         _openBrowser(url);
@@ -299,7 +299,8 @@ class MMSFlutterCanvas {
   void _customTabsError(Object? e, String url) {
     // An exception is thrown if browser app is not installed on Android device.
     debugPrint(e.toString());
-    showPopup(context!, url);
+    showPopup(
+        context!, 'Received error $e \nwhen opening $url', 'Navigation error');
   }
 
   void _openBrowser(String url) {
@@ -311,7 +312,7 @@ class MMSFlutterCanvas {
   void _browserError(bool success, String url) {
     // An exception is thrown if browser app is not installed on Android device.
     if (!success) {
-      showPopup(context!, url);
+      showPopup(context!, url, 'Browser error');
     }
   }
 }

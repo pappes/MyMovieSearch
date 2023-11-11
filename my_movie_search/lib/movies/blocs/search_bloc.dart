@@ -85,7 +85,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     }
   }
 
-  // Annotate the DTO with a read inidicator
+  // Annotate the DTO with a read indicator
   void addReadIndicator(MovieResultDTO dto, dynamic value) {
     if (null != value) {
       dto.sources[DataSourceType.fbmmsnavlog] = value.toString();

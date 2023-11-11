@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
-Future<void> showPopup(BuildContext context, String dialogText) async {
+Future<void> showPopup(
+  BuildContext context,
+  String dialogText,
+  String title,
+) async {
   return showDialog<void>(
     context: context,
     builder: (BuildContext context) {
       return AlertDialog(
-        title: const Text('Android Only'),
+        title: Text(title),
         content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
