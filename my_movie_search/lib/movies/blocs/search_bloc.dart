@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
 part 'bloc_parts/search_event.dart';
 part 'bloc_parts/search_state.dart';
@@ -86,9 +87,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   }
 
   // Annotate the DTO with a read indicator
-  void addReadIndicator(MovieResultDTO dto, dynamic value) {
+  void _addReadIndicator(MovieResultDTO dto, dynamic value) {
     if (null != value) {
-      dto.sources[DataSourceType.fbmmsnavlog] = value.toString();
+      dto.setReadIndicator();
       _throttleUpdates();
     }
   }
@@ -107,12 +108,19 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       _allResults[key] = DtoCache.singleton().merge(newValue);
       if (!subsequentFetch) {
         // Check navigation history to see if this result has been viewed
-        FirebaseApplicationState()
-            .fetchRecord(
-              'MMSNavLog/screen/moviedetails',
-              id: newValue.uniqueId,
-            )
-            .then((value) => addReadIndicator(_allResults[key]!, value));
+        if (key.startsWith(imdbPersonPrefix) ||
+            key.startsWith(imdbTitlePrefix)) {
+          const collectionPrefix = 'MMSNavLog/screen/';
+          final collection = key.startsWith(imdbTitlePrefix)
+              ? 'moviedetails'
+              : 'persondetails';
+          FirebaseApplicationState()
+              .fetchRecord(
+                '$collectionPrefix$collection',
+                id: newValue.uniqueId,
+              )
+              .then((value) => _addReadIndicator(_allResults[key]!, value));
+        }
       }
     }
 

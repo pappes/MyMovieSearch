@@ -106,7 +106,7 @@ class MMSNav {
   void searchForRelated(String description, List<MovieResultDTO> movies) {
     if (movies.length == 1) {
       // Only one result so open details screen.
-      canvas.viewFlutterPage(getDetailsPage(movies[0]));
+      resultDrillDown(movies[0]);
     } else {
       // Multiple results so show them as individual cards.
       showResultsPage(
@@ -160,6 +160,7 @@ class MMSNav {
   /// Display more details for the selected card.
   ///
   void resultDrillDown(MovieResultDTO movie) {
+    movie.setReadIndicator();
     switch (movie.type) {
       case MovieContentType.keyword:
         // Search for movies that match the keyword.

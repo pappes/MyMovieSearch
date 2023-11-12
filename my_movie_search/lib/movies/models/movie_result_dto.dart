@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
@@ -394,6 +395,12 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     sources[bestSource] = uniqueId;
     return this;
   }
+
+  void setReadIndicator() {
+    sources[DataSourceType.fbmmsnavlog] = uniqueId;
+  }
+
+  bool getReadIndicator() => sources.containsKey(DataSourceType.fbmmsnavlog);
 
   /// Create a MovieResultDTO with supplied data.
   ///
@@ -830,7 +837,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     int? seconds,
     String id,
   ) {
-    if (id.startsWith('nm')) return MovieContentType.person;
+    if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
     if (id == "-1") return MovieContentType.none;
     if (id.startsWith(movieDTOMessagePrefix)) return MovieContentType.error;
     final String title = info.toLowerCase();
@@ -854,7 +861,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (title.lastIndexOf('movie') > -1) return MovieContentType.movie;
     if (title.lastIndexOf('video') > -1) return MovieContentType.movie;
     if (title.lastIndexOf('feature') > -1) return MovieContentType.movie;
-    if (id.startsWith('tt')) return MovieContentType.title;
+    if (id.startsWith(imdbTitlePrefix)) return MovieContentType.title;
     return null;
   }
 
@@ -1343,6 +1350,10 @@ extension DTOCompare on MovieResultDTO {
     if (userRatingCategory() != other.userRatingCategory()) {
       return userRatingCategory().compareTo(other.userRatingCategory());
     }
+    // See how many people have rated this movie.
+    if (viewedCategory() != other.viewedCategory()) {
+      return viewedCategory().compareTo(other.viewedCategory());
+    }
     // Preference movies > series > short film > episodes.
     if (titleContentCategory() != other.titleContentCategory()) {
       return titleContentCategory().compareTo(other.titleContentCategory());
@@ -1367,6 +1378,12 @@ extension DTOCompare on MovieResultDTO {
     if (userRatingCount < 100) return 1;
     if (userRatingCount < 10000) return 2;
     return 3;
+  }
+
+  /// Rank movies based not recently viewed.
+  ///
+  int viewedCategory() {
+    return getReadIndicator() ? 0 : 1;
   }
 
   /// Rank movies based on type of content.
