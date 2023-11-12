@@ -41,7 +41,6 @@ const gtSampleMidEmpty = r'''
 <div class="f-border"><div class="f-cat" width="100%">Nothing Found</div><div>No torrents were found based on your search criteria.</div></div>
 ''';
 
-const intermediateErrorMapList = [];
 const intermediateMapList = [
   {
     'magnet':

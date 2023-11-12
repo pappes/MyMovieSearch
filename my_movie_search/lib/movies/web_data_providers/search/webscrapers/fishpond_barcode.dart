@@ -20,7 +20,7 @@ const yearSelector = '.year';
 /// ```
 mixin ScrapeFishpondBarcodeSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = [];
+  final movieData = <Map>[];
   bool validPage = false;
   final searchLog = StringBuffer();
 
@@ -53,7 +53,7 @@ mixin ScrapeFishpondBarcodeSearch
 
   /// Collect webpage text to construct a map of the movie data.
   void _processRow(Element row) {
-    final result = {};
+    final result = <String, dynamic>{};
     final rawDescription = row.querySelector(titleSelector)?.cleanText ?? '';
     final rawYear = row.querySelector(yearSelector)?.cleanText ?? '';
     result[jsonRawDescriptionKey] = '$rawDescription $rawYear';

@@ -196,7 +196,7 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   }
 }
 
-extension MapResultDTOConversion on Map {
+extension MapResultDTOConversion on Map<dynamic, dynamic> {
   /// Convert a [Map] into a [MovieResultDTO] object
   ///
   @factory
@@ -569,7 +569,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       // convert each related dto to a string
       final relatedMap = <String, Object>{};
       for (final category in related.entries) {
-        final Map movies = {};
+        final movies = <String, dynamic>{};
         for (final dto in category.value.entries) {
           final movieMap = dto.value.toMap();
           movies[dto.value.uniqueId] = movieMap;

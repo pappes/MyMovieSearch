@@ -372,7 +372,7 @@ Future main() async {
   group('DynamicHelper', () {
     // Convert a value to a string - non static version.
     test('dynamicToString()', () {
-      void testToString(input, expectedOutput) =>
+      void testToString(dynamic input, String expectedOutput) =>
           expect(DynamicHelperTest().callToString(input), expectedOutput);
 
       testToString('9', '9');
@@ -382,7 +382,7 @@ Future main() async {
     });
     // Convert a value to a string - static version.
     test('dynamicToString_()', () {
-      void testToString(input, expectedOutput) =>
+      void testToString(dynamic input, String expectedOutput) =>
           expect(DynamicHelperTest.callToString_(input), expectedOutput);
 
       testToString('9', '9');
@@ -393,7 +393,7 @@ Future main() async {
 
     // Convert a value to List<string> - non static version.
     test('dynamicToString()', () {
-      void testToStringList(input, expectedOutput) =>
+      void testToStringList(dynamic input, List<String> expectedOutput) =>
           expect(DynamicHelperTest().callToStringList(input), expectedOutput);
 
       testToStringList(['9'], ['9']);
@@ -405,7 +405,7 @@ Future main() async {
     });
     // Convert a value to List<string> - static version.
     test('dynamicToString_()', () {
-      void testToStringList(input, expectedOutput) =>
+      void testToStringList(dynamic input, List<String> expectedOutput) =>
           expect(DynamicHelperTest.callToStringList_(input), expectedOutput);
 
       testToStringList(['9'], ['9']);
@@ -418,7 +418,7 @@ Future main() async {
 
     // Convert a value to a int - non static version.
     test('dynamicToInt()', () {
-      void testToInt(input, expectedOutput) =>
+      void testToInt(dynamic input, int expectedOutput) =>
           expect(DynamicHelperTest().callToInt(input), expectedOutput);
 
       testToInt('9', 9);
@@ -428,7 +428,7 @@ Future main() async {
     });
     // Convert a value to a int - static version.
     test('dynamicToInt_()', () {
-      void testToInt(input, expectedOutput) =>
+      void testToInt(dynamic input, int expectedOutput) =>
           expect(DynamicHelperTest.callToInt_(input), expectedOutput);
 
       testToInt('9', 9);
@@ -439,7 +439,7 @@ Future main() async {
 
     // Convert a value to a double - non static version.
     test('dynamicToDouble()', () {
-      void testToDouble(input, expectedOutput) =>
+      void testToDouble(dynamic input, double expectedOutput) =>
           expect(DynamicHelperTest().callToDouble(input), expectedOutput);
 
       testToDouble('9', 9);
@@ -449,7 +449,7 @@ Future main() async {
     });
     // Convert a value to a double - static version.
     test('dynamicToDouble_()', () {
-      void testToDouble(input, expectedOutput) =>
+      void testToDouble(dynamic input, double expectedOutput) =>
           expect(DynamicHelperTest.callToDouble_(input), expectedOutput);
 
       testToDouble('9', 9);
@@ -463,7 +463,7 @@ Future main() async {
     // Convert a string to a number, stripping comma seperators,
     // rounding decimals and ignoring non numeric input.
     test('fromText()', () {
-      void testToNumber(input, expectedOutput) =>
+      void testToNumber(String? input, int? expectedOutput) =>
           expect(IntHelper.fromText(input), expectedOutput);
 
       testToNumber('0', 0);
@@ -480,7 +480,7 @@ Future main() async {
     // Convert a string to a number, stripping comma seperators and
     // ignoring non numeric input.
     test('fromText()', () {
-      void testToNumber(input, expectedOutput) =>
+      void testToNumber(String? input, double? expectedOutput) =>
           expect(DoubleHelper.fromText(input), expectedOutput);
 
       testToNumber('0', 0);
@@ -493,7 +493,7 @@ Future main() async {
     });
     // Convert a string to a number, substituting num values where required.
     test('fromText() null substitution', () {
-      void testToNumber(input, expectedOutput) => expect(
+      void testToNumber(String input, double expectedOutput) => expect(
             DoubleHelper.fromText(input, nullValueSubstitute: -1),
             expectedOutput,
           );
@@ -507,7 +507,7 @@ Future main() async {
     });
     // Convert a string to a number, substituting 0 values where required.
     test('fromText() zero substitution', () {
-      void testToNumber(input, expectedOutput) => expect(
+      void testToNumber(String input, double? expectedOutput) => expect(
             DoubleHelper.fromText(input, zeroValueSubstitute: null),
             expectedOutput,
           );
@@ -520,7 +520,7 @@ Future main() async {
     });
     // Convert a string to a number, rounding decimal values where required.
     test('fromText() int', () {
-      void testToNumber(input, expectedOutput) =>
+      void testToNumber(String input, int? expectedOutput) =>
           expect(DoubleHelper.fromText(input)?.round(), expectedOutput);
 
       testToNumber('0', 0);
@@ -536,7 +536,7 @@ Future main() async {
     // Convert a string to a numeric year, stripping comma seperators and
     // ignoring non numeric input.
     test('getYear()', () {
-      void testToNumber(String? input, expectedOutput) =>
+      void testToNumber(String? input, int? expectedOutput) =>
           expect(getYear(input), expectedOutput, reason: 'input = $input');
 
       testToNumber('0000', 0);
@@ -560,7 +560,7 @@ Future main() async {
     test('removeYear()', () {
       void testRemoveYear(
         String input,
-        expectedOutput, {
+        String expectedOutput, {
         String substitution = 'none',
       }) {
         if ('none' == substitution) {
@@ -602,7 +602,7 @@ Future main() async {
     test('removePunctuation()', () {
       void testRemovePunctuation(
         String input,
-        expectedOutput, {
+        String expectedOutput, {
         String substitution = 'none',
       }) {
         if ('none' == substitution) {
@@ -631,7 +631,7 @@ Future main() async {
     test('reduceWhitespace()', () {
       void testReduceWhitespace(
         String input,
-        expectedOutput, {
+        String expectedOutput, {
         String substitution = 'none',
       }) {
         if ('none' == substitution) {
@@ -665,7 +665,7 @@ Future main() async {
     group('trimJoin', () {
       // Find timJoin removes trailing whitepsace.
       test('empty collection', () {
-        expect([].trimJoin(), '');
+        expect(<String>[].trimJoin(), '');
       });
       test('just whitespace', () {
         expect([' ', ' '].trimJoin(), '');
@@ -732,7 +732,7 @@ Future main() async {
     group('combineUnique', () {
       void testCombineUnique(
         List<String> input1,
-        input2,
+        dynamic input2,
         List<String> expectedOutput,
       ) {
         input1.combineUnique(input2);
@@ -746,19 +746,19 @@ Future main() async {
       // Combining a list with an empty list results in the original list.
       test('empty', () {
         testCombineUnique([], null, []);
-        testCombineUnique([], [], []);
-        testCombineUnique([''], [], ['']);
+        testCombineUnique([], <void>[], []);
+        testCombineUnique([''], <void>[], ['']);
         testCombineUnique([], [''], ['']);
       });
       // Combining lists with single elements results in all elements being present.
       test('single element', () {
-        testCombineUnique(['a'], [], ['a']);
+        testCombineUnique(['a'], <void>[], ['a']);
         testCombineUnique([], ['a'], ['a']);
         testCombineUnique(['b'], ['a'], ['b', 'a']);
       });
       // Combining lists, each with mutiple elements results in all elements being present.
       test('multiple elements', () {
-        testCombineUnique(['a', 'b', 'c'], [], ['a', 'b', 'c']);
+        testCombineUnique(['a', 'b', 'c'], <void>[], ['a', 'b', 'c']);
         testCombineUnique([], ['a', 'b', 'c'], ['a', 'b', 'c']);
         testCombineUnique(
           ['a', 'b', 'c'],
@@ -840,17 +840,17 @@ Future main() async {
 
       // Search for value in an empty list.
       test('empty list search', () {
-        final list = [];
+        final list = <void>[];
         expect(TreeHelper(list).deepSearch('marco'), null);
       });
       // Search for value in an empty map.
       test('empty map search', () {
-        final map = {};
+        final map = <void, void>{};
         expect(TreeHelper(map).deepSearch('marco'), null);
       });
       // Search for value in an empty set.
       test('empty set search', () {
-        final set = <dynamic>{};
+        final set = <void>{};
         expect(TreeHelper(set).deepSearch('marco'), null);
       });
 

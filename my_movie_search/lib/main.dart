@@ -9,7 +9,7 @@ import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:provider/provider.dart';
 
-Future main() async {
+Future<void> main() async {
   final settings = Settings.singleton();
 
   WidgetsFlutterBinding.ensureInitialized();

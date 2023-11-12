@@ -96,7 +96,7 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
-      final expectedOutput = [];
+      final expectedOutput = <void>[];
       final actualOutput = QueryPicclickBarcodeSearch(criteria)
           .myConvertWebTextToTraversableTree(
         htmlSampleEmpty,

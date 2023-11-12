@@ -57,7 +57,7 @@ class ImdbSuggestionConverter {
     return movie;
   }
 
-  static String? _getImage(imageData) {
+  static String? _getImage(dynamic imageData) {
     if (imageData is List) return imageData.first as String;
     if (imageData is String) return imageData;
     return null;

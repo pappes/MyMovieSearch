@@ -23,13 +23,13 @@ mixin ScrapeIMDBMoreKeywordsDetails
 
   /// Collect webpage text to construct a map of the movie data.
   Map _scrapeWebPage(Document document) {
-    final movieData = {};
+    final movieData = <String, dynamic>{};
     _scrapeRelated(document, movieData);
     return movieData;
   }
 
   /// Extract the keywords for the current movie.
-  void _scrapeRelated(Document document, Map movieData) {
+  void _scrapeRelated(Document document, Map<String, dynamic> movieData) {
     final links = document.querySelectorAll('[href*="search/keyword"]');
     for (final link in links) {
       movieData[link.text] = 'keyword';

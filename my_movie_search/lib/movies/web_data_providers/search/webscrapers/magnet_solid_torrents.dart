@@ -19,7 +19,7 @@ const detailSelector = '.stats';
 /// ```
 mixin ScrapeSolidTorrentsSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = [];
+  final movieData = <Map>[];
   bool validPage = false;
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
@@ -50,7 +50,7 @@ mixin ScrapeSolidTorrentsSearch
 
   /// Collect webpage text to construct a map of the movie data.
   void _processRow(Element row) {
-    final result = {};
+    final result = <String, dynamic>{};
     final details = row.querySelectorAll(detailSelector);
     if (details.isNotEmpty) {
       final stats = details.first;

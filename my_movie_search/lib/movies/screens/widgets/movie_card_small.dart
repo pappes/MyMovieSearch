@@ -9,7 +9,6 @@ import 'package:flutter/material.dart'
         NetworkImage,
         Text,
         Widget;
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
@@ -40,8 +39,8 @@ class MovieTile extends ListTile {
     }
 
     final start = [movie.title, year];
-    final middle = [];
-    final end = [];
+    final middle = <String>[];
+    final end = <String>[];
     switch (movie.type) {
       case MovieContentType.download:
         middle.add(movie.bestSource.excludeNone);
@@ -66,9 +65,9 @@ class MovieTile extends ListTile {
 
   static Widget _getDescription(MovieResultDTO movie) {
     final ratingCount = '(${formatter.format(movie.userRatingCount)})';
-    final start = [];
-    final middle = [];
-    final end = [];
+    final start = <String>[];
+    final middle = <String>[];
+    final end = <String>[];
     switch (movie.type) {
       case MovieContentType.download:
         final seeders = 'S:${movie.creditsOrder} L:${movie.userRatingCount}';
@@ -85,7 +84,7 @@ class MovieTile extends ListTile {
         start.add(movie.runTime.toFormattedTime());
         middle.add(movie.censorRating.excludeNone);
         middle.add(movie.type.name);
-        middle.add(movie.userRating);
+        middle.add(movie.userRating.toString());
         middle.add(ratingCount);
         end.add(movie.alternateTitle);
         end.add(movie.charactorName);

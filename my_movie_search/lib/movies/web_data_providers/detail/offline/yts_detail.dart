@@ -36,7 +36,6 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-const intermediateMapListError = [];
 const intermediateMapList = [
   {
     'name': '2001: A Space Odyssey',

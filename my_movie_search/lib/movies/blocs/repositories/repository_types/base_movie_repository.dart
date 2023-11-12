@@ -15,7 +15,6 @@ class BaseMovieRepository {
   late SearchCriteriaDTO criteria;
   StreamController<MovieResultDTO>? _movieStreamController;
   var _awaitingProviders = 0;
-  final Map _requestedDetails = {};
   static int _searchUID = 1;
 
   BaseMovieRepository();
@@ -35,19 +34,16 @@ class BaseMovieRepository {
     yield feedback;
 
     _movieStreamController = StreamController<MovieResultDTO>(sync: true);
-    _requestedDetails.clear();
     // TODO: error handling
     initSearch(_searchUID, criteria);
     // TODO: make fetch duration configurable.
-    Future.delayed(const Duration(seconds: 30)).then((_) => close());
+    Future<void>.delayed(const Duration(seconds: 30)).then((_) => close());
 
     yield* _movieStreamController!.stream;
   }
 
   /// Cancels or completes an in progress search.
   void close() {
-    _requestedDetails.clear();
-
     final feedback = MovieResultDTO();
     feedback.title = 'Search completed ...';
     feedback.type = MovieContentType.information;

@@ -21,7 +21,7 @@ const descriptionSelector = '.tdnormal';
 /// ```
 mixin ScrapeTorrentDownloadSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = [];
+  final movieData = <Map>[];
   bool validPage = false;
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
@@ -56,7 +56,7 @@ mixin ScrapeTorrentDownloadSearch
 
   /// Collect webpage text to construct a map of the movie data.
   void _processRow(Element row) {
-    final result = {};
+    final result = <String, dynamic>{};
     result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;
     result[jsonSeedersKey] = row.querySelector(seedSelector)?.cleanText;
     result[jsonLeechersKey] = row.querySelector(leechSelector)?.cleanText;

@@ -79,7 +79,7 @@ void main() {
   group('DTOCompare', () {
     // Categorise dto based on popularity from userRatingCount.
     test('userRatingCategory', () {
-      void testUserRatingCategory(int input, expectedOutput) {
+      void testUserRatingCategory(int input, int expectedOutput) {
         final testInput = MovieResultDTO();
         testInput.userRatingCount = input;
         expect(testInput.userRatingCategory(), expectedOutput);
@@ -94,7 +94,7 @@ void main() {
     });
     // Categorise dto based on title type from MovieContentType.
     test('userContentCategory', () {
-      void testUserContentCategory(MovieContentType input, expectedOutput) {
+      void testUserContentCategory(MovieContentType input, int expectedOutput) {
         final testInput = MovieResultDTO();
         testInput.type = input;
         expect(testInput.titleContentCategory(), expectedOutput);
@@ -111,7 +111,7 @@ void main() {
     // A rating of 2/5 is better than a rating of less than 2/5.
     // A movie after 2000 is better than a movie before 2000.
     test('popularityCategory', () {
-      void testPopularityCategory(MovieResultDTO input, expectedOutput) =>
+      void testPopularityCategory(MovieResultDTO input, int expectedOutput) =>
           expect(input.popularityCategory(), expectedOutput);
 
       final testInput = MovieResultDTO();
@@ -185,7 +185,7 @@ void main() {
     });
     // Determine definative year based on text based year range
     test('yearRangeAsNumber', () {
-      void testYearCompare(String inputYR, expectedOutput) {
+      void testYearCompare(String inputYR, int expectedOutput) {
         final testInput = MovieResultDTO();
         testInput.yearRange = inputYR;
         expect(testInput.yearRangeAsNumber(), expectedOutput);

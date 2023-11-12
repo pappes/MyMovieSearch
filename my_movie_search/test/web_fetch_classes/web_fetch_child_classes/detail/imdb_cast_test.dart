@@ -129,7 +129,7 @@ void main() {
       final listResult = await testClass.readCachedList(
         source: (_) async => Stream.value('Polo'),
       );
-      expect(listResult, []);
+      expect(listResult, <MovieResultDTO>[]);
       final resultIsCached = testClass.isThreadedResultCached();
       expect(resultIsCached, false);
       final resultIsStale = testClass.isThreadedCacheStale();

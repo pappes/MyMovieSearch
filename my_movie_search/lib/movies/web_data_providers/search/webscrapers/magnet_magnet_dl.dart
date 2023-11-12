@@ -20,7 +20,7 @@ const leechSelector = '.l';
 /// ScrapeMagnetDlSearch().readList(criteria, limit: 10)
 /// ```
 mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = [];
+  final movieData = <Map>[];
   bool validPage = false;
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
@@ -32,9 +32,9 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     if (webText.contains('Your search has returned <strong>0</strong>')) {
       return [];
     }
-    if (webText.contains(
-        'The download may have been removed or search query blocked '
-        'due to copyright complaint. We apologize for the inconvenience')) {
+    if (webText
+        .contains('The download may have been removed or search query blocked '
+            'due to copyright complaint. We apologize for the inconvenience')) {
       return [];
     }
     final document = parse(webText);
@@ -58,7 +58,7 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Collect webpage text to construct a map of the movie data.
   void _processRow(Element row) {
-    final result = {};
+    final result = <String, dynamic>{};
     result[jsonCategoryKey] = row.querySelector(detailSelector)?.cleanText;
     result[jsonMagnetKey] =
         row.querySelector(magnetSelector)?.attributes['href'] ?? "";

@@ -37,7 +37,7 @@ final intermediateMapList = [jsonDecode(jsonSampleFull)];
 
 const tmdbTree = {
   "adult": false,
-  "also_known_as": [],
+  "also_known_as": <void>[],
   "biography": "I came, I saw, I went",
   "birthday": "1963-12-18",
   "deathday": null,

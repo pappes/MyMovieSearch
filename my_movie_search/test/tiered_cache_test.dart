@@ -13,10 +13,10 @@ void main() {
         'String',
         () {
           /// Run a series of values through the cache and compare to expected output
-          void testCache(List<Map> input, Map expectedOutput) {
-            final cache = TieredCache();
+          void testCache(List<Map<String, String>> input, Map expectedOutput) {
+            final cache = TieredCache<String>();
 
-            void addMapContentsToCache(Map listItem) =>
+            void addMapContentsToCache(Map<String, String> listItem) =>
                 listItem.forEach((key, value) {
                   cache.add(key, value);
                 });

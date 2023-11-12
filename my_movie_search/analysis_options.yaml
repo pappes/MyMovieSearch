@@ -5,6 +5,16 @@
 # IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
 # invoked from the command line by running `flutter analyze`.
 
+
+analyzer:
+  language:
+    strict-casts: true
+    strict-inference: true   # forces declaration of synamic for literal constants e.g. <String,dynamic>{}
+    #strict-raw-types: true  # forces declartaion of dynamic for generic types e.g. Map<dynamic, dynamic>
+
+
+
+
 # The following line activates a set of recommended lints for Flutter apps,
 # packages, and plugins designed to encourage good coding practices.
 #include: package:flutter_lints/flutter.yaml

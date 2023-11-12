@@ -390,7 +390,7 @@ void main() {
       final listResult = await testClass.readCachedList(
         source: (_) => Future.value(Stream.value('Polo')),
       );
-      expect(listResult, []);
+      expect(listResult, <void>[]);
       final resultIsCached = testClass.myIsResultCached();
       expect(resultIsCached, false);
       final resultIsStale = testClass.myIsCacheStale();
@@ -405,7 +405,7 @@ void main() {
         source: (_) =>
             Future.value(Stream.value('"Polo"')), // Stream a Json result
       );
-      await sc.stream.drain();
+      await sc.stream.drain<void>();
       final listResult = await testClass.readCachedList(
         source: (_) => Future.value(Stream.value('Who Is Marco?')),
       );
@@ -445,7 +445,7 @@ void main() {
       await testClass.myAddResultToCache('Polo');
       testClass.myClearCache();
       final listResult = await testClass.readCachedList();
-      expect(listResult, []);
+      expect(listResult, <void>[]);
       final resultIsCached = testClass.myIsResultCached();
       expect(resultIsCached, false);
       final resultIsStale = testClass.myIsCacheStale();

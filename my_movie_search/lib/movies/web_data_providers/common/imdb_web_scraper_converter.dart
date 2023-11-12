@@ -455,7 +455,7 @@ class ImdbWebScraperConverter {
     _getRelatedSections(related, movie);
   }
 
-  void _getRelated(MovieResultDTO movie, related, String label) {
+  void _getRelated(MovieResultDTO movie, dynamic related, String label) {
     // Do nothing if related is null
     if (related is Map) {
       final dto = dtoFromMap(related, '');
@@ -507,7 +507,7 @@ class ImdbWebScraperConverter {
     );
   }
 
-  static void _getRelatedSections(related, MovieResultDTO movie) {
+  static void _getRelatedSections(dynamic related, MovieResultDTO movie) {
     // Do nothing if related is null
     if (related is Map) {
       _getMovieCategories(related, movie);
@@ -530,7 +530,7 @@ class ImdbWebScraperConverter {
     }
   }
 
-  static void _getMovies(MovieResultDTO movie, movies, String label) {
+  static void _getMovies(MovieResultDTO movie, dynamic movies, String label) {
     if (movies is Map) {
       _getMovie(movies, movie, label);
     } else if (movies is Iterable) {

@@ -20,7 +20,7 @@ const jpgDescriptionSelector = 'h3';
 /// ```
 mixin ScrapePicclickBarcodeSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = [];
+  final movieData = <Map>[];
   bool validPage = false;
   final searchLog = StringBuffer();
 
@@ -57,7 +57,7 @@ mixin ScrapePicclickBarcodeSearch
 
   /// Collect webpage text to construct a map of the movie data.
   void _processRow(Element row) {
-    final result = {};
+    final result = <String, dynamic>{};
     final rawDescription =
         row.querySelector(jpgDescriptionSelector)?.cleanText ?? '';
     result[jsonRawDescriptionKey] = rawDescription;

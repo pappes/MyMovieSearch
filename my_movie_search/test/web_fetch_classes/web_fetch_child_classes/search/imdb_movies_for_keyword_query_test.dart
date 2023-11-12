@@ -122,7 +122,7 @@ testing and punctuation
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
-      const expectedOutput = [];
+      const expectedOutput = <void>[];
       final actualOutput =
           QueryIMDBMoviesForKeyword(criteria).myConvertWebTextToTraversableTree(
         htmlSampleEmpty,

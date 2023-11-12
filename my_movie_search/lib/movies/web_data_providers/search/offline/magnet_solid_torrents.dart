@@ -38,7 +38,6 @@ const htmlSampleEnd = '''
   </html>
 ''';
 
-const intermediateErrorMapList = [];
 const intermediateMapList = [
   {
     'description': '125 1.36 GB 19 14 May 20, 2022',

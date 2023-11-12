@@ -96,7 +96,7 @@ class MovieResultDTOMatcher extends Matcher {
 
   @override
   // Compare expected with actual.
-  bool matches(dynamic actual, Map matchState) {
+  bool matches(dynamic actual, Map<dynamic, dynamic> matchState) {
     if (actual is MovieResultDTO) {
       _actual = actual;
       sortDtoList([_actual]);
@@ -225,7 +225,7 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
     for (final actualDto in _actual) {
       bool resultMatched = false;
       for (final expectedDto in expected) {
-        final differences = {};
+        final differences = <dynamic, dynamic>{};
         if (actualDto.uniqueId == expectedDto.uniqueId) {
           resultMatched = true;
           if (actualDto.matches(

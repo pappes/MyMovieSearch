@@ -22,9 +22,6 @@ mixin ThreadedCacheIMDBTitleDetails
   /// Insert transformed data into cache.
   @override
   Future<void> myAddResultToCache(MovieResultDTO fetchedResult) async {
-    // add individual result to cache, keyed by uniqueId
-    final key = '${myDataSourceName()}${fetchedResult.uniqueId}';
-    _cache.add(key, fetchedResult);
     // add search results result to cache, keyed by search criteria
     return _cache.add(_makeKey(criteria), [fetchedResult]);
   }

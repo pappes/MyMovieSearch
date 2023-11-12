@@ -4,13 +4,13 @@
 /// to balance access speed with memory usage.
 ///
 class TieredCache<T> {
-  Map memoryCache = {};
+  Map<dynamic, T> memoryCache = {};
 
   /// Put a data item into the cache if it is not already there.
   /// If it is a list and already present, merge the lists.
   ///
-  void add(dynamic key, dynamic item) {
-    if (null != item && item is T) {
+  void add(dynamic key, T? item) {
+    if (null != item) {
       final existing = memoryCache[key];
       if (null != existing && existing is List && item is List) {
         existing.addAll(item);
@@ -41,12 +41,9 @@ class TieredCache<T> {
 
   /// Get data from the cache.
   ///
-  /// If data is not in any cache, executes [callback] to construct the value.
+  /// Throws an exception if ther is not match in the cache.
   T get(dynamic key) {
-    final val = memoryCache[key];
-    if (val is T) {
-      return val;
-    }
+    if (memoryCache.containsKey(key)) return memoryCache[key]!;
     throw 'key not found';
   }
 

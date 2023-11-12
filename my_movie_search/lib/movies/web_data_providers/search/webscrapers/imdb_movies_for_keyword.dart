@@ -47,7 +47,7 @@ mixin ScrapeIMDBMoviesForKeyword
 
   /// Collect webpage text to construct a map of the movie data.
   List _scrapeWebPage(Document document) {
-    final movieData = [];
+    final movieData = <Map>[];
 
     final children = document.querySelector('.lister-list')?.children;
     if (null != children) {
@@ -69,9 +69,9 @@ mixin ScrapeIMDBMoviesForKeyword
     return movieData;
   }
 
-  Map _getMovie(Element row) {
+  Map<String, dynamic> _getMovie(Element row) {
     final sections = _getSections(row);
-    final map = {};
+    final map = <String, dynamic>{};
     map[keywordId] = _getId(sections['header']);
 
     map[keywordName] = _getTitle(sections['header']);
@@ -152,7 +152,7 @@ mixin ScrapeIMDBMoviesForKeyword
   String? _getKeywords(Element? section) => criteria.criteriaTitle;
 
   String? _getActors(Element? section) {
-    final cast = {};
+    final cast = <String, dynamic>{};
     var skipDirectors = section?.innerHtml.contains('Director') ?? false;
     if (section?.innerHtml.contains('Stars') ?? false) {
       for (final element in section!.children) {
@@ -169,7 +169,7 @@ mixin ScrapeIMDBMoviesForKeyword
   }
 
   String? _getDirectors(Element? section) {
-    final directors = {};
+    final directors = <String, dynamic>{};
     if (section?.innerHtml.contains('Director') ?? false) {
       for (final element in section!.children) {
         if (element.text == '|') {
@@ -215,7 +215,7 @@ mixin ScrapeIMDBMoviesForKeyword
     return sections;
   }
 
-  Map _addNextPage(Element next) {
+  Map<String, dynamic> _addNextPage(Element next) {
     final keyword = criteria.criteriaTitle;
     final baseURL = myConstructURI(keyword);
     final String extraURL = next.attributes['href'] ?? '';

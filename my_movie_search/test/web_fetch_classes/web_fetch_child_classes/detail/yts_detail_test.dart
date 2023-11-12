@@ -81,7 +81,7 @@ void main() {
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final criteria = SearchCriteriaDTO().fromString('batman');
-      final expectedOutput = [];
+      final expectedOutput = <void>[];
       final actualOutput =
           QueryYtsDetails(criteria).myConvertWebTextToTraversableTree(
         htmlSampleEmpty,

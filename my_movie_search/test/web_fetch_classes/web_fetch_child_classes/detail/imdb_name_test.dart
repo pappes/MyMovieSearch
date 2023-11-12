@@ -26,7 +26,7 @@ class StaticJsonGenerator {
 
   static Future<Stream<String>> stuffDelayed(dynamic criteria) {
     // Insert artificial delay to allow tests to observe prior processing.
-    return Future.delayed(const Duration(milliseconds: 300))
+    return Future<void>.delayed(const Duration(milliseconds: 300))
         .then((_) => stuff(criteria));
   }
 }
@@ -171,7 +171,7 @@ void main() {
       final listResult = await testClass.readCachedList(
         source: (_) => Future.value(Stream.value('Polo')),
       );
-      expect(listResult, []);
+      expect(listResult, <MovieResultDTO>[]);
       final resultIsCached = testClass.isThreadedResultCached();
       expect(resultIsCached, false);
       final resultIsStale = testClass.isThreadedCacheStale();
@@ -246,7 +246,7 @@ void main() {
         );
       }
       // Wait for queued requests to be intitialised but not completed.
-      await Future.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 100));
       expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 5);
       expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 95);
     });

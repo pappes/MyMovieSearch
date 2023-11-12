@@ -107,7 +107,7 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
-      const expectedOutput = [];
+      const expectedOutput = <void>[];
       final actualOutput =
           QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
         htmlSampleEmpty,

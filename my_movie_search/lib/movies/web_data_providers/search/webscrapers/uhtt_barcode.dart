@@ -17,7 +17,7 @@ const resultTableSelector = 'tbody tr';
 /// ```
 mixin ScrapeUhttBarcodeSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = [];
+  final movieData = <Map>[];
   bool validPage = false;
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
@@ -50,7 +50,7 @@ mixin ScrapeUhttBarcodeSearch
 
   /// Collect webpage text to construct a map of the movie data.
   void _processRow(Element row) {
-    final result = {};
+    final result = <String, dynamic>{};
     final columns = row.children;
     if (4 == columns.length) {
       result[jsonRawDescriptionKey] = columns[1].cleanText;

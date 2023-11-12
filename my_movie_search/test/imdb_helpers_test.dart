@@ -118,7 +118,7 @@ Future main() async {
   group('getIdFromIMDBLink', () {
     // Ensure conversion between IMDB and URL yields correct results.
     test('check sample urls', () {
-      void testGetIdFromIMDBLink(String input, expectedOutput) {
+      void testGetIdFromIMDBLink(String input, String expectedOutput) {
         final text = getIdFromIMDBLink(input);
         expect(text, expectedOutput);
       }

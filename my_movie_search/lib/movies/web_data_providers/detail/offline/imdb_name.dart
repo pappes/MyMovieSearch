@@ -125,7 +125,7 @@ const intermediateMapList = [
               },
             }
           ],
-          'unreleasedPrimaryCredits': [],
+          'unreleasedPrimaryCredits': <void>[],
           'akas': {
             'edges': [
               {

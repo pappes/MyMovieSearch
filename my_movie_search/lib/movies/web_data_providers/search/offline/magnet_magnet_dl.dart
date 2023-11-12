@@ -39,7 +39,6 @@ const mdlHtmlSampleEnd = '''
   </html>
 ''';
 
-const intermediateErrorMapList = [];
 const intermediateMapList = [
   {
     'category': 'Movie',

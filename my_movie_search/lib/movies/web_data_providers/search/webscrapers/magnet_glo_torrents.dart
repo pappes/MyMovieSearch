@@ -18,7 +18,7 @@ const magnetSelector = "[href^='magnet:']";
 /// ```
 mixin ScrapeGloTorrentsSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = [];
+  final movieData = <Map>[];
   bool validPage = false;
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
@@ -54,7 +54,7 @@ mixin ScrapeGloTorrentsSearch
   void _processRow(Element row) {
     final columns = row.querySelectorAll('td');
     if (9 == columns.length) {
-      final result = {};
+      final result = <String, dynamic>{};
 
       result[jsonMagnetKey] =
           row.querySelector(magnetSelector)?.attributes['href'] ?? "";

@@ -73,7 +73,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     DataSourceFn? source,
     int? limit,
   }) {
-    void errorHandler(error, stackTrace) {
+    void errorHandler(dynamic error, StackTrace stackTrace) {
       logger.e(
         'Error in WebFetch populate: $error\n$stackTrace',
       );
@@ -168,7 +168,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   Future<Stream<String>> myConvertCriteriaToWebText() async {
     final errors = StringBuffer();
 
-    Stream<String> captureError(error, StackTrace _) {
+    Stream<String> captureError(dynamic error, _) {
       errors.writeln(baseConstructErrorMessage('fetching web text', error));
       return const Stream.empty();
     }
@@ -320,7 +320,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   Stream<String> baseConvertCriteriaToWebText() async* {
     final errors = <String>[];
 
-    Stream<String> captureError(error, StackTrace _) {
+    Stream<String> captureError(dynamic error, _) {
       errors.add(
         baseConstructErrorMessage('fetching web text chunks', error),
       );
@@ -345,15 +345,15 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     Stream<String> webStream,
   ) async* {
     final errors = <String>[];
-    List<String> captureError(error, String message) {
+    List<String> captureError(dynamic error, String message) {
       final errorMessge = baseConstructErrorMessage(message, error);
       errors.add(errorMessge);
       return [];
     }
 
-    List<String> captureStreamError(error, StackTrace _) =>
+    List<String> captureStreamError(dynamic error, _) =>
         captureError(error, 'stream error interpreting web text as a map');
-    List<String> captureConvertError(error, StackTrace _) =>
+    List<String> captureConvertError(dynamic error, _) =>
         captureError(error, 'convert error interpreting web text as a map');
 
     final list = await webStream
@@ -388,15 +388,15 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     Stream<dynamic> pageMap,
   ) async* {
     final errors = <OUTPUT_TYPE>[];
-    List<OUTPUT_TYPE> captureError(error, String message) {
+    List<OUTPUT_TYPE> captureError(dynamic error, String message) {
       final errorMessge = baseConstructErrorMessage(message, error);
       errors.add(myYieldError(errorMessge));
       return [];
     }
 
-    List<OUTPUT_TYPE> captureStreamError(error, StackTrace _) =>
+    List<OUTPUT_TYPE> captureStreamError(dynamic error, StackTrace _) =>
         captureError(error, 'stream error translating page map to objects');
-    List<OUTPUT_TYPE> captureConvertError(error, StackTrace _) =>
+    List<OUTPUT_TYPE> captureConvertError(dynamic error, StackTrace _) =>
         captureError(error, 'convert error translating page map to objects');
 
     List<OUTPUT_TYPE> filterList(List<OUTPUT_TYPE> objects) {
@@ -497,7 +497,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     if (response.statusCode >= 500 && retryDelay <= maxDelay) {
       final oldDelay = retryDelay;
       retryDelay = retryDelay * 2;
-      return Future.delayed(Duration(milliseconds: oldDelay))
+      return Future<void>.delayed(Duration(milliseconds: oldDelay))
           .then((value) => baseFetchWebText(criteria));
     }
 

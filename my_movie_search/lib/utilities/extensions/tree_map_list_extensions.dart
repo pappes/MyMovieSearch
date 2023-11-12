@@ -73,7 +73,7 @@ class TreeHelper {
     bool multipleMatch = false,
   }) {
     if (null == tree) return null;
-    final matches = []; // Allow mutiple results on suffix search.
+    final matches = <dynamic>[]; // Allow mutiple results on suffix search.
     for (final entry in asIterable ?? []) {
       final key = entry is MapEntry ? entry.key : '';
       final value = entry is MapEntry ? entry.value : entry;

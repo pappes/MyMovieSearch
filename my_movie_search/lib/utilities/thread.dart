@@ -74,7 +74,7 @@ class ThreadRunner {
   /// Function should not call any libraries that attempt to write to common objects
   ///     e.g. external files, etc because the libraries may not be thread safe
   ///     console appears to be thread safe.
-  Future run<T>(Function(T) function, T parameter) async {
+  Future run<T>(dynamic Function(T) function, T parameter) async {
     final receivePort = ReceivePort();
     final message = {'fn': function, 'param': parameter};
     if (!ready) await initialised;

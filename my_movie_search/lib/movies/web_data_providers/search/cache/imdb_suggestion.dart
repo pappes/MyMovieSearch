@@ -9,7 +9,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// Implements [WebFetchBase] for caching movie suggestions from IMDB.
 mixin ThreadedCacheIMDBSuggestions
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static final _cache = TieredCache();
+  static final _cache = TieredCache<MovieResultDTO>();
   static final List<SearchCriteriaDTO> _normalQueue = [];
   static final List<SearchCriteriaDTO> _verySlowQueue = [];
 
@@ -31,7 +31,7 @@ mixin ThreadedCacheIMDBSuggestions
         '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
         'value was pre cached ${myFormatInputAsText()}',
       );
-      return _fetchResultFromCache().toList();
+      return [_fetchResultFromCache()!];
     }
 
     final newPriority = _enqueueRequest(priority);
@@ -91,11 +91,8 @@ mixin ThreadedCacheIMDBSuggestions
   }
 
   /// Retrieve cached result.
-  Stream<MovieResultDTO> _fetchResultFromCache() async* {
-    final value = _cache.get('${myDataSourceName()}${criteria.criteriaTitle}');
-    if (value is MovieResultDTO) {
-      yield value;
-    }
+  MovieResultDTO? _fetchResultFromCache() {
+    return _cache.get(_makeKey());
   }
 
   String? _enqueueRequest(String priority) {
@@ -115,4 +112,7 @@ mixin ThreadedCacheIMDBSuggestions
     }
     return priority;
   }
+
+  /// Retrieve cached result.
+  String _makeKey() => '${myDataSourceName()}${criteria.criteriaTitle}';
 }

@@ -18,7 +18,7 @@ const detailSelector = '.detDesc';
 /// ScrapeTpbSearch().readList(criteria, limit: 10)
 /// ```
 mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = [];
+  final movieData = <Map>[];
   bool validPage = false;
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
@@ -54,7 +54,7 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   void _processRow(Element row) {
     final columns = row.querySelectorAll('td');
     if (4 == columns.length) {
-      final result = {};
+      final result = <String, dynamic>{};
       result[jsonCategoryKey] = columns[0].cleanText;
       result[jsonMagnetKey] =
           columns[1].querySelector(magnetSelector)?.attributes['href'] ?? "";

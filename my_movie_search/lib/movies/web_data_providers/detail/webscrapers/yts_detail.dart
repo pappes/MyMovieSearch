@@ -81,7 +81,7 @@ mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
 /// Extract the title and year for the current movie.
 Map _getTitle(Document document) {
-  final map = {};
+  final map = <String, dynamic>{};
   final titleElement = document.querySelector(titleSelector);
   map[jsonNameKey] = titleElement?.cleanText;
   map[jsonYearKey] = titleElement?.nextElementSibling?.cleanText;
@@ -90,7 +90,7 @@ Map _getTitle(Document document) {
 
 /// Extract the title and year for the current movie.
 Map _getImage(Document document) {
-  final map = {};
+  final map = <String, dynamic>{};
   final imageElement = document.querySelector(imageSelector);
   map[jsonImageKey] = imageElement?.attributes['src'];
   return map;

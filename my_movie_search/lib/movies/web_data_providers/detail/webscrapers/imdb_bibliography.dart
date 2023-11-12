@@ -21,7 +21,7 @@ mixin ScrapeIMDBBibliographyDetails
 
   /// Collect webpage text to construct a map of the movie data.
   Map _scrapeWebPage(Document document) {
-    final movieData = {};
+    final movieData = <String, dynamic>{};
 
     _scrapeRelated(document, movieData);
 
@@ -53,11 +53,11 @@ mixin ScrapeIMDBBibliographyDetails
     return '$firstLine';
   }
 
-  void _addBibliography(Map movieData, String role, dynamic bibliography) {
+  void _addBibliography(Map movieData, String role, List<Map> bibliography) {
     if (!movieData.containsKey(role)) {
-      movieData[role] = [];
+      movieData[role] = <Map>[];
     }
-    (movieData[role] as List).addAll(bibliography as List);
+    (movieData[role] as List).addAll(bibliography);
   }
 
   List<Map> _getBibliography(Element table) {

@@ -17,7 +17,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// ```
 abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     extends WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
-  static final _cache = TieredCache();
+  static final _cache = TieredCache<List>();
 
   WebFetchThreadedCache(super.criteria);
 

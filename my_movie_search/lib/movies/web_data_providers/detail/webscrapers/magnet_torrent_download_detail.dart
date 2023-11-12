@@ -17,7 +17,7 @@ const resultTableSelector = '.torrentcontent';
 /// ```
 mixin ScrapeTorrentDownloadDetail
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = [];
+  final movieData = <Map>[];
   bool validPage = false;
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
@@ -39,7 +39,7 @@ mixin ScrapeTorrentDownloadDetail
 
   /// extract each row from the page.
   void _scrapeWebPage(Document document) {
-    final result = {};
+    final result = <String, dynamic>{};
     final links = document.querySelectorAll(magnetSelector);
     if (links.isNotEmpty) {
       validPage = true;

@@ -20,7 +20,7 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Collect webpage text to construct a map of the movie data.
   Map _scrapeWebPage(Document document) {
-    final movieData = {};
+    final movieData = <String, dynamic>{};
 
     _scrapeRelated(document, movieData);
 
@@ -29,7 +29,7 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   }
 
   /// Extract the cast for the current movie.
-  void _scrapeRelated(Document document, Map movieData) {
+  void _scrapeRelated(Document document, Map<String, dynamic> movieData) {
     String? roleText;
     final children = document.querySelector('#fullcredits_content')?.children;
     if (null != children) {
@@ -55,11 +55,11 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     return null;
   }
 
-  void _addCast(Map movieData, String role, dynamic cast) {
+  void _addCast(Map<String, dynamic> movieData, String role, List<Map> cast) {
     if (!movieData.containsKey(role)) {
-      movieData[role] = [];
+      movieData[role] = <Map>[];
     }
-    (movieData[role] as List).addAll(cast as List);
+    (movieData[role] as List).addAll(cast);
   }
 
   List<Map> _getCast(Element table) {
