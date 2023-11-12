@@ -1,7 +1,7 @@
 /// Extend [Iterable] and [Map] to provide tree convenience functions.
 ///
-extension TreeListHelper on Iterable {
-  List? deepSearch(
+extension TreeListHelper on Iterable<dynamic> {
+  List<dynamic>? deepSearch(
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
@@ -16,8 +16,8 @@ extension TreeListHelper on Iterable {
       TreeHelper(this).searchForString(key: key);
 }
 
-extension TreeMapHelper on Map {
-  List? deepSearch(
+extension TreeMapHelper on Map<dynamic, dynamic> {
+  List<dynamic>? deepSearch(
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
@@ -32,8 +32,8 @@ extension TreeMapHelper on Map {
       TreeHelper(this).searchForString(key: key);
 }
 
-extension TreeSetHelper on Set {
-  List? deepSearch(
+extension TreeSetHelper on Set<dynamic> {
+  List<dynamic>? deepSearch(
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
@@ -52,8 +52,8 @@ class TreeHelper {
   final dynamic tree;
   late bool _isMap;
   late bool _isIterable;
-  Iterable? asIterable;
-  Map? asMap;
+  Iterable<dynamic>? asIterable;
+  Map<dynamic, dynamic>? asMap;
   // Constructor to save tree for later use.
   TreeHelper(this.tree) {
     _isMap = tree is Map;
@@ -67,7 +67,7 @@ class TreeHelper {
   }
 
   /// Recursively traverse a tree to pull a specific value out.
-  List? deepSearch(
+  List<dynamic>? deepSearch(
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,

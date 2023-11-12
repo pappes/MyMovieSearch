@@ -37,7 +37,7 @@ mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   }
 
   /// Collect JSON and webpage text to construct a map of the movie data.
-  Map _scrapeWebPage(Document document) {
+  Map<dynamic, dynamic> _scrapeWebPage(Document document) {
     final movieData = json.decode(_getMovieJson(document)) as Map;
     return movieData;
   }

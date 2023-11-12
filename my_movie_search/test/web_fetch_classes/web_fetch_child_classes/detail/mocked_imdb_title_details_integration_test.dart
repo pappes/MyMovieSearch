@@ -100,7 +100,7 @@ List<String> _makeQueries(int startId, int qty) {
   return results;
 }
 
-Map offlineMapList(String id) => {
+Map<String, dynamic> offlineMapList(String id) => {
       'props': {
         'pageProps': {
           'tconst': id,

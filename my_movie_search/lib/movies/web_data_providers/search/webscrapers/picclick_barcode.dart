@@ -20,14 +20,14 @@ const jpgDescriptionSelector = 'h3';
 /// ```
 mixin ScrapePicclickBarcodeSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = <Map>[];
+  final movieData = <Map<String, dynamic>>[];
   bool validPage = false;
   final searchLog = StringBuffer();
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if (webText.contains('did not match any items')) {

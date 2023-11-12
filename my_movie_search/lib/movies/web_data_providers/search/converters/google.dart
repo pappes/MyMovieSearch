@@ -40,7 +40,9 @@ const imdbResultTypeSeries = 'video.tv_show';
 const imdbPageTypeParentPage = 'main';
 
 class GoogleMovieSearchConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(
+    Map<dynamic, dynamic> map,
+  ) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
     try {
@@ -55,7 +57,7 @@ class GoogleMovieSearchConverter {
       for (final movie in map[outerElementResultsCollection] as Iterable) {
         movie as Map;
         if (!isImdbChildPage(movie)) {
-          searchResults.add(dtoFromMap(movie));
+          searchResults.add(_dtoFromMap(movie));
         }
       }
     } catch (e) {
@@ -68,7 +70,7 @@ class GoogleMovieSearchConverter {
     return searchResults;
   }
 
-  static List<MovieResultDTO> _searchError(Map map) {
+  static List<MovieResultDTO> _searchError(Map<dynamic, dynamic> map) {
     // construct an error message
     String error = '';
     final resultsError = map[outerElementErrorFailure];
@@ -86,7 +88,7 @@ class GoogleMovieSearchConverter {
     ];
   }
 
-  static MovieResultDTO dtoFromMap(Map map) {
+  static MovieResultDTO _dtoFromMap(Map<dynamic, dynamic> map) {
     final movie = MovieResultDTO();
 
     movie.title = getTitle(map);
@@ -123,18 +125,18 @@ class GoogleMovieSearchConverter {
     return movie;
   }
 
-  static String getTitle(Map map) {
+  static String getTitle(Map<dynamic, dynamic> map) {
     final title = DynamicHelper.toString_(map[innerElementTitle]);
     final lastOpen = title.lastIndexOf('(');
     return lastOpen > 1 ? title.substring(0, lastOpen) : title;
   }
 
-  static String getID(Map map) =>
+  static String getID(Map<dynamic, dynamic> map) =>
       map[innerElementIdentity]?.toString() ??
       map[innerElementPageconst]?.toString() ??
       movieDTOUninitialized;
 
-  static String getYearRange(Map map) {
+  static String getYearRange(Map<dynamic, dynamic> map) {
     // Extract year range from 'title (TV Series 1988–1993)'
     final title = DynamicHelper.toString_(map[innerElementTitle]);
     final lastOpen = title.lastIndexOf('(');
@@ -148,7 +150,7 @@ class GoogleMovieSearchConverter {
     return DynamicHelper.toString_(numerics);
   }
 
-  static MovieContentType getType(Map map) {
+  static MovieContentType getType(Map<dynamic, dynamic> map) {
     switch (map[innerElementType]) {
       case imdbResultTypeMovie:
         return MovieContentType.movie;
@@ -159,22 +161,23 @@ class GoogleMovieSearchConverter {
     }
   }
 
-  static String getImage(Map map) =>
+  static String getImage(Map<dynamic, dynamic> map) =>
       DynamicHelper.toString_(map[innerElementImage]);
 
-  static double getRatingValue(Map map) => DoubleHelper.fromText(
+  static double getRatingValue(Map<dynamic, dynamic> map) =>
+      DoubleHelper.fromText(
         map[innerElementRatingValue],
         nullValueSubstitute: 0,
       )!;
 
-  static int getRatingCount(Map map) => IntHelper.fromText(
+  static int getRatingCount(Map<dynamic, dynamic> map) => IntHelper.fromText(
         map[innerElementRatingCount],
         nullValueSubstitute: 0,
       )!;
 
   // Ignore duplicated child pages. Page sub type is: main
   // or reviews or fullcredits or trivia or locations or plotsummary or ...
-  static bool isImdbChildPage(Map map) {
+  static bool isImdbChildPage(Map<dynamic, dynamic> map) {
     final subPageType = map.searchForString(key: innerElementSubtype) ??
         map.searchForString(key: innerElementPrefixedSubtype) ??
         'unknown';

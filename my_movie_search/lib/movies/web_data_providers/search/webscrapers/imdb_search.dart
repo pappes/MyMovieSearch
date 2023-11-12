@@ -55,7 +55,7 @@ mixin ScrapeIMDBSearchDetails
   }
 
   /// Extract search content from json
-  Future<List> _scrapeSearchResult(
+  Future<List<dynamic>> _scrapeSearchResult(
     String webText,
     dynamic jsonTree, [
     String? jsonText,
@@ -78,14 +78,14 @@ mixin ScrapeIMDBSearchDetails
   }
 
   /// Delegate web scraping to IMDBMovie web scraper.
-  Future<List> _scrapeMovieDetails(String webText) {
+  Future<List<dynamic>> _scrapeMovieDetails(String webText) {
     final movie = QueryIMDBTitleDetails(criteria);
     return movie.myConvertWebTextToTraversableTree(webText);
   }
 
   // Extract search content from json
-  List<Map> _extractSearchResults(List searchResult) {
-    final results = <Map>[];
+  List<Map<String, dynamic>> _extractSearchResults(List<dynamic> searchResult) {
+    final results = <Map<String, dynamic>>[];
     final resultNodes = searchResult.deepSearch(
           deepJsonResults, // 'results'
           multipleMatch: true,
@@ -111,8 +111,8 @@ mixin ScrapeIMDBSearchDetails
     return results;
   }
 
-  Map _getPerson(Map person) {
-    final Map rowData = {};
+  Map<String, dynamic> _getPerson(Map<dynamic, dynamic> person) {
+    final Map<String, dynamic> rowData = {};
     rowData[outerElementIdentity] = person[_searchResultId];
     rowData[outerElementOfficialTitle] = person[_searchResultPersonName];
 
@@ -126,8 +126,8 @@ mixin ScrapeIMDBSearchDetails
     return rowData;
   }
 
-  Map _getMovie(Map movie) {
-    final Map rowData = {};
+  Map<String, dynamic> _getMovie(Map<dynamic, dynamic> movie) {
+    final Map<String, dynamic> rowData = {};
     rowData[outerElementIdentity] = movie[_searchResultId];
     rowData[outerElementOfficialTitle] = movie[_searchResultMovieName];
     rowData[outerElementYearRange] = movie[_searchResultMovieYearRange];

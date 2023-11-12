@@ -5,10 +5,12 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
 class ImdbBibliographyConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) =>
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(
+    Map<dynamic, dynamic> map,
+  ) =>
       [_dtoFromMap(map)];
 
-  static MovieResultDTO _dtoFromMap(Map map) {
+  static MovieResultDTO _dtoFromMap(Map<dynamic, dynamic> map) {
     final movie = MovieResultDTO().init(
       bestSource: DataSourceType.imdbSuggestions,
       uniqueId: map[outerElementIdentity]?.toString(),
@@ -38,7 +40,7 @@ class ImdbBibliographyConverter {
     }
   }
 
-  static MovieResultDTO? dtoFromRelatedMap(Map map) {
+  static MovieResultDTO? dtoFromRelatedMap(Map<dynamic, dynamic> map) {
     final id = getIdFromIMDBLink(map[outerElementLink]?.toString());
     if (id == '') {
       return null;

@@ -6,7 +6,7 @@ import 'package:bloc/bloc.dart';
 /// {@endtemplate}
 class MMSearchObserver extends BlocObserver {
   @override
-  void onChange(BlocBase bloc, Change change) {
+  void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     super.onChange(bloc, change);
     //print('MMSearchObserver: ${bloc.runtimeType} $change');
   }

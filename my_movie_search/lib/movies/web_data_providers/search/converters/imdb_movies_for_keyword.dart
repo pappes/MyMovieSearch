@@ -29,10 +29,12 @@ const innerElementType = 'q';
 const innerElementYearRange = 'yr';
 
 class ImdbMoviesForKeywordConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) =>
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(
+    Map<dynamic, dynamic> map,
+  ) =>
       [dtoFromMap(map)];
 
-  static MovieResultDTO dtoFromMap(Map map) {
+  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
     final uniqueId = map[keywordId]!.toString();
 
     final minutes = IntHelper.fromText(
@@ -95,7 +97,7 @@ class ImdbMoviesForKeywordConverter {
     return relatedPeople;
   }
 
-  static MovieCollection _decodePerson(MapEntry entry) {
+  static MovieCollection _decodePerson(MapEntry<dynamic, dynamic> entry) {
     final name = entry.key?.toString();
     final url = entry.value?.toString();
     if (null != url) {

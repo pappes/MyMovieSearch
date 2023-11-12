@@ -5,10 +5,15 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/yts_detail.dart';
 
 class YtsDetailConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) =>
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(
+    Map<dynamic, dynamic> map,
+  ) =>
       [dtoFromMap(map)];
 
-  static MovieResultDTO dtoFromMap(Map map) => MovieResultDTO().init(
+  static MovieResultDTO dtoFromMap(
+    Map<dynamic, dynamic> map,
+  ) =>
+      MovieResultDTO().init(
         bestSource: DataSourceType.ytsDetails,
         type: MovieContentType.download.toString(),
         uniqueId: map[jsonMagnetKey]?.toString(),

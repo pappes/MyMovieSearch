@@ -6,10 +6,12 @@ import 'package:my_movie_search/movies/web_data_providers/search/magnet_torrent_
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 
 class TorrentDownloadSearchConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) =>
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(
+    Map<dynamic, dynamic> map,
+  ) =>
       [dtoFromMap(map)];
 
-  static MovieResultDTO dtoFromMap(Map map) {
+  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
     // TorrentDownloadSearch always overestimates the number of seeders
     // Need to artifically reduce TDS in the results
     final reducedSeeders = DynamicHelper.toInt_(map[jsonSeedersKey]) / 100;

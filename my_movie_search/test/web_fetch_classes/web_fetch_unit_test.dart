@@ -28,7 +28,7 @@ import 'web_fetch_unit_test.mocks.dart';
 // To regenerate mocks run the following command
 // flutter pub run build_runner build --delete-conflicting-outputs
 @GenerateMocks([HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders])
-typedef ConvertWebTextToTreeFn = Future<List> Function(String t);
+typedef ConvertWebTextToTreeFn = Future<List<dynamic>> Function(String t);
 typedef ConvertTreeToOutputType = Future<List<MovieResultDTO>> Function(
   dynamic m,
 );
@@ -90,7 +90,9 @@ class QueryUnknownSourceMocked
   ConvertWebTextToTreeFn overriddenConvertWebTextToTraversableTree =
       (webText) => Future.value([jsonDecode(webText)]);
   @override
-  Future<List> myConvertWebTextToTraversableTree(String webText) async =>
+  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+    String webText,
+  ) async =>
       overriddenConvertWebTextToTraversableTree(webText);
 
   /// Include entire error in the movie title when an error occurs.
@@ -111,20 +113,21 @@ class QueryUnknownSourceMocked
   DataSourceFn myOfflineData() => (_) async => const Stream<String>.empty();
 
   static Future<List<MovieResultDTO>> treeToDto(dynamic tree) {
-    if (tree is Map) return Future.value([mapToDto(tree)]);
-    if (tree is List) return Future.value(listToDto(tree));
+    if (tree is Map) return Future.value([_mapToDto(tree)]);
+    if (tree is List) return Future.value(_listToDto(tree));
     throw 'Unknown: $tree';
   }
 
-  static MovieResultDTO mapToDto(Map map) => MovieResultDTO().init(
+  static MovieResultDTO _mapToDto(Map<dynamic, dynamic> map) =>
+      MovieResultDTO().init(
         uniqueId: DynamicHelper.toString_(map[outerElementIdentity]),
         description: DynamicHelper.toString_(map[outerElementDescription]),
       );
 
-  static List<MovieResultDTO> listToDto(List list) {
+  static List<MovieResultDTO> _listToDto(List<dynamic> list) {
     final List<MovieResultDTO> results = [];
     for (final value in list) {
-      results.add(mapToDto(value as Map));
+      results.add(_mapToDto(value as Map));
     }
     return results;
   }
@@ -200,8 +203,8 @@ List<MovieResultDTO> _makeDTOs(int qty) {
 }
 
 /// Make dummy dto results for offline queries.
-List<Map> _makeMaps(int qty) {
-  final results = <Map>[];
+List<Map<String, dynamic>> _makeMaps(int qty) {
+  final results = <Map<String, dynamic>>[];
   for (int i = 0; i < qty; i++) {
     final uniqueId = 1000 + i;
     results.add(
@@ -459,7 +462,7 @@ void main() {
 
   group('WebFetchBase mocked baseConvertTreeToOutputType', () {
     void testConvert(
-      List<Map> input,
+      List<Map<dynamic, dynamic>> input,
       List<MovieResultDTO>? expectedValue, [
       String? expectedError,
     ]) {

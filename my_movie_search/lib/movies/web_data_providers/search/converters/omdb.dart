@@ -36,7 +36,9 @@ const omdbResultTypeSeries = "series";
 const omdbResultTypeEpisode = "episode";
 
 class OmdbMovieSearchConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(
+    Map<dynamic, dynamic> map,
+  ) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
 
@@ -58,7 +60,7 @@ class OmdbMovieSearchConverter {
     return searchResults;
   }
 
-  static MovieResultDTO dtoFromMap(Map map) {
+  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
     final movie = MovieResultDTO().init(
       bestSource: DataSourceType.omdb,
       uniqueId: map[innerElementIdentity]?.toString(),

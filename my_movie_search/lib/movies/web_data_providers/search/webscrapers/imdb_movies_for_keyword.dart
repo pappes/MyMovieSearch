@@ -38,7 +38,7 @@ mixin ScrapeIMDBMoviesForKeyword
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     final document = parse(webText);
@@ -46,8 +46,8 @@ mixin ScrapeIMDBMoviesForKeyword
   }
 
   /// Collect webpage text to construct a map of the movie data.
-  List _scrapeWebPage(Document document) {
-    final movieData = <Map>[];
+  List<Map<String, dynamic>> _scrapeWebPage(Document document) {
+    final movieData = <Map<String, dynamic>>[];
 
     final children = document.querySelector('.lister-list')?.children;
     if (null != children) {

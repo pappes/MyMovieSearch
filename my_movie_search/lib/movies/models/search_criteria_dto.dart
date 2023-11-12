@@ -150,7 +150,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   SearchCriteriaDTO clone() => toMap().toSearchCriteriaDTO();
 }
 
-extension MapCriteriaDTOConversion on Map {
+extension MapCriteriaDTOConversion on Map<dynamic, dynamic> {
   /// Convert a [Map] into a [SearchCriteriaDTO] object.
   ///
   @factory

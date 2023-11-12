@@ -17,7 +17,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// ```
 abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     extends WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
-  static final _cache = TieredCache<List>();
+  static final _cache = TieredCache<List<dynamic>>();
 
   WebFetchThreadedCache(super.criteria);
 
@@ -110,7 +110,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE> myClone(INPUT_TYPE criteria);
 
   /// static wrapper to readList() for compatibility with ThreadRunner.
-  static Future<List> runReadList(Map input) {
+  static Future<List<dynamic>> runReadList(Map<String, dynamic> input) {
     final instance = input['newInstance'] as WebFetchBase;
     return instance.readList(
       source: input['source'] as DataSourceFn?,

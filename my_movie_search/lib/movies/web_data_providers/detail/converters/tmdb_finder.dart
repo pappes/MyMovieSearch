@@ -54,7 +54,10 @@ const personElementPosterPath = 'profile_path';
 const personElementPopularity = 'popularity';
 
 class TmdbFinderConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map, String imdbId) {
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(
+    Map<dynamic, dynamic> map,
+    String imdbId,
+  ) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
 
@@ -79,7 +82,10 @@ class TmdbFinderConverter {
     return searchResults;
   }
 
-  static MovieResultDTO dtoFromMovieMap(Map map, String imdbId) {
+  static MovieResultDTO dtoFromMovieMap(
+    Map<dynamic, dynamic> map,
+    String imdbId,
+  ) {
     final movie = MovieResultDTO().setSource(
       newSource: DataSourceType.tmdbFinder,
       newUniqueId: map[movieElementTMDBIdentity]?.toString(),
@@ -130,7 +136,10 @@ class TmdbFinderConverter {
     return movie;
   }
 
-  static MovieResultDTO dtoFromPersonMap(Map map, String imdbId) {
+  static MovieResultDTO dtoFromPersonMap(
+    Map<dynamic, dynamic> map,
+    String imdbId,
+  ) {
     final person = MovieResultDTO().init(
       bestSource: DataSourceType.tmdbFinder,
       uniqueId: map[movieElementTMDBIdentity]?.toString(),

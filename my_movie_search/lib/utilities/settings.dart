@@ -18,7 +18,9 @@ class Settings {
 
   String? get(String key) => _settingsMap[key];
 
-  Future<Map> loadFile([String location = 'assets/settings.json']) async {
+  Future<Map<String, dynamic>> loadFile([
+    String location = 'assets/settings.json',
+  ]) async {
     final json = await rootBundle.loadString(location);
     final map = jsonDecode(json) as Map<String, dynamic>;
     map.forEach((key, value) => _settingsMap[key] = value as String);

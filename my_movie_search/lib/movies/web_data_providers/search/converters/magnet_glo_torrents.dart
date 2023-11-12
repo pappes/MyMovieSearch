@@ -6,10 +6,12 @@ import 'package:my_movie_search/movies/web_data_providers/search/magnet_glo_torr
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 class GloTorrentsSearchConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) =>
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(
+    Map<dynamic, dynamic> map,
+  ) =>
       [dtoFromMap(map)];
 
-  static MovieResultDTO dtoFromMap(Map map) {
+  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
     // Compensate for gloTorrents overrestimation
     final seeders = DoubleHelper.fromText(map[jsonSeedersKey]) ?? 0 / 10;
     final leechers = DoubleHelper.fromText(map[jsonLeechersKey]) ?? 0 / 10;

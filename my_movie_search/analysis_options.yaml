@@ -10,7 +10,7 @@ analyzer:
   language:
     strict-casts: true
     strict-inference: true   # forces declaration of synamic for literal constants e.g. <String,dynamic>{}
-    #strict-raw-types: true  # forces declartaion of dynamic for generic types e.g. Map<dynamic, dynamic>
+    strict-raw-types: true  # forces declartaion of dynamic for generic types e.g. Map<dynamic, dynamic>
 
 
 

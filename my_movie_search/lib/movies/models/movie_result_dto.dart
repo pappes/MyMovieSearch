@@ -288,12 +288,12 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
           final categoryContents = category.value as Map;
           // Build a collection of movies keyed by the unique id.
           final MovieCollection movies = {};
-          for (final movie in categoryContents.entries) {
-            if (movie.value is Map) {
-              final movieId = movie.key.toString();
+          for (final movieEntry in categoryContents.entries) {
+            final movieMap = movieEntry.value;
+            if (movieMap is Map) {
+              final movieId = movieEntry.key.toString();
               // Build DTO based on attributes encoded in the map.
-              final Map movieAttributes = movie.value as Map;
-              final dto = movieAttributes.toMovieResultDTO();
+              final dto = movieMap.toMovieResultDTO();
               movies[movieId] = dto;
             }
           }
@@ -981,7 +981,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// [fuzzy] allows volitile numeric data to have a 75% variation
   bool matches(
     MovieResultDTO actualDTO, {
-    Map? matchState,
+    Map<dynamic, dynamic>? matchState,
     bool related = true,
     bool fuzzy = false,
     String prefix = '',
@@ -1052,7 +1052,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   }
 
   /// Loop through all languages in order to see how dominant English is.
-  LanguageType getLanguageType([Iterable? languageList]) {
+  LanguageType getLanguageType([Iterable<dynamic>? languageList]) {
     for (final languageVal in languageList ?? languages) {
       final languageText = languageVal.toString();
       if (languageText.isNotEmpty) {

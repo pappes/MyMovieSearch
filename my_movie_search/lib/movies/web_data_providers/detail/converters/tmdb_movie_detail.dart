@@ -48,7 +48,9 @@ const innerElementVoteCount = 'vote_count';
 const innerElementVoteAverage = 'vote_average';
 
 class TmdbMovieDetailConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(
+    Map<dynamic, dynamic> map,
+  ) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
 
@@ -68,7 +70,7 @@ class TmdbMovieDetailConverter {
     return searchResults;
   }
 
-  static MovieResultDTO dtoFromMap(Map map) {
+  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
     final movie = MovieResultDTO().setSource(
       newSource: DataSourceType.tmdbMovie,
       newUniqueId: '${map[innerElementIdentity]}',

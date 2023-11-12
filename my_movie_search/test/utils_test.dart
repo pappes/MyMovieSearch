@@ -52,7 +52,7 @@ class DynamicHelperTest {
 /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-Future main() async {
+Future<void> main() async {
   group('DurationHelper', () {
     // Formatted time includes the correct values.
     test(

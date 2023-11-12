@@ -7,7 +7,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/fishpond_barcod
 
 class FishpondBarcodeSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map map,
+    Map<dynamic, dynamic> map,
     SearchCriteriaDTO criteria,
   ) =>
       [

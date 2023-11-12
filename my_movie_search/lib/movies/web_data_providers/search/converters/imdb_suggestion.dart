@@ -22,7 +22,9 @@ const innerElementType = 'q';
 const innerElementYearRange = 'yr';
 
 class ImdbSuggestionConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(
+    Map<dynamic, dynamic> map,
+  ) {
     // deserialise outer json from map then iterate inner json
     final resultCollection = map[outerElementResultsCollection];
 
@@ -37,7 +39,7 @@ class ImdbSuggestionConverter {
     return allSuggestions;
   }
 
-  static MovieResultDTO dtoFromMap(Map map) {
+  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
     final uniqueId = map[innerElementIdentity]?.toString();
     final movieType = MovieResultDTOHelpers.getMovieContentType(
       "${map[innerElementType]} ${map[innerElementYearRange]}",

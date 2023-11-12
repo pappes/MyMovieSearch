@@ -74,18 +74,18 @@ class ThreadRunner {
   /// Function should not call any libraries that attempt to write to common objects
   ///     e.g. external files, etc because the libraries may not be thread safe
   ///     console appears to be thread safe.
-  Future run<T>(dynamic Function(T) function, T parameter) async {
+  Future<dynamic> run<T>(dynamic Function(T) function, T parameter) async {
     final receivePort = ReceivePort();
     final message = {'fn': function, 'param': parameter};
     if (!ready) await initialised;
 
     _mainThreadOutboundPort.send([message, receivePort.sendPort]);
 
-    return receivePort.first;
+    return await receivePort.first;
   }
 
   /// Spawn another thread and capture port to send future requests to.
-  Future _init(String threadName) async {
+  Future<void> _init(String threadName) async {
     final receivePort = ReceivePort();
 
     // Spawn another thread and wait to receive a port for the main thread to talk on.
@@ -99,7 +99,7 @@ class ThreadRunner {
   }
 
   /// Function to process any incoming requests.
-  static Future<void> _runOnOtherThread(Map params) async {
+  static Future<void> _runOnOtherThread(Map<String, dynamic> params) async {
     final initialOutboundPort = params['port'] as SendPort;
 
     currentThreadName = params['threadName'] as String;

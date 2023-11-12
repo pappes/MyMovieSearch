@@ -20,7 +20,6 @@ import 'package:universal_io/io.dart'
         HttpHeaders; // limit inclusions to reduce size
 
 typedef DataSourceFn = Future<Stream<String>> Function(dynamic s);
-typedef TransformFn = List Function(Map? map);
 
 /// Fetch data from web sources (web services or web pages).
 ///

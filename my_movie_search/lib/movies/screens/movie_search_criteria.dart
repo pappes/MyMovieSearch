@@ -13,7 +13,7 @@ class MovieSearchCriteriaPage extends StatefulWidget {
   _MovieSearchCriteriaPageState createState() =>
       _MovieSearchCriteriaPageState();
 
-  static Route route() => MaterialPageRoute<void>(
+  static Route<dynamic> route() => MaterialPageRoute<dynamic>(
         builder: (_) => const MovieSearchCriteriaPage(),
       );
 }

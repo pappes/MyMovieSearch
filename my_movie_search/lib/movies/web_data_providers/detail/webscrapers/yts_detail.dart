@@ -23,7 +23,7 @@ const descriptionSelector = '#movie-tech-specs .tech-spec-info';
 mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Convert web text to a traversable tree of [List] or [Map] data.
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if (webText.contains('404, Oops! This page could not be found')) {
@@ -50,14 +50,14 @@ mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
             );
 
   /// Collect webpage text to construct a map of the movie data.
-  List<Map> _scrapeWebPage(Document document) {
-    final movieData = <Map>[];
+  List<Map<String, dynamic>> _scrapeWebPage(Document document) {
+    final movieData = <Map<String, dynamic>>[];
     _scrapeMagnets(document, movieData);
     return movieData;
   }
 
   /// Extract the download infomation for the current movie.
-  void _scrapeMagnets(Document document, List<Map> movieData) {
+  void _scrapeMagnets(Document document, List<Map<String, dynamic>> movieData) {
     final title = _getTitle(document);
     final image = _getImage(document);
     final descriptions = _getDescriptions(document);
@@ -80,7 +80,7 @@ mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 }
 
 /// Extract the title and year for the current movie.
-Map _getTitle(Document document) {
+Map<String, dynamic> _getTitle(Document document) {
   final map = <String, dynamic>{};
   final titleElement = document.querySelector(titleSelector);
   map[jsonNameKey] = titleElement?.cleanText;
@@ -89,7 +89,7 @@ Map _getTitle(Document document) {
 }
 
 /// Extract the title and year for the current movie.
-Map _getImage(Document document) {
+Map<String, dynamic> _getImage(Document document) {
   final map = <String, dynamic>{};
   final imageElement = document.querySelector(imageSelector);
   map[jsonImageKey] = imageElement?.attributes['src'];
@@ -97,8 +97,8 @@ Map _getImage(Document document) {
 }
 
 /// Extract the title and year for the current movie.
-List<Map> _getLinks(Document document) {
-  final links = <Map>[];
+List<Map<String, String>> _getLinks(Document document) {
+  final links = <Map<String, String>>[];
   final magnetRows = document.querySelectorAll(magnetsSelector);
   for (final row in magnetRows) {
     var size = '0 MB';
@@ -121,8 +121,8 @@ List<Map> _getLinks(Document document) {
 }
 
 /// Extract the other details for the current movie.
-List<Map> _getDescriptions(Document document) {
-  final descriptions = <Map>[];
+List<Map<String, dynamic>> _getDescriptions(Document document) {
+  final descriptions = <Map<String, dynamic>>[];
   final descriptionRows = document.querySelectorAll(descriptionSelector);
   for (final row in descriptionRows) {
     try {

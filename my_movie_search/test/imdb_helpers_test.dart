@@ -5,7 +5,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
 
-Future main() async {
+Future<void> main() async {
   group('makeImdbUrl', () {
     test(
       'empty string',

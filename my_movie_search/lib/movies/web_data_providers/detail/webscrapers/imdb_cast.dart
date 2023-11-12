@@ -11,7 +11,7 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape cast data from rows in the html div named fullcredits_content.
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     final document = parse(webText);
@@ -19,7 +19,7 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   }
 
   /// Collect webpage text to construct a map of the movie data.
-  Map _scrapeWebPage(Document document) {
+  Map<String, dynamic> _scrapeWebPage(Document document) {
     final movieData = <String, dynamic>{};
 
     _scrapeRelated(document, movieData);
@@ -55,15 +55,19 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     return null;
   }
 
-  void _addCast(Map<String, dynamic> movieData, String role, List<Map> cast) {
+  void _addCast(
+    Map<String, dynamic> movieData,
+    String role,
+    List<Map<dynamic, dynamic>> cast,
+  ) {
     if (!movieData.containsKey(role)) {
-      movieData[role] = <Map>[];
+      movieData[role] = <Map<dynamic, dynamic>>[];
     }
     (movieData[role] as List).addAll(cast);
   }
 
-  List<Map> _getCast(Element table) {
-    final movies = <Map>[];
+  List<Map<dynamic, dynamic>> _getCast(Element table) {
+    final movies = <Map<dynamic, dynamic>>[];
     for (final row in table.querySelectorAll('tr')) {
       final title = StringBuffer();
       var linkURL = '';

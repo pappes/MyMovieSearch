@@ -12,7 +12,7 @@ mixin ScrapeIMDBBibliographyDetails
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape bibliography data from rows in the html div named fullcredits_content.
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     final document = parse(webText);
@@ -20,7 +20,7 @@ mixin ScrapeIMDBBibliographyDetails
   }
 
   /// Collect webpage text to construct a map of the movie data.
-  Map _scrapeWebPage(Document document) {
+  Map<String, dynamic> _scrapeWebPage(Document document) {
     final movieData = <String, dynamic>{};
 
     _scrapeRelated(document, movieData);
@@ -30,7 +30,7 @@ mixin ScrapeIMDBBibliographyDetails
   }
 
   /// Extract the bibliography for the current movie.
-  void _scrapeRelated(Document document, Map movieData) {
+  void _scrapeRelated(Document document, Map<String, dynamic> movieData) {
     String? roleText;
     final children = document.querySelector('#filmography')?.children;
     if (null != children) {
@@ -53,15 +53,19 @@ mixin ScrapeIMDBBibliographyDetails
     return '$firstLine';
   }
 
-  void _addBibliography(Map movieData, String role, List<Map> bibliography) {
+  void _addBibliography(
+    Map<String, dynamic> movieData,
+    String role,
+    List<Map<dynamic, dynamic>> bibliography,
+  ) {
     if (!movieData.containsKey(role)) {
-      movieData[role] = <Map>[];
+      movieData[role] = <Map<dynamic, dynamic>>[];
     }
     (movieData[role] as List).addAll(bibliography);
   }
 
-  List<Map> _getBibliography(Element table) {
-    final movies = <Map>[];
+  List<Map<dynamic, dynamic>> _getBibliography(Element table) {
+    final movies = <Map<dynamic, dynamic>>[];
     for (final row in table.querySelectorAll('b')) {
       final title = StringBuffer();
       var linkURL = '';

@@ -37,7 +37,7 @@ class MovieModel {
   }
 }
 
-extension ModelConversion on Map {
+extension ModelConversion on Map<dynamic, dynamic> {
   MovieModel toMovieModel() => MovieModel(
         id: this[_colMovieId]! as int,
         uniqueId: this[_colMovieUniqueId]!.toString(),
@@ -78,7 +78,7 @@ class DatabaseHelper {
   }
 
   // SQL string to create the database
-  Future _onCreate(Database db, int version) async {
+  Future<void> _onCreate(Database db, int version) async {
     await db.execute(
       '''
       CREATE TABLE $_tableMovie (
@@ -122,7 +122,7 @@ class DatabaseHelper {
   Future<MovieModel?> queryMovie(int id) async {
     final Database db = await database;
     //db.query(tableMovie) can be used to return a list of every row as a Map.
-    final List<Map> movieMap = await db.query(
+    final List<Map<dynamic, dynamic>> movieMap = await db.query(
       _tableMovie,
       columns: [_colMovieId, _colMovieUniqueId, _colMovieJson],
       where: '$_colMovieId = ?',
@@ -134,7 +134,7 @@ class DatabaseHelper {
     return null;
   }
 
-  Future<List<Map>> queryAllMovies() async {
+  Future<List<Map<dynamic, dynamic>>> queryAllMovies() async {
     final Database db = await database;
     return db.query(_tableMovie);
   }

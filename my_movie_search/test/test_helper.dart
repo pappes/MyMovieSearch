@@ -145,7 +145,7 @@ class MovieResultDTOListMatcher extends Matcher {
 
   @override
   // Compare expected with actual.
-  bool matches(dynamic actual, Map matchState) {
+  bool matches(dynamic actual, Map<dynamic, dynamic> matchState) {
     if (actual is List<MovieResultDTO>) {
       _actual = actual;
       sortDtoList(_actual);
@@ -208,7 +208,7 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
 
   @override
   // Compare expected with actual.
-  bool matches(dynamic actual, Map matchState) {
+  bool matches(dynamic actual, Map<dynamic, dynamic> matchState) {
     matchQuantity = (expected.length * percentMatch / 100).ceil();
     if (actual is List<MovieResultDTO>) {
       _actual = actual;

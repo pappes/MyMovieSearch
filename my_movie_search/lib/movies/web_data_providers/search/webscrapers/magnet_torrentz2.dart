@@ -18,13 +18,13 @@ const detailSelector = 'dd';
 /// ScrapeTorrentz2Search().readList(criteria, limit: 10)
 /// ```
 mixin ScrapeTorrentz2Search on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = <Map>[];
+  final movieData = <Map<String, dynamic>>[];
   bool validPage = false;
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if (webText.contains('<h2>0+ Torrents ')) {

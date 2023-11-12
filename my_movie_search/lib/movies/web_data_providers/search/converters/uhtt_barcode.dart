@@ -5,7 +5,10 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/uhtt_barcode.dart';
 
 class UhttBarcodeSearchConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) => [
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(
+    Map<dynamic, dynamic> map,
+  ) =>
+      [
         MovieResultDTO().init(
           bestSource: DataSourceType.uhttBarcode,
           type: MovieContentType.barcode.toString(),

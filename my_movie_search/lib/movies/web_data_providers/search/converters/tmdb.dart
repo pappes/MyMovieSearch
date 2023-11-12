@@ -37,7 +37,9 @@ const innerElementYear = 'release_date';
 const innerElementType = 'video';
 
 class TmdbMovieSearchConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(Map map) {
+  static List<MovieResultDTO> dtoFromCompleteJsonMap(
+    Map<dynamic, dynamic> map,
+  ) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
 
@@ -62,7 +64,7 @@ class TmdbMovieSearchConverter {
     return searchResults;
   }
 
-  static MovieResultDTO dtoFromMap(Map map) {
+  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
     final movie = MovieResultDTO().init(
       bestSource: DataSourceType.tmdbSearch,
       uniqueId: '${map[innerElementIdentity]}',
