@@ -19,7 +19,7 @@ import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieTile extends ListTile {
-  MovieTile(this.context, this.movie)
+  MovieTile(this.context, this.movie, {super.key})
       : super(
           leading: _getImage(movie),
           title: _getTitle(movie),

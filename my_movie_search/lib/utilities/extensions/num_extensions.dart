@@ -29,7 +29,8 @@ extension DoubleHelper on double {
   /// ```dart
   ///if (DoubleHelper.fuzzyMatch(123.7, 124.2)) ...
   /// ```
-  static bool fuzzyMatch<T>(T actual, T expected, {int tolerance = 80}) {
+  static bool fuzzyMatch<T extends num>(T actual, T expected,
+      {int tolerance = 80}) {
     if (actual != expected) {
       final expectedDouble = fromText(expected.toString()) ?? 0.0;
       final actualDouble = fromText(actual.toString()) ?? 0.0;

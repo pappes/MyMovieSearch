@@ -8,7 +8,7 @@ class ErrorDetailsPage extends StatefulWidget {
   final MovieResultDTO errorDto;
 
   @override
-  _ErrorDetailsPageState createState() => _ErrorDetailsPageState();
+  State createState() => _ErrorDetailsPageState();
 }
 
 class _ErrorDetailsPageState extends State<ErrorDetailsPage>

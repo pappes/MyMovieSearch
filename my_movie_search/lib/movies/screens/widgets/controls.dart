@@ -76,7 +76,7 @@ class Poster extends Widget {
 ///
 class ExpandedColumn extends Expanded {
   ExpandedColumn({
-    Key? key,
+    super.key,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     MainAxisSize mainAxisSize = MainAxisSize.max,
     CrossAxisAlignment crossAxisAlignment = CrossAxisAlignment.center,
@@ -104,7 +104,7 @@ class ExpandedColumn extends Expanded {
 /// and have the initial letter capitalised.
 ///
 class BoldLabel extends Text {
-  BoldLabel(String string)
+  BoldLabel(String string, {super.key})
       : super(
           _formatString(string),
           textAlign: TextAlign.left,

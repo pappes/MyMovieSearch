@@ -18,7 +18,7 @@ class MovieDetailsPage extends StatefulWidget {
   final MovieResultDTO movie;
 
   @override
-  _MovieDetailsPageState createState() => _MovieDetailsPageState();
+  State createState() => _MovieDetailsPageState();
 }
 
 class _MovieDetailsPageState extends State<MovieDetailsPage>

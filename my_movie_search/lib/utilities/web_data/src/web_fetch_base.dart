@@ -451,7 +451,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
     searchResultsLimit.reset();
 
-    final selector = OnlineOfflineSelector<DataSourceFn>();
+    final selector = OnlineOfflineSelector();
     selectedDataSource = selector.select(
       source ?? baseFetchWebText,
       myOfflineData(),

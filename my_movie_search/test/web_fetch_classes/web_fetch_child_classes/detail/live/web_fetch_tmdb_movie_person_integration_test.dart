@@ -14,19 +14,22 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
+{"uniqueId":"-2","bestSource":"DataSourceType.tmdbPerson","title":"[tmdbPerson]","type":"MovieContentType.error"}
+''',
+  r'''
 {"uniqueId":"nm0001323","bestSource":"DataSourceType.tmdbPerson","title":"Debbie Harry","type":"MovieContentType.person","year":"1945",
       "description":"An American singer, songwriter, and actress, known as the lead singer of the new wave band Blondie.",
-      "userRating":"13.077","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/pASovJqjDaaHGs08jQs9FBOuWW6.jpg","sources":{"DataSourceType.tmdbPerson":"102"}}
+      "userRating":"3.997","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/pASovJqjDaaHGs08jQs9FBOuWW6.jpg","sources":{"DataSourceType.tmdbPerson":"102"}}
 ''',
   r'''
 {"uniqueId":"nm0005454","bestSource":"DataSourceType.tmdbPerson","title":"Scott Speedman","type":"MovieContentType.person","year":"1975",
       "description":"Scott Speedman (born September 1, 1975) is a British-born Canadian film and television actor. He is best known for playing Ben Covington in the coming-of-age television drama Felicity and Lycan-Vampire hybrid Michael Corvin in the gothic horror/action Underworld films.\n\nDescription above from the Wikipedia article Scott Speedman, licensed under CC-BY-SA, full list of contributors on Wikipedia.",
-      "userRating":"24.443","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/d0fzWMIzsMAXS2M04SKFMof6zQX.jpg","sources":{"DataSourceType.tmdbPerson":"100"}}
+      "userRating":"19.845","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/d0fzWMIzsMAXS2M04SKFMof6zQX.jpg","sources":{"DataSourceType.tmdbPerson":"100"}}
 ''',
   r'''
 {"uniqueId":"nm0914455","bestSource":"DataSourceType.tmdbPerson","title":"Leonor Watling","type":"MovieContentType.person","year":"1975",
       "description":"Leonor Elizabeth Ceballos Watling (born July 28, 1975) is an award-winning Spanish film actress and singer.",
-      "userRating":"9.466","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/uyEM3c37lL90by5vmuOk0XZQ83O.jpg","sources":{"DataSourceType.tmdbPerson":"101"}}
+      "userRating":"12.677","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/uyEM3c37lL90by5vmuOk0XZQ83O.jpg","sources":{"DataSourceType.tmdbPerson":"101"}}
 ''',
 ];
 final expectedEmptyDTOList =

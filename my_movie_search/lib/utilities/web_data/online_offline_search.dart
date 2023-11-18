@@ -7,7 +7,7 @@ const defaultToOffline = false;
 ///
 /// [OnlineOfflineSelector] allows for dynamic change of behaviour
 /// if the developer wants to test in offline mode.
-class OnlineOfflineSelector<T> {
+class OnlineOfflineSelector {
   static var _offline = false;
 
   /// Initialise the selector.
@@ -24,6 +24,6 @@ class OnlineOfflineSelector<T> {
   }
 
   /// Returns appropriate <generic> for current mode (online or offline)
-  T select(T onlineDataSource, T offlineDataSource) =>
+  T select<T>(T onlineDataSource, T offlineDataSource) =>
       _offline ? offlineDataSource : onlineDataSource;
 }

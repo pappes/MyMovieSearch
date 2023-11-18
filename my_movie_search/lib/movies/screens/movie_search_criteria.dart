@@ -10,8 +10,7 @@ class MovieSearchCriteriaPage extends StatefulWidget {
   static const String title = "Movie Search Criteria";
 
   @override
-  _MovieSearchCriteriaPageState createState() =>
-      _MovieSearchCriteriaPageState();
+  State createState() => _MovieSearchCriteriaPageState();
 
   static Route<dynamic> route() => MaterialPageRoute<dynamic>(
         builder: (_) => const MovieSearchCriteriaPage(),

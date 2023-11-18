@@ -893,8 +893,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     T expected, {
     bool fuzzy = false,
   }) {
-    if (fuzzy && (actual is int || actual is double)) {
-      _matchFuzzyCompare(mismatches, fieldName, actual, expected);
+    if (fuzzy && (actual is num || expected is num)) {
+      _matchFuzzyCompare(mismatches, fieldName, actual as num, expected as num);
     } else {
       if (expected != actual) {
         mismatches[fieldName] =
@@ -904,7 +904,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   }
 
   /// Compare 2 fields and describe the difference
-  void _matchFuzzyCompare<T>(
+  void _matchFuzzyCompare<T extends num>(
     Map<String, String> mismatches,
     String fieldName,
     T actual,

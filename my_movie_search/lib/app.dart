@@ -24,15 +24,17 @@ class MMSearchApp extends StatelessWidget {
       value: movieRepository,
       child: BlocProvider(
         create: (_) => SearchBloc(movieRepository: movieRepository),
-        child: MMSearchAppView(),
+        child: const MMSearchAppView(),
       ),
     );
   }
 }
 
 class MMSearchAppView extends StatefulWidget {
+  const MMSearchAppView({super.key});
+
   @override
-  _MMSearchAppViewState createState() => _MMSearchAppViewState();
+  State createState() => _MMSearchAppViewState();
 }
 
 class _MMSearchAppViewState extends State<MMSearchAppView> {

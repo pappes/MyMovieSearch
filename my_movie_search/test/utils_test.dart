@@ -212,32 +212,32 @@ Future<void> main() async {
     String fnOnline() => 'online';
     String fnOffline() => 'offline';
     test('default select to online', () {
-      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      final selecter = OnlineOfflineSelector();
       final fn = selecter.select(fnOnline, fnOffline);
       expect(fn(), 'online');
     });
     test('default init(null) to  select to online', () {
       OnlineOfflineSelector.init(null);
-      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      final selecter = OnlineOfflineSelector();
       final fn = selecter.select(fnOnline, fnOffline);
       expect(fn(), 'online');
     });
     test('override select to offline', () {
       OnlineOfflineSelector.init('true');
-      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      final selecter = OnlineOfflineSelector();
       final fn = selecter.select(fnOnline, fnOffline);
       expect(fn(), 'offline');
     });
     test('override select to online', () {
       OnlineOfflineSelector.init('true');
       OnlineOfflineSelector.init('false');
-      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      final selecter = OnlineOfflineSelector();
       final fn = selecter.select(fnOnline, fnOffline);
       expect(fn(), 'online');
     });
     test('override select to offline uppercase', () {
       OnlineOfflineSelector.init('TRUE');
-      final selecter = OnlineOfflineSelector<DataSourceFn>();
+      final selecter = OnlineOfflineSelector();
       final fn = selecter.select(fnOnline, fnOffline);
       expect(fn(), 'offline');
     });
