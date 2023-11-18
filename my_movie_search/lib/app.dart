@@ -2,42 +2,51 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
 import 'package:my_movie_search/movies/screens/movie_search_criteria.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 /// {@template mmsearch_app}
 /// A [MaterialApp] which sets the `home` to [MovieSearchCriteriaPage].
+///
+/// [overrideBlocRepository] can be overridden
+/// to provide an alternate datasource for mocking
 /// {@endtemplate}
 class MMSearchApp extends StatelessWidget {
   /// {@macro mmsearch_app}
-  const MMSearchApp({super.key, required this.movieRepository});
-  final MovieSearchRepository movieRepository;
+  MMSearchApp({this.overrideBlocRepository, super.key});
+
+  /// The default block repository is [MovieSearchRepository]
+  final BaseMovieRepository? overrideBlocRepository;
+  final BaseMovieRepository _defaultBlocRepository = MovieSearchRepository();
 
   /// Set up information for the bloc design pattern
   /// then initialise the Material application user interface.
   ///
+
+  // TODO(pappes): Use bloc provider and repository provider on search screens. https://github.com/pappes/MyMovieSearch/issues/69
   @override
-  Widget build(BuildContext context) {
-    // TODO: use bloc provider and repository provider on search screens
-    return RepositoryProvider.value(
-      value: movieRepository,
-      child: BlocProvider(
-        create: (_) => SearchBloc(movieRepository: movieRepository),
-        child: const MMSearchAppView(),
-      ),
-    );
-  }
+  Widget build(BuildContext context) =>
+      RepositoryProvider<BaseMovieRepository>.value(
+        value: overrideBlocRepository ?? _defaultBlocRepository,
+        child: BlocProvider<SearchBloc>(
+          create: (_) => SearchBloc(
+            movieRepository: overrideBlocRepository ?? _defaultBlocRepository,
+          ),
+          child: const _MMSearchAppView(),
+        ),
+      );
 }
 
-class MMSearchAppView extends StatefulWidget {
-  const MMSearchAppView({super.key});
+class _MMSearchAppView extends StatefulWidget {
+  const _MMSearchAppView();
 
   @override
-  State<MMSearchAppView> createState() => _MMSearchAppViewState();
+  State<_MMSearchAppView> createState() => _MMSearchAppViewState();
 }
 
-class _MMSearchAppViewState extends State<MMSearchAppView>
+class _MMSearchAppViewState extends State<_MMSearchAppView>
     with RestorationMixin {
   /// Initialise the Material app with app specific settings.
   ///

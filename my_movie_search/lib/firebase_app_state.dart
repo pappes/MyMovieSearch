@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io' show Platform;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -13,27 +14,35 @@ import 'package:my_movie_search/firebase_options.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 //import 'package:provider/provider.dart';
 
+/// Grants access to firebase persistent data
 abstract class FirebaseApplicationState extends ChangeNotifier {
+  /// Singleton for the current platform
   factory FirebaseApplicationState() {
-    instance ??= Platform.isLinux
+    _instance ??= Platform.isLinux
         ? _WebFirebaseApplicationState()
         : _NativeFirebaseApplicationState();
-    return instance!;
+    return _instance!;
   }
 
   FirebaseApplicationState._internal() {
-    init();
+    unawaited(init());
   }
-  static FirebaseApplicationState? instance;
+  static FirebaseApplicationState? _instance;
 
-  Future<bool> _loggedIn = Future.value(false);
+  Future<bool> _loggedIn = Future<bool>.value(false);
   String? _userDisplayName;
   String? _userId;
 
+  /// Determine if the current user is authenticated against Firebase.
   Future<bool> get loggedIn => _loggedIn;
+
+  /// The user name according to Firebase.
   String? get userDisplayName => _userDisplayName;
+
+  /// The userId in Firebase.
   String? get userId => _userId;
 
+  /// Initialise firebase ready for use.
   Future<void> init() async => _loggedIn = _login();
 
   Future<bool> _login() async {
@@ -46,8 +55,10 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
     }
   }
 
+  /// Connect to firebase anonymously
   Future<bool> login();
 
+  /// Extract data from Firebase
   Future<dynamic> fetchRecord(
     String collectionPath, {
     required String id,
@@ -61,6 +72,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
     return true;
   }
 
+  /// Insert data into Firebase.
   Future<dynamic>? addRecord(
     String collectionPath, {
     String? message,
@@ -75,7 +87,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
     return true;
   }
 
-  Map<String, dynamic> newRecord(String message) => {
+  Map<String, dynamic> _newRecord(String message) => {
         'text': message,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'userName': _userDisplayName,
@@ -86,8 +98,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
 class _WebFirebaseApplicationState extends FirebaseApplicationState {
   _WebFirebaseApplicationState() : super._internal();
 
-  // TODO: To keep token across sessions create a TokenStore
-  // that persists the token e.g. using hive
+  // TODO(pappes): reuse tokens. https://github.com/pappes/MyMovieSearch/issues/70
   final _sessionStore = firedart.VolatileStore();
 
   @override
@@ -141,7 +152,7 @@ class _WebFirebaseApplicationState extends FirebaseApplicationState {
     try {
       if (await super.addRecord(collectionPath, message: message, id: id)
           as bool) {
-        final map = newRecord(message ?? 'blank');
+        final map = _newRecord(message ?? 'blank');
         final fbcollection =
             firedart.Firestore.instance.collection(collectionPath);
         if (id == null) {
@@ -171,18 +182,8 @@ class _NativeFirebaseApplicationState extends FirebaseApplicationState {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
-    FirebaseAuth.instance.signInAnonymously();
-    // TODO: link anonymous accounts to authenticated accounts
-    // when FirebaseIUAuth supports linux applications
-    // see https://firebase.google.com/docs/auth/android/anonymous-auth
-    // could be resoved when firebase_auth_desktop issue 130 is fixed via PR 131
-    // https://github.com/FirebaseExtended/flutterfire_desktop/issues/130
-    // https://github.com/FirebaseExtended/flutterfire_desktop/pull/131
-    // also https://stackoverflow.com/questions/73989832/flutterfire-cli-not-showing-windows-and-linux-as-an-option-for-platform-to-suppo
-
-    /*FirebaseUIAuth.configureProviders([
-      EmailAuthProvider(),
-    ]);*/
+    await FirebaseAuth.instance.signInAnonymously();
+    // TODO(pappes): User based auth (not anaonymous) https://github.com/pappes/MyMovieSearch/issues/71
 
     final stream = FirebaseAuth.instance.userChanges().asBroadcastStream();
 
@@ -194,11 +195,11 @@ class _NativeFirebaseApplicationState extends FirebaseApplicationState {
 
   void loginStatusEvent(User? user) {
     if (user != null) {
-      _loggedIn = Future.value(true);
+      _loggedIn = Future<bool>.value(true);
       _userDisplayName = user.displayName;
       _userId = user.uid;
     } else {
-      _loggedIn = Future.value(false);
+      _loggedIn = Future<bool>.value(false);
       _userDisplayName = null;
       _userId = null;
     }
@@ -236,7 +237,7 @@ class _NativeFirebaseApplicationState extends FirebaseApplicationState {
           as bool) {
         final fbcollection =
             FirebaseFirestore.instance.collection(collectionPath);
-        final map = newRecord(message ?? 'blank');
+        final map = _newRecord(message ?? 'blank');
 
         if (id == null) {
           // Generate random ID
@@ -256,72 +257,3 @@ class _NativeFirebaseApplicationState extends FirebaseApplicationState {
     return false;
   }
 }
-
-  /// Defines known routes handled by Firebase UI.
-  ///
-  /*List<RouteBase> getRoutes() => [  
-    GoRoute(
-      path: 'sign-in',
-      builder: (context, state) {
-        return SignInScreen(
-          actions: [
-            ForgotPasswordAction((context, email) {
-              final uri = Uri(
-                path: '/sign-in/forgot-password',
-                queryParameters: <String, String?>{
-                  'email': email,
-                },
-              );
-              context.push(uri.toString());
-            }),
-            AuthStateChangeAction((context, state) {
-              final user = switch (state) {
-                final SignedIn state => state.user,
-                final UserCreated state => state.credential.user,
-                _ => null
-              };
-              if (user == null) {
-                return;
-              }
-              if (state is UserCreated) {
-                user.updateDisplayName(user.email!.split('@')[0]);
-              }
-              if (!user.emailVerified) {
-                user.sendEmailVerification();
-                const snackBar = SnackBar(
-                    content: Text(
-                        'Please check your email to verify your email address'));
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-              }
-              context.pushReplacement('/');
-            }),
-          ],
-        );
-      },
-      routes: [
-        GoRoute(
-          path: 'forgot-password',
-          builder: (context, state) {
-            final arguments = state.uri.queryParameters;
-            return ForgotPasswordScreen(
-              email: arguments['email'],
-              headerMaxExtent: 200,
-            );
-          },
-        ),
-      ],
-    ),
-    GoRoute(
-      path: 'profile',
-      builder: (context, state) {
-        return ProfileScreen(
-          providers: const [],
-          actions: [
-            SignedOutAction((context) {
-              context.pushReplacement('/');
-            }),
-          ],
-        );
-      },
-    ),
-      ];*/

@@ -1,5 +1,6 @@
 part of '../search_bloc.dart';
 
+/// Notify that a search reult has been received.
 abstract class SearchEvent extends Equatable {
   const SearchEvent();
 

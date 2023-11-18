@@ -12,7 +12,7 @@ import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 //Type = title type
 //Poster = image url
 
-// TODO: scrape additional omdb fields & use api for detail (free account is limited to 100/day)
+// TODO(pappes): scrape additional omdb fields & use api for detail (free account is limited to 100/day)
 //Rated = "N/A",
 //Released = "01 Jun 2002",
 //Runtime = "127 min",

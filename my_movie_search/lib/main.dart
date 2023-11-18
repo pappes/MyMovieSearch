@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:logger/logger.dart';
@@ -14,17 +16,19 @@ Future<void> main() async {
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  settings
-      .init(logger: Logger())
-      .then((_) => OnlineOfflineSelector.init(settings.get('OFFLINE')));
+  unawaited(
+    settings
+        .init(logger: Logger())
+        .then((_) => OnlineOfflineSelector.init(settings.get('OFFLINE'))),
+  );
   Bloc.observer = MMSearchObserver();
-  FirebaseApplicationState().login();
+  unawaited(FirebaseApplicationState().login());
 
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => FirebaseApplicationState(),
-      builder: (context, child) =>
-          MMSearchApp(movieRepository: MovieSearchRepository()),
+    ChangeNotifierProvider<FirebaseApplicationState>(
+      create: (_) => FirebaseApplicationState(),
+      builder: (_, __) =>
+          MMSearchApp(overrideBlocRepository: MovieSearchRepository()),
     ),
   );
 }

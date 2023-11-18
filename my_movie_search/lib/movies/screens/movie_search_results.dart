@@ -39,7 +39,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     super.initState();
     _title = widget.criteria.criteriaTitle;
     _searchId = widget.criteria.searchId;
-    //TODO: use a factory in inject search bloc instances _searchBloc = BlocProvider.of<SearchBloc>(context);
+    //TODO(pappes): use a factory in inject search bloc instances _searchBloc = BlocProvider.of<SearchBloc>(context);
     _searchBloc = SearchBloc(movieRepository: getDatasource());
     if (_searchBloc != null && !_searchBloc!.isClosed) {
       _searchBloc!.add(SearchRequested(widget.criteria));

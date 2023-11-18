@@ -327,7 +327,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     yield* await myConvertCriteriaToWebText()
-        .timeout(const Duration(seconds: 24)) // TODO: allow configurable
+        .timeout(
+            const Duration(seconds: 24)) // TODO(pappes): allow configurable
         .onError(captureError);
     for (final error in errors) {
       yield* Stream.error(error);

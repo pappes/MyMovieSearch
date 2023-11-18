@@ -34,9 +34,9 @@ class BaseMovieRepository {
     yield feedback;
 
     _movieStreamController = StreamController<MovieResultDTO>(sync: true);
-    // TODO: error handling
+    // TODO(pappes): error handling
     initSearch(_searchUID, criteria);
-    // TODO: make fetch duration configurable.
+    // TODO(pappes): make fetch duration configurable.
     Future<void>.delayed(const Duration(seconds: 30)).then((_) => close());
 
     yield* _movieStreamController!.stream;

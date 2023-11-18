@@ -31,7 +31,7 @@ mixin ThreadedCacheIMDBTitleDetails
   List<MovieResultDTO> myFetchResultFromCache() {
     final value = _cache.get(_makeKey(criteria));
     return value;
-    // TODO: treat value as a list not as a single DTO
+    // TODO(pappes): treat value as a list not as a single DTO
   }
 
   /// Flush all data from the cache.
