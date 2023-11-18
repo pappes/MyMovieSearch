@@ -17,7 +17,7 @@ class PersonDetailsPage extends StatefulWidget {
   final MovieResultDTO person;
 
   @override
-  State createState() => _PersonDetailsPageState();
+  State<PersonDetailsPage> createState() => _PersonDetailsPageState();
 }
 
 class _PersonDetailsPageState extends State<PersonDetailsPage>

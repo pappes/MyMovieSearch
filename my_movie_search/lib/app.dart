@@ -34,18 +34,27 @@ class MMSearchAppView extends StatefulWidget {
   const MMSearchAppView({super.key});
 
   @override
-  State createState() => _MMSearchAppViewState();
+  State<MMSearchAppView> createState() => _MMSearchAppViewState();
 }
 
-class _MMSearchAppViewState extends State<MMSearchAppView> {
+class _MMSearchAppViewState extends State<MMSearchAppView>
+    with RestorationMixin {
   /// Initialise the Material app with app specific settings.
   ///
+
+  @override
+  String get restorationId => '_MMSearchAppViewState';
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {}
+
   @override
   Widget build(BuildContext context) => MaterialApp.router(
-        restorationScopeId: 'root',
+        restorationScopeId: 'MyMovieSearch',
         title: 'My Movie Search',
         routerConfig: GoRouter(
-          routes: [
+          restorationScopeId: 'router',
+          routes: <RouteBase>[
             ...MMSNav.getRoutes(),
             //...FirebaseApplicationState().getRoutes(),
           ],

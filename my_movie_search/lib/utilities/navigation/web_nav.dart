@@ -209,41 +209,56 @@ class MMSNav {
   static List<RouteBase> getRoutes() => [
         GoRoute(
           path: '/',
-          builder: (context, state) => const MovieSearchCriteriaPage(),
-        ),
-        GoRoute(
-          name: routeSearchCriteria,
-          path: '/$routeSearchCriteria',
-          builder: (context, state) => const MovieSearchCriteriaPage(),
-        ),
-        GoRoute(
-          name: routeSearchResults,
-          path: '/$routeSearchResults',
-          builder: (context, state) => MovieSearchResultsNewPage(
-            criteria: state.extra! as SearchCriteriaDTO,
+          pageBuilder: (context, state) => const MaterialPage(
+            restorationId: 'router.scroll',
+            child: MovieSearchCriteriaPage(),
           ),
         ),
         GoRoute(
-          name: routePersonDetails,
-          path: '/$routePersonDetails',
-          builder: (context, state) => PersonDetailsPage(
-            person: state.extra! as MovieResultDTO,
-          ),
-        ),
+            name: routeSearchCriteria,
+            path: '/$routeSearchCriteria',
+            pageBuilder: (context, state) => const MaterialPage(
+                  restorationId: '$routeSearchCriteria.router.scroll',
+                  child: MovieSearchCriteriaPage(),
+                )),
         GoRoute(
-          name: routeMovieDetails,
-          path: '/$routeMovieDetails',
-          builder: (context, state) => MovieDetailsPage(
-            movie: state.extra! as MovieResultDTO,
-          ),
-        ),
+            name: routeSearchResults,
+            path: '/$routeSearchResults',
+            pageBuilder: (context, state) => MaterialPage(
+                  restorationId: '$routeSearchResults.router.scroll',
+                  child: MovieSearchResultsNewPage(
+                    criteria: state.extra as SearchCriteriaDTO? ??
+                        SearchCriteriaDTO(),
+                  ),
+                )),
         GoRoute(
-          name: routeErrorDetails,
-          path: '/$routeErrorDetails',
-          builder: (context, state) => ErrorDetailsPage(
-            errorDto: state.extra! as MovieResultDTO,
-          ),
-        ),
+            name: routePersonDetails,
+            path: '/$routePersonDetails',
+            pageBuilder: (context, state) => MaterialPage(
+                  restorationId: '$routePersonDetails.router.scroll',
+                  child: PersonDetailsPage(
+                    person: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+                  ),
+                )),
+        GoRoute(
+            name: routeMovieDetails,
+            path: '/$routeMovieDetails',
+            pageBuilder: (context, state) => MaterialPage(
+                  restorationId: '$routeMovieDetails.router.scroll',
+                  child: MovieDetailsPage(
+                    movie: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+                  ),
+                )),
+        GoRoute(
+            name: routeErrorDetails,
+            path: '/$routeErrorDetails',
+            pageBuilder: (context, state) => MaterialPage(
+                  restorationId: '$routeErrorDetails.router.scroll',
+                  child: ErrorDetailsPage(
+                    errorDto:
+                        state.extra as MovieResultDTO? ?? MovieResultDTO(),
+                  ),
+                )),
       ];
 }
 

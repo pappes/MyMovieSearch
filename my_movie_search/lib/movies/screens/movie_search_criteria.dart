@@ -5,21 +5,24 @@ import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
-  const MovieSearchCriteriaPage({super.key});
+  const MovieSearchCriteriaPage({super.key, this.restorationId});
 
   static const String title = "Movie Search Criteria";
+  final String? restorationId;
 
   @override
-  State createState() => _MovieSearchCriteriaPageState();
+  State<MovieSearchCriteriaPage> createState() =>
+      _MovieSearchCriteriaPageState();
 
   static Route<dynamic> route() => MaterialPageRoute<dynamic>(
         builder: (_) => const MovieSearchCriteriaPage(),
       );
 }
 
-class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage> {
-  final textController = TextEditingController();
-  final FocusNode criteriaFocusNode = FocusNode();
+class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
+    with RestorationMixin {
+  late RestorableTextEditingController _textController;
+  late FocusNode _criteriaFocusNode;
 
   void performSearch(SearchCriteriaDTO criteria) =>
       MMSNav(context).showResultsPage(criteria);
@@ -34,16 +37,34 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage> {
   void searchForMovie() => performSearch(
         SearchCriteriaDTO().init(
           SearchCriteriaType.movieTitle,
-          title: textController.text,
+          title: _textController.value.text,
         ),
       );
 
   @override
+  String? get restorationId => 'MovieSearchCriteriaPage${widget.restorationId}';
+
+  @override
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    // All restorable properties must be registered with the mixin. After
+    // registration, the counter either has its old value restored or is
+    // initialized to its default value.
+    registerForRestoration(_textController, 'criteriatext');
+  }
+
+  @override
+  void initState() {
+    _textController = RestorableTextEditingController();
+    _criteriaFocusNode = FocusNode();
+    super.initState();
+  }
+
+  @override
   void dispose() {
     // Restorables must be disposed when no longer used.
-    textController.dispose();
+    _textController.dispose();
     // Clean up the focus node when the Form is disposed.
-    criteriaFocusNode.dispose();
+    _criteriaFocusNode.dispose();
     super.dispose();
   }
 
@@ -67,7 +88,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage> {
         child: const Icon(Icons.search),
       ),
     );
-    criteriaFocusNode.requestFocus();
+    _criteriaFocusNode.requestFocus();
     return page;
   }
 }
@@ -76,8 +97,8 @@ class _CriteriaInput extends Center {
   _CriteriaInput(_MovieSearchCriteriaPageState state)
       : super(
           child: TextField(
-            controller: state.textController,
-            focusNode: state.criteriaFocusNode,
+            controller: state._textController.value,
+            focusNode: state._criteriaFocusNode,
             textInputAction: TextInputAction.search,
             autofocus: true,
             autofillHints: const [AutofillHints.sublocality],
@@ -88,14 +109,14 @@ class _CriteriaInput extends Center {
               suffixIcon: IconButton(
                 icon: const Icon(Icons.clear),
                 onPressed: () {
-                  state.textController.clear();
-                  state.criteriaFocusNode.requestFocus();
+                  state._textController.value.clear();
+                  state._criteriaFocusNode.requestFocus();
                 },
               ),
               prefixIcon: IconButton(
                 icon: const Icon(Icons.qr_code_2),
                 onPressed: () {
-                  state.textController.clear();
+                  state._textController.value.clear();
                   DVDBarcodeScanner()
                       .scanBarcode(state.context, state.searchForBarcode);
                 },

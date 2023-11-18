@@ -16,7 +16,8 @@ class MovieSearchResultsNewPage extends StatefulWidget {
   final SearchCriteriaDTO criteria;
 
   @override
-  State createState() => _MovieSearchResultsPageState();
+  State<MovieSearchResultsNewPage> createState() =>
+      _MovieSearchResultsPageState();
 }
 
 class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
