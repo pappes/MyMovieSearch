@@ -157,13 +157,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   Widget _leftColumn() => Wrap(
         children: [
           ..._leftHeader(),
+          ..._description(),
           // Only show poster in left column on mobile
           if (_mobileLayout) _posterSection(),
 
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ..._description(),
               ..._suggestions(),
               ..._cast(),
             ],
