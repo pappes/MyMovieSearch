@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 class ErrorDetailsPage extends StatefulWidget {
-  const ErrorDetailsPage({super.key, required this.errorDto});
+  const ErrorDetailsPage({
+    super.key,
+    required this.restorationId,
+    required this.errorDto,
+  });
 
   final MovieResultDTO errorDto;
+  final String restorationId;
 
   @override
   State<ErrorDetailsPage> createState() => _ErrorDetailsPageState();

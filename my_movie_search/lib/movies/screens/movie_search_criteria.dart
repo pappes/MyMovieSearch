@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
-  const MovieSearchCriteriaPage({super.key, this.restorationId});
+  const MovieSearchCriteriaPage({super.key, required this.restorationId});
 
   static const String title = "Movie Search Criteria";
-  final String? restorationId;
+  final String restorationId;
 
   @override
   State<MovieSearchCriteriaPage> createState() =>
       _MovieSearchCriteriaPageState();
 
-  static Route<dynamic> route() => MaterialPageRoute<dynamic>(
-        builder: (_) => const MovieSearchCriteriaPage(),
+  /// Instruct goroute how to navigate to this page.
+  static MaterialPage<dynamic> goRoute(_, GoRouterState state) =>
+      const MaterialPage(
+        restorationId: 'MovieSearchCriteriaPage',
+        child: MovieSearchCriteriaPage(restorationId: 'MovieSearchCriteria'),
       );
 }
 

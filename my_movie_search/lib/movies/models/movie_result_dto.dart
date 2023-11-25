@@ -1187,8 +1187,8 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
   ///
   String toJson() {
     final listContents = <String>[];
-    for (final key in this) {
-      listContents.add(jsonEncode(key.toMap()));
+    for (final dto in this) {
+      listContents.add(jsonEncode(dto.toMap()));
     }
     return jsonEncode(listContents);
   }

@@ -13,9 +13,14 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 
 class MovieDetailsPage extends StatefulWidget {
-  const MovieDetailsPage({super.key, required this.movie});
+  const MovieDetailsPage({
+    super.key,
+    required this.restorationId,
+    required this.movie,
+  });
 
   final MovieResultDTO movie;
+  final String restorationId;
 
   @override
   State<MovieDetailsPage> createState() => _MovieDetailsPageState();

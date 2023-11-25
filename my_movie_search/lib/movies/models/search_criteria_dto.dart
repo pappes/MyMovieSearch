@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:equatable/equatable.dart' show Equatable;
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
@@ -88,6 +89,15 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
     return result;
   }
 
+  static String getRestorationId(GoRouterState state) {
+    final criteria = state.extra;
+    String? id;
+    if (criteria != null && criteria is SearchCriteriaDTO) {
+      id = criteria.toSearchId();
+    }
+    return '_${state.fullPath}$id';
+  }
+
   @override
   Object toPrimitives() => dtoToPrimitives(value);
   Object dtoToPrimitives(SearchCriteriaDTO value) => jsonEncode(value.toMap());
@@ -108,7 +118,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
         ids.add(dto.uniqueId);
       }
     }
-    if (ids.isEmpty) return criteriaTitle;
+    if (ids.isEmpty) return '$criteriaType:$criteriaTitle';
     if (ids.length == 1) return ids.first;
     return ids.join(',');
   }

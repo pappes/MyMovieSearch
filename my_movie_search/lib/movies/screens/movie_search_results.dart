@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
+import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/blocs/repositories/barcode_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/more_keywords_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
@@ -12,12 +13,25 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/movie_card_small.dart';
 
 class MovieSearchResultsNewPage extends StatefulWidget {
-  const MovieSearchResultsNewPage({super.key, required this.criteria});
+  const MovieSearchResultsNewPage({
+    super.key,
+    required this.restorationId,
+    required this.criteria,
+  });
   final SearchCriteriaDTO criteria;
+  final String restorationId;
 
   @override
   State<MovieSearchResultsNewPage> createState() =>
       _MovieSearchResultsPageState();
+
+  /// Instruct goroute how to navigate to this page.
+  static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
+        restorationId: state.fullPath,
+        child: MovieSearchResultsNewPage(
+            criteria: state.extra as SearchCriteriaDTO? ?? SearchCriteriaDTO(),
+            restorationId: RestorableSearchCriteria.getRestorationId(state)),
+      );
 }
 
 class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
@@ -44,7 +58,13 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     if (_searchBloc != null && !_searchBloc!.isClosed) {
       _searchBloc!.add(SearchRequested(widget.criteria));
     }
+
+    print(restorationId);
   }
+
+  //@override
+  // Create resoration ID dynamimcall on the statful widget to save teh call needing to
+  //String? get restorationId => widget.criteria.toSearchId();
 
   BaseMovieRepository getDatasource() {
     switch (widget.criteria.criteriaType) {
@@ -64,8 +84,9 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   }
 
   @override
+  String get restorationId => widget.restorationId;
   // The restoration bucket id for this page.
-  String get restorationId => 'MovieSearchResults$_searchId';
+  //String get restorationId => 'MovieSearchResults$_searchId';
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {

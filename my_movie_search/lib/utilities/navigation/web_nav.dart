@@ -204,59 +204,56 @@ class MMSNav {
     }
   }
 
+  static String getRestorationId(GoRouterState state) {
+    final criteria = state.extra;
+    String? id;
+    if (criteria != null && criteria is SearchCriteriaDTO) {
+      id = criteria.toSearchId();
+    }
+    return '_${state.fullPath}$id';
+  }
+
   /// Defines known routes handled by MMSNav.
   ///
   static List<RouteBase> getRoutes() => [
-        GoRoute(
-          path: '/',
-          pageBuilder: (context, state) => const MaterialPage(
-            restorationId: 'router.scroll',
-            child: MovieSearchCriteriaPage(),
-          ),
-        ),
+        GoRoute(path: '/', pageBuilder: MovieSearchCriteriaPage.goRoute),
         GoRoute(
             name: routeSearchCriteria,
             path: '/$routeSearchCriteria',
-            pageBuilder: (context, state) => const MaterialPage(
-                  restorationId: '$routeSearchCriteria.router.scroll',
-                  child: MovieSearchCriteriaPage(),
-                )),
+            pageBuilder: MovieSearchCriteriaPage.goRoute),
         GoRoute(
             name: routeSearchResults,
             path: '/$routeSearchResults',
-            pageBuilder: (context, state) => MaterialPage(
-                  restorationId: '$routeSearchResults.router.scroll',
-                  child: MovieSearchResultsNewPage(
-                    criteria: state.extra as SearchCriteriaDTO? ??
-                        SearchCriteriaDTO(),
-                  ),
-                )),
+            pageBuilder: MovieSearchResultsNewPage.goRoute),
         GoRoute(
             name: routePersonDetails,
             path: '/$routePersonDetails',
             pageBuilder: (context, state) => MaterialPage(
-                  restorationId: '$routePersonDetails.router.scroll',
+                  restorationId: state.fullPath,
                   child: PersonDetailsPage(
                     person: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+                    restorationId: getRestorationId(state),
                   ),
                 )),
         GoRoute(
             name: routeMovieDetails,
             path: '/$routeMovieDetails',
             pageBuilder: (context, state) => MaterialPage(
-                  restorationId: '$routeMovieDetails.router.scroll',
+                  restorationId: state.fullPath,
                   child: MovieDetailsPage(
                     movie: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+                    restorationId: getRestorationId(state),
                   ),
                 )),
         GoRoute(
             name: routeErrorDetails,
             path: '/$routeErrorDetails',
             pageBuilder: (context, state) => MaterialPage(
-                  restorationId: '$routeErrorDetails.router.scroll',
+                  restorationId: state.fullPath,
                   child: ErrorDetailsPage(
                     errorDto:
                         state.extra as MovieResultDTO? ?? MovieResultDTO(),
+                    restorationId: getRestorationId(state),
                   ),
                 )),
       ];

@@ -49,6 +49,7 @@ dependencies:
   go_router: ^12.1.1                    # screen navigation
   html: ^0.15.0                         # Dart dom and html utilities.
   html_unescape: ^2.0.0                 # decode &apos;
+  hydrated_bloc: ^9.1.2                 # automatic restoration for bloc data
   intl: ^0.18.0                         # internationalisation including number and data formatting.
   lint: ^2.0.1
   logger: ^2.0.2                        # Log trace messages to console.
