@@ -38,11 +38,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     with RestorationMixin {
   SearchBloc? _searchBloc;
   List<MovieResultDTO> _sortedList = [];
-  late String _searchId;
-  final _restorableList = RestorableMovieList();
-  final _restorableId = RestorableString('');
-  var _title = 'Results';
-  late final _textController = TextEditingController(text: _title);
+  late final RestorableMovieList _restorableList;
+  late final RestorableTextEditingController _textController;
   late final FocusNode _criteriaFocusNode = FocusNode();
   late final FocusNode _searchFocusNode = FocusNode();
 
@@ -50,21 +47,20 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
 
   @override
   void initState() {
+    _textController = RestorableTextEditingController(
+      text: (widget.criteria.criteriaType == SearchCriteriaType.moreKeywords)
+          ? 'Keywords for ${widget.criteria.criteriaList.first.title}'
+          : widget.criteria.criteriaTitle,
+    );
+    _restorableList = RestorableMovieList();
     super.initState();
-    _title = widget.criteria.criteriaTitle;
-    _searchId = widget.criteria.searchId;
+    //final controller = _textController.value;
+    //final text = controller.text;
     //TODO(pappes): use a factory in inject search bloc instances _searchBloc = BlocProvider.of<SearchBloc>(context);
-    _searchBloc = SearchBloc(movieRepository: getDatasource());
-    if (_searchBloc != null && !_searchBloc!.isClosed) {
+    /*if (_searchBloc != null && !_searchBloc!.isClosed) {
       _searchBloc!.add(SearchRequested(widget.criteria));
-    }
-
-    print(restorationId);
+    }*/
   }
-
-  //@override
-  // Create resoration ID dynamimcall on the statful widget to save teh call needing to
-  //String? get restorationId => widget.criteria.toSearchId();
 
   BaseMovieRepository getDatasource() {
     switch (widget.criteria.criteriaType) {
@@ -76,7 +72,6 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
       case SearchCriteriaType.barcode:
         return BarcodeRepository();
       case SearchCriteriaType.moreKeywords:
-        _title = 'Keywords for ${widget.criteria.criteriaList.first.title}';
         return MoreKeywordsRepository();
       default:
         return MovieSearchRepository();
@@ -85,21 +80,21 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
 
   @override
   String get restorationId => widget.restorationId;
-  // The restoration bucket id for this page.
-  //String get restorationId => 'MovieSearchResults$_searchId';
-
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     // Register our property to be saved every time it changes,
     // and to be restored every time our app is killed by the OS!
-    registerForRestoration(_restorableId, 'searchId');
-    registerForRestoration(_restorableList, _searchId);
+    registerForRestoration(_restorableList, 'sortedList');
+    registerForRestoration(_textController, 'inputText');
+    _searchBloc = SearchBloc(movieRepository: getDatasource());
+    if (oldBucket == null && _searchBloc != null && !_searchBloc!.isClosed) {
+      _searchBloc!.add(SearchRequested(widget.criteria));
+    }
   }
 
   @override
   void dispose() {
     // Restorables must be disposed when no longer used.
-    _restorableId.dispose();
     _restorableList.dispose();
     _textController.dispose();
     // Clean up the focus node when the Form is disposed.
@@ -114,7 +109,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     _restorableList.value = _sortedList;
 
     final criteriaText = TextField(
-      controller: _textController,
+      controller: _textController.value,
       focusNode: _criteriaFocusNode,
       onSubmitted: _newSearch,
       showCursor: true,
@@ -123,7 +118,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
         suffixIcon: IconButton(
           icon: const Icon(Icons.clear),
           onPressed: () {
-            _textController.clear();
+            _textController.value.clear();
             _criteriaFocusNode.requestFocus();
           },
         ),
@@ -139,7 +134,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
             children: [
               Expanded(child: criteriaText),
               IconButton(
-                onPressed: () => _newSearch(_textController.text),
+                onPressed: () => _newSearch(_textController.value.text),
                 icon: const Icon(Icons.search),
                 focusNode: _searchFocusNode,
               ),

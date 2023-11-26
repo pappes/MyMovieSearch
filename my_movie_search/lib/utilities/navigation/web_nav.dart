@@ -228,23 +228,11 @@ class MMSNav {
         GoRoute(
             name: routePersonDetails,
             path: '/$routePersonDetails',
-            pageBuilder: (context, state) => MaterialPage(
-                  restorationId: state.fullPath,
-                  child: PersonDetailsPage(
-                    person: state.extra as MovieResultDTO? ?? MovieResultDTO(),
-                    restorationId: getRestorationId(state),
-                  ),
-                )),
+            pageBuilder: PersonDetailsPage.goRoute),
         GoRoute(
             name: routeMovieDetails,
             path: '/$routeMovieDetails',
-            pageBuilder: (context, state) => MaterialPage(
-                  restorationId: state.fullPath,
-                  child: MovieDetailsPage(
-                    movie: state.extra as MovieResultDTO? ?? MovieResultDTO(),
-                    restorationId: getRestorationId(state),
-                  ),
-                )),
+            pageBuilder: MovieDetailsPage.goRoute),
         GoRoute(
             name: routeErrorDetails,
             path: '/$routeErrorDetails',

@@ -89,6 +89,8 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
     return result;
   }
 
+  /// Get a unique ideintifier for this data.
+  ///
   static String getRestorationId(GoRouterState state) {
     final criteria = state.extra;
     String? id;

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
@@ -14,6 +15,14 @@ class ErrorDetailsPage extends StatefulWidget {
 
   @override
   State<ErrorDetailsPage> createState() => _ErrorDetailsPageState();
+
+  /// Instruct goroute how to navigate to this page.
+  static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
+        restorationId: state.fullPath,
+        child: ErrorDetailsPage(
+            errorDto: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+            restorationId: RestorableMovie.getRestorationId(state)),
+      );
 }
 
 class _ErrorDetailsPageState extends State<ErrorDetailsPage>
@@ -24,13 +33,13 @@ class _ErrorDetailsPageState extends State<ErrorDetailsPage>
 
   @override
   // The restoration bucket id for this page.
-  String get restorationId => 'ErrorDetails${widget.errorDto.uniqueId}';
+  String get restorationId => widget.restorationId;
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) =>
       // Register our property to be saved every time it changes,
       // and to be restored every time our app is killed by the OS!
-      registerForRestoration(_restorableMovie, widget.errorDto.uniqueId);
+      registerForRestoration(_restorableMovie, 'dto');
 
   @override
   void dispose() {

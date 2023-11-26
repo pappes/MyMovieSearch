@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math' show max;
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
@@ -115,6 +116,17 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
     if (null == oldValue || !oldValue.matches(value)) {
       notifyListeners();
     }
+  }
+
+  /// Get a unique identifier for this data.
+  ///
+  static String getRestorationId(GoRouterState state) {
+    final criteria = state.extra;
+    String? id;
+    if (criteria != null && criteria is MovieResultDTO) {
+      id = criteria.uniqueId;
+    }
+    return '_${state.fullPath}$id';
   }
 
   @override

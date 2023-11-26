@@ -1,5 +1,6 @@
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -23,12 +24,20 @@ class PersonDetailsPage extends StatefulWidget {
 
   @override
   State<PersonDetailsPage> createState() => _PersonDetailsPageState();
+
+  /// Instruct goroute how to navigate to this page.
+  static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
+        restorationId: state.fullPath,
+        child: PersonDetailsPage(
+            person: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+            restorationId: RestorableMovie.getRestorationId(state)),
+      );
 }
 
 class _PersonDetailsPageState extends State<PersonDetailsPage>
     with RestorationMixin {
   late MovieResultDTO _person;
-  bool _descriptionExpanded = false;
+  final RestorableBool _descriptionExpanded = RestorableBool(false);
   bool _redrawRequired = true;
   final _restorablePerson = RestorableMovie();
   var _mobileLayout = true;
@@ -90,18 +99,21 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
   @override
   // The restoration bucket id for this page.
-  String get restorationId => 'PersonDetails${_person.uniqueId}';
+  String get restorationId => widget.restorationId;
 
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) =>
-      // Register our property to be saved every time it changes,
-      // and to be restored every time our app is killed by the OS!
-      registerForRestoration(_restorablePerson, _person.uniqueId);
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    // Register our property to be saved every time it changes,
+    // and to be restored every time our app is killed by the OS!
+    registerForRestoration(_restorablePerson, 'person');
+    registerForRestoration(_descriptionExpanded, 'expanded');
+  }
 
   @override
   void dispose() {
     // Restorable must be disposed when no longer used.
     _restorablePerson.dispose();
+    _descriptionExpanded.dispose();
     super.dispose();
   }
 
@@ -184,8 +196,9 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
               child: Text(
                 _person.description,
                 style: biggerFont,
-                overflow: _descriptionExpanded ? null : TextOverflow.ellipsis,
-                maxLines: _descriptionExpanded ? null : 8,
+                overflow:
+                    _descriptionExpanded.value ? null : TextOverflow.ellipsis,
+                maxLines: _descriptionExpanded.value ? null : 8,
               ),
             ),
           ),
@@ -194,7 +207,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       );
 
   void _toggleDescription() =>
-      setState(() => _descriptionExpanded = !_descriptionExpanded);
+      setState(() => _descriptionExpanded.value = !_descriptionExpanded.value);
 
   Widget posterSection() => Row(
         children: [
