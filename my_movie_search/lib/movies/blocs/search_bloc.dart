@@ -105,9 +105,9 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
   }
 
   // Annotate the DTO with a read indicator
-  void _addReadIndicator(MovieResultDTO dto, dynamic value) {
+  void _addReadIndicator(MovieResultDTO dto, String? value) {
     if (null != value) {
-      dto.setReadIndicator();
+      dto.setReadIndicator(value.toString());
       _throttleUpdates();
     }
   }
@@ -137,7 +137,8 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
                 '$collectionPrefix$collection',
                 id: newValue.uniqueId,
               )
-              .then((value) => _addReadIndicator(_allResults[key]!, value));
+              .then((value) =>
+                  _addReadIndicator(_allResults[key]!, value?.toString()));
         }
       }
     }

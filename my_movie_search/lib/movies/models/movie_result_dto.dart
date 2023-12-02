@@ -408,11 +408,11 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return this;
   }
 
-  void setReadIndicator() {
-    sources[DataSourceType.fbmmsnavlog] = uniqueId;
+  void setReadIndicator(String value) {
+    sources[DataSourceType.fbmmsnavlog] = value;
   }
 
-  bool getReadIndicator() => sources.containsKey(DataSourceType.fbmmsnavlog);
+  String? getReadIndicator() => sources[DataSourceType.fbmmsnavlog];
 
   /// Create a MovieResultDTO with supplied data.
   ///
@@ -1395,7 +1395,31 @@ extension DTOCompare on MovieResultDTO {
   /// Rank movies based not recently viewed.
   ///
   int viewedCategory() {
-    return getReadIndicator() ? 0 : 1;
+    final read = getReadIndicator();
+
+    switch (read) {
+      case '':
+        return 98;
+      case null:
+        return 98;
+      default:
+        {
+          try {
+            final readHistory =
+                getEnumValue<ReadHistory>(read, ReadHistory.values);
+            switch (readHistory) {
+              case ReadHistory.starred:
+                return 99;
+              case ReadHistory.reading:
+                return 1;
+              case ReadHistory.read:
+                return 0;
+              default:
+            }
+          } catch (_) {}
+        }
+    }
+    return 0;
   }
 
   /// Rank movies based on type of content.

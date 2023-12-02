@@ -9,6 +9,7 @@ import 'package:flutter/material.dart'
         NetworkImage,
         Text,
         Widget;
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
@@ -17,6 +18,7 @@ import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 class MovieTile extends ListTile {
   MovieTile(this.context, this.movie, {super.key})
@@ -144,10 +146,35 @@ class MovieTile extends ListTile {
         return movie.imageUrl == '' ? null : _navigateButton(context, movie);
 
       default:
-        return movie.getReadIndicator()
-            ? const Icon(Icons.visibility)
-            : const Text('');
+        {
+          final read = movie.getReadIndicator();
+          try {
+            final readHistory = getEnumValue<ReadHistory>(
+              read,
+              ReadHistory.values,
+            );
+            logger.t('read indicator = ${movie.uniqueId} $read');
+            switch (readHistory) {
+              case ReadHistory.starred:
+                return const Icon(Icons.star);
+              case ReadHistory.reading:
+                return const Icon(Icons.visibility, fill: 1);
+              case ReadHistory.read:
+                return const Icon(Icons.visibility);
+              case null:
+                return null;
+              default:
+                return const Icon(Icons.question_mark);
+            }
+          } catch (_) {
+            logger.t('old inidcator = ${movie.uniqueId} $read');
+            if (read != null && read.isNotEmpty) {
+              return const Icon(Icons.visibility_off, fill: 1);
+            }
+          }
+        }
     }
+    return null;
   }
 
   static void _navigate(BuildContext context, MovieResultDTO movie) =>

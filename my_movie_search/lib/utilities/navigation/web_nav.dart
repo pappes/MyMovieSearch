@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as tabs;
 import 'package:go_router/go_router.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/error_details.dart';
@@ -93,7 +94,8 @@ class MMSNav {
 
   /// Navigates to a search results page populated with a movie list.
   ///
-  void showResultsPage(SearchCriteriaDTO criteria) => canvas.viewFlutterPage(
+  Future<Object?> showResultsPage(SearchCriteriaDTO criteria) =>
+      canvas.viewFlutterPage(
         RouteInfo(
           routeSearchResults,
           criteria,
@@ -160,7 +162,6 @@ class MMSNav {
   /// Display more details for the selected card.
   ///
   void resultDrillDown(MovieResultDTO movie) {
-    movie.setReadIndicator();
     switch (movie.type) {
       case MovieContentType.keyword:
         // Search for movies that match the keyword.
@@ -199,8 +200,11 @@ class MMSNav {
         canvas.viewWebPage(movie.imageUrl);
 
       default:
+        movie.setReadIndicator(ReadHistory.reading.toString());
         // Show details screen (movie details or person details)
-        canvas.viewFlutterPage(getDetailsPage(movie));
+        canvas
+            .viewFlutterPage(getDetailsPage(movie))
+            .then((_) => movie.setReadIndicator(ReadHistory.read.toString()));
     }
   }
 
@@ -268,15 +272,20 @@ class MMSFlutterCanvas {
   ///
   /// Chooses a MovieDetailsPage or PersonDetailsPage
   /// based on the IMDB unique ID or ErrorDetailsPage otherwise
-  void viewFlutterPage(RouteInfo page) {
+  Future<Object?> viewFlutterPage(RouteInfo page) {
     if (null != context) {
-      NavLog(context!).log(page.routePath, page.reference);
+      NavLog(context!).logPageOpen(page.routePath, page.reference);
       try {
-        context!.pushNamed(page.routePath, extra: page.params);
+        return context!.pushNamed(page.routePath, extra: page.params)
+          ..then((Object? val) {
+            NavLog(context!)
+                .logPageClose(page.routePath, page.reference, page.params);
+          });
       } catch (e) {
         logger.t(e);
       }
     }
+    return Future.value(null);
   }
 
   void _invokeChromeCustomTabs(String url) => tabs

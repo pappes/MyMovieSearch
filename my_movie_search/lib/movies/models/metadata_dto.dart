@@ -7,6 +7,14 @@ enum DetailLevel {
   custom, //          context specific
 }
 
+enum ReadHistory {
+  none,
+  starred, //         Want to come back to this one later.
+  read, //            Read the text, got the tshirt to prove it.
+  reading, //         Give me a minute, sheesh.
+  custom, //          context specific.
+}
+
 enum DataSourceType {
   none,
   imdb,
