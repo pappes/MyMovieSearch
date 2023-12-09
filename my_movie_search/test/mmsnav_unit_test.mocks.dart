@@ -3,6 +3,8 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'dart:async' as _i4;
+
 import 'package:flutter/material.dart' as _i3;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:my_movie_search/utilities/navigation/web_nav.dart' as _i2;
@@ -34,6 +36,7 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
   void viewWebPage(String? url) => super.noSuchMethod(
         Invocation.method(
@@ -42,12 +45,14 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
         ),
         returnValueForMissingStub: null,
       );
+
   @override
-  void viewFlutterPage(_i2.RouteInfo? page) => super.noSuchMethod(
+  _i4.Future<Object?> viewFlutterPage(_i2.RouteInfo? page) =>
+      (super.noSuchMethod(
         Invocation.method(
           #viewFlutterPage,
           [page],
         ),
-        returnValueForMissingStub: null,
-      );
+        returnValue: _i4.Future<Object?>.value(),
+      ) as _i4.Future<Object?>);
 }

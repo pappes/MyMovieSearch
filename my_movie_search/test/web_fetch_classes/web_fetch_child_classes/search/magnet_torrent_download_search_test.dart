@@ -33,7 +33,7 @@ void main() {
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
         QueryTorrentDownloadSearch(criteria).myFormatInputAsText(),
-        '${criteria.criteriaType}:${criteria.criteriaTitle}'.toLowerCase(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -108,7 +108,7 @@ void main() {
       final expectedOutput = throwsA(
         startsWith(
           'TorrentDownload results data not detected for criteria '
-          '${criteria.toSearchId().toLowerCase()} in html:',
+          '${criteria.toPrintableIdOrText().toLowerCase()} in html:',
         ),
       );
       final actualOutput = QueryTorrentDownloadSearch(criteria)
@@ -228,9 +228,9 @@ void main() {
       final torrentDownloadSearch = QueryTorrentDownloadSearch(criteria);
       final expectedException =
           '[QueryTorrentDownloadSearch] Error in torrentDownloadSearch '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :TorrentDownload results data not '
-          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:not valid html';
 
       // Invoke the functionality.
@@ -247,9 +247,9 @@ void main() {
       // Set up the test data.
       final expectedException =
           '[QueryTorrentDownloadSearch] Error in torrentDownloadSearch '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :TorrentDownload results data not '
-          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final torrentDownloadSearch = QueryTorrentDownloadSearch(criteria);

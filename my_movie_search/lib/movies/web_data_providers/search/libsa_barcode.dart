@@ -43,7 +43,7 @@ class QueryLibsaBarcodeSearch
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String myFormatInputAsText() => criteria.toSearchId().toLowerCase();
+  String myFormatInputAsText() => criteria.toPrintableIdOrText().toLowerCase();
 
   /// Include entire map in the movie title when an error occurs.
   @override

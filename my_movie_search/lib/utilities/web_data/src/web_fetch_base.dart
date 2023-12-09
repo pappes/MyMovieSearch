@@ -225,6 +225,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// If this is blank the query will not run!
   String myFormatInputAsText() => criteria?.toString() ?? '';
 
+  /// converts [criteria] as a unique path.
+  ///
+  /// Can be overridden by child classes.
+  String myFormatInputAsAddress() =>
+      myConstructURI(myFormatInputAsText()).toString();
+
   /// Extracts page number from [criteria]
   ///
   /// Can be overridden by child classes.

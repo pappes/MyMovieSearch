@@ -57,8 +57,7 @@ void main() {
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       expect(
         QueryYtsSearch(partialCriteria).myFormatInputAsText(),
-        '${partialCriteria.criteriaType}:${partialCriteria.criteriaTitle}'
-            .toLowerCase(),
+        partialCriteria.criteriaTitle,
       );
     });
 

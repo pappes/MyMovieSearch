@@ -33,7 +33,7 @@ void main() {
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
         QueryLibsaBarcodeSearch(criteria).myFormatInputAsText(),
-        '${criteria.criteriaType}:${criteria.criteriaTitle}'.toLowerCase(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -107,7 +107,7 @@ void main() {
       final expectedOutput = throwsA(
         startsWith(
           'LibsaBarcode results data not detected for criteria '
-          '${criteria.toSearchId().toLowerCase()} in html',
+          '${criteria.toPrintableIdOrText().toLowerCase()} in html',
         ),
       );
       final actualOutput =
@@ -224,9 +224,9 @@ void main() {
       // Set up the test data.
       final expectedException =
           '[QueryLibsaBarcodeSearch] Error in libsaBarcode '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :LibsaBarcode results data not '
-          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:not valid html';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryLibsaBarcodeSearch(criteria);
@@ -245,9 +245,9 @@ void main() {
       // Set up the test data.
       final expectedException =
           '[QueryLibsaBarcodeSearch] Error in libsaBarcode '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :LibsaBarcode results data not '
-          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryLibsaBarcodeSearch(criteria);

@@ -30,6 +30,7 @@ class TestMMSFlutterCanvas {
     when(mockCanvas.viewFlutterPage(any)).thenAnswer((Invocation inv) {
       final page = inv.positionalArguments[0] as RouteInfo;
       result = page.routePath;
+      return Future.value(null);
     });
   }
 }

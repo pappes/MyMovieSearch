@@ -95,7 +95,7 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
     final criteria = state.extra;
     String? id;
     if (criteria != null && criteria is SearchCriteriaDTO) {
-      id = criteria.toSearchId();
+      id = criteria.toPrintableIdOrText();
     }
     return '_${state.fullPath}$id';
   }
@@ -112,17 +112,27 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     return criteriaList.toJson();
   }
 
-  /// Create an ID search for [SearchCriteriaDTO] if available.
-  String toSearchId() {
+  /// Create an ID search for [SearchCriteriaDTO].
+  String? toIds() {
     final ids = <String>[];
     for (final dto in criteriaList) {
       if (!dto.uniqueId.startsWith(movieDTOMessagePrefix)) {
         ids.add(dto.uniqueId);
       }
     }
-    if (ids.isEmpty) return '$criteriaType:$criteriaTitle';
+    if (ids.isEmpty) return null;
     if (ids.length == 1) return ids.first;
     return ids.join(',');
+  }
+
+  /// Create an ID or text search for [SearchCriteriaDTO] if available.
+  String toPrintableIdOrText() {
+    return toIds() ?? criteriaTitle;
+  }
+
+  /// Create a unique string that represents this search.
+  String toUniqueReference() {
+    return toIds() ?? '$criteriaType:$criteriaTitle';
   }
 
   /// Convert a [Map] into a [SearchCriteriaDTO] object.

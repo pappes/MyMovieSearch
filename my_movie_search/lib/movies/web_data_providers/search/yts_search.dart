@@ -33,7 +33,7 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// converts <INPUT_TYPE> to a string representation.
   @override
-  String myFormatInputAsText() => criteria.toSearchId().toLowerCase();
+  String myFormatInputAsText() => criteria.toPrintableIdOrText().toLowerCase();
 
   /// Convert IMDB map to MovieResultDTO records.
   @override

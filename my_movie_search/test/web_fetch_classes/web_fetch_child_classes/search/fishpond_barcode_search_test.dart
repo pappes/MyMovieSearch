@@ -33,7 +33,7 @@ void main() {
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
         QueryFishpondBarcodeSearch(criteria).myFormatInputAsText(),
-        '${criteria.criteriaType}:${criteria.criteriaTitle}'.toLowerCase(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -217,10 +217,10 @@ void main() {
       // Set up the test data.
       final expectedException =
           '[QueryFishpondBarcodeSearch] Error in fishpondBarcode '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :FishpondBarcode results data '
           'not detected log: resultSelector found 0 result\n '
-          'for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:not valid html';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryFishpondBarcodeSearch(criteria);
@@ -239,10 +239,10 @@ void main() {
       // Set up the test data.
       final expectedException =
           '[QueryFishpondBarcodeSearch] Error in fishpondBarcode '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :FishpondBarcode results data '
           'not detected log: resultSelector found 0 result\n '
-          'for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryFishpondBarcodeSearch(criteria);

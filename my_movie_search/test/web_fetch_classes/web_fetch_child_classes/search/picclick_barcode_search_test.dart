@@ -33,7 +33,7 @@ void main() {
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
         QueryPicclickBarcodeSearch(criteria).myFormatInputAsText(),
-        '${criteria.criteriaType}:${criteria.criteriaTitle}'.toLowerCase(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -226,10 +226,10 @@ void main() {
       // Set up the test data.
       final expectedException =
           '[QueryPicclickBarcodeSearch] Error in picclickBarcode '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :PicclickBarcode results data not '
           'detected log: tableSelector found 0 tables\n '
-          'for criteria searchcriteriatype.movietitle:dream in '
+          'for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:not valid html';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryPicclickBarcodeSearch(criteria);
@@ -248,10 +248,10 @@ void main() {
       // Set up the test data.
       final expectedException =
           '[QueryPicclickBarcodeSearch] Error in picclickBarcode '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :PicclickBarcode results data not '
           'detected log: tableSelector found 0 tables\n '
-          'for criteria searchcriteriatype.movietitle:dream in '
+          'for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryPicclickBarcodeSearch(criteria);

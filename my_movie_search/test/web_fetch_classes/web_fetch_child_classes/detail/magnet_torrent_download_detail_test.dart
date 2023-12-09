@@ -33,7 +33,7 @@ void main() {
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
         QueryTorrentDownloadDetail(criteria).myFormatInputAsText(),
-        '${criteria.criteriaType}:${criteria.criteriaTitle}'.toLowerCase(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -241,9 +241,9 @@ void main() {
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);
       final expectedException =
           '[QueryTorrentDownloadDetail] Error in torrentDownloadDetail '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :TorrentDownload results data not '
-          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:not valid html';
 
       // Invoke the functionality.
@@ -260,9 +260,9 @@ void main() {
       // Set up the test data.
       final expectedException =
           '[QueryTorrentDownloadDetail] Error in torrentDownloadDetail '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :TorrentDownload results data not '
-          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);

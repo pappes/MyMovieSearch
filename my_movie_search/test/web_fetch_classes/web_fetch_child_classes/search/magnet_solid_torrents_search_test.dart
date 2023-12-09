@@ -33,7 +33,7 @@ void main() {
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
         QuerySolidTorrentsSearch(criteria).myFormatInputAsText(),
-        '${criteria.criteriaType}:${criteria.criteriaTitle}'.toLowerCase(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -107,7 +107,7 @@ void main() {
       final expectedOutput = throwsA(
         startsWith(
           'SolidTorrents results data not detected for criteria '
-          '${criteria.toSearchId().toLowerCase()} in html:',
+          '${criteria.toPrintableIdOrText().toLowerCase()} in html:',
         ),
       );
       final actualOutput =
@@ -226,9 +226,9 @@ void main() {
       final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);
       final expectedException =
           '[QuerySolidTorrentsSearch] Error in solidTorrents '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :SolidTorrents results data not '
-          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:not valid html';
 
       // Invoke the functionality.
@@ -245,9 +245,9 @@ void main() {
       // Set up the test data.
       final expectedException =
           '[QuerySolidTorrentsSearch] Error in solidTorrents '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :SolidTorrents results data not '
-          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);

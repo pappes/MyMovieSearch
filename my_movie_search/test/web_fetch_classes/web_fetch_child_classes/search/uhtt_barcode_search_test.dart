@@ -33,7 +33,7 @@ void main() {
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
         QueryUhttBarcodeSearch(criteria).myFormatInputAsText(),
-        '${criteria.criteriaType}:${criteria.criteriaTitle}'.toLowerCase(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -107,7 +107,7 @@ void main() {
       final expectedOutput = throwsA(
         startsWith(
           'UhttBarcode results data not detected for criteria '
-          '${criteria.toSearchId().toLowerCase()} in html:',
+          '${criteria.toPrintableIdOrText().toLowerCase()} in html:',
         ),
       );
       final actualOutput =
@@ -228,9 +228,9 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryUhttBarcodeSearch(criteria);
       final expectedException = '[QueryUhttBarcodeSearch] Error in uhttBarcode '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :UhttBarcode results data not '
-          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:not valid html';
 
       // Invoke the functionality.
@@ -248,9 +248,9 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryUhttBarcodeSearch(criteria);
       final expectedException = '[QueryUhttBarcodeSearch] Error in uhttBarcode '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :UhttBarcode results data not '
-          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:<html><body>stuff</body></html>';
 
       // Invoke the functionality.

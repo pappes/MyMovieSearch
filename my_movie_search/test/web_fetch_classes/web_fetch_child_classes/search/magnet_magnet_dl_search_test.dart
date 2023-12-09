@@ -30,7 +30,7 @@ void main() {
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
         QueryMagnetDlSearch(criteria).myFormatInputAsText(),
-        '${criteria.criteriaType}:${criteria.criteriaTitle}'.toLowerCase(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -102,7 +102,7 @@ void main() {
       final expectedOutput = throwsA(
         startsWith(
           'magnetDl results data not detected for criteria '
-          '${criteria.toSearchId().toLowerCase()} in html:',
+          '${criteria.toPrintableIdOrText().toLowerCase()} in html:',
         ),
       );
       final actualOutput =
@@ -220,9 +220,9 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final magnetDlSearch = QueryMagnetDlSearch(criteria);
       final expectedException = '[QueryMagnetDlSearch] Error in magnetDl '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :magnetDl results data not '
-          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:not valid html';
 
       // Invoke the functionality.
@@ -238,9 +238,9 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       final expectedException = '[QueryMagnetDlSearch] Error in magnetDl '
-          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :magnetDl results data not '
-          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final magnetDlSearch = QueryMagnetDlSearch(criteria);

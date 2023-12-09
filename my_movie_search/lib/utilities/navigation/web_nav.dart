@@ -99,7 +99,7 @@ class MMSNav {
         RouteInfo(
           routeSearchResults,
           criteria,
-          criteria.toSearchId(),
+          criteria.toUniqueReference(),
         ),
       );
 
@@ -212,9 +212,9 @@ class MMSNav {
     final criteria = state.extra;
     String? id;
     if (criteria != null && criteria is SearchCriteriaDTO) {
-      id = criteria.toSearchId();
+      id = criteria.toUniqueReference();
     }
-    return '_${state.fullPath}$id';
+    return '_${state.fullPath}_${id ?? criteria}';
   }
 
   /// Defines known routes handled by MMSNav.
