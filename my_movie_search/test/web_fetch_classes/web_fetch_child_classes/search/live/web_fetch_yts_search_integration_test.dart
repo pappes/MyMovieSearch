@@ -37,8 +37,6 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt3127016');
       final actualOutput = await QueryYtsSearch(criteria).readList(limit: 10);
       final expectedOutput = expectedDTOList;
-      expectedOutput.clearCopyrightedData();
-      actualOutput.clearCopyrightedData();
 
       // To update expected data, uncomment the following line
       // printTestData(actualOutput);
@@ -58,8 +56,6 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('rize 2005');
       final actualOutput = await QueryYtsSearch(criteria).readList(limit: 10);
       final expectedOutput = expectedTitleList;
-      expectedOutput.clearCopyrightedData();
-      actualOutput.clearCopyrightedData();
 
       // To update expected data, uncomment the following line
       // printTestData(actualOutput);

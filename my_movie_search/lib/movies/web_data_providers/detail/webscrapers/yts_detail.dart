@@ -137,6 +137,12 @@ List<Map<String, dynamic>> _getDescriptions(Document document) {
           seeders = IntHelper.fromText(parts.last) ?? 0;
         }
       }
+      if (stats.startsWith('S')) {
+        final parts = stats.split(' ');
+        if (parts.length > 1) {
+          seeders = IntHelper.fromText(parts.last) ?? 0;
+        }
+      }
 
       descriptions.add({
         jsonDescriptionKey: text,
