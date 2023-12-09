@@ -24,7 +24,7 @@ const jsonLeechersKey = 'leechers';
 class QuerySolidTorrentsSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeSolidTorrentsSearch {
-  static const _baseURL = 'https://solidtorrents.to/search?q=';
+  static const _baseURL = 'https://solidtorrents.eu/search?q=';
   static const _pageURL = '&sort=seeders&page=';
 
   QuerySolidTorrentsSearch(super.criteria);

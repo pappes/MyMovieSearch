@@ -24,7 +24,7 @@ const jsonLeechersKey = 'leechers';
 class QueryGloTorrentsSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeGloTorrentsSearch {
-  static const _baseURL = 'https://www.gtdb.to/search_results.php?search=';
+  static const _baseURL = 'https://www.glodls.to/search_results.php?search=';
   static const _pageURL = '&sort=seeders&order=desc&page=';
 
   QueryGloTorrentsSearch(super.criteria);
