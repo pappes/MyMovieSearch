@@ -55,11 +55,10 @@ void main() {
 
     // Confirm text criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'testing';
       expect(
         QueryYtsSearch(partialCriteria).myFormatInputAsText(),
-        partialCriteria.criteriaTitle,
+        '${partialCriteria.criteriaType}:${partialCriteria.criteriaTitle}'
+            .toLowerCase(),
       );
     });
 

@@ -33,7 +33,7 @@ void main() {
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
         QueryPicclickBarcodeSearch(criteria).myFormatInputAsText(),
-        criteria.criteriaTitle,
+        '${criteria.criteriaType}:${criteria.criteriaTitle}'.toLowerCase(),
       );
     });
 
@@ -42,16 +42,16 @@ void main() {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'List of errors';
       input.criteriaList = [
-        MovieResultDTO().error('test1'),
-        MovieResultDTO().error('test2'),
+        MovieResultDTO().init(uniqueId: 'test1'),
+        MovieResultDTO().init(uniqueId: 'test2'),
       ];
       expect(
         QueryPicclickBarcodeSearch(input).myFormatInputAsText(),
-        input.criteriaTitle.toLowerCase(),
+        'test1,test2',
       );
       expect(
         QueryPicclickBarcodeSearch(input).myFormatInputAsText(),
-        input.criteriaTitle.toLowerCase(),
+        'test1,test2',
       );
     });
 
@@ -104,8 +104,11 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput =
-          throwsA(startsWith('PicclickBarcode results data not detected log'));
+      final expectedOutput = throwsA(
+        startsWith(
+          'PicclickBarcode results data not detected log',
+        ),
+      );
       final actualOutput = QueryPicclickBarcodeSearch(criteria)
           .myConvertWebTextToTraversableTree(
         htmlSampleError,
@@ -213,19 +216,21 @@ void main() {
         queryResult,
         MovieResultDTOListMatcher(expectedValue, related: false),
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
 
     // Read search results from a simulated byte stream and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
-      const expectedException =
+      final expectedException =
           '[QueryPicclickBarcodeSearch] Error in picclickBarcode '
-          'with criteria dream convert error interpreting web text as a map '
-          ':PicclickBarcode results data not detected '
-          'log: tableSelector found 0 tables\n '
-          'for criteria dream in html:not valid html';
+          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'interpreting web text as a map :PicclickBarcode results data not '
+          'detected log: tableSelector found 0 tables\n '
+          'for criteria searchcriteriatype.movietitle:dream in '
+          'html:not valid html';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryPicclickBarcodeSearch(criteria);
 
@@ -241,12 +246,13 @@ void main() {
     // Read search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException =
+      final expectedException =
           '[QueryPicclickBarcodeSearch] Error in picclickBarcode '
-          'with criteria dream convert error interpreting web text as a map '
-          ':PicclickBarcode results data not detected '
-          'log: tableSelector found 0 tables\n '
-          'for criteria dream in html:<html><body>stuff</body></html>';
+          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'interpreting web text as a map :PicclickBarcode results data not '
+          'detected log: tableSelector found 0 tables\n '
+          'for criteria searchcriteriatype.movietitle:dream in '
+          'html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryPicclickBarcodeSearch(criteria);
 

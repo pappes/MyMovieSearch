@@ -33,7 +33,7 @@ void main() {
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
         QuerySolidTorrentsSearch(criteria).myFormatInputAsText(),
-        criteria.criteriaTitle,
+        '${criteria.criteriaType}:${criteria.criteriaTitle}'.toLowerCase(),
       );
     });
 
@@ -42,16 +42,16 @@ void main() {
       final input = SearchCriteriaDTO();
       input.criteriaTitle = 'List of errors';
       input.criteriaList = [
-        MovieResultDTO().error('test1'),
-        MovieResultDTO().error('test2'),
+        MovieResultDTO().init(uniqueId: 'test1'),
+        MovieResultDTO().init(uniqueId: 'test2'),
       ];
       expect(
         QuerySolidTorrentsSearch(input).myFormatInputAsText(),
-        input.criteriaTitle.toLowerCase(),
+        'test1,test2',
       );
       expect(
         QuerySolidTorrentsSearch(input).myFormatInputAsText(),
-        input.criteriaTitle.toLowerCase(),
+        'test1,test2',
       );
     });
 
@@ -105,8 +105,10 @@ void main() {
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = throwsA(
-        startsWith('SolidTorrents results data not detected '
-            'for criteria dream in html'),
+        startsWith(
+          'SolidTorrents results data not detected for criteria '
+          '${criteria.toSearchId().toLowerCase()} in html:',
+        ),
       );
       final actualOutput =
           QuerySolidTorrentsSearch(criteria).myConvertWebTextToTraversableTree(
@@ -212,7 +214,8 @@ void main() {
         queryResult,
         MovieResultDTOListMatcher(expectedValue, related: false),
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
 
@@ -221,10 +224,12 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);
-      const expectedException =
+      final expectedException =
           '[QuerySolidTorrentsSearch] Error in solidTorrents '
-          'with criteria dream convert error interpreting web text as a map '
-          ':SolidTorrents results data not detected for criteria dream in html:not valid html';
+          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'interpreting web text as a map :SolidTorrents results data not '
+          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'html:not valid html';
 
       // Invoke the functionality.
       await solidTorrentsSearch
@@ -238,10 +243,12 @@ void main() {
     // Read search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException =
+      final expectedException =
           '[QuerySolidTorrentsSearch] Error in solidTorrents '
-          'with criteria dream convert error interpreting web text as a map '
-          ':SolidTorrents results data not detected for criteria dream in html:<html><body>stuff</body></html>';
+          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'interpreting web text as a map :SolidTorrents results data not '
+          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);
 

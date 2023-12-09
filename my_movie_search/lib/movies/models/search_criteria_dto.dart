@@ -143,6 +143,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   SearchCriteriaDTO fromString(String criteria) {
     final dto = SearchCriteriaDTO();
     dto.criteriaTitle = criteria;
+    dto.criteriaType = SearchCriteriaType.movieTitle;
     return dto;
   }
 

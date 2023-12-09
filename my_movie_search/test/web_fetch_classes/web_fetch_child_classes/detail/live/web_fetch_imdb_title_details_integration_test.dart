@@ -20,7 +20,7 @@ const expectedDtoJsonStringList = [
 {"uniqueId":"tt0101001","bestSource":"DataSourceType.imdb","title":"Zai shi feng liu jie","alternateTitle":"A Haunted Romance","type":"MovieContentType.title","year":"1985","yearRange":"1985","runTime":"5340","language":"LanguageType.foreign","sources":{"DataSourceType.imdb":"tt0101001"}}
 ''',
   r'''
-{"uniqueId":"tt0101002","bestSource":"DataSourceType.imdb","title":"Joi jin gong woo","alternateTitle":"Hong Kong Corruptor","type":"MovieContentType.title","year":"1990","yearRange":"1990","runTime":"6480","language":"LanguageType.someEnglish","censorRating":"CensorRatingType.restricted","sources":{"DataSourceType.imdb":"tt0101002"}}
+{"uniqueId":"tt0101002","bestSource":"DataSourceType.imdb","title":"Joi jin gong woo","alternateTitle":"Return Engagement","type":"MovieContentType.title","year":"1990","yearRange":"1990","runTime":"6480","language":"LanguageType.someEnglish","censorRating":"CensorRatingType.restricted","sources":{"DataSourceType.imdb":"tt0101002"}}
 ''',
 ];
 

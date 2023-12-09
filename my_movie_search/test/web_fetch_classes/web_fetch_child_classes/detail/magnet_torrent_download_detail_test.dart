@@ -33,25 +33,25 @@ void main() {
     test('Run myFormatInputAsText() for simple keyword', () {
       expect(
         QueryTorrentDownloadDetail(criteria).myFormatInputAsText(),
-        criteria.criteriaTitle,
+        '${criteria.criteriaType}:${criteria.criteriaTitle}'.toLowerCase(),
       );
     });
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO();
+      final input = SearchCriteriaDTO().init(SearchCriteriaType.movieDTOList);
       input.criteriaTitle = 'List of errors';
       input.criteriaList = [
-        MovieResultDTO().error('test1'),
-        MovieResultDTO().error('test2'),
+        MovieResultDTO().init(uniqueId: 'test1'),
+        MovieResultDTO().init(uniqueId: 'test2'),
       ];
       expect(
         QueryTorrentDownloadDetail(input).myFormatInputAsText(),
-        input.criteriaTitle.toLowerCase(),
+        'test1,test2',
       );
       expect(
         QueryTorrentDownloadDetail(input).myFormatInputAsText(),
-        input.criteriaTitle.toLowerCase(),
+        'test1,test2',
       );
     });
 
@@ -229,7 +229,8 @@ void main() {
         queryResult,
         MovieResultDTOListMatcher(expectedValue, related: false),
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
 
@@ -238,10 +239,12 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);
-      const expectedException =
+      final expectedException =
           '[QueryTorrentDownloadDetail] Error in torrentDownloadDetail '
-          'with criteria https://address convert error interpreting web text as a map '
-          ':TorrentDownload results data not detected for criteria https://address in html:not valid html';
+          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'interpreting web text as a map :TorrentDownload results data not '
+          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'html:not valid html';
 
       // Invoke the functionality.
       await torrentDownloadDetail
@@ -255,10 +258,12 @@ void main() {
     // Read search results from a simulated byte stream and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException =
+      final expectedException =
           '[QueryTorrentDownloadDetail] Error in torrentDownloadDetail '
-          'with criteria https://address convert error interpreting web text as a map '
-          ':TorrentDownload results data not detected for criteria https://address in html:<html><body>stuff</body></html>';
+          'with criteria ${criteria.toSearchId().toLowerCase()} convert error '
+          'interpreting web text as a map :TorrentDownload results data not '
+          'detected for criteria ${criteria.toSearchId().toLowerCase()} in '
+          'html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);
 
