@@ -24,7 +24,7 @@ class JsonPConversionSink implements Sink<String> {
 
 /// Parses JSONP string streams and builds the json string stream.
 ///
-/// When used as a [StreamTransformer], the input stream may emit
+/// When used as a StreamTransformer, the input stream may emit
 /// multiple strings. Where necesary streamed input will be buffered.
 /// If the JS function name is not supplied it is inferred from syntax.
 ///

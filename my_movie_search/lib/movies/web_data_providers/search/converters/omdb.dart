@@ -83,9 +83,10 @@ class OmdbMovieSearchConverter {
     movie.year = year ?? movie.year;
     final yearRange = map[innerElementYear]?.toString();
     if (null != yearRange && yearRange.length > 4) {
-      movie.yearRange = yearRange;
-      movie.year = movie.maxYear();
-      movie.type = MovieContentType.series;
+      movie
+        ..yearRange = yearRange
+        ..year = movie.maxYear()
+        ..type = MovieContentType.series;
     }
 
     return movie;

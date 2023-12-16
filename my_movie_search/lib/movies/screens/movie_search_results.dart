@@ -14,9 +14,9 @@ import 'package:my_movie_search/movies/screens/widgets/movie_card_small.dart';
 
 class MovieSearchResultsNewPage extends StatefulWidget {
   const MovieSearchResultsNewPage({
-    super.key,
     required this.restorationId,
     required this.criteria,
+    super.key,
   });
   final SearchCriteriaDTO criteria;
   final String restorationId;

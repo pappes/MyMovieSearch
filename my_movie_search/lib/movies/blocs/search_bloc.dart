@@ -1,6 +1,5 @@
 import 'dart:async' show StreamSubscription;
 
-import 'package:bloc/bloc.dart' show Bloc, Emitter;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
@@ -214,10 +213,11 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
   /// Prepare data for display by sorting by relevence and
   /// update bloc state to indicate that new data is available.
   void _sendResults() {
-    sortedResults.clear();
-    sortedResults.addAll(_allResults.values.toList());
-    // Sort by relevence with recent year first
-    sortedResults.sort((a, b) => b.compareTo(a));
+    sortedResults
+      ..clear()
+      ..addAll(_allResults.values.toList())
+      // Sort by relevence with recent year first
+      ..sort((a, b) => b.compareTo(a));
     _searchProgress++;
 
     if (!isClosed) {

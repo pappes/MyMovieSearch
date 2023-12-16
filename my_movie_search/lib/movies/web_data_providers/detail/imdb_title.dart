@@ -40,7 +40,8 @@ class QueryIMDBTitleDetails
     return ''; // do not allow searches for non-imdb IDs
   }
 
-  /// API call to IMDB search returning the top matching results for [searchText].
+  /// API call to IMDB search returning the top matching results
+  /// for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     final url = '$_baseURL$searchCriteria$_baseURLsuffix';

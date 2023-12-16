@@ -64,8 +64,8 @@ class Poster extends Widget {
     );
   }
 
-  static const placeholderMessage = Text('NoImage');
-  final imageSearchIcon = const Icon(Icons.image_search);
+  static const Widget placeholderMessage = Text('NoImage');
+  final Widget imageSearchIcon = const Icon(Icons.image_search);
   final BuildContext context;
   late final Widget controls;
   late final String url;

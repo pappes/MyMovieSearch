@@ -19,11 +19,8 @@ class SearchFunctions {
 
 /// Search for movie data from multiple online search sources.
 ///
-/// BlockRepository to consolidate data retrieval from multiple search
-/// and detail providers using the WebFetch framework.
-///
-/// [Search] provides a stream of incomplete and complete results.
-/// [Close] can be used to cancel a search.
+/// Suppliament content from detail providers
+/// with content from additonal detail providers.
 class MovieListRepository extends BaseMovieRepository {
   /// Maintain a map of unique movie detail requests
   /// and request retrieval if the fetch is not already in progress.

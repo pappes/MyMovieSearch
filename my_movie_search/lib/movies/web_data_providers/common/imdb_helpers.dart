@@ -119,8 +119,7 @@ String makeImdbUrl(
   bool photos = false,
   bool parentalGuide = false,
 }) {
-  final url = StringBuffer();
-  url.write(mobile ? imdbMobileURL : imdbBaseURL);
+  final url = StringBuffer()..write(mobile ? imdbMobileURL : imdbBaseURL);
   if (key.startsWith(imdbTitlePrefix)) {
     url.write(imdbTitlePath);
   }

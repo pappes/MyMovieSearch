@@ -77,8 +77,8 @@ void main() {
   group('live QueryTMDBMovieDetails test', () {
     // Convert 3 TMDB pages into dtos.
     test('Run read 3 pages from TMDB', () async {
-      final expectedOutput = expectedDTOList;
-      expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+      final expectedOutput = expectedDTOList
+        ..sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);

@@ -5,9 +5,9 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 class ErrorDetailsPage extends StatefulWidget {
   const ErrorDetailsPage({
-    super.key,
     required this.restorationId,
     required this.errorDto,
+    super.key,
   });
 
   final MovieResultDTO errorDto;

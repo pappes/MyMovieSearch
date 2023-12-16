@@ -45,8 +45,6 @@ void main() {
 
     // Confirm dto criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO list', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'testing';
       expect(
         QueryYtsSearch(fullCriteria).myFormatInputAsText(),
         fullCriteria.criteriaList.first.uniqueId,

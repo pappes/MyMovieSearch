@@ -34,10 +34,10 @@ typedef DataSourceFn = Future<Stream<String>> Function(dynamic s);
 /// Workflow delegated to child class:
 /// * criteria
 ///   *  is converted to [Stream<Text>]
-///   *  via [offlineData] or [baseConvertCriteriaToWebText]
+///   *  via offlineData or [baseConvertCriteriaToWebText]
 /// * JSON, JSONP or HTML is converted to
 ///   *  is converted to [Map<Object?>]
-///   *  via [offlineData] or [baseConvertWebTextToTraversableTree]
+///   *  via offlineData or [baseConvertWebTextToTraversableTree]
 /// * [Map<Object?>]
 ///   *  is converted to Objects of type [OUTPUT_TYPE]
 ///   *  via [baseConvertTreeToOutputType]
@@ -115,7 +115,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     return Future.value(<OUTPUT_TYPE>[]);
   }
 
-  /// Convert dart [List] or [Map] or [document] to [OUTPUT_TYPE] object data.
+  /// Convert dart [List] or [Map] or Document to [OUTPUT_TYPE] object data.
   ///
   /// Must be overridden by child classes.
   /// resulting Object(s) are returned in a list
@@ -196,7 +196,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///    accepts a [String] criteria and
   ///    asynchronously returns a [String] stream.
   ///
-  /// Only called if [OnlineOffline] operation is enabled.
+  /// Only called if OnlineOffline operation is enabled.
   ///
   /// Should be overridden by child classes.
   @visibleForOverriding
@@ -211,7 +211,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   @visibleForOverriding
   OUTPUT_TYPE myYieldError(String contents);
 
-  /// Define the [Uri] called to fetch online data for criteria [searchText].
+  /// Define the [Uri] called to fetch online data
+  /// for criteria [searchCriteria].
   ///
   /// When pagination is not supported and [pageNumber] is not 1
   /// an empty Uri() must be returned.

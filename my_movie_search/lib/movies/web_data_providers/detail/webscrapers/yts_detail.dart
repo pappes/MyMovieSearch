@@ -19,7 +19,7 @@ const magnetsSelector = '.modal-torrent';
 const sizeSelector = '.quality-size';
 const descriptionSelector = '#movie-tech-specs .tech-spec-info';
 
-/// Implements [WebScraper] for retrieving download details from yts.
+/// Implements a web scraper for retrieving download details from yts.
 mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Convert web text to a traversable tree of [List] or [Map] data.
   @override

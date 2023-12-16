@@ -86,13 +86,14 @@ class TmdbFinderConverter {
     Map<dynamic, dynamic> map,
     String imdbId,
   ) {
-    final movie = MovieResultDTO().setSource(
-      newSource: DataSourceType.tmdbFinder,
-      newUniqueId: map[movieElementTMDBIdentity]?.toString(),
-    );
-    // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
-    // no longer need to have alternateId field
-    movie.uniqueId = imdbId;
+    final movie = MovieResultDTO()
+      ..setSource(
+        newSource: DataSourceType.tmdbFinder,
+        newUniqueId: map[movieElementTMDBIdentity]?.toString(),
+      )
+      // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
+      // no longer need to have alternateId field
+      ..uniqueId = imdbId;
 
     final title = map[movieElementCommonTitle]?.toString();
     final originalTitle = map[movieElementOriginalTitle]?.toString();
@@ -117,21 +118,19 @@ class TmdbFinderConverter {
     if ('true' == map[movieElementAdult]) {
       movie.censorRating = CensorRatingType.adult;
     }
-    movie.description =
-        map[movieElementOverview]?.toString() ?? movie.description;
-
-    movie.userRating = DoubleHelper.fromText(
-      map[movieElementVoteAverage],
-      nullValueSubstitute: movie.userRating,
-    )!;
-    movie.userRatingCount = IntHelper.fromText(
-      map[movieElementVoteCount],
-      nullValueSubstitute: movie.userRatingCount,
-    )!;
-
-    movie.languages.combineUnique(map[movieElementOriginalLanguage]);
-    movie.getLanguageType();
-    movie.getContentType();
+    movie
+      ..description = map[movieElementOverview]?.toString() ?? movie.description
+      ..userRating = DoubleHelper.fromText(
+        map[movieElementVoteAverage],
+        nullValueSubstitute: movie.userRating,
+      )!
+      ..userRatingCount = IntHelper.fromText(
+        map[movieElementVoteCount],
+        nullValueSubstitute: movie.userRatingCount,
+      )!
+      ..languages.combineUnique(map[movieElementOriginalLanguage])
+      ..getLanguageType()
+      ..getContentType();
 
     return movie;
   }
@@ -140,19 +139,18 @@ class TmdbFinderConverter {
     Map<dynamic, dynamic> map,
     String imdbId,
   ) {
-    final person = MovieResultDTO().init(
-      bestSource: DataSourceType.tmdbFinder,
-      uniqueId: map[movieElementTMDBIdentity]?.toString(),
-      title: map[personElementCommonTitle]?.toString(),
-      userRatingCount: map[personElementPopularity]?.toString(),
-      type: MovieContentType.person.toString(),
-    );
-    // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
-    // no longer need to have alternateId field!
-    person.uniqueId = imdbId;
+    return MovieResultDTO()
+      ..init(
+        bestSource: DataSourceType.tmdbFinder,
+        uniqueId: map[movieElementTMDBIdentity]?.toString(),
+        title: map[personElementCommonTitle]?.toString(),
+        userRatingCount: map[personElementPopularity]?.toString(),
+        type: MovieContentType.person.toString(),
+      )
+      // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
+      // no longer need to have alternateId field!
+      ..uniqueId = imdbId;
     // TODO expand partial URL to full url
     //person.imageUrl = map[personElementPosterPath]?.toString() ?? person.imageUrl;
-
-    return person;
   }
 }

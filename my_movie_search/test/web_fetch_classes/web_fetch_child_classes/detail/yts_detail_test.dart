@@ -33,8 +33,7 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'testing';
+      final input = SearchCriteriaDTO()..criteriaTitle = 'testing';
       expect(
         QueryYtsDetails(input).myFormatInputAsText(),
         'testing',
@@ -43,10 +42,10 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaList = [
-        makeResultDTO('test1'),
-      ];
+      final input = SearchCriteriaDTO()
+        ..criteriaList = [
+          makeResultDTO('test1'),
+        ];
       expect(
         QueryYtsDetails(input).myFormatInputAsText(),
         '',
@@ -62,9 +61,10 @@ void main() {
       };
       final criteria = SearchCriteriaDTO();
       // Invoke the functionality.
-      final actualResult =
-          QueryYtsDetails(criteria).myYieldError('new query').toMap();
-      actualResult.remove('uniqueId');
+      final actualResult = QueryYtsDetails(criteria)
+          .myYieldError('new query')
+          .toMap()
+        ..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -152,8 +152,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryYtsDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryYtsDetails(criteria)..myClearCache();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
@@ -175,8 +174,7 @@ void main() {
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () {
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryYtsDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryYtsDetails(criteria)..myClearCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -201,8 +199,7 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('7602562');
-      final testClass = QueryYtsDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryYtsDetails(criteria)..myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -232,8 +229,7 @@ void main() {
           ':yts data not detected for criteria 123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('123');
-      final testClass = QueryYtsDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryYtsDetails(criteria)..myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -252,8 +248,7 @@ void main() {
           ':yts data not detected for criteria 123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('123');
-      final testClass = QueryYtsDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryYtsDetails(criteria)..myClearCache();
 
       // Invoke the functionality.
       await testClass

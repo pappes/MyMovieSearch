@@ -22,9 +22,8 @@ class Settings {
     String location = 'assets/settings.json',
   ]) async {
     final json = await rootBundle.loadString(location);
-    final map = jsonDecode(json) as Map<String, dynamic>;
-    map.forEach((key, value) => _settingsMap[key] = value as String);
-    return map;
+    return jsonDecode(json) as Map<String, dynamic>
+      ..forEach((key, value) => _settingsMap[key] = value as String);
   }
 
   /// Read setting from files into in memory structures.

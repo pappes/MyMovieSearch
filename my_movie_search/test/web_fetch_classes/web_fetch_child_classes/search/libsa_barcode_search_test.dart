@@ -39,12 +39,12 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'List of errors';
-      input.criteriaList = [
-        MovieResultDTO().init(uniqueId: 'test1'),
-        MovieResultDTO().init(uniqueId: 'test2'),
-      ];
+      final input = SearchCriteriaDTO()
+        ..criteriaTitle = 'List of errors'
+        ..criteriaList = [
+          MovieResultDTO().init(uniqueId: 'test1'),
+          MovieResultDTO().init(uniqueId: 'test2'),
+        ];
       expect(
         QueryLibsaBarcodeSearch(input).myFormatInputAsText(),
         'test1,test2',
@@ -78,9 +78,10 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult =
-          QueryLibsaBarcodeSearch(criteria).myYieldError('new query').toMap();
-      actualResult.remove('uniqueId');
+      final actualResult = QueryLibsaBarcodeSearch(criteria)
+          .myYieldError('new query')
+          .toMap()
+        ..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -88,8 +89,7 @@ void main() {
 
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final testClass = QueryLibsaBarcodeSearch(criteria);
-      testClass.criteria = criteria;
+      final testClass = QueryLibsaBarcodeSearch(criteria)..criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
         htmlSampleFull,
       );

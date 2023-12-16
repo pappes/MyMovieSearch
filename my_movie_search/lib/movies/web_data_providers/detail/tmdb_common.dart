@@ -51,7 +51,7 @@ abstract class QueryTMDBCommon
         source,
       );
 
-  /// API call to TMDB returning the movie details for [searchText].
+  /// API call to TMDB returning the movie details for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     // Get key from the file assets/secrets.json (not source controlled)

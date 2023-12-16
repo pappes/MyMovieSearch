@@ -47,8 +47,7 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'nmtesting';
+      final input = SearchCriteriaDTO()..criteriaTitle = 'nmtesting';
       expect(
         QueryIMDBNameDetails(input).myFormatInputAsText(),
         'nmtesting',
@@ -57,11 +56,11 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaList = [
-        MovieResultDTO().error('test1'),
-        MovieResultDTO().error('test2'),
-      ];
+      final input = SearchCriteriaDTO()
+        ..criteriaList = [
+          MovieResultDTO().error('test1'),
+          MovieResultDTO().error('test2'),
+        ];
       expect(
         QueryIMDBNameDetails(input).myFormatInputAsText(),
         '',
@@ -82,9 +81,10 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBNameDetails(criteria).myYieldError('new query').toMap();
-      actualResult.remove('uniqueId');
+      final actualResult = QueryIMDBNameDetails(criteria)
+          .myYieldError('new query')
+          .toMap()
+        ..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -141,25 +141,25 @@ void main() {
       expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
       for (var iteration = 0; iteration < 100; iteration++) {
         final criteria = SearchCriteriaDTO().fromString(iteration.toString());
-        final testClass = QueryIMDBNameDetails(criteria);
         // Enqueue requests but do not wait for result.
-        testClass.initialiseThreadCacheRequest(ThreadRunner.slow, null);
+        QueryIMDBNameDetails(criteria)
+            .initialiseThreadCacheRequest(ThreadRunner.slow, null);
       }
       expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 100);
       expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
       for (var iteration = 0; iteration < 10; iteration++) {
         final criteria = SearchCriteriaDTO().fromString(iteration.toString());
-        final testClass = QueryIMDBNameDetails(criteria);
         // Enqueue requests but do not wait for result.
-        testClass.initialiseThreadCacheRequest(ThreadRunner.slow, null);
+        QueryIMDBNameDetails(criteria)
+            .initialiseThreadCacheRequest(ThreadRunner.slow, null);
       }
       expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 100);
       expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
       for (var iteration = 0; iteration < 10; iteration++) {
         final criteria = SearchCriteriaDTO().fromString(iteration.toString());
-        final testClass = QueryIMDBNameDetails(criteria);
         // Enqueue requests but do not wait for result.
-        testClass.completeThreadCacheRequest(ThreadRunner.slow);
+        QueryIMDBNameDetails(criteria)
+            .completeThreadCacheRequest(ThreadRunner.slow);
       }
       expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 90);
       expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
@@ -238,10 +238,9 @@ void main() {
       QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       for (var iteration = 0; iteration < 100; iteration++) {
         final criteria = SearchCriteriaDTO().fromString('nm$iteration');
-        final testClass = QueryIMDBNameDetails(criteria);
         // Enqueue requests but do not wait for result.
         // ignore: unused_result
-        testClass.readPrioritisedCachedList(
+        QueryIMDBNameDetails(criteria).readPrioritisedCachedList(
           source: StaticJsonGenerator.stuffDelayed,
         );
       }
@@ -278,8 +277,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryIMDBNameDetails(criteria);
-      testClass.clearThreadedCache();
+      final testClass = QueryIMDBNameDetails(criteria)..clearThreadedCache();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
@@ -301,8 +299,7 @@ void main() {
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () {
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryIMDBNameDetails(criteria);
-      testClass.clearThreadedCache();
+      final testClass = QueryIMDBNameDetails(criteria)..clearThreadedCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -327,8 +324,7 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
-      final testClass = QueryIMDBNameDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBNameDetails(criteria)..myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -358,8 +354,7 @@ void main() {
           ':imdb web scraper data not detected for criteria nm7602562 in not valid html';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm7602562');
-      final testClass = QueryIMDBNameDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBNameDetails(criteria)..myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -376,8 +371,7 @@ void main() {
           ':imdb web scraper data not detected for criteria nm7602562 in <html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm7602562');
-      final testClass = QueryIMDBNameDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBNameDetails(criteria)..myClearCache();
 
       // Invoke the functionality.
       await testClass

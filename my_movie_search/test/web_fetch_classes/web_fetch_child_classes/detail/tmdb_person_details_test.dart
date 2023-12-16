@@ -41,11 +41,11 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaList = [
-        MovieResultDTO().error('test1'),
-        MovieResultDTO().error('test2'),
-      ];
+      final input = SearchCriteriaDTO()
+        ..criteriaList = [
+          MovieResultDTO().error('test1'),
+          MovieResultDTO().error('test2'),
+        ];
       expect(
         QueryTMDBPersonDetails(input).myFormatInputAsText(),
         contains('test1'),
@@ -134,8 +134,7 @@ void main() {
   group('QueryTMDBPersonDetails integration tests', () {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      final testClass = QueryTMDBPersonDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryTMDBPersonDetails(criteria)..myClearCache();
       const expected = 'https://api.themoviedb.org/3/person/1234?api_key=';
 
       // Invoke the functionality.
@@ -152,8 +151,7 @@ void main() {
   group('QueryTMDBPersonDetails integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final testClass = QueryTMDBPersonDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryTMDBPersonDetails(criteria)..myClearCache();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
@@ -174,8 +172,7 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final testClass = QueryTMDBPersonDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryTMDBPersonDetails(criteria)..myClearCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -199,8 +196,7 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBPersonDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryTMDBPersonDetails(criteria)..myClearCache();
 
       // Invoke the functionality.
       await testClass

@@ -49,7 +49,8 @@ class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         DataSourceType.omdb,
       );
 
-  /// API call to OMDB returning the top 10 matching results for [searchText].
+  /// API call to OMDB returning the top 10 matching results
+  /// for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     // Get key from the file assets/secrets.json (not source controlled)

@@ -9,13 +9,14 @@ class ImdbMoreKeywordsConverter {
   ) {
     final dtos = <MovieResultDTO>[];
     for (final entry in map.keys) {
-      final dto = MovieResultDTO().init(
-        bestSource: DataSourceType.imdbKeywords,
-        uniqueId: entry.toString(),
-        title: entry.toString(),
+      dtos.add(
+        MovieResultDTO().init(
+          bestSource: DataSourceType.imdbKeywords,
+          uniqueId: entry.toString(),
+          title: entry.toString(),
+          type: MovieContentType.keyword.toString(),
+        ),
       );
-      dto.type = MovieContentType.keyword;
-      dtos.add(dto);
     }
     return dtos;
   }

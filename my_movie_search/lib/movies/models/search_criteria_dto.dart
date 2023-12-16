@@ -73,19 +73,18 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
 
   SearchCriteriaDTO getDTO(Map<String, String> map) {
     final result = SearchCriteriaDTO();
-    result.searchId = map[movieCriteriaDTOSearchId] ?? result.searchId;
-    result.criteriaTitle =
-        map[movieCriteriaDTOCriteriaTitle] ?? result.criteriaTitle;
-
-    result.criteriaType = getEnumValue<SearchCriteriaType>(
-          map[movieCriteriaDTOCriteriaType],
-          SearchCriteriaType.values,
-        ) ??
-        result.criteriaType;
-
-    result.criteriaList = SearchCriteriaDTOHelpers.getMovieList(
-      map[movieCriteriaDTOCriteriaList],
-    );
+    result
+      ..searchId = map[movieCriteriaDTOSearchId] ?? result.searchId
+      ..criteriaTitle =
+          map[movieCriteriaDTOCriteriaTitle] ?? result.criteriaTitle
+      ..criteriaType = getEnumValue<SearchCriteriaType>(
+            map[movieCriteriaDTOCriteriaType],
+            SearchCriteriaType.values,
+          ) ??
+          result.criteriaType
+      ..criteriaList = SearchCriteriaDTOHelpers.getMovieList(
+        map[movieCriteriaDTOCriteriaList],
+      );
     return result;
   }
 
@@ -151,10 +150,9 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   }
 
   SearchCriteriaDTO fromString(String criteria) {
-    final dto = SearchCriteriaDTO();
-    dto.criteriaTitle = criteria;
-    dto.criteriaType = SearchCriteriaType.movieTitle;
-    return dto;
+    return SearchCriteriaDTO()
+      ..criteriaTitle = criteria
+      ..criteriaType = SearchCriteriaType.movieTitle;
   }
 
   SearchCriteriaDTO init(
@@ -179,19 +177,19 @@ extension MapCriteriaDTOConversion on Map<dynamic, dynamic> {
   @factory
   // ignore: invalid_factory_method_impl
   SearchCriteriaDTO toSearchCriteriaDTO() {
-    final dto = SearchCriteriaDTO();
-    dto.searchId = dynamicToString(this[movieCriteriaDTOSearchId]);
-    dto.criteriaTitle = dynamicToString(this[movieCriteriaDTOCriteriaTitle]);
+    final dto = SearchCriteriaDTO()
+      ..searchId = dynamicToString(this[movieCriteriaDTOSearchId])
+      ..criteriaTitle = dynamicToString(this[movieCriteriaDTOCriteriaTitle]);
 
-    dto.criteriaType = getEnumValue<SearchCriteriaType>(
-          this[movieCriteriaDTOCriteriaType],
-          SearchCriteriaType.values,
-        ) ??
-        dto.criteriaType;
-
-    dto.criteriaList = SearchCriteriaDTOHelpers.getMovieList(
-      this[movieCriteriaDTOCriteriaList],
-    );
+    dto
+      ..criteriaType = getEnumValue<SearchCriteriaType>(
+            this[movieCriteriaDTOCriteriaType],
+            SearchCriteriaType.values,
+          ) ??
+          dto.criteriaType
+      ..criteriaList = SearchCriteriaDTOHelpers.getMovieList(
+        this[movieCriteriaDTOCriteriaList],
+      );
     return dto;
   }
 }

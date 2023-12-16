@@ -20,9 +20,9 @@ void main() {
 
     /// Confirms the closing pearenthesis is removed from the input (if present).
     void testSuffix(String input, String expectedOutput) {
-      final decoder = JsonPDecoder();
-      // Prime the decoder so that it does not strip the prefix from the input.
-      decoder.stripPrefix('(');
+      final decoder = JsonPDecoder()
+        // Prime the decoder so that it does not strip the prefix from the input.
+        ..stripPrefix('(');
       final actualOutput = decoder.bufferSuffix(input);
       expect(actualOutput, expectedOutput, reason: decoder.toString());
     }
@@ -197,11 +197,10 @@ void main() {
       }
 
       // Invoke the functionality.
-      final stream = emitByteStream(testInput)
+      emitByteStream(testInput)
           .transform(utf8.decoder)
-          .transform(JsonPDecoder());
-
-      stream.listen(expectFn, onDone: doneFn);
+          .transform(JsonPDecoder())
+          .listen(expectFn, onDone: doneFn);
     });
   });
 }

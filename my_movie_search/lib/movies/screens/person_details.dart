@@ -14,9 +14,9 @@ import 'package:my_movie_search/utilities/thread.dart';
 
 class PersonDetailsPage extends StatefulWidget {
   const PersonDetailsPage({
-    super.key,
     required this.restorationId,
     required this.person,
+    super.key,
   });
 
   final MovieResultDTO person;
@@ -48,9 +48,10 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   void initState() {
     super.initState();
     _person = DtoCache.singleton().fetch(widget.person);
-    final detailCriteria = SearchCriteriaDTO();
-    detailCriteria.criteriaTitle = _person.uniqueId;
-    _getDetails(detailCriteria);
+    _getDetails(SearchCriteriaDTO().init(
+      SearchCriteriaType.movieTitle,
+      title: _person.uniqueId,
+    ));
   }
 
   /// Fetch full person details from imdb.
@@ -227,22 +228,23 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       final rolesMap = category.value;
       final rolesLabel = category.key;
       final description = rolesMap.toShortString(); // Get a list of movie roles
-      categories.add(BoldLabel('$rolesLabel: (${rolesMap.length})'));
-      categories.add(
-        Center(
-          child: InkWell(
-            onTap: () => MMSNav(context).searchForRelated(
-              // Open search details when tapped.
-              '$rolesLabel: ${_person.title}',
-              rolesMap.values.toList(),
-            ),
-            child: Text(
-              description,
-              textAlign: TextAlign.center,
+      categories
+        ..add(BoldLabel('$rolesLabel: (${rolesMap.length})'))
+        ..add(
+          Center(
+            child: InkWell(
+              onTap: () => MMSNav(context).searchForRelated(
+                // Open search details when tapped.
+                '$rolesLabel: ${_person.title}',
+                rolesMap.values.toList(),
+              ),
+              child: Text(
+                description,
+                textAlign: TextAlign.center,
+              ),
             ),
           ),
-        ),
-      );
+        );
     }
     return categories;
   }

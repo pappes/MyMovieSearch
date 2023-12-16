@@ -70,8 +70,8 @@ void main() {
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-      final expectedOutput = expectedDTOList;
-      expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+      final expectedOutput = expectedDTOList
+        ..sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
       // printTestData(actualOutput);

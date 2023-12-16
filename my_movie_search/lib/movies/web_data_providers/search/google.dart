@@ -53,7 +53,8 @@ class QueryGoogleMovies
         DataSourceType.google,
       );
 
-  /// API call to Google returning the top 10 matching results for [searchText].
+  /// API call to Google returning the top 10 matching results
+  /// for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     // Get key from the file assets/secrets.json (not source controlled)

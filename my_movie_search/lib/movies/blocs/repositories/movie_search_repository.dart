@@ -8,13 +8,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-/// Search for movie data from multiple online search sources.
-///
-/// BlockRepository to consolidate data retrieval from multiple search
-/// and detail providers using the WebFetch framework.
-///
-/// [Search] provides a stream of incomplete and complete results.
-/// [Close] can be used to cancel a search.
+/// Search for movie data from all online search sources.
 class MovieSearchRepository extends MovieListRepository {
   /// Initiates a search for the provided [criteria].
   ///

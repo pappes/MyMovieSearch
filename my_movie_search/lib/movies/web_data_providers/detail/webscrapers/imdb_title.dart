@@ -14,7 +14,7 @@ const searchResultsTable = 'findList';
 const columnMovieText = 'result_text';
 const columnMoviePoster = 'primary_photo';
 
-/// Implements [WebScraper] for retrieving movie details from IMDB.
+/// Implements a web scraper for retrieving movie details from IMDB.
 mixin ScrapeIMDBTitleDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Reduce computation effort for html extraction.

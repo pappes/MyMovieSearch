@@ -54,8 +54,8 @@ mixin ThreadedCacheIMDBSuggestions
         'source': source,
         'limit': limit,
       },
-    ) as List<MovieResultDTO>;
-    result.forEach(_addResultToCache);
+    ) as List<MovieResultDTO>
+      ..forEach(_addResultToCache);
 
     _normalQueue.remove(criteria);
     _verySlowQueue.remove(criteria);

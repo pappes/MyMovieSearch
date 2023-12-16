@@ -67,7 +67,8 @@ class QueryIMDBMoviesForKeyword
         DataSourceType.imdbKeywords,
       );
 
-  /// API call to IMDB keywords returning the top matching results for [keywordsText].
+  /// API call to IMDB keywords returning the top matching results
+  /// for [encodedCriteria].
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
     searchResultsLimit = WebFetchLimiter(55);
@@ -96,9 +97,9 @@ class QueryIMDBMoviesForKeyword
   }
 
   static SearchCriteriaDTO convertMovieDtoToCriteriaDto(MovieResultDTO card) {
-    final newCriteria =
-        SearchCriteriaDTO().init(SearchCriteriaType.moviesForKeyword);
-    newCriteria.criteriaList = [card];
+    final newCriteria = SearchCriteriaDTO()
+      ..init(SearchCriteriaType.moviesForKeyword)
+      ..criteriaList = [card];
     newCriteria.criteriaTitle =
         _getCriteriaJsonValue(newCriteria, jsonKeywordKey);
     return newCriteria;

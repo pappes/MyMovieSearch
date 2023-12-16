@@ -70,8 +70,8 @@ void main() {
     // Convert a restorable dto to JSON and then convert the JSON to a restorable dto.
     test('RestorableCriteria', () {
       final criteria = makeCriteriaDTO('abc');
-      final rtp = RestorationTestParent(criteria.criteriaTitle);
-      rtp.restoreState(null, true);
+      final rtp = RestorationTestParent(criteria.criteriaTitle)
+        ..restoreState(null, true);
 
       final encoded = rtp.criteria.dtoToPrimitives(criteria);
       rtp.criteria.initWithValue(rtp.criteria.fromPrimitives(encoded));

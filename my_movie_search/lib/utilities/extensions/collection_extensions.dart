@@ -49,17 +49,14 @@ extension StringIterableHelper on Iterable<String> {
     }
 
     if (this is List) {
-      final list = this as List;
-
-      final unique = toSet();
-      unique.addAll(itemSet);
-      list.clear();
-      list.addAll(unique);
+      final unique = toSet()..addAll(itemSet);
+      this as List
+        ..clear()
+        ..addAll(unique);
     }
 
     if (this is Set) {
-      final set = this as Set;
-      set.addAll(itemSet);
+      (this as Set).addAll(itemSet);
     }
   }
 }

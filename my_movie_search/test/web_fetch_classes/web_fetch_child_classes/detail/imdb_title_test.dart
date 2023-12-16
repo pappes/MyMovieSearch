@@ -33,18 +33,17 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'tttesting';
+      final input = SearchCriteriaDTO()..criteriaTitle = 'tttesting';
       expect(QueryIMDBTitleDetails(input).myFormatInputAsText(), 'tttesting');
     });
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaList = [
-        MovieResultDTO().error('test1'),
-        MovieResultDTO().error('test2'),
-      ];
+      final input = SearchCriteriaDTO()
+        ..criteriaList = [
+          MovieResultDTO().error('test1'),
+          MovieResultDTO().error('test2'),
+        ];
       expect(QueryIMDBTitleDetails(input).myFormatInputAsText(), '');
       expect(QueryIMDBTitleDetails(input).myFormatInputAsText(), '');
     });
@@ -59,9 +58,10 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBTitleDetails(input).myYieldError('new query').toMap();
-      actualResult.remove('uniqueId');
+      final actualResult = QueryIMDBTitleDetails(input)
+          .myYieldError('new query')
+          .toMap()
+        ..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -71,8 +71,7 @@ void main() {
       final input = SearchCriteriaDTO();
       const expectedOutput = intermediateMapList;
       final testClass = QueryIMDBTitleDetails(input);
-      final criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = 'tt7602562';
+      final criteria = SearchCriteriaDTO()..criteriaTitle = 'tt7602562';
       testClass.criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
         imdbHtmlSampleFull,
@@ -156,8 +155,7 @@ void main() {
 
     test('read empty cache via readCachedList', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryIMDBTitleDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
       final listResult = await testClass.readCachedList(
         source: (_) async => Stream.value('Who Is Marco?'),
       );
@@ -170,8 +168,7 @@ void main() {
 
     test('read populated cache via readCachedList', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryIMDBTitleDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
       final dto = MovieResultDTO().testDto('Polo');
       await testClass.myAddResultToCache(dto);
       final listResult = await testClass.readCachedList(
@@ -186,8 +183,7 @@ void main() {
 
     test('read populated cache via readList', () async {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final testClass = QueryIMDBTitleDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
       // ignore: unused_result
       await testClass.readList(
         source: streamImdbHtmlOfflineData,
@@ -204,8 +200,7 @@ void main() {
 
     test('fetch result from cache', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryIMDBTitleDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
       final dto = MovieResultDTO().testDto('Polo');
       await testClass.myAddResultToCache(dto);
       final listResult = testClass.myFetchResultFromCache();
@@ -218,8 +213,7 @@ void main() {
 
     test('fetch multiple results from cache', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryIMDBTitleDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
       final dto1 = MovieResultDTO().testDto('Polo1');
       final dto2 = MovieResultDTO().testDto('Polo2');
       await testClass.myAddResultToCache(dto1);
@@ -259,8 +253,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryIMDBTitleDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
@@ -282,8 +275,7 @@ void main() {
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryIMDBTitleDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -308,8 +300,8 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final testClass =
-          QueryIMDBTitleDetails(SearchCriteriaDTO().fromString('tt123'));
-      testClass.myClearCache();
+          QueryIMDBTitleDetails(SearchCriteriaDTO().fromString('tt123'))
+            ..myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -338,8 +330,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails(
         SearchCriteriaDTO().fromString('tt123'),
-      );
-      testClass.myClearCache();
+      )..myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -357,8 +348,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails(
         SearchCriteriaDTO().fromString('tt123'),
-      );
-      testClass.myClearCache();
+      )..myClearCache();
 
       // Invoke the functionality.
       await testClass

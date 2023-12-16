@@ -93,29 +93,26 @@ class TmdbMovieDetailConverter {
     } else {
       movie.yearRange = map[innerElementYear]?.toString() ?? movie.yearRange;
     }
-    movie.description =
-        map[innerElementOverview]?.toString() ?? movie.description;
-
-    movie.userRating = DoubleHelper.fromText(
-      map[innerElementVoteAverage],
-      nullValueSubstitute: movie.userRating,
-    )!;
-    movie.userRatingCount = IntHelper.fromText(
-      map[innerElementVoteCount],
-      nullValueSubstitute: movie.userRatingCount,
-    )!;
-
     final mins = IntHelper.fromText(map[innerElementRuntime]);
-    movie.runTime = _getDuration(mins) ?? movie.runTime;
-
-    movie.languages.combineUnique(
-      map.deepSearch(
-        'english_name',
-        multipleMatch: true,
-      ),
-    );
-    movie.getContentType();
-    movie.getLanguageType();
+    movie
+      ..runTime = _getDuration(mins) ?? movie.runTime
+      ..description = map[innerElementOverview]?.toString() ?? movie.description
+      ..userRating = DoubleHelper.fromText(
+        map[innerElementVoteAverage],
+        nullValueSubstitute: movie.userRating,
+      )!
+      ..userRatingCount = IntHelper.fromText(
+        map[innerElementVoteCount],
+        nullValueSubstitute: movie.userRatingCount,
+      )!
+      ..languages.combineUnique(
+        map.deepSearch(
+          'english_name',
+          multipleMatch: true,
+        ),
+      )
+      ..getContentType()
+      ..getLanguageType();
     for (final genre in map[innerElementGenres] as Iterable) {
       if (genre is Map) {
         movie.genres.combineUnique(genre['name'] as String);

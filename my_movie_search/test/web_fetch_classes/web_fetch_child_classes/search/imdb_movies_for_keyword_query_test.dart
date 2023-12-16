@@ -65,11 +65,11 @@ testing and punctuation
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaList = [
-        MovieResultDTO().error('test1'),
-        MovieResultDTO().error('test2'),
-      ];
+      final input = SearchCriteriaDTO()
+        ..criteriaList = [
+          MovieResultDTO().error('test1'),
+          MovieResultDTO().error('test2'),
+        ];
       expect(
         QueryIMDBMoviesForKeyword(input).myFormatInputAsText(),
         contains('test1'),
@@ -103,9 +103,10 @@ testing and punctuation
       };
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBMoviesForKeyword(criteria).myYieldError('new query').toMap();
-      actualResult.remove('uniqueId');
+      final actualResult = QueryIMDBMoviesForKeyword(criteria)
+          .myYieldError('new query')
+          .toMap()
+        ..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -114,8 +115,8 @@ testing and punctuation
     // Confirm error is constructed as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final testClass = QueryIMDBMoviesForKeyword(criteria);
-      testClass.criteria = criteria;
+      final testClass = QueryIMDBMoviesForKeyword(criteria)
+        ..criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
         htmlSampleFull,
       );

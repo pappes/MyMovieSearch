@@ -6,7 +6,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
-  const MovieSearchCriteriaPage({super.key, required this.restorationId});
+  const MovieSearchCriteriaPage({required this.restorationId, super.key});
 
   static const String title = "Movie Search Criteria";
   final String restorationId;

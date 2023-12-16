@@ -45,8 +45,7 @@ void main() {
       expect(l.limit, 10, reason: 'final limit');
     });
     test('non default limit from setter', () {
-      final l = WebFetchLimiter();
-      l.limit = 10;
+      final l = WebFetchLimiter()..limit = 10;
       expect(l.currentUsage, 0, reason: 'initial usage');
       expect(l.limit, 10, reason: 'initial limit');
       final consumed = l.consume(200);

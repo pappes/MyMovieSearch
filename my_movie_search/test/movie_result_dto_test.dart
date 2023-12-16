@@ -34,41 +34,34 @@ class RestorationTestParent extends State with RestorationMixin {
 }
 
 MovieResultDTO fullDTO() {
-  final dto = MovieResultDTO();
-
-  dto.bestSource = DataSourceType.wiki;
-  dto.uniqueId = 'abc123';
-  dto.title = 'init testing';
-  dto.alternateTitle = 'testing init';
-  dto.charactorName = 'testing dto';
-  dto.description = 'test dto';
-  dto.type = MovieContentType.episode;
-  dto.year = 1999;
-  dto.yearRange = '1999-2005';
-  dto.creditsOrder = 42;
-  dto.userRating = 1.5;
-  dto.userRatingCount = 1500;
-  dto.censorRating = CensorRatingType.family;
-  dto.runTime = const Duration(seconds: 9000);
-  dto.imageUrl = 'www.microsoft.com';
-  dto.language = LanguageType.mostlyEnglish;
-  dto.languages = {'a', 'b', 'c'};
-  dto.genres = {'x', 'y', 'z'};
-  dto.keywords = {'they', 'them'};
-  dto.sources = {DataSourceType.wiki: 'abc123'};
-
-  final dto2 = MovieResultDTO();
-  dto2.uniqueId = 'dto2';
-  final dto3 = MovieResultDTO();
-  dto3.uniqueId = 'dto3';
-  final dto4 = MovieResultDTO();
-  dto4.uniqueId = 'dto4';
-
-  dto.related = {
-    'Actress': {dto2.uniqueId: dto2, dto3.uniqueId: dto3},
-    'Director': {dto4.uniqueId: dto4, dto3.uniqueId: dto3},
-  };
-  return dto;
+  final dto2 = MovieResultDTO()..uniqueId = 'dto2';
+  final dto3 = MovieResultDTO()..uniqueId = 'dto3';
+  final dto4 = MovieResultDTO()..uniqueId = 'dto4';
+  return MovieResultDTO()
+    ..bestSource = DataSourceType.wiki
+    ..uniqueId = 'abc123'
+    ..title = 'init testing'
+    ..alternateTitle = 'testing init'
+    ..charactorName = 'testing dto'
+    ..description = 'test dto'
+    ..type = MovieContentType.episode
+    ..year = 1999
+    ..yearRange = '1999-2005'
+    ..creditsOrder = 42
+    ..userRating = 1.5
+    ..userRatingCount = 1500
+    ..censorRating = CensorRatingType.family
+    ..runTime = const Duration(seconds: 9000)
+    ..imageUrl = 'www.microsoft.com'
+    ..language = LanguageType.mostlyEnglish
+    ..languages = {'a', 'b', 'c'}
+    ..genres = {'x', 'y', 'z'}
+    ..keywords = {'they', 'them'}
+    ..sources = {DataSourceType.wiki: 'abc123'}
+    ..related = {
+      'Actress': {dto2.uniqueId: dto2, dto3.uniqueId: dto3},
+      'Director': {dto4.uniqueId: dto4, dto3.uniqueId: dto3},
+    };
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -80,8 +73,7 @@ void main() {
     // Categorise dto based on popularity from userRatingCount.
     test('userRatingCategory', () {
       void testUserRatingCategory(int input, int expectedOutput) {
-        final testInput = MovieResultDTO();
-        testInput.userRatingCount = input;
+        final testInput = MovieResultDTO()..userRatingCount = input;
         expect(testInput.userRatingCategory(), expectedOutput);
       }
 
@@ -95,8 +87,7 @@ void main() {
     // Categorise dto based on title type from MovieContentType.
     test('userContentCategory', () {
       void testUserContentCategory(MovieContentType input, int expectedOutput) {
-        final testInput = MovieResultDTO();
-        testInput.type = input;
+        final testInput = MovieResultDTO()..type = input;
         expect(testInput.titleContentCategory(), expectedOutput);
       }
 
@@ -114,9 +105,9 @@ void main() {
       void testPopularityCategory(MovieResultDTO input, int expectedOutput) =>
           expect(input.popularityCategory(), expectedOutput);
 
-      final testInput = MovieResultDTO();
-      // Any movie with a super low rating is probably bad.
-      testInput.userRating = 1.99;
+      final testInput = MovieResultDTO()
+        // Any movie with a super low rating is probably bad.
+        ..userRating = 1.99;
       testPopularityCategory(testInput, 0);
       // A rating of 2 out of 5 is not great but better than nothing.
       testInput.userRating = 2;
@@ -126,8 +117,9 @@ void main() {
       // Movies made before 2000 have a lower relevancy to today.
       testInput.year = 2000;
       testPopularityCategory(testInput, 2);
-      testInput.year = 1999;
-      testInput.yearRange = '1999';
+      testInput
+        ..year = 1999
+        ..yearRange = '1999';
       testPopularityCategory(testInput, 1);
       // TVSeries started before 2000 have a lower relevancy to today.
       testInput.yearRange = '2000';
@@ -143,12 +135,12 @@ void main() {
         String otherYR,
         int expectedOutput,
       ) {
-        final testInput = MovieResultDTO();
-        testInput.year = inputYear;
-        testInput.yearRange = inputYR;
-        final testOther = MovieResultDTO();
-        testOther.year = otherYear;
-        testOther.yearRange = otherYR;
+        final testInput = MovieResultDTO()
+          ..year = inputYear
+          ..yearRange = inputYR;
+        final testOther = MovieResultDTO()
+          ..year = otherYear
+          ..yearRange = otherYR;
         expect(testInput.yearCompare(testOther), expectedOutput);
       }
 
@@ -186,8 +178,7 @@ void main() {
     // Determine definative year based on text based year range
     test('yearRangeAsNumber', () {
       void testYearCompare(String inputYR, int expectedOutput) {
-        final testInput = MovieResultDTO();
-        testInput.yearRange = inputYR;
+        final testInput = MovieResultDTO()..yearRange = inputYR;
         expect(testInput.yearRangeAsNumber(), expectedOutput);
       }
 
@@ -213,8 +204,7 @@ void main() {
           '    Actual: "def"\n'
           '}';
       final dtoExpected = makeResultDTO('abc');
-      final dtoActual = makeResultDTO('abc');
-      dtoActual.uniqueId = 'def';
+      final dtoActual = makeResultDTO('abc')..uniqueId = 'def';
       final matcher = MovieResultDTOMatcher(dtoExpected);
 
       final Description mismatchDescription = StringDescription();
@@ -241,15 +231,15 @@ void main() {
           '    Actual: "def"\n'
           '}';
       final dto1 = makeResultDTO('abc');
-      final dto2 = makeResultDTO('abc');
-      dto2.uniqueId = 'def';
+      final dto2 = makeResultDTO('abc')..uniqueId = 'def';
       final matcher = MovieResultDTOMatcher(dto1);
 
       final Description mismatchDescription = StringDescription();
       final Map<dynamic, dynamic> matchState = {};
       const bool verbose = true;
-      matcher.matches(dto2, matchState);
-      matcher.describeMismatch(dto1, mismatchDescription, matchState, verbose);
+      matcher
+        ..matches(dto2, matchState)
+        ..describeMismatch(dto1, mismatchDescription, matchState, verbose);
 
       expect(mismatchDescription.toString(), expectedError);
     });
@@ -289,13 +279,14 @@ void main() {
       final Description mismatchDescription = StringDescription();
       final Map<dynamic, dynamic> matchState = {};
       const bool verbose = false;
-      matcher.matches(actualDTOList, matchState);
-      matcher.describeMismatch(
-        expectedDTOList,
-        mismatchDescription,
-        matchState,
-        verbose,
-      );
+      matcher
+        ..matches(actualDTOList, matchState)
+        ..describeMismatch(
+          expectedDTOList,
+          mismatchDescription,
+          matchState,
+          verbose,
+        );
 
       expect(mismatchDescription.toString(), expectedError);
     });
@@ -329,13 +320,14 @@ void main() {
       final Description mismatchDescription = StringDescription();
       final Map<dynamic, dynamic> matchState = {};
       const bool verbose = true;
-      matcher.matches(actualDTOList, matchState);
-      matcher.describeMismatch(
-        expectedDTOList,
-        mismatchDescription,
-        matchState,
-        verbose,
-      );
+      matcher
+        ..matches(actualDTOList, matchState)
+        ..describeMismatch(
+          expectedDTOList,
+          mismatchDescription,
+          matchState,
+          verbose,
+        );
 
       expect(mismatchDescription.toString(), expectedError);
     });
@@ -353,19 +345,17 @@ void main() {
       expect(dto.languages, {'English'});
     });
     test('supply list to dto, get language from helper', () {
-      final dto = MovieResultDTO();
-      dto.languages = {'English'};
+      final dto = MovieResultDTO()..languages = {'English'};
       expect(dto.getLanguageType(), LanguageType.allEnglish);
     });
     test('supply list to dto, get language from dto', () {
-      final dto = MovieResultDTO();
-      dto.languages = {'English'};
-      dto.getLanguageType();
+      final dto = MovieResultDTO()
+        ..languages = {'English'}
+        ..getLanguageType();
       expect(dto.language, LanguageType.allEnglish);
     });
     test('supply list to helper, get language from dto', () {
-      final dto = MovieResultDTO();
-      dto.getLanguageType({'English'});
+      final dto = MovieResultDTO()..getLanguageType({'English'});
       expect(dto.language, LanguageType.allEnglish);
       expect(dto.languages, {'English'});
     });
@@ -402,9 +392,9 @@ void main() {
   group('MovieResultDTOinit', () {
     // Convert a dto to a map.
     test('empty_DTO', () {
-      final dto = MovieResultDTO();
-      dto.type = MovieContentType.none;
-      dto.setSource();
+      final dto = MovieResultDTO()
+        ..type = MovieContentType.none
+        ..setSource();
       final initialisedDTO = MovieResultDTO().init();
       expect(dto, MovieResultDTOMatcher(initialisedDTO));
     });
@@ -460,10 +450,11 @@ void main() {
 
     // Convert a list of dtos to a JSON and then convert the JSON back to a list.
     test('multiple_DTO', () {
-      final list = <MovieResultDTO>[];
-      list.add(makeResultDTO('abc'));
-      list.add(makeResultDTO('def'));
-      list.add(makeResultDTO('ghi'));
+      final list = <MovieResultDTO>[
+        makeResultDTO('abc'),
+        makeResultDTO('def'),
+        makeResultDTO('ghi'),
+      ];
       final encoded = list.encodeList();
 
       final decoded = ListDTOConversion.decodeList(encoded);
@@ -475,8 +466,8 @@ void main() {
     // Convert a restorable dto to JSON and then convert the JSON to a restorable dto.
     test('RestorableMovie', () {
       final movie = makeResultDTO('abcd');
-      final rtp = RestorationTestParent(movie.uniqueId);
-      rtp.restoreState(null, true);
+      final rtp = RestorationTestParent(movie.uniqueId)
+        ..restoreState(null, true);
 
       final encoded = rtp.movie.dtoToPrimitives(movie);
       rtp.movie.initWithValue(rtp.movie.fromPrimitives(encoded));
@@ -487,12 +478,13 @@ void main() {
     });
     // Convert a restorable dto list to JSON and then convert the JSON to a restorable dto list.
     test('RestorableMovieList', () {
-      final list = <MovieResultDTO>[];
-      list.add(makeResultDTO('abc'));
-      list.add(makeResultDTO('def'));
-      list.add(makeResultDTO('ghi'));
-      final rtp = RestorationTestParent(list[1].uniqueId);
-      rtp.restoreState(null, true);
+      final list = <MovieResultDTO>[
+        makeResultDTO('abc'),
+        makeResultDTO('def'),
+        makeResultDTO('ghi'),
+      ];
+      final rtp = RestorationTestParent(list[1].uniqueId)
+        ..restoreState(null, true);
 
       final encoded = rtp.list.listToPrimitives(list);
       rtp.list.initWithValue(rtp.list.fromPrimitives(encoded));
@@ -526,10 +518,11 @@ void main() {
 
     // Convert a list of dtos to a JSON and then convert the JSON back to a list.
     test('multiple_DTO', () {
-      final list = <MovieResultDTO>[];
-      list.add(makeResultDTO('abc'));
-      list.add(makeResultDTO('def'));
-      list.add(makeResultDTO('ghi'));
+      final list = <MovieResultDTO>[
+        makeResultDTO('abc'),
+        makeResultDTO('def'),
+        makeResultDTO('ghi'),
+      ];
       final encoded = list.toJson();
 
       final decoded = encoded.jsonToList();
@@ -703,42 +696,40 @@ void main() {
     });
 
     group('full DTO', () {
-      final betterValues = makeResultDTO('abc');
-      betterValues.setSource(newSource: DataSourceType.omdb);
-      betterValues.sources[DataSourceType.imdb] = 'good data';
-      betterValues.languages = {'English', 'French', 'Italian'};
-      betterValues.userRating = 0;
-      betterValues.userRatingCount = 0;
-      betterValues.getLanguageType();
-      final otherValues = MovieResultDTO();
-      otherValues.sources[DataSourceType.imdb] = 'good data';
-      otherValues.setSource(newSource: DataSourceType.wiki);
-      otherValues.languages = {'French', 'English'};
-      otherValues.userRating = 0;
-      otherValues.userRatingCount = 0;
-      otherValues.getLanguageType();
+      final betterValues = makeResultDTO('abc')
+        ..setSource(newSource: DataSourceType.omdb)
+        ..sources[DataSourceType.imdb] = 'good data'
+        ..languages = {'English', 'French', 'Italian'}
+        ..userRating = 0
+        ..userRatingCount = 0
+        ..getLanguageType();
+      final otherValues = MovieResultDTO()
+        ..sources[DataSourceType.imdb] = 'good data'
+        ..setSource(newSource: DataSourceType.wiki)
+        ..languages = {'French', 'English'}
+        ..userRating = 0
+        ..userRatingCount = 0
+        ..getLanguageType();
 
       test('no merge required', () {
         final expected = betterValues.clone();
         expected.sources.addAll(otherValues.sources);
 
-        final output = betterValues.clone();
-        output.merge(otherValues);
+        final output = betterValues.clone()..merge(otherValues);
 
         expect(output, MovieResultDTOMatcher(expected));
       });
 
       test('merge required', () {
-        final expected = betterValues.clone();
-        expected.uniqueId = otherValues.uniqueId;
-        expected.sources.addAll(otherValues.sources);
-        expected.bestSource = otherValues.bestSource;
-        expected.languages = otherValues.languages;
-        expected.languages.addAll(betterValues.languages);
-        expected.getLanguageType();
+        final expected = betterValues.clone()
+          ..uniqueId = otherValues.uniqueId
+          ..sources.addAll(otherValues.sources)
+          ..bestSource = otherValues.bestSource
+          ..languages = otherValues.languages
+          ..languages.addAll(betterValues.languages)
+          ..getLanguageType();
 
-        final output = otherValues.clone();
-        output.merge(betterValues);
+        final output = otherValues.clone()..merge(betterValues);
 
         expect(output, MovieResultDTOMatcher(expected));
       });
@@ -748,17 +739,16 @@ void main() {
             'Short but sweet.  More than 100 chars long but does not end in . . . unlike the other string.  This string should win.';
         const longDescription =
             'Longer description text.  More than 100 chars long and does end in . . . unlike the other string.  This string should lose...';
-        final worseDescription = betterValues.clone();
-        worseDescription.description = longDescription;
-        final betterDescription = otherValues.clone();
-        betterDescription.description = shortDescription;
-        final expected = betterValues.clone();
-        expected.description = shortDescription;
-        expected.sources.addAll(betterDescription.sources);
-        expected.bestSource = worseDescription.bestSource;
+        final worseDescription = betterValues.clone()
+          ..description = longDescription;
+        final betterDescription = otherValues.clone()
+          ..description = shortDescription;
+        final expected = betterValues.clone()
+          ..description = shortDescription
+          ..sources.addAll(betterDescription.sources)
+          ..bestSource = worseDescription.bestSource;
 
-        final output = worseDescription.clone();
-        output.merge(betterDescription);
+        final output = worseDescription.clone()..merge(betterDescription);
 
         expect(output, MovieResultDTOMatcher(expected));
       });

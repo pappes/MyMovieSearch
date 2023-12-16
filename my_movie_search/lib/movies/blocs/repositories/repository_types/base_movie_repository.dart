@@ -4,13 +4,13 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
-/// Retrieve for movie data from multiple online sources.
+/// Retrieve movie data from multiple online sources.
 ///
 /// BlockRepository to consolidate data retrieval from multiple search
 /// and detail providers using the WebFetch framework.
 ///
-/// [Search] provides a stream of incomplete and complete results.
-/// [Close] can be used to cancel a search.
+/// [search] provides a stream of incomplete and complete results.
+/// [close] can be used to cancel a search.
 class BaseMovieRepository {
   late SearchCriteriaDTO criteria;
   StreamController<MovieResultDTO>? _movieStreamController;
@@ -28,10 +28,9 @@ class BaseMovieRepository {
   Stream<MovieResultDTO> search(SearchCriteriaDTO newCriteria) async* {
     criteria = newCriteria;
     ++_searchUID;
-    final feedback = MovieResultDTO();
-    feedback.title = 'Searching ...';
-    feedback.type = MovieContentType.information;
-    yield feedback;
+    yield MovieResultDTO()
+      ..title = 'Searching ...'
+      ..type = MovieContentType.information;
 
     _movieStreamController = StreamController<MovieResultDTO>(sync: true);
     // TODO(pappes): error handling
@@ -44,10 +43,11 @@ class BaseMovieRepository {
 
   /// Cancels or completes an in progress search.
   void close() {
-    final feedback = MovieResultDTO();
-    feedback.title = 'Search completed ...';
-    feedback.type = MovieContentType.information;
-    yieldResult(feedback);
+    yieldResult(
+      MovieResultDTO()
+        ..title = 'Search completed ...'
+        ..type = MovieContentType.information,
+    );
 
     logger.t('closing stream');
     _movieStreamController?.close();
@@ -71,7 +71,9 @@ class BaseMovieRepository {
   /// Close the stream if all WebFetch operations have completed.
   void finishProvider() {
     _awaitingProviders = _awaitingProviders - 1;
-    if (_awaitingProviders == 0) close();
+    if (_awaitingProviders == 0) {
+      close();
+    }
   }
 
   /// Begin waiting for another data provider to complete.

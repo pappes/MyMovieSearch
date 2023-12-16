@@ -39,8 +39,7 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaTitle = 'tttesting';
+      final input = SearchCriteriaDTO()..criteriaTitle = 'tttesting';
       expect(
         QueryIMDBMoreKeywordsDetails(input).myFormatInputAsText(),
         'tttesting',
@@ -49,11 +48,11 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaList = [
-        makeResultDTO('tttest1'),
-        makeResultDTO('tttest2'),
-      ];
+      final input = SearchCriteriaDTO()
+        ..criteriaList = [
+          makeResultDTO('tttest1'),
+          makeResultDTO('tttest2'),
+        ];
       expect(
         QueryIMDBMoreKeywordsDetails(input).myFormatInputAsText(),
         '',
@@ -75,8 +74,8 @@ void main() {
       // Invoke the functionality.
       final actualResult = QueryIMDBMoreKeywordsDetails(criteria)
           .myYieldError('new query')
-          .toMap();
-      actualResult.remove('uniqueId');
+          .toMap()
+        ..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -126,8 +125,8 @@ void main() {
   group('WebFetchThreadedCache unit tests', () {
     test('empty cache', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      testClass.clearThreadedCache();
+      final testClass = QueryIMDBMoreKeywordsDetails(criteria)
+        ..clearThreadedCache();
       final listResult = await testClass.readCachedList(
         source: (_) => Future.value(Stream.value('Polo')),
       );
@@ -140,8 +139,8 @@ void main() {
 
     test('add to cache via readPrioritisedCachedList', () async {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      testClass.clearThreadedCache();
+      final testClass = QueryIMDBMoreKeywordsDetails(criteria)
+        ..clearThreadedCache();
       // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
@@ -164,8 +163,8 @@ void main() {
 
     test('fetch result from cache', () async {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      testClass.clearThreadedCache();
+      final testClass = QueryIMDBMoreKeywordsDetails(criteria)
+        ..clearThreadedCache();
       // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
@@ -181,8 +180,8 @@ void main() {
 
     test('clear cache', () async {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      testClass.clearThreadedCache();
+      final testClass = QueryIMDBMoreKeywordsDetails(criteria)
+        ..clearThreadedCache();
       // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
@@ -222,8 +221,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBMoreKeywordsDetails(criteria)..myClearCache();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
@@ -245,8 +243,7 @@ void main() {
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () {
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBMoreKeywordsDetails(criteria)..myClearCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -271,8 +268,7 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBMoreKeywordsDetails(criteria)..myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -303,8 +299,7 @@ void main() {
           ':imdb more keywords data not detected for criteria tt123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('tt123');
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBMoreKeywordsDetails(criteria)..myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -324,8 +319,7 @@ void main() {
           ':imdb more keywords data not detected for criteria tt123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('tt123');
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      testClass.myClearCache();
+      final testClass = QueryIMDBMoreKeywordsDetails(criteria)..myClearCache();
 
       // Invoke the functionality.
       await testClass

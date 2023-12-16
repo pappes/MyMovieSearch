@@ -15,9 +15,9 @@ import 'package:my_movie_search/utilities/thread.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   const MovieDetailsPage({
-    super.key,
     required this.restorationId,
     required this.movie,
+    super.key,
   });
 
   final MovieResultDTO movie;
@@ -49,9 +49,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   void initState() {
     super.initState();
     _movie = DtoCache.singleton().fetch(widget.movie);
-    final detailCriteria = SearchCriteriaDTO();
-    detailCriteria.criteriaTitle = _movie.uniqueId;
-    _getDetails(detailCriteria);
+    _getDetails(SearchCriteriaDTO().init(
+      SearchCriteriaType.movieTitle,
+      title: _movie.uniqueId,
+    ));
   }
 
   /// Fetch full person details from imdb.
@@ -302,22 +303,22 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         final rolesMap = category.value;
         final rolesLabel = category.key;
         final description = rolesMap.toShortString();
-        categories.add(BoldLabel('$rolesLabel (${rolesMap.length})'));
-
-        categories.add(
-          Center(
-            child: InkWell(
-              onTap: () => MMSNav(context).searchForRelated(
-                '$rolesLabel ${_movie.title}',
-                rolesMap.values.toList(),
-              ),
-              child: Text(
-                description,
-                textAlign: TextAlign.center,
+        categories
+          ..add(BoldLabel('$rolesLabel (${rolesMap.length})'))
+          ..add(
+            Center(
+              child: InkWell(
+                onTap: () => MMSNav(context).searchForRelated(
+                  '$rolesLabel ${_movie.title}',
+                  rolesMap.values.toList(),
+                ),
+                child: Text(
+                  description,
+                  textAlign: TextAlign.center,
+                ),
               ),
             ),
-          ),
-        );
+          );
       }
     }
     return categories;

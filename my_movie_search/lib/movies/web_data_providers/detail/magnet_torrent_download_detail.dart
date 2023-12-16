@@ -59,7 +59,8 @@ class QueryTorrentDownloadDetail
         DataSourceType.torrentDownloadDetail,
       );
 
-  /// API call to search returning the top matching results for [encodedCriteria].
+  /// API call to search returning the top matching results
+  /// for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     final decodedCriteria = Uri.decodeComponent(searchCriteria);

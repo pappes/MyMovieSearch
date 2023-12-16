@@ -54,8 +54,7 @@ class TieredCache<T> {
 
     if (memoryCache.containsKey(key)) {
       // Get existing search result from cache.
-      final newList = get(key) as List;
-      newList.add(item);
+      final newList = get(key) as List..add(item);
       memoryCache[key] = newList as T;
     } else {
       memoryCache[key] = [item] as T;

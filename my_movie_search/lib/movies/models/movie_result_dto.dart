@@ -214,51 +214,50 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
   @factory
   // ignore: invalid_factory_method_impl
   MovieResultDTO toMovieResultDTO() {
-    final dto = MovieResultDTO();
-    dto.uniqueId = dynamicToString(this[movieDTOUniqueId]);
-    dto.title = dynamicToString(this[movieDTOTitle]);
-    dto.alternateTitle = dynamicToString(this[movieDTOAlternateTitle]);
-    dto.charactorName = dynamicToString(this[movieDTOCharactorName]);
+    final dto = MovieResultDTO()
+      ..uniqueId = dynamicToString(this[movieDTOUniqueId])
+      ..title = dynamicToString(this[movieDTOTitle])
+      ..alternateTitle = dynamicToString(this[movieDTOAlternateTitle])
+      ..charactorName = dynamicToString(this[movieDTOCharactorName])
+      ..description = dynamicToString(this[movieDTODescription])
+      ..year = dynamicToInt(this[movieDTOYear])
+      ..yearRange = dynamicToString(this[movieDTOYearRange])
+      ..creditsOrder = dynamicToInt(this[movieDTOcreditsOrder])
+      ..userRating = dynamicToDouble(this[movieDTOUserRating])
+      ..userRatingCount = dynamicToInt(this[movieDTOUserRatingCount])
+      ..runTime = Duration(seconds: dynamicToInt(this[movieDTORunTime]))
+      ..imageUrl = dynamicToString(this[movieDTOImageUrl])
+      ..languages = dynamicToStringSet(this[movieDTOLanguages])
+      ..genres = dynamicToStringSet(this[movieDTOGenres])
+      ..keywords = dynamicToStringSet(this[movieDTOKeywords])
+      ..related = stringToRelated(this[movieDTORelated]);
 
-    dto.description = dynamicToString(this[movieDTODescription]);
-    dto.year = dynamicToInt(this[movieDTOYear]);
-    dto.yearRange = dynamicToString(this[movieDTOYearRange]);
-    dto.creditsOrder = dynamicToInt(this[movieDTOcreditsOrder]);
-    dto.userRating = dynamicToDouble(this[movieDTOUserRating]);
-    dto.userRatingCount = dynamicToInt(this[movieDTOUserRatingCount]);
-    dto.runTime = Duration(seconds: dynamicToInt(this[movieDTORunTime]));
-    dto.imageUrl = dynamicToString(this[movieDTOImageUrl]);
-
-    dto.bestSource = getEnumValue<DataSourceType>(
-          this[movieDTOBestSource],
-          DataSourceType.values,
-        ) ??
-        dto.bestSource;
-    dto.type = getEnumValue<MovieContentType>(
-          this[movieDTOType],
-          MovieContentType.values,
-        ) ??
-        dto.type;
-    dto.censorRating = getEnumValue<CensorRatingType>(
-          this[movieDTOCensorRating],
-          CensorRatingType.values,
-        ) ??
-        dto.censorRating;
-    dto.language = getEnumValue<LanguageType>(
-          this[movieDTOLanguage],
-          LanguageType.values,
-        ) ??
-        dto.language;
-
-    dto.sources = stringToSources(this[movieDTOSources]);
+    dto
+      ..bestSource = getEnumValue<DataSourceType>(
+            this[movieDTOBestSource],
+            DataSourceType.values,
+          ) ??
+          dto.bestSource
+      ..type = getEnumValue<MovieContentType>(
+            this[movieDTOType],
+            MovieContentType.values,
+          ) ??
+          dto.type
+      ..censorRating = getEnumValue<CensorRatingType>(
+            this[movieDTOCensorRating],
+            CensorRatingType.values,
+          ) ??
+          dto.censorRating
+      ..language = getEnumValue<LanguageType>(
+            this[movieDTOLanguage],
+            LanguageType.values,
+          ) ??
+          dto.language
+      ..sources = stringToSources(this[movieDTOSources]);
     if (!dto.sources.containsKey(dto.bestSource) &&
         !dto.uniqueId.startsWith(movieDTOMessagePrefix)) {
       dto.sources[dto.bestSource] = dto.uniqueId;
     }
-    dto.languages = dynamicToStringSet(this[movieDTOLanguages]);
-    dto.genres = dynamicToStringSet(this[movieDTOGenres]);
-    dto.keywords = dynamicToStringSet(this[movieDTOKeywords]);
-    dto.related = stringToRelated(this[movieDTORelated]);
     return dto;
   }
 
@@ -402,9 +401,12 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (newSource is DataSourceType) {
       bestSource = newSource;
     }
+    final readIndicator = getReadIndicator();
 
     sources.clear();
     sources[bestSource] = uniqueId;
+
+    if (readIndicator != null) setReadIndicator(readIndicator);
     return this;
   }
 
@@ -508,7 +510,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Convert a [MovieResultDTO] object into a [Map].
   ///
-  /// All returned objects are compatible with the [StandardMessageCodec] class.
+  /// All returned objects are compatible with the StandardMessageCodec class.
   /// i.e. only contain string, number, bool, map or list.
   Map<String, Object> toMap({bool includeRelated = true}) {
     final result = <String, Object>{};
@@ -815,30 +817,28 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// as a [MovieResultDTO].
   ///
   MovieResultDTO toUnknown() {
-    final dto = MovieResultDTO();
-    dto.bestSource = bestSource;
-    dto.uniqueId = uniqueId;
-    dto.title = 'unknown';
-    dto.alternateTitle = alternateTitle;
-    dto.charactorName = charactorName;
-
-    dto.description = description;
-    dto.type = type;
-    dto.year = year;
-    dto.yearRange = yearRange;
-    dto.creditsOrder = creditsOrder;
-    dto.userRating = userRating;
-    dto.userRatingCount = userRatingCount;
-    dto.censorRating = censorRating;
-    dto.runTime = runTime;
-    dto.imageUrl = imageUrl;
-    dto.language = language;
-    dto.languages = languages;
-    dto.genres = genres;
-    dto.keywords = keywords;
-    dto.sources = sources;
-    dto.related = related;
-    return dto;
+    return MovieResultDTO()
+      ..bestSource = bestSource
+      ..uniqueId = uniqueId
+      ..title = 'unknown'
+      ..alternateTitle = alternateTitle
+      ..charactorName = charactorName
+      ..description = description
+      ..type = type
+      ..year = year
+      ..yearRange = yearRange
+      ..creditsOrder = creditsOrder
+      ..userRating = userRating
+      ..userRatingCount = userRatingCount
+      ..censorRating = censorRating
+      ..runTime = runTime
+      ..imageUrl = imageUrl
+      ..language = language
+      ..languages = languages
+      ..genres = genres
+      ..keywords = keywords
+      ..sources = sources
+      ..related = related;
   }
 
   /// Look at information provided to see if [MovieContentType] can be determined.

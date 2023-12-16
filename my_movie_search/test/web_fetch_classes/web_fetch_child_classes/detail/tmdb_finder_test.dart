@@ -41,11 +41,11 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO();
-      input.criteriaList = [
-        MovieResultDTO().error('test1'),
-        MovieResultDTO().error('test2'),
-      ];
+      final input = SearchCriteriaDTO()
+        ..criteriaList = [
+          MovieResultDTO().error('test1'),
+          MovieResultDTO().error('test2'),
+        ];
       expect(
         QueryTMDBFinder(input).myFormatInputAsText(),
         '',
@@ -61,9 +61,10 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult =
-          QueryTMDBFinder(criteria).myYieldError('new query').toMap();
-      actualResult.remove('uniqueId');
+      final actualResult = QueryTMDBFinder(criteria)
+          .myYieldError('new query')
+          .toMap()
+        ..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -195,8 +196,7 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBFinder(criteria);
-      testClass.myClearCache();
+      final testClass = QueryTMDBFinder(criteria)..myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -222,8 +222,7 @@ void main() {
     test('invalid json', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBFinder(criteria);
-      testClass.myClearCache();
+      final testClass = QueryTMDBFinder(criteria)..myClearCache();
       const expectedException =
           '[tmdbFinder] Error in tmdbFinder with criteria ttImdbId123 '
           'convert error interpreting web text as a map '
@@ -247,8 +246,7 @@ void main() {
           ':tmdb results data not detected for criteria ttImdbId123'
           ' in json:[{"hello":"world"}]';
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBFinder(criteria);
-      testClass.myClearCache();
+      final testClass = QueryTMDBFinder(criteria)..myClearCache();
 
       // Invoke the functionality.
       await testClass

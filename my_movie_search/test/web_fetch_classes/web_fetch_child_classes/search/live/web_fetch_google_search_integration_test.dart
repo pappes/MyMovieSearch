@@ -38,8 +38,8 @@ void main() {
       final actualOutput =
           await QueryGoogleMovies(criteria).readList(limit: 1000);
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-      final expectedOutput = expectedDTOList;
-      expectedOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+      final expectedOutput = expectedDTOList
+        ..sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
       // printTestData(actualOutput);

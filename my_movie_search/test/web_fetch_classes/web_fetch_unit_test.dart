@@ -244,8 +244,7 @@ String _getOfflineJson(String id) {
 
 /// Make dummy json results for offline queries.
 String _makeJson(int qty) {
-  final results = StringBuffer();
-  results.write('[');
+  final results = StringBuffer()..write('[');
   for (int i = 0; i < qty; i++) {
     if (i > 0) results.write(', \n  ');
     results.write('{"id": "${1000 + i}","description": "${1000 + i}."}');
@@ -360,8 +359,8 @@ void main() {
 
     test('with jsonp transformation', () {
       const jsonText = '[{"key":"val"}]';
-      final testClass = WebFetchBasic('JsonP($jsonText)');
-      testClass.transformJsonP = true;
+      final testClass = WebFetchBasic('JsonP($jsonText)')
+        ..transformJsonP = true;
       final result = testClass
           .myConvertCriteriaToWebText()
           .then((stream) => stream.toList());
@@ -371,8 +370,7 @@ void main() {
     test('exception handler', () async {
       Future<Stream<String>> myError(dynamic s) async => throw s.toString();
       const jsonpText = 'JsonP([{"key":"val"}])';
-      final testClass = WebFetchBasic(jsonpText);
-      testClass.selectedDataSource = myError;
+      final testClass = WebFetchBasic(jsonpText)..selectedDataSource = myError;
       final streamResult = await testClass.myConvertCriteriaToWebText();
       String actualResult = '';
       try {
@@ -550,9 +548,9 @@ void main() {
     test(
       'exception handling2',
       () {
-        final testClass = QueryUnknownSourceMocked(criteriaDto);
-        testClass.overriddenConvertTreeToOutputType =
-            (_) => throw 'Conversion Failed';
+        final testClass = QueryUnknownSourceMocked(criteriaDto)
+          ..overriddenConvertTreeToOutputType =
+              (_) => throw 'Conversion Failed';
         final actualOutput = testClass.baseConvertTreeToOutputType(
           Stream.fromIterable(_makeMaps(2)),
         );
@@ -726,9 +724,9 @@ void main() {
     test(
       'child function exception handling',
       () async {
-        final testClass = QueryUnknownSourceMocked(criteriaDto);
-        testClass.overriddenConvertWebTextToTraversableTree =
-            (_) => throw 'Search Failed';
+        final testClass = QueryUnknownSourceMocked(criteriaDto)
+          ..overriddenConvertWebTextToTraversableTree =
+              (_) => throw 'Search Failed';
         final actualOutput = testClass.baseConvertWebTextToTraversableTree(
           Stream.fromIterable(['Part1', 'Part2']),
         );
@@ -748,9 +746,9 @@ void main() {
     test(
       'stream exception handling',
       () async {
-        final testClass = QueryUnknownSourceMocked(criteriaDto);
-        testClass.overriddenConvertWebTextToTraversableTree =
-            (_) => throw 'Search Failed';
+        final testClass = QueryUnknownSourceMocked(criteriaDto)
+          ..overriddenConvertWebTextToTraversableTree =
+              (_) => throw 'Search Failed';
         final actualOutput = testClass.baseConvertWebTextToTraversableTree(
           Stream.error('more exception handling'),
         );
@@ -892,8 +890,8 @@ void main() {
     test(
       'exception handling',
       () async {
-        final testClass = QueryUnknownSourceMocked(criteriaDto);
-        testClass.selectedDataSource = (_) => throw 'Convert Failed';
+        final testClass = QueryUnknownSourceMocked(criteriaDto)
+          ..selectedDataSource = (_) => throw 'Convert Failed';
         final actualOutput = testClass.baseConvertCriteriaToWebText();
         await expectLater(
           actualOutput,
@@ -943,8 +941,7 @@ void main() {
       List<MovieResultDTO>? expectedValue, [
       String? expectedError,
     ]) {
-      final criteria = SearchCriteriaDTO();
-      criteria.criteriaTitle = input;
+      final criteria = SearchCriteriaDTO()..criteriaTitle = input;
       final actualOutput = QueryUnknownSourceMocked(criteria).baseTransform();
       if (null != expectedValue) {
         final expectedMatchers =

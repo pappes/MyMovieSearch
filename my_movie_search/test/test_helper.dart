@@ -88,8 +88,9 @@ class MovieResultDTOMatcher extends Matcher {
     bool verbose,
   ) {
     if (verbose || this.verbose) {
-      mismatchDescription.add('Expected: ${expected.toPrintableString()}\n');
-      mismatchDescription.add('  Actual: ${_actual.toPrintableString()}\n');
+      mismatchDescription
+        ..add('Expected: ${expected.toPrintableString()}\n')
+        ..add('  Actual: ${_actual.toPrintableString()}\n');
     }
     return mismatchDescription.add(matchState['differences'].toString());
   }
@@ -137,8 +138,9 @@ class MovieResultDTOListMatcher extends Matcher {
     bool verbose,
   ) {
     if (verbose || this.verbose) {
-      mismatchDescription.add('Expected: ${expected.toPrintableString()}\n');
-      mismatchDescription.add('  Actual: ${_actual.toPrintableString()}\n');
+      mismatchDescription
+        ..add('Expected: ${expected.toPrintableString()}\n')
+        ..add('  Actual: ${_actual.toPrintableString()}\n');
     }
     return mismatchDescription.add(matchState['differences'].toString());
   }
@@ -314,31 +316,30 @@ MovieResultDTO makeResultDTOWithRelatedDTO(String sample) {
 
 /// Helper function to make a unique dto containing unique values.
 MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
-  final dto = MovieResultDTO();
-
-  dto.bestSource = DataSourceType.wiki;
-  dto.uniqueId = '${sample}_uniqueId';
-  dto.title = '${sample}_title';
-  dto.alternateTitle = '${sample}_alternateTitle';
-  dto.charactorName = '${sample}_charactorName';
-  dto.description = '${sample}_description';
-  dto.type = MovieContentType.custom;
-  dto.year = 123;
-  dto.yearRange = '${sample}_yearRange';
-  dto.creditsOrder = 42;
-  dto.userRating = 456;
-  dto.userRatingCount = 789;
-  dto.censorRating = CensorRatingType.family;
-  dto.runTime = const Duration(hours: 1, minutes: 2, seconds: 3);
-  dto.imageUrl = '${sample}_imageUrl';
-  dto.language = LanguageType.mostlyEnglish;
-  dto.languages = {'English', '${sample}_language1', '${sample}_language2'};
-  dto.genres = {'${sample}_genre1', '${sample}_genre2'};
-  dto.keywords = {'${sample}_keyword1', '${sample}_keyword2'};
-  dto.sources = {
-    DataSourceType.tmdbMovie: '${sample}_alternateTitle',
-    DataSourceType.wiki: '${sample}_uniqueId',
-  };
+  final dto = MovieResultDTO()
+    ..bestSource = DataSourceType.wiki
+    ..uniqueId = '${sample}_uniqueId'
+    ..title = '${sample}_title'
+    ..alternateTitle = '${sample}_alternateTitle'
+    ..charactorName = '${sample}_charactorName'
+    ..description = '${sample}_description'
+    ..type = MovieContentType.custom
+    ..year = 123
+    ..yearRange = '${sample}_yearRange'
+    ..creditsOrder = 42
+    ..userRating = 456
+    ..userRatingCount = 789
+    ..censorRating = CensorRatingType.family
+    ..runTime = const Duration(hours: 1, minutes: 2, seconds: 3)
+    ..imageUrl = '${sample}_imageUrl'
+    ..language = LanguageType.mostlyEnglish
+    ..languages = {'English', '${sample}_language1', '${sample}_language2'}
+    ..genres = {'${sample}_genre1', '${sample}_genre2'}
+    ..keywords = {'${sample}_keyword1', '${sample}_keyword2'}
+    ..sources = {
+      DataSourceType.tmdbMovie: '${sample}_alternateTitle',
+      DataSourceType.wiki: '${sample}_uniqueId',
+    };
   if (makeRelated) {
     final ref = 'rel$sample';
     dto.related = {
@@ -359,26 +360,24 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
 
 /// Helper function to make a unique dto containing unique values.
 SearchCriteriaDTO makeCriteriaDTO(String sample) {
-  final dto = SearchCriteriaDTO();
-
-  dto.criteriaType = SearchCriteriaType.movieDTOList;
-  dto.criteriaTitle = '${sample}_criteriaTitle';
-  dto.searchId = '${sample}_searchId';
-  dto.criteriaList = [
-    makeResultDTO('first'),
-    makeResultDTO('second'),
-  ];
-  return dto;
+  return SearchCriteriaDTO()
+    ..criteriaType = SearchCriteriaType.movieDTOList
+    ..criteriaTitle = '${sample}_criteriaTitle'
+    ..searchId = '${sample}_searchId'
+    ..criteriaList = [
+      makeResultDTO('first'),
+      makeResultDTO('second'),
+    ];
 }
 
 class TestApp extends StatelessWidget {
   const TestApp({
-    super.key,
     required this.children,
+    super.key,
   });
   const TestApp.con({
-    super.key,
     required this.children,
+    super.key,
   });
 
   final List<Widget> children;

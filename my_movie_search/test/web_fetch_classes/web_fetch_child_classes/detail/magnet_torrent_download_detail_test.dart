@@ -39,12 +39,12 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO().init(SearchCriteriaType.movieDTOList);
-      input.criteriaTitle = 'List of errors';
-      input.criteriaList = [
-        MovieResultDTO().init(uniqueId: 'test1'),
-        MovieResultDTO().init(uniqueId: 'test2'),
-      ];
+      final input = SearchCriteriaDTO().init(SearchCriteriaType.movieDTOList)
+        ..criteriaTitle = 'List of errors'
+        ..criteriaList = [
+          MovieResultDTO().init(uniqueId: 'test1'),
+          MovieResultDTO().init(uniqueId: 'test2'),
+        ];
       expect(
         QueryTorrentDownloadDetail(input).myFormatInputAsText(),
         'test1,test2',
@@ -79,8 +79,8 @@ void main() {
       // Invoke the functionality.
       final actualResult = QueryTorrentDownloadDetail(criteria)
           .myYieldError('new query')
-          .toMap();
-      actualResult.remove('uniqueId');
+          .toMap()
+        ..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -88,8 +88,8 @@ void main() {
 
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final testClass = QueryTorrentDownloadDetail(criteria);
-      testClass.criteria = criteria;
+      final testClass = QueryTorrentDownloadDetail(criteria)
+        ..criteria = criteria;
       final actualOutput =
           testClass.myConvertWebTextToTraversableTree(htmlSampleFull);
       expect(actualOutput, completion(expectedOutput));

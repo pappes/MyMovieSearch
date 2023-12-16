@@ -106,8 +106,9 @@ class ImdbWebScraperConverter {
 
   /// Parse [Map] to pull IMDB data out.
   void _deepConvertTitle(MovieResultDTO movie, Map<dynamic, dynamic> map) {
-    movie.uniqueId = map.deepSearch(deepTitleId)!.first!.toString();
-    movie.merge(_getDeepTitleCommon(map, movie.uniqueId));
+    movie
+      ..uniqueId = map.deepSearch(deepTitleId)!.first!.toString()
+      ..merge(_getDeepTitleCommon(map, movie.uniqueId));
     final relatedMap = map.deepSearch(
       deepRelatedHeader, // mainColumnData
       multipleMatch: true,
@@ -366,8 +367,9 @@ class ImdbWebScraperConverter {
         multipleMatch: true,
       );
       if (names is List && names.isNotEmpty) {
-        dto.alternateTitle = ' ${dto.alternateTitle}';
-        dto.charactorName = ' $names';
+        dto
+          ..alternateTitle = ' ${dto.alternateTitle}'
+          ..charactorName = ' $names';
       }
     }
   }
@@ -399,36 +401,36 @@ class ImdbWebScraperConverter {
   }
 
   void _shallowConvert(MovieResultDTO movie, Map<dynamic, dynamic> map) {
-    movie.setSource(
-      newSource: map[dataSource],
-      newUniqueId: map[outerElementIdentity]!.toString(),
-    );
-
-    movie.title = map[outerElementOfficialTitle]?.toString() ?? movie.title;
-    movie.alternateTitle =
-        map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;
+    movie
+      ..setSource(
+        newSource: map[dataSource],
+        newUniqueId: map[outerElementIdentity]!.toString(),
+      )
+      ..title = map[outerElementOfficialTitle]?.toString() ?? movie.title
+      ..alternateTitle =
+          map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;
     if (movie.title == movie.alternateTitle) {
       movie.alternateTitle = '';
     }
-    movie.description =
-        map[outerElementDescription]?.toString() ?? movie.description;
-    movie.imageUrl = map[outerElementImage]?.toString() ?? movie.imageUrl;
-    movie.year = getYear(map[outerElementYear]?.toString()) ?? movie.year;
-    movie.yearRange = map[outerElementYearRange]?.toString() ?? movie.yearRange;
-    movie.year = movie.maxYear();
-
-    movie.censorRating = getImdbCensorRating(
-          map[outerElementCensorRating]?.toString(),
-        ) ??
-        movie.censorRating;
-    movie.userRating = DoubleHelper.fromText(
-      (map[outerElementRating] as Map?)?[innerElementRatingValue],
-      nullValueSubstitute: movie.userRating,
-    )!;
-    movie.userRatingCount = IntHelper.fromText(
-      (map[outerElementRating] as Map?)?[innerElementRatingCount],
-      nullValueSubstitute: movie.userRatingCount,
-    )!;
+    movie
+      ..description =
+          map[outerElementDescription]?.toString() ?? movie.description
+      ..imageUrl = map[outerElementImage]?.toString() ?? movie.imageUrl
+      ..year = getYear(map[outerElementYear]?.toString()) ?? movie.year
+      ..yearRange = map[outerElementYearRange]?.toString() ?? movie.yearRange
+      ..year = movie.maxYear()
+      ..censorRating = getImdbCensorRating(
+            map[outerElementCensorRating]?.toString(),
+          ) ??
+          movie.censorRating
+      ..userRating = DoubleHelper.fromText(
+        (map[outerElementRating] as Map?)?[innerElementRatingValue],
+        nullValueSubstitute: movie.userRating,
+      )!
+      ..userRatingCount = IntHelper.fromText(
+        (map[outerElementRating] as Map?)?[innerElementRatingCount],
+        nullValueSubstitute: movie.userRatingCount,
+      )!;
 
     final language = map[outerElementLanguage];
     if (language is LanguageType) {
@@ -443,10 +445,11 @@ class ImdbWebScraperConverter {
       movie.runTime = Duration.zero.fromIso8601(map[outerElementDuration]);
     } catch (_) {}
 
-    movie.genres.combineUnique(map[outerElementGenre]);
-    movie.keywords.combineUnique(map[outerElementKeywords]);
-    movie.languages.combineUnique(map[outerElementLanguages]);
-    movie.getLanguageType();
+    movie
+      ..genres.combineUnique(map[outerElementGenre])
+      ..keywords.combineUnique(map[outerElementKeywords])
+      ..languages.combineUnique(map[outerElementLanguages])
+      ..getLanguageType();
 
     for (final person in getPeopleFromJson(map[outerElementDirector])) {
       movie.addRelated(relatedDirectorsLabel, person);

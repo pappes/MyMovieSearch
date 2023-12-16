@@ -61,8 +61,9 @@ class GoogleMovieSearchConverter {
         }
       }
     } catch (e) {
-      final error = MovieResultDTO();
-      error.title = 'Unknown google error - potential API change! $e $map';
+      final error = MovieResultDTO().init(
+        title: 'Unknown google error - potential API change! $e $map',
+      );
       logger.e(error.title);
 
       searchResults.add(error);
@@ -89,9 +90,7 @@ class GoogleMovieSearchConverter {
   }
 
   static MovieResultDTO _dtoFromMap(Map<dynamic, dynamic> map) {
-    final movie = MovieResultDTO();
-
-    movie.title = getTitle(map);
+    final movie = MovieResultDTO().init(title: getTitle(map));
 
     final inner = map[innerElementPagemap];
     if (inner is Map) {
@@ -99,23 +98,26 @@ class GoogleMovieSearchConverter {
       if (metaTags is Iterable) {
         final metatag = metaTags.first;
         if (metatag is Map) {
-          movie.uniqueId = getID(metatag);
-          movie.imageUrl = getImage(metatag);
-          movie.type = getType(metatag);
+          movie
+            ..uniqueId = getID(metatag)
+            ..imageUrl = getImage(metatag)
+            ..type = getType(metatag);
         }
       }
       final innerRating = inner[innerElementPagemap];
       if (innerRating is Iterable) {
         final rating = innerRating.first;
         if (rating is Map) {
-          movie.userRating = getRatingValue(rating);
-          movie.userRatingCount = getRatingCount(rating);
+          movie
+            ..userRating = getRatingValue(rating)
+            ..userRatingCount = getRatingCount(rating);
         }
       }
     }
 
-    movie.yearRange = getYearRange(map);
-    movie.year = movie.maxYear();
+    movie
+      ..yearRange = getYearRange(map)
+      ..year = movie.maxYear();
     if (movie.yearRange.length > 4) {
       movie.type = MovieContentType.series;
     }

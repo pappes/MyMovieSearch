@@ -22,7 +22,7 @@ extension DoubleHelper on double {
     return count ?? nullValueSubstitute;
   }
 
-  /// Convert an [formattedText] to decimal representation ignoring thousand seperators
+  /// Compare [actual] and [expected] to see if they are close enough.
   ///
   /// [tolerance] is the percentage varianace allowed
   ///
