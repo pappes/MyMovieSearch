@@ -54,7 +54,7 @@ enum MovieContentType {
   navigation, // e.g. next page
   movie, //      includes "tv movie"
   short, //      anything less that an hour long that does not repeat
-  series, //     anything less that an hour long that does repeat or repeats more than 4 times
+  series, //     a short that repeats or movie repeats more than 4 times
   miniseries, // anything more that an hour long that does repeat
   episode, //    anything that is part of a series or mini-series
   title, //      unknown movie type
@@ -184,7 +184,8 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
 }
 
 extension ListDTOConversion on Iterable<MovieResultDTO> {
-  /// Convert a [List] of json encoded [String]s into a [List] of [MovieResultDTO] objects
+  /// Convert a [List] of json encoded [String]s
+  /// into a [List] of [MovieResultDTO] objects
   ///
   @factory
   // ignore: invalid_factory_method_impl
@@ -197,7 +198,8 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
     return result;
   }
 
-  /// Convert a [List] of [MovieResultDTO] objects into a [List] of json encoded [String]s
+  /// Convert a [List] of [MovieResultDTO] objects
+  /// into a [List] of json encoded [String]s
   ///
   List<String> encodeList() {
     final result = <String>[];
@@ -292,7 +294,8 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
   RelatedMovieCategories stringToRelated(dynamic categories) {
     final RelatedMovieCategories related = {};
     if (categories is Map) {
-      // Find the categories that movie are collected under e.g. "director", "writer", etc
+      // Find the categories that movie are collected under
+      // e.g. "director", "writer", etc
       for (final category in categories.entries) {
         if (category.value is Map) {
           final categoryText = category.key.toString();
@@ -595,7 +598,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return result;
   }
 
-  /// Add [relatedDto] into the related movies list of a [MovieResultDTO] in the [key] section.
+  /// Add [relatedDto] into the related movies list of a [MovieResultDTO]
+  /// in the [key] section.
   ///
   void addRelated(String key, MovieResultDTO relatedDto) {
     if ('' != relatedDto.title) {
@@ -679,7 +683,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return this;
   }
 
-  /// Combine related movie information from [existingDtos] into a [MovieResultDTO].
+  /// Combine related movie information from [existingDtos]
+  /// into a [MovieResultDTO].
   ///
   static void mergeRelatedDtos(
     RelatedMovieCategories existingDtos,
@@ -841,7 +846,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       ..related = related;
   }
 
-  /// Look at information provided to see if [MovieContentType] can be determined.
+  /// Look at information provided
+  /// to see if [MovieContentType] can be determined.
   ///
   /// info is in the form  ' (1988–1993) (TV Series)'
   static MovieContentType? _lookupMovieContentType(
@@ -1074,7 +1080,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         if (languageText.toUpperCase().startsWith('EN')) {
           if (LanguageType.none == language ||
               LanguageType.allEnglish == language) {
-            // First item(s) found are English, assume all English until other languages found.
+            // First item(s) found are English,
+            // assume all English until other languages found.
             language = LanguageType.allEnglish;
             continue;
           } else {
@@ -1086,7 +1093,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
           // English was the first language listed but found another language.
           return language = LanguageType.mostlyEnglish;
         } else {
-          // First item found is foreign, assume all foreign until other languages found.
+          // First item found is foreign,
+          // assume all foreign until other languages found.
           language = LanguageType.foreign;
           continue;
         }
@@ -1243,7 +1251,8 @@ extension MapMovieResultDTOHelpers on Map<dynamic, MovieResultDTO> {
     return 'List<MovieResultDTO>($length)[\n$listContents\n]';
   }
 
-  /// Create a short string representation of a [Map]<[dynamic],[MovieResultDTO]>.
+  /// Create a short string representation
+  /// of a [Map]<[dynamic],[MovieResultDTO]>.
   ///
   /// Output will be less than 1000 chars long, truncating if required.
   String toShortString() {
@@ -1263,7 +1272,8 @@ extension MapMovieResultDTOHelpers on Map<dynamic, MovieResultDTO> {
 
 extension MapMapMovieResultDTOHelpers
     on Map<dynamic, Map<dynamic, MovieResultDTO>> {
-  /// Create a string representation of a Map<[dynamic], Map<[dynamic], [MovieResultDTO]>>>.
+  /// Create a string representation
+  /// of a Map<[dynamic], Map<[dynamic], [MovieResultDTO]>>>.
   ///
   String toPrintableString() {
     final listContents = StringBuffer();
@@ -1277,7 +1287,8 @@ extension MapMapMovieResultDTOHelpers
     return '{$listContents}';
   }
 
-  /// Create a short string representation of a Map<[dynamic], Map<[dynamic], [MovieResultDTO]>>>.
+  /// Create a short string representation
+  /// of a Map<[dynamic], Map<[dynamic], [MovieResultDTO]>>>.
   ///
   String toShortString() {
     final listContents = StringBuffer();

@@ -66,7 +66,8 @@ class JsonPDecoder extends Converter<String, String> {
     return input;
   }
 
-  // Internal function to strip FunctionName( from the start of the string stream.
+  // Internal function to strip FunctionName(
+  // from the start of the string stream.
   // Strips nothing if [ or { is encountered before (
   String stripPrefix(String input) {
     final firstRound = input.indexOf("(");
@@ -86,7 +87,8 @@ class JsonPDecoder extends Converter<String, String> {
     if ((firstRound == -1) ||
         (firstCurly > -1 && firstCurly < firstRound) ||
         (firstSquare > -1 && firstSquare < firstRound)) {
-      // JSON encoded text starts before JSONP wrapper so no conversion required.
+      // JSON encoded text starts before JSONP wrapper
+      // so no conversion required.
       return input;
     }
     // Found valid JSONP need to trim start.
@@ -96,7 +98,8 @@ class JsonPDecoder extends Converter<String, String> {
 
   // Internal function to Strip ) from the end of the string stream.
   // Strips nothing if no valid JSONP prefix has been encountered.
-  // Buffers stripped text to allow it to be emitted if further text is streamed.
+  // Buffers stripped text to allow it to be emitted
+  // if further text is streamed.
   String bufferSuffix(String input) {
     if (_state.buffering) {
       final lastRound = input.lastIndexOf(")");
@@ -128,7 +131,8 @@ class JsonPDecoder extends Converter<String, String> {
           (firstSquare > -1 && firstSquare > lastRound) ||
           (lastCurly > -1 && lastCurly > lastRound) ||
           (lastSquare > -1 && lastSquare > lastRound)) {
-        // JSON encoded text continues after last round bracket no buffering required.
+        // JSON encoded text continues after last round bracket
+        // no buffering required.
         return output + input;
       }
       // Found valid close bracket, need to buffer.
@@ -142,9 +146,11 @@ class JsonPDecoder extends Converter<String, String> {
   @override
   String toString() => _state.toString();
 
-  /// Starts a conversion from a chunked JSONP string to its corresponding JSON string.
+  /// Starts a conversion from a chunked JSONP string
+  /// to its corresponding JSON string.
   ///
-  /// The output [sink] receives one string element per input element through `add`.
+  /// The output [sink] receives one string element
+  /// per input element through `add`.
   @override
   Sink<String> startChunkedConversion(Sink<Object> sink) =>
       JsonPConversionSink(sink, this);

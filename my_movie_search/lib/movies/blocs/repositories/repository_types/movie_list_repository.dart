@@ -46,7 +46,8 @@ class MovieListRepository extends BaseMovieRepository {
         );
         searchesRequested = searchesRequested + 1;
       }
-      // Load slow results into cache for access on details screen in a seperate thread
+      // Load slow results into cache for access on details screen
+      // in a seperate thread
       for (final function in functions.slowSearch) {
         if (Settings.singleton().get('PREFETCH') == 'true') {
           function(dto);

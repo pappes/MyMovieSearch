@@ -5,7 +5,8 @@ import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_pe
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-/// Implements [WebFetchBase] for fetching people data in The Movie Database (TMDB).
+/// Implements [WebFetchBase] for fetching people data
+/// in The Movie Database (TMDB).
 ///
 /// The TMDb API is a free web service to obtain movie information.
 ///

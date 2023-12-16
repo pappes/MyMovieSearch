@@ -12,7 +12,8 @@ const resultRowsSelector = '.results_cell';
 const jpgPictureSelector = '.results_img';
 const titleSelector = '.displayDetailLink';
 const yearSelector = '.displayElementText.PUBDATE';
-//'#results_bio0 > span.thumb_hidden.PUBDATE > div > div.displayElementText.text-p.highlightMe.PUBDATE'
+// '#results_bio0 > span.thumb_hidden.PUBDATE > div >
+// div.displayElementText.text-p.highlightMe.PUBDATE'
 
 /// Implements [WebFetchBase] for the LibsaBarcode search html web scraper.
 ///
@@ -39,7 +40,8 @@ mixin ScrapeLibsaBarcodeSearch
     if (validPage) {
       return movieData;
     }
-    throw 'LibsaBarcode results data not detected for criteria $getCriteriaText in html:$webText';
+    throw 'LibsaBarcode results data not detected for criteria '
+        '$getCriteriaText in html:$webText';
   }
 
   /// extract each row from the table.

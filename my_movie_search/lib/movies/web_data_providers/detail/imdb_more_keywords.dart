@@ -8,7 +8,8 @@ import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_ti
 import 'package:my_movie_search/movies/web_data_providers/detail/webscrapers/imdb_more_keywords.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-/// Implements [WebFetchBase] for retrieving full list of keywords for a movie from IMDB.
+/// Implements [WebFetchBase] for retrieving full list of keywords
+/// for a movie from IMDB.
 ///
 /// ```dart
 /// QueryIMDBMoreKeywordsDetails().readList(criteria);

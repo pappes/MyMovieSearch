@@ -57,7 +57,8 @@ class QueryTpbSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
         DataSourceType.tpb,
       );
 
-  /// API call to tpb search returning the top matching results for [encodedCriteria].
+  /// API call to tpb search
+  /// returning the top matching results for [encodedCriteria].
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
     searchResultsLimit = WebFetchLimiter(55);

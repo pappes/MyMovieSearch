@@ -137,7 +137,8 @@ testing and punctuation
           QueryIMDBMoviesForKeyword(criteria).myConvertWebTextToTraversableTree(
         'htmlSampleError',
       );
-      //NOTE: Using expect on an async result only works as the last line of the test!
+      // NOTE: Using expect on an async result
+      // only works as the last line of the test!
       expect(actualOutput, expectedOutput);
     });
   });
@@ -162,7 +163,8 @@ testing and punctuation
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
   });
@@ -189,7 +191,8 @@ testing and punctuation
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
     // Test error detection.
@@ -200,7 +203,8 @@ testing and punctuation
       final actualResult = imdbKeywords.myConvertTreeToOutputType('map');
 
       // Check the results.
-      //NOTE: Using expect on an async result only works as the last line of the test!
+      // NOTE: Using expect on an async result
+      // only works as the last line of the test!
       expect(
         actualResult,
         throwsA('expected map got String unable to interpret data map'),
@@ -209,11 +213,13 @@ testing and punctuation
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and ScrapeIMDBSearchDetails and ImdbSearchConverter
+  /// Integration tests using WebFetchBase and ScrapeIMDBSearchDetails
+  /// and ImdbSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search query', () {
-    // Read IMDB search results from a simulated byte stream and convert JSON to dtos.
+    // Read IMDB search results from a simulated byte stream
+    // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
@@ -236,11 +242,13 @@ testing and punctuation
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
 
-    // Read IMDB search results from a simulated byte stream and report error due to invalid html.
+    // Read IMDB search results from a simulated byte stream
+    // and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
@@ -259,7 +267,8 @@ testing and punctuation
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read IMDB search results from a simulated byte stream and report error due to unexpected html.
+    // Read IMDB search results from a simulated byte stream
+    // and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException =

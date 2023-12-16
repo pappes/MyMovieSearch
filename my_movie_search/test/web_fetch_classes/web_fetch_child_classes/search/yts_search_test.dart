@@ -96,7 +96,8 @@ void main() {
       final actualResult = webfetch.myConvertTreeToOutputType('map');
 
       // Check the results.
-      //NOTE: Using expect on an async result only works as the last line of the test!
+      // NOTE: Using expect on an async result
+      // only works as the last line of the test!
       expect(
         actualResult,
         throwsA('expected map got String unable to interpret data map'),
@@ -166,7 +167,8 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('yts suggestion query', () {
-    // Read search results from a simulated byte stream and convert JSON to dtos.
+    // Read search results from a simulated byte stream
+    // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
@@ -190,11 +192,13 @@ void main() {
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
 
-    // Read search results from a simulated byte stream and report error due to invalid html.
+    // Read search results from a simulated byte stream
+    // and report error due to invalid html.
     test('invalid json', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
@@ -213,11 +217,13 @@ void main() {
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read search results from a simulated byte stream and convert JSON to dtos.
+    // Read search results from a simulated byte stream
+    // and convert JSON to dtos.
     test('unexpected json contents', () async {
       // Set up the test data.
-      const expectedException = '[QueryYtsSearch] Error in ytsSearch '
-          'with criteria tt123 convert error translating page map to objects '
+      const expectedException =
+          '[QueryYtsSearch] Error in ytsSearch with criteria '
+          'tt123 convert error translating page map to objects '
           ':expected map got Null unable to interpret data null';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryYtsSearch(fullCriteria);

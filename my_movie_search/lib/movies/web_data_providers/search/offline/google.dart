@@ -59,8 +59,8 @@ final intermediateMapList = [jsonDecode(jsonSampleFull)];
 final intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
 final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
-const jsonSampleFull =
-    ' $googleMoviesJsonSearchPrefix $googleMoviesJsonSearchInner $googleMoviesJsonSearchSuffix';
+const jsonSampleFull = ' $googleMoviesJsonSearchPrefix '
+    '$googleMoviesJsonSearchInner $googleMoviesJsonSearchSuffix';
 
 Future<Stream<String>> streamGoogleMoviesJsonOfflineData(_) =>
     Future.value(Stream.value(jsonSampleFull));

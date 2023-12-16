@@ -11,23 +11,27 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('transformer', () {
-    /// Confirms the JSONP function prefix is removed from the input (if present).
+    /// Confirms the JSONP function prefix
+    /// is removed from the input (if present).
     void testPrefix(String input, String expectedOutput) {
       final decoder = JsonPDecoder();
       final actualOutput = decoder.stripPrefix(input);
       expect(actualOutput, expectedOutput, reason: decoder.toString());
     }
 
-    /// Confirms the closing pearenthesis is removed from the input (if present).
+    /// Confirms the closing pearenthesis
+    /// is removed from the input (if present).
     void testSuffix(String input, String expectedOutput) {
       final decoder = JsonPDecoder()
-        // Prime the decoder so that it does not strip the prefix from the input.
+        // Prime the decoder
+        //so that it does not strip the prefix from the input.
         ..stripPrefix('(');
       final actualOutput = decoder.bufferSuffix(input);
       expect(actualOutput, expectedOutput, reason: decoder.toString());
     }
 
-    /// Confirm removal is prefix and suffix even across multiple line of input.
+    /// Confirm removal is prefix and suffix
+    /// even across multiple line of input.
     void testMultiLineConversion(
       List<String> lines,
       String expectedOutput, [
@@ -130,7 +134,8 @@ void main() {
       testSingleLineConversion('{[abc]})', '{[abc]})');
       testSingleLineConversion('{[ab)c]}', '{[ab)c]}');
     });
-    // Strip function name, opening parenthesis and closing parenthesis (if present).
+    // Strip function name, opening parenthesis
+    // and closing parenthesis (if present).
     test('JsonPDecoder single line change required', () {
       testSingleLineConversion('jsfunction(abc', 'abc');
       testSingleLineConversion('jsfunction({abc}', '{abc}');
@@ -146,8 +151,8 @@ void main() {
       testSingleLineConversion('jsfunction({[abc]})', '{[abc]}');
       testSingleLineConversion('jsfunction({[ab)c]})', '{[ab)c]}');
     });
-    // Strip function name, opening parenthesis and closing parenthesis
-    // even across multiple lines.
+    // Strip function name, opening parenthesis
+    // and closing parenthesis even across multiple lines.
     test('JsonPDecoder multiline change required', () {
       testMultiLineConversion(['\n', 'jsfunction(abc', '\n'], 'abc\n');
       testMultiLineConversion(['\n', 'jsfunction(', 'abc'], 'abc');

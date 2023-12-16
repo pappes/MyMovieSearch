@@ -43,6 +43,7 @@ const intermediateMapList = [
     'description': '125 1.36 GB 19 14 May 20, 2022',
     'category': 'Other/Video',
     'magnet':
+        // ignore: lines_longer_than_80_chars
         'magnet:?xt=urn:btih:799625568D3F7419095C2BA1B0CFA11607B1B259&tr=udp%3A%2F%2Ftracker.bitsearch.to%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.zerobytes.xyz%3A1337%2Fannounce&tr=udp%3A%2F%2Fwww.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.0x.tf%3A6969%2Fannounce&tr=udp%3A%2F%2F9.rarbg.com%3A2920%2Fannounce&dn=%5BBitsearch.to%5D+Space.Babes.from.Outer.Space.2017.1080p.BluRay.x265-RARBG',
     'name': 'Space.Babes.from.Outer.Space.2017.1080p.BluRay.x265-RARBG',
     'seeders': '19',

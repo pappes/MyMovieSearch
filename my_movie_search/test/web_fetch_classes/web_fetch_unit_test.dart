@@ -86,7 +86,8 @@ class QueryUnknownSourceMocked
       overriddenConvertTreeToOutputType(tree);
   ConvertTreeToOutputType overriddenConvertTreeToOutputType = treeToDto;
 
-  // Default myConvertWebTextToTraversableTree to jsonDecode but allow tests to alter it
+  // Default myConvertWebTextToTraversableTree
+  // to jsonDecode but allow tests to alter it
   ConvertWebTextToTreeFn overriddenConvertWebTextToTraversableTree =
       (webText) => Future.value([jsonDecode(webText)]);
   @override
@@ -757,7 +758,8 @@ void main() {
           actualOutput,
           emitsError(
             'Error in unknown with criteria ${criteriaDto.criteriaTitle} '
-            'stream error interpreting web text as a map :more exception handling',
+            'stream error interpreting web text as a map '
+            ':more exception handling',
           ),
         );
       },
@@ -928,8 +930,8 @@ void main() {
     test('http exception', () async {
       final criteria = SearchCriteriaDTO().fromString('EXCEPTION');
       final testClass = QueryUnknownSourceMocked(criteria);
-      final expectedResult =
-          'Error in unknown with criteria ${criteria.criteriaTitle} fetching web text: :go away!';
+      final expectedResult = 'Error in unknown with criteria '
+          '${criteria.criteriaTitle} fetching web text: :go away!';
       final fetchResult = await testClass.baseFetchWebText(criteria);
       expect(fetchResult, emitsError(expectedResult));
     });

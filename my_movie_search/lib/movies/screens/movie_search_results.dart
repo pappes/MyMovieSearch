@@ -56,7 +56,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     super.initState();
     //final controller = _textController.value;
     //final text = controller.text;
-    //TODO(pappes): use a factory in inject search bloc instances _searchBloc = BlocProvider.of<SearchBloc>(context);
+    // TODO(pappes): use a factory in inject search bloc instances
+    // e.g _searchBloc = BlocProvider.of<SearchBloc>(context);
     /*if (_searchBloc != null && !_searchBloc!.isClosed) {
       _searchBloc!.add(SearchRequested(widget.criteria));
     }*/

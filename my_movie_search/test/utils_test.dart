@@ -684,14 +684,15 @@ Future<void> main() async {
       });
     });
     group('fromJson', () {
-      /// Convert JSON [input] to a [List] of [String] and compare to [expectedOutput]
+      /// Convert JSON [input] to a [List] of [String]
+      /// and compare to [expectedOutput]
       void testFromJson(String? input, List<String> expectedOutput) => expect(
             StringIterableHelper.fromJson(input),
             expectedOutput,
             reason: 'input $input',
           );
 
-      //Convert a JSON encoded array to List<String>
+      // Convert a JSON encoded array to List<String>
       test('string array', () {
         testFromJson('""', [""]);
         testFromJson('["a"]', ["a"]);
@@ -699,7 +700,7 @@ Future<void> main() async {
         testFromJson('[""]', [""]);
       });
 
-      //Convert empty JSON encoded value to List<String>
+      // Convert empty JSON encoded value to List<String>
       test('empty', () {
         testFromJson(null, []);
         testFromJson('', []);
@@ -707,19 +708,20 @@ Future<void> main() async {
         testFromJson('{}', []);
       });
 
-      //Convert a JSON encoded array of numbers to List<String>
+      // Convert a JSON encoded array of numbers to List<String>
       test('numbers', () {
         testFromJson('[0]', ['0']);
         testFromJson('[1,2,3]', ['1', '2', '3']);
       });
 
-      //Convert a JSON encoded objects to List<String>
+      // Convert a JSON encoded objects to List<String>
       test('objects', () {
         testFromJson('[[1,2,3],[4,5,6]]', ['[1, 2, 3]', '[4, 5, 6]']);
         testFromJson('{"first":1, "second":2 }', ['1', '2']);
         testFromJson('[{"first":1, "second":2 }]', ['{first: 1, second: 2}']);
         testFromJson(
-          '[{"first":"one", "second":"two" }, {"first":"eleven", "second":"twelve" }]',
+          '[{"first":"one", "second":"two" }, '
+          '{"first":"eleven", "second":"twelve" }]',
           ['{first: one, second: two}', '{first: eleven, second: twelve}'],
         );
         testFromJson(
@@ -750,13 +752,15 @@ Future<void> main() async {
         testCombineUnique([''], <void>[], ['']);
         testCombineUnique([], [''], ['']);
       });
-      // Combining lists with single elements results in all elements being present.
+      // Combining lists with single elements
+      // results in all elements being present.
       test('single element', () {
         testCombineUnique(['a'], <void>[], ['a']);
         testCombineUnique([], ['a'], ['a']);
         testCombineUnique(['b'], ['a'], ['b', 'a']);
       });
-      // Combining lists, each with mutiple elements results in all elements being present.
+      // Combining lists, each with mutiple elements
+      // results in all elements being present.
       test('multiple elements', () {
         testCombineUnique(['a', 'b', 'c'], <void>[], ['a', 'b', 'c']);
         testCombineUnique([], ['a', 'b', 'c'], ['a', 'b', 'c']);
@@ -766,7 +770,8 @@ Future<void> main() async {
           ['a', 'b', 'c', 'd', 'e', 'f'],
         );
       });
-      // Combining lists, with differnt datatypes results in all elements being present.
+      // Combining lists, with differnt datatypes
+      // results in all elements being present.
       test('multiple elements different datatypes', () {
         testCombineUnique(['a', 'b', 'c'], [1], ['a', 'b', 'c', '1']);
         testCombineUnique([], [1, 2, 3], ['1', '2', '3']);
@@ -781,7 +786,8 @@ Future<void> main() async {
           ['a', 'b', 'c', '1', '2'],
         );
       });
-      // Combining lists, with duplicate elements results in all elements being present once only.
+      // Combining lists, with duplicate elements
+      // results in all elements being present once only.
       test('deduplication', () {
         testCombineUnique([], ['', ''], ['']);
         testCombineUnique(['a'], ['a'], ['a']);

@@ -36,7 +36,8 @@ mixin ScrapeUhttBarcodeSearch
         return movieData;
       }
     }
-    throw 'UhttBarcode results data not detected for criteria $getCriteriaText in html:$webText';
+    throw 'UhttBarcode results data not detected for criteria '
+        '$getCriteriaText in html:$webText';
   }
 
   /// extract each row from the table.

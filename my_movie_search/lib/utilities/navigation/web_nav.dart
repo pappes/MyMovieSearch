@@ -58,10 +58,12 @@ class MMSNav {
 
   /// Render web page [url] in a child page of the current screen.
   ///
-  /// For platforms that don't support CustomTabs, the URL is displayed to the user.
+  /// For platforms that don't support CustomTabs
+  /// the URL is displayed to the user.
   void viewWebPage(String url) => canvas.viewWebPage(url);
 
-  /// Construct route to Material user interface page as appropriate for the dto.
+  /// Construct route to Material user interface page
+  /// as appropriate for the dto.
   ///
   /// Chooses a MovieDetailsPage or PersonDetailsPage
   /// based on the IMDB unique ID or ErrorDetailsPage otherwise
@@ -103,7 +105,8 @@ class MMSNav {
         ),
       );
 
-  /// Navigates to a search results page populated with a predefined list of dtos.
+  /// Navigates to a search results page
+  /// populated with a predefined list of dtos.
   ///
   void searchForRelated(String description, List<MovieResultDTO> movies) {
     if (movies.length == 1) {
@@ -257,7 +260,8 @@ class MMSFlutterCanvas {
 
   /// Render web page [url] in a child page of the current screen.
   ///
-  /// For platforms that don't support CustomTabs, the URL is displayed to the user.
+  /// For platforms that don't support CustomTabs
+  /// the URL is displayed to the user.
   void viewWebPage(String url) {
     if (null != context) {
       if (Platform.isAndroid && url.startsWith('http')) {
@@ -268,7 +272,8 @@ class MMSFlutterCanvas {
     }
   }
 
-  /// Construct route to Material user interface page as appropriate for the dto.
+  /// Construct route to Material user interface page
+  /// as appropriate for the dto.
   ///
   /// Chooses a MovieDetailsPage or PersonDetailsPage
   /// based on the IMDB unique ID or ErrorDetailsPage otherwise

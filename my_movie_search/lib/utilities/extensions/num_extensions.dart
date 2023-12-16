@@ -1,7 +1,8 @@
 /// Extend [double] to provide convenience functions.
 ///
 extension DoubleHelper on double {
-  /// Convert an [formattedText] to decimal representation ignoring thousand seperators
+  /// Convert a [formattedText] to decimal representation
+  /// ignoring thousand seperators
   ///
   /// Allows substitution of null values and zero values
   ///
@@ -47,7 +48,8 @@ extension DoubleHelper on double {
 /// Extend [int] to provide convenience functions.
 ///
 extension IntHelper on int {
-  /// Convert an [formattedText] to int representation ignoring thousand seperators
+  /// Convert a [formattedText] to int representation
+  /// ignoring thousand seperators
   ///
   /// Allows substitution of null values and zero values
   ///

@@ -42,7 +42,8 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     if (validPage) {
       return movieData;
     }
-    throw 'magnetDl results data not detected for criteria $getCriteriaText in html:$webText';
+    throw 'magnetDl results data not detected for criteria '
+        '$getCriteriaText in html:$webText';
   }
 
   /// extract each row from the table.

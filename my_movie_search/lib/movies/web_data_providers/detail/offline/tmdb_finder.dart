@@ -10,7 +10,8 @@
 //  backdrop_path = alternate image url fragment
 //  video = indicator of low quality movie (true/false)
 //  adult = indicator of adult content (true/false)
-//  genre_ids = list of numeric ids that need to be correlated with another web service call e.g. [28, 12, 878]
+//  genre_ids = list of numeric ids that need to be correlated
+//              with another web service call e.g. [28, 12, 878]
 //  original_language = language spoken during the movie (iso_639_1) e.g. "en"
 //  original_title = previous title assigned to the movie
 //  overview = synopsis of the movie plot
@@ -59,11 +60,13 @@ const tmdbJsonSearchInner = '''
 ''';
 
 const jsonSampleFull =
-    ' { "movie_results": [ $tmdbJsonSearchInner ],"person_results":[],"tv_results":[],"tv_episode_results":[],"tv_season_results":[]} ';
+    ' { "movie_results": [ $tmdbJsonSearchInner ],"person_results":[],'
+    '"tv_results":[],"tv_episode_results":[],"tv_season_results":[]} ';
 const jsonSampleEmpty =
-    '{"movie_results":[],"person_results":[],"tv_results":[],"tv_episode_results":[],"tv_season_results":[]}';
-const jsonSampleError =
-    '{"success":false,"status_code":34,"status_message":"The resource you requested could not be found."}';
+    '{"movie_results":[],"person_results":[],"tv_results":[],'
+    '"tv_episode_results":[],"tv_season_results":[]}';
+const jsonSampleError = '{"success":false,"status_code":34,"status_message":'
+    '"The resource you requested could not be found."}';
 
 Future<Stream<String>> streamTmdbJsonOfflineData(_) =>
     Future.value(Stream.value(jsonSampleFull));

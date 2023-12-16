@@ -8,7 +8,8 @@ import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dar
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-/// Implements [WebFetchBase] for using IMDB IDs searching The Movie Database (TMDB).
+/// Implements [WebFetchBase] for using IMDB IDs
+/// searching The Movie Database (TMDB).
 ///
 /// The TMDb API is a free web service to obtain movie information.
 ///
@@ -29,7 +30,8 @@ class QueryTMDBFinder extends QueryTMDBCommon {
   @override
   DataSourceFn myOfflineData() => streamTmdbJsonOfflineData;
 
-  /// converts <INPUT_TYPE> to a string representation if criteria is an IMDB id.
+  /// converts <INPUT_TYPE> to a string representation
+  /// if criteria is an IMDB id.
   @override
   String myFormatInputAsText() {
     final text = super.myFormatInputAsText();

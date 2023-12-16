@@ -85,7 +85,8 @@ void main() {
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
     test('Run myConvertTreeToOutputType() with error results', () async {
@@ -105,7 +106,8 @@ void main() {
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
 
@@ -173,7 +175,8 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb suggestion query', () {
-    // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
+    // Read IMDB suggestions from a simulated byte stream
+    // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
@@ -196,11 +199,13 @@ void main() {
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
 
-    // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
+    // Read IMDB suggestions from a simulated byte stream
+    // and convert JSON to dtos.
     test('empty readList()', () async {
       // Set up the test data.
       final expectedValue = <MovieResultDTO>[];
@@ -223,11 +228,13 @@ void main() {
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
 
-    // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
+    // Read IMDB suggestions from a simulated byte stream
+    // and convert JSON to dtos.
     test('invalid jsonp', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
@@ -246,7 +253,8 @@ void main() {
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read IMDB suggestions from a simulated byte stream and convert JSON to dtos.
+    // Read IMDB suggestions from a simulated byte stream
+    // and convert JSON to dtos.
     test('unexpected json contents', () async {
       // Set up the test data.
       const expectedException =

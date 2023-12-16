@@ -15,7 +15,9 @@ Future<Stream<String>> emitEmptyImdbSearchSample(_) =>
 const htmlSampleEmpty =
     '$htmlSampleStart$imdbSearchJsonSampleEmpty$htmlSampleEnd';
 const imdbSearchJsonSampleEmpty =
-    '{"props":{"pageProps":{"nameResults":{"results":[]},"titleResults":{"results":[],"hasExactMatches":false},"companyResults":{"results":[]},"keywordResults":{"results":[]}}}}';
+    '{"props":{"pageProps":{"nameResults":{"results":[]},'
+    '"titleResults":{"results":[],"hasExactMatches":false},'
+    '"companyResults":{"results":[]},"keywordResults":{"results":[]}}}}';
 
 const htmlSampleError = '$htmlSampleStart$htmlSampleEnd';
 const htmlSampleFull = '$htmlSampleStart$imdbSampleJson$htmlSampleEnd';

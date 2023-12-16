@@ -12,7 +12,8 @@ void main() {
       test(
         'String',
         () {
-          /// Run a series of values through the cache and compare to expected output
+          /// Run a series of values through the cache
+          /// and compare to expected output.
           void testCache(
             List<Map<String, String>> input,
             Map<String, String> expectedOutput,
@@ -33,7 +34,7 @@ void main() {
             }
           }
 
-          /// Test one key:value pair in and the same key:value pair out
+          /// Test one key:value pair in and the same key:value pair out.
           testCache(
             [
               {'a': 'b'},
@@ -41,7 +42,8 @@ void main() {
             {'a': 'b'},
           );
 
-          /// Test two distinct key:value pairs in and the same key:value pairs out
+          /// Test two distinct key:value pairs in
+          ///  and the same key:value pairs out.
           testCache(
             [
               {'a': 'b', 'c': 'd'},

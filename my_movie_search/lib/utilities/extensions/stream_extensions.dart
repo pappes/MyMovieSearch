@@ -3,7 +3,8 @@ import 'dart:async';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 extension StreamHelper<T> on Stream<T> {
-  /// Consumes values from a stream and prints them out then puts them on a new stream.
+  /// Consumes values from a stream
+  /// and prints them out then puts them on a new stream.
   ///
   /// For debugging purposes only.
   Stream<T> printStream([String prefix = '', int limit = 4000]) async* {

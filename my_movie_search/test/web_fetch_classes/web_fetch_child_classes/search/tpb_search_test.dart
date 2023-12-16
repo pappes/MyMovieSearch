@@ -109,7 +109,8 @@ void main() {
           QueryTpbSearch(criteria).myConvertWebTextToTraversableTree(
         htmlSampleError,
       );
-      //NOTE: Using expect on an async result only works as the last line of the test!
+      // NOTE: Using expect on an async result
+      // only works as the last line of the test!
       expect(
         actualOutput,
         expectedOutput,
@@ -137,7 +138,8 @@ void main() {
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
   });
@@ -164,7 +166,8 @@ void main() {
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
     // Test error detection.
@@ -175,7 +178,8 @@ void main() {
       final actualResult = tpbSearch.myConvertTreeToOutputType('map');
 
       // Check the results.
-      //NOTE: Using expect on an async result only works as the last line of the test!
+      // NOTE: Using expect on an async result
+      // only works as the last line of the test!
       expect(
         actualResult,
         throwsA('expected map got String unable to interpret data map'),
@@ -184,11 +188,13 @@ void main() {
   });
 
 ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and ScrapeTpbSearchDetails and TpbSearchConverter
+  /// Integration tests using WebFetchBase
+  ///  and ScrapeTpbSearchDetails and TpbSearchConverter
 ////////////////////////////////////////////////////////////////////////////////
 
   group('tpb search query', () {
-    // Read Tpb search results from a simulated byte stream and convert JSON to dtos.
+    // Read Tpb search results from a simulated byte stream
+    // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
@@ -217,15 +223,17 @@ void main() {
       );
     });
 
-    // Read Tpb search results from a simulated byte stream and report error due to invalid html.
+    // Read Tpb search results from a simulated byte stream
+    // and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final tpbSearch = QueryTpbSearch(criteria);
-      final expectedException = '[QueryTpbSearch] Error in tpb '
-          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
-          'interpreting web text as a map :tpb results data not '
-          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
+      final expectedException = '[QueryTpbSearch] Error in tpb with criteria '
+          '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
+          'interpreting web text as a map :tpb '
+          'results data not detected for criteria '
+          '${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:not valid html';
 
       // Invoke the functionality.
@@ -237,13 +245,15 @@ void main() {
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read Tpb search results from a simulated byte stream and report error due to unexpected html.
+    // Read Tpb search results from a simulated byte stream
+    // and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      final expectedException = '[QueryTpbSearch] Error in tpb '
-          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} convert error '
-          'interpreting web text as a map :tpb results data not '
-          'detected for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
+      final expectedException = '[QueryTpbSearch] Error in tpb with criteria '
+          '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
+          'interpreting web text as a map :tpb '
+          'results data not detected for criteria '
+          '${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final tpbSearch = QueryTpbSearch(criteria);

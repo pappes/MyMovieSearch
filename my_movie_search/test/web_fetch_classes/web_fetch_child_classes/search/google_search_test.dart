@@ -122,7 +122,8 @@ void main() {
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
   });
@@ -169,7 +170,8 @@ void main() {
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
     test('Run myConvertTreeToOutputType() with empty search results', () async {
@@ -189,7 +191,8 @@ void main() {
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
     test('Run myConvertTreeToOutputType() with error results', () async {
@@ -209,7 +212,8 @@ void main() {
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
     // Test error detection.
@@ -220,7 +224,8 @@ void main() {
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
 
       // Check the results.
-      //NOTE: Using expect on an async result only works as the last line of the test!
+      //NOTE: Using expect on an async result
+      // only works as the last line of the test!
       expect(
         actualResult,
         throwsA('expected map got String unable to interpret data wrongData'),
@@ -233,7 +238,8 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('google search query', () {
-    // Read google search results from a simulated byte stream and convert JSON to dtos.
+    // Read google search results from a simulated byte stream
+    // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
@@ -256,11 +262,13 @@ void main() {
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
 
-    // Read google search results from a simulated byte stream and report error due to invalid html.
+    // Read google search results from a simulated byte stream
+    // and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
@@ -280,12 +288,14 @@ not valid json
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read google search results from a simulated byte stream and report error due to unexpected html.
+    // Read google search results from a simulated byte stream
+    // and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[QueryGoogleMovies] Error in google '
           'with criteria 123 convert error translating page map to objects '
-          ':expected map got List<dynamic> unable to interpret data [{hello: world}]';
+          ':expected map got List<dynamic> unable to interpret data '
+          '[{hello: world}]';
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryGoogleMovies(criteria);
 

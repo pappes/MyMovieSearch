@@ -23,9 +23,14 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
 
   /// Return a list with data matching [criteria].
   ///
-  /// Optionally override the [priority] to push slow operations to another thread.
-  /// Optionally inject [source] as an alternate data source for mocking/testing.
-  /// Optionally [limit] the quantity of results returned from the query.
+  /// Optionally override the [priority]
+  /// to push slow operations to another thread.
+  ///
+  /// Optionally inject [source]
+  /// as an alternate data source for mocking/testing.
+  ///
+  /// Optionally supply [limit]
+  /// to reduce the quantity of results returned from the query.
   @useResult
   Future<List<OUTPUT_TYPE>> readPrioritisedCachedList({
     String priority = ThreadRunner.slow,

@@ -146,7 +146,8 @@ class GoogleMovieSearchConverter {
     if (lastOpen == -1 || lastClose == -1) return '';
 
     final yearRange = title.substring(lastOpen + 1, lastClose);
-    // Anything starting and ending with numerics allowing ofr optional dash at end of line
+    // Anything starting and ending with numerics
+    // allowing for optional dash at end of line.
     final filter = RegExp('[0-9].*[0-9]-?–?');
     final numerics = filter.stringMatch(yearRange);
     return DynamicHelper.toString_(numerics);

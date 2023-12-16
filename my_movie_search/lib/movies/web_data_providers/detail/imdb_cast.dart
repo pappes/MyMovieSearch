@@ -8,7 +8,8 @@ import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_ti
 import 'package:my_movie_search/movies/web_data_providers/detail/webscrapers/imdb_cast.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-/// Implements [WebFetchBase] for retrieving cast and crew information from IMDB.
+/// Implements [WebFetchBase] for retrieving cast and
+/// crew information from IMDB.
 ///
 /// ```dart
 /// QueryIMDBCastDetails().readList(criteria);

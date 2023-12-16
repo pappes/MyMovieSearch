@@ -58,7 +58,8 @@ class QueryGloTorrentsSearch
         DataSourceType.gloTorrents,
       );
 
-  /// API call to search returning the top matching results for [encodedCriteria].
+  /// API call to search
+  /// returning the top matching results for [encodedCriteria].
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
     searchResultsLimit = WebFetchLimiter(55);

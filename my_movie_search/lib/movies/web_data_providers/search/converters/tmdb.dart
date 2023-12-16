@@ -21,7 +21,8 @@ import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 //backdrop_path = alternate image url fragment
 //video = indicator of low quality movie (true/false)
 //adult = indicator of adult content (true/false)
-//genre_ids = list of numeric ids that need to be correlated with another web service call e.g. [28, 12, 878]
+//genre_ids = list of numeric ids that need to be correlated
+//            with another web service call e.g. [28, 12, 878]
 //original_language = language spoken during the movie e.g. en
 //original_title = previous title assigned to the movie
 //overview = synopsis of the movie plot

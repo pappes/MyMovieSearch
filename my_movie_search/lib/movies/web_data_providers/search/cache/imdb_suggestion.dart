@@ -15,9 +15,14 @@ mixin ThreadedCacheIMDBSuggestions
 
   /// Return a list with data matching [criteria].
   ///
-  /// Optionally override the [priority] to push slow operations to another thread.
-  /// Optionally inject [source] as an alternate data source for mocking/testing.
-  /// Optionally [limit] the quantity of results returned from the query.
+  /// Optionally override the [priority]
+  /// to push slow operations to another thread.
+  ///
+  /// Optionally inject [source]
+  /// as an alternate data source for mocking/testing.
+  ///
+  /// Optionally supply [limit]
+  /// to change the quantity of results returned from the query.
   Future<List<MovieResultDTO>> readPrioritisedCachedList({
     String priority = ThreadRunner.slow,
     DataSourceFn? source,

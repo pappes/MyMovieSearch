@@ -121,32 +121,32 @@ linter:
     - constant_identifier_names
     - control_flow_in_finally
     - curly_braces_in_flow_control_structures
-    # - dangling_library_doc_comments
-    # - depend_on_referenced_packages
-    # - deprecated_consistency
-    # - deprecated_member_use_from_same_package
-    # - directives_ordering
-    # - discarded_futures
-    # - do_not_use_environment
-    # - empty_catches
-    # - empty_constructor_bodies
-    # - empty_statements
-    # - eol_at_end_of_file
-    # - exhaustive_cases
-    # - file_names
-    # - flutter_style_todos
-    # - hash_and_equals
-    # - implementation_imports
-    # - implicit_call_tearoffs
-    # - implicit_reopen
-    # - invalid_case_patterns
-    # - join_return_with_assignment
-    # - leading_newlines_in_multiline_strings
-    # - library_annotations
-    # - library_names
-    # - library_prefixes
-    # - library_private_types_in_public_api
-    # - lines_longer_than_80_chars
+    - dangling_library_doc_comments
+    - depend_on_referenced_packages
+    - deprecated_consistency
+    - deprecated_member_use_from_same_package
+    - directives_ordering
+    #- discarded_futures
+    - do_not_use_environment
+    - empty_catches
+    - empty_constructor_bodies
+    - empty_statements
+    - eol_at_end_of_file
+    - exhaustive_cases
+    - file_names
+    #- flutter_style_todos
+    - hash_and_equals
+    - implementation_imports
+    - implicit_call_tearoffs
+    - implicit_reopen
+    - invalid_case_patterns
+    - join_return_with_assignment
+    - leading_newlines_in_multiline_strings
+    - library_annotations
+    - library_names
+    - library_prefixes
+    - library_private_types_in_public_api
+    - lines_longer_than_80_chars
     # - literal_only_boolean_expressions
     # - matching_super_parameters
     # - missing_whitespace_between_adjacent_strings

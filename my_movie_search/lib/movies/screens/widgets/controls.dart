@@ -12,11 +12,11 @@ bool useMobileLayout(BuildContext context) =>
 
 /// A [Widget] that displays a network image and image address.
 ///
-/// if no valid network address is supplied, a placeholder text is shown instead.
+/// if no valid network address is supplied, placeholder text is shown instead.
 ///
 /// Diplayed image has pinch to zoom enabled.
 ///
-/// An [showImages] handler can be supplied to allow drilldown on the image source.
+/// [showImages] handler can be supplied to allow drilldown on the image source.
 ///
 class Poster extends Widget {
   Poster(
@@ -129,8 +129,9 @@ class BoldLabel extends Text {
     final newString = StringBuffer();
     final words = string.split('_');
     for (final word in words) {
-      newString.write(_initCap(word));
-      newString.write(' ');
+      newString
+        ..write(_initCap(word))
+        ..write(' ');
     }
     return newString.toString();
   }

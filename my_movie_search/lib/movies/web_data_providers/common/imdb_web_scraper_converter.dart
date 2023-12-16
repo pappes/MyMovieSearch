@@ -53,31 +53,34 @@ class ImdbWebScraperConverter {
   /// Parse [Map] to pull IMDB data out.
   void _deepConvertPerson(MovieResultDTO movie, Map<dynamic, dynamic> map) {
     movie.uniqueId = map.deepSearch(deepPersonId)!.first!.toString();
-    final name = // ...{'nameText':...{...'text':<value>...}};
-        map.deepSearch(deepPersonNameHeader)?.searchForString();
+    // ...{'nameText':...{...'text':<value>...}};
+    final name = map.deepSearch(deepPersonNameHeader)?.searchForString();
 
-    final url = // ...{'primaryImage':...{...'url':<value>...}};
-        map.deepSearch(deepImageHeader)?.searchForString(
-              key: deepImageField,
-            );
-    final description = // ...{'bio':...{...'plainText':<value>...}};
+    // ...{'primaryImage':...{...'url':<value>...}};
+    final url = map.deepSearch(deepImageHeader)?.searchForString(
+          key: deepImageField,
+        );
+    // ...{'bio':...{...'plainText':<value>...}};
+    final description =
         map.deepSearch(deepPersonDescriptionHeader)?.searchForString(
               key: deepPersonDescriptionField,
             );
-    final startDate = // ...{'birthDate':...{...'year':<value>...}}
+    // ...{'birthDate':...{...'year':<value>...}}
+    final startDate =
         map.deepSearch(deepPersonStartDateHeader)?.searchForString(
               key: deepPersonStartDateField,
             );
-    final endDate = // ...{'deathDate':...{...'year':<value>...}}
-        map.deepSearch(deepPersonEndDateHeader)?.searchForString(
-              key: deepPersonEndDateField,
-            );
+    // ...{'deathDate':...{...'year':<value>...}}
+    final endDate = map.deepSearch(deepPersonEndDateHeader)?.searchForString(
+          key: deepPersonEndDateField,
+        );
     final yearRange = (null != endDate)
         ? '$startDate-$endDate'
         : (null != startDate)
             ? startDate
             : null;
-    final popularity = // ...{'meterRanking':...{...'currentRank':<value>...}}
+    // ...{'meterRanking':...{...'currentRank':<value>...}}
+    final popularity =
         map.deepSearch(deepPersonPopularityHeader)?.searchForString(
               key: deepPersonPopularityField,
             );
@@ -120,52 +123,56 @@ class ImdbWebScraperConverter {
 
   /// extract related movie details from [map].
   MovieResultDTO _getDeepTitleCommon(Map<dynamic, dynamic> map, String id) {
-    final title = // ...{'titleText':...{...'text':<value>...}}
-        map.deepSearch(deepRelatedMovieTitle)?.searchForString();
-    String?
-        originalTitle = // ...{'originalTitleText':...{...'text':<value>...}}
+    // ...{'titleText':...{...'text':<value>...}}
+    final title = map.deepSearch(deepRelatedMovieTitle)?.searchForString();
+    // ...{'originalTitleText':...{...'text':<value>...}}
+    String? originalTitle =
         map.deepSearch(deepRelatedMovieOriginalTitle)?.searchForString();
     if (title == originalTitle) {
       originalTitle =
           map.deepSearch(deepRelatedMovieAlternateTitle)?.searchForString();
     }
 
-    final description = // ...{'plotText':...{...'plainText':<value>...}}
+    // ...{'plotText':...{...'plainText':<value>...}}
+    final description =
         map.deepSearch(deepRelatedMoviePlotHeader)?.searchForString(
               key: deepRelatedMoviePlotField,
             );
-    final url = // ...{'primaryImage':...{...'url':<value>...}}
-        map.deepSearch(deepImageHeader)?.searchForString(
-              key: deepImageField,
-            );
-    final userRating = // ...{...'aggregateRating':<value>...}
-        map.searchForString(key: deepRelatedMovieUserRating);
-    final userRatingCount = // ...{...'voteCount':<value>...}
+    // ...{'primaryImage':...{...'url':<value>...}}
+    final url = map.deepSearch(deepImageHeader)?.searchForString(
+          key: deepImageField,
+        );
+    // ...{...'aggregateRating':<value>...}
+    final userRating = map.searchForString(key: deepRelatedMovieUserRating);
+    // ...{...'voteCount':<value>...}
+    final userRatingCount =
         map.searchForString(key: deepRelatedMovieUserRatingCount);
-    final duration = // ...{'runtime':...{...'seconds':<value>...}}
+    // ...{'runtime':...{...'seconds':<value>...}}
+    final duration =
         map.deepSearch(deepRelatedMovieDurationHeader)?.searchForString(
               key: deepRelatedMovieDurationField,
             );
 
     final yearHeader = map.deepSearch(deepRelatedMovieYearHeader);
-    final startDate = // ...{'releaseYear':...{...'year':<value>...}}
+    // ...{'releaseYear':...{...'year':<value>...}}
+    final startDate =
         yearHeader?.searchForString(key: deepRelatedMovieYearStart);
-    final endDate = // ...{'releaseYear':...{...'endYear':<value>...}}
-        yearHeader?.searchForString(key: deepRelatedMovieYearEnd);
+    // ...{'releaseYear':...{...'endYear':<value>...}}
+    final endDate = yearHeader?.searchForString(key: deepRelatedMovieYearEnd);
     final yearRange = (null != endDate)
         ? '$startDate-$endDate'
         : (null != startDate)
             ? startDate
             : null;
 
-    final censorRatingText = // ...{'certificate':...{...'rating':<value>...}}
-        map
-            .deepSearch(deepRelatedMovieCensorRatingHeader)
-            ?.searchForString(key: deepRelatedMovieCensorRatingField);
+    // ...{'certificate':...{...'rating':<value>...}}
+    final censorRatingText = map
+        .deepSearch(deepRelatedMovieCensorRatingHeader)
+        ?.searchForString(key: deepRelatedMovieCensorRatingField);
     final censorRating = getImdbCensorRating(censorRatingText);
 
-    final genreNode = // ...{'genres':...[...{...'text':<value>...}...]}
-        map.deepSearch(deepRelatedMovieGenreHeader);
+    // ...{'genres':...[...{...'text':<value>...}...]}
+    final genreNode = map.deepSearch(deepRelatedMovieGenreHeader);
     String? genres;
     if (null != genreNode) {
       final genreList = genreNode.deepSearch(
@@ -177,7 +184,8 @@ class ImdbWebScraperConverter {
       }
     }
 
-    final movieTypeString = // ...{'titleType':...{...'text':<value>...}}
+    // ...{'titleType':...{...'text':<value>...}}
+    final movieTypeString =
         map.deepSearch(deepRelatedMovieType)?.searchForString();
     final movieType = MovieResultDTOHelpers.getMovieContentType(
       '$movieTypeString $genres $yearRange',
@@ -185,8 +193,8 @@ class ImdbWebScraperConverter {
       id,
     );
 
-    final languageNode = // ...{'SpokenLanguages':...[...{...'text':<value>...}...]}
-        map.deepSearch(deepRelatedMovieLanguageHeader);
+    // ...{'SpokenLanguages':...[...{...'text':<value>...}...]}
+    final languageNode = map.deepSearch(deepRelatedMovieLanguageHeader);
     String? languages;
     if (null != languageNode) {
       final languageList = languageNode.deepSearch(
@@ -198,8 +206,8 @@ class ImdbWebScraperConverter {
       }
     }
 
-    final keywordNode = // ...{'keywords':...[...{...'text':<value>...}...]}
-        map.deepSearch(deepRelatedMovieKeywordHeader);
+    // ...{'keywords':...[...{...'text':<value>...}...]}
+    final keywordNode = map.deepSearch(deepRelatedMovieKeywordHeader);
     String? keywords;
     if (null != keywordNode) {
       final keywordList = keywordNode.deepSearch(
@@ -265,7 +273,8 @@ class ImdbWebScraperConverter {
         if (related is List) {
           for (final item in related) {
             if (item is Map) {
-              //Pull description out of top level and movie details out of lower level
+              // Pull description out of top level
+              // and movie details out of lower level.
               final categoryHeader = item.deepSearch(deepRelatedCategoryHeader);
               final categoryText =
                   categoryHeader?.searchForString() ?? 'Unknown';
@@ -295,7 +304,8 @@ class ImdbWebScraperConverter {
     }
   }
 
-  /// extract collections of movies for a specific category from a map or a list.
+  /// extract collections of movies for a specific category for the person
+  /// from a map or a list.
   MovieCollection _getDeepPersonRelatedMoviesForCategory(dynamic category) {
     final MovieCollection result = {};
     final nodes = TreeHelper(category).deepSearch(
@@ -317,7 +327,8 @@ class ImdbWebScraperConverter {
     return result;
   }
 
-  /// extract collections of movies for a specific category from a map or a list.
+  /// extract collections of movies for a specific category for the title
+  /// from a map or a list.
   MovieCollection _getDeepTitleRelatedMoviesForCategory(dynamic nodes) {
     final MovieCollection result = {};
     if (nodes is List) {
@@ -332,7 +343,8 @@ class ImdbWebScraperConverter {
     return result;
   }
 
-  /// extract collections of movies for a specific category from a map or a list.
+  /// extract collections of people for a specific category for the title
+  /// from a map or a list.
   MovieCollection _getDeepTitleRelatedPeopleForCategory(dynamic nodes) {
     final MovieCollection result = {};
     var creditsOrder = 100;

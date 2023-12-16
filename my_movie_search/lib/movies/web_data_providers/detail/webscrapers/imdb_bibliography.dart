@@ -10,7 +10,8 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 mixin ScrapeIMDBBibliographyDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Convert web text to a traversable tree of [List] or [Map] data.
-  /// Scrape bibliography data from rows in the html div named fullcredits_content.
+  /// Scrape bibliography data from rows
+  /// in the html div named fullcredits_content.
   @override
   Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,

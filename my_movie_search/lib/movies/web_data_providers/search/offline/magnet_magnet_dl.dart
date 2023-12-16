@@ -43,6 +43,7 @@ const intermediateMapList = [
   {
     'category': 'Movie',
     'magnet':
+        // ignore: lines_longer_than_80_chars
         'magnet:?xt=urn:btih:ac8c26d936b1da5ce94d415fb07a71384db7cb80&dn=Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS+%5BTGx%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Fexodus.desync.com%3A6969',
     'name': 'Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS [TGx]',
     'description': '857.10 MB',

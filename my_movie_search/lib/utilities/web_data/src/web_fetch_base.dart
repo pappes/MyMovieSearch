@@ -23,7 +23,8 @@ typedef DataSourceFn = Future<Stream<String>> Function(dynamic s);
 
 /// Fetch data from web sources (web services or web pages).
 ///
-/// Extend [WebFetchBase] to provide a dynamically switchable stream of <[OUTPUT_TYPE]>
+/// Extend [WebFetchBase]
+/// to provide a dynamically switchable stream of <[OUTPUT_TYPE]>
 /// from online and offline sources.
 ///
 /// Classes extending WebFetchBase can be interchanged
@@ -46,7 +47,8 @@ typedef DataSourceFn = Future<Stream<String>> Function(dynamic s);
 /// Naming convention for internal methods in this class:
 ///   myMethodName - should be overridden by child class
 ///   baseMethodName - should not need to be overridden by base class
-/// Methods without these prefixes are intended for external use and should not be overridden
+/// Methods without these prefixes are intended for external use
+/// and should not be overridden.
 abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   INPUT_TYPE criteria;
   WebFetchLimiter searchResultsLimit = WebFetchLimiter();
@@ -63,7 +65,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   String? get _getFetchContext =>
       '${myDataSourceName()} with criteria $getCriteriaText';
 
-  /// Populate [StreamController] with [OUTPUT_TYPE] objects matching [criteria].
+  /// Populate [StreamController] with [OUTPUT_TYPE] objects
+  /// matching [criteria].
   ///
   /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
@@ -161,7 +164,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Can be overridden by child classes.
   /// Default implementation pulls back and UTF8 decodes HTML or Json or JsonP.
-  /// Data source can be offline or online data source as requested by calling function.
+  /// Data source can be offline or online data source
+  /// as requested by calling function.
   /// online data fetches from the web URL defined by [myConstructURI].
   @visibleForOverriding
   Future<Stream<String>> myConvertCriteriaToWebText() async {
@@ -342,10 +346,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
   }
 
-  /// Convert web text to a traversable tree of [List] or [Map] data with exception handling.
+  /// Convert web text to a traversable tree of [List] or [Map] data
+  /// with exception handling.
   ///
   /// Calls child class [myConvertWebTextToTraversableTree]
-  /// Unpacks Stream<String> to a single String to make child class logic simpler
+  /// Unpacks Stream<String> to a single String
+  /// to make child class logic simpler
   /// Converts Future<List<Map>> to Stream<Map>
   @visibleForTesting
   Stream<dynamic> baseConvertWebTextToTraversableTree(

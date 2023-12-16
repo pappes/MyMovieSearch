@@ -9,7 +9,8 @@
 //backdrop_path = alternate image url fragment
 //video = indicator of low quality movie (true/false)
 //adult = indicator of adult content (true/false)
-//genre_ids = list of numeric ids that need to be correlated with another web service call e.g. [28, 12, 878]
+//genre_ids = list of numeric ids that need to be correlated
+//            with another web service call e.g. [28, 12, 878]
 //original_language = language spoken during the movie (iso_639_1) e.g. "en"
 //original_title = previous title assigned to the movie
 //overview = synopsis of the movie plot
@@ -67,10 +68,10 @@ const tmdbJsonSearchInner = '''
 ''';
 
 const jsonSampleFull = tmdbJsonSearchInner;
-const jsonSampleEmpty =
-    '{"success":false,"status_code":34,"status_message":"The resource you requested could not be found."}';
-const jsonSampleError =
-    '{"status_code":7,"status_message":"Invalid API key: You must be granted a valid key.","success":false}';
+const jsonSampleEmpty = '{"success":false,"status_code":34,'
+    '"status_message":"The resource you requested could not be found."}';
+const jsonSampleError = '{"status_code":7,"status_message":'
+    '"Invalid API key: You must be granted a valid key.","success":false}';
 
 Future<Stream<String>> streamTmdbJsonOfflineData(_) =>
     Future.value(Stream.value(jsonSampleFull));

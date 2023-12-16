@@ -42,8 +42,8 @@ const imdbPhotosPath = 'mediaindex';
 const imdbParentalPath = 'parentalguide';
 
 // Fields common to person and title
-const deepImageHeader =
-    'primaryImage'; // Can be repeated for related movies - use first instance only
+// primaryImage can be repeated for related movies - use first instance only
+const deepImageHeader = 'primaryImage';
 const deepImageField = 'url';
 const deepRelatedMovieContainer = 'node';
 const deepRelatedHeader = 'mainColumnData';
@@ -58,8 +58,8 @@ const deepTitleRelatedTitlesHeader = 'moreLikeThisTitles';
 
 // Fields exclusive to person
 const deepPersonId = 'nmconst';
-const deepPersonNameHeader =
-    'nameText'; // Can be repeated for spouce - user first instance only
+// nameText can be repeated for related movies - use first instance only
+const deepPersonNameHeader = 'nameText';
 const deepPersonDescriptionHeader = 'bio';
 const deepPersonDescriptionField = 'plainText';
 const deepPersonStartDateHeader = 'birthDate';
@@ -69,22 +69,27 @@ const deepPersonEndDateField = 'year';
 const deepPersonPopularityHeader = 'meterRanking';
 const deepPersonPopularityField = 'currentRank';
 
-const deepPersonRelatedSuffix =
-    'Credits'; // Repeated inside the category as "credits" - use case sensative compare
-const deepRelatedCategoryHeader =
-    'category'; // Repeated inside the node - use the first instance for the credits section
+// Credits is repeated inside the category as "credits"
+// so use case sensative compare
+const deepPersonRelatedSuffix = 'Credits';
+// category repeated inside the node
+// souse the first instance for the credits section
+const deepRelatedCategoryHeader = 'category';
 const deepRelatedMovieHeader = 'title';
-const deepRelatedMovieParentCharactorHeader =
-    'characters'; // same map depth as title
-const deepRelatedMovieParentCharactorField = 'name'; // same map depth as title
-const deepRelatedMovieId =
-    'id'; // Repeated inside other children of the title - do not do a deep search
+// characters are same map depth as title
+const deepRelatedMovieParentCharactorHeader = 'characters';
+// name is same map depth as title
+const deepRelatedMovieParentCharactorField = 'name';
+// id is repeated inside other children of the title - do not do a deep search
+const deepRelatedMovieId = 'id';
 const deepRelatedMoviePlotHeader = 'plotText';
 const deepRelatedMoviePlotField = 'plainText';
-const deepRelatedMovieOriginalTitle = 'originalTitleText'; // child key = text
-const deepRelatedMovieAlternateTitle = 'akas'; // child key = text
-const deepRelatedMovieTitle = 'titleText'; // child key = text
-const deepRelatedMovieType = 'titleType'; // child key = text
+// originalTitleText, akas, titleText and titleType child key = text
+const deepRelatedMovieOriginalTitle = 'originalTitleText';
+const deepRelatedMovieAlternateTitle = 'akas';
+const deepRelatedMovieTitle = 'titleText';
+const deepRelatedMovieType = 'titleType';
+
 const deepRelatedMovieUserRating = 'aggregateRating';
 const deepRelatedMovieUserRatingCount = 'voteCount';
 const deepRelatedMovieYearHeader = 'releaseYear';
@@ -171,9 +176,11 @@ String getIdFromIMDBLink(String? link) {
       '';
 }
 
-/// Converts human readable censor ratings to [CensorRatingType] rating categories.
+/// Converts human readable censor ratings
+/// to [CensorRatingType] rating categories.
 CensorRatingType? getImdbCensorRating(String? type) {
-  // Details available at https://help.imdb.com/article/contribution/titles/certificates/GU757M8ZJ9ZPXB39
+  // Details available at
+  // https://help.imdb.com/article/contribution/titles/certificates/GU757M8ZJ9ZPXB39
   if (type == null) return null;
   if (type.lastIndexOf('Unrated') > -1) return CensorRatingType.none;
   if (type.lastIndexOf('Banned') > -1) return CensorRatingType.adult;

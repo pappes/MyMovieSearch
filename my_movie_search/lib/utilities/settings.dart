@@ -28,7 +28,8 @@ class Settings {
 
   /// Read setting from files into in memory structures.
   ///
-  /// To be called once during application initialisation before accessing values.
+  /// To be called once during application initialisation
+  /// before accessing values.
 
   Future<void> init({Logger? logger, Map<String, String>? override}) async {
     // Manually initalise flutter to ensure setting can be loaded before RunApp

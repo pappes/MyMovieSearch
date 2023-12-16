@@ -77,7 +77,8 @@ void main() {
         actualOutput,
         MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
-            'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
       );
     });
     test('Run an empty search', () async {
@@ -93,7 +94,8 @@ void main() {
           expectedOutput,
         ),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
-            'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
       );
     });
   });

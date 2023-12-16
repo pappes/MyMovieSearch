@@ -55,8 +55,8 @@ const tpbSampleMid = '''
 
 const intermediateMapList = [
   {
-    'description':
-        'The Pink Panther Film Collection DVD Box Set - 6 Disc - Peter Sellers RARE Set',
+    'description': 'The Pink Panther Film Collection DVD Box Set - '
+        '6 Disc - Peter Sellers RARE Set',
     'barcode': 'item-331233484',
     'cleanDescription':
         'the pink panther film collection 6 peter sellers rare set',

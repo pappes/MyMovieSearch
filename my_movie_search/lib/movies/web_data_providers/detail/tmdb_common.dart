@@ -74,7 +74,8 @@ abstract class QueryTMDBCommon
     String webText,
   ) async {
     if (webText.contains(
-      'movie_results":[],"person_results":[],"tv_results":[],"tv_episode_results":[],"tv_season_results":[]',
+      'movie_results":[],"person_results":[],'
+      '"tv_results":[],"tv_episode_results":[],"tv_season_results":[]',
     )) {
       return [];
     }
@@ -91,11 +92,13 @@ abstract class QueryTMDBCommon
         return [tree];
       }
       if (tree.containsKey('status_message')) {
-        throw 'tmdb call for criteria $getCriteriaText returned error:${tree['status_message']}';
+        throw 'tmdb call for criteria $getCriteriaText '
+            'returned error:${tree['status_message']}';
       }
     }
 
-    throw 'tmdb results data not detected for criteria $getCriteriaText in json:$webText';
+    throw 'tmdb results data not detected '
+        'for criteria $getCriteriaText in json:$webText';
   }
 
   /// Allow response parsing for http 404

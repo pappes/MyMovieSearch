@@ -51,8 +51,8 @@ void main() {
 
   group('live QueryPicclickBarcodeSearch test', () {
     // Search for a known movie.
-    test(
-        'Run a search on piclick that will hopefully have static results', //not likely this is pulling data from ebay about live sales !
+    test('Run a search on piclick that will hopefully have static results',
+        // not likely this is pulling data from ebay about live sales !
         () async {
       final criteria = SearchCriteriaDTO().fromString('9324915073425');
       final actualOutput =
@@ -69,7 +69,8 @@ void main() {
         actualOutput.length,
         greaterThan(5),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
-            'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
       );
     });
     test('Run an empty search', () async {
@@ -85,7 +86,8 @@ void main() {
           expectedOutput,
         ),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
-            'needs to match expected DTO list ${expectedOutput.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
       );
     });
   });

@@ -20,7 +20,8 @@ part 'bloc_parts/search_state.dart';
 /// manage search state
 /// marshal data into a display ready format (sorting)
 ///
-/// In progress search results can be accessed from [SearchBloc].[sortedResults].
+/// In progress search results can be accessed from
+/// [SearchBloc].[sortedResults].
 class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
   SearchBloc({required this.movieRepository})
       : super(const SearchState.awaitingInput()) {
@@ -78,7 +79,8 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
     return super.close();
   }
 
-  /// Clean up the results of any previous search and submit the new search criteria.
+  /// Clean up the results of any previous search
+  /// and submit the new search criteria.
   void _initiateSearch(SearchCriteriaDTO criteria, Emitter<SearchState> emit) {
     if (!isClosed) {
       emit(const SearchState.awaitingInput());

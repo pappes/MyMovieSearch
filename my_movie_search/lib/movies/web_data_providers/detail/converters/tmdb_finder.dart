@@ -17,7 +17,8 @@ import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 //  backdrop_path = alternate image url fragment
 //  video = indicator of low quality movie (true/false)
 //  adult = indicator of adult content (true/false)
-//  genre_ids = list of numeric ids that need to be correlated with another web service call e.g. [28, 12, 878]
+//  genre_ids = list of numeric ids that need to be correlated
+//              with another web service call e.g. [28, 12, 878]
 //  original_language = language spoken during the movie (iso_639_1) e.g. "en"
 //  original_title = previous title assigned to the movie
 //  overview = synopsis of the movie plot
@@ -111,7 +112,8 @@ class TmdbFinderConverter {
     }
 
     // TODO expand partial URL to full url
-    //movie.imageUrl = map[movieElementPosterPath]?.toString() ?? movie.imageUrl;
+    // e.g. movie.imageUrl =
+    //      map[movieElementPosterPath]?.toString() ?? movie.imageUrl;
     if ('true' == map[movieElementType]) {
       movie.type = MovieContentType.short;
     }
@@ -151,6 +153,7 @@ class TmdbFinderConverter {
       // no longer need to have alternateId field!
       ..uniqueId = imdbId;
     // TODO expand partial URL to full url
-    //person.imageUrl = map[personElementPosterPath]?.toString() ?? person.imageUrl;
+    // e.g. person.imageUrl =
+    //      map[personElementPosterPath]?.toString() ?? person.imageUrl;
   }
 }

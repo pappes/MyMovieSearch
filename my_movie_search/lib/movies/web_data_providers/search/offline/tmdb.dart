@@ -9,7 +9,8 @@
 //backdrop_path = alternate image url fragment
 //video = indicator of low quality movie (true/false)
 //adult = indicator of adult content (true/false)
-//genre_ids = list of numeric ids that need to be correlated with another web service call e.g. [28, 12, 878]
+//genre_ids = list of numeric ids that need to be correlated
+//            with another web service call e.g. [28, 12, 878]
 //original_language = language spoken during the movie (iso_639_1) e.g. "en"
 //original_title = previous title assigned to the movie
 //overview = synopsis of the movie plot
@@ -43,14 +44,15 @@ final intermediateMapList = [jsonDecode(jsonSampleFull)];
 final intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
 final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
-const jsonSampleFull =
-    ' { "page": 1, "results": [ $tmdbJsonSearchInner ], "total_pages": 12, "total_results": 340 } ';
+const jsonSampleFull = ' { "page": 1, "results": [ $tmdbJsonSearchInner ], '
+    '"total_pages": 12, "total_results": 340 } ';
 const jsonSampleEmpty =
     '{"page": 1, "results": [], "total_pages": 1, "total_results": 0}';
-const jsonSampleEmptyx =
-    '{ "status_message": "The resource you requested could not be found.", "status_code": 34 }';
-const jsonSampleError =
-    '{ "status_message": "Invalid API key: You must be granted a valid key.", "success": false, "status_code": 7 }';
+const jsonSampleEmptyx = '{ "status_message": '
+    '"The resource you requested could not be found.", "status_code": 34 }';
+const jsonSampleError = '{ "status_message": '
+    '"Invalid API key: You must be granted a valid key.", '
+    '"success": false, "status_code": 7 }';
 
 Future<Stream<String>> streamTmdbJsonOfflineData(_) =>
     Future.value(Stream.value(jsonSampleFull));

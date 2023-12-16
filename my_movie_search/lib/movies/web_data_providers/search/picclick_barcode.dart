@@ -53,7 +53,8 @@ class QueryPicclickBarcodeSearch
         DataSourceType.picclickBarcode,
       );
 
-  /// API call to search returning the top matching results for [encodedCriteria].
+  /// API call to search
+  /// returning the top matching results for [encodedCriteria].
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
     final url = '$_baseURL$encodedCriteria$_suffixURL';

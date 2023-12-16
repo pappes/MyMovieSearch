@@ -81,7 +81,8 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         person[outerElementLink] = linkURL;
         final charactor = row.querySelector('a[href*="/title/tt"]')?.text;
         if (null != charactor) {
-          // Include name of character played by actor for display in search results.
+          // Include name of character played by actor
+          // for display in search results.
           person[outerElementCharactorName] = charactor;
         }
         movies.add(person);

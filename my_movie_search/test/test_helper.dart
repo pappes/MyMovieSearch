@@ -126,7 +126,8 @@ class MovieResultDTOListMatcher extends Matcher {
   @override
   // Tell test framework what content was expected.
   Description describe(Description description) => description.add(
-        '$expected (set MovieResultDTOListMatcher verbose:true for full details)',
+        '$expected (set MovieResultDTOListMatcher '
+        'verbose:true for full details)',
       );
 
   @override
@@ -183,7 +184,8 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
   /// Constructor for fuzzy match list comparison
   ///
   /// [expected] is the list of DTOs to look for
-  /// [percentMatch] allows a portion of the records to match instead of all records
+  /// [percentMatch] allows a portion of the records
+  /// to match instead of all records
   MovieResultDTOListFuzzyMatcher(this.expected, {this.percentMatch = 100});
 
   @override

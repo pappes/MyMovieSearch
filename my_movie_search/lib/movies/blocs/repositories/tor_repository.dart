@@ -17,7 +17,8 @@ class TorRepository extends TorMultiSearchRepository {
   /// [searchUID] is a unique correlation ID identifying this search request
   @override
   void initSearch(int searchUID, SearchCriteriaDTO criteria) {
-    // Manufacture a navigation card to expand downloadSimple to downloadAdvanced
+    // Manufacture a navigation card
+    // to expand downloadSimple to downloadAdvanced
     if (criteria.criteriaType == SearchCriteriaType.downloadSimple) {
       addResults(
         searchUID,

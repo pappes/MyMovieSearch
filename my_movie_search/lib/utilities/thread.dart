@@ -21,8 +21,10 @@ import 'dart:isolate';
 ///
 /// Sample usage using a named thread:
 /// ```dart
-/// final val = await ThreadRunner(ThreadRunner.slow).runAsync(myFunction, input1);
-/// final val = await ThreadRunner(ThreadRunner.verySlow).runAsync(myFunction, input2);
+/// final val = await
+///          ThreadRunner(ThreadRunner.slow).runAsync(myFunction, input1);
+/// final val = await
+///          ThreadRunner(ThreadRunner.verySlow).runAsync(myFunction, input2);
 /// ```
 class ThreadRunner {
   late SendPort _mainThreadOutboundPort;
@@ -66,12 +68,15 @@ class ThreadRunner {
   /// ````
   ///
   /// DART V2.14 and prior had the following restrictions:
-  /// Function must not be a closure, unnamed function or non-static member function.
-  /// Function must be a static class member or global function to avoid the runtime exception
+  /// Function must not be a closure,
+  /// unnamed function or non-static member function.
+  /// Function must be a static class member or
+  /// global function to avoid the runtime exception
   ///     Invalid argument(s): Illegal argument in isolate message :
   ///     (object is a closure - Function '<function_name>')
   ///
-  /// Function should not call any libraries that attempt to write to common objects
+  /// Function should not call any libraries
+  /// that attempt to write to common objects
   ///     e.g. external files, etc because the libraries may not be thread safe
   ///     console appears to be thread safe.
   Future<dynamic> run<T>(dynamic Function(T) function, T parameter) async {
@@ -88,7 +93,8 @@ class ThreadRunner {
   Future<void> _init(String threadName) async {
     final receivePort = ReceivePort();
 
-    // Spawn another thread and wait to receive a port for the main thread to talk on.
+    // Spawn another thread and wait to receive a port
+    // for the main thread to talk on.
     await Isolate.spawn(_runOnOtherThread, {
       'port': receivePort.sendPort,
       'threadName': threadName,

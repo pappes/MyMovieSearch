@@ -107,7 +107,8 @@ class TreeHelper {
     return null;
   }
 
-  /// Validate a [Map] or [List] tree contains a String value identided by [key].
+  /// Validate a [Map] or [List] tree
+  /// contains a String value identided by [key].
   String? searchForString({Object key = 'text'}) {
     final results = deepSearch(key);
     if (null != results && results.isNotEmpty && null != results.first) {

@@ -67,7 +67,8 @@ void main() {
     });
   });
   group('RestoreSearchCriteriaDTO', () {
-    // Convert a restorable dto to JSON and then convert the JSON to a restorable dto.
+    // Convert a restorable dto to JSON
+    //and then convert the JSON to a restorable dto.
     test('RestorableCriteria', () {
       final criteria = makeCriteriaDTO('abc');
       final rtp = RestorationTestParent(criteria.criteriaTitle)

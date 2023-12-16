@@ -7,7 +7,8 @@ extension DynamicHelper on dynamic {
   ///
   /// Sets the value to empty string if it is not currently a string
   ///
-  /// Static version of the function supplied for calling from other static functions
+  /// Static version of the function
+  /// supplied for calling from other static functions
   /// ```dart
   /// x = DynamicHelper.dynamicToString(y);
   /// ```
@@ -32,7 +33,8 @@ extension DynamicHelper on dynamic {
   /// *   a [List]<[String]>
   /// *   a json encoded [List]<[String]>
   ///
-  /// Static version of the function supplied for calling from other static functions
+  /// Static version of the function
+  /// supplied for calling from other static functions
   /// ```dart
   /// x = DynamicHelper.dynamicToStringList_(y);
   /// ```
@@ -61,7 +63,8 @@ extension DynamicHelper on dynamic {
   /// *   a [Iterable]<[String]>
   /// *   a json encoded [Iterable]<[String]>
   ///
-  /// Static version of the function supplied for calling from other static functions
+  /// Static version of the function
+  /// supplied for calling from other static functions
   /// ```dart
   /// x = DynamicHelper.dynamicToStringSet_(y);
   /// ```
@@ -91,7 +94,8 @@ extension DynamicHelper on dynamic {
   /// *   a number
   /// *   a string representation of a number
   ///
-  /// Static version of the function supplied for calling from other static functions
+  /// Static version of the function
+  /// supplied for calling from other static functions
   /// ```dart
   /// x = DynamicHelper.dynamicToInt_(y);
   /// ```
@@ -115,7 +119,8 @@ extension DynamicHelper on dynamic {
   /// *   a number
   /// *   a string representation of a number
   ///
-  /// Static version of the function supplied for calling from other static functions
+  /// Static version of the function
+  /// supplied for calling from other static functions
   /// ```dart
   /// x = DynamicHelper.dynamicToDouble_(y);
   /// ```

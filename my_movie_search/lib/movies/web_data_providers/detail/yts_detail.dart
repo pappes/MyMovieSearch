@@ -18,7 +18,8 @@ const jsonDescriptionKey = 'description';
 const jsonSeedersKey = 'seeders';
 const jsonLeechersKey = 'leechers';
 
-/// Implements [WebFetchBase] for retrieving full list of keywords for a movie from IMDB.
+/// Implements [WebFetchBase] for retrieving full list of keywords
+/// for a movie from IMDB.
 ///
 /// ```dart
 /// QueryYtsDetails().readList(criteria);

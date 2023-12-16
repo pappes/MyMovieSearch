@@ -9,7 +9,8 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 mixin ScrapeIMDBMoreKeywordsDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Convert web text to a traversable tree of [List] or [Map] data.
-  /// Scrape bibliography data from rows in the html div named fullcredits_content.
+  /// Scrape bibliography data from rows
+  /// in the html div named fullcredits_content.
   @override
   Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
@@ -35,7 +36,8 @@ mixin ScrapeIMDBMoreKeywordsDetails
       movieData[link.text] = 'keyword';
     }
     if (movieData.isEmpty) {
-      throw 'imdb more keywords data not detected for criteria $getCriteriaText';
+      throw 'imdb more keywords data not detected for criteria '
+          '$getCriteriaText';
     }
   }
 }

@@ -49,7 +49,9 @@ class DVDBarcodeScanner {
   /// Uses camera to read 2D Barcodes.
   ///
   /// Ignores any detected QRcodes
-  /// Requires [context] to draw the page with the camera contents and cancel button.
+  /// Requires [context] to draw the page
+  /// with the camera contents and cancel button.
+  ///
   /// Invokes callback [action] with the string encoded in the barcode.
   void scanBarcode(BuildContext context, BarcodeAction action) {
     this.context = context;

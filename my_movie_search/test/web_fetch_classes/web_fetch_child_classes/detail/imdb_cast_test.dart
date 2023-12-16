@@ -112,7 +112,8 @@ void main() {
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
   });
@@ -145,14 +146,15 @@ void main() {
         source: streamImdbHtmlOfflineData,
       );
       final listResult = await testClass.readPrioritisedCachedList(
-        source: StaticJsonGenerator
-            .stuff, // Return some random junk that will not get used do to caching
+        source: StaticJsonGenerator.stuff,
+        // Return some random junk that will not get used do to caching
       );
       expect(
         listResult,
         MovieResultDTOListMatcher(expectedDTOList),
         reason: 'Emitted DTO list ${listResult.toPrintableString()} '
-            'needs to match expected DTO List${expectedDTOList.toPrintableString()}',
+            'needs to match expected DTO List'
+            '${expectedDTOList.toPrintableString()}',
       );
       final resultIsCached = testClass.isThreadedResultCached();
       expect(resultIsCached, true);
@@ -233,7 +235,8 @@ void main() {
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
     });
     // Test error detection.
@@ -245,7 +248,8 @@ void main() {
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
 
       // Check the results.
-      //NOTE: Using expect on an async result only works as the last line of the test!
+      // NOTE: Using expect on an async result
+      // only works as the last line of the test!
       expect(
         actualResult,
         throwsA('expected map got String unable to interpret data wrongData'),
@@ -258,7 +262,8 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search query', () {
-    // Read imdb search results from a simulated byte stream and convert JSON to dtos.
+    // Read imdb search results from a simulated byte stream
+    // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
       final expectedValue = expectedDTOList;
@@ -282,7 +287,8 @@ void main() {
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
         reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
-            'needs to match expected DTO list ${expectedValue.toPrintableString()}',
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
       );
       // Explicitly check related because MovieResultDTOListMatcher won't
       expect(
@@ -297,7 +303,8 @@ void main() {
       );
     });
 
-    // Read imdb search results from a simulated byte stream and report error due to invalid html.
+    // Read imdb search results from a simulated byte stream
+    // and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
       const expectedException = '[QueryIMDBCastDetails] Error in imdb_cast '
@@ -316,7 +323,8 @@ void main() {
       expect(queryResult.first.title, expectedException);
     });
 
-    // Read imdb search results from a simulated byte stream and report error due to unexpected html.
+    // Read imdb search results from a simulated byte stream
+    // and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
       const expectedException = '[QueryIMDBCastDetails] Error in imdb_cast '
