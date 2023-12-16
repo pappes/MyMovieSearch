@@ -25,6 +25,7 @@ dependencies:
   # Note: use "dart pub outdated" to find libraries that should be upgraded
   bloc: ^8.0.3
   
+  cached_network_image: ^3.3.0          # preload large images
   cloud_firestore: ^4.9.1
   
   cupertino_icons: ^1.0.4               # iOS style icons.

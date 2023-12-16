@@ -1,5 +1,7 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
@@ -23,14 +25,20 @@ class Poster extends Widget {
     void Function()? showImages,
     super.key,
   }) {
-    final displayedImage = Image(
-      image: NetworkImage(getBigImage(url)),
+    bigUrl = getBigImage(url);
+    smallImage = Image(
+      image: NetworkImage(url),
       alignment: Alignment.topCenter,
       fit: BoxFit.fitWidth,
     );
+    largeImage = CachedNetworkImage(
+      imageUrl: bigUrl,
+      placeholder: (context, url) => smallImage,
+      errorWidget: (context, url, error) => const Icon(Icons.error),
+    );
     final tapableImage = GestureDetector(
       onTap: _pinchToZoom,
-      child: displayedImage,
+      child: largeImage,
     );
 
     final imageText = SelectableText(
@@ -61,12 +69,15 @@ class Poster extends Widget {
   final BuildContext context;
   late final Widget controls;
   late final String url;
+  late final String bigUrl;
+  late final Widget smallImage;
+  late final Widget largeImage;
 
   @override
   Element createElement() => controls.createElement();
 
   Future<Dialog?> _pinchToZoom() =>
-      showImageViewer(context, NetworkImage(getBigImage(url)));
+      showImageViewer(context, NetworkImage(bigUrl));
 }
 
 /// A [Widget] that includes a [Column] that expands so that it
