@@ -248,7 +248,7 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
           }
         }
       }
-      if (false == resultMatched) {
+      if (!resultMatched) {
         matchState[actualDto.uniqueId] = 'No match for ${actualDto.uniqueId}\n';
       }
     }

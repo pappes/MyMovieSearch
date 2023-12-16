@@ -1318,7 +1318,18 @@ extension DTOCompare on MovieResultDTO {
         return downloadCompare(other);
       case MovieContentType.barcode:
         return barcodeCompare(other);
-      default:
+      case MovieContentType.movie:
+      case MovieContentType.error:
+      case MovieContentType.information:
+      case MovieContentType.keyword:
+      case MovieContentType.navigation:
+      case MovieContentType.none:
+      case MovieContentType.short:
+      case MovieContentType.series:
+      case MovieContentType.miniseries:
+      case MovieContentType.episode:
+      case MovieContentType.title:
+      case MovieContentType.custom:
         return movieCompare(other);
     }
   }
@@ -1425,7 +1436,9 @@ extension DTOCompare on MovieResultDTO {
                 return 1;
               case ReadHistory.read:
                 return 0;
-              default:
+              case null:
+              case ReadHistory.none:
+              case ReadHistory.custom:
             }
           } catch (_) {}
         }
@@ -1456,13 +1469,20 @@ extension DTOCompare on MovieResultDTO {
     switch (type) {
       case MovieContentType.person:
         return 99;
+      case MovieContentType.movie:
+      case MovieContentType.none:
+      case MovieContentType.title:
+        return 90;
       case MovieContentType.episode:
+      case MovieContentType.series:
+      case MovieContentType.miniseries:
         return 7;
       case MovieContentType.short:
         return 6;
       case MovieContentType.custom:
         return 5;
       case MovieContentType.keyword:
+      case MovieContentType.barcode:
         return 4;
       case MovieContentType.download:
         return 3;
@@ -1472,8 +1492,6 @@ extension DTOCompare on MovieResultDTO {
         return 1;
       case MovieContentType.navigation:
         return 0;
-      default:
-        return 90;
     }
   }
 

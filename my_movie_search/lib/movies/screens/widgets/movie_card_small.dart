@@ -49,7 +49,19 @@ class MovieTile extends ListTile {
       case MovieContentType.person:
       case MovieContentType.barcode:
         break;
-      default:
+
+      case MovieContentType.movie:
+      case MovieContentType.none:
+      case MovieContentType.title:
+      case MovieContentType.episode:
+      case MovieContentType.series:
+      case MovieContentType.miniseries:
+      case MovieContentType.short:
+      case MovieContentType.custom:
+      case MovieContentType.keyword:
+      case MovieContentType.error:
+      case MovieContentType.information:
+      case MovieContentType.navigation:
         middle.add(movie.bestSource.excludeNone);
         end.add(movie.language.excludeNone);
     }
@@ -81,7 +93,19 @@ class MovieTile extends ListTile {
       case MovieContentType.barcode:
         start.add(movie.bestSource.excludeNone);
         end.add(movie.alternateTitle);
-      default:
+
+      case MovieContentType.movie:
+      case MovieContentType.none:
+      case MovieContentType.title:
+      case MovieContentType.episode:
+      case MovieContentType.series:
+      case MovieContentType.miniseries:
+      case MovieContentType.short:
+      case MovieContentType.custom:
+      case MovieContentType.keyword:
+      case MovieContentType.error:
+      case MovieContentType.information:
+      case MovieContentType.navigation:
         start.add(movie.runTime.toFormattedTime());
         middle.add(movie.censorRating.excludeNone);
         middle.add(movie.type.name);
@@ -119,7 +143,15 @@ class MovieTile extends ListTile {
         return movie.imageUrl == ''
             ? const Icon(Icons.block)
             : const Icon(Icons.download);
-      default:
+
+      case MovieContentType.movie:
+      case MovieContentType.none:
+      case MovieContentType.title:
+      case MovieContentType.episode:
+      case MovieContentType.series:
+      case MovieContentType.miniseries:
+      case MovieContentType.short:
+      case MovieContentType.custom:
         return const Icon(Icons.theaters);
     }
   }
@@ -143,7 +175,17 @@ class MovieTile extends ListTile {
       case MovieContentType.download:
         return movie.imageUrl == '' ? null : _navigateButton(context, movie);
 
-      default:
+      case MovieContentType.person:
+      case MovieContentType.movie:
+      case MovieContentType.none:
+      case MovieContentType.title:
+      case MovieContentType.episode:
+      case MovieContentType.series:
+      case MovieContentType.miniseries:
+      case MovieContentType.short:
+      case MovieContentType.custom:
+      case MovieContentType.error:
+      case MovieContentType.information:
         {
           final read = movie.getReadIndicator();
           try {
@@ -161,7 +203,8 @@ class MovieTile extends ListTile {
                 return const Icon(Icons.visibility);
               case null:
                 return null;
-              default:
+              case ReadHistory.none:
+              case ReadHistory.custom:
                 return const Icon(Icons.question_mark);
             }
           } catch (_) {

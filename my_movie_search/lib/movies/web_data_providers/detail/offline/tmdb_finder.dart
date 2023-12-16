@@ -60,7 +60,7 @@ const tmdbJsonSearchInner = '''
 ''';
 
 const jsonSampleFull =
-    ' { "movie_results": [ $tmdbJsonSearchInner ],"person_results":[],'
+    ' { "movie_results": [ $tmdbJsonSearchInner ],"person_results":[], '
     '"tv_results":[],"tv_episode_results":[],"tv_season_results":[]} ';
 const jsonSampleEmpty =
     '{"movie_results":[],"person_results":[],"tv_results":[],'

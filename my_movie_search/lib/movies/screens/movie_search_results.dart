@@ -74,7 +74,10 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
         return BarcodeRepository();
       case SearchCriteriaType.moreKeywords:
         return MoreKeywordsRepository();
-      default:
+      case SearchCriteriaType.none:
+      case SearchCriteriaType.custom:
+      case SearchCriteriaType.movieDTOList:
+      case SearchCriteriaType.movieTitle:
         return MovieSearchRepository();
     }
   }

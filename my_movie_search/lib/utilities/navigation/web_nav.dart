@@ -202,7 +202,17 @@ class MMSNav {
         // Open magnet link.
         canvas.viewWebPage(movie.imageUrl);
 
-      default:
+      case MovieContentType.person:
+      case MovieContentType.movie:
+      case MovieContentType.none:
+      case MovieContentType.title:
+      case MovieContentType.episode:
+      case MovieContentType.series:
+      case MovieContentType.miniseries:
+      case MovieContentType.short:
+      case MovieContentType.custom:
+      case MovieContentType.error:
+      case MovieContentType.information:
         movie.setReadIndicator(ReadHistory.reading.toString());
         // Show details screen (movie details or person details)
         canvas

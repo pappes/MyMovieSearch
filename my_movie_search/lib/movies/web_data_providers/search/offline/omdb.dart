@@ -29,7 +29,7 @@ const expectedDtoJsonStringList = [
 final intermediateMapList = [jsonDecode(jsonSampleFull)];
 final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
-const jsonSampleFull = ' {"Search":[ $omdbJsonSearchInner ],'
+const jsonSampleFull = ' {"Search":[ $omdbJsonSearchInner ], '
     '"totalResults":"44","Response":"True"}';
 const jsonSampleEmpty = '{"Response":"False","Error":"Movie not found!"}';
 const jsonSampleError = '{"Response":"False","Error":"Invalid API key!"}';
