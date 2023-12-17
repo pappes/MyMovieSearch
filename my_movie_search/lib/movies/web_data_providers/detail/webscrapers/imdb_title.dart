@@ -24,7 +24,7 @@ mixin ScrapeIMDBTitleDetails
   ) async {
     try {
       return fastParse(webText);
-    } catch (_) {
+    } on FastParseException {
       return slowConvertWebTextToTraversableTree(webText);
     }
   }
@@ -39,8 +39,9 @@ mixin ScrapeIMDBTitleDetails
     final movieData = _scrapeWebPage(document);
     if (movieData[outerElementDescription] == null &&
         movieData['props'] == null) {
-      throw 'imdb web scraper data not detected for criteria '
-          '$getCriteriaText in $webText';
+      throw WebConvertException(
+          'imdb web scraper data not detected for criteria '
+          '$getCriteriaText in $webText');
     }
     return [movieData];
   }

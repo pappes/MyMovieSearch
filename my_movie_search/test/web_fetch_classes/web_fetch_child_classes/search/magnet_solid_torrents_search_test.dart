@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/magnet_solid_torrents.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_solid_torrents.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/magnet_solid_torrents.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 import '../../../test_helper.dart';
 
@@ -104,12 +105,12 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA(
-        startsWith(
-          'SolidTorrents results data not detected for criteria '
-          '${criteria.toPrintableIdOrText().toLowerCase()} in html:',
-        ),
-      );
+      final expectedOutput = throwsA(isA<WebConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        contains('results data not detected for criteria '
+            '${criteria.toPrintableIdOrText().toLowerCase()} in html:'),
+      ));
       final actualOutput =
           QuerySolidTorrentsSearch(criteria).myConvertWebTextToTraversableTree(
         htmlSampleError,
@@ -174,18 +175,22 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
+      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        startsWith(
+            'expected map got String unable to interpret data wrongData'),
+      ));
       final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);
 
       // Invoke the functionality and collect results.
-      final actualResult = solidTorrentsSearch.myConvertTreeToOutputType('map');
+      final actualResult =
+          solidTorrentsSearch.myConvertTreeToOutputType('wrongData');
 
       // Check the results.
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(
-        actualResult,
-        throwsA('expected map got String unable to interpret data map'),
-      );
+      expect(actualResult, expectedOutput);
     });
   });
 

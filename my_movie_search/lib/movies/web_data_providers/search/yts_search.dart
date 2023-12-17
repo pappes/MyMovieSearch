@@ -39,7 +39,9 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
     if (map is Map) return YtsSearchConverter.dtoFromCompleteJsonMap(map);
-    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+    throw TreeConvertException(
+      'expected map got ${map.runtimeType} unable to interpret data $map',
+    );
   }
 
   /// Include entire map in the movie title when an error occurs.
@@ -61,13 +63,19 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    if ('' == webText) throw 'No content returned from web call';
+    if ('' == webText) {
+      throw WebConvertException(
+          'No content returned from web call for criteria '
+          '$getCriteriaText');
+    }
     try {
       // Assume text is json encoded.
       final tree = jsonDecode(webText);
       return [tree];
     } catch (jsonException) {
-      throw 'Invalid json returned from web call $webText';
+      throw WebConvertException(
+          'Invalid json returned from web call $webText for criteria '
+          '$getCriteriaText');
     }
   }
 }

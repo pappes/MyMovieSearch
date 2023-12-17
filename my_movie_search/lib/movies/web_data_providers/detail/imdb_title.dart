@@ -55,7 +55,9 @@ class QueryIMDBTitleDetails
       return ImdbWebScraperConverter()
           .dtoFromCompleteJsonMap(map, DataSourceType.imdb);
     }
-    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+    throw TreeConvertException(
+      'expected map got ${map.runtimeType} unable to interpret data $map',
+    );
   }
 
   /// Include entire map in the movie title when an error occurs.

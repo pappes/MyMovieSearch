@@ -36,8 +36,9 @@ mixin ScrapeSolidTorrentsSearch
     if (validPage) {
       return movieData;
     }
-    throw 'SolidTorrents results data not detected for criteria '
-        '$getCriteriaText in html:$webText';
+    throw WebConvertException(
+        'SolidTorrents results data not detected for criteria '
+        '$getCriteriaText in html:$webText');
   }
 
   /// extract each row from the table.

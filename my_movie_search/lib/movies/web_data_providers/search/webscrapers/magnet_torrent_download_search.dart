@@ -38,8 +38,9 @@ mixin ScrapeTorrentDownloadSearch
     if (validPage) {
       return movieData;
     }
-    throw 'TorrentDownload results data not detected for criteria '
-        '$getCriteriaText in html:$webText';
+    throw WebConvertException(
+        'TorrentDownload results data not detected for criteria '
+        '$getCriteriaText in html:$webText');
   }
 
   /// extract each row from the table.

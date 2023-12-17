@@ -64,7 +64,9 @@ mixin ScrapeIMDBMoviesForKeyword
         movieData.add(_addNextPage(next));
       }
     } else {
-      throw 'imdb keyword data not detected for criteria $getCriteriaText';
+      throw WebConvertException(
+        'imdb keyword data not detected for criteria $getCriteriaText',
+      );
     }
     return movieData;
   }

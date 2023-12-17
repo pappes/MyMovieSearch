@@ -35,7 +35,9 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
     if (map is Map) return TmdbMovieSearchConverter.dtoFromCompleteJsonMap(map);
-    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+    throw TreeConvertException(
+      'expected map got ${map.runtimeType} unable to interpret data $map',
+    );
   }
 
   /// converts <INPUT_TYPE> to a string representation.
@@ -82,7 +84,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       final tree = jsonDecode(webText);
       return [tree];
     } catch (jsonException) {
-      throw 'Invalid json returned from web call $webText';
+      throw WebConvertException('Invalid json returned from web call $webText');
     }
   }
 }

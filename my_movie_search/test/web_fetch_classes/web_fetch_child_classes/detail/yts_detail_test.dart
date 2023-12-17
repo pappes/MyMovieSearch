@@ -5,6 +5,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/converters/yts_
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/yts_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/yts_detail.dart';
 import 'package:my_movie_search/utilities/settings.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 import '../../../test_helper.dart';
 
@@ -90,8 +91,12 @@ void main() {
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final criteria = SearchCriteriaDTO().fromString('batman');
-      final expectedOutput =
-          throwsA('yts data not detected for criteria batman');
+      final expectedOutput = throwsA(isA<WebConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        contains('data not detected for criteria '
+            '${criteria.toPrintableIdOrText().toLowerCase()}'),
+      ));
       final actualOutput =
           QueryYtsDetails(criteria).myConvertWebTextToTraversableTree(
         htmlSampleError,
@@ -175,6 +180,12 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () {
+      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          startsWith(
+            'expected map got String unable to interpret data wrongData',
+          )));
       final criteria = SearchCriteriaDTO();
       final testClass = QueryYtsDetails(criteria)..myClearCache();
 
@@ -184,10 +195,7 @@ void main() {
       // Check the results.
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(
-        actualResult,
-        throwsA('expected map got String unable to interpret data wrongData'),
-      );
+      expect(actualResult, expectedOutput);
     });
   });
 

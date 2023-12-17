@@ -46,7 +46,9 @@ class QueryTMDBFinder extends QueryTMDBCommon {
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
     if (map is! Map) {
-      throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+      throw TreeConvertException(
+        'expected map got ${map.runtimeType} unable to interpret data $map',
+      );
     }
     final results = <MovieResultDTO>[];
     for (final movie

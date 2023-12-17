@@ -42,7 +42,9 @@ class QueryIMDBMoviesForKeyword
     if (map is Map) {
       return ImdbMoviesForKeywordConverter.dtoFromCompleteJsonMap(map);
     }
-    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+    throw TreeConvertException(
+      'expected map got ${map.runtimeType} unable to interpret data $map',
+    );
   }
 
   /// Extract plain text or dto encoded keyword.

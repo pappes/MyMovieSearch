@@ -33,7 +33,9 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
       return ImdbWebScraperConverter()
           .dtoFromCompleteJsonMap(map, DataSourceType.imdbSearch);
     }
-    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+    throw TreeConvertException(
+      'expected map got ${map.runtimeType} unable to interpret data $map',
+    );
   }
 
   /// converts <INPUT_TYPE> to a string representation.

@@ -123,6 +123,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Must be overridden by child classes.
   /// resulting Object(s) are returned in a list
   /// to allow for Maps that contain multiple records.
+  ///
+  /// Should throw TreeConvertException
+  /// when unable to covert the tree to [OUTPUT_TYPE].
   @visibleForOverriding
   Future<List<OUTPUT_TYPE>> myConvertTreeToOutputType(
     dynamic listOrMapOrDocument,
@@ -140,11 +143,16 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Resulting Tree(s) are returned in a list to allow for web sources that
   /// return multiple chucks of results.
+  ///
+  /// Should throw WebConvertException
+  /// when unable to covert [webText] to a tree.
   @visibleForOverriding
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    if ('' == webText) throw 'No content returned from web call';
+    if ('' == webText) {
+      throw WebConvertException('No content returned from web call');
+    }
     try {
       // Assume text is json encoded.
       final tree = jsonDecode(webText);
@@ -154,7 +162,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       final tree = parse(webText);
       if (tree.outerHtml == '<html><head></head><body>$webText</body></html>') {
         // If text is not valid json and not valid html then show the json error
-        rethrow;
+        throw WebConvertException('Invalid json $jsonException');
       }
       return [tree];
     }
@@ -167,6 +175,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Data source can be offline or online data source
   /// as requested by calling function.
   /// online data fetches from the web URL defined by [myConstructURI].
+  ///
+  /// Should throw WebFetchException
+  /// when unable to covert [criteria] to web text.
   @visibleForOverriding
   Future<Stream<String>> myConvertCriteriaToWebText() async {
     final errors = StringBuffer();
@@ -330,7 +341,17 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   Stream<String> baseConvertCriteriaToWebText() async* {
     final errors = <String>[];
 
-    Stream<String> captureError(dynamic error, _) {
+    Stream<String> captureGenericError(dynamic error, _) {
+      errors.add(
+        baseConstructErrorMessage(
+            'non-confomant baseConvertCriteriaToWebText error '
+            'fetching web text chunks',
+            error),
+      );
+      return const Stream.empty();
+    }
+
+    Stream<String> captureError(WebFetchException error, _) {
       errors.add(
         baseConstructErrorMessage('fetching web text chunks', error),
       );
@@ -340,7 +361,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     yield* await myConvertCriteriaToWebText()
         .timeout(
             const Duration(seconds: 24)) // TODO(pappes): allow configurable
-        .onError(captureError);
+        .onError<WebFetchException>(captureError)
+        .onError(captureGenericError);
     for (final error in errors) {
       yield* Stream.error(error);
     }
@@ -364,9 +386,14 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return [];
     }
 
-    List<String> captureStreamError(dynamic error, _) =>
+    List<String> captureStreamError(dynamic error, StackTrace _) =>
         captureError(error, 'stream error interpreting web text as a map');
-    List<String> captureConvertError(dynamic error, _) =>
+    List<String> captureGenericConvertError(dynamic error, StackTrace _) =>
+        captureError(
+            error,
+            'non-confomant baseConvertWebTextToTraversableTree error '
+            'interpreting web text as a map');
+    List<String> captureConvertError(WebConvertException error, StackTrace _) =>
         captureError(error, 'convert error interpreting web text as a map');
 
     final list = await webStream
@@ -375,7 +402,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         .toList();
     final webText = list.join();
     final rawObjects = await myConvertWebTextToTraversableTree(webText)
-        .onError(captureConvertError);
+        .onError<WebConvertException>(captureConvertError)
+        .onError(captureGenericConvertError);
 
     for (final object in rawObjects) {
       yield object;
@@ -409,7 +437,15 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
     List<OUTPUT_TYPE> captureStreamError(dynamic error, StackTrace _) =>
         captureError(error, 'stream error translating page map to objects');
-    List<OUTPUT_TYPE> captureConvertError(dynamic error, StackTrace _) =>
+    List<OUTPUT_TYPE> captureGenericError(dynamic error, StackTrace _) =>
+        captureError(
+            error,
+            'non-confomant baseConvertTreeToOutputType error '
+            'translating page map to objects');
+    List<OUTPUT_TYPE> captureConvertError(
+      TreeConvertException error,
+      StackTrace _,
+    ) =>
         captureError(error, 'convert error translating page map to objects');
 
     List<OUTPUT_TYPE> filterList(List<OUTPUT_TYPE> objects) {
@@ -426,7 +462,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     for (final rawObjects in list) {
       final processedObjects = await myConvertTreeToOutputType(rawObjects)
           .then(filterList)
-          .onError(captureConvertError);
+          .onError<TreeConvertException>(captureConvertError)
+          .onError(captureGenericError);
       for (final object in processedObjects) {
         yield object;
       }
@@ -537,4 +574,31 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should not be be overridden by child classes.
   @visibleForTesting
   HttpClient baseGetHttpClient() => HttpClient();
+}
+
+/// Exception used in myConvertCriteriaToWebText.
+class WebFetchException implements Exception {
+  String cause;
+  WebFetchException(this.cause);
+
+  @override
+  String toString() => cause;
+}
+
+/// Exception used in myConvertWebTextToTraversableTree.
+class WebConvertException implements Exception {
+  String cause;
+  WebConvertException(this.cause);
+
+  @override
+  String toString() => cause;
+}
+
+/// Exception used in myConvertTreeToOutputType.
+class TreeConvertException implements Exception {
+  String cause;
+  TreeConvertException(this.cause);
+
+  @override
+  String toString() => cause;
 }

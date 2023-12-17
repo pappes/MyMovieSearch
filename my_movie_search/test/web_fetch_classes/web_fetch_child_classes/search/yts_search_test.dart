@@ -6,6 +6,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/yts_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/yts_search.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonPSample(_) =>
@@ -90,18 +91,21 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
+      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        startsWith(
+            'expected map got String unable to interpret data wrongData'),
+      ));
       final webfetch = QueryYtsSearch(ignoreCriteria);
 
       // Invoke the functionality and collect results.
-      final actualResult = webfetch.myConvertTreeToOutputType('map');
+      final actualResult = webfetch.myConvertTreeToOutputType('wrongData');
 
       // Check the results.
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(
-        actualResult,
-        throwsA('expected map got String unable to interpret data map'),
-      );
+      expect(actualResult, expectedOutput);
     });
 
     // Confirm URL is constructed as expected.
@@ -153,8 +157,11 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput =
-          throwsA(startsWith('Invalid json returned from web call'));
+      final expectedOutput = throwsA(isA<WebConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        startsWith('Invalid json returned from web call'),
+      ));
       final actualOutput =
           QueryYtsSearch(ignoreCriteria).myConvertWebTextToTraversableTree(
         'imdbErrorSample',
@@ -206,7 +213,8 @@ void main() {
       const expectedException =
           '[QueryYtsSearch] Error in ytsSearch with criteria tt123 '
           'convert error interpreting web text as a map '
-          ':Invalid json returned from web call {not valid json}';
+          ':Invalid json returned from web call {not valid json} '
+          'for criteria tt123';
 
       // Invoke the functionality.
       await webfetch

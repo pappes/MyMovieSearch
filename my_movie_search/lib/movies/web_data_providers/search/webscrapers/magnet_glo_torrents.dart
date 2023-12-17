@@ -36,8 +36,9 @@ mixin ScrapeGloTorrentsSearch
     if (validPage) {
       return movieData;
     }
-    throw 'gloTorrents results data not detected for criteria '
-        '$getCriteriaText in html:$webText';
+    throw WebConvertException(
+        'gloTorrents results data not detected for criteria '
+        '$getCriteriaText in html:$webText');
   }
 
   /// extract each row from the table.

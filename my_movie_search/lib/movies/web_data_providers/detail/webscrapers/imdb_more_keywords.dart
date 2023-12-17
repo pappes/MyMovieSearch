@@ -36,8 +36,9 @@ mixin ScrapeIMDBMoreKeywordsDetails
       movieData[link.text] = 'keyword';
     }
     if (movieData.isEmpty) {
-      throw 'imdb more keywords data not detected for criteria '
-          '$getCriteriaText';
+      throw WebConvertException(
+          'imdb more keywords data not detected for criteria '
+          '$getCriteriaText');
     }
   }
 }

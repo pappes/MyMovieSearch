@@ -295,9 +295,21 @@ List<dynamic> fastParse(String webText) {
     if (-1 != endTag) {
       // Assume text is json encoded.
       final json = webText.substring(startTag, endTag);
-      final tree = jsonDecode(json);
-      return [tree];
+      try {
+        final tree = jsonDecode(json);
+        return [tree];
+      } catch (e) {
+        throw FastParseException('Json decode failed!');
+      }
     }
   }
-  throw 'Fast parse unsuccessful, try a slow parse!';
+  throw FastParseException('Fast parse unsuccessful, try a slow parse!');
+}
+
+class FastParseException implements Exception {
+  String cause;
+  FastParseException(this.cause);
+
+  @override
+  String toString() => cause;
 }

@@ -9,6 +9,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_ti
     as title_data;
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_search.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 import '../../../test_helper.dart';
 
@@ -116,8 +117,11 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput =
-          throwsA(startsWith('No search results found in html'));
+      final expectedOutput = throwsA(isA<WebConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        contains('No search results found in html:'),
+      ));
       final actualOutput =
           QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
         htmlSampleError,
@@ -183,18 +187,21 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
+      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        startsWith(
+            'expected map got String unable to interpret data wrongData'),
+      ));
       final imdbSearch = QueryIMDBSearch(criteria);
 
       // Invoke the functionality and collect results.
-      final actualResult = imdbSearch.myConvertTreeToOutputType('map');
+      final actualResult = imdbSearch.myConvertTreeToOutputType('wrongData');
 
       // Check the results.
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(
-        actualResult,
-        throwsA('expected map got String unable to interpret data map'),
-      );
+      expect(actualResult, expectedOutput);
     });
   });
 

@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_movies_for_keyword.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 import '../../../test_helper.dart';
 
@@ -131,8 +132,12 @@ testing and punctuation
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput =
-          throwsA('imdb keyword data not detected for criteria dream');
+      final expectedOutput = throwsA(isA<WebConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        contains('data not detected for criteria '
+            '${criteria.toPrintableIdOrText().toLowerCase()}'),
+      ));
       final actualOutput =
           QueryIMDBMoviesForKeyword(criteria).myConvertWebTextToTraversableTree(
         'htmlSampleError',
@@ -197,18 +202,21 @@ testing and punctuation
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
+      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          startsWith(
+            'expected map got String unable to interpret data wrongData',
+          )));
       final imdbKeywords = QueryIMDBMoviesForKeyword(criteria);
 
       // Invoke the functionality and collect results.
-      final actualResult = imdbKeywords.myConvertTreeToOutputType('map');
+      final actualResult = imdbKeywords.myConvertTreeToOutputType('wrongData');
 
       // Check the results.
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(
-        actualResult,
-        throwsA('expected map got String unable to interpret data map'),
-      );
+      expect(actualResult, expectedOutput);
     });
   });
 

@@ -160,17 +160,17 @@ linter:
     - no_runtimeType_toString
     - no_self_assignments
     - no_wildcard_variable_uses
-    # - non_constant_identifier_names
-    # - noop_primitive_operations
-    # - null_check_on_nullable_type_parameter
-    # - null_closures
-    # - one_member_abstracts
-    # - only_throw_errors
-    # - overridden_fields
-    # - package_api_docs
-    # - package_names
-    # - package_prefixed_library_names
-    # - parameter_assignments
+    - non_constant_identifier_names
+    - noop_primitive_operations
+    - null_check_on_nullable_type_parameter
+    - null_closures
+    - one_member_abstracts
+    - only_throw_errors
+    - overridden_fields
+    - package_api_docs
+    - package_names
+    - package_prefixed_library_names
+    - parameter_assignments
     # - prefer_adjacent_string_concatenation
     # - prefer_asserts_in_initializer_lists
     # - prefer_asserts_with_message

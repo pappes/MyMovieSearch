@@ -30,6 +30,8 @@ class QueryTMDBMovieDetails extends QueryTMDBCommon {
       final dto = TmdbMovieDetailConverter.dtoFromCompleteJsonMap(map);
       return dto;
     }
-    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+    throw TreeConvertException(
+      'expected map got ${map.runtimeType} unable to interpret data $map',
+    );
   }
 }

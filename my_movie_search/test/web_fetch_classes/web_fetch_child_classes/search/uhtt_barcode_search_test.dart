@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/uhtt_barcode.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/uhtt_barcode.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/uhtt_barcode.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 import '../../../test_helper.dart';
 
@@ -104,12 +105,12 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA(
-        startsWith(
-          'UhttBarcode results data not detected for criteria '
-          '${criteria.toPrintableIdOrText().toLowerCase()} in html:',
-        ),
-      );
+      final expectedOutput = throwsA(isA<WebConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        contains('results data not detected for criteria '
+            '${criteria.toPrintableIdOrText().toLowerCase()} in html:'),
+      ));
       final actualOutput =
           QueryUhttBarcodeSearch(criteria).myConvertWebTextToTraversableTree(
         'htmlSampleError',
@@ -177,18 +178,21 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
+      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        startsWith(
+            'expected map got String unable to interpret data wrongData'),
+      ));
       final webfetch = QueryUhttBarcodeSearch(criteria);
 
       // Invoke the functionality and collect results.
-      final actualResult = webfetch.myConvertTreeToOutputType('map');
+      final actualResult = webfetch.myConvertTreeToOutputType('wrongData');
 
       // Check the results.
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(
-        actualResult,
-        throwsA('expected map got String unable to interpret data map'),
-      );
+      expect(actualResult, expectedOutput);
     });
   });
 

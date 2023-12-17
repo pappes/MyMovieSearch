@@ -45,7 +45,9 @@ class QueryIMDBSuggestions
   @override
   Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
     if (map is Map) return ImdbSuggestionConverter.dtoFromCompleteJsonMap(map);
-    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+    throw TreeConvertException(
+      'expected map got ${map.runtimeType} unable to interpret data $map',
+    );
   }
 
   /// Include entire map in the movie title when an error occurs.
@@ -67,13 +69,15 @@ class QueryIMDBSuggestions
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    if ('' == webText) throw 'No content returned from web call';
+    if ('' == webText) {
+      throw WebConvertException('No content returned from web call');
+    }
     try {
       // Assume text is json encoded.
       final tree = jsonDecode(webText);
       return [tree];
     } catch (jsonException) {
-      throw 'Invalid json returned from web call $webText';
+      throw WebConvertException('Invalid json returned from web call $webText');
     }
   }
 }

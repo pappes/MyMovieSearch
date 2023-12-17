@@ -35,7 +35,7 @@ mixin ScrapeIMDBSearchDetails
       final json = fastParse(webText);
       final result = _scrapeSearchResult(webText, json);
       return result;
-    } catch (_) {
+    } on FastParseException {
       return _slowConvertWebTextToTraversableTree(webText);
     }
   }
@@ -51,7 +51,7 @@ mixin ScrapeIMDBSearchDetails
       final jsonTree = json.decode(jsonText);
       return _scrapeSearchResult(webText, jsonTree, jsonText);
     }
-    throw 'No search results found in html:$webText';
+    throw WebConvertException('No search results found in html:$webText');
   }
 
   /// Extract search content from json
@@ -73,8 +73,9 @@ mixin ScrapeIMDBSearchDetails
     } else if (null != TreeHelper(jsonTree).deepSearch(deepRelatedHeader)) {
       return _scrapeMovieDetails(webText);
     }
-    throw 'Possible IMDB site update, no search result found for search query, '
-        'json contents:${jsonText ?? jsonTree.toString()}';
+    throw WebConvertException(
+        'Possible IMDB site update, no search result found for search query, '
+        'json contents:${jsonText ?? jsonTree.toString()}');
   }
 
   /// Delegate web scraping to IMDBMovie web scraper.
@@ -92,7 +93,10 @@ mixin ScrapeIMDBSearchDetails
         ) ??
         [];
     if (resultNodes.isEmpty) {
-      throw 'No results';
+      throw WebConvertException(
+        'No IMDB nameResults or titleResults detected in json for criteria '
+        '$getCriteriaText',
+      );
     }
     for (final resultNode in resultNodes) {
       if (resultNode is List) {

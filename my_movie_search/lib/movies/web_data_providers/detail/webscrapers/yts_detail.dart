@@ -74,7 +74,9 @@ mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     }
 
     if (movieData.isEmpty) {
-      throw 'yts data not detected for criteria $getCriteriaText';
+      throw WebConvertException(
+        'yts data not detected for criteria $getCriteriaText',
+      );
     }
   }
 }

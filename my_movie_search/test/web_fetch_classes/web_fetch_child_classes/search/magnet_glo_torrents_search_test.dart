@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/magnet_glo_torrents.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_glo_torrents.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/magnet_glo_torrents.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 import '../../../test_helper.dart';
 
@@ -104,12 +105,12 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA(
-        startsWith(
-          'gloTorrents results data not detected for criteria '
-          '${criteria.toPrintableIdOrText().toLowerCase()} in html',
-        ),
-      );
+      final expectedOutput = throwsA(isA<WebConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        contains('results data not detected for criteria '
+            '${criteria.toPrintableIdOrText().toLowerCase()} in html:'),
+      ));
       final actualOutput =
           QueryGloTorrentsSearch(criteria).myConvertWebTextToTraversableTree(
         htmlSampleError,
@@ -174,17 +175,22 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
+      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        startsWith(
+            'expected map got String unable to interpret data wrongData'),
+      ));
       final gloTorrentsSearch = QueryGloTorrentsSearch(criteria);
-      final expectedValue =
-          throwsA('expected map got String unable to interpret data map');
 
       // Invoke the functionality and collect results.
-      final actualResult = gloTorrentsSearch.myConvertTreeToOutputType('map');
+      final actualResult =
+          gloTorrentsSearch.myConvertTreeToOutputType('wrongData');
 
       // Check the results.
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(actualResult, expectedValue);
+      expect(actualResult, expectedOutput);
     });
   });
 

@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/converters/omdb
 import 'package:my_movie_search/movies/web_data_providers/search/offline/omdb.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/omdb.dart';
 import 'package:my_movie_search/utilities/settings.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonSample(_) =>
@@ -174,6 +175,12 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
+      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        startsWith(
+            'expected map got String unable to interpret data wrongData'),
+      ));
       final testClass = QueryOMDBMovies(criteria);
 
       // Invoke the functionality and collect results.
@@ -182,10 +189,7 @@ void main() {
       // Check the results.
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(
-        actualResult,
-        throwsA('expected map got String unable to interpret data wrongData'),
-      );
+      expect(actualResult, expectedOutput);
     });
   });
 

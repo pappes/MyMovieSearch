@@ -61,7 +61,9 @@ class QueryUnknownSourceMocked
     );
 
     when(clientRequest.close()).thenAnswer((_) async {
-      if (mockedCriteria.criteriaTitle == 'EXCEPTION') throw 'go away!';
+      if (mockedCriteria.criteriaTitle == 'EXCEPTION') {
+        throw Exception('go away!');
+      }
       return clientResponse;
     });
 
@@ -116,7 +118,7 @@ class QueryUnknownSourceMocked
   static Future<List<MovieResultDTO>> treeToDto(dynamic tree) {
     if (tree is Map) return Future.value([_mapToDto(tree)]);
     if (tree is List) return Future.value(_listToDto(tree));
-    throw 'Unknown: $tree';
+    throw TreeConvertException('Unknown: $tree');
   }
 
   static MovieResultDTO _mapToDto(Map<dynamic, dynamic> map) =>
@@ -294,7 +296,11 @@ void main() {
       final actualResult = testClass.myConvertWebTextToTraversableTree('');
       await expectLater(
         actualResult,
-        throwsA('No content returned from web call'),
+        throwsA(isA<WebConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          startsWith('No content returned from web call'),
+        )),
       );
     });
     test('html doc', () {
@@ -368,8 +374,27 @@ void main() {
       expect(result, completion([jsonText]));
     });
 
-    test('exception handler', () async {
-      Future<Stream<String>> myError(dynamic s) async => throw s.toString();
+    test('generic exception handler', () async {
+      Future<Stream<String>> myError(dynamic s) async =>
+          throw Exception(s.toString());
+      const jsonpText = 'JsonP([{"key":"val"}])';
+      final testClass = WebFetchBasic(jsonpText)..selectedDataSource = myError;
+      final streamResult = await testClass.myConvertCriteriaToWebText();
+      String actualResult = '';
+      try {
+        await streamResult.toList();
+      } catch (error) {
+        actualResult = error.toString();
+      }
+      expect(
+          actualResult,
+          'Error in unknown with criteria $jsonpText '
+          'fetching web text :Exception: $jsonpText\n');
+    });
+
+    test('WebFetchException exception handler', () async {
+      Future<Stream<String>> myError(dynamic s) async =>
+          throw WebFetchException(s.toString());
       const jsonpText = 'JsonP([{"key":"val"}])';
       final testClass = WebFetchBasic(jsonpText)..selectedDataSource = myError;
       final streamResult = await testClass.myConvertCriteriaToWebText();
@@ -545,13 +570,52 @@ void main() {
       timeout: const Timeout(Duration(seconds: 5)),
     );
 
-    //override myConvertTreeToOutputType to throw an exception
+    //override myConvertTreeToOutputType to throw a generic exception
     test(
       'exception handling2',
       () {
         final testClass = QueryUnknownSourceMocked(criteriaDto)
           ..overriddenConvertTreeToOutputType =
-              (_) => throw 'Conversion Failed';
+              (_) => throw Exception('Conversion Failed');
+        final actualOutput = testClass.baseConvertTreeToOutputType(
+          Stream.fromIterable(_makeMaps(2)),
+        );
+        final expectedOutput = [
+          testClass.myYieldError('Error in unknown with criteria '
+              '${criteriaDto.criteriaTitle} '
+              'non-confomant baseConvertTreeToOutputType error '
+              'translating page map to objects '
+              ':Exception: Conversion Failed'),
+          testClass.myYieldError(
+            'Error in unknown with criteria '
+            '${criteriaDto.criteriaTitle} '
+            'non-confomant baseConvertTreeToOutputType error '
+            'translating page map to objects '
+            ':Exception: Conversion Failed',
+          ),
+        ];
+        final newId = int.parse(expectedOutput.first.uniqueId) - 1;
+        expectedOutput.first.uniqueId = newId.toString();
+
+        expect(
+          actualOutput,
+          emitsInOrder([
+            MovieResultDTOMatcher(expectedOutput.first),
+            MovieResultDTOMatcher(expectedOutput.last),
+          ]),
+        );
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+
+    // override myConvertTreeToOutputType
+    // to throw a TreeConvertException exception
+    test(
+      'exception handling3',
+      () {
+        final testClass = QueryUnknownSourceMocked(criteriaDto)
+          ..overriddenConvertTreeToOutputType =
+              (_) => throw TreeConvertException('Conversion Failed');
         final actualOutput = testClass.baseConvertTreeToOutputType(
           Stream.fromIterable(_makeMaps(2)),
         );
@@ -723,11 +787,33 @@ void main() {
 
     //override myConvertWebTextToTraversableTree to encapsulate errors
     test(
-      'child function exception handling',
+      'child function generic exception handling',
       () async {
         final testClass = QueryUnknownSourceMocked(criteriaDto)
           ..overriddenConvertWebTextToTraversableTree =
-              (_) => throw 'Search Failed';
+              (_) => throw Exception('Search Failed');
+        final actualOutput = testClass.baseConvertWebTextToTraversableTree(
+          Stream.fromIterable(['Part1', 'Part2']),
+        );
+
+        await expectLater(
+          actualOutput,
+          emitsError(
+            'Error in unknown with criteria ${criteriaDto.criteriaTitle} '
+            'non-confomant baseConvertWebTextToTraversableTree error interpreting web text as a map :Exception: Search Failed',
+          ),
+        );
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+
+    //override myConvertWebTextToTraversableTree to encapsulate errors
+    test(
+      'child function WebConvertException exception handling',
+      () async {
+        final testClass = QueryUnknownSourceMocked(criteriaDto)
+          ..overriddenConvertWebTextToTraversableTree =
+              (_) => throw WebConvertException('Search Failed');
         final actualOutput = testClass.baseConvertWebTextToTraversableTree(
           Stream.fromIterable(['Part1', 'Part2']),
         );
@@ -749,7 +835,7 @@ void main() {
       () async {
         final testClass = QueryUnknownSourceMocked(criteriaDto)
           ..overriddenConvertWebTextToTraversableTree =
-              (_) => throw 'Search Failed';
+              (_) => throw Exception('Search Failed');
         final actualOutput = testClass.baseConvertWebTextToTraversableTree(
           Stream.error('more exception handling'),
         );
@@ -890,10 +976,28 @@ void main() {
       timeout: const Timeout(Duration(seconds: 5)),
     );
     test(
-      'exception handling',
+      'generic exception handling',
       () async {
         final testClass = QueryUnknownSourceMocked(criteriaDto)
-          ..selectedDataSource = (_) => throw 'Convert Failed';
+          ..selectedDataSource = (_) => throw Exception('Convert Failed');
+        final actualOutput = testClass.baseConvertCriteriaToWebText();
+        await expectLater(
+          actualOutput,
+          emitsError(
+            'Error in unknown with criteria ${criteriaDto.criteriaTitle} '
+            'non-confomant baseConvertCriteriaToWebText error '
+            'fetching web text chunks :Exception: Convert Failed',
+          ),
+        );
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+    test(
+      'WebFetchException exception handling',
+      () async {
+        final testClass = QueryUnknownSourceMocked(criteriaDto)
+          ..selectedDataSource =
+              (_) => throw WebFetchException('Convert Failed');
         final actualOutput = testClass.baseConvertCriteriaToWebText();
         await expectLater(
           actualOutput,
@@ -931,7 +1035,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('EXCEPTION');
       final testClass = QueryUnknownSourceMocked(criteria);
       final expectedResult = 'Error in unknown with criteria '
-          '${criteria.criteriaTitle} fetching web text: :go away!';
+          '${criteria.criteriaTitle} fetching web text: :Exception: go away!';
       final fetchResult = await testClass.baseFetchWebText(criteria);
       expect(fetchResult, emitsError(expectedResult));
     });
@@ -990,7 +1094,7 @@ void main() {
         const input = 'EXCEPTION';
         const output =
             '[QueryIMDBTitleDetails] Error in unknown with criteria $input '
-            'fetching web text: :go away!';
+            'fetching web text: :Exception: go away!';
         testTransform(input, null, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),

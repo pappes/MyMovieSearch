@@ -39,7 +39,9 @@ class QueryPicclickBarcodeSearch
     if (map is Map) {
       return PicclickBarcodeSearchConverter.dtoFromCompleteJsonMap(map);
     }
-    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+    throw TreeConvertException(
+      'expected map got ${map.runtimeType} unable to interpret data $map',
+    );
   }
 
   /// converts <INPUT_TYPE> to a string representation.

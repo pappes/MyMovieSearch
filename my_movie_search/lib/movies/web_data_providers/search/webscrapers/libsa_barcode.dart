@@ -40,8 +40,10 @@ mixin ScrapeLibsaBarcodeSearch
     if (validPage) {
       return movieData;
     }
-    throw 'LibsaBarcode results data not detected for criteria '
-        '$getCriteriaText in html:$webText';
+    throw WebConvertException(
+      'LibsaBarcode results data not detected for criteria '
+      '$getCriteriaText in html:$webText',
+    );
   }
 
   /// extract each row from the table.

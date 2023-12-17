@@ -41,10 +41,12 @@ class TieredCache<T> {
 
   /// Get data from the cache.
   ///
-  /// Throws an exception if ther is not match in the cache.
+  /// The caller must validate the data in is the cache before calling get.
+  ///
+  /// Throws an error if there is no match in the cache.
   T get(dynamic key) {
     if (memoryCache.containsKey(key)) return memoryCache[key]!;
-    throw 'key not found';
+    throw CacheMissError('Requested key $key not found in the cache');
   }
 
   /// Put a data item as a list into into the cache.
@@ -61,4 +63,17 @@ class TieredCache<T> {
     }
     return;
   }
+}
+
+/// Exception used in myConvertTreeToOutputType.
+class CacheMissError implements Error {
+  String cause;
+  StackTrace stack = StackTrace.current;
+  CacheMissError(this.cause);
+
+  @override
+  StackTrace? get stackTrace => stack;
+
+  @override
+  String toString() => cause;
 }

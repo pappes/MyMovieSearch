@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/converters/goog
 import 'package:my_movie_search/movies/web_data_providers/search/google.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/google.dart';
 import 'package:my_movie_search/utilities/settings.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonSample(_) =>
@@ -218,6 +219,12 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
+      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          startsWith(
+            'expected map got String unable to interpret data wrongData',
+          )));
       final testClass = QueryGoogleMovies(criteria);
 
       // Invoke the functionality and collect results.
@@ -226,10 +233,7 @@ void main() {
       // Check the results.
       //NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(
-        actualResult,
-        throwsA('expected map got String unable to interpret data wrongData'),
-      );
+      expect(actualResult, expectedOutput);
     });
   });
 
@@ -274,7 +278,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryGoogleMovies(criteria);
       const expectedException = '''
-[QueryGoogleMovies] Error in google with criteria 123 convert error interpreting web text as a map :FormatException: Unexpected character (at character 1)
+[QueryGoogleMovies] Error in google with criteria 123 convert error interpreting web text as a map :Invalid json FormatException: Unexpected character (at character 1)
 not valid json
 ^
 ''';

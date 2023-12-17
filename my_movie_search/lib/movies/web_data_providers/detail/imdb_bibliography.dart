@@ -62,7 +62,9 @@ class QueryIMDBBibliographyDetails
     if (map is Map) {
       return ImdbBibliographyConverter.dtoFromCompleteJsonMap(map);
     }
-    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+    throw TreeConvertException(
+      'expected map got ${map.runtimeType} unable to interpret data $map',
+    );
   }
 
   /// Include entire map in the movie title when an error occurs.

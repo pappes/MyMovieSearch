@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_data/imdb_suggestion_converter_data.dart';
 import '../../../test_helper.dart';
 
@@ -161,8 +162,14 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput =
-          throwsA(startsWith('Invalid json returned from web call'));
+      final expectedOutput = throwsA(isA<WebConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        startsWith(
+          'Invalid json returned from web call',
+        ),
+      ));
+
       final actualOutput =
           QueryIMDBSuggestions(criteria).myConvertWebTextToTraversableTree(
         imdbErrorSample,

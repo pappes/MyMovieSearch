@@ -30,6 +30,8 @@ class QueryTMDBPersonDetails extends QueryTMDBCommon {
     if (map is Map) {
       return TmdbPersonDetailConverter.dtoFromCompleteJsonMap(map);
     }
-    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+    throw TreeConvertException(
+      'expected map got ${map.runtimeType} unable to interpret data $map',
+    );
   }
 }

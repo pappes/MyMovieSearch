@@ -44,7 +44,9 @@ mixin ScrapeIMDBBibliographyDetails
         }
       }
     } else {
-      throw 'imdb bibliography data not detected for criteria $getCriteriaText';
+      throw WebConvertException(
+        'imdb bibliography data not detected for criteria $getCriteriaText',
+      );
     }
   }
 

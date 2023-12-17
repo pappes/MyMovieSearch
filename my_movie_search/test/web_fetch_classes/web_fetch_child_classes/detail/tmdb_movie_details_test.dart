@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_movie_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_detail.dart';
 import 'package:my_movie_search/utilities/settings.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonSample(_) =>
@@ -83,8 +84,12 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
-      final expectedOutput = throwsA('tmdb call for criteria 123 returned '
-          'error:The resource you requested could not be found.');
+      final expectedOutput = throwsA(isA<WebConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        'tmdb call for criteria 123 returned '
+            'error:The resource you requested could not be found.',
+      ));
       final actualOutput =
           QueryTMDBMovieDetails(criteria).myConvertWebTextToTraversableTree(
         jsonSampleEmpty,
@@ -92,8 +97,12 @@ void main() {
       expect(actualOutput, expectedOutput);
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA('tmdb call for criteria 123 returned '
-          'error:Invalid API key: You must be granted a valid key.');
+      final expectedOutput = throwsA(isA<WebConvertException>().having(
+        (e) => e.cause,
+        'cause',
+        'tmdb call for criteria 123 returned '
+            'error:Invalid API key: You must be granted a valid key.',
+      ));
       final actualOutput =
           QueryTMDBMovieDetails(criteria).myConvertWebTextToTraversableTree(
         jsonSampleError,
@@ -174,6 +183,12 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
+      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          startsWith(
+            'expected map got String unable to interpret data wrongData',
+          )));
       final testClass = QueryTMDBMovieDetails(criteria)..myClearCache();
 
       // Invoke the functionality and collect results.
@@ -182,10 +197,7 @@ void main() {
       // Check the results.
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(
-        actualResult,
-        throwsA('expected map got String unable to interpret data wrongData'),
-      );
+      expect(actualResult, expectedOutput);
     });
   });
 

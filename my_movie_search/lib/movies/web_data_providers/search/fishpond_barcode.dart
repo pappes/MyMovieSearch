@@ -41,7 +41,9 @@ class QueryFishpondBarcodeSearch
         criteria,
       );
     }
-    throw 'expected map got ${map.runtimeType} unable to interpret data $map';
+    throw TreeConvertException(
+      'expected map got ${map.runtimeType} unable to interpret data $map',
+    );
   }
 
   /// converts <INPUT_TYPE> to a string representation.

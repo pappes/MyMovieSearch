@@ -84,7 +84,7 @@ abstract class QueryTMDBCommon
       // Assume text is json encoded.
       tree = jsonDecode(webText);
     } catch (jsonException) {
-      throw 'Invalid json returned from web call $webText';
+      throw WebConvertException('Invalid json returned from web call $webText');
     }
 
     if (tree is Map) {
@@ -92,13 +92,13 @@ abstract class QueryTMDBCommon
         return [tree];
       }
       if (tree.containsKey('status_message')) {
-        throw 'tmdb call for criteria $getCriteriaText '
-            'returned error:${tree['status_message']}';
+        throw WebConvertException('tmdb call for criteria $getCriteriaText '
+            'returned error:${tree['status_message']}');
       }
     }
 
-    throw 'tmdb results data not detected '
-        'for criteria $getCriteriaText in json:$webText';
+    throw WebConvertException('tmdb results data not detected '
+        'for criteria $getCriteriaText in json:$webText');
   }
 
   /// Allow response parsing for http 404

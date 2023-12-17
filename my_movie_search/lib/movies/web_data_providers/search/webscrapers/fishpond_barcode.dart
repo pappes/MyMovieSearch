@@ -38,8 +38,9 @@ mixin ScrapeFishpondBarcodeSearch
     if (validPage) {
       return movieData;
     }
-    throw 'FishpondBarcode results data not detected log: $searchLog '
-        'for criteria $getCriteriaText in html:$webText';
+    throw WebConvertException(
+        'FishpondBarcode results data not detected log: $searchLog '
+        'for criteria $getCriteriaText in html:$webText');
   }
 
   /// extract each row from the table.

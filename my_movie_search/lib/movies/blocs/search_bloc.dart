@@ -108,7 +108,7 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
   // Annotate the DTO with a read indicator
   void _addReadIndicator(MovieResultDTO dto, String? value) {
     if (null != value) {
-      dto.setReadIndicator(value.toString());
+      dto.setReadIndicator(value);
       _throttleUpdates();
     }
   }

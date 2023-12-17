@@ -39,7 +39,9 @@ mixin ScrapeIMDBCastDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
         _addCast(movieData, roleText ?? '?', cast);
       }
     } else {
-      throw 'imdb cast data not detected for criteria $getCriteriaText';
+      throw WebConvertException(
+        'imdb cast data not detected for criteria $getCriteriaText',
+      );
     }
   }
 
