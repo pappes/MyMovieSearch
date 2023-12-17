@@ -8,7 +8,7 @@ import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const resultTableSelector = '.table2';
-const detailLinkSelector = "a";
+const detailLinkSelector = 'a';
 const nameSelector = '.tdleft';
 const seedSelector = '.tdseed';
 const leechSelector = '.tdleech';

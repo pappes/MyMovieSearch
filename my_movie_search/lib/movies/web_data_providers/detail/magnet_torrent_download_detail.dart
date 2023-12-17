@@ -23,9 +23,9 @@ const jsonLeechersKey = 'leechers';
 class QueryTorrentDownloadDetail
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeTorrentDownloadDetail {
-  static const _baseURL = 'https://www.torrentdownload.info/';
-
   QueryTorrentDownloadDetail(super.criteria);
+
+  static const _baseURL = 'https://www.torrentdownload.info/';
 
   /// Describe where the data is coming from.
   @override

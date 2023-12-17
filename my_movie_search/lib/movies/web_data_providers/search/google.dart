@@ -19,10 +19,10 @@ const _googleResultsPerPage = 10; // More than 10 results in an error!
 /// ```
 class QueryGoogleMovies
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
+  QueryGoogleMovies(super.criteria);
+
   static const _baseURL =
       'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
-
-  QueryGoogleMovies(super.criteria);
 
   /// Describe where the data is coming from.
   @override

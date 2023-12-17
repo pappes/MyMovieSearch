@@ -30,29 +30,32 @@ class MovieDetailsPage extends StatefulWidget {
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
         restorationId: state.fullPath,
         child: MovieDetailsPage(
-            movie: state.extra as MovieResultDTO? ?? MovieResultDTO(),
-            restorationId: RestorableMovie.getRestorationId(state)),
+          movie: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+          restorationId: RestorableMovie.getRestorationId(state),
+        ),
       );
 }
 
 class _MovieDetailsPageState extends State<MovieDetailsPage>
     with RestorationMixin {
+  _MovieDetailsPageState();
+
   late MovieResultDTO _movie;
   bool _redrawRequired = true;
   final RestorableBool _descriptionExpanded = RestorableBool(false);
   final _restorableMovie = RestorableMovie();
   var _mobileLayout = true;
 
-  _MovieDetailsPageState();
-
   @override
   void initState() {
     super.initState();
     _movie = DtoCache.singleton().fetch(widget.movie);
-    _getDetails(SearchCriteriaDTO().init(
-      SearchCriteriaType.movieTitle,
-      title: _movie.uniqueId,
-    ));
+    _getDetails(
+      SearchCriteriaDTO().init(
+        SearchCriteriaType.movieTitle,
+        title: _movie.uniqueId,
+      ),
+    );
   }
 
   /// Fetch full person details from imdb.
@@ -77,8 +80,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     EasyThrottle.throttle(
       'MovieDetails${_movie.uniqueId}',
       const Duration(milliseconds: 500), // limit refresh to 2 per second
-      () => _showDetails(), // Initial screen draw
-      onAfter: () => _showDetails(), // Process throttled updates
+      _showDetails, // Initial screen draw
+      onAfter: _showDetails, // Process throttled updates
     );
   }
 
@@ -91,11 +94,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     _redrawRequired = false;
   }
 
-  void _mergeDetails(List<MovieResultDTO> details) {
-    for (final dto in details) {
-      _movie.merge(dto);
-    }
-  }
+  void _mergeDetails(List<MovieResultDTO> details) =>
+      details.forEach(_movie.merge);
 
   @override
   // The restoration bucket id for this page.

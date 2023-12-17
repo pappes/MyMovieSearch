@@ -21,9 +21,7 @@ void main() {
             final cache = TieredCache<String>();
 
             void addMapContentsToCache(Map<String, String> listItem) =>
-                listItem.forEach((key, value) {
-                  cache.add(key, value);
-                });
+                listItem.forEach(cache.add);
 
             input.forEach(addMapContentsToCache);
             for (final keyValuePair in expectedOutput.entries) {

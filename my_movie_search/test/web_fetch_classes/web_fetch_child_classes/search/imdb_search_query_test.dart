@@ -117,11 +117,13 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA(isA<WebConvertException>().having(
-        (e) => e.cause,
-        'cause',
-        contains('No search results found in html:'),
-      ));
+      final expectedOutput = throwsA(
+        isA<WebConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          contains('No search results found in html:'),
+        ),
+      );
       final actualOutput =
           QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
         htmlSampleError,
@@ -187,12 +189,15 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final expectedOutput = throwsA(isA<TreeConvertException>().having(
-        (e) => e.cause,
-        'cause',
-        startsWith(
-            'expected map got String unable to interpret data wrongData'),
-      ));
+      final expectedOutput = throwsA(
+        isA<TreeConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          startsWith(
+            'expected map got String unable to interpret data wrongData',
+          ),
+        ),
+      );
       final imdbSearch = QueryIMDBSearch(criteria);
 
       // Invoke the functionality and collect results.
@@ -221,10 +226,8 @@ void main() {
 
       // Invoke the functionality.
       await imdbSearch
-          .readList(
-            source: streamImdbSearchHtmlOfflineData,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: streamImdbSearchHtmlOfflineData)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -250,10 +253,8 @@ void main() {
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(
-            source: emitEmptyImdbSearchSample,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: emitEmptyImdbSearchSample)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -282,10 +283,8 @@ void main() {
 
       // Invoke the functionality.
       await imdbSearch
-          .readList(
-            source: _emitInvalidHtmlSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitInvalidHtmlSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
     });
 
@@ -302,10 +301,8 @@ void main() {
 
       // Invoke the functionality.
       await imdbSearch
-          .readList(
-            source: _emitUnexpectedHtmlSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitUnexpectedHtmlSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
 
       // Check the results.
@@ -326,10 +323,8 @@ void main() {
 
     // Invoke the functionality.
     await imdbSearch
-        .readList(
-          source: _emitUnexpectedJsonSample,
-        )
-        .then((values) => queryResult.addAll(values));
+        .readList(source: _emitUnexpectedJsonSample)
+        .then(queryResult.addAll);
     expect(queryResult.first.title, startsWith(expectedException));
 
     // Check the results.
@@ -348,10 +343,8 @@ void main() {
 
     // Invoke the functionality.
     await imdbSearch
-        .readList(
-          source: _emitEmtpyJsonSample,
-        )
-        .then((values) => queryResult.addAll(values));
+        .readList(source: _emitEmtpyJsonSample)
+        .then(queryResult.addAll);
     expect(queryResult.first.title, expectedException);
 
     // Check the results.
@@ -387,10 +380,8 @@ void main() {
 
       // Invoke the functionality.
       await imdbSearch
-          .readList(
-            source: title_data.streamImdbHtmlOfflineData,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: title_data.streamImdbHtmlOfflineData)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -431,10 +422,8 @@ void main() {
 
       // Invoke the functionality.
       await imdbSearch
-          .readList(
-            source: person_data.streamImdbHtmlOfflineData,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: person_data.streamImdbHtmlOfflineData)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),

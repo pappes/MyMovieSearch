@@ -25,11 +25,10 @@ class StaticJsonGenerator {
   static Future<Stream<String>> stuff(_) =>
       Future.value(Stream.value('"stuff"'));
 
-  static Future<Stream<String>> stuffDelayed(dynamic criteria) {
-    // Insert artificial delay to allow tests to observe prior processing.
-    return Future<void>.delayed(const Duration(milliseconds: 300))
-        .then((_) => stuff(criteria));
-  }
+  // Insert artificial delay to allow tests to observe prior processing.
+  static Future<Stream<String>> stuffDelayed(dynamic criteria) =>
+      Future<void>.delayed(const Duration(milliseconds: 300))
+          .then((_) => stuff(criteria));
 }
 
 void main() {
@@ -243,8 +242,10 @@ void main() {
         final criteria = SearchCriteriaDTO().fromString('nm$iteration');
         // Enqueue requests but do not wait for result.
         // ignore: unused_result
-        QueryIMDBNameDetails(criteria).readPrioritisedCachedList(
-          source: StaticJsonGenerator.stuffDelayed,
+        unawaited(
+          QueryIMDBNameDetails(criteria).readPrioritisedCachedList(
+            source: StaticJsonGenerator.stuffDelayed,
+          ),
         );
       }
       // Wait for queued requests to be intitialised but not completed.
@@ -304,12 +305,15 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () {
-      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+      final expectedOutput = throwsA(
+        isA<TreeConvertException>().having(
           (e) => e.cause,
           'cause',
           startsWith(
             'expected map got String unable to interpret data wrongData',
-          )));
+          ),
+        ),
+      );
       final criteria = SearchCriteriaDTO();
       final testClass = QueryIMDBNameDetails(criteria)..clearThreadedCache();
 
@@ -339,10 +343,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: streamImdbHtmlOfflineData,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: streamImdbHtmlOfflineData)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -374,7 +376,7 @@ void main() {
       // Invoke the functionality.
       await testClass
           .readList(source: _emitInvalidHtmlSample)
-          .then((values) => queryResult.addAll(values));
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
     });
 
@@ -394,7 +396,7 @@ void main() {
       // Invoke the functionality.
       await testClass
           .readList(source: _emitUnexpectedHtmlSample)
-          .then((values) => queryResult.addAll(values));
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
 
       // Check the results.

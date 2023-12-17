@@ -17,10 +17,6 @@ import 'mmsnav_unit_test.mocks.dart';
 // flutter pub run build_runner build --delete-conflicting-outputs
 @GenerateMocks([MMSFlutterCanvas])
 class TestMMSFlutterCanvas {
-  String? result;
-
-  final mockCanvas = MockMMSFlutterCanvas();
-
   TestMMSFlutterCanvas() {
     // Use Mockito to return a string describing the parameters.
     when(mockCanvas.viewWebPage(any)).thenAnswer((Invocation inv) {
@@ -33,6 +29,9 @@ class TestMMSFlutterCanvas {
       return Future.value(null);
     });
   }
+
+  String? result;
+  final mockCanvas = MockMMSFlutterCanvas();
 }
 
 void main() {

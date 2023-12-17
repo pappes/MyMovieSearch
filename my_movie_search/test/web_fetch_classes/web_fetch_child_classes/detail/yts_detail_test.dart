@@ -91,12 +91,14 @@ void main() {
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final criteria = SearchCriteriaDTO().fromString('batman');
-      final expectedOutput = throwsA(isA<WebConvertException>().having(
-        (e) => e.cause,
-        'cause',
-        contains('data not detected for criteria '
-            '${criteria.toPrintableIdOrText().toLowerCase()}'),
-      ));
+      final expectedOutput = throwsA(
+        isA<WebConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          contains('data not detected for criteria '
+              '${criteria.toPrintableIdOrText().toLowerCase()}'),
+        ),
+      );
       final actualOutput =
           QueryYtsDetails(criteria).myConvertWebTextToTraversableTree(
         htmlSampleError,
@@ -180,12 +182,15 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () {
-      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+      final expectedOutput = throwsA(
+        isA<TreeConvertException>().having(
           (e) => e.cause,
           'cause',
           startsWith(
             'expected map got String unable to interpret data wrongData',
-          )));
+          ),
+        ),
+      );
       final criteria = SearchCriteriaDTO();
       final testClass = QueryYtsDetails(criteria)..myClearCache();
 
@@ -215,10 +220,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: streamhtmlOfflineData,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: streamhtmlOfflineData)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -247,10 +250,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: _emitInvalidHtmlSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitInvalidHtmlSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
     });
 
@@ -267,10 +268,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: _emitUnexpectedHtmlSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitUnexpectedHtmlSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
 
       // Check the results.

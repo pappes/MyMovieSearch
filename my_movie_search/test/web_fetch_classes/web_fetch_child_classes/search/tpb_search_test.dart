@@ -100,12 +100,14 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA(isA<WebConvertException>().having(
-        (e) => e.cause,
-        'cause',
-        contains('results data not detected for criteria '
-            '${criteria.toPrintableIdOrText().toLowerCase()} in html:'),
-      ));
+      final expectedOutput = throwsA(
+        isA<WebConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          contains('results data not detected for criteria '
+              '${criteria.toPrintableIdOrText().toLowerCase()} in html:'),
+        ),
+      );
       final actualOutput =
           QueryTpbSearch(criteria).myConvertWebTextToTraversableTree(
         htmlSampleError,
@@ -173,12 +175,15 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final expectedOutput = throwsA(isA<TreeConvertException>().having(
-        (e) => e.cause,
-        'cause',
-        startsWith(
-            'expected map got String unable to interpret data wrongData'),
-      ));
+      final expectedOutput = throwsA(
+        isA<TreeConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          startsWith(
+            'expected map got String unable to interpret data wrongData',
+          ),
+        ),
+      );
       final tpbSearch = QueryTpbSearch(criteria);
 
       // Invoke the functionality and collect results.
@@ -207,10 +212,8 @@ void main() {
 
       // Invoke the functionality.
       await tpbSearch
-          .readList(
-            source: streamTpbHtmlOfflineData,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: streamTpbHtmlOfflineData)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -245,7 +248,7 @@ void main() {
           .readList(
             source: _emitInvalidHtmlSample,
           )
-          .then((values) => queryResult.addAll(values));
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
     });
 
@@ -264,10 +267,8 @@ void main() {
 
       // Invoke the functionality.
       await tpbSearch
-          .readList(
-            source: _emitUnexpectedHtmlSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitUnexpectedHtmlSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
 
       // Check the results.

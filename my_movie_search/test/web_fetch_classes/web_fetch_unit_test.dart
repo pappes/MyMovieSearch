@@ -40,10 +40,10 @@ typedef ConvertTreeToOutputType = Future<List<MovieResultDTO>> Function(
 //myConstructHeaders(client.headers);
 class QueryUnknownSourceMocked
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
+  QueryUnknownSourceMocked(this.mockedCriteria) : super(mockedCriteria);
+
   int httpReturnCode = 200;
   SearchCriteriaDTO mockedCriteria;
-
-  QueryUnknownSourceMocked(this.mockedCriteria) : super(mockedCriteria);
 
   /// Returns a new [HttpClient] instance to allow mocking in tests.
   @override
@@ -160,10 +160,10 @@ class WebFetchBasic extends WebFetchBase<String, String> {
 }
 
 class WebFetchCached extends WebFetchBasic {
+  WebFetchCached(super.criteria);
+
   String lastCriteria = '';
   String lastResult = '';
-
-  WebFetchCached(super.criteria);
 
   @override
   bool myIsResultCached() => criteria == lastCriteria;
@@ -296,11 +296,13 @@ void main() {
       final actualResult = testClass.myConvertWebTextToTraversableTree('');
       await expectLater(
         actualResult,
-        throwsA(isA<WebConvertException>().having(
-          (e) => e.cause,
-          'cause',
-          startsWith('No content returned from web call'),
-        )),
+        throwsA(
+          isA<WebConvertException>().having(
+            (e) => e.cause,
+            'cause',
+            startsWith('No content returned from web call'),
+          ),
+        ),
       );
     });
     test('html doc', () {
@@ -496,8 +498,7 @@ void main() {
         pageMap,
       );
       if (null != expectedValue) {
-        final expectedMatchers =
-            expectedValue.map((e) => MovieResultDTOMatcher(e));
+        final expectedMatchers = expectedValue.map(MovieResultDTOMatcher.new);
         expect(actualOutput, emitsInOrder(expectedMatchers));
       }
     }
@@ -800,7 +801,8 @@ void main() {
           actualOutput,
           emitsError(
             'Error in unknown with criteria ${criteriaDto.criteriaTitle} '
-            'non-confomant baseConvertWebTextToTraversableTree error interpreting web text as a map :Exception: Search Failed',
+            'non-confomant baseConvertWebTextToTraversableTree '
+            'error interpreting web text as a map :Exception: Search Failed',
           ),
         );
       },
@@ -1050,8 +1052,7 @@ void main() {
       final criteria = SearchCriteriaDTO()..criteriaTitle = input;
       final actualOutput = QueryUnknownSourceMocked(criteria).baseTransform();
       if (null != expectedValue) {
-        final expectedMatchers =
-            expectedValue.map((e) => MovieResultDTOMatcher(e));
+        final expectedMatchers = expectedValue.map(MovieResultDTOMatcher.new);
         expect(actualOutput, emitsInOrder(expectedMatchers));
       }
       if (null != expectedError) {

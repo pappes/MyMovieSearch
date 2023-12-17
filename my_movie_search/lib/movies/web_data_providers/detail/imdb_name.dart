@@ -16,10 +16,10 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryIMDBNameDetails
     extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBNameDetails, ThreadedCacheIMDBNameDetails {
+  QueryIMDBNameDetails(super.criteria);
+
   static const _baseURL = 'https://www.imdb.com/name/';
   static const defaultSearchResultsLimit = 100;
-
-  QueryIMDBNameDetails(super.criteria);
 
   /// Describe where the data is coming from.
   @override

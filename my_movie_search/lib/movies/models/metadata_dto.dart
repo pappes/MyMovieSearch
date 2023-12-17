@@ -48,7 +48,7 @@ enum DataSourceType {
 
 class MetaDataDTO {
   DataSourceType type = DataSourceType.none;
-  String uniqueId = "";
+  String uniqueId = '';
   DetailLevel populationDetailLevel = DetailLevel.none;
   DetailLevel viewDetailLevel = DetailLevel.none;
 }

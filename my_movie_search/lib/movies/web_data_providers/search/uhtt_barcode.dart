@@ -18,11 +18,11 @@ const jsonIdKey = 'barcode';
 class QueryUhttBarcodeSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeUhttBarcodeSearch {
+  QueryUhttBarcodeSearch(super.criteria);
+
   static const _baseURL =
       'http://uhtt.ru/dispatcher/?query=SELECT%20GOODS%20BY%20CODE(';
   static const _suffixURL = ')%20FORMAT.TDDO(VIEW_GOODS)';
-
-  QueryUhttBarcodeSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

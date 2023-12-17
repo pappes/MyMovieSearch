@@ -46,9 +46,7 @@ mixin ScrapeGloTorrentsSearch
     final rows = document.querySelector(resultTableSelector);
     if (null != rows) {
       validPage = true;
-      for (final row in rows.querySelectorAll('tr')) {
-        _processRow(row);
-      }
+      rows.querySelectorAll('tr').forEach(_processRow);
     }
   }
 
@@ -59,7 +57,7 @@ mixin ScrapeGloTorrentsSearch
       final result = <String, dynamic>{};
 
       result[jsonMagnetKey] =
-          row.querySelector(magnetSelector)?.attributes['href'] ?? "";
+          row.querySelector(magnetSelector)?.attributes['href'] ?? '';
       result[jsonNameKey] = columns[1].children.last.attributes['title'];
       result[jsonDescriptionKey] = columns[4].cleanText;
 

@@ -8,14 +8,15 @@ class JsonPState {
 
   @override
   String toString() =>
-      "activated=$activated buffering=$buffering buffer=$buffer";
+      'activated=$activated buffering=$buffering buffer=$buffer';
 }
 
 class JsonPConversionSink implements Sink<String> {
+  JsonPConversionSink(this._sink, this._jsonPDecoder);
+
   final Sink<Object> _sink;
   final JsonPDecoder _jsonPDecoder;
 
-  JsonPConversionSink(this._sink, this._jsonPDecoder);
   @override
   void add(String x) => _sink.add(_jsonPDecoder.convert(x));
   @override
@@ -38,12 +39,11 @@ class JsonPConversionSink implements Sink<String> {
 /// }
 /// ```
 class JsonPDecoder extends Converter<String, String> {
+  JsonPDecoder([this._jsFunction]);
+
   final _state = JsonPState();
 
   final String? _jsFunction;
-
-  /// Constructs a new JsonPEncoder.
-  JsonPDecoder([this._jsFunction]);
 
   /// Converts the given JSONP-string [input] to its corresponding json.
   @override
@@ -70,12 +70,12 @@ class JsonPDecoder extends Converter<String, String> {
   // from the start of the string stream.
   // Strips nothing if [ or { is encountered before (
   String stripPrefix(String input) {
-    final firstRound = input.indexOf("(");
-    final firstCurly = input.indexOf("{");
-    final firstSquare = input.indexOf("[");
+    final firstRound = input.indexOf('(');
+    final firstCurly = input.indexOf('{');
+    final firstSquare = input.indexOf('[');
     if (firstRound == -1 && firstCurly == -1 && firstSquare == -1) {
       // JSON has not started, JSONP has not finished
-      return "";
+      return '';
     }
 
     // Monitor for start of JSONP inner contents or start of JSON.
@@ -102,13 +102,13 @@ class JsonPDecoder extends Converter<String, String> {
   // if further text is streamed.
   String bufferSuffix(String input) {
     if (_state.buffering) {
-      final lastRound = input.lastIndexOf(")");
-      final lastCurly = input.lastIndexOf("}");
-      final lastSquare = input.lastIndexOf("]");
-      final firstRound = input.indexOf("(");
-      final firstCurly = input.indexOf("{");
-      final firstSquare = input.indexOf("[");
-      String output = "";
+      final lastRound = input.lastIndexOf(')');
+      final lastCurly = input.lastIndexOf('}');
+      final lastSquare = input.lastIndexOf(']');
+      final firstRound = input.indexOf('(');
+      final firstCurly = input.indexOf('{');
+      final firstSquare = input.indexOf('[');
+      String output = '';
 
       if (_state.buffer.isNotEmpty) {
         if (firstRound > -1 ||
@@ -119,10 +119,10 @@ class JsonPDecoder extends Converter<String, String> {
             lastSquare > -1) {
           // Release buffer if more json has been received.
           output = _state.buffer;
-          _state.buffer = "";
+          _state.buffer = '';
         } else {
           _state.buffer += input;
-          return "";
+          return '';
         }
       }
       if ((lastRound == -1) ||

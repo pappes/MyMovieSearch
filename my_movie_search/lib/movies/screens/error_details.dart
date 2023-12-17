@@ -20,16 +20,17 @@ class ErrorDetailsPage extends StatefulWidget {
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
         restorationId: state.fullPath,
         child: ErrorDetailsPage(
-            errorDto: state.extra as MovieResultDTO? ?? MovieResultDTO(),
-            restorationId: RestorableMovie.getRestorationId(state)),
+          errorDto: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+          restorationId: RestorableMovie.getRestorationId(state),
+        ),
       );
 }
 
 class _ErrorDetailsPageState extends State<ErrorDetailsPage>
     with RestorationMixin {
-  final _restorableMovie = RestorableMovie();
-
   _ErrorDetailsPageState();
+
+  final _restorableMovie = RestorableMovie();
 
   @override
   // The restoration bucket id for this page.

@@ -27,7 +27,7 @@ class MovieListRepository extends BaseMovieRepository {
   @override
   int getExtraDetails(int originalSearchUID, MovieResultDTO dto) {
     int searchesRequested = 0;
-    if ("null" != dto.uniqueId &&
+    if ('null' != dto.uniqueId &&
         !dto.uniqueId.startsWith(movieDTOMessagePrefix)) {
       final functions = SearchFunctions();
       _getDetailSources(dto, functions);

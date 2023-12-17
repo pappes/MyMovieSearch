@@ -132,12 +132,14 @@ testing and punctuation
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA(isA<WebConvertException>().having(
-        (e) => e.cause,
-        'cause',
-        contains('data not detected for criteria '
-            '${criteria.toPrintableIdOrText().toLowerCase()}'),
-      ));
+      final expectedOutput = throwsA(
+        isA<WebConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          contains('data not detected for criteria '
+              '${criteria.toPrintableIdOrText().toLowerCase()}'),
+        ),
+      );
       final actualOutput =
           QueryIMDBMoviesForKeyword(criteria).myConvertWebTextToTraversableTree(
         'htmlSampleError',
@@ -202,12 +204,15 @@ testing and punctuation
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+      final expectedOutput = throwsA(
+        isA<TreeConvertException>().having(
           (e) => e.cause,
           'cause',
           startsWith(
             'expected map got String unable to interpret data wrongData',
-          )));
+          ),
+        ),
+      );
       final imdbKeywords = QueryIMDBMoviesForKeyword(criteria);
 
       // Invoke the functionality and collect results.
@@ -236,10 +241,8 @@ testing and punctuation
 
       // Invoke the functionality.
       await imdbKeywords
-          .readList(
-            source: streamImdbKeywordsHtmlOfflineData,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: streamImdbKeywordsHtmlOfflineData)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -268,10 +271,8 @@ testing and punctuation
 
       // Invoke the functionality.
       await imdbKeywords
-          .readList(
-            source: _emitInvalidHtmlSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitInvalidHtmlSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
     });
 
@@ -288,10 +289,8 @@ testing and punctuation
 
       // Invoke the functionality.
       await imdbKeywords
-          .readList(
-            source: _emitUnexpectedHtmlSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitUnexpectedHtmlSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
 
       // Check the results.

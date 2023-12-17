@@ -19,14 +19,14 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryIMDBSuggestions
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ThreadedCacheIMDBSuggestions {
-  static const _baseURL = 'https://sg.media-imdb.com/suggestion/x/';
-  static const defaultSearchResultsLimit = 10;
-
-  /// Limit results to 10 most relevant by default.
   QueryIMDBSuggestions(super.criteria) {
     searchResultsLimit = WebFetchLimiter(defaultSearchResultsLimit);
     transformJsonP = true;
   }
+
+  static const _baseURL = 'https://sg.media-imdb.com/suggestion/x/';
+  // Limit results to 10 most relevant by default.
+  static const defaultSearchResultsLimit = 10;
 
   /// Describe where the data is coming from.
   @override

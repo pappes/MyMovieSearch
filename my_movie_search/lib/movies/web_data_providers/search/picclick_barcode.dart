@@ -19,10 +19,10 @@ const jsonUrlKey = 'url';
 class QueryPicclickBarcodeSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapePicclickBarcodeSearch {
+  QueryPicclickBarcodeSearch(super.criteria);
+
   static const _baseURL = 'https://picclick.com.au/?q=';
   static const _suffixURL = '+';
-
-  QueryPicclickBarcodeSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

@@ -18,10 +18,10 @@ const jsonUrlKey = 'url';
 class QueryLibsaBarcodeSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeLibsaBarcodeSearch {
+  QueryLibsaBarcodeSearch(super.criteria);
+
   static const _baseURL =
       'https://libraries.sa.gov.au/client/en_AU/sapubliclibraries/search/results?qu=';
-
-  QueryLibsaBarcodeSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

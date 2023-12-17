@@ -50,6 +50,8 @@ typedef DataSourceFn = Future<Stream<String>> Function(dynamic s);
 /// Methods without these prefixes are intended for external use
 /// and should not be overridden.
 abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
+  WebFetchBase(this.criteria);
+
   INPUT_TYPE criteria;
   WebFetchLimiter searchResultsLimit = WebFetchLimiter();
   bool transformJsonP = false;
@@ -58,9 +60,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   int maxDelay = 8000;
   // Online data source or offline data source.
   late DataSourceFn selectedDataSource = baseFetchWebText;
-
-  WebFetchBase(this.criteria);
-
   String get getCriteriaText => myFormatInputAsText();
   String? get _getFetchContext =>
       '${myDataSourceName()} with criteria $getCriteriaText';
@@ -344,9 +343,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     Stream<String> captureGenericError(dynamic error, _) {
       errors.add(
         baseConstructErrorMessage(
-            'non-confomant baseConvertCriteriaToWebText error '
-            'fetching web text chunks',
-            error),
+          'non-confomant baseConvertCriteriaToWebText error '
+          'fetching web text chunks',
+          error,
+        ),
       );
       return const Stream.empty();
     }
@@ -360,7 +360,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
     yield* await myConvertCriteriaToWebText()
         .timeout(
-            const Duration(seconds: 24)) // TODO(pappes): allow configurable
+          const Duration(seconds: 24),
+        ) // TODO(pappes): allow configurable
         .onError<WebFetchException>(captureError)
         .onError(captureGenericError);
     for (final error in errors) {
@@ -449,9 +450,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         captureError(error, 'convert error translating page map to objects');
 
     List<OUTPUT_TYPE> filterList(List<OUTPUT_TYPE> objects) {
-      for (final object in objects) {
-        myAddResultToCache(object);
-      }
+      objects.forEach(myAddResultToCache);
       // Construct result set with a subset of results.
       final capacity = searchResultsLimit.consume(objects.length);
       final subset = objects.take(capacity).toList();
@@ -578,8 +577,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
 /// Exception used in myConvertCriteriaToWebText.
 class WebFetchException implements Exception {
-  String cause;
   WebFetchException(this.cause);
+  String cause;
 
   @override
   String toString() => cause;
@@ -587,8 +586,8 @@ class WebFetchException implements Exception {
 
 /// Exception used in myConvertWebTextToTraversableTree.
 class WebConvertException implements Exception {
-  String cause;
   WebConvertException(this.cause);
+  String cause;
 
   @override
   String toString() => cause;
@@ -596,8 +595,8 @@ class WebConvertException implements Exception {
 
 /// Exception used in myConvertTreeToOutputType.
 class TreeConvertException implements Exception {
-  String cause;
   TreeConvertException(this.cause);
+  String cause;
 
   @override
   String toString() => cause;

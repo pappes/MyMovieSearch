@@ -23,11 +23,11 @@ const jsonLeechersKey = 'leechers';
 class QueryTorrentDownloadSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeTorrentDownloadSearch {
+  QueryTorrentDownloadSearch(super.criteria);
+
   // Note url /search/ will order by peers but /searchr/ will order by relevance
   static const _baseURL = 'https://www.torrentdownload.info/search?q=';
   static const _pageURL = '&p=';
-
-  QueryTorrentDownloadSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

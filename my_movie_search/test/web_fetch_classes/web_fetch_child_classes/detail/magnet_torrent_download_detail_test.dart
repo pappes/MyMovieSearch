@@ -102,11 +102,13 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA(isA<WebConvertException>().having(
-        (e) => e.cause,
-        'cause',
-        startsWith('TorrentDownload results data not detected for criteria'),
-      ));
+      final expectedOutput = throwsA(
+        isA<WebConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          startsWith('TorrentDownload results data not detected for criteria'),
+        ),
+      );
       final actualOutput = QueryTorrentDownloadDetail(criteria)
           .myConvertWebTextToTraversableTree(htmlSampleError);
       expect(actualOutput, expectedOutput);
@@ -190,12 +192,15 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+      final expectedOutput = throwsA(
+        isA<TreeConvertException>().having(
           (e) => e.cause,
           'cause',
           startsWith(
             'expected map got String unable to interpret data wrongData',
-          )));
+          ),
+        ),
+      );
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);
 
       // Invoke the functionality and collect results.
@@ -226,10 +231,8 @@ void main() {
 
       // Invoke the functionality.
       await torrentDownloadDetail
-          .readList(
-            source: streamHtmlOfflineData,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: streamHtmlOfflineData)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -262,10 +265,8 @@ void main() {
 
       // Invoke the functionality.
       await torrentDownloadDetail
-          .readList(
-            source: _emitInvalidHtmlSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitInvalidHtmlSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
     });
 
@@ -285,10 +286,8 @@ void main() {
 
       // Invoke the functionality.
       await torrentDownloadDetail
-          .readList(
-            source: _emitUnexpectedHtmlSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitUnexpectedHtmlSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
 
       // Check the results.

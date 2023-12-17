@@ -23,10 +23,10 @@ const jsonLeechersKey = 'leechers';
 /// ```
 class QueryTpbSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeTpbSearch {
+  QueryTpbSearch(super.criteria);
+
   static const _baseURL = 'https://tpb.party/search/';
   static const _pageURL = '/99/0';
-
-  QueryTpbSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

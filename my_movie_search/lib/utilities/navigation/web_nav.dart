@@ -30,11 +30,12 @@ const routeMovieDetails = 'moviedetails';
 const routeErrorDetails = 'errordetails';
 
 class RouteInfo {
+  RouteInfo(this.routePath, this.params, this.reference);
+
   final String routePath;
   final Object params;
   final String reference;
 
-  RouteInfo(this.routePath, this.params, this.reference);
   @override
   String toString() => json.encode({
         'path': routePath,
@@ -48,13 +49,12 @@ class RouteInfo {
 /// Headless testing can have a null context (no page navigation)
 /// or an alternate canvas implementation using the _headless constructor.
 class MMSNav {
-  late MMSFlutterCanvas canvas;
-
   MMSNav([BuildContext? context]) {
     canvas = MMSFlutterCanvas(context);
   }
-
   MMSNav.headless(this.canvas);
+
+  late MMSFlutterCanvas canvas;
 
   /// Render web page [url] in a child page of the current screen.
   ///
@@ -235,38 +235,43 @@ class MMSNav {
   static List<RouteBase> getRoutes() => [
         GoRoute(path: '/', pageBuilder: MovieSearchCriteriaPage.goRoute),
         GoRoute(
-            name: routeSearchCriteria,
-            path: '/$routeSearchCriteria',
-            pageBuilder: MovieSearchCriteriaPage.goRoute),
+          name: routeSearchCriteria,
+          path: '/$routeSearchCriteria',
+          pageBuilder: MovieSearchCriteriaPage.goRoute,
+        ),
         GoRoute(
-            name: routeSearchResults,
-            path: '/$routeSearchResults',
-            pageBuilder: MovieSearchResultsNewPage.goRoute),
+          name: routeSearchResults,
+          path: '/$routeSearchResults',
+          pageBuilder: MovieSearchResultsNewPage.goRoute,
+        ),
         GoRoute(
-            name: routePersonDetails,
-            path: '/$routePersonDetails',
-            pageBuilder: PersonDetailsPage.goRoute),
+          name: routePersonDetails,
+          path: '/$routePersonDetails',
+          pageBuilder: PersonDetailsPage.goRoute,
+        ),
         GoRoute(
-            name: routeMovieDetails,
-            path: '/$routeMovieDetails',
-            pageBuilder: MovieDetailsPage.goRoute),
+          name: routeMovieDetails,
+          path: '/$routeMovieDetails',
+          pageBuilder: MovieDetailsPage.goRoute,
+        ),
         GoRoute(
-            name: routeErrorDetails,
-            path: '/$routeErrorDetails',
-            pageBuilder: (context, state) => MaterialPage(
-                  restorationId: state.fullPath,
-                  child: ErrorDetailsPage(
-                    errorDto:
-                        state.extra as MovieResultDTO? ?? MovieResultDTO(),
-                    restorationId: getRestorationId(state),
-                  ),
-                )),
+          name: routeErrorDetails,
+          path: '/$routeErrorDetails',
+          pageBuilder: (context, state) => MaterialPage(
+            restorationId: state.fullPath,
+            child: ErrorDetailsPage(
+              errorDto: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+              restorationId: getRestorationId(state),
+            ),
+          ),
+        ),
       ];
 }
 
 class MMSFlutterCanvas {
-  BuildContext? context;
   MMSFlutterCanvas(this.context);
+
+  BuildContext? context;
 
   /// Render web page [url] in a child page of the current screen.
   ///

@@ -8,7 +8,7 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 class MovieSearchCriteriaPage extends StatefulWidget {
   const MovieSearchCriteriaPage({required this.restorationId, super.key});
 
-  static const String title = "Movie Search Criteria";
+  static const String title = 'Movie Search Criteria';
   final String restorationId;
 
   @override
@@ -108,8 +108,8 @@ class _CriteriaInput extends Center {
             autofillHints: const [AutofillHints.sublocality],
             style: hugeFont,
             decoration: InputDecoration(
-              labelText: "Movie",
-              hintText: "Enter movie or tv series to search for",
+              labelText: 'Movie',
+              hintText: 'Enter movie or tv series to search for',
               suffixIcon: IconButton(
                 icon: const Icon(Icons.clear),
                 onPressed: () {

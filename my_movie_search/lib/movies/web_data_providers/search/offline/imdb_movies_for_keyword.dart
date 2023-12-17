@@ -67,9 +67,9 @@ const intermediateMapList = [
     'titlePopulartyRatingCount': '374',
     'titleDuration': '61 min',
     'directors':
-        '{"Vonuck Heint\\n            ":"/name/nm0311837/?ref_=kw_li_dr_0"}',
+        r'{"Vonuck Heint\n            ":"/name/nm0311837/?ref_=kw_li_dr_0"}',
     'topCredits':
-        '{"Rano Romino\\n            ":"/name/nm0718931/?ref_=kw_li_st_0","Eara Sabvan\\n            ":"/name/nm0714533/?ref_=kw_li_st_1","Ataircan Dunlas\\n            ":"/name/nm0211835/?ref_=kw_li_st_2","Tnny Keom \\n            ":"/name/nm0414736/?ref_=kw_li_st_3"}',
+        r'{"Rano Romino\n            ":"/name/nm0718931/?ref_=kw_li_st_0","Eara Sabvan\n            ":"/name/nm0714533/?ref_=kw_li_st_1","Ataircan Dunlas\n            ":"/name/nm0211835/?ref_=kw_li_st_2","Tnny Keom \n            ":"/name/nm0414736/?ref_=kw_li_st_3"}',
     'keywords': 'dream',
   },
   {

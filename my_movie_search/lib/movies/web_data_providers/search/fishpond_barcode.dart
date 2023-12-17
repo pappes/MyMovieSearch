@@ -18,10 +18,10 @@ const jsonUrlKey = 'url';
 class QueryFishpondBarcodeSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeFishpondBarcodeSearch {
+  QueryFishpondBarcodeSearch(super.criteria);
+
   static const _baseURL = 'https://www.mightyape.com.au/search?s=';
   static const _suffixURL = '+';
-
-  QueryFishpondBarcodeSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

@@ -164,7 +164,7 @@ void main() {
     // Strip criteria, opening parenthesis and closing parenthesis
     // even across multiple lines.
     test('JsonPDecoder criteria change required', () {
-      const complexFunction = 'Avengers : \$eason 1 (DVD Box Set) Ml C. Hl';
+      const complexFunction = r'Avengers : $eason 1 (DVD Box Set) Ml C. Hl';
       final encoded = Uri.encodeComponent(complexFunction).replaceAll(' ', '+');
       final jsFunction = 'imdb\$$encoded';
       testMultiLineConversion(

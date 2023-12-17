@@ -13,9 +13,9 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// ```
 class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBSearchDetails {
-  static const _baseURL = 'https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=';
-
   QueryIMDBSearch(super.criteria);
+
+  static const _baseURL = 'https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=';
 
   /// Describe where the data is coming from.
   @override

@@ -143,7 +143,7 @@ mixin ScrapeIMDBMoviesForKeyword
   }
 
   String? _getCensorRating(Element? section) =>
-      section?.querySelector(".certificate")?.text.reduceWhitespace();
+      section?.querySelector('.certificate')?.text.reduceWhitespace();
 
   String? _getTypeInfo(Element? section) =>
       section?.querySelector('.lister-item-year')?.text.reduceWhitespace();

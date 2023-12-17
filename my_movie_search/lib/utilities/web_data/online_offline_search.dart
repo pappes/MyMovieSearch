@@ -15,7 +15,7 @@ class OnlineOfflineSelector {
     if (offline == null) {
       _offline = defaultToOffline;
     } else {
-      _offline = offline.toString().toLowerCase() == "true";
+      _offline = offline.toString().toLowerCase() == 'true';
     }
     logger.d(
       'OnlineOfflineSelector initialised to: '

@@ -67,10 +67,10 @@ class TieredCache<T> {
 
 /// Exception used in myConvertTreeToOutputType.
 class CacheMissError implements Error {
-  String cause;
-  StackTrace stack = StackTrace.current;
   CacheMissError(this.cause);
 
+  String cause;
+  StackTrace stack = StackTrace.current;
   @override
   StackTrace? get stackTrace => stack;
 

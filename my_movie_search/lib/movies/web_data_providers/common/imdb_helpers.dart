@@ -307,8 +307,8 @@ List<dynamic> fastParse(String webText) {
 }
 
 class FastParseException implements Exception {
-  String cause;
   FastParseException(this.cause);
+  String cause;
 
   @override
   String toString() => cause;

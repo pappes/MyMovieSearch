@@ -42,9 +42,7 @@ class DVDBarcodeScanner {
     }
   }
 
-  void _scan() => _showScanner()
-      .then((scannedBarcode) => _useBarcode(scannedBarcode))
-      .then(_retryScanIfFailed);
+  void _scan() => _showScanner().then(_useBarcode).then(_retryScanIfFailed);
 
   /// Uses camera to read 2D Barcodes.
   ///

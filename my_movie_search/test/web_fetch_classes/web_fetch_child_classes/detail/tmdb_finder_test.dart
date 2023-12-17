@@ -88,13 +88,15 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA(isA<WebConvertException>().having(
-        (e) => e.cause,
-        'cause',
-        startsWith('tmdb call for criteria '
-            '${criteria.toPrintableIdOrText()} '
-            'returned error:The resource you requested could not be found.'),
-      ));
+      final expectedOutput = throwsA(
+        isA<WebConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          startsWith('tmdb call for criteria '
+              '${criteria.toPrintableIdOrText()} '
+              'returned error:The resource you requested could not be found.'),
+        ),
+      );
       final actualOutput =
           QueryTMDBFinder(criteria).myConvertWebTextToTraversableTree(
         jsonSampleError,
@@ -178,12 +180,15 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () {
-      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+      final expectedOutput = throwsA(
+        isA<TreeConvertException>().having(
           (e) => e.cause,
           'cause',
           startsWith(
             'expected map got String unable to interpret data wrongData',
-          )));
+          ),
+        ),
+      );
       final testClass = QueryTMDBFinder(criteria);
 
       // Invoke the functionality and collect results.
@@ -211,10 +216,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: streamTmdbJsonOfflineData,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: streamTmdbJsonOfflineData)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -243,10 +246,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: _emitInvalidJsonSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitInvalidJsonSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
     });
 
@@ -264,10 +265,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: _emitUnexpectedJsonSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitUnexpectedJsonSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
 
       // Check the results.

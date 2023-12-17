@@ -19,24 +19,24 @@ const expectedDtoJsonStringList = [
 
 const intermediateMapList = [
   {
-    "Actress": [
+    'Actress': [
       {
-        "name": "Land of the fill",
-        "url": "/title/tt1234567/?ref_=nm_flmg_act_1",
+        'name': 'Land of the fill',
+        'url': '/title/tt1234567/?ref_=nm_flmg_act_1',
       },
-      {"name": "Fill the land", "url": "/title/tt1234568/?ref_=nm_flmg_act_1"},
+      {'name': 'Fill the land', 'url': '/title/tt1234568/?ref_=nm_flmg_act_1'},
     ],
-    "Director": [
+    'Director': [
       {
-        "name": "Land of the turtle",
-        "url": "/title/tt2234567/?ref_=nm_flmg_act_1",
+        'name': 'Land of the turtle',
+        'url': '/title/tt2234567/?ref_=nm_flmg_act_1',
       },
       {
-        "name": "Turtle the land",
-        "url": "/title/tt2234568/?ref_=nm_flmg_act_1",
+        'name': 'Turtle the land',
+        'url': '/title/tt2234568/?ref_=nm_flmg_act_1',
       },
     ],
-    "id": "nm7602562",
+    'id': 'nm7602562',
   }
 ];
 

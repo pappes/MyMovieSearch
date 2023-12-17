@@ -33,9 +33,9 @@ const innerElementTitle = 'Title';
 const innerElementYear = 'Year';
 const innerElementType = 'Type';
 const innerElementImage = 'Poster';
-const omdbResultTypeMovie = "movie";
-const omdbResultTypeSeries = "series";
-const omdbResultTypeEpisode = "episode";
+const omdbResultTypeMovie = 'movie';
+const omdbResultTypeSeries = 'series';
+const omdbResultTypeEpisode = 'episode';
 
 class OmdbMovieSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
@@ -44,14 +44,14 @@ class OmdbMovieSearchConverter {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
 
-    final resultsMatched = map[outerElementSearchSuccess] ?? "";
-    if (resultsMatched == "True") {
+    final resultsMatched = map[outerElementSearchSuccess] ?? '';
+    if (resultsMatched == 'True') {
       for (final movie in map[outerElementResultsCollection] as Iterable) {
         searchResults.add(dtoFromMap(movie as Map));
       }
     } else {
       final error = map[outerElementFailureReason]?.toString() ??
-          "No failure reason provided in results $map";
+          'No failure reason provided in results $map';
       searchResults.add(
         MovieResultDTO().error(
           '[OmdbMovieSearchConverter] $error',

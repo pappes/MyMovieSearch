@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -29,14 +30,15 @@ import '../../web_fetch_unit_test.mocks.dart';
 //HttpClientResponse.statusCode = 200
 //HttpClientResponse.transform(utf8.decoder) = stream<String>
 class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
-  /// Returns a new [HttpClient] instance to allow mocking in tests.
-  late int httpStatus;
-  String? expectedCriteria;
   QueryIMDBTitleDetailsMocked(
     super.criteria,
     this.expectedCriteria, {
     this.httpStatus = 200,
   });
+
+  /// Returns a new [HttpClient] instance to allow mocking in tests.
+  late int httpStatus;
+  String? expectedCriteria;
 
   @override
   HttpClient baseGetHttpClient() {
@@ -105,7 +107,7 @@ Map<String, dynamic> offlineMapList(String id) => {
         'pageProps': {
           'tconst': id,
           'aboveTheFold': {
-            "titleText": {"text": "$id."},
+            'titleText': {'text': '$id.'},
           },
         },
       },
@@ -182,7 +184,7 @@ void main() {
       // Collect the result of all the IMDB queries.
       final queryResult = <MovieResultDTO>[];
       for (final future in futures) {
-        future.then((value) => queryResult.addAll(value));
+        unawaited(future.then(queryResult.addAll));
       }
       for (final future in futures) {
         await future;

@@ -175,12 +175,15 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () async {
-      final expectedOutput = throwsA(isA<TreeConvertException>().having(
-        (e) => e.cause,
-        'cause',
-        startsWith(
-            'expected map got String unable to interpret data wrongData'),
-      ));
+      final expectedOutput = throwsA(
+        isA<TreeConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          startsWith(
+            'expected map got String unable to interpret data wrongData',
+          ),
+        ),
+      );
       final testClass = QueryOMDBMovies(criteria);
 
       // Invoke the functionality and collect results.
@@ -208,10 +211,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: streamOmdbJsonOfflineData,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: streamOmdbJsonOfflineData)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -240,10 +241,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: _emitInvalidJsonSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitInvalidJsonSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
     });
 
@@ -260,10 +259,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: _emitUnexpectedJsonSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitUnexpectedJsonSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
 
       // Check the results.

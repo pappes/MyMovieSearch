@@ -15,8 +15,6 @@ import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 import 'test_helper.dart';
 
-typedef DataSourceFn = String Function();
-
 class ThreadTest {
   static var _counter = 0;
   static Future<int> accumulate(int value) async => _counter += value;
@@ -152,8 +150,7 @@ Future<void> main() async {
       final actualOutput = emitStringChars(input);
       final doublePrint =
           actualOutput.printStream('print1:').printStream('print2:');
-      final revivedStream =
-          doublePrint.toList().then((list) => Stream.fromIterable(list));
+      final revivedStream = doublePrint.toList().then(Stream.fromIterable);
 
       expectLater(
         revivedStream,
@@ -187,7 +184,7 @@ Future<void> main() async {
           .printStreamFuture('print1:')
           .printStreamFuture('print2:')
           .then((stream) => stream.toList())
-          .then((list) => Stream.fromIterable(list));
+          .then(Stream.fromIterable);
 
       expect(
         doublePrint,
@@ -486,7 +483,7 @@ Future<void> main() async {
       testToNumber('0', 0);
       testToNumber('1', 1);
       testToNumber('9,999', 9999);
-      testToNumber('1.0', 1.0);
+      testToNumber('1.0', 1);
       testToNumber('9,999.99', 9999.99);
       testToNumber('number', null);
       testToNumber(null, null);
@@ -501,7 +498,7 @@ Future<void> main() async {
       testToNumber('0', 0);
       testToNumber('1', 1);
       testToNumber('9,999', 9999);
-      testToNumber('1.0', 1.0);
+      testToNumber('1.0', 1);
       testToNumber('9,999.99', 9999.99);
       testToNumber('number', -1);
     });
@@ -514,7 +511,7 @@ Future<void> main() async {
 
       testToNumber('1', 1);
       testToNumber('9,999', 9999);
-      testToNumber('1.0', 1.0);
+      testToNumber('1.0', 1);
       testToNumber('9,999.99', 9999.99);
       testToNumber('0', null);
     });
@@ -694,10 +691,10 @@ Future<void> main() async {
 
       // Convert a JSON encoded array to List<String>
       test('string array', () {
-        testFromJson('""', [""]);
-        testFromJson('["a"]', ["a"]);
-        testFromJson('["a", "b","c"]', ["a", "b", "c"]);
-        testFromJson('[""]', [""]);
+        testFromJson('""', ['']);
+        testFromJson('["a"]', ['a']);
+        testFromJson('["a", "b","c"]', ['a', 'b', 'c']);
+        testFromJson('[""]', ['']);
       });
 
       // Convert empty JSON encoded value to List<String>

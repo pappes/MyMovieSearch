@@ -24,10 +24,10 @@ const jsonLeechersKey = 'leechers';
 class QueryTorrentz2Search
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeTorrentz2Search {
+  QueryTorrentz2Search(super.criteria);
+
   static const _baseURL = 'https://torrentz2.nz/search?q=';
   static const _pageURL = '&page=';
-
-  QueryTorrentz2Search(super.criteria);
 
   /// Describe where the data is coming from.
   @override

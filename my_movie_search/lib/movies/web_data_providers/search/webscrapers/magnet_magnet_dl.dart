@@ -51,9 +51,7 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     final rows = document.querySelector(resultTableSelector);
     if (null != rows) {
       validPage = true;
-      for (final row in rows.querySelectorAll('tr')) {
-        _processRow(row);
-      }
+      rows.querySelectorAll('tr').forEach(_processRow);
     }
   }
 
@@ -62,7 +60,7 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     final result = <String, dynamic>{};
     result[jsonCategoryKey] = row.querySelector(detailSelector)?.cleanText;
     result[jsonMagnetKey] =
-        row.querySelector(magnetSelector)?.attributes['href'] ?? "";
+        row.querySelector(magnetSelector)?.attributes['href'] ?? '';
     result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;
     result[jsonDescriptionKey] =
         row.querySelector(seedSelector)?.previousElementSibling?.cleanText;

@@ -24,10 +24,10 @@ const jsonLeechersKey = 'leechers';
 class QueryMagnetDlSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeMagnetDlSearch {
+  QueryMagnetDlSearch(super.criteria);
+
   static const _baseURL = 'https://www.magnetdl.com/';
   static const _pageURL = '/';
-
-  QueryMagnetDlSearch(super.criteria);
 
   /// Describe where the data is coming from.
   @override

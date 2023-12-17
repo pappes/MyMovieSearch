@@ -49,7 +49,7 @@ class ImdbMoviesForKeywordConverter {
         .replaceAll('(', '')
         .replaceAll(')', '');
     var movieType = MovieResultDTOHelpers.getMovieContentType(
-      "${map[keywordTypeInfo]} $yearRange",
+      '${map[keywordTypeInfo]} $yearRange',
       seconds,
       uniqueId,
     )?.toString();

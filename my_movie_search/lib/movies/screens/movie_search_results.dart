@@ -29,21 +29,22 @@ class MovieSearchResultsNewPage extends StatefulWidget {
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
         restorationId: state.fullPath,
         child: MovieSearchResultsNewPage(
-            criteria: state.extra as SearchCriteriaDTO? ?? SearchCriteriaDTO(),
-            restorationId: RestorableSearchCriteria.getRestorationId(state)),
+          criteria: state.extra as SearchCriteriaDTO? ?? SearchCriteriaDTO(),
+          restorationId: RestorableSearchCriteria.getRestorationId(state),
+        ),
       );
 }
 
 class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     with RestorationMixin {
+  _MovieSearchResultsPageState();
+
   SearchBloc? _searchBloc;
   List<MovieResultDTO> _sortedList = [];
   late final RestorableMovieList _restorableList;
   late final RestorableTextEditingController _textController;
   late final FocusNode _criteriaFocusNode = FocusNode();
   late final FocusNode _searchFocusNode = FocusNode();
-
-  _MovieSearchResultsPageState();
 
   @override
   void initState() {
@@ -168,7 +169,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
           return Scrollbar(
             thumbVisibility: true,
             child: ListView.builder(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(16),
               itemCount: _sortedList.length,
               itemBuilder: _movieListBuilder,
               primary: true, //attach scrollbar controller to primary view
@@ -180,7 +181,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   Widget _movieListBuilder(BuildContext context, int listIndex) {
     if (listIndex >= _sortedList.length) {
       return const ListTile(
-        title: Text("More widgets than available data to populate them!"),
+        title: Text('More widgets than available data to populate them!'),
       );
     }
     return MovieTile(

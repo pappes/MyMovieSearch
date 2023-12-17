@@ -18,9 +18,9 @@ const omdbJsonSearchEmpty = '{"Response":"False","Error":"Movie not found!"}';
 /// QueryOMDBMovies().readList(criteria, limit: 10)
 /// ```
 class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static const _baseURL = 'https://www.omdbapi.com/?apikey=';
-
   QueryOMDBMovies(super.criteria);
+
+  static const _baseURL = 'https://www.omdbapi.com/?apikey=';
 
   /// Describe where the data is coming from.
   @override

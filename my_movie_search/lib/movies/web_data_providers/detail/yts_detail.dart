@@ -26,9 +26,9 @@ const jsonLeechersKey = 'leechers';
 /// ```
 class QueryYtsDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeYtsDetails {
-  static const _baseURL = 'https://yts.mx/movies/';
-
   QueryYtsDetails(super.criteria);
+
+  static const _baseURL = 'https://yts.mx/movies/';
 
   /// Describe where the data is coming from.
   @override

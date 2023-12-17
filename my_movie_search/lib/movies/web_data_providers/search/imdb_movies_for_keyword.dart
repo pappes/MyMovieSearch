@@ -21,11 +21,11 @@ const jsonPageKey = 'page';
 class QueryIMDBMoviesForKeyword
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBMoviesForKeyword {
+  QueryIMDBMoviesForKeyword(super.criteria);
+
   static const _baseURL =
       'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=';
   static const _pageURL = '&page=';
-
-  QueryIMDBMoviesForKeyword(super.criteria);
 
   /// Describe where the data is coming from.
   @override

@@ -162,13 +162,15 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
-      final expectedOutput = throwsA(isA<WebConvertException>().having(
-        (e) => e.cause,
-        'cause',
-        startsWith(
-          'Invalid json returned from web call',
+      final expectedOutput = throwsA(
+        isA<WebConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          startsWith(
+            'Invalid json returned from web call',
+          ),
         ),
-      ));
+      );
 
       final actualOutput =
           QueryIMDBSuggestions(criteria).myConvertWebTextToTraversableTree(
@@ -192,10 +194,8 @@ void main() {
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(
-            source: emitImdbSuggestionJsonSample,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: emitImdbSuggestionJsonSample)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -221,10 +221,8 @@ void main() {
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(
-            source: emitEmptyImdbSuggestionJsonSample,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: emitEmptyImdbSuggestionJsonSample)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -253,10 +251,8 @@ void main() {
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(
-            source: _emitInvalidJsonSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitInvalidJsonSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
     });
 
@@ -273,10 +269,8 @@ void main() {
 
       // Invoke the functionality.
       await imdbSuggestions
-          .readList(
-            source: _emitUnexpectedJsonSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitUnexpectedJsonSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
 
       // Check the results.

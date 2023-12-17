@@ -15,12 +15,11 @@ const _colMovieJson = 'json';
 
 // data model class
 class MovieModel {
+  MovieModel({required this.id, required this.uniqueId, required this.dtoJson});
+
   int id;
   String uniqueId;
   String dtoJson;
-
-  MovieModel({required this.id, required this.uniqueId, required this.dtoJson});
-
   // convenience method to create a Map from this MovieModel object
   Map<String, dynamic> toMap() => <String, dynamic>{
         _colMovieUniqueId: uniqueId,
@@ -47,14 +46,14 @@ extension ModelConversion on Map<dynamic, dynamic> {
 
 // singleton class to manage the database
 class DatabaseHelper {
-  // This is the actual database filename that is saved in the docs directory.
-  static const _databaseName = "MyMovieSearch.db";
-  // Increment this version when you need to change the schema.
-  static const _databaseVersion = 1;
-
   // Make this a singleton class.
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
+
+  // This is the actual database filename that is saved in the docs directory.
+  static const _databaseName = 'MyMovieSearch.db';
+  // Increment this version when you need to change the schema.
+  static const _databaseVersion = 1;
 
   // Only allow a single open connection to the database.
   static Database? _database;

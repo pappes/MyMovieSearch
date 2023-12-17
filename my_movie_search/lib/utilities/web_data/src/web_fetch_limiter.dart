@@ -8,6 +8,8 @@ const _defaultSearchResultsLimit = 100;
 
 /// Constrain the number of records that can be fetched from the web.
 class WebFetchLimiter {
+  WebFetchLimiter([this._classLimit = _defaultSearchResultsLimit]);
+
   final int? _classLimit;
   int? _instanceLimit;
   int currentUsage = 0;
@@ -16,8 +18,6 @@ class WebFetchLimiter {
 
   int get limit => _instanceLimit ?? _classLimit ?? double.maxFinite.toInt();
   set limit(int? newLimit) => _instanceLimit = newLimit;
-
-  WebFetchLimiter([this._classLimit = _defaultSearchResultsLimit]);
 
   @mustCallSuper
   int consume([int quantity = 1]) {

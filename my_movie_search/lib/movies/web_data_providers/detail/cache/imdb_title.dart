@@ -20,19 +20,16 @@ mixin ThreadedCacheIMDBTitleDetails
   //return _cache.isCached(criteria.criteriaTitle);
 
   /// Insert transformed data into cache.
+  // add search results result to cache, keyed by search criteria
   @override
-  Future<void> myAddResultToCache(MovieResultDTO fetchedResult) async {
-    // add search results result to cache, keyed by search criteria
-    return _cache.add(_makeKey(criteria), [fetchedResult]);
-  }
+  Future<void> myAddResultToCache(MovieResultDTO fetchedResult) async =>
+      _cache.add(_makeKey(criteria), [fetchedResult]);
 
   /// Retrieve cached result.
   @override
-  List<MovieResultDTO> myFetchResultFromCache() {
-    final value = _cache.get(_makeKey(criteria));
-    return value;
-    // TODO(pappes): treat value as a list not as a single DTO
-  }
+  List<MovieResultDTO> myFetchResultFromCache() =>
+      _cache.get(_makeKey(criteria));
+  // TODO(pappes): treat value as a list not as a single DTO
 
   /// Flush all data from the cache.
   @override

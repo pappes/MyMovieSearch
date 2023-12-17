@@ -20,11 +20,11 @@ const tmdbPosterPathPrefix = 'https://image.tmdb.org/t/p/w500';
 /// ```
 abstract class QueryTMDBCommon
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
+  QueryTMDBCommon(super.criteria);
+
   late DataSourceType source;
   late String baseURL;
   String midURL = '?api_key=';
-
-  QueryTMDBCommon(super.criteria);
 
   /// Must be orerridden by child classes.
   /// Static snapshot of data for offline operation.

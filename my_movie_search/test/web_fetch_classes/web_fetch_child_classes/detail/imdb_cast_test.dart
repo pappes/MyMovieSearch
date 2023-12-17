@@ -242,12 +242,15 @@ void main() {
     });
     // Test error detection.
     test('myConvertTreeToOutputType() errors', () {
-      final expectedOutput = throwsA(isA<TreeConvertException>().having(
+      final expectedOutput = throwsA(
+        isA<TreeConvertException>().having(
           (e) => e.cause,
           'cause',
           startsWith(
             'expected map got String unable to interpret data wrongData',
-          )));
+          ),
+        ),
+      );
       final criteria = SearchCriteriaDTO();
       final testClass = QueryIMDBCastDetails(criteria)..myClearCache();
 
@@ -277,10 +280,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: streamImdbHtmlOfflineData,
-          )
-          .then((values) => queryResult.addAll(values))
+          .readList(source: streamImdbHtmlOfflineData)
+          .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
@@ -320,10 +321,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: _emitInvalidHtmlSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitInvalidHtmlSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
     });
 
@@ -340,10 +339,8 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: _emitUnexpectedHtmlSample,
-          )
-          .then((values) => queryResult.addAll(values));
+          .readList(source: _emitUnexpectedHtmlSample)
+          .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
 
       // Check the results.

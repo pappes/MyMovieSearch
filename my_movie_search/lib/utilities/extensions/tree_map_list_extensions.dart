@@ -49,11 +49,6 @@ extension TreeSetHelper on Set<dynamic> {
 }
 
 class TreeHelper {
-  final dynamic tree;
-  late bool _isMap;
-  late bool _isIterable;
-  Iterable<dynamic>? asIterable;
-  Map<dynamic, dynamic>? asMap;
   // Constructor to save tree for later use.
   TreeHelper(this.tree) {
     _isMap = tree is Map;
@@ -65,6 +60,12 @@ class TreeHelper {
       asIterable = asMap!.entries;
     }
   }
+
+  final dynamic tree;
+  late bool _isMap;
+  late bool _isIterable;
+  Iterable<dynamic>? asIterable;
+  Map<dynamic, dynamic>? asMap;
 
   /// Recursively traverse a tree to pull a specific value out.
   List<dynamic>? deepSearch(

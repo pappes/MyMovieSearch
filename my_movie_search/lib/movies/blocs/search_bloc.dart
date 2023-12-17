@@ -48,7 +48,7 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
   StreamSubscription<MovieResultDTO>? _searchStatusSubscription;
   final MovieCollection _allResults = {};
   List<MovieResultDTO> sortedResults = [];
-  double _searchProgress = 0.0; // Value representing the search progress.
+  double _searchProgress = 0; // Value representing the search progress.
   bool _searchComplete = false;
   bool _throttleActive = false; // There hase been a recent result.
   bool _throttledDataPending = false; // There has been multple recent results.
@@ -91,7 +91,7 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
     _throttleName = 'SearchBloc${criteria.toPrintableString()}';
     _searchStatusSubscription = movieRepository
         .search(criteria)
-        .listen((dto) => _receiveDTO(dto))
+        .listen(_receiveDTO)
       ..onDone(_completeSearch);
   }
 
@@ -138,8 +138,10 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
                 '$collectionPrefix$collection',
                 id: newValue.uniqueId,
               )
-              .then((value) =>
-                  _addReadIndicator(_allResults[key]!, value?.toString()));
+              .then(
+                (value) =>
+                    _addReadIndicator(_allResults[key]!, value?.toString()),
+              );
         }
       }
     }
@@ -194,8 +196,8 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
     _throttledDataPending = EasyThrottle.throttle(
       _throttleName,
       const Duration(milliseconds: 500), // limit refresh to twice per second
-      () => _sendResults(), // Initial screen draw
-      onAfter: () => _throttleCompleted(), // Process throttled updates
+      _sendResults, // Initial screen draw
+      onAfter: _throttleCompleted, // Process throttled updates
     );
   }
 

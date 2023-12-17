@@ -17,10 +17,10 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryIMDBBibliographyDetails
     extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBBibliographyDetails {
+  QueryIMDBBibliographyDetails(super.criteria);
+
   static const _baseURL = 'https://www.imdb.com/name/';
   static const _baseURLsuffix = '/fullcredits/';
-
-  QueryIMDBBibliographyDetails(super.criteria);
 
   /// Describe where the data is coming from.
   @override

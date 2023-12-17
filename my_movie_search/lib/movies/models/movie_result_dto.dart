@@ -821,30 +821,30 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Create a placeholder for a value that can not be easily represented
   /// as a [MovieResultDTO].
   ///
-  MovieResultDTO toUnknown() {
-    return MovieResultDTO()
-      ..bestSource = bestSource
-      ..uniqueId = uniqueId
-      ..title = 'unknown'
-      ..alternateTitle = alternateTitle
-      ..charactorName = charactorName
-      ..description = description
-      ..type = type
-      ..year = year
-      ..yearRange = yearRange
-      ..creditsOrder = creditsOrder
-      ..userRating = userRating
-      ..userRatingCount = userRatingCount
-      ..censorRating = censorRating
-      ..runTime = runTime
-      ..imageUrl = imageUrl
-      ..language = language
-      ..languages = languages
-      ..genres = genres
-      ..keywords = keywords
-      ..sources = sources
-      ..related = related;
-  }
+  @factory
+  // ignore: invalid_factory_method_impl
+  MovieResultDTO toUnknown() => MovieResultDTO()
+    ..bestSource = bestSource
+    ..uniqueId = uniqueId
+    ..title = 'unknown'
+    ..alternateTitle = alternateTitle
+    ..charactorName = charactorName
+    ..description = description
+    ..type = type
+    ..year = year
+    ..yearRange = yearRange
+    ..creditsOrder = creditsOrder
+    ..userRating = userRating
+    ..userRatingCount = userRatingCount
+    ..censorRating = censorRating
+    ..runTime = runTime
+    ..imageUrl = imageUrl
+    ..language = language
+    ..languages = languages
+    ..genres = genres
+    ..keywords = keywords
+    ..sources = sources
+    ..related = related;
 
   /// Look at information provided
   /// to see if [MovieContentType] can be determined.
@@ -856,7 +856,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String id,
   ) {
     if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
-    if (id == "-1") return MovieContentType.none;
+    if (id == '-1') return MovieContentType.none;
     if (id.startsWith(movieDTOMessagePrefix)) return MovieContentType.error;
     final String title = info.toLowerCase().replaceAll('sci-fi', '');
     if (title.lastIndexOf('game') > -1) return MovieContentType.custom;
@@ -1162,7 +1162,7 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
       final dartString = "r'''\n${json.replaceAll("'", "'")}\n''',\n";
       listContents.write(formatDtoJson(dartString));
     }
-    return "[\n$listContents]";
+    return '[\n$listContents]';
   }
 
   /// Format JSON for readability
@@ -1173,15 +1173,15 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
       '\n  "related":{"',
     );
     formatted = formatted.replaceAll(
-      '"languages":"[\\"',
+      r'"languages":"[\"',
       '\n      "languages":"[\\"',
     );
     formatted = formatted.replaceAll(
-      '"genres":"[\\"',
+      r'"genres":"[\"',
       '\n      "genres":"[\\"',
     );
     formatted = formatted.replaceAll(
-      '"keywords":"[\\"',
+      r'"keywords":"[\"',
       '\n      "keywords":"[\\"',
     );
     formatted = formatted.replaceAll(
@@ -1498,10 +1498,8 @@ extension DTOCompare on MovieResultDTO {
   /// Rank movies based on spoken language.
   ///
   /// English > mostly English > some English > no English > silent
-  int languageCategory() {
-    // Need to reverse the enum order for use with CompareTo().
-    return language.index * -1;
-  }
+  // Need to reverse the enum order for use with CompareTo().
+  int languageCategory() => language.index * -1;
 
   /// Rank movies based on popular opinion.
   ///

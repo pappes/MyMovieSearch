@@ -36,20 +36,20 @@ const expectedDtoJsonStringList = [
 final intermediateMapList = [jsonDecode(jsonSampleFull)];
 
 const tmdbTree = {
-  "adult": false,
-  "also_known_as": <void>[],
-  "biography": "I came, I saw, I went",
-  "birthday": "1963-12-18",
-  "deathday": null,
-  "gender": 0,
-  "homepage": null,
-  "id": 11234,
-  "imdb_id": "nm0109036",
-  "known_for_department": "Editing",
-  "name": "Fred Abraham",
-  "place_of_birth": null,
-  "popularity": 0.6,
-  "profile_path": "/kU3B75TyRiCfivoq.jpg",
+  'adult': false,
+  'also_known_as': <void>[],
+  'biography': 'I came, I saw, I went',
+  'birthday': '1963-12-18',
+  'deathday': null,
+  'gender': 0,
+  'homepage': null,
+  'id': 11234,
+  'imdb_id': 'nm0109036',
+  'known_for_department': 'Editing',
+  'name': 'Fred Abraham',
+  'place_of_birth': null,
+  'popularity': 0.6,
+  'profile_path': '/kU3B75TyRiCfivoq.jpg',
 };
 
 final jsonSampleInner = jsonEncode(tmdbTree);

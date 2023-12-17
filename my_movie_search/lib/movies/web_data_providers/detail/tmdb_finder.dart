@@ -50,12 +50,7 @@ class QueryTMDBFinder extends QueryTMDBCommon {
         'expected map got ${map.runtimeType} unable to interpret data $map',
       );
     }
-    final results = <MovieResultDTO>[];
-    for (final movie
-        in TmdbFinderConverter.dtoFromCompleteJsonMap(map, imdbId)) {
-      results.add(movie);
-    }
-    return results;
+    return TmdbFinderConverter.dtoFromCompleteJsonMap(map, imdbId);
   }
 
   /// API call to TMDB returning the movie details for [searchCriteria].

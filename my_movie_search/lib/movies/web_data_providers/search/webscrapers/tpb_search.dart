@@ -45,9 +45,8 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     final rows = document.querySelector(resultTableSelector);
     if (null != rows) {
       validPage = true;
-      for (final row in rows.querySelectorAll('tr')) {
-        _processRow(row);
-      }
+
+      rows.querySelectorAll('tr').forEach(_processRow);
     }
   }
 
@@ -58,7 +57,7 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       final result = <String, dynamic>{};
       result[jsonCategoryKey] = columns[0].cleanText;
       result[jsonMagnetKey] =
-          columns[1].querySelector(magnetSelector)?.attributes['href'] ?? "";
+          columns[1].querySelector(magnetSelector)?.attributes['href'] ?? '';
       result[jsonNameKey] = columns[1].querySelector(nameSelector)?.cleanText;
       result[jsonDescriptionKey] =
           columns[1].querySelector(detailSelector)?.cleanText;

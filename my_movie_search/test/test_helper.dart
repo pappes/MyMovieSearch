@@ -62,16 +62,16 @@ Matcher containsSubstring(String substring, {String startsWith = ''}) {
 
 /// Expectation matcher for test framework to compare DTOs
 class MovieResultDTOMatcher extends Matcher {
-  MovieResultDTO expected;
-  bool related;
-  bool verbose;
-  late MovieResultDTO _actual;
-
   MovieResultDTOMatcher(
     this.expected, {
     this.related = true,
     this.verbose = false,
   });
+
+  MovieResultDTO expected;
+  bool related;
+  bool verbose;
+  late MovieResultDTO _actual;
 
   @override
   // Tell test framework what content was expected.
@@ -112,16 +112,16 @@ class MovieResultDTOMatcher extends Matcher {
 
 /// Expectation matcher for test framework to compare DTO lists
 class MovieResultDTOListMatcher extends Matcher {
-  List<MovieResultDTO> expected;
-  bool related;
-  bool verbose;
-  late List<MovieResultDTO> _actual;
-
   MovieResultDTOListMatcher(
     this.expected, {
     this.related = true,
     this.verbose = false,
   });
+
+  List<MovieResultDTO> expected;
+  bool related;
+  bool verbose;
+  late List<MovieResultDTO> _actual;
 
   @override
   // Tell test framework what content was expected.
@@ -176,17 +176,17 @@ class MovieResultDTOListMatcher extends Matcher {
 
 /// Expectation matcher for comparing volitile DTO list data
 class MovieResultDTOListFuzzyMatcher extends Matcher {
-  List<MovieResultDTO> expected;
-  int matchQuantity = 0;
-  int percentMatch;
-  late List<MovieResultDTO> _actual;
-
   /// Constructor for fuzzy match list comparison
   ///
   /// [expected] is the list of DTOs to look for
   /// [percentMatch] allows a portion of the records
   /// to match instead of all records
   MovieResultDTOListFuzzyMatcher(this.expected, {this.percentMatch = 100});
+
+  List<MovieResultDTO> expected;
+  int matchQuantity = 0;
+  int percentMatch;
+  late List<MovieResultDTO> _actual;
 
   @override
   // Tell test framework what content was expected.
@@ -277,18 +277,6 @@ Stream<List<int>> emitByteStream(String text) async* {
   }
 }
 
-/// Converts [text] to a stream containing a list of bytes.
-///
-/// Emits all bytes at the same time.
-Stream<List<int>> emitConsolidatedByteStream(String text) async* {
-  final lst = <int>[];
-
-  for (final rune in text.runes.toList()) {
-    lst.add(rune);
-  }
-  yield lst;
-}
-
 /// Converts [records] to a stream of DTOs.
 Stream<MovieResultDTO> streamMovieResultDTOFromJsonMap(
   Iterable<Map<String, dynamic>> records,
@@ -301,17 +289,17 @@ Stream<MovieResultDTO> streamMovieResultDTOFromJsonMap(
 /// Helper function to make a unique dto containing unique values.
 MovieResultDTO makeResultDTOWithRelatedDTO(String sample) {
   final mainDto = makeResultDTO(sample);
-  final relatedDto1 = makeResultDTO("{sample}1");
-  final relatedDto2 = makeResultDTO("{sample}2");
-  final relatedDto3 = makeResultDTO("{sample}3");
-  final relatedDto4 = makeResultDTO("{sample}4");
+  final relatedDto1 = makeResultDTO('{sample}1');
+  final relatedDto2 = makeResultDTO('{sample}2');
+  final relatedDto3 = makeResultDTO('{sample}3');
+  final relatedDto4 = makeResultDTO('{sample}4');
   mainDto.related = {
-    "director": {
+    'director': {
       relatedDto1.uniqueId: relatedDto1,
       relatedDto2.uniqueId: relatedDto2,
     },
-    "actor": {relatedDto3.uniqueId: relatedDto3},
-    "writer": {relatedDto4.uniqueId: relatedDto4},
+    'actor': {relatedDto3.uniqueId: relatedDto3},
+    'writer': {relatedDto4.uniqueId: relatedDto4},
   };
   return mainDto;
 }
@@ -361,16 +349,14 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
 }
 
 /// Helper function to make a unique dto containing unique values.
-SearchCriteriaDTO makeCriteriaDTO(String sample) {
-  return SearchCriteriaDTO()
-    ..criteriaType = SearchCriteriaType.movieDTOList
-    ..criteriaTitle = '${sample}_criteriaTitle'
-    ..searchId = '${sample}_searchId'
-    ..criteriaList = [
-      makeResultDTO('first'),
-      makeResultDTO('second'),
-    ];
-}
+SearchCriteriaDTO makeCriteriaDTO(String sample) => SearchCriteriaDTO()
+  ..criteriaType = SearchCriteriaType.movieDTOList
+  ..criteriaTitle = '${sample}_criteriaTitle'
+  ..searchId = '${sample}_searchId'
+  ..criteriaList = [
+    makeResultDTO('first'),
+    makeResultDTO('second'),
+  ];
 
 class TestApp extends StatelessWidget {
   const TestApp({

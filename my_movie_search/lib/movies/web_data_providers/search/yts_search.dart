@@ -15,12 +15,11 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// QueryYtsSearch().readList(criteria, limit: 10)
 /// ```
 class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  static const _baseURL = 'https://yts.mx/ajax/search?query=';
-
-  /// Limit results to 10 most relevant by default.
   QueryYtsSearch(super.criteria) {
     transformJsonP = true;
   }
+
+  static const _baseURL = 'https://yts.mx/ajax/search?query=';
 
   /// Describe where the data is coming from.
   @override

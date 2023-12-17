@@ -16,10 +16,10 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryIMDBTitleDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBTitleDetails, ThreadedCacheIMDBTitleDetails {
+  QueryIMDBTitleDetails(super.criteria);
+
   static const _baseURL = 'https://www.imdb.com/title/';
   static const _baseURLsuffix = '/?ref_=fn_tt_tt_1';
-
-  QueryIMDBTitleDetails(super.criteria);
 
   /// Describe where the data is coming from.
   @override

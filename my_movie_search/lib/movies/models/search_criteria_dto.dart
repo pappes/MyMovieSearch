@@ -125,14 +125,10 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   }
 
   /// Create an ID or text search for [SearchCriteriaDTO] if available.
-  String toPrintableIdOrText() {
-    return toIds() ?? criteriaTitle;
-  }
+  String toPrintableIdOrText() => toIds() ?? criteriaTitle;
 
   /// Create a unique string that represents this search.
-  String toUniqueReference() {
-    return toIds() ?? '$criteriaType:$criteriaTitle';
-  }
+  String toUniqueReference() => toIds() ?? '$criteriaType:$criteriaTitle';
 
   /// Convert a [Map] into a [SearchCriteriaDTO] object.
   ///
@@ -149,15 +145,13 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     return converter.dtoFromPrimitives(stringList);
   }
 
-  SearchCriteriaDTO fromString(String criteria) {
-    return SearchCriteriaDTO()
-      ..criteriaTitle = criteria
-      ..criteriaType = SearchCriteriaType.movieTitle;
-  }
+  SearchCriteriaDTO fromString(String criteria) => SearchCriteriaDTO()
+    ..criteriaTitle = criteria
+    ..criteriaType = SearchCriteriaType.movieTitle;
 
   SearchCriteriaDTO init(
     SearchCriteriaType source, {
-    String title = "",
+    String title = '',
     List<MovieResultDTO> list = const [],
   }) {
     criteriaType = source;

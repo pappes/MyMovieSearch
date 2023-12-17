@@ -27,19 +27,6 @@ import 'dart:isolate';
 ///          ThreadRunner(ThreadRunner.verySlow).runAsync(myFunction, input2);
 /// ```
 class ThreadRunner {
-  late SendPort _mainThreadOutboundPort;
-  static const String fast = 'Fast Thread';
-  static const String slow = 'Slow Thread';
-  static const String verySlow = 'Very Slow Thread';
-  static String? latestThreadName;
-  static String? currentThreadName = 'Default Thread';
-
-  bool ready = false;
-  late Future<bool> initialised;
-  final _completer = Completer<bool>();
-
-  static final Map<String, ThreadRunner> _namedThreads = {};
-
   ThreadRunner() {
     initialised = _completer.future;
     _init(latestThreadName ?? 'Unnamed Thread');
@@ -54,6 +41,19 @@ class ThreadRunner {
     _namedThreads[name] = thread;
     return thread;
   }
+
+  late SendPort _mainThreadOutboundPort;
+  static const String fast = 'Fast Thread';
+  static const String slow = 'Slow Thread';
+  static const String verySlow = 'Very Slow Thread';
+  static String? latestThreadName;
+  static String? currentThreadName = 'Default Thread';
+
+  bool ready = false;
+  late Future<bool> initialised;
+  final _completer = Completer<bool>();
+
+  static final Map<String, ThreadRunner> _namedThreads = {};
 
   /// Requests execution of [function] with value [parameter]
   ///
@@ -86,7 +86,7 @@ class ThreadRunner {
 
     _mainThreadOutboundPort.send([message, receivePort.sendPort]);
 
-    return await receivePort.first;
+    return receivePort.first;
   }
 
   /// Spawn another thread and capture port to send future requests to.

@@ -1,4 +1,4 @@
-import 'dart:async' show StreamController;
+import 'dart:async' show StreamController, unawaited;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -12,12 +12,12 @@ import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 /// [search] provides a stream of incomplete and complete results.
 /// [close] can be used to cancel a search.
 class BaseMovieRepository {
+  BaseMovieRepository();
+
   late SearchCriteriaDTO criteria;
   StreamController<MovieResultDTO>? _movieStreamController;
   var _awaitingProviders = 0;
   static int _searchUID = 1;
-
-  BaseMovieRepository();
 
   /// Return a stream of data matching [criteria].
   ///
@@ -36,7 +36,9 @@ class BaseMovieRepository {
     // TODO(pappes): error handling
     initSearch(_searchUID, criteria);
     // TODO(pappes): make fetch duration configurable.
-    Future<void>.delayed(const Duration(seconds: 30)).then((_) => close());
+    unawaited(
+      Future<void>.delayed(const Duration(seconds: 30)).then((_) => close()),
+    );
 
     yield* _movieStreamController!.stream;
   }

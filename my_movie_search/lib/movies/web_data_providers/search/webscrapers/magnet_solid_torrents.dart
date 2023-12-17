@@ -61,7 +61,7 @@ mixin ScrapeSolidTorrentsSearch
         result[jsonCategoryKey] =
             row.querySelector(categorySelector)?.cleanText;
         result[jsonMagnetKey] =
-            row.querySelector(magnetSelector)?.attributes['href'] ?? "";
+            row.querySelector(magnetSelector)?.attributes['href'] ?? '';
         result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;
         result[jsonSeedersKey] = stats.children[2].cleanText;
         result[jsonLeechersKey] = stats.children[3].cleanText;

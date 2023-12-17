@@ -72,7 +72,7 @@ class TmdbFinderConverter {
       }
     } else {
       final error = map[outerElementFailureReason]?.toString() ??
-          "No failure reason provided in results $map";
+          'No failure reason provided in results $map';
       searchResults.add(
         MovieResultDTO().error(
           '[TmdbFinderConverter] $error',
@@ -140,20 +140,19 @@ class TmdbFinderConverter {
   static MovieResultDTO dtoFromPersonMap(
     Map<dynamic, dynamic> map,
     String imdbId,
-  ) {
-    return MovieResultDTO()
-      ..init(
-        bestSource: DataSourceType.tmdbFinder,
-        uniqueId: map[movieElementTMDBIdentity]?.toString(),
-        title: map[personElementCommonTitle]?.toString(),
-        userRatingCount: map[personElementPopularity]?.toString(),
-        type: MovieContentType.person.toString(),
-      )
-      // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
-      // no longer need to have alternateId field!
-      ..uniqueId = imdbId;
-    // TODO expand partial URL to full url
-    // e.g. person.imageUrl =
-    //      map[personElementPosterPath]?.toString() ?? person.imageUrl;
-  }
+  ) =>
+      MovieResultDTO()
+        ..init(
+          bestSource: DataSourceType.tmdbFinder,
+          uniqueId: map[movieElementTMDBIdentity]?.toString(),
+          title: map[personElementCommonTitle]?.toString(),
+          userRatingCount: map[personElementPopularity]?.toString(),
+          type: MovieContentType.person.toString(),
+        )
+        // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
+        // no longer need to have alternateId field!
+        ..uniqueId = imdbId;
+  // TODO expand partial URL to full url
+  // e.g. person.imageUrl =
+  //      map[personElementPosterPath]?.toString() ?? person.imageUrl;
 }

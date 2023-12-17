@@ -53,7 +53,7 @@ mixin ScrapeTorrentz2Search on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     final result = <String, dynamic>{};
     result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;
     result[jsonMagnetKey] =
-        row.querySelector(magnetSelector)?.attributes['href'] ?? "";
+        row.querySelector(magnetSelector)?.attributes['href'] ?? '';
     final columns = row.querySelector(detailSelector)?.children;
 
     if (5 == columns?.length) {

@@ -98,9 +98,7 @@ mixin ThreadedCacheIMDBSuggestions
   }
 
   /// Retrieve cached result.
-  MovieResultDTO? _fetchResultFromCache() {
-    return _cache.get(_makeKey());
-  }
+  MovieResultDTO? _fetchResultFromCache() => _cache.get(_makeKey());
 
   String? _enqueueRequest(String priority) {
     // Track and throttle low priority requests
