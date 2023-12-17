@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -42,7 +44,9 @@ class DVDBarcodeScanner {
     }
   }
 
-  void _scan() => _showScanner().then(_useBarcode).then(_retryScanIfFailed);
+  void _scan() => unawaited(
+        _showScanner().then(_useBarcode).then(_retryScanIfFailed),
+      );
 
   /// Uses camera to read 2D Barcodes.
   ///

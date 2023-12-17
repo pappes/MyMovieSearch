@@ -100,7 +100,7 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
-    test('Run myConvertWebTextToTraversableTree()', () {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       const expectedOutput = intermediateMapList;
       final actualOutput =
           QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
@@ -108,7 +108,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
       const expectedOutput = <void>[];
       final actualOutput =
           QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
@@ -116,7 +116,8 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results',
+        () async {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
@@ -355,7 +356,8 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search redirect', () {
-    test('Run QueryIMDBTitleDetails myConvertWebTextToTraversableTree()', () {
+    test('Run QueryIMDBTitleDetails myConvertWebTextToTraversableTree()',
+        () async {
       const expectedOutput = title_data.intermediateMapList;
 
       final imdbSearch = QueryIMDBSearch(criteria);

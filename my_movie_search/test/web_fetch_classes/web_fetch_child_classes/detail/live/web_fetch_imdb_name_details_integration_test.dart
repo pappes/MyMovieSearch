@@ -39,6 +39,7 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
   final List<Future<List<MovieResultDTO>>> futures = [];
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
+    // ignore: discarded_futures
     final future = QueryIMDBNameDetails(criteria).readList();
     futures.add(future);
   }

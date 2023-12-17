@@ -61,8 +61,10 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
         .thenAnswer((_) => _getOfflineHTML('$expectedCriteria'));
 
     //when(clientRequest.close()).thenAnswer((_) async => clientResponse);
+    // ignore: discarded_futures
     when(clientRequest.close()).thenAnswer(getClientResponse);
 
+    // ignore: discarded_futures
     when(client.getUrl(expectedUri))
         .thenAnswer((_) => Future.value(clientRequest));
     when(clientRequest.headers).thenAnswer((_) => headers);
@@ -150,8 +152,10 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(
 
     Future<List<MovieResultDTO>> future;
     if (online) {
+      // ignore: discarded_futures
       future = imdbDetails.readList();
     } else {
+      // ignore: discarded_futures
       future = imdbDetails.readList(
         source: _offlineSearch,
       );

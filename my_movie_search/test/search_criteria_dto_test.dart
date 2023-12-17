@@ -11,7 +11,7 @@ import 'test_helper.dart';
 class RestorationTestParent extends State with RestorationMixin {
   RestorationTestParent(this.uniqueId);
   String uniqueId;
-  final criteria = RestorableSearchCriteria();
+  final _criteria = RestorableSearchCriteria();
 
   @override
   // The restoration bucket id for this page.
@@ -21,7 +21,7 @@ class RestorationTestParent extends State with RestorationMixin {
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) =>
       // Register our property to be saved every time it changes,
       // and to be restored every time our app is killed by the OS!
-      registerForRestoration(criteria, '${uniqueId}criteria');
+      registerForRestoration(_criteria, '${uniqueId}criteria');
 
   @override
   Widget build(BuildContext context) => const Text('');
@@ -74,11 +74,11 @@ void main() {
       final rtp = RestorationTestParent(criteria.criteriaTitle)
         ..restoreState(null, true);
 
-      final encoded = rtp.criteria.dtoToPrimitives(criteria);
-      rtp.criteria.initWithValue(rtp.criteria.fromPrimitives(encoded));
-      final encoded2 = rtp.criteria.toPrimitives();
+      final encoded = rtp._criteria.dtoToPrimitives(criteria);
+      rtp._criteria.initWithValue(rtp._criteria.fromPrimitives(encoded));
+      final encoded2 = rtp._criteria.toPrimitives();
 
-      compareCriteria(criteria, rtp.criteria.value);
+      compareCriteria(criteria, rtp._criteria.value);
       expect(encoded, encoded2);
     });
   });

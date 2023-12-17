@@ -76,7 +76,7 @@ class QueryIMDBSuggestions
       // Assume text is json encoded.
       final tree = jsonDecode(webText);
       return [tree];
-    } catch (jsonException) {
+    } on FormatException {
       throw WebConvertException('Invalid json returned from web call $webText');
     }
   }

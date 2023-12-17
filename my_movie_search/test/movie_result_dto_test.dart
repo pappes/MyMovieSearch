@@ -14,8 +14,8 @@ import 'test_helper.dart';
 class RestorationTestParent extends State with RestorationMixin {
   RestorationTestParent(this.uniqueId);
   String uniqueId;
-  final movie = RestorableMovie();
-  final list = RestorableMovieList();
+  final _movie = RestorableMovie();
+  final _list = RestorableMovieList();
 
   @override
   // The restoration bucket id for this page.
@@ -25,8 +25,8 @@ class RestorationTestParent extends State with RestorationMixin {
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     // Register our property to be saved every time it changes,
     // and to be restored every time our app is killed by the OS!
-    registerForRestoration(movie, '${uniqueId}movie');
-    registerForRestoration(list, '${uniqueId}list');
+    registerForRestoration(_movie, '${uniqueId}movie');
+    registerForRestoration(_list, '${uniqueId}list');
   }
 
   @override
@@ -97,6 +97,21 @@ void main() {
       testUserContentCategory(MovieContentType.series, 3);
       testUserContentCategory(MovieContentType.miniseries, 4);
       testUserContentCategory(MovieContentType.movie, 5);
+    });
+    // Categorise dto based on title type from MovieContentType.
+    test('viewedCategory', () {
+      void testViewedCategory(String input, int expectedOutput) {
+        final testInput = MovieResultDTO()..setReadIndicator(input);
+        expect(testInput.viewedCategory(), expectedOutput);
+      }
+
+      testViewedCategory(ReadHistory.starred.name, 99);
+      testViewedCategory(ReadHistory.custom.name, 0);
+      testViewedCategory(ReadHistory.none.name, 0);
+      testViewedCategory(ReadHistory.read.name, 0);
+      testViewedCategory(ReadHistory.reading.name, 1);
+      testViewedCategory('AndNowForSomethingCompletelyDifferent', 0);
+      testViewedCategory('', 98);
     });
     // Categorise dto based on popularity from userRating and Year.
     // A rating of 2/5 is better than a rating of less than 2/5.
@@ -477,11 +492,11 @@ void main() {
       final rtp = RestorationTestParent(movie.uniqueId)
         ..restoreState(null, true);
 
-      final encoded = rtp.movie.dtoToPrimitives(movie);
-      rtp.movie.initWithValue(rtp.movie.fromPrimitives(encoded));
-      final encoded2 = rtp.movie.toPrimitives();
+      final encoded = rtp._movie.dtoToPrimitives(movie);
+      rtp._movie.initWithValue(rtp._movie.fromPrimitives(encoded));
+      final encoded2 = rtp._movie.toPrimitives();
 
-      expect(movie, MovieResultDTOMatcher(rtp.movie.value));
+      expect(movie, MovieResultDTOMatcher(rtp._movie.value));
       expect(encoded, encoded2);
     });
     // Convert a restorable dto list to JSON
@@ -495,11 +510,11 @@ void main() {
       final rtp = RestorationTestParent(list[1].uniqueId)
         ..restoreState(null, true);
 
-      final encoded = rtp.list.listToPrimitives(list);
-      rtp.list.initWithValue(rtp.list.fromPrimitives(encoded));
-      final encoded2 = rtp.list.toPrimitives();
+      final encoded = rtp._list.listToPrimitives(list);
+      rtp._list.initWithValue(rtp._list.fromPrimitives(encoded));
+      final encoded2 = rtp._list.toPrimitives();
 
-      expect(list, MovieResultDTOListMatcher(rtp.list.value));
+      expect(list, MovieResultDTOListMatcher(rtp._list.value));
       expect(encoded, encoded2);
     });
   });
@@ -653,6 +668,16 @@ void main() {
       'tv series special',
       () => testContent(MovieContentType.series, 'special', null, 'tt1234'),
     );
+  });
+
+  group('read indicator', () {
+    test('set and get', () {
+      final dto = MovieResultDTO();
+      const expectedValue = 'testing';
+      dto.setReadIndicator(expectedValue);
+      final actualValue = dto.getReadIndicator();
+      expect(actualValue, expectedValue);
+    });
   });
 
   group('merge', () {

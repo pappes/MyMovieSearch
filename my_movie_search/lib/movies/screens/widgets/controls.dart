@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
@@ -16,68 +15,68 @@ bool useMobileLayout(BuildContext context) =>
 ///
 /// Diplayed image has pinch to zoom enabled.
 ///
-/// [showImages] handler can be supplied to allow drilldown on the image source.
+/// showImages handler can be supplied to allow drilldown on the image source.
 ///
 class Poster extends Widget {
   Poster(
-    this.context, {
-    required this.url,
+    this._context, {
+    required String url,
     void Function()? showImages,
     super.key,
-  }) {
-    bigUrl = getBigImage(url);
-    smallImage = Image(
-      image: NetworkImage(url),
+  }) : _url = url {
+    _bigUrl = getBigImage(_url);
+    _smallImage = Image(
+      image: NetworkImage(_url),
       alignment: Alignment.topCenter,
       fit: BoxFit.fitWidth,
     );
-    largeImage = CachedNetworkImage(
-      imageUrl: bigUrl,
-      placeholder: (context, url) => smallImage,
+    _largeImage = CachedNetworkImage(
+      imageUrl: _bigUrl,
+      placeholder: (context, url) => _smallImage,
       errorWidget: (context, url, error) => const Icon(Icons.error),
     );
     final tapableImage = GestureDetector(
       onTap: _pinchToZoom,
-      child: largeImage,
+      child: _largeImage,
     );
 
     final imageText = SelectableText(
-      url,
+      _url,
       onTap: _pinchToZoom,
       style: tinyFont,
     );
     final imageSearch = ElevatedButton(
       onPressed: showImages,
-      child: imageSearchIcon,
+      child: _imageSearchIcon,
     );
 
-    controls = ExpandedColumn(
+    _controls = ExpandedColumn(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        if (url.startsWith(webAddressPrefix))
+        if (_url.startsWith(webAddressPrefix))
           tapableImage
         else
-          placeholderMessage,
+          _placeholderMessage,
         imageText,
         if (showImages != null) imageSearch,
       ],
     );
   }
 
-  static const Widget placeholderMessage = Text('NoImage');
-  final Widget imageSearchIcon = const Icon(Icons.image_search);
-  final BuildContext context;
-  late final Widget controls;
-  late final String url;
-  late final String bigUrl;
-  late final Widget smallImage;
-  late final Widget largeImage;
+  static const Widget _placeholderMessage = Text('NoImage');
+  final Widget _imageSearchIcon = const Icon(Icons.image_search);
+  final BuildContext _context;
+  late final Widget _controls;
+  late final String _url;
+  late final String _bigUrl;
+  late final Widget _smallImage;
+  late final Widget _largeImage;
 
   @override
-  Element createElement() => controls.createElement();
+  Element createElement() => _controls.createElement();
 
   Future<Dialog?> _pinchToZoom() =>
-      showImageViewer(context, NetworkImage(bigUrl));
+      showImageViewer(_context, NetworkImage(_bigUrl));
 }
 
 /// A [Widget] that includes a [Column] that expands so that it

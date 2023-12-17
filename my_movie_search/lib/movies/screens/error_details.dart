@@ -3,6 +3,13 @@ import 'package:go_router/go_router.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
+/// Display details of an error meessag to the user.
+///
+/// Public parameters are:
+/// * [restorationId]
+///   *  A unique value used to restore this instance of the object.
+/// * [errorDto]
+///   *  a [MovieResultDTO] containing the error message in the title field
 class ErrorDetailsPage extends StatefulWidget {
   const ErrorDetailsPage({
     required this.restorationId,

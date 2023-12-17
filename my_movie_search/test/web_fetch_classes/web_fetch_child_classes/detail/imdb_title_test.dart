@@ -20,7 +20,7 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() => Settings.singleton().init());
+  setUpAll(() async => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       final input = SearchCriteriaDTO();
       const expectedOutput = intermediateMapList;
       final testClass = QueryIMDBTitleDetails(input);

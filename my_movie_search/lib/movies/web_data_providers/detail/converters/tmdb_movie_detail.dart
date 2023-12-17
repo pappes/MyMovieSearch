@@ -137,10 +137,6 @@ class TmdbMovieDetailConverter {
     if (null == mins) {
       return null;
     }
-    try {
-      return Duration(minutes: mins);
-    } catch (e) {
-      return null;
-    }
+    return Duration(minutes: mins);
   }
 }

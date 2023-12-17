@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -62,12 +64,16 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   void _getDetails(SearchCriteriaDTO criteria) {
     if (_movie.uniqueId.startsWith(imdbTitlePrefix)) {
       /// Fetch movie details
-      QueryIMDBTitleDetails(criteria).readList().then(_requestShowDetails);
+      unawaited(
+        QueryIMDBTitleDetails(criteria).readList().then(_requestShowDetails),
+      );
 
       /// Fetch cast details from cache using a separate thread.
-      QueryIMDBCastDetails(criteria)
-          .readPrioritisedCachedList(priority: ThreadRunner.fast)
-          .then(_requestShowDetails);
+      unawaited(
+        QueryIMDBCastDetails(criteria)
+            .readPrioritisedCachedList(priority: ThreadRunner.fast)
+            .then(_requestShowDetails),
+      );
     }
   }
 
@@ -258,13 +264,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         _descriptionExpanded.value = !_descriptionExpanded.value;
       });
 
-  final caseInsensativeSuggestion =
+  final _caseInsensativeSuggestion =
       RegExp('[sS][uU][gG][gG][eE][sS][tT][iI][oO][nN]');
 
-  List<Widget> _suggestions() => _related(caseInsensativeSuggestion);
+  List<Widget> _suggestions() => _related(_caseInsensativeSuggestion);
 
   List<Widget> _cast() =>
-      _related(caseInsensativeSuggestion, invertFilter: true);
+      _related(_caseInsensativeSuggestion, invertFilter: true);
 
   Widget _keywords() {
     Widget makeHyperlink(String keyword) => InkWell(

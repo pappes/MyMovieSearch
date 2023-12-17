@@ -207,7 +207,8 @@ class MovieTile extends ListTile {
               case ReadHistory.custom:
                 return const Icon(Icons.question_mark);
             }
-          } catch (_) {
+            // ignore: avoid_catching_errors
+          } on ArgumentError {
             logger.t('old inidcator = ${movie.uniqueId} $read');
             if (read != null && read.isNotEmpty) {
               return const Icon(Icons.visibility_off, fill: 1);

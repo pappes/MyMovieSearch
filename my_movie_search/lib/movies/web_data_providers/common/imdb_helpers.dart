@@ -186,18 +186,17 @@ CensorRatingType? getImdbCensorRating(String? type) {
   if (type.lastIndexOf('Banned') > -1) return CensorRatingType.adult;
   if (type.lastIndexOf('X') > -1) return CensorRatingType.adult;
   if (type.lastIndexOf('R21') > -1) return CensorRatingType.adult;
+  if (type.lastIndexOf('21') > -1) return CensorRatingType.adult;
   // Suitable for Only Adults
   if (type.lastIndexOf('SOA') > -1) return CensorRatingType.adult;
 
   if (type.lastIndexOf('Z') > -1) return CensorRatingType.restricted;
-  //R includes R, R(A), RP18
-  if (type.lastIndexOf('R') > -1) return CensorRatingType.restricted;
-  //if (type.lastIndexOf('Unrated') > -1) return CensorRatingType.restricted;
   if (type.lastIndexOf('Mature') > -1) return CensorRatingType.restricted;
   if (type.lastIndexOf('Adult') > -1) return CensorRatingType.restricted;
   if (type.lastIndexOf('GA') > -1) return CensorRatingType.restricted;
   //18 includes 18, R18, M18, RP18, 18+, VM18
   if (type.lastIndexOf('18') > -1) return CensorRatingType.restricted;
+  if (type.lastIndexOf('19') > -1) return CensorRatingType.restricted;
   if (type.lastIndexOf('17') > -1) return CensorRatingType.restricted; //NC-17
 
   // 16 includes 16, NC16, R16, RP16, VM 16
@@ -205,8 +204,6 @@ CensorRatingType? getImdbCensorRating(String? type) {
   // 15 includes 15+, B15, R15+, 15A, 15PG
   if (type.lastIndexOf('15') > -1) return CensorRatingType.mature;
   if (type.lastIndexOf('14') > -1) return CensorRatingType.mature; // 14+, VM14
-  // M includes M, MA, TV-MA
-  if (type.lastIndexOf('M') > -1) return CensorRatingType.mature;
   if (type.lastIndexOf('GY') > -1) return CensorRatingType.mature;
   if (type.lastIndexOf('D') > -1) return CensorRatingType.mature;
   if (type.lastIndexOf('LH') > -1) return CensorRatingType.mature;
@@ -216,11 +213,12 @@ CensorRatingType? getImdbCensorRating(String? type) {
   if (type.lastIndexOf('13') > -1) return CensorRatingType.family;
   // 12 includes 12+, 12A, PG12, 12A, 12PG
   if (type.lastIndexOf('12') > -1) return CensorRatingType.family;
-  if (type.lastIndexOf('11') > -1) return CensorRatingType.family; // 11
-  if (type.lastIndexOf('10') > -1) return CensorRatingType.family; // 10
+  if (type.lastIndexOf('11') > -1) return CensorRatingType.family;
+  if (type.lastIndexOf('10') > -1) return CensorRatingType.family;
   if (type.lastIndexOf('9') > -1) return CensorRatingType.family; // 9+
-  if (type.lastIndexOf('Teen') > -1) return CensorRatingType.family; // Teen
-  if (type.lastIndexOf('TE') > -1) return CensorRatingType.family; // TE
+  if (type.lastIndexOf('8') > -1) return CensorRatingType.family;
+  if (type.lastIndexOf('Teen') > -1) return CensorRatingType.family;
+  if (type.lastIndexOf('TE') > -1) return CensorRatingType.family;
   if (type.lastIndexOf('7') > -1) return CensorRatingType.family; // 7+
   if (type.lastIndexOf('6') > -1) return CensorRatingType.family; // 6+
   if (type.lastIndexOf('S') > -1) return CensorRatingType.family;
@@ -233,11 +231,18 @@ CensorRatingType? getImdbCensorRating(String? type) {
   if (type.lastIndexOf('Btl') > -1) return CensorRatingType.kids;
   if (type.lastIndexOf('TP') > -1) return CensorRatingType.kids;
   if (type.lastIndexOf('0') > -1) return CensorRatingType.kids; // 0+
+
+  //R includes R, R(A), RP18
+  if (type.lastIndexOf('R') > -1) return CensorRatingType.restricted;
+  // M includes M, MA, TV-MA
+  if (type.lastIndexOf('M') > -1) return CensorRatingType.mature;
+
   // A includes A, All, AL, AA
   if (type.lastIndexOf('A') > -1) return CensorRatingType.kids;
 
   if (type.lastIndexOf('T') > -1) return CensorRatingType.family; // T
   if (type.lastIndexOf('B') > -1) return CensorRatingType.family;
+
   return CensorRatingType.none;
 }
 
@@ -298,7 +303,7 @@ List<dynamic> fastParse(String webText) {
       try {
         final tree = jsonDecode(json);
         return [tree];
-      } catch (e) {
+      } on FormatException {
         throw FastParseException('Json decode failed!');
       }
     }

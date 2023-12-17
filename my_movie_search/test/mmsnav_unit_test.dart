@@ -19,12 +19,13 @@ import 'mmsnav_unit_test.mocks.dart';
 class TestMMSFlutterCanvas {
   TestMMSFlutterCanvas() {
     // Use Mockito to return a string describing the parameters.
-    when(mockCanvas.viewWebPage(any)).thenAnswer((Invocation inv) {
-      final url = inv.positionalArguments[0] as String;
+    when(mockCanvas.viewWebPage(any)).thenAnswer((invocation) {
+      final url = invocation.positionalArguments[0] as String;
       result = url;
     });
-    when(mockCanvas.viewFlutterPage(any)).thenAnswer((Invocation inv) {
-      final page = inv.positionalArguments[0] as RouteInfo;
+    // ignore: discarded_futures
+    when(mockCanvas.viewFlutterPage(any)).thenAnswer((invocation) {
+      final page = invocation.positionalArguments[0] as RouteInfo;
       result = page.routePath;
       return Future.value(null);
     });

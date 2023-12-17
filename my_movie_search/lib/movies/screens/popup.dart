@@ -7,7 +7,7 @@ Future<void> showPopup(
 ) async =>
     showDialog<void>(
       context: context,
-      builder: (BuildContext context) => AlertDialog(
+      builder: (context) => AlertDialog(
         title: Text(title),
         content: SingleChildScrollView(
           child: ListBody(

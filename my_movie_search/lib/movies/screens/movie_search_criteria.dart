@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -29,7 +31,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
   late FocusNode _criteriaFocusNode;
 
   void performSearch(SearchCriteriaDTO criteria) =>
-      MMSNav(context).showResultsPage(criteria);
+      unawaited(MMSNav(context).showResultsPage(criteria));
 
   void searchForBarcode(String barcode) => performSearch(
         SearchCriteriaDTO().init(

@@ -87,7 +87,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
 
-    test('Run myConvertWebTextToTraversableTree()', () {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       const expectedOutput = intermediateMapList;
       final testClass = QueryTorrentDownloadDetail(criteria)
         ..criteria = criteria;
@@ -95,13 +95,14 @@ void main() {
           testClass.myConvertWebTextToTraversableTree(htmlSampleFull);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
       final expectedOutput = <void>[];
       final actualOutput = QueryTorrentDownloadDetail(criteria)
           .myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results',
+        () async {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,

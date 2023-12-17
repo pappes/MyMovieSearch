@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -32,10 +34,12 @@ class BarcodeRepository extends BaseMovieRepository {
     ];
     for (final provider in providers) {
       initProvider();
-      provider
-          .readList(limit: 1000)
-          .then((values) => addResults(searchUID, values))
-          .whenComplete(finishProvider);
+      unawaited(
+        provider
+            .readList(limit: 1000)
+            .then((values) => addResults(searchUID, values))
+            .whenComplete(finishProvider),
+      );
     }
   }
 

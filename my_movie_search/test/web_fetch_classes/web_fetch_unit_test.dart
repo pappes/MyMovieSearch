@@ -60,6 +60,7 @@ class QueryUnknownSourceMocked
       (_) => Stream.value(_getOfflineJson(mockedCriteria.criteriaTitle)),
     );
 
+    // ignore: discarded_futures
     when(clientRequest.close()).thenAnswer((_) async {
       if (mockedCriteria.criteriaTitle == 'EXCEPTION') {
         throw Exception('go away!');
@@ -67,6 +68,7 @@ class QueryUnknownSourceMocked
       return clientResponse;
     });
 
+    // ignore: discarded_futures
     when(client.getUrl(any)).thenAnswer((_) => Future.value(clientRequest));
     when(clientRequest.headers).thenAnswer((_) => headers);
 
@@ -305,7 +307,7 @@ void main() {
         ),
       );
     });
-    test('html doc', () {
+    test('html doc', () async {
       const expectedResult = '''
 <!DOCTYPE html><html><head>
       <script type="application/ld+json">{
@@ -326,7 +328,7 @@ void main() {
 
       expect(actualResult, completion(expectedResult));
     });
-    test('json doc', () {
+    test('json doc', () async {
       final actualResult =
           testClass.myConvertWebTextToTraversableTree('[{"key":"val"}]');
       expect(
@@ -340,7 +342,7 @@ void main() {
         ),
       );
     });
-    test('invalid string', () {
+    test('invalid string', () async {
       final actualResult = testClass
           .myConvertWebTextToTraversableTree('<html>this is junk</ht>')
           .then((val) => val.toString());
@@ -349,7 +351,7 @@ void main() {
   });
 
   group('WebFetchBase myConvertCriteriaToWebText unit tests', () {
-    test('empty string', () {
+    test('empty string', () async {
       final testClass = WebFetchBasic('');
       final result = testClass
           .myConvertCriteriaToWebText()
@@ -357,7 +359,7 @@ void main() {
       expect(result, completion(['']));
     });
 
-    test('without jsonp transformation', () {
+    test('without jsonp transformation', () async {
       const jsonpText = 'JsonP([{"key":"val"}])';
       final testClass = WebFetchBasic(jsonpText);
       final result = testClass
@@ -366,7 +368,7 @@ void main() {
       expect(result, completion([jsonpText]));
     });
 
-    test('with jsonp transformation', () {
+    test('with jsonp transformation', () async {
       const jsonText = '[{"key":"val"}]';
       final testClass = WebFetchBasic('JsonP($jsonText)')
         ..transformJsonP = true;
@@ -647,7 +649,7 @@ void main() {
     //override myConvertWebTextToTraversableTree to encapsulate errors
     test(
       'stream exception handling',
-      () {
+      () async {
         final testClass = QueryUnknownSourceMocked(criteriaDto);
         final expectedError =
             '[QueryIMDBTitleDetails] Error in unknown with criteria '
@@ -855,17 +857,17 @@ void main() {
     );
   });
 
-  group('WebFetchBase mocked baseFetchWebText', () {
-    void testConvert(
+  group('WebFetchBase mocked baseFetchWebText', () async {
+    Future<void> testConvert(
       String input,
       String expectedValue, [
       String? expectedError,
-    ]) {
+    ]) async {
       final criteria = SearchCriteriaDTO().fromString(input);
       final testClass = QueryUnknownSourceMocked(criteria);
 
       final actualOutput = testClass.baseFetchWebText(criteria);
-      expectLater(
+      expect(
         actualOutput, //.printStream(input),
         completion(
           emitsInOrder(
@@ -898,12 +900,12 @@ void main() {
     );
   });
 
-  group('WebFetchBase mocked myConvertCriteriaToWebText', () {
-    void testConvert(
+  group('WebFetchBase mocked myConvertCriteriaToWebText', () async {
+    Future<void> testConvert(
       String input,
       String expectedValue, [
       String? expectedError,
-    ]) {
+    ]) async {
       final criteria = SearchCriteriaDTO().fromString(input);
       final testClass = QueryUnknownSourceMocked(criteria);
 
@@ -1043,12 +1045,12 @@ void main() {
     });
   });
 
-  group('WebFetchBase mocked baseTransform unit tests', () {
-    void testTransform(
+  group('WebFetchBase mocked baseTransform unit tests', () async {
+    Future<void> testTransform(
       String input,
       List<MovieResultDTO>? expectedValue, [
       String? expectedError,
-    ]) {
+    ]) async {
       final criteria = SearchCriteriaDTO()..criteriaTitle = input;
       final actualOutput = QueryUnknownSourceMocked(criteria).baseTransform();
       if (null != expectedValue) {

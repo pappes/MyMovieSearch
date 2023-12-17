@@ -21,7 +21,7 @@ final criteria = SearchCriteriaDTO().fromString('123');
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() => Settings.singleton().init());
+  setUpAll(() async => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           QueryOMDBMovies(criteria).myConvertWebTextToTraversableTree(
@@ -83,7 +83,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
       final expectedOutput = <void>[];
       final actualOutput =
           QueryOMDBMovies(criteria).myConvertWebTextToTraversableTree(
@@ -91,7 +91,8 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results',
+        () async {
       final expectedOutput = intermediateErrorMapList;
       final actualOutput =
           QueryOMDBMovies(criteria).myConvertWebTextToTraversableTree(

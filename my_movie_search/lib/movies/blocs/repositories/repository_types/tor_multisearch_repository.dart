@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -30,8 +32,11 @@ class TorMultiSearchRepository extends BaseMovieRepository {
       // Load supplementary results into list for display on screen
       for (final function in functions.supplementarySearch) {
         searchesRequested = searchesRequested + 1;
-        function(dto).then(
-          (searchResults) => _addExtraDetails(originalSearchUID, searchResults),
+        unawaited(
+          function(dto).then(
+            (searchResults) =>
+                _addExtraDetails(originalSearchUID, searchResults),
+          ),
         );
       }
     }

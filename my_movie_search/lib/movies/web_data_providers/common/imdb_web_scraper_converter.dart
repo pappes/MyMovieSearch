@@ -455,7 +455,8 @@ class ImdbWebScraperConverter {
 
     try {
       movie.runTime = Duration.zero.fromIso8601(map[outerElementDuration]);
-    } catch (_) {}
+      // ignore: avoid_catching_errors
+    } on ArgumentError catch (_) {}
 
     movie
       ..genres.combineUnique(map[outerElementGenre])

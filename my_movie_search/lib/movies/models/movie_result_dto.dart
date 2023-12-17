@@ -1440,7 +1440,8 @@ extension DTOCompare on MovieResultDTO {
               case ReadHistory.none:
               case ReadHistory.custom:
             }
-          } catch (_) {}
+            // ignore: avoid_catching_errors
+          } on ArgumentError catch (_) {}
         }
     }
     return 0;

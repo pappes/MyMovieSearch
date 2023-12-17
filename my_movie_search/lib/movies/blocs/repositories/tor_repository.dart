@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/tor_multisearch_repository.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -34,10 +36,12 @@ class TorRepository extends TorMultiSearchRepository {
 
     for (final provider in _getProviders(criteria)) {
       initProvider();
-      provider
-          .readList(limit: 10)
-          .then((values) => addResults(searchUID, values))
-          .whenComplete(finishProvider);
+      unawaited(
+        provider
+            .readList(limit: 10)
+            .then((values) => addResults(searchUID, values))
+            .whenComplete(finishProvider),
+      );
     }
   }
 

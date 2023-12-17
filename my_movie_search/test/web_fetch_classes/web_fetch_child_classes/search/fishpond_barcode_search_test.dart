@@ -89,7 +89,7 @@ void main() {
     });
 
     // Confirm web text is parsed as expected.
-    test('Run myConvertWebTextToTraversableTree()', () {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       const expectedOutput = intermediateMapList;
       final testClass = QueryFishpondBarcodeSearch(criteria)
         ..criteria = criteria;
@@ -97,13 +97,14 @@ void main() {
           testClass.myConvertWebTextToTraversableTree(htmlSampleFull);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
       final expectedOutput = <void>[];
       final actualOutput = QueryFishpondBarcodeSearch(criteria)
           .myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results',
+        () async {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,

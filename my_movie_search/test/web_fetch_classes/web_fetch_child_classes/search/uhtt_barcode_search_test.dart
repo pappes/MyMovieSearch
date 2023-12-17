@@ -88,7 +88,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
 
-    test('Run myConvertWebTextToTraversableTree()', () {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       const expectedOutput = intermediateMapList;
       final testClass = QueryUhttBarcodeSearch(criteria)..criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
@@ -96,7 +96,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
       final expectedOutput = <void>[];
       final actualOutput =
           QueryUhttBarcodeSearch(criteria).myConvertWebTextToTraversableTree(
@@ -104,7 +104,8 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results',
+        () async {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,

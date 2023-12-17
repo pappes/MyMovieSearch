@@ -52,7 +52,7 @@ class BaseMovieRepository {
     );
 
     logger.t('closing stream');
-    _movieStreamController?.close();
+    unawaited(_movieStreamController?.close());
     _movieStreamController = null;
   }
 

@@ -83,7 +83,7 @@ abstract class QueryTMDBCommon
     try {
       // Assume text is json encoded.
       tree = jsonDecode(webText);
-    } catch (jsonException) {
+    } on FormatException {
       throw WebConvertException('Invalid json returned from web call $webText');
     }
 

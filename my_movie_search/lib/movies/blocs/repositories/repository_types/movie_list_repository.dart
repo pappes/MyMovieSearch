@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -34,15 +36,21 @@ class MovieListRepository extends BaseMovieRepository {
 
       // Load fast results into list for display on screen
       for (final function in functions.fastSearch) {
-        function(dto).then(
-          (searchResults) => _addExtraDetails(originalSearchUID, searchResults),
+        unawaited(
+          function(dto).then(
+            (searchResults) =>
+                _addExtraDetails(originalSearchUID, searchResults),
+          ),
         );
         searchesRequested = searchesRequested + 1;
       }
       // Load supplementary results into list for display on screen
       for (final function in functions.supplementarySearch) {
-        function(dto).then(
-          (searchResults) => _addExtraDetails(originalSearchUID, searchResults),
+        unawaited(
+          function(dto).then(
+            (searchResults) =>
+                _addExtraDetails(originalSearchUID, searchResults),
+          ),
         );
         searchesRequested = searchesRequested + 1;
       }
@@ -50,7 +58,7 @@ class MovieListRepository extends BaseMovieRepository {
       // in a seperate thread
       for (final function in functions.slowSearch) {
         if (Settings.singleton().get('PREFETCH') == 'true') {
-          function(dto);
+          unawaited(function(dto));
         }
       }
     }

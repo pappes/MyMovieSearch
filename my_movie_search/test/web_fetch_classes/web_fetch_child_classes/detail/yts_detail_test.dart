@@ -17,7 +17,7 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() => Settings.singleton().init());
+  setUpAll(() async => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       final criteria = SearchCriteriaDTO().fromString('batman');
       const expectedOutput = intermediateMapList;
       final testClass = QueryYtsDetails(criteria);
@@ -80,7 +80,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
       final criteria = SearchCriteriaDTO().fromString('batman');
       final expectedOutput = <void>[];
       final actualOutput =
@@ -89,7 +89,8 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results',
+        () async {
       final criteria = SearchCriteriaDTO().fromString('batman');
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
@@ -181,7 +182,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () {
+    test('myConvertTreeToOutputType() errors', () async {
       final expectedOutput = throwsA(
         isA<TreeConvertException>().having(
           (e) => e.cause,

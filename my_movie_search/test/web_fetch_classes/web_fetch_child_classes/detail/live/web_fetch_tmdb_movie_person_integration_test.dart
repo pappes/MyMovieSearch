@@ -55,6 +55,7 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
   final List<Future<List<MovieResultDTO>>> futures = [];
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
+    // ignore: discarded_futures
     final future = QueryTMDBPersonDetails(criteria).readList();
     futures.add(future);
   }
@@ -76,7 +77,7 @@ Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() => Settings.singleton().init());
+  setUpAll(() async => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////

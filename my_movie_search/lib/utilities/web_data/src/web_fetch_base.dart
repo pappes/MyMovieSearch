@@ -2,7 +2,7 @@
 /// in a concsistent manner.
 library web_fetch;
 
-import 'dart:async' show StreamController;
+import 'dart:async' show StreamController, unawaited;
 import 'dart:convert' show jsonDecode, utf8;
 
 import 'package:html/parser.dart';
@@ -83,9 +83,11 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
     searchResultsLimit.limit = limit;
     try {
-      baseYieldFetchedObjects(
-        source: source,
-      ).pipe(sc).onError(errorHandler);
+      unawaited(
+        baseYieldFetchedObjects(
+          source: source,
+        ).pipe(sc).onError(errorHandler),
+      );
     } catch (error, stackTrace) {
       errorHandler(error, stackTrace);
     }
@@ -156,7 +158,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       // Assume text is json encoded.
       final tree = jsonDecode(webText);
       return [tree];
-    } catch (jsonException) {
+    } on FormatException catch (jsonException) {
       // Allow text to be HTML encoded if not json encoded
       final tree = parse(webText);
       if (tree.outerHtml == '<html><head></head><body>$webText</body></html>') {

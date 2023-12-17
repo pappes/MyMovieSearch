@@ -29,7 +29,7 @@ import 'dart:isolate';
 class ThreadRunner {
   ThreadRunner() {
     initialised = _completer.future;
-    _init(latestThreadName ?? 'Unnamed Thread');
+    unawaited(_init(latestThreadName ?? 'Unnamed Thread'));
   }
 
   /// Convenience constructor to keep track of threads.

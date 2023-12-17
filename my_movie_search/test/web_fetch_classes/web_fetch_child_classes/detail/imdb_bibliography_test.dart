@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -23,7 +25,7 @@ class StaticJsonGenerator {
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() => Settings.singleton().init());
+  setUpAll(() async => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -82,7 +84,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       const expectedOutput = intermediateMapList;
       final criteria = SearchCriteriaDTO().fromString('nm7602562');
       final testClass = QueryIMDBBibliographyDetails(criteria);
@@ -247,7 +249,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () {
+    test('myConvertTreeToOutputType() errors', () async {
       final expectedOutput = throwsA(
         isA<TreeConvertException>().having(
           (e) => e.cause,

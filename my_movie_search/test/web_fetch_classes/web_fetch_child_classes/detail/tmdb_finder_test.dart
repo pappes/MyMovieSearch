@@ -21,7 +21,7 @@ final criteria = SearchCriteriaDTO().fromString('ttImdbId123');
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() => Settings.singleton().init());
+  setUpAll(() async => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           QueryTMDBFinder(criteria).myConvertWebTextToTraversableTree(
@@ -79,7 +79,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
       final expectedOutput = <void>[];
       final actualOutput =
           QueryTMDBFinder(criteria).myConvertWebTextToTraversableTree(
@@ -87,7 +87,8 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results',
+        () async {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
@@ -179,7 +180,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () {
+    test('myConvertTreeToOutputType() errors', () async {
       final expectedOutput = throwsA(
         isA<TreeConvertException>().having(
           (e) => e.cause,

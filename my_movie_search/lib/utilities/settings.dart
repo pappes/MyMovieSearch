@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -7,7 +8,7 @@ import 'package:logger/logger.dart';
 /// Load application defined settings.
 class Settings {
   Settings({Logger? logger, Map<String, String>? override}) {
-    init(logger: logger, override: override);
+    unawaited(init(logger: logger, override: override));
   }
   Settings._internal();
 

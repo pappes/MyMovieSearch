@@ -61,7 +61,7 @@ void main() {
     });
 
     // Confirm map can be converted to DTO.
-    test('Run myConvertTreeToOutputType()', () {
+    test('Run myConvertTreeToOutputType()', () async {
       final expectedValue = expectedDTOList;
       final webfetch = QueryYtsSearch(ignoreCriteria);
 
@@ -143,7 +143,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed as expected.
-    test('Run myConvertWebTextToTraversableTree()', () {
+    test('Run myConvertWebTextToTraversableTree()', () async {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           QueryYtsSearch(ignoreCriteria).myConvertWebTextToTraversableTree(
@@ -151,7 +151,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
       final expectedOutput = intermediateEmptyMapList;
       final actualOutput =
           QueryYtsSearch(ignoreCriteria).myConvertWebTextToTraversableTree(
@@ -159,7 +159,8 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results',
+        () async {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,

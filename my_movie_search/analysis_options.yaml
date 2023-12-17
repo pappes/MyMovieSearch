@@ -48,28 +48,26 @@ linter:
 # all rules! from https://dart.dev/tools/linter-rules/all
 
 #- annotate_redeclares
-    #- avoid_final_parameters
-    #- avoid_types_on_closure_parameters
+    - avoid_final_parameters
     #- avoid_unstable_final_fields
     #- prefer_double_quotes
-    #- prefer_final_locals
     #- unnecessary_final
     #- omit_local_variable_types
     #- prefer_relative_imports
 
 
-    #- avoid_catches_without_on_clauses
     #- diagnostic_describe_all_properties
     #- always_specify_types
     #- always_put_control_body_on_new_line
-    - always_put_required_named_parameters_first
     #- avoid_annotating_with_dynamic
     #- avoid_redundant_argument_values
 
 
 
+    #- avoid_catches_without_on_clauses
     - always_declare_return_types
     - always_require_non_null_named_parameters
+    - always_put_required_named_parameters_first
     - always_use_package_imports
     - annotate_overrides    
     - avoid_bool_literals_in_conditional_expressions
@@ -103,6 +101,7 @@ linter:
     - avoid_slow_async_io
     - avoid_type_to_string
     - avoid_types_as_parameter_names
+    - avoid_types_on_closure_parameters
     - avoid_unnecessary_containers
     - avoid_unused_constructor_parameters
     - avoid_void_async
@@ -126,7 +125,7 @@ linter:
     - deprecated_consistency
     - deprecated_member_use_from_same_package
     - directives_ordering
-    #- discarded_futures
+    - discarded_futures
     - do_not_use_environment
     - empty_catches
     - empty_constructor_bodies

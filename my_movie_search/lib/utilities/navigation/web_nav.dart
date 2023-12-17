@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -114,11 +115,13 @@ class MMSNav {
       resultDrillDown(movies[0]);
     } else {
       // Multiple results so show them as individual cards.
-      showResultsPage(
-        SearchCriteriaDTO().init(
-          SearchCriteriaType.movieDTOList,
-          title: description,
-          list: movies,
+      unawaited(
+        showResultsPage(
+          SearchCriteriaDTO().init(
+            SearchCriteriaType.movieDTOList,
+            title: description,
+            list: movies,
+          ),
         ),
       );
     }
@@ -128,10 +131,12 @@ class MMSNav {
   ///
   void getMoviesForKeyword(String keyword) =>
       // Fetch first batch of movies that match the keyword.
-      showResultsPage(
-        SearchCriteriaDTO().init(
-          SearchCriteriaType.moviesForKeyword,
-          title: keyword,
+      unawaited(
+        showResultsPage(
+          SearchCriteriaDTO().init(
+            SearchCriteriaType.moviesForKeyword,
+            title: keyword,
+          ),
         ),
       );
 
@@ -139,11 +144,13 @@ class MMSNav {
   ///
   void getMoreKeywords(MovieResultDTO movie) =>
       // Fetch first batch of movies that match the keyword.
-      showResultsPage(
-        SearchCriteriaDTO().init(
-          SearchCriteriaType.moreKeywords,
-          title: movie.uniqueId,
-          list: [movie],
+      unawaited(
+        showResultsPage(
+          SearchCriteriaDTO().init(
+            SearchCriteriaType.moreKeywords,
+            title: movie.uniqueId,
+            list: [movie],
+          ),
         ),
       );
 
@@ -153,11 +160,13 @@ class MMSNav {
     // replace space with . for more matches
     final criteria = text.replaceAll(' ', '.');
     // Fetch first batch of movies that match the keyword.
-    showResultsPage(
-      SearchCriteriaDTO().init(
-        SearchCriteriaType.downloadSimple,
-        title: criteria,
-        list: [dto],
+    unawaited(
+      showResultsPage(
+        SearchCriteriaDTO().init(
+          SearchCriteriaType.downloadSimple,
+          title: criteria,
+          list: [dto],
+        ),
       ),
     );
   }
@@ -172,28 +181,34 @@ class MMSNav {
 
       case MovieContentType.barcode:
         // Search for movies based on the data fetched for the barcode.
-        showResultsPage(
-          SearchCriteriaDTO().init(
-            SearchCriteriaType.movieTitle,
-            title: getSearchTitle(movie),
+        unawaited(
+          showResultsPage(
+            SearchCriteriaDTO().init(
+              SearchCriteriaType.movieTitle,
+              title: getSearchTitle(movie),
+            ),
           ),
         );
 
       case MovieContentType.navigation:
         if (movie.uniqueId.startsWith(webAddressPrefix)) {
           // Search for more movies that match the keyword.
-          showResultsPage(
-            QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
+          unawaited(
+            showResultsPage(
+              QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
+            ),
           );
         } else {
           // replace space with . for more specific searching
           final criteria = movie.uniqueId;
           // Fetch first batch of movies that match the keyword.
-          showResultsPage(
-            SearchCriteriaDTO().init(
-              SearchCriteriaType.downloadAdvanced,
-              title: criteria,
-              list: [movie],
+          unawaited(
+            showResultsPage(
+              SearchCriteriaDTO().init(
+                SearchCriteriaType.downloadAdvanced,
+                title: criteria,
+                list: [movie],
+              ),
             ),
           );
         }
@@ -215,9 +230,11 @@ class MMSNav {
       case MovieContentType.information:
         movie.setReadIndicator(ReadHistory.reading.toString());
         // Show details screen (movie details or person details)
-        canvas
-            .viewFlutterPage(getDetailsPage(movie))
-            .then((_) => movie.setReadIndicator(ReadHistory.read.toString()));
+        unawaited(
+          canvas
+              .viewFlutterPage(getDetailsPage(movie))
+              .then((_) => movie.setReadIndicator(ReadHistory.read.toString())),
+        );
     }
   }
 
@@ -297,7 +314,7 @@ class MMSFlutterCanvas {
       NavLog(context!).logPageOpen(page.routePath, page.reference);
       try {
         return context!.pushNamed(page.routePath, extra: page.params)
-          ..then((Object? val) {
+          ..then((val) {
             NavLog(context!)
                 .logPageClose(page.routePath, page.reference, page.params);
           });
@@ -308,36 +325,42 @@ class MMSFlutterCanvas {
     return Future.value(null);
   }
 
-  void _invokeChromeCustomTabs(String url) => tabs
-      .launch(
-        url,
-        customTabsOption: tabs.CustomTabsOption(
-          toolbarColor: Theme.of(context!).primaryColor,
-          enableDefaultShare: true,
-          enableUrlBarHiding: true,
-          showPageTitle: true,
-        ),
-      )
-      .onError((error, stackTrace) => _customTabsError(error, url));
+  void _invokeChromeCustomTabs(String url) => unawaited(
+        tabs
+            .launch(
+              url,
+              customTabsOption: tabs.CustomTabsOption(
+                toolbarColor: Theme.of(context!).primaryColor,
+                enableDefaultShare: true,
+                enableUrlBarHiding: true,
+                showPageTitle: true,
+              ),
+            )
+            .onError((error, stackTrace) => _customTabsError(error, url)),
+      );
 
   void _customTabsError(Object? e, String url) {
     // An exception is thrown if browser app is not installed on Android device.
     debugPrint(e.toString());
-    showPopup(
-      context!,
-      'Received error $e\nwhen opening $url',
-      'Navigation error',
+    unawaited(
+      showPopup(
+        context!,
+        'Received error $e\nwhen opening $url',
+        'Navigation error',
+      ),
     );
   }
 
-  void _openBrowser(String url) => launcher.launchUrl(Uri.parse(url)).then(
-        (bool success) => _browserError(success, url),
+  void _openBrowser(String url) => unawaited(
+        launcher.launchUrl(Uri.parse(url)).then(
+              (success) => _browserError(success, url),
+            ),
       );
 
   void _browserError(bool success, String url) {
     // An exception is thrown if browser app is not installed on Android device.
     if (!success) {
-      showPopup(context!, url, 'Browser error');
+      unawaited(showPopup(context!, url, 'Browser error'));
     }
   }
 }

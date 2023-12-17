@@ -142,17 +142,17 @@ Future<void> main() async {
   });
 
   group('SteamHelper printStream', () {
-    void testPrint(
+    Future<void> testPrint(
       String input,
       String expectedValue, [
       String? expectedError,
-    ]) {
+    ]) async {
       final actualOutput = emitStringChars(input);
       final doublePrint =
           actualOutput.printStream('print1:').printStream('print2:');
       final revivedStream = doublePrint.toList().then(Stream.fromIterable);
 
-      expectLater(
+      await expectLater(
         revivedStream,
         completion(emitsInOrder(expectedValue.characters.toList())),
       );
@@ -171,11 +171,11 @@ Future<void> main() async {
   });
 
   group('SteamHelper printStreamFuture', () {
-    void testPrint(
+    Future<void> testPrint(
       String input,
       String expectedValue, [
       String? expectedError,
-    ]) {
+    ]) async {
       final actualOutput = Future.delayed(
         const Duration(seconds: 1),
         () => emitStringChars(input),

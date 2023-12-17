@@ -1,4 +1,4 @@
-import 'dart:async' show StreamSubscription;
+import 'dart:async' show StreamSubscription, unawaited;
 
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:equatable/equatable.dart';
@@ -133,15 +133,17 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
           final collection = key.startsWith(imdbTitlePrefix)
               ? 'moviedetails'
               : 'persondetails';
-          FirebaseApplicationState()
-              .fetchRecord(
-                '$collectionPrefix$collection',
-                id: newValue.uniqueId,
-              )
-              .then(
-                (value) =>
-                    _addReadIndicator(_allResults[key]!, value?.toString()),
-              );
+          unawaited(
+            FirebaseApplicationState()
+                .fetchRecord(
+                  '$collectionPrefix$collection',
+                  id: newValue.uniqueId,
+                )
+                .then(
+                  (value) =>
+                      _addReadIndicator(_allResults[key]!, value?.toString()),
+                ),
+          );
         }
       }
     }

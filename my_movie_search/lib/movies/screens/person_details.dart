@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -61,14 +63,18 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   void _getDetails(SearchCriteriaDTO criteria) {
     if (MovieContentType.person == _person.type) {
       /// Fetch person details from cache using a separate thread.
-      QueryIMDBNameDetails(criteria)
-          .readPrioritisedCachedList(priority: ThreadRunner.fast)
-          .then(_requestShowDetails);
+      unawaited(
+        QueryIMDBNameDetails(criteria)
+            .readPrioritisedCachedList(priority: ThreadRunner.fast)
+            .then(_requestShowDetails),
+      );
 
       /// Fetch related movie from cache using a separate thread.
-      QueryIMDBBibliographyDetails(criteria)
-          .readPrioritisedCachedList(priority: ThreadRunner.slow)
-          .then(_requestShowDetails);
+      unawaited(
+        QueryIMDBBibliographyDetails(criteria)
+            .readPrioritisedCachedList(priority: ThreadRunner.slow)
+            .then(_requestShowDetails),
+      );
     }
   }
 
