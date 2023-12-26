@@ -10,13 +10,11 @@ class MoviesForKeywordRepository extends MovieListRepository {
   ///
   /// [searchUID] is a unique correlation ID identifying this search request
   @override
-  void initSearch(int searchUID, SearchCriteriaDTO criteria) {
-    initProvider();
-    unawaited(
-      QueryIMDBMoviesForKeyword(criteria)
-          .readList(limit: 10)
-          .then((values) => addResults(searchUID, values))
-          .whenComplete(finishProvider),
-    );
+  Future<void> initSearch(int searchUID, SearchCriteriaDTO criteria) async {
+    initProvider(criteria);
+    return QueryIMDBMoviesForKeyword(criteria)
+        .readList(limit: 10)
+        .then((values) => addResults(searchUID, values))
+        .whenComplete(() => finishProvider(criteria));
   }
 }

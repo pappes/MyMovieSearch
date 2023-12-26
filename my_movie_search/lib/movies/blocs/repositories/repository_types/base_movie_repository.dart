@@ -4,6 +4,8 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
+typedef ExtraDetailFn = Future<List<MovieResultDTO>> Function(MovieResultDTO);
+
 /// Retrieve movie data from multiple online sources.
 ///
 /// BlockRepository to consolidate data retrieval from multiple search
@@ -16,7 +18,7 @@ class BaseMovieRepository {
 
   late SearchCriteriaDTO criteria;
   StreamController<MovieResultDTO>? _movieStreamController;
-  var _awaitingProviders = 0;
+  final _awaitingProviders = <dynamic>[];
   static int _searchUID = 1;
 
   /// Return a stream of data matching [criteria].
@@ -44,43 +46,61 @@ class BaseMovieRepository {
   }
 
   /// Cancels or completes an in progress search.
-  void close() {
+  Future<void> close() async {
     yieldResult(
       MovieResultDTO()
         ..title = 'Search completed ...'
         ..type = MovieContentType.information,
     );
 
-    logger.t('closing stream');
-    unawaited(_movieStreamController?.close());
-    _movieStreamController = null;
+    if (_movieStreamController != null) {
+      logger.t('closing stream');
+      final tempController = _movieStreamController!;
+      _movieStreamController = null;
+      return tempController.close();
+    }
   }
 
   /// Initialise the class for a new search
   /// with all known movie search providers.
+  ///
   /// To be overridden by specific implementations, calling:
   ///   initProvider() before requesting data for a source.
-  ///   addResults(searchUID,dto) for matching data.
-  ///   finishProvider() as each source completes.
+  ///   await addResults(searchUID,dto) for matching data.
+  ///   await finishProvider() as each source completes.
   void initSearch(int searchUID, SearchCriteriaDTO criteria) {}
 
   /// Initiates a secondary data fetch.
+  ///
   /// To be overridden by specific implementations, calling:
+  ///   initProvider() before requesting data for a source.
   ///   yieldResult() for any returned data.
+  ///   await finishProvider() as each source completes.
   /// Returns number of extra fetches requested.
-  int getExtraDetails(int originalSearchUID, MovieResultDTO dto) => 0;
+  Future<int> getExtraDetails(
+    int originalSearchUID,
+    MovieResultDTO dto,
+  ) async =>
+      0;
+
+  /// Begin waiting for another data provider to complete.
+  ///
+  /// [provider] uniquely identifies the search source and search criteria.
+  void initProvider(dynamic provider) {
+    _awaitingProviders.add(provider);
+  }
 
   /// Cease waiting for data provider to complete.
   /// Close the stream if all WebFetch operations have completed.
-  void finishProvider() {
-    _awaitingProviders = _awaitingProviders - 1;
-    if (_awaitingProviders == 0) {
-      close();
+  ///
+  /// [provider] is the same passed through to initProvider.
+  Future<void> finishProvider(dynamic provider) async {
+    _awaitingProviders.remove(provider);
+    if (_awaitingProviders.isEmpty) {
+      DtoCache.dumpCache();
+      return close();
     }
   }
-
-  /// Begin waiting for another data provider to complete.
-  void initProvider() => _awaitingProviders = _awaitingProviders + 1;
 
   /// Yields incomplete or completed results in the stream.
   void yieldResult(MovieResultDTO result) =>
@@ -92,13 +112,15 @@ class BaseMovieRepository {
 
   /// Yields incomplete or completed results in the stream
   /// and initiates retrieval of movie details.
-  void addResults(int originalSearchUID, List<MovieResultDTO> results) {
+  Future<void> addResults(
+    int originalSearchUID,
+    List<MovieResultDTO> results,
+  ) async {
     if (!searchInterrupted(originalSearchUID)) {
       // Ensure a new search has not been started.
       results.forEach(yieldResult);
       for (final dto in results) {
-        _awaitingProviders =
-            _awaitingProviders + getExtraDetails(originalSearchUID, dto);
+        unawaited(getExtraDetails(originalSearchUID, dto));
       }
     }
   }

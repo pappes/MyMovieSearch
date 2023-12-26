@@ -115,9 +115,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   String? toIds() {
     final ids = <String>[];
     for (final dto in criteriaList) {
-      if (!dto.uniqueId.startsWith(movieDTOMessagePrefix)) {
-        ids.add(dto.uniqueId);
-      }
+      if (!dto.isMessage()) ids.add(dto.uniqueId);
     }
     if (ids.isEmpty) return null;
     if (ids.length == 1) return ids.first;

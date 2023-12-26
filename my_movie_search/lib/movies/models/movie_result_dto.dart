@@ -256,8 +256,7 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
           ) ??
           dto.language
       ..sources = stringToSources(this[movieDTOSources]);
-    if (!dto.sources.containsKey(dto.bestSource) &&
-        !dto.uniqueId.startsWith(movieDTOMessagePrefix)) {
+    if (!dto.sources.containsKey(dto.bestSource) && !dto.isMessage()) {
       dto.sources[dto.bestSource] = dto.uniqueId;
     }
     return dto;
@@ -331,6 +330,14 @@ class DtoCache {
 
   final _globalDtoCache = TieredCache<MovieResultDTO>();
 
+  static Map<dynamic, dynamic> dumpCache() {
+    final cache = _singleton._globalDtoCache.memoryCache;
+    for (final record in cache.entries) {
+      print('${record.key} - ${record.value.title}');
+    }
+    return cache;
+  }
+
   /// Retrieve data from the cache.
   ///
   MovieResultDTO fetch(MovieResultDTO newValue) => merge(newValue);
@@ -386,6 +393,30 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     title = errorText;
     bestSource = errorSource;
     return this;
+  }
+
+  /// dto is a message if it is an error, navigation command, of info.
+  bool isMessage() {
+    switch (type) {
+      case MovieContentType.error:
+      case MovieContentType.navigation:
+        return true;
+
+      case MovieContentType.information:
+      case MovieContentType.none:
+      case MovieContentType.keyword:
+      case MovieContentType.barcode:
+      case MovieContentType.person:
+      case MovieContentType.download:
+      case MovieContentType.movie:
+      case MovieContentType.short:
+      case MovieContentType.series:
+      case MovieContentType.miniseries:
+      case MovieContentType.episode:
+      case MovieContentType.title:
+      case MovieContentType.custom:
+        return false;
+    }
   }
 
   MovieResultDTO testDto(String testText) {
@@ -856,7 +887,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String id,
   ) {
     if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
-    if (id == '-1') return MovieContentType.none;
+    if (id == movieDTOUninitialized) return MovieContentType.none;
     if (id.startsWith(movieDTOMessagePrefix)) return MovieContentType.error;
     final String title = info.toLowerCase().replaceAll('sci-fi', '');
     if (title.lastIndexOf('game') > -1) return MovieContentType.custom;
@@ -974,20 +1005,14 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       Enum.compareByIndex,
     );
     for (var index = 0; index < expected.length; index++) {
+      final actualKey = actualSorted.keys.elementAt(index);
+      final expectedKey = expectedSorted.keys.elementAt(index);
+      final actualValue = actualSorted.values.elementAt(index);
+      final expectedValue = expectedSorted.values.elementAt(index);
       // Compare source name
-      _matchCompare(
-        mismatches,
-        fieldName,
-        actualSorted.keys.elementAt(index),
-        expectedSorted.keys.elementAt(index),
-      );
+      _matchCompare(mismatches, fieldName, actualKey, expectedKey);
       // Compare source identifier
-      _matchCompareId(
-        mismatches,
-        fieldName,
-        actualSorted.values.elementAt(index),
-        expectedSorted.values.elementAt(index),
-      );
+      _matchCompareId(mismatches, fieldName, actualValue, expectedValue);
     }
   }
 

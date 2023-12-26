@@ -16,7 +16,12 @@ import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 import 'package:universal_io/io.dart'
-    show HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders;
+    show
+        HttpClient,
+        HttpClientRequest,
+        HttpClientResponse,
+        HttpHeaders,
+        SocketException;
 
 import '../test_helper.dart';
 import 'web_fetch_unit_test.mocks.dart';
@@ -64,6 +69,9 @@ class QueryUnknownSourceMocked
     when(clientRequest.close()).thenAnswer((_) async {
       if (mockedCriteria.criteriaTitle == 'EXCEPTION') {
         throw Exception('go away!');
+      }
+      if (mockedCriteria.criteriaTitle == 'SOCKETEXCEPTION') {
+        throw const SocketException("Failed host lookup: 'solidtorrents.eu'");
       }
       return clientResponse;
     });
@@ -857,7 +865,7 @@ void main() {
     );
   });
 
-  group('WebFetchBase mocked baseFetchWebText', () async {
+  group('WebFetchBase mocked baseFetchWebText', () {
     Future<void> testConvert(
       String input,
       String expectedValue, [
@@ -883,7 +891,7 @@ void main() {
     }
 
     // Convert empty input to empty output.
-    test('empty input', () {
+    test('empty input', () async {
       const input = '';
       const output = '';
       testConvert(input, output);
@@ -900,7 +908,7 @@ void main() {
     );
   });
 
-  group('WebFetchBase mocked myConvertCriteriaToWebText', () async {
+  group('WebFetchBase mocked myConvertCriteriaToWebText', () {
     Future<void> testConvert(
       String input,
       String expectedValue, [
@@ -926,7 +934,7 @@ void main() {
     }
 
     // Convert empty input to empty output.
-    test('empty input', () {
+    test('empty input', () async {
       const input = '';
       const output = '';
       testConvert(input, output);
@@ -934,7 +942,7 @@ void main() {
     // Convert 1 json map into a tree.
     test(
       'mocked http call',
-      () {
+      () async {
         const input = '1234';
         const output = '1234.';
         testConvert(input, output);
@@ -1043,9 +1051,20 @@ void main() {
       final fetchResult = await testClass.baseFetchWebText(criteria);
       expect(fetchResult, emitsError(expectedResult));
     });
+
+    test('socket exception', () async {
+      final criteria = SearchCriteriaDTO().fromString('SOCKETEXCEPTION');
+      final testClass = QueryUnknownSourceMocked(criteria);
+      final expectedResult = 'Error in unknown with criteria '
+          '${criteria.criteriaTitle} '
+          'unable to contact website, has the host moved? : '
+          ":SocketException: Failed host lookup: 'solidtorrents.eu'";
+      final fetchResult = await testClass.baseFetchWebText(criteria);
+      expect(fetchResult, emitsError(expectedResult));
+    });
   });
 
-  group('WebFetchBase mocked baseTransform unit tests', () async {
+  group('WebFetchBase mocked baseTransform unit tests', () {
     Future<void> testTransform(
       String input,
       List<MovieResultDTO>? expectedValue, [
@@ -1072,7 +1091,7 @@ void main() {
     // Convert 1 map into a dto.
     test(
       'single map input',
-      () {
+      () async {
         const input = '1000';
         final output = _makeDTOs(1);
         testTransform(input, output);
@@ -1081,7 +1100,7 @@ void main() {
     );
     test(
       'http error code 404',
-      () {
+      () async {
         const input = 'HTTP404';
         const output =
             '[QueryIMDBTitleDetails] Error in unknown with criteria $input '
@@ -1093,7 +1112,7 @@ void main() {
     );
     test(
       'http EXCEPTION',
-      () {
+      () async {
         const input = 'EXCEPTION';
         const output =
             '[QueryIMDBTitleDetails] Error in unknown with criteria $input '

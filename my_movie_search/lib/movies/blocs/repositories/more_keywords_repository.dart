@@ -10,13 +10,11 @@ class MoreKeywordsRepository extends BaseMovieRepository {
   ///
   /// [searchUID] is a unique correlation ID identifying this search request
   @override
-  void initSearch(int searchUID, SearchCriteriaDTO criteria) {
-    initProvider();
-    unawaited(
-      QueryIMDBMoreKeywordsDetails(criteria)
-          .readList(limit: 1000)
-          .then((values) => addResults(searchUID, values))
-          .whenComplete(finishProvider),
-    );
+  Future<void> initSearch(int searchUID, SearchCriteriaDTO criteria) async {
+    initProvider(criteria);
+    await QueryIMDBMoreKeywordsDetails(criteria)
+        .readList(limit: 1000)
+        .then((values) => addResults(searchUID, values))
+        .whenComplete(() => finishProvider(criteria));
   }
 }

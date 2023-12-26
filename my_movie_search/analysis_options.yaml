@@ -65,6 +65,10 @@ linter:
 
 
     #- avoid_catches_without_on_clauses
+
+
+    #- flutter_style_todos
+    # - public_member_api_docs
     - always_declare_return_types
     - always_require_non_null_named_parameters
     - always_put_required_named_parameters_first
@@ -133,7 +137,6 @@ linter:
     - eol_at_end_of_file
     - exhaustive_cases
     - file_names
-    #- flutter_style_todos
     - hash_and_equals
     - implementation_imports
     - implicit_call_tearoffs
@@ -206,7 +209,6 @@ linter:
     - prefer_typing_uninitialized_variables
     - prefer_void_to_null
     - provide_deprecation_message
-    # - public_member_api_docs
     - recursive_getters
     - require_trailing_commas
     - secure_pubspec_urls

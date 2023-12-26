@@ -73,19 +73,22 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
 
   @override
   // Clean up all open objects.
-  Future<void> close() {
-    _searchStatusSubscription?.cancel();
-    movieRepository.close();
+  Future<void> close() async {
+    await _searchStatusSubscription?.cancel();
+    await movieRepository.close();
     return super.close();
   }
 
   /// Clean up the results of any previous search
   /// and submit the new search criteria.
-  void _initiateSearch(SearchCriteriaDTO criteria, Emitter<SearchState> emit) {
+  Future<void> _initiateSearch(
+    SearchCriteriaDTO criteria,
+    Emitter<SearchState> emit,
+  ) async {
     if (!isClosed) {
       emit(const SearchState.awaitingInput());
     }
-    movieRepository.close();
+    await movieRepository.close();
     _allResults.clear();
     sortedResults.clear();
     _throttleName = 'SearchBloc${criteria.toPrintableString()}';
@@ -118,7 +121,7 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
   void _receiveDTO(MovieResultDTO newValue) {
     final key = newValue.uniqueId;
 
-    if (key.startsWith(movieDTOMessagePrefix)) {
+    if (newValue.isMessage()) {
       _allResults[key] = newValue;
     } else {
       // Merge value with existing information and insert value into list

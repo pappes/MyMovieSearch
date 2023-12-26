@@ -26,7 +26,7 @@ class QuerySolidTorrentsSearch
     with ScrapeSolidTorrentsSearch {
   QuerySolidTorrentsSearch(super.criteria);
 
-  static const _baseURL = 'https://solidtorrents.eu/search?q=';
+  static const _baseURL = 'https://solidtorrents.to/search?q=';
   static const _pageURL = '&sort=seeders&page=';
 
   /// Describe where the data is coming from.

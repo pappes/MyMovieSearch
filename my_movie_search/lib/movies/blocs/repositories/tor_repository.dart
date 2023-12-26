@@ -12,17 +12,35 @@ import 'package:my_movie_search/movies/web_data_providers/search/tpb_search.dart
 import 'package:my_movie_search/movies/web_data_providers/search/yts_search.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
+typedef WebFetch = WebFetchBase<MovieResultDTO, SearchCriteriaDTO>;
+
 /// Search for download data from multiple torrent sources.
 class TorRepository extends TorMultiSearchRepository {
   /// Initiates a search for the provided [criteria].
   ///
   /// [searchUID] is a unique correlation ID identifying this search request
   @override
-  void initSearch(int searchUID, SearchCriteriaDTO criteria) {
-    // Manufacture a navigation card
-    // to expand downloadSimple to downloadAdvanced
+  Future<void> initSearch(int searchUID, SearchCriteriaDTO criteria) async {
+    await _advancedDownloadCard(searchUID);
+
+    for (final provider in _getProviders(criteria)) {
+      unawaited(_search(searchUID, provider));
+    }
+  }
+
+  Future<void> _search(int searchUID, WebFetch provider) async {
+    initProvider(provider);
+
+    final results = await provider.readList(limit: 10);
+    return addResults(searchUID, results)
+        .then((value) => finishProvider(provider));
+  }
+
+  /// Manufacture a navigation card
+  /// to expand downloadSimple to downloadAdvanced
+  Future<void> _advancedDownloadCard(int searchUID) async {
     if (criteria.criteriaType == SearchCriteriaType.downloadSimple) {
-      addResults(
+      return addResults(
         searchUID,
         [
           MovieResultDTO().init(
@@ -33,22 +51,10 @@ class TorRepository extends TorMultiSearchRepository {
         ],
       );
     }
-
-    for (final provider in _getProviders(criteria)) {
-      initProvider();
-      unawaited(
-        provider
-            .readList(limit: 10)
-            .then((values) => addResults(searchUID, values))
-            .whenComplete(finishProvider),
-      );
-    }
   }
 
   /// Determine best provider(s) for the supplied criteria.
-  List<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>> _getProviders(
-    SearchCriteriaDTO criteria,
-  ) {
+  List<WebFetch> _getProviders(SearchCriteriaDTO criteria) {
     if (criteria.criteriaType == SearchCriteriaType.downloadSimple) {
       // Yts searches based on IMDB ID
       return [QueryYtsSearch(criteria)];

@@ -15,17 +15,17 @@ class BarcodeRepository extends BaseMovieRepository {
   ///
   /// [searchUID] is a unique correlation ID identifying this search request
   @override
-  void initSearch(int searchUID, SearchCriteriaDTO criteria) {
+  Future<void> initSearch(int searchUID, SearchCriteriaDTO criteria) async {
     if (criteria.criteriaList.isEmpty) {
-      _searchText(searchUID);
+      await _searchText(searchUID);
     } else {
-      _searchList(searchUID);
+      await _searchList(searchUID);
     }
   }
 
   /// Initiates a search with all known movie "search" providers.
   /// Requests details retrieval for all returned search results.
-  void _searchText(int searchUID) {
+  Future<void> _searchText(int searchUID) async {
     final providers = <WebFetchBase<MovieResultDTO, SearchCriteriaDTO>>[
       QueryLibsaBarcodeSearch(criteria),
       QueryFishpondBarcodeSearch(criteria),
@@ -33,20 +33,18 @@ class BarcodeRepository extends BaseMovieRepository {
       QueryPicclickBarcodeSearch(criteria),
     ];
     for (final provider in providers) {
-      initProvider();
-      unawaited(
-        provider
-            .readList(limit: 1000)
-            .then((values) => addResults(searchUID, values))
-            .whenComplete(finishProvider),
-      );
+      initProvider(provider);
+      await provider
+          .readList(limit: 1000)
+          .then((values) => addResults(searchUID, values))
+          .whenComplete(() => finishProvider(provider));
     }
   }
 
   /// Initiates a details retrival for a specified list of movies.
-  void _searchList(int searchUID) {
-    initProvider();
-    addResults(searchUID, criteria.criteriaList);
-    finishProvider();
+  Future<void> _searchList(int searchUID) async {
+    initProvider(this);
+    return addResults(searchUID, criteria.criteriaList)
+        .then((_) => finishProvider(this));
   }
 }

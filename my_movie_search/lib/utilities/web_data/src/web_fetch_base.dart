@@ -17,7 +17,8 @@ import 'package:universal_io/io.dart'
     show
         HttpClient,
         HttpClientResponse,
-        HttpHeaders; // limit inclusions to reduce size
+        HttpHeaders,
+        SocketException; // limit inclusions to reduce size
 
 typedef DataSourceFn = Future<Stream<String>> Function(dynamic s);
 
@@ -536,6 +537,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       final request = client.close();
 
       response = await request;
+    } on SocketException catch (error) {
+      final errorMessage = baseConstructErrorMessage(
+        'unable to contact website, has the host moved? :',
+        error,
+      );
+      return Stream.error(errorMessage);
     } catch (error) {
       final errorMessage = baseConstructErrorMessage(
         'fetching web text:',
