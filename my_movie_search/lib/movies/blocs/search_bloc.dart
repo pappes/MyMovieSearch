@@ -40,7 +40,7 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
           isClosed ? null : emit(const SearchState.awaitingInput()),
     );
     on<SearchRequested>((event, emit) {
-      _initiateSearch(event.criteria, emit);
+      unawaited(_initiateSearch(event.criteria, emit));
     });
   }
 

@@ -1,8 +1,10 @@
 import 'dart:async' show StreamController, unawaited;
 
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 typedef ExtraDetailFn = Future<List<MovieResultDTO>> Function(MovieResultDTO);
 
@@ -13,12 +15,18 @@ typedef ExtraDetailFn = Future<List<MovieResultDTO>> Function(MovieResultDTO);
 ///
 /// [search] provides a stream of incomplete and complete results.
 /// [close] can be used to cancel a search.
+///
+/// Child calsses shoud override
+/// - initSearch if a
+/// - getProviders if using one or more WebFetchBase are use to fetch the data.
+/// - getExtraDetails if additional dat is require for each record returned.
 class BaseMovieRepository {
   BaseMovieRepository();
 
   late SearchCriteriaDTO criteria;
   StreamController<MovieResultDTO>? _movieStreamController;
   final _awaitingProviders = <dynamic>[];
+  final providers = <WebFetchBase<MovieResultDTO, SearchCriteriaDTO>>[];
   static int _searchUID = 1;
 
   /// Return a stream of data matching [criteria].
@@ -36,7 +44,7 @@ class BaseMovieRepository {
 
     _movieStreamController = StreamController<MovieResultDTO>(sync: true);
     // TODO(pappes): error handling
-    initSearch(_searchUID, criteria);
+    unawaited(initSearch(_searchUID, criteria));
     // TODO(pappes): make fetch duration configurable.
     unawaited(
       Future<void>.delayed(const Duration(seconds: 30)).then((_) => close()),
@@ -61,14 +69,30 @@ class BaseMovieRepository {
     }
   }
 
-  /// Initialise the class for a new search
-  /// with all known movie search providers.
+  /// Initiates a the primary data fetch.
   ///
-  /// To be overridden by specific implementations, calling:
+  /// May be overridden by specific implementations, calling:
   ///   initProvider() before requesting data for a source.
-  ///   await addResults(searchUID,dto) for matching data.
+  ///   await addResults(searchUID,dto) to yeild each matching record.
   ///   await finishProvider() as each source completes.
-  void initSearch(int searchUID, SearchCriteriaDTO criteria) {}
+  @protected
+  Future<void> initSearch(int searchUID, SearchCriteriaDTO criteria) async {
+    if (criteria.criteriaList.isEmpty) {
+      await _searchText(searchUID);
+    } else {
+      await _searchList(searchUID);
+    }
+  }
+
+  /// Initiates a secondary data fetch.
+  ///
+  /// To be overridden by specific implementations
+  /// Returning a list containing a map of:
+  ///   WebFetchBase class : result quantity limit.
+  /// e.g. Return [{QueryIMDBSearch(criteria):10}]
+  @protected
+  Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int> getProviders() =>
+      {};
 
   /// Initiates a secondary data fetch.
   ///
@@ -77,15 +101,16 @@ class BaseMovieRepository {
   ///   yieldResult() for any returned data.
   ///   await finishProvider() as each source completes.
   /// Returns number of extra fetches requested.
-  Future<int> getExtraDetails(
+  @protected
+  Future<void> getExtraDetails(
     int originalSearchUID,
     MovieResultDTO dto,
-  ) async =>
-      0;
+  ) async {}
 
   /// Begin waiting for another data provider to complete.
   ///
   /// [provider] uniquely identifies the search source and search criteria.
+  @protected
   void initProvider(dynamic provider) {
     _awaitingProviders.add(provider);
   }
@@ -94,6 +119,7 @@ class BaseMovieRepository {
   /// Close the stream if all WebFetch operations have completed.
   ///
   /// [provider] is the same passed through to initProvider.
+  @protected
   Future<void> finishProvider(dynamic provider) async {
     _awaitingProviders.remove(provider);
     if (_awaitingProviders.isEmpty) {
@@ -103,15 +129,18 @@ class BaseMovieRepository {
   }
 
   /// Yields incomplete or completed results in the stream.
+  @protected
   void yieldResult(MovieResultDTO result) =>
       _movieStreamController?.add(result);
 
   /// Determines if a new search has been initatatd since originalSearchUID.
+  @protected
   bool searchInterrupted(int originalSearchUID) =>
       originalSearchUID != _searchUID;
 
   /// Yields incomplete or completed results in the stream
   /// and initiates retrieval of movie details.
+  @protected
   Future<void> addResults(
     int originalSearchUID,
     List<MovieResultDTO> results,
@@ -123,5 +152,33 @@ class BaseMovieRepository {
         unawaited(getExtraDetails(originalSearchUID, dto));
       }
     }
+  }
+
+  /// Initiates a search with multiple WebFetch providers.
+  /// Requests details retrieval for all returned search results.
+  Future<void> _searchText(int searchUID) async {
+    final futures = <Future<dynamic>>{};
+
+    for (final entry in getProviders().entries) {
+      final provider = entry.key;
+      final limit = entry.value;
+      initProvider(provider);
+      futures.add(
+        provider
+            .readList(limit: limit)
+            .then((values) => addResults(searchUID, values))
+            .whenComplete(() => finishProvider(provider)),
+      );
+    }
+    for (final future in futures) {
+      await future;
+    }
+  }
+
+  /// Initiates a details retrival for a specified list of movies.
+  Future<void> _searchList(int searchUID) async {
+    initProvider(this);
+    return addResults(searchUID, criteria.criteriaList)
+        .then((_) => finishProvider(this));
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/movie_list_repository.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -12,6 +10,16 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Search for movie data from all online search sources.
 class MovieSearchRepository extends MovieListRepository {
+  @override
+  Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int> getProviders() => {
+        QueryIMDBSuggestions(criteria): 10,
+        QueryIMDBSearch(criteria): 10,
+        QueryOMDBMovies(criteria): 10,
+        QueryTMDBMovies(criteria): 10,
+        QueryGoogleMovies(criteria): 10,
+      };
+/*
+  //BaseMovieRepository
   /// Initiates a search for the provided [criteria].
   ///
   /// [searchUID] is a unique correlation ID identifying this search request
@@ -34,12 +42,18 @@ class MovieSearchRepository extends MovieListRepository {
       QueryTMDBMovies(criteria),
       QueryGoogleMovies(criteria),
     ];
+    final futures = <Future<dynamic>>{};
     for (final provider in providers) {
       initProvider(provider);
-      await provider
-          .readList(limit: 10)
-          .then((values) => addResults(searchUID, values))
-          .whenComplete(() => finishProvider(provider));
+      futures.add(
+        provider
+            .readList(limit: 10)
+            .then((values) => addResults(searchUID, values))
+            .whenComplete(() => finishProvider(provider)),
+      );
+    }
+    for (final future in futures) {
+      await future;
     }
   }
 
@@ -50,4 +64,5 @@ class MovieSearchRepository extends MovieListRepository {
     return addResults(searchUID, criteria.criteriaList)
         .then((_) => finishProvider(this));
   }
+  */
 }
