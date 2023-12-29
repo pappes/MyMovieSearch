@@ -894,15 +894,15 @@ void main() {
     test('empty input', () async {
       const input = '';
       const output = '';
-      testConvert(input, output);
+      await testConvert(input, output);
     });
     // Convert 1 json map into a tree.
     test(
       'mocked http call',
-      () {
+      () async {
         const input = '1234';
         const output = '1234.';
-        testConvert(input, output);
+        await testConvert(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
@@ -937,7 +937,7 @@ void main() {
     test('empty input', () async {
       const input = '';
       const output = '';
-      testConvert(input, output);
+      await testConvert(input, output);
     });
     // Convert 1 json map into a tree.
     test(
@@ -945,7 +945,7 @@ void main() {
       () async {
         const input = '1234';
         const output = '1234.';
-        testConvert(input, output);
+        await testConvert(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
@@ -1083,10 +1083,10 @@ void main() {
     }
 
     // Convert 0 maps into dtos.
-    test('empty input', () {
+    test('empty input', () async {
       const input = '';
       final output = <MovieResultDTO>[];
-      testTransform(input, output);
+      await testTransform(input, output);
     });
     // Convert 1 map into a dto.
     test(
@@ -1094,7 +1094,7 @@ void main() {
       () async {
         const input = '1000';
         final output = _makeDTOs(1);
-        testTransform(input, output);
+        await testTransform(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
@@ -1106,7 +1106,7 @@ void main() {
             '[QueryIMDBTitleDetails] Error in unknown with criteria $input '
             'stream error interpreting web text as a map :Error in http read, '
             'HTTP status code : 404 for https://www.unknown.com/title/HTTP404/?ref_=fn_tt_tt_1';
-        testTransform(input, null, output);
+        await testTransform(input, null, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
@@ -1117,7 +1117,7 @@ void main() {
         const output =
             '[QueryIMDBTitleDetails] Error in unknown with criteria $input '
             'fetching web text: :Exception: go away!';
-        testTransform(input, null, output);
+        await testTransform(input, null, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );

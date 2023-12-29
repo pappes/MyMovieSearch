@@ -59,7 +59,7 @@ void main() {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
       const expectedResult =
-          'https://solidtorrents.eu/search?q=new%20query&sort=seeders&page=1';
+          'https://solidtorrents.to/search?q=new%20query&sort=seeders&page=1';
 
       // Invoke the functionality.
       final actualResult = QuerySolidTorrentsSearch(criteria)
