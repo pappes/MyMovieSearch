@@ -141,8 +141,9 @@ class GoogleMovieSearchConverter {
   static String getYearRange(Map<dynamic, dynamic> map) {
     // Extract year range from 'title (TV Series 1988–1993)'
     final title = DynamicHelper.toString_(map[innerElementTitle]);
-    final lastOpen = title.lastIndexOf('(');
     final lastClose = title.lastIndexOf(')');
+    final startTitle = title.substring(1, lastClose);
+    final lastOpen = startTitle.lastIndexOf('(');
     if (lastOpen == -1 || lastClose == -1) return '';
 
     final yearRange = title.substring(lastOpen + 1, lastClose);

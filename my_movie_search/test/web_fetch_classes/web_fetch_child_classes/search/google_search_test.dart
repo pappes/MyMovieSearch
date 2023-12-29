@@ -128,6 +128,22 @@ void main() {
             '${expectedValue.toPrintableString()}',
       );
     });
+    // Confirm map can be converted to DTO.
+    test('Run getYearRange() success', () {
+      final input = {'title': 'title (TV Series 1988–1993)'};
+      const expectedOutput = '1988–1993';
+
+      final actualResult = GoogleMovieSearchConverter.getYearRange(input);
+      expect(actualResult, expectedOutput);
+    });
+    // Confirm map can be converted to DTO.
+    test('Run getYearRange() truncated', () {
+      final input = {'title': 'title (TV Series 1988–1993) (...'};
+      const expectedOutput = '1988–1993';
+
+      final actualResult = GoogleMovieSearchConverter.getYearRange(input);
+      expect(actualResult, expectedOutput);
+    });
   });
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
