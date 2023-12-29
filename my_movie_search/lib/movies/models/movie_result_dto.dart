@@ -50,6 +50,7 @@ enum MovieContentType {
   keyword,
   barcode,
   person,
+  title, //      unknown movie type
   download, //   e.g. magnet from tpb
   navigation, // e.g. next page
   movie, //      includes "tv movie"
@@ -57,7 +58,6 @@ enum MovieContentType {
   series, //     a short that repeats or movie repeats more than 4 times
   miniseries, // anything more that an hour long that does repeat
   episode, //    anything that is part of a series or mini-series
-  title, //      unknown movie type
   custom,
 }
 
@@ -353,7 +353,7 @@ class DtoCache {
   MovieResultDTO merge(MovieResultDTO newValue) {
     final key = _key(newValue);
     if (_globalDtoCache.isCached(key)) {
-      return _globalDtoCache.get(key).merge(newValue);
+      return _globalDtoCache.get(key)..merge(newValue);
     }
     _globalDtoCache.add(key, newValue);
     return newValue;
@@ -647,7 +647,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Combine information from [newValue] into a [MovieResultDTO].
   ///
-  MovieResultDTO merge(MovieResultDTO newValue, {bool excludeRelated = false}) {
+  void merge(MovieResultDTO newValue, {bool excludeRelated = false}) {
     if (newValue.userRatingCount >= userRatingCount ||
         0 == userRatingCount ||
         newValue.sources.containsKey(DataSourceType.imdb) ||
@@ -674,9 +674,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
       alternateTitle = newAlternateTitle;
       charactorName = bestValue(newValue.charactorName, charactorName);
-      if (newValue.uniqueId == 'tt3127016') {
-        newValue.uniqueId = 'tt3127016';
-      }
       description = bestValue(newValue.description, description);
       type = bestValue(newValue.type, type);
       year = bestValue(newValue.year, year);
@@ -711,7 +708,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (!excludeRelated) {
       mergeRelatedDtos(related, newValue.related);
     }
-    return this;
   }
 
   /// Combine related movie information from [existingDtos]
@@ -817,32 +813,44 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return rating2;
   }
 
-  /// Compare [a] with [b] and return the most relevant value.
+  /// Compare [existing] with [candidate] and return the most relevant value.
   ///
-  MovieContentType bestType(MovieContentType a, MovieContentType b) {
-    if (b.index > a.index) return b;
-    return a;
+  MovieContentType bestType(
+    MovieContentType existing,
+    MovieContentType candidate,
+  ) {
+    if (candidate.index > existing.index) return candidate;
+    return existing;
   }
 
-  /// Compare [a] with [b] and return the most relevant value.
+  /// Compare [existing] with [candidate] and return the most relevant value.
   ///
-  CensorRatingType bestCensorRating(CensorRatingType a, CensorRatingType b) {
-    if (b.index > a.index) return b;
-    return a;
+  CensorRatingType bestCensorRating(
+    CensorRatingType existing,
+    CensorRatingType candidate,
+  ) {
+    if (candidate.index > existing.index) return candidate;
+    return existing;
   }
 
-  /// Compare [a] with [b] and return the most relevant value.
+  /// Compare [existing] with [candidate] and return the most relevant value.
   ///
-  DataSourceType bestBestSource(DataSourceType a, DataSourceType b) {
-    if (b == DataSourceType.imdb) return b;
-    return a;
+  DataSourceType bestBestSource(
+    DataSourceType existing,
+    DataSourceType candidate,
+  ) {
+    if (candidate == DataSourceType.imdb) return candidate;
+    return existing;
   }
 
-  /// Compare [a] with [b] and return the most relevant value.
+  /// Compare [existing] with [candidate] and return the most relevant value.
   ///
-  LanguageType bestLanguage(LanguageType a, LanguageType b) {
-    if (b.index > a.index) return b;
-    return a;
+  LanguageType bestLanguage(
+    LanguageType existing,
+    LanguageType candidate,
+  ) {
+    if (candidate.index > existing.index) return candidate;
+    return existing;
   }
 
   /// Create a string representation of a [MovieResultDTO].
