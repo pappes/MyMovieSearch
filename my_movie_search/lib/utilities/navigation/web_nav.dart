@@ -10,6 +10,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/error_details.dart';
 import 'package:my_movie_search/movies/screens/movie_details.dart';
+import 'package:my_movie_search/movies/screens/movie_physical_location.dart';
 import 'package:my_movie_search/movies/screens/movie_search_criteria.dart';
 import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
@@ -28,6 +29,7 @@ const routeSearchCriteria = 'search';
 const routeSearchResults = 'searchresults';
 const routePersonDetails = 'persondetails';
 const routeMovieDetails = 'moviedetails';
+const routeMovieLocation = 'addlocation';
 const routeErrorDetails = 'errordetails';
 
 class RouteInfo {
@@ -171,6 +173,14 @@ class MMSNav {
     );
   }
 
+  /// Adds a physical location to a movie.
+  ///
+  void addLocation(MovieResultDTO movie) => unawaited(
+        canvas.viewFlutterPage(
+          RouteInfo(routeMovieLocation, movie, movie.uniqueId),
+        ),
+      );
+
   /// Display more details for the selected card.
   ///
   void resultDrillDown(MovieResultDTO movie) {
@@ -272,15 +282,14 @@ class MMSNav {
           pageBuilder: MovieDetailsPage.goRoute,
         ),
         GoRoute(
+          name: routeMovieLocation,
+          path: '/$routeMovieLocation',
+          pageBuilder: MoviePhysicalLocationPage.goRoute,
+        ),
+        GoRoute(
           name: routeErrorDetails,
           path: '/$routeErrorDetails',
-          pageBuilder: (context, state) => MaterialPage(
-            restorationId: state.fullPath,
-            child: ErrorDetailsPage(
-              errorDto: state.extra as MovieResultDTO? ?? MovieResultDTO(),
-              restorationId: getRestorationId(state),
-            ),
-          ),
+          pageBuilder: ErrorDetailsPage.goRoute,
         ),
       ];
 }

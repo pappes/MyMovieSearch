@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
 import 'package:flutter/material.dart';
+import 'package:my_movie_search/movies/models/movie_location.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
@@ -79,6 +81,49 @@ class Poster extends Widget {
       showImageViewer(_context, NetworkImage(_bigUrl));
 }
 
+List<Widget> movieLocations(MovieResultDTO movie, {GestureTapCallback? onTap}) {
+  final locations = MovieLocation().getLocationsForMovie(movie.uniqueId);
+  final rows = <DataRow>[];
+  for (final location in locations) {
+    final descriptions = MovieLocation().getMoviesAtLocation(location);
+    String title = movie.title;
+    for (final description in descriptions) {
+      if (description.uniqueId == movie.uniqueId) {
+        title = description.titleName;
+      }
+    }
+    rows.add(
+      DataRow(
+        cells: [
+          DataCell(Text(location.libNum)),
+          DataCell(Text(location.location)),
+          DataCell(Text(title)),
+        ],
+      ),
+    );
+  }
+  return (rows.isEmpty)
+      ? []
+      : [
+          GestureDetector(
+            onTap: onTap,
+            child: DataTable(
+              headingRowHeight: 20,
+              headingTextStyle: const TextStyle(fontWeight: FontWeight.bold),
+              dataRowMinHeight: 20,
+              dataRowMaxHeight: 20,
+              columnSpacing: 5,
+              rows: rows,
+              columns: const [
+                DataColumn(label: Text('Stacker')),
+                DataColumn(label: Text('Slot')),
+                DataColumn(label: Text('Title')),
+              ],
+            ),
+          ),
+        ];
+}
+
 /// A [Widget] that includes a [Column] that expands so that it
 /// virtically fills the available space.
 ///
@@ -118,10 +163,7 @@ class BoldLabel extends Text {
       : super(
           _formatString(string),
           textAlign: TextAlign.left,
-          style: const TextStyle(
-            fontFamily: 'RobotoMono',
-            fontWeight: FontWeight.bold,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold),
         );
 
   static String _formatString(String string) {

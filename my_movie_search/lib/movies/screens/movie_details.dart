@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_movie_search/movies/models/movie_location.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -188,6 +189,10 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ...movieLocations(
+                _movie,
+                onTap: () => MMSNav(context).addLocation(_movie),
+              ),
               ..._suggestions(),
               ..._cast(),
             ],
@@ -266,6 +271,49 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
   final _caseInsensativeSuggestion =
       RegExp('[sS][uU][gG][gG][eE][sS][tT][iI][oO][nN]');
+
+  List<Widget> _locations() {
+    final locations = MovieLocation().getLocationsForMovie(_movie.uniqueId);
+    final rows = <DataRow>[];
+    for (final location in locations) {
+      final descriptions = MovieLocation().getMoviesAtLocation(location);
+      String title = _movie.title;
+      for (final description in descriptions) {
+        if (description.uniqueId == _movie.uniqueId) {
+          title = description.titleName;
+        }
+      }
+      rows.add(
+        DataRow(
+          cells: [
+            DataCell(Text(location.libNum)),
+            DataCell(Text(location.location)),
+            DataCell(Text(title)),
+          ],
+        ),
+      );
+    }
+    return (rows.isEmpty)
+        ? []
+        : [
+            GestureDetector(
+              onTap: () => MMSNav(context).addLocation(_movie),
+              child: DataTable(
+                headingRowHeight: 20,
+                headingTextStyle: const TextStyle(fontWeight: FontWeight.bold),
+                dataRowMinHeight: 20,
+                dataRowMaxHeight: 20,
+                columnSpacing: 5,
+                rows: rows,
+                columns: const [
+                  DataColumn(label: Text('Stacker')),
+                  DataColumn(label: Text('Slot')),
+                  DataColumn(label: Text('Title')),
+                ],
+              ),
+            ),
+          ];
+  }
 
   List<Widget> _suggestions() => _related(_caseInsensativeSuggestion);
 
