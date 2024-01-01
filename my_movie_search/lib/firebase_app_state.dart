@@ -9,6 +9,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firedart/firedart.dart' as firedart;
 import 'package:flutter/material.dart';
 //import 'package:go_router/go_router.dart';
+import 'package:grpc/grpc.dart' as firedartstatus;
 
 import 'package:my_movie_search/firebase_options.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -137,8 +138,12 @@ class _WebFirebaseApplicationState extends FirebaseApplicationState {
         final msg = await doc.get();
         return msg['text']?.toString() ?? '';
       }
-    } catch (exception) {
-      logger.t('Unable to fetch record to Firebase exception: $exception');
+    } on firedart.GrpcError catch (exception) {
+      if (exception.code == firedartstatus.StatusCode.notFound) {
+        return null; // record does not exist, ignore
+      } else {
+        logger.t('Unable to fetch record to Firebase exception: $exception');
+      }
     }
     return null;
   }

@@ -48,6 +48,7 @@ dependencies:
   flutter_custom_tabs: ^1.0.4           # replace webview with andorid chrome browser
   flutter_dotenv: ^5.0.2                # Read secrests and settings from .env file.
   go_router: ^12.1.1                    # screen navigation
+  grpc: ^3.2.4                          # extended firedart error handling
   html: ^0.15.0                         # Dart dom and html utilities.
   html_unescape: ^2.0.0                 # decode &apos;
   hydrated_bloc: ^9.1.2                 # automatic restoration for bloc data

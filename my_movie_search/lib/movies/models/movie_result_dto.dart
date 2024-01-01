@@ -41,6 +41,12 @@ class MovieResultDTO {
   MovieSources sources = {};
   // Related DTOs are in a category, then keyed by uniqueId
   RelatedMovieCategories related = {};
+
+  /// Convert a [MovieResultDTO] to a json [String].
+  ///
+  String toJson({bool includeRelated = true}) =>
+      // ignore: unnecessary_this
+      jsonEncode(this.toMap(includeRelated: includeRelated));
 }
 
 enum MovieContentType {
@@ -1457,6 +1463,8 @@ extension DTOCompare on MovieResultDTO {
         return 98;
       case null:
         return 98;
+      case 'blank': // old version of as ReadHistory.read
+        return 0;
       default:
         {
           try {

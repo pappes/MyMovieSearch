@@ -93,11 +93,9 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         appBar: AppBar(
           title: Text(_restorableMovie.value.title),
         ),
-        body: Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(8),
-            child: _bodySection(),
-          ),
+        body: Padding(
+          padding: const EdgeInsets.all(8),
+          child: _bodySection(),
         ),
       ),
     );

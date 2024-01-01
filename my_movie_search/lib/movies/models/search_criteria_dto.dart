@@ -37,6 +37,12 @@ class SearchCriteriaDTO {
   String criteriaTitle = '';
   SearchCriteriaType criteriaType = SearchCriteriaType.none;
   List<MovieResultDTO> criteriaList = [];
+
+  /// Convert a [MovieResultDTO] to a json [String].
+  ///
+  String toJson({bool includeRelated = true}) =>
+      // ignore: unnecessary_this
+      jsonEncode(this.toMap());
 }
 
 // member variable names
