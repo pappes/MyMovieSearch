@@ -163,11 +163,11 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    ExpandedColumn(children: <Widget>[_leftColumn()]),
+                    LeftAligendColumn(children: <Widget>[_leftColumn()]),
 
                     // Only show right column on tablet
                     if (!_mobileLayout)
-                      ExpandedColumn(
+                      LeftAligendColumn(
                         children: [posterSection()],
                       ),
                   ],
@@ -184,7 +184,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
           Text('UniqueId: ${_person.uniqueId}      '),
           Text('Popularity: ${_person.userRatingCount}'),
           ElevatedButton(
-            onPressed: () =>
+            onPressed: () async =>
                 MMSNav(context).viewWebPage(makeImdbUrl(_person.uniqueId)),
             child: const Text('IMDB'),
           ),
@@ -221,7 +221,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
           Poster(
             context,
             url: _person.imageUrl,
-            showImages: () => MMSNav(context).viewWebPage(
+            showImages: () async => MMSNav(context).viewWebPage(
               makeImdbUrl(_person.uniqueId, photos: true),
             ),
           ),
@@ -239,7 +239,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         ..add(
           Center(
             child: InkWell(
-              onTap: () => MMSNav(context).searchForRelated(
+              onTap: () async => MMSNav(context).searchForRelated(
                 // Open search details when tapped.
                 '$rolesLabel: ${_person.title}',
                 rolesMap.values.toList(),

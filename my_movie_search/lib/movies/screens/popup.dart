@@ -1,28 +1,32 @@
 import 'package:flutter/material.dart';
 
-Future<void> showPopup(
+Future<Object?> showPopup(
   BuildContext context,
   String dialogText,
-  String title,
-) async =>
-    showDialog<void>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: SingleChildScrollView(
-          child: ListBody(
-            children: <Widget>[
-              SelectableText(dialogText),
-            ],
-          ),
+  String title, {
+  List<Widget>? buttons,
+}) async {
+  final actions = buttons ??
+      <Widget>[
+        TextButton(
+          child: const Text('Back'),
+          onPressed: () {
+            Navigator.of(context).pop('Return value goes here');
+          },
         ),
-        actions: <Widget>[
-          TextButton(
-            child: const Text('Back'),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-        ],
+      ];
+  return showDialog<Object?>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(title),
+      content: SingleChildScrollView(
+        child: ListBody(
+          children: <Widget>[
+            SelectableText(dialogText),
+          ],
+        ),
       ),
-    );
+      actions: actions,
+    ),
+  );
+}

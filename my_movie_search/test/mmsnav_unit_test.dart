@@ -22,6 +22,7 @@ class TestMMSFlutterCanvas {
     when(mockCanvas.viewWebPage(any)).thenAnswer((invocation) {
       final url = invocation.positionalArguments[0] as String;
       result = url;
+      return Future.value(null);
     });
     // ignore: discarded_futures
     when(mockCanvas.viewFlutterPage(any)).thenAnswer((invocation) {
@@ -44,37 +45,29 @@ void main() {
     final testCanvas = TestMMSFlutterCanvas();
     final testClass = MMSNav.headless(testCanvas.mockCanvas);
 
-    test('viewWebPage()', () {
-      testClass.viewWebPage('unknown');
+    test('viewWebPage()', () async {
+      await testClass.viewWebPage('unknown');
       expect(testCanvas.result, 'unknown');
     });
 
-    test('searchForRelated()', () {
-      testClass.searchForRelated('unknown', []);
+    test('searchForRelated()', () async {
+      await testClass.searchForRelated('unknown', []);
       expect(
         testCanvas.result,
         'searchresults',
       );
     });
 
-    test('getMoviesForKeyword()', () {
-      testClass.getMoviesForKeyword('unknown');
+    test('getMoviesForKeyword()', () async {
+      await testClass.showMoviesForKeyword('unknown');
       expect(
         testCanvas.result,
         'searchresults',
       );
     });
 
-    test('getDownloads()', () {
-      testClass.getDownloads('unknown', MovieResultDTO());
-      expect(
-        testCanvas.result,
-        'searchresults',
-      );
-    });
-
-    test('getMoreKeywords()', () {
-      testClass.getMoviesForKeyword('unknown');
+    test('getDownloads()', () async {
+      await testClass.showDownloads('unknown', MovieResultDTO());
       expect(
         testCanvas.result,
         'searchresults',
@@ -200,14 +193,18 @@ void main() {
       );
     });
 
-    test('resultDrillDown()', () {
-      void checkCalledPage(String id, String expected, {String? type}) {
+    test('resultDrillDown()', () async {
+      Future<void> checkCalledPage(
+        String id,
+        String expected, {
+        String? type,
+      }) async {
         final movie = MovieResultDTO().init(
           uniqueId: id,
           type: type,
           imageUrl: 'http://something.com',
         );
-        testClass.resultDrillDown(movie);
+        await testClass.resultDrillDown(movie);
         expect(
           testCanvas.result,
           expected,
@@ -215,89 +212,89 @@ void main() {
         );
       }
 
-      checkCalledPage('${imdbTitlePrefix}12345', 'moviedetails');
-      checkCalledPage('${imdbPersonPrefix}12345', 'persondetails');
-      checkCalledPage('12345', 'errordetails');
+      await checkCalledPage('${imdbTitlePrefix}12345', 'moviedetails');
+      await checkCalledPage('${imdbPersonPrefix}12345', 'persondetails');
+      await checkCalledPage('12345', 'errordetails');
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'moviedetails',
         type: MovieContentType.movie.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'persondetails',
         type: MovieContentType.person.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'errordetails',
         type: MovieContentType.custom.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'http://something.com',
         type: MovieContentType.download.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'moviedetails',
         type: MovieContentType.episode.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'errordetails',
         type: MovieContentType.error.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'errordetails',
         type: MovieContentType.information.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'searchresults',
         type: MovieContentType.keyword.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'moviedetails',
         type: MovieContentType.miniseries.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'searchresults',
         type: MovieContentType.navigation.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'errordetails',
         type: MovieContentType.none.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'moviedetails',
         type: MovieContentType.series.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'moviedetails',
         type: MovieContentType.short.toString(),
       );
 
-      checkCalledPage(
+      await checkCalledPage(
         '12345',
         'moviedetails',
         type: MovieContentType.title.toString(),

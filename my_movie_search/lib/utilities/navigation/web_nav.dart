@@ -112,7 +112,9 @@ class MMSNav {
   /// populated with a predefined list of dtos.
   ///
   Future<Object?> searchForRelated(
-      String description, List<MovieResultDTO> movies) async {
+    String description,
+    List<MovieResultDTO> movies,
+  ) async {
     if (movies.length == 1) {
       // Only one result so open details screen.
       return resultDrillDown(movies[0]);
@@ -130,7 +132,7 @@ class MMSNav {
 
   /// Navigates to a search results page populated with movie for the keyword.
   ///
-  Future<Object?> getMoviesForKeyword(String keyword) async =>
+  Future<Object?> showMoviesForKeyword(String keyword) async =>
       // Fetch first batch of movies that match the keyword.
 
       showResultsPage(
@@ -154,7 +156,7 @@ class MMSNav {
 
   /// Navigates to a search results page populated with downloads for the movie.
   ///
-  Future<Object?> getDownloads(String text, MovieResultDTO dto) async {
+  Future<Object?> showDownloads(String text, MovieResultDTO dto) async {
     // replace space with . for more matches
     final criteria = text.replaceAll(' ', '.');
     // Fetch first batch of movies that match the keyword.
@@ -180,7 +182,7 @@ class MMSNav {
     switch (movie.type) {
       case MovieContentType.keyword:
         // Search for movies that match the keyword.
-        return getMoviesForKeyword(movie.title);
+        return showMoviesForKeyword(movie.title);
 
       case MovieContentType.barcode:
         // Search for movies based on the data fetched for the barcode.
@@ -354,12 +356,5 @@ class MMSFlutterCanvas {
       return showPopup(context!, url, 'Browser error');
     }
     return success;
-  }
-
-  Future<Object?> _browserError(bool success, String url) async {
-    // An exception is thrown if browser app is not installed on Android device.
-    if (!success) {
-      return showPopup(context!, url, 'Browser error');
-    }
   }
 }

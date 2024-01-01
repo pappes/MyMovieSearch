@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_movie_search/movies/models/movie_location.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
@@ -46,7 +47,6 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
   late final FocusNode _stackerFocusNode = FocusNode();
   late final FocusNode _locationFocusNode = FocusNode();
   late final FocusNode _titleFocusNode = FocusNode();
-  var _mobileLayout = true;
 
   @override
   // The restoration bucket id for this page.
@@ -88,7 +88,6 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
   @override
   Widget build(BuildContext context) {
     _restorableMovie.value = widget.movieDto;
-    _mobileLayout = useMobileLayout(context);
     return SelectionArea(
       child: Scaffold(
         appBar: AppBar(
@@ -98,26 +97,14 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         body: Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8),
-            child: bodySection(),
+            child: _bodySection(),
           ),
         ),
-
-        /* body: Scrollbar(
-          thumbVisibility: true,
-          child: bodySection(),
-        ),*/
       ),
     );
   }
 
-  ScrollView oldBodySection() => ListView(
-        primary: true, //attach scrollbar controller to primary view
-        children: <Widget>[
-          Text(widget.movieDto.title),
-        ],
-      );
-
-  Widget bodySection() => Column(
+  Widget _bodySection() => Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -126,86 +113,168 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                stackerSectionLayout(),
-                const VerticalDivider(
-                  endIndent: 50,
-                ),
-                locationSectionLayout(),
+                _stackerSectionLayout(),
+                _locationSectionLayout(),
               ],
             ),
           ),
-          existingContentsSectionLayout(),
+          _existingContentsSectionLayout(),
         ],
       );
-  Widget stackerSectionLayout() => SizedBox(
+  Widget _stackerSectionLayout() => SizedBox(
         width: 100,
-        child: stackerSectionContents(),
+        child: _stackerSectionContents(),
       );
-  Widget locationSectionLayout() => Expanded(
-        child: locationSectionContents(),
+  Widget _locationSectionLayout() => Expanded(
+        child: _locationSectionContents(),
       );
-  Widget existingContentsSectionLayout() => Align(
+  Widget _existingContentsSectionLayout() => Align(
         alignment: Alignment.bottomCenter,
-        child: Expanded(child: existingContentsSectionContents()),
+        child: Expanded(child: _existingContentsSectionContents()),
       );
-  Widget stackerSectionContents() => Column(
+  Widget _stackerSectionContents() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           BoldLabel('Stacker'),
-          const Expanded(
-            child: Column(
-              children: [
-                Text('001'),
-                Text('002'),
-                Text('003'),
-                Text('004'),
-                Text('005'),
-                Text('006'),
-                Text('007'),
-                Text('008'),
-                Text('009'),
-              ],
-            ),
-          ),
+          _availableStackersLayout(),
           Align(
             alignment: Alignment.bottomLeft,
-            child: stackerInputField(),
+            child: _stackerInputField(),
           ),
         ],
       );
-  Widget locationSectionContents() => Column(
+  Widget _locationSectionContents() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           BoldLabel('Location'),
-          const Expanded(child: Text('more stuff here')),
-          //const Expanded(child: Text('more stuff here')),
+          LeftAligendColumn(
+            children: [
+              const Text('empty locations:'),
+              _emptyLocationsLayout(),
+              const Text('used locations:'),
+              _usedLocationsLayout(),
+            ],
+          ),
           Align(
             alignment: Alignment.bottomRight,
-            child: locationInputField(),
+            child: _locationInputField(),
           ),
         ],
       );
-  Widget existingContentsSectionContents() => Column(
+
+  Widget _availableStackersLayout() => _scrollableColumn(
+        _createStackerWidgets(
+          _getStackerLabels(),
+        ),
+      );
+  Widget _usedLocationsLayout() => _scrollableColumn(_usedLocationsContent());
+  Widget _emptyLocationsLayout() => _scrollableColumn(
+        _emptyLocationsContent(),
+        primary: true,
+      );
+
+  Widget _scrollableColumn(List<Widget> contents, {bool primary = false}) =>
+      Expanded(
+        child: Row(
+          children: [
+            const VerticalDivider(),
+            LeftAligendColumn(
+              children: [
+                Expanded(
+                  child: Scrollbar(
+                    thumbVisibility: true,
+                    child: ListView(
+                      primary: primary, //there can be only one
+                      children: contents,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+
+  List<Widget> _emptyLocationsContent() => _createLocationsWidgets(
+        MovieLocation().emptyLocations(_stackerController.value.text),
+      );
+
+  List<Widget> _usedLocationsContent() => _createLocationsWidgets(
+        MovieLocation().usedLocations(_stackerController.value.text),
+      );
+
+  List<Widget> _createLocationsWidgets(List<StackerAddress> locations) {
+    final widgets = <Widget>[];
+    for (final location in locations) {
+      widgets.add(
+        selectableText(location.location, _locationController.value),
+      );
+    }
+    return widgets;
+  }
+
+  List<Widget> _createStackerWidgets(List<String> indexes) {
+    final widgets = <Widget>[];
+    for (final index in indexes) {
+      widgets.add(
+        selectableText(index, _stackerController.value),
+      );
+    }
+    return widgets;
+  }
+
+  Widget selectableText(String text, TextEditingController controller) =>
+      InkWell(
+        child: Text(text),
+        onTap: () => setState(() => controller.text = text),
+      );
+
+  Widget _existingContentsSectionContents() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ...[BoldLabel('Existing Contents')],
-          ...movieLocations(
-            _restorableMovie.value,
-          ),
+          ...movieLocations(_restorableMovie.value),
           ...[
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Text('Add'),
-                Text('Done'),
+                ElevatedButton(
+                  onPressed: () => context.pop(),
+                  child: const Text('Add'),
+                ),
+                ElevatedButton(
+                  onPressed: () => context.pop(),
+                  child: const Text('Done'),
+                ),
               ],
-            )
+            ),
           ],
         ],
       );
-  //Widget orientation() => _mobileLayout ? Row.new : Column.new;
 
-  Widget stackerInputField() => TextField(
+  List<Widget> movieLocations(
+    MovieResultDTO movie, {
+    GestureTapCallback? onTap,
+    StackerAddress? proposedLocation,
+  }) =>
+      movieLocationTable(
+        onTap: onTap,
+        [
+          ...moviesAtLocation(proposedLocation),
+          ...locationsWithCustomTitle(movie),
+        ],
+      );
+
+  Iterable<DataRow> moviesAtLocation(StackerAddress? location) sync* {
+    if (location != null) {
+      final movies = MovieLocation().getMoviesAtLocation(location);
+      for (final movie in movies) {
+        yield movieLocationRow(location, movie.titleName);
+      }
+    }
+  }
+
+  Widget _stackerInputField() => TextField(
         controller: _stackerController.value,
         focusNode: _stackerFocusNode,
         //onSubmitted: _newSearch,
@@ -222,7 +291,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         ),
       );
 
-  Widget locationInputField() => TextField(
+  Widget _locationInputField() => TextField(
         controller: _locationController.value,
         focusNode: _locationFocusNode,
         //onSubmitted: _newSearch,
@@ -238,4 +307,12 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
           ),
         ),
       );
+
+  List<String> _getStackerLabels() {
+    final labels = <String>[];
+    for (int i = 1; i < 100; i++) {
+      labels.add(i.toString().padLeft(3, '0'));
+    }
+    return labels;
+  }
 }

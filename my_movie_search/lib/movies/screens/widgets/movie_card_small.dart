@@ -219,7 +219,10 @@ class MovieTile extends ListTile {
     return null;
   }
 
-  static void _navigate(BuildContext context, MovieResultDTO movie) =>
+  static Future<Object?> _navigate(
+    BuildContext context,
+    MovieResultDTO movie,
+  ) async =>
       MMSNav(context).resultDrillDown(movie);
 
   static ElevatedButton _navigateButton(
@@ -228,7 +231,7 @@ class MovieTile extends ListTile {
     Widget? icon,
   }) =>
       ElevatedButton(
-        onPressed: () => _navigate(context, movie),
+        onPressed: () async => _navigate,
         child: icon ?? _getIcon(movie),
       );
 }

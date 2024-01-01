@@ -52,7 +52,7 @@ class Poster extends Widget {
       child: _imageSearchIcon,
     );
 
-    _controls = ExpandedColumn(
+    _controls = LeftAligendColumn(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         if (_url.startsWith(webAddressPrefix))
@@ -81,56 +81,62 @@ class Poster extends Widget {
       showImageViewer(_context, NetworkImage(_bigUrl));
 }
 
-List<Widget> movieLocations(MovieResultDTO movie, {GestureTapCallback? onTap}) {
-  final locations = MovieLocation().getLocationsForMovie(movie.uniqueId);
-  final rows = <DataRow>[];
-  for (final location in locations) {
-    final descriptions = MovieLocation().getMoviesAtLocation(location);
-    String title = movie.title;
-    for (final description in descriptions) {
-      if (description.uniqueId == movie.uniqueId) {
-        title = description.titleName;
-      }
-    }
-    rows.add(
-      DataRow(
-        cells: [
-          DataCell(Text(location.libNum)),
-          DataCell(Text(location.location)),
-          DataCell(Text(title)),
-        ],
-      ),
-    );
-  }
-  return (rows.isEmpty)
-      ? []
-      : [
-          GestureDetector(
-            onTap: onTap,
-            child: DataTable(
-              headingRowHeight: 20,
-              headingTextStyle: const TextStyle(fontWeight: FontWeight.bold),
-              dataRowMinHeight: 20,
-              dataRowMaxHeight: 20,
-              columnSpacing: 5,
-              rows: rows,
-              columns: const [
-                DataColumn(label: Text('Stacker')),
-                DataColumn(label: Text('Slot')),
-                DataColumn(label: Text('Title')),
-              ],
+List<Widget> movieLocationTable(
+  Iterable<DataRow> rows, {
+  GestureTapCallback? onTap,
+  List<Widget> ifEmpty = const [],
+}) =>
+    (rows.isEmpty)
+        ? ifEmpty
+        : [
+            InkWell(
+              onTap: onTap,
+              child: DataTable(
+                headingRowHeight: 20,
+                headingTextStyle: const TextStyle(fontWeight: FontWeight.bold),
+                dataRowMinHeight: 20,
+                dataRowMaxHeight: 20,
+                columnSpacing: 5,
+                rows: rows.toList(),
+                columns: const [
+                  DataColumn(label: Text('Stacker')),
+                  DataColumn(label: Text('Slot')),
+                  DataColumn(label: Text('Title')),
+                ],
+              ),
             ),
-          ),
-        ];
+          ];
+
+Iterable<DataRow> locationsWithCustomTitle(MovieResultDTO movie) sync* {
+  final contents = StackerContents(
+    titleName: movie.title,
+    uniqueId: movie.uniqueId,
+  );
+  final locations = MovieLocation().getLocationsForMovie(contents);
+  for (final location in locations) {
+    final customTitle = MovieLocation().customTitleForMovieAtLocation(
+      location,
+      contents,
+    );
+    yield movieLocationRow(location, customTitle);
+  }
 }
+
+DataRow movieLocationRow(StackerAddress location, String title) => DataRow(
+      cells: [
+        DataCell(Text(location.libNum)),
+        DataCell(Text(location.location)),
+        DataCell(Text(title)),
+      ],
+    );
 
 /// A [Widget] that includes a [Column] that expands so that it
 /// virtically fills the available space.
 ///
 /// By default children are stacked from the top and and horizontally centered.
 ///
-class ExpandedColumn extends Expanded {
-  ExpandedColumn({
+class LeftAligendColumn extends Expanded {
+  LeftAligendColumn({
     super.key,
     MainAxisAlignment mainAxisAlignment = MainAxisAlignment.start,
     MainAxisSize mainAxisSize = MainAxisSize.max,

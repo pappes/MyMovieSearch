@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:my_movie_search/movies/models/movie_location.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -166,11 +165,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    ExpandedColumn(children: <Widget>[_leftColumn()]),
+                    LeftAligendColumn(children: <Widget>[_leftColumn()]),
 
                     // Only show right column on tablet
                     if (!_mobileLayout)
-                      ExpandedColumn(children: [_posterSection()]),
+                      LeftAligendColumn(children: [_posterSection()]),
                   ],
                 ),
               ),
@@ -189,11 +188,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ...movieLocations(
-                _movie,
-                onTap: () => MMSNav(context).addLocation(_movie),
-              ),
-              ..._suggestions(),
+              ..._locations(),
+              ..._related(_caseInsensativeSuggestion),
               ..._cast(),
             ],
           ),
@@ -205,7 +201,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           Poster(
             context,
             url: _movie.imageUrl,
-            showImages: () => MMSNav(context)
+            showImages: () async => MMSNav(context)
                 .viewWebPage(makeImdbUrl(_movie.uniqueId, photos: true)),
           ),
         ],
@@ -231,7 +227,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   List<Widget> _leftHeader() => [
         InkWell(
           child: _movieFacts(),
-          onTap: () => MMSNav(context).viewWebPage(
+          onTap: () async => MMSNav(context).viewWebPage(
             makeImdbUrl(_movie.uniqueId, parentalGuide: true),
           ),
         ),
@@ -240,7 +236,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
             Text('Source: ${_movie.bestSource.name}      '),
             Text('UniqueId: ${_movie.uniqueId}'),
             ElevatedButton(
-              onPressed: () =>
+              onPressed: () async =>
                   MMSNav(context).viewWebPage(makeImdbUrl(_movie.uniqueId)),
               child: const Text('IMDB'),
             ),
@@ -272,50 +268,17 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   final _caseInsensativeSuggestion =
       RegExp('[sS][uU][gG][gG][eE][sS][tT][iI][oO][nN]');
 
-  List<Widget> _locations() {
-    final locations = MovieLocation().getLocationsForMovie(_movie.uniqueId);
-    final rows = <DataRow>[];
-    for (final location in locations) {
-      final descriptions = MovieLocation().getMoviesAtLocation(location);
-      String title = _movie.title;
-      for (final description in descriptions) {
-        if (description.uniqueId == _movie.uniqueId) {
-          title = description.titleName;
-        }
-      }
-      rows.add(
-        DataRow(
-          cells: [
-            DataCell(Text(location.libNum)),
-            DataCell(Text(location.location)),
-            DataCell(Text(title)),
-          ],
-        ),
+  List<Widget> _locations() => movieLocationTable(
+        locationsWithCustomTitle(_movie),
+        onTap: _addLocations,
+        ifEmpty: [
+          ElevatedButton(
+            onPressed: _addLocations,
+            child: const Text('Tap to add location'),
+          ),
+        ],
       );
-    }
-    return (rows.isEmpty)
-        ? []
-        : [
-            GestureDetector(
-              onTap: () => MMSNav(context).addLocation(_movie),
-              child: DataTable(
-                headingRowHeight: 20,
-                headingTextStyle: const TextStyle(fontWeight: FontWeight.bold),
-                dataRowMinHeight: 20,
-                dataRowMaxHeight: 20,
-                columnSpacing: 5,
-                rows: rows,
-                columns: const [
-                  DataColumn(label: Text('Stacker')),
-                  DataColumn(label: Text('Slot')),
-                  DataColumn(label: Text('Title')),
-                ],
-              ),
-            ),
-          ];
-  }
-
-  List<Widget> _suggestions() => _related(_caseInsensativeSuggestion);
+  Future<Object?> _addLocations() async => MMSNav(context).addLocation(_movie);
 
   List<Widget> _cast() =>
       _related(_caseInsensativeSuggestion, invertFilter: true);
@@ -323,7 +286,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   Widget _keywords() {
     Widget makeHyperlink(String keyword) => InkWell(
           child: Text('  $keyword  '),
-          onTap: () => MMSNav(context).getMoviesForKeyword(keyword),
+          onTap: () async => MMSNav(context).showMoviesForKeyword(keyword),
         );
 
     final hyperlinks = <Widget>[];
@@ -333,7 +296,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
     final label = InkWell(
       child: const Text('Keywords: '),
-      onTap: () => MMSNav(context).getMoreKeywords(_movie),
+      onTap: () async => MMSNav(context).getMoreKeywords(_movie),
     );
 
     return Wrap(
@@ -362,7 +325,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           ..add(
             Center(
               child: InkWell(
-                onTap: () => MMSNav(context).searchForRelated(
+                onTap: () async => MMSNav(context).searchForRelated(
                   '$rolesLabel ${_movie.title}',
                   rolesMap.values.toList(),
                 ),
@@ -385,7 +348,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       ];
 
   Widget _externalSearchButton(String title) => ElevatedButton(
-        onPressed: () => MMSNav(context).getDownloads(
+        onPressed: () async => MMSNav(context).showDownloads(
           '$title ${_movie.year}',
           _movie,
         ),

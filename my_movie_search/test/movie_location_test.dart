@@ -11,59 +11,87 @@ Future<void> main() async {
     test(
       'default test data',
       () {
-        final actualOutput = MovieLocation().getLocationsForMovie('tt1111422');
-        final expectedOutput = [
+        const contents = StackerContents(
+          uniqueId: 'tt1111422',
+          titleName: 'Batman',
+        );
+        final actualOutput = MovieLocation().getLocationsForMovie(contents);
+        const expectedOutput = [
           StackerAddress(libNum: '007', location: '008'),
           StackerAddress(libNum: '007', location: '009'),
         ];
-        expect(actualOutput.toString(), expectedOutput.toString());
+        expect(actualOutput[0], expectedOutput[0]);
+        expect(actualOutput[1], expectedOutput[1]);
       },
     );
     test(
       'getLocationsForMovie',
       () {
-        final contents = StackerContents(
+        const contents = StackerContents(
           uniqueId: 'tt111111111',
           titleName: 'Batman',
         );
-        final address = StackerAddress(libNum: '007', location: '001');
+        const address = StackerAddress(libNum: '007', location: '001');
         MovieLocation().clear();
         MovieLocation().storeMovieAtLocation(contents, address);
-        final actualOutput =
-            MovieLocation().getLocationsForMovie(contents.uniqueId);
+        final actualOutput = MovieLocation().getLocationsForMovie(contents);
         final expectedOutput = [address];
-        expect(actualOutput.toString(), expectedOutput.toString());
+        expect(actualOutput, expectedOutput);
       },
     );
     test(
       'getMoviesAtLocation',
       () {
-        final contents =
+        const contents =
             StackerContents(uniqueId: 'tt111111111', titleName: 'Batman');
-        final address = StackerAddress(libNum: '007', location: '002');
+        const address = StackerAddress(libNum: '007', location: '002');
         MovieLocation().clear();
         MovieLocation().storeMovieAtLocation(contents, address);
         final actualOutput = MovieLocation().getMoviesAtLocation(address);
         final expectedOutput = [contents];
-        expect(actualOutput.toString(), expectedOutput.toString());
+        expect(actualOutput, expectedOutput);
       },
     );
     test(
       'add second record',
       () {
-        final contents = StackerContents(
+        const contents = StackerContents(
           uniqueId: 'tt111111111',
           titleName: 'Batman',
         );
-        final address1 = StackerAddress(libNum: '007', location: '003');
-        final address2 = StackerAddress(libNum: '007', location: '004');
+        const address1 = StackerAddress(libNum: '007', location: '003');
+        const address2 = StackerAddress(libNum: '007', location: '004');
         MovieLocation().clear();
         MovieLocation().storeMovieAtLocation(contents, address1);
         MovieLocation().storeMovieAtLocation(contents, address2);
-        final actualOutput =
-            MovieLocation().getLocationsForMovie(contents.uniqueId);
+        final actualOutput = MovieLocation().getLocationsForMovie(contents);
         final expectedOutput = [address1, address2];
-        expect(actualOutput.toString(), expectedOutput.toString());
+        expect(actualOutput, expectedOutput);
+      },
+    );
+    test(
+      'usedLocations',
+      () {
+        const contents = StackerContents(
+          uniqueId: 'tt111111111',
+          titleName: 'Batman',
+        );
+        const address1 = StackerAddress(libNum: '007', location: '001');
+        const address2 = StackerAddress(libNum: '007', location: '150');
+        MovieLocation().clear();
+
+        for (int i = 2; i <= 149; i++) {
+          MovieLocation().storeMovieAtLocation(
+            contents,
+            StackerAddress(
+              libNum: '007',
+              location: i.toString().padLeft(3, '0'),
+            ),
+          );
+        }
+        final actualOutput = MovieLocation().emptyLocations('007');
+        final expectedOutput = [address1, address2];
+        expect(actualOutput, expectedOutput);
       },
     );
   });
