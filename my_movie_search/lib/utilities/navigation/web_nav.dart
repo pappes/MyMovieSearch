@@ -63,7 +63,7 @@ class MMSNav {
   ///
   /// For platforms that don't support CustomTabs
   /// the URL is displayed to the user.
-  void viewWebPage(String url) => canvas.viewWebPage(url);
+  Future<void> viewWebPage(String url) async => canvas.viewWebPage(url);
 
   /// Construct route to Material user interface page
   /// as appropriate for the dto.
@@ -99,7 +99,7 @@ class MMSNav {
 
   /// Navigates to a search results page populated with a movie list.
   ///
-  Future<Object?> showResultsPage(SearchCriteriaDTO criteria) =>
+  Future<Object?> showResultsPage(SearchCriteriaDTO criteria) async =>
       canvas.viewFlutterPage(
         RouteInfo(
           routeSearchResults,
@@ -111,19 +111,18 @@ class MMSNav {
   /// Navigates to a search results page
   /// populated with a predefined list of dtos.
   ///
-  void searchForRelated(String description, List<MovieResultDTO> movies) {
+  Future<Object?> searchForRelated(
+      String description, List<MovieResultDTO> movies) async {
     if (movies.length == 1) {
       // Only one result so open details screen.
-      resultDrillDown(movies[0]);
+      return resultDrillDown(movies[0]);
     } else {
       // Multiple results so show them as individual cards.
-      unawaited(
-        showResultsPage(
-          SearchCriteriaDTO().init(
-            SearchCriteriaType.movieDTOList,
-            title: description,
-            list: movies,
-          ),
+      return showResultsPage(
+        SearchCriteriaDTO().init(
+          SearchCriteriaType.movieDTOList,
+          title: description,
+          list: movies,
         ),
       );
     }
@@ -131,101 +130,90 @@ class MMSNav {
 
   /// Navigates to a search results page populated with movie for the keyword.
   ///
-  void getMoviesForKeyword(String keyword) =>
+  Future<Object?> getMoviesForKeyword(String keyword) async =>
       // Fetch first batch of movies that match the keyword.
-      unawaited(
-        showResultsPage(
-          SearchCriteriaDTO().init(
-            SearchCriteriaType.moviesForKeyword,
-            title: keyword,
-          ),
+
+      showResultsPage(
+        SearchCriteriaDTO().init(
+          SearchCriteriaType.moviesForKeyword,
+          title: keyword,
         ),
       );
 
   /// Navigates to a search results page populated with keywords for the movie.
   ///
-  void getMoreKeywords(MovieResultDTO movie) =>
+  Future<Object?> getMoreKeywords(MovieResultDTO movie) async =>
       // Fetch first batch of movies that match the keyword.
-      unawaited(
-        showResultsPage(
-          SearchCriteriaDTO().init(
-            SearchCriteriaType.moreKeywords,
-            title: movie.uniqueId,
-            list: [movie],
-          ),
+      showResultsPage(
+        SearchCriteriaDTO().init(
+          SearchCriteriaType.moreKeywords,
+          title: movie.uniqueId,
+          list: [movie],
         ),
       );
 
   /// Navigates to a search results page populated with downloads for the movie.
   ///
-  void getDownloads(String text, MovieResultDTO dto) {
+  Future<Object?> getDownloads(String text, MovieResultDTO dto) async {
     // replace space with . for more matches
     final criteria = text.replaceAll(' ', '.');
     // Fetch first batch of movies that match the keyword.
-    unawaited(
-      showResultsPage(
-        SearchCriteriaDTO().init(
-          SearchCriteriaType.downloadSimple,
-          title: criteria,
-          list: [dto],
-        ),
+    return showResultsPage(
+      SearchCriteriaDTO().init(
+        SearchCriteriaType.downloadSimple,
+        title: criteria,
+        list: [dto],
       ),
     );
   }
 
   /// Adds a physical location to a movie.
   ///
-  void addLocation(MovieResultDTO movie) => unawaited(
-        canvas.viewFlutterPage(
-          RouteInfo(routeMovieLocation, movie, movie.uniqueId),
-        ),
+  Future<Object?> addLocation(MovieResultDTO movie) async =>
+      canvas.viewFlutterPage(
+        RouteInfo(routeMovieLocation, movie, movie.uniqueId),
       );
 
   /// Display more details for the selected card.
   ///
-  void resultDrillDown(MovieResultDTO movie) {
+  Future<Object?> resultDrillDown(MovieResultDTO movie) async {
     switch (movie.type) {
       case MovieContentType.keyword:
         // Search for movies that match the keyword.
-        getMoviesForKeyword(movie.title);
+        return getMoviesForKeyword(movie.title);
 
       case MovieContentType.barcode:
         // Search for movies based on the data fetched for the barcode.
-        unawaited(
-          showResultsPage(
-            SearchCriteriaDTO().init(
-              SearchCriteriaType.movieTitle,
-              title: getSearchTitle(movie),
-            ),
+
+        return showResultsPage(
+          SearchCriteriaDTO().init(
+            SearchCriteriaType.movieTitle,
+            title: getSearchTitle(movie),
           ),
         );
 
       case MovieContentType.navigation:
         if (movie.uniqueId.startsWith(webAddressPrefix)) {
           // Search for more movies that match the keyword.
-          unawaited(
-            showResultsPage(
-              QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
-            ),
+          return showResultsPage(
+            QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
           );
         } else {
           // replace space with . for more specific searching
           final criteria = movie.uniqueId;
           // Fetch first batch of movies that match the keyword.
-          unawaited(
-            showResultsPage(
-              SearchCriteriaDTO().init(
-                SearchCriteriaType.downloadAdvanced,
-                title: criteria,
-                list: [movie],
-              ),
+          return showResultsPage(
+            SearchCriteriaDTO().init(
+              SearchCriteriaType.downloadAdvanced,
+              title: criteria,
+              list: [movie],
             ),
           );
         }
 
       case MovieContentType.download:
         // Open magnet link.
-        canvas.viewWebPage(movie.imageUrl);
+        return canvas.viewWebPage(movie.imageUrl);
 
       case MovieContentType.person:
       case MovieContentType.movie:
@@ -240,11 +228,9 @@ class MMSNav {
       case MovieContentType.information:
         movie.setReadIndicator(ReadHistory.reading.toString());
         // Show details screen (movie details or person details)
-        unawaited(
-          canvas
-              .viewFlutterPage(getDetailsPage(movie))
-              .then((_) => movie.setReadIndicator(ReadHistory.read.toString())),
-        );
+        return canvas.viewFlutterPage(getDetailsPage(movie)).then(
+              (_) => movie.setReadIndicator(ReadHistory.read.toString()),
+            );
     }
   }
 
@@ -303,14 +289,15 @@ class MMSFlutterCanvas {
   ///
   /// For platforms that don't support CustomTabs
   /// the URL is displayed to the user.
-  void viewWebPage(String url) {
+  Future<Object?> viewWebPage(String url) async {
     if (null != context) {
       if (Platform.isAndroid && url.startsWith('http')) {
-        _invokeChromeCustomTabs(url);
+        return _invokeChromeCustomTabs(url);
       } else {
-        _openBrowser(url);
+        return _openBrowser(url);
       }
     }
+    return null;
   }
 
   /// Construct route to Material user interface page
@@ -334,42 +321,45 @@ class MMSFlutterCanvas {
     return Future.value(null);
   }
 
-  void _invokeChromeCustomTabs(String url) => unawaited(
-        tabs
-            .launch(
-              url,
-              customTabsOption: tabs.CustomTabsOption(
-                toolbarColor: Theme.of(context!).primaryColor,
-                enableDefaultShare: true,
-                enableUrlBarHiding: true,
-                showPageTitle: true,
-              ),
-            )
-            .onError((error, stackTrace) => _customTabsError(error, url)),
-      );
+  Future<Object?> _invokeChromeCustomTabs(String url) async {
+    Object? retval;
+    await tabs
+        .launch(
+          url,
+          customTabsOption: tabs.CustomTabsOption(
+            toolbarColor: Theme.of(context!).primaryColor,
+            enableDefaultShare: true,
+            enableUrlBarHiding: true,
+            showPageTitle: true,
+          ),
+        )
+        .onError((error, stackTrace) => retval = _customTabsError(error, url));
+    return retval;
+  }
 
-  void _customTabsError(Object? e, String url) {
+  Future<Object?> _customTabsError(Object? e, String url) {
     // An exception is thrown if browser app is not installed on Android device.
     debugPrint(e.toString());
-    unawaited(
-      showPopup(
-        context!,
-        'Received error $e\nwhen opening $url',
-        'Navigation error',
-      ),
+    return showPopup(
+      context!,
+      'Received error $e\nwhen opening $url',
+      'Navigation error',
     );
   }
 
-  void _openBrowser(String url) => unawaited(
-        launcher.launchUrl(Uri.parse(url)).then(
-              (success) => _browserError(success, url),
-            ),
-      );
-
-  void _browserError(bool success, String url) {
+  Future<Object?> _openBrowser(String url) async {
+    final success = await launcher.launchUrl(Uri.parse(url));
     // An exception is thrown if browser app is not installed on Android device.
     if (!success) {
-      unawaited(showPopup(context!, url, 'Browser error'));
+      return showPopup(context!, url, 'Browser error');
+    }
+    return success;
+  }
+
+  Future<Object?> _browserError(bool success, String url) async {
+    // An exception is thrown if browser app is not installed on Android device.
+    if (!success) {
+      return showPopup(context!, url, 'Browser error');
     }
   }
 }
