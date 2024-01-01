@@ -90,7 +90,7 @@ Future<void> main() async {
           );
         }
         final actualOutput = MovieLocation().emptyLocations('007');
-        final expectedOutput = [address1, address2];
+        final expectedOutput = [address1.location, address2.location];
         expect(actualOutput, expectedOutput);
       },
     );

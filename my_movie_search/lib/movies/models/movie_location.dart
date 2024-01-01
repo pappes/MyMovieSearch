@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:meta/meta.dart';
 
 /// Position of the movie including stacker [libNum] and slot [location].
@@ -81,7 +83,7 @@ class MovieLocation {
     _locations.clear();
   }
 
-  /// [List] of movies known to be stroed at
+  /// [List] of movies known to be stored at [location]
   List<StackerContents> getMoviesAtLocation(StackerAddress location) =>
       _locations[location] ?? [];
 
@@ -89,6 +91,7 @@ class MovieLocation {
   List<StackerAddress> getLocationsForMovie(StackerContents movie) =>
       _movies[movie.uniqueId] ?? [];
 
+  /// Insert a record into tthe cache.
   void storeMovieAtLocation(StackerContents movie, StackerAddress location) {
     _movies[movie.uniqueId] ??= [];
     _movies[movie.uniqueId]!.add(location);
@@ -96,28 +99,50 @@ class MovieLocation {
     _locations[location]!.add(movie);
   }
 
-  List<StackerAddress> emptyLocations(String libNum) {
-    final locations = <StackerAddress>[];
+  /// [StackerAddress] location values
+  /// not used to store any movies in [libNum].
+  Iterable<String> emptyLocations(String libNum) sync* {
     for (int i = 1; i <= 150; i++) {
+      final str = i.toString().padLeft(3, '0');
       final location = StackerAddress(
         libNum: libNum,
-        location: i.toString().padLeft(3, '0'),
+        location: str,
       );
-      if (!_locations.containsKey(location)) locations.add(location);
+      if (!_locations.containsKey(location)) yield str;
     }
-
-    return locations;
   }
 
-  List<StackerAddress> usedLocations(String libNum) {
-    final locations = <StackerAddress>[];
+  /// [StackerAddress] location values
+  /// currently used to store movies in [libNum].
+  Iterable<String> usedLocations(String libNum) {
+    final locations = SplayTreeSet<String>();
     for (final address in _locations.keys) {
-      if (address.libNum == libNum) locations.add(address);
+      if (address.libNum == libNum) locations.add(address.location);
     }
 
     return locations;
   }
 
+  /// [StackerAddress] LibNum values not used to store any movies.
+  Iterable<String> emptyLibNums() sync* {
+    final used = usedLibNums();
+    for (int i = 1; i < 100; i++) {
+      final str = i.toString().padLeft(3, '0');
+      if (!used.contains(str)) yield str;
+    }
+  }
+
+  /// [StackerAddress] LibNum values currently used to store movies.
+  Iterable<String> usedLibNums() {
+    final locations = SplayTreeSet<String>();
+    for (final address in _locations.keys) {
+      if (!locations.contains(address.libNum)) locations.add(address.libNum);
+    }
+
+    return locations;
+  }
+
+  /// Retrieve the title used for a specific movie at a specifica location.
   String customTitleForMovieAtLocation(
     StackerAddress location,
     StackerContents movie,

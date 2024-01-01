@@ -93,7 +93,6 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         appBar: AppBar(
           title: Text(_restorableMovie.value.title),
         ),
-        //body: bodySection(),
         body: Expanded(
           child: Padding(
             padding: const EdgeInsets.all(8),
@@ -156,25 +155,56 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
             ],
           ),
           Align(
-            alignment: Alignment.bottomRight,
-            child: _locationInputField(),
+            alignment: Alignment.bottomLeft,
+            child: Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    flex: 1,
+                    fit: FlexFit.tight,
+                    child: Column(
+                      children: [
+                        _locationInputField(),
+                      ],
+                    ),
+                  ),
+                  Flexible(
+                    flex: 2,
+                    fit: FlexFit.loose,
+                    child: Column(
+                      children: [
+                        _titleInputField(),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       );
 
   Widget _availableStackersLayout() => _scrollableColumn(
-        _createStackerWidgets(
-          _getStackerLabels(),
-        ),
+        _createStackerWidgets(_getStackerLabels()),
       );
-  Widget _usedLocationsLayout() => _scrollableColumn(_usedLocationsContent());
+  Widget _usedLocationsLayout() => _scrollableColumn(
+        flex: 1,
+        _usedLocationsContent(),
+      );
   Widget _emptyLocationsLayout() => _scrollableColumn(
+        flex: 4,
         _emptyLocationsContent(),
         primary: true,
       );
 
-  Widget _scrollableColumn(List<Widget> contents, {bool primary = false}) =>
+  Widget _scrollableColumn(
+    Iterable<Widget> contents, {
+    bool primary = false,
+    int flex = 1,
+  }) =>
       Expanded(
+        flex: flex,
         child: Row(
           children: [
             const VerticalDivider(),
@@ -185,7 +215,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
                     thumbVisibility: true,
                     child: ListView(
                       primary: primary, //there can be only one
-                      children: contents,
+                      children: contents.toList(),
                     ),
                   ),
                 ),
@@ -195,22 +225,18 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         ),
       );
 
-  List<Widget> _emptyLocationsContent() => _createLocationsWidgets(
+  Iterable<Widget> _emptyLocationsContent() => _createLocationsWidgets(
         MovieLocation().emptyLocations(_stackerController.value.text),
       );
 
-  List<Widget> _usedLocationsContent() => _createLocationsWidgets(
+  Iterable<Widget> _usedLocationsContent() => _createLocationsWidgets(
         MovieLocation().usedLocations(_stackerController.value.text),
       );
 
-  List<Widget> _createLocationsWidgets(List<StackerAddress> locations) {
-    final widgets = <Widget>[];
+  Iterable<Widget> _createLocationsWidgets(Iterable<String> locations) sync* {
     for (final location in locations) {
-      widgets.add(
-        selectableText(location.location, _locationController.value),
-      );
+      yield selectableText(location, _locationController.value);
     }
-    return widgets;
   }
 
   List<Widget> _createStackerWidgets(List<String> indexes) {
@@ -233,13 +259,22 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ...[BoldLabel('Existing Contents')],
-          ...movieLocations(_restorableMovie.value),
+          ...movieLocations(
+            _restorableMovie.value,
+            proposedLocation: currentLocation(),
+          ),
           ...[
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
-                  onPressed: () => context.pop(),
+                  onPressed: () {
+                    MovieLocation().storeMovieAtLocation(
+                      currentMovie(),
+                      currentLocation(),
+                    );
+                    context.pop();
+                  },
                   child: const Text('Add'),
                 ),
                 ElevatedButton(
@@ -252,13 +287,20 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         ],
       );
 
+  StackerAddress currentLocation() => StackerAddress(
+        libNum: _stackerController.value.text,
+        location: _locationController.value.text,
+      );
+  StackerContents currentMovie() => StackerContents(
+        uniqueId: _restorableMovie.value.uniqueId,
+        titleName: _titleController.value.text,
+      );
+
   List<Widget> movieLocations(
     MovieResultDTO movie, {
-    GestureTapCallback? onTap,
     StackerAddress? proposedLocation,
   }) =>
       movieLocationTable(
-        onTap: onTap,
         [
           ...moviesAtLocation(proposedLocation),
           ...locationsWithCustomTitle(movie),
@@ -303,6 +345,23 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
             onPressed: () {
               _locationController.value.clear();
               _locationFocusNode.requestFocus();
+            },
+          ),
+        ),
+      );
+
+  Widget _titleInputField() => TextField(
+        controller: _titleController.value,
+        focusNode: _titleFocusNode,
+        //onSubmitted: _newSearch,
+        showCursor: true,
+        decoration: InputDecoration(
+          hintText: 'What is the name if the disc?',
+          suffixIcon: IconButton(
+            icon: const Icon(Icons.clear),
+            onPressed: () {
+              _titleController.value.clear();
+              _titleFocusNode.requestFocus();
             },
           ),
         ),
