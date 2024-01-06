@@ -29,16 +29,17 @@ dependencies:
   cloud_firestore: ^4.9.1
   
   cupertino_icons: ^1.0.4               # iOS style icons.
-  easy_debounce: ^2.0.3
+  device_info_plus: ^9.1.1              # get infomation about the manufacturer of the phone
+  easy_debounce: ^2.0.3                 # manage the frequency fo requests
   easy_image_viewer: ^1.2.1
   equatable: ^2.0.3                     # Simplify object comparisons.
 
   firebase_auth: ^4.9.0
   firebase_core: ^2.15.1
-  #firebase_ui_auth: ^1.7.0  # does not work on linux
+  #firebase_ui_auth: ^1.7.0       # does not work on linux :(
   #firebase_core: ^1.0.3                # Firebase initialisation
-  #firebase_auth: ^3.0.1                 # Authenticate users against Firebase
-  #cloud_firestore: ^2.4.0               # Store data in Firebase Firestore cloud database
+  #firebase_auth: ^3.0.1                # Authenticate users against Firebase
+  #cloud_firestore: ^2.4.0              # Store data in Firebase Firestore cloud database
   
   firedart: ^0.9.7                      # dart native wrapper to firebase API
   flutter:

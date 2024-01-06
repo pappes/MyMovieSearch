@@ -127,7 +127,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
       );
   Widget _existingContentsSectionLayout() => Align(
         alignment: Alignment.bottomCenter,
-        child: Expanded(child: _existingContentsSectionContents()),
+        child: _existingContentsSectionContents(),
       );
   Widget _stackerSectionContents() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -154,30 +154,28 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
           ),
           Align(
             alignment: Alignment.bottomLeft,
-            child: Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Flexible(
-                    flex: 1,
-                    fit: FlexFit.tight,
-                    child: Column(
-                      children: [
-                        _locationInputField(),
-                      ],
-                    ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const VerticalDivider(),
+                Flexible(
+                  flex: 1,
+                  child: Column(
+                    children: [
+                      _locationInputField(),
+                    ],
                   ),
-                  Flexible(
-                    flex: 2,
-                    fit: FlexFit.loose,
-                    child: Column(
-                      children: [
-                        _titleInputField(),
-                      ],
-                    ),
+                ),
+                const VerticalDivider(),
+                Flexible(
+                  flex: 2,
+                  child: Column(
+                    children: [
+                      _titleInputField(),
+                    ],
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
