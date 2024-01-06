@@ -14,28 +14,28 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt0406158","bestSource":"DataSourceType.imdbSuggestions","title":"The Prize Winner of Defiance, Ohio","type":"MovieContentType.title","year":"2005","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt0406158"},"related":{}}
+{"uniqueId":"tt0406158","bestSource":"DataSourceType.imdbSuggestions","title":"The Prize Winner of Defiance, Ohio","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0406158"}}
 ''',
   r'''
-{"uniqueId":"tt0427038","bestSource":"DataSourceType.imdbSuggestions","title":"Carlito's Way: Rise to Power","type":"MovieContentType.title","year":"2005","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt0427038"},"related":{}}
+{"uniqueId":"tt0427038","bestSource":"DataSourceType.imdbSuggestions","title":"Carlito's Way: Rise to Power","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0427038"}}
 ''',
   r'''
-{"uniqueId":"tt0436724","bestSource":"DataSourceType.imdbSuggestions","title":"Rize","type":"MovieContentType.title","year":"2005","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt0436724"},"related":{}}
+{"uniqueId":"tt0436724","bestSource":"DataSourceType.imdbSuggestions","title":"Rize","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0436724"}}
 ''',
   r'''
-{"uniqueId":"tt0468538","bestSource":"DataSourceType.imdbSuggestions","title":"Ride or Die","type":"MovieContentType.title","year":"2005","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt0468538"},"related":{}}
+{"uniqueId":"tt0453540","bestSource":"DataSourceType.imdbSuggestions","title":"Rise of the Undead","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0453540"}}
 ''',
   r'''
-{"uniqueId":"tt0470883","bestSource":"DataSourceType.imdbSuggestions","title":"Magic Carpet Ride","type":"MovieContentType.title","year":"2005","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt0470883"},"related":{}}
+{"uniqueId":"tt0468538","bestSource":"DataSourceType.imdbSuggestions","title":"Ride or Die","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0468538"}}
 ''',
   r'''
-{"uniqueId":"tt0473080","bestSource":"DataSourceType.imdbSuggestions","title":"Riot at the Rite","type":"MovieContentType.title","year":"2005","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt0473080"},"related":{}}
+{"uniqueId":"tt0470883","bestSource":"DataSourceType.imdbSuggestions","title":"Magic Carpet Ride","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0470883"}}
 ''',
   r'''
-{"uniqueId":"tt0479726","bestSource":"DataSourceType.imdbSuggestions","title":"Nationwide Mercury Prize 2005","type":"MovieContentType.series","year":"2005","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt0479726"},"related":{}}
+{"uniqueId":"tt0473080","bestSource":"DataSourceType.imdbSuggestions","title":"Riot at the Rite","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0473080"}}
 ''',
   r'''
-{"uniqueId":"tt5156572","bestSource":"DataSourceType.imdbSuggestions","title":"SpongeBob SquarePants 4-D: Ride","type":"MovieContentType.title","year":"2005","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSuggestions":"tt5156572"},"related":{}}
+{"uniqueId":"tt0479726","bestSource":"DataSourceType.imdbSuggestions","title":"Nationwide Mercury Prize 2005","type":"MovieContentType.series","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0479726"}}
 ''',
 ];
 
