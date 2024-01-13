@@ -147,9 +147,8 @@ class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
         // Get reference to supplied ID
         final doc = fbcollection.document(id);
         final msg = await doc.get();
-        // Check the surrentuser
-        if (_derivedUser(_userDevice) ==
-            _derivedUser(msg['devices']?.toString())) {
+        // Check the currentuser
+        if (_derivedUserMatch(_userDevice, msg['devices'])) {
           return msg['text']?.toString() ?? '';
         }
         return '';
@@ -186,11 +185,15 @@ class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
           final doc = fbcollection.document(id);
           final msg = await doc.get();
           // Preserve existing data.
-          final existingDevices = msg['devices'];
-          final newDevices = map['devices'] as List<dynamic>;
-          if (existingDevices != null && existingDevices is Iterable) {
-            // Define unique list of devices.
-            map['devices'] = {...existingDevices, ...newDevices}.toList();
+          final newDevices = [_userDevice];
+          if (await doc.exists) {
+            final existingDevices = msg['devices'];
+            if (existingDevices != null && existingDevices is Iterable) {
+              // Define unique list of devices.
+              map['devices'] = {...existingDevices, ...newDevices}.toList();
+            }
+          } else {
+            map['devices'] = newDevices;
           }
           // Write data to0 firestore.
           await doc.update(map);
@@ -257,10 +260,16 @@ class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {
       if (await super.fetchRecord(collectionPath, id: id) as bool) {
         final fbcollection =
             FirebaseFirestore.instance.collection(collectionPath);
+
         // Get reference to supplied ID
         final doc = fbcollection.doc(id);
         final msg = await doc.get();
-        return msg['text']?.toString() ?? '';
+
+        // Check the currentuser
+        if (_derivedUserMatch(_userDevice, msg['devices'])) {
+          return msg['text']?.toString() ?? '';
+        }
+        return '';
       }
     } catch (exception) {
       logger.t('Unable to fetch record to Firebase exception: $exception');
@@ -295,11 +304,15 @@ class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {
           final msg = await doc.get();
 
           // Preserve existing data.
-          final existingDevices = msg['devices'];
-          final newDevices = map['devices'] as List<dynamic>;
-          if (existingDevices != null && existingDevices is Iterable) {
-            // Define unique list of devices.
-            map['devices'] = {...existingDevices, ...newDevices}.toList();
+          final newDevices = [_userDevice];
+          if (msg.exists) {
+            final existingDevices = msg['devices'];
+            if (existingDevices != null && existingDevices is Iterable) {
+              // Define unique list of devices.
+              map['devices'] = {...existingDevices, ...newDevices}.toList();
+            }
+          } else {
+            map['devices'] = newDevices;
           }
 
           // Write data to firestore.
@@ -324,3 +337,14 @@ String _derivedUser(String? device) =>
             device == null)
         ? 'dave'
         : 'tash';
+bool _derivedUserMatch(String? device, dynamic devices) {
+  if (devices is Iterable) {
+    final currentUser = _derivedUser(device);
+    for (final storedDevice in devices) {
+      if (currentUser == _derivedUser(storedDevice.toString())) {
+        return true;
+      }
+    }
+  }
+  return false;
+}
