@@ -22,7 +22,7 @@ const outerElementSearchInformation = 'searchInformation';
 const outerElementResultsCollection = 'items';
 const innerElementErrorFailureReason = 'message';
 const innerElementSearchInfoCount = 'totalResults';
-const innerElementTitle = 'title';
+const deepElementTitle = 'og:title';
 const innerElementYear = 'title';
 const innerElementPagemap = 'pagemap';
 const innerElementMetatags = 'metatags';
@@ -128,9 +128,16 @@ class GoogleMovieSearchConverter {
   }
 
   static String getTitle(Map<dynamic, dynamic> map) {
-    final title = DynamicHelper.toString_(map[innerElementTitle]);
+    final title = getRawTitle(map);
     final lastOpen = title.lastIndexOf('(');
     return lastOpen > 1 ? title.substring(0, lastOpen) : title;
+  }
+
+  static String getRawTitle(Map<dynamic, dynamic> map) {
+    final titles = DynamicHelper.toStringList_(
+      map.deepSearch(deepElementTitle),
+    );
+    return (titles.isEmpty ? '' : titles.first);
   }
 
   static String getID(Map<dynamic, dynamic> map) =>
@@ -140,16 +147,16 @@ class GoogleMovieSearchConverter {
 
   static String getYearRange(Map<dynamic, dynamic> map) {
     // Extract year range from 'title (TV Series 1988–1993)'
-    final title = DynamicHelper.toString_(map[innerElementTitle]);
-    final lastClose = title.lastIndexOf(')');
-    final startTitle = title.substring(1, lastClose);
-    final lastOpen = startTitle.lastIndexOf('(');
-    if (lastOpen == -1 || lastClose == -1) return '';
+    final title = getRawTitle(map).replaceAll('–', '-');
+    final lastOpen = title.lastIndexOf('(');
+    if (lastOpen == -1) return '';
+    var lastClose = title.lastIndexOf(')');
+    if (lastClose < lastOpen) lastClose = title.length;
 
-    final yearRange = title.substring(lastOpen + 1, lastClose);
+    final yearRange = title.substring(lastOpen + 1, lastClose).trim();
     // Anything starting and ending with numerics
     // allowing for optional dash at end of line.
-    final filter = RegExp('[0-9].*[0-9]-?–?');
+    final filter = RegExp('[0-9].*[0-9]-?');
     final numerics = filter.stringMatch(yearRange);
     return DynamicHelper.toString_(numerics);
   }

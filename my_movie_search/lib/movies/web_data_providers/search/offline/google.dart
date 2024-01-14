@@ -16,33 +16,33 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-const expectedDtoJsonStringList = [
+final expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt2543472","bestSource":"DataSourceType.google","title":"Wonder ","type":"MovieContentType.movie","year":"2017","yearRange":"2017","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BYjFhOWY0OTgtNDkzMC00YWJkLTk1NGEtYWUxNjhmMmQ5ZjYyXkEyXkFqcGdeQXVyMjMxOTE0ODA@._V1_UY1200_CR74,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt2543472"},"related":{}}
+{"uniqueId":"tt0074074","bestSource":"DataSourceType.google","title":"Wonder Woman ","type":"MovieContentType.series","year":"1979","yearRange":"1975–1979","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjAxYTcxMDUtZTRmMi00NTk3LThkZTItNGNlZTQ3NWRhMjY5XkEyXkFqcGdeQXVyNjExODE1MDc@._V1_UY1200_CR107,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0074074"}}
 ''',
   r'''
-{"uniqueId":"tt0451279","bestSource":"DataSourceType.google","title":"Wonder Woman ","type":"MovieContentType.movie","year":"2017","yearRange":"2017","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTYzODQzYjQtNTczNC00MzZhLTg1ZWYtZDUxYmQ3ZTY4NzA1XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_UY1200_CR90,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0451279"},"related":{}}
+{"uniqueId":"tt0094582","bestSource":"DataSourceType.google","title":"The Wonder Years ","type":"MovieContentType.series","year":"1993","yearRange":"1988–1993","imageUrl":"https://m.media-amazon.com/images/M/MV5BMWRhYjZjOTQtOGNiNC00MTQ0LWE2MTYtMTQxYzEwNDE3NjYyXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_UY1200_CR114,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0094582"}}
 ''',
   r'''
-{"uniqueId":"tt7126948","bestSource":"DataSourceType.google","title":"Wonder Woman 1984 ","type":"MovieContentType.movie","year":"2020","yearRange":"2020","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BYTlhNzJjYzYtNGU3My00ZDI5LTgzZDUtYzllYjU1ZmU0YTgwXkEyXkFqcGdeQXVyMjQwMDg0Ng@@._V1_UY1200_CR90,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt7126948"},"related":{}}
+{"uniqueId":"tt0185014","bestSource":"DataSourceType.google","title":"Wonder Boys ","type":"MovieContentType.movie","year":"2000","yearRange":"2000","imageUrl":"https://m.media-amazon.com/images/M/MV5BZGFlZDI5OGMtMmVhMS00NTQxLTgzZmEtZDJlMGVjNWViZThmXkEyXkFqcGdeQXVyMTAwMzUyOTc@._V1_UY1200_CR91,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0185014"}}
 ''',
   r'''
-{"uniqueId":"tt1595656","bestSource":"DataSourceType.google","title":"To the Wonder ","type":"MovieContentType.series","year":"2012","yearRange":"2012-","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTAwNzk1NjM2ODZeQTJeQWpwZ15BbWU3MDE1MjQwMjk@._V1_UY1200_CR90,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt1595656"},"related":{}}
+{"uniqueId":"tt0451279","bestSource":"DataSourceType.google","title":"Wonder Woman ","type":"MovieContentType.movie","year":"2017","yearRange":"2017","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTYzODQzYjQtNTczNC00MzZhLTg1ZWYtZDUxYmQ3ZTY4NzA1XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_UY1200_CR90,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0451279"}}
 ''',
   r'''
-{"uniqueId":"tt0094582","bestSource":"DataSourceType.google","title":"The Wonder Years ","type":"MovieContentType.series","year":"1993","yearRange":"1988–1993","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BMWRhYjZjOTQtOGNiNC00MTQ0LWE2MTYtMTQxYzEwNDE3NjYyXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_UY1200_CR114,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0094582"},"related":{}}
+{"uniqueId":"tt13276386","bestSource":"DataSourceType.google","title":"Shawn Mendes: In Wonder ","type":"MovieContentType.movie","year":"2020","yearRange":"2020","imageUrl":"https://m.media-amazon.com/images/M/MV5BNDRkMGM5YTQtOGMzZS00ZGJiLTg5YWMtYjg4NTcyZTk0MzAzXkEyXkFqcGdeQXVyMTI0OTAwOTgy._V1_UY1200_CR90,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt13276386"}}
 ''',
   r'''
-{"uniqueId":"tt0185014","bestSource":"DataSourceType.google","title":"Wonder Boys ","type":"MovieContentType.movie","year":"2000","yearRange":"2000","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BZGFlZDI5OGMtMmVhMS00NTQxLTgzZmEtZDJlMGVjNWViZThmXkEyXkFqcGdeQXVyMTAwMzUyOTc@._V1_UY1200_CR91,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0185014"},"related":{}}
+{"uniqueId":"tt1595656","bestSource":"DataSourceType.google","title":"To the Wonder ","type":"MovieContentType.series","year":"2012","yearRange":"2012-","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTAwNzk1NjM2ODZeQTJeQWpwZ15BbWU3MDE1MjQwMjk@._V1_UY1200_CR90,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt1595656"}}
 ''',
   r'''
-{"uniqueId":"tt0074074","bestSource":"DataSourceType.google","title":"Wonder Woman ","type":"MovieContentType.series","year":"1979","yearRange":"1975–1979","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjAxYTcxMDUtZTRmMi00NTk3LThkZTItNGNlZTQ3NWRhMjY5XkEyXkFqcGdeQXVyNjExODE1MDc@._V1_UY1200_CR107,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0074074"},"related":{}}
+{"uniqueId":"tt1740828","bestSource":"DataSourceType.google","title":"Wonder Woman ","type":"MovieContentType.movie","year":"2011","yearRange":"2011","imageUrl":"https://m.media-amazon.com/images/M/MV5BMjA0MzYzNzY3OV5BMl5BanBnXkFtZTcwMzM4ODM4NA@@._V1_UX630_CR0,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt1740828"}}
 ''',
   r'''
-{"uniqueId":"tt13276386","bestSource":"DataSourceType.google","title":"Shawn Mendes: In Wonder ","type":"MovieContentType.movie","year":"2020","yearRange":"2020","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BNDRkMGM5YTQtOGMzZS00ZGJiLTg5YWMtYjg4NTcyZTk0MzAzXkEyXkFqcGdeQXVyMTI0OTAwOTgy._V1_UY1200_CR90,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt13276386"},"related":{}}
+{"uniqueId":"tt2543472","bestSource":"DataSourceType.google","title":"Wonderful movie with real long title that google truncates ","type":"MovieContentType.series","yearRange":"2021–","imageUrl":"https://m.media-amazon.com/images/M/MV5BYjFhOWY0OTgtNDkzMC00YWJkLTk1NGEtYWUxNjhmMmQ5ZjYyXkEyXkFqcGdeQXVyMjMxOTE0ODA@._V1_UY1200_CR74,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt2543472"}}
 ''',
   r'''
-{"uniqueId":"tt1740828","bestSource":"DataSourceType.google","title":"Wonder Woman ","type":"MovieContentType.movie","year":"2011","yearRange":"2011","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://m.media-amazon.com/images/M/MV5BMjA0MzYzNzY3OV5BMl5BanBnXkFtZTcwMzM4ODM4NA@@._V1_UX630_CR0,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt1740828"},"related":{}}
+{"uniqueId":"tt7126948","bestSource":"DataSourceType.google","title":"Wonder Woman 1984 ","type":"MovieContentType.movie","year":"2020","yearRange":"2020","imageUrl":"https://m.media-amazon.com/images/M/MV5BYTlhNzJjYzYtNGU3My00ZDI5LTgzZDUtYzllYjU1ZmU0YTgwXkEyXkFqcGdeQXVyMjQwMDg0Ng@@._V1_UY1200_CR90,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt7126948"}}
 ''',
 ];
 
@@ -168,7 +168,7 @@ const jsonSampleEmpty = r'''
 const googleMoviesJsonSearchInner = r'''
     {
       "kind": "customsearch#result",
-      "title": "Wonder (2017) - IMDb",
+      "title": "Wonderful movie with real long title that google truncates (2017... - IMDb",
       "htmlTitle": "\u003cb\u003eWonder\u003c/b\u003e (2017) - IMDb",
       "link": "https://www.imdb.com/title/tt2543472/",
       "displayLink": "www.imdb.com",
@@ -202,9 +202,9 @@ const googleMoviesJsonSearchInner = r'''
             "theme-color": "#000000",
             "og:type": "video.movie",
             "og:site_name": "IMDb",
-            "og:title": "Wonder (2017) - IMDb",
+            "og:title": "Wonderful movie with real long title that google truncates (TV Series 2021– ) - IMDb",
             "pageid": "tt2543472",
-            "title": "Wonder (2017) - IMDb",
+            "title": "Wonderful movie with real long title that google truncates (TV Series 2021– ) - IMDb",
             "og:description": "Directed by Stephen Chbosky.  With Jacob Tremblay, Owen Wilson, ... school for the first time.",
             "fb:app_id": "115109575169727",
             "og:url": "http://www.imdb.com/title/tt2543472/",
