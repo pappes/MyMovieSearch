@@ -102,7 +102,7 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
     if (criteria != null && criteria is SearchCriteriaDTO) {
       id = criteria.toPrintableIdOrText();
     }
-    return '_${state.fullPath}$id';
+    return '_${state.fullPath}$id'.hashCode.toString();
   }
 
   @override

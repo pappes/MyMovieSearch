@@ -132,7 +132,7 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
     if (criteria != null && criteria is MovieResultDTO) {
       id = criteria.uniqueId;
     }
-    return '_${state.fullPath}$id';
+    return '_${state.fullPath}$id'.hashCode.toString().padRight(17000, '0');
   }
 
   @override
