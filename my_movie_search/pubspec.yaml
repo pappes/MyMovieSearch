@@ -63,8 +63,9 @@ dependencies:
   provider: ^6.0.5                      # so ChangeNotifierProvider can notify change to firebase login state
 
   simple_barcode_scanner: ^0.0.8
-  sqflite: ^2.0.2                       # Database storage for persisting state across sessions.
+  #sqflite: ^2.0.2                       # Database storage for persisting state across sessions.
   ####logger_flutter: ^0.7.1            # Shake device to see trace messages.
+  sqflite_common_ffi: ^2.3.2+1          # Database storage for persisting state across sessions.
   universal_io: ^2.0.4                  # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
   url_launcher: ^6.0.20                 # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
   webview_flutter: ^4.0.1               # Show web page

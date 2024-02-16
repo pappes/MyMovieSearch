@@ -205,8 +205,6 @@ class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
     }
     return false;
   }
-
-  _checkOwner(DocumentReference msg) {}
 }
 
 class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {

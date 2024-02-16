@@ -5,26 +5,26 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
-import 'package:sqflite/sqflite.dart' show Database, openDatabase;
+//import 'package:sqflite/sqflite.dart' show Database, openDatabase;
+
+//import 'package:sqflite_common/sqlite_api.dart';
+import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
 // database table and column names
 const _tableMovie = 'Movie';
-const _colMovieId = '_id';
 const _colMovieUniqueId = 'uniqueId';
 const _colMovieJson = 'json';
 
 // data model class
 class MovieModel {
-  MovieModel({required this.id, required this.uniqueId, required this.dtoJson});
+  MovieModel({required this.uniqueId, required this.dtoJson});
 
-  int id;
   String uniqueId;
   String dtoJson;
   // convenience method to create a Map from this MovieModel object
   Map<String, dynamic> toMap() => <String, dynamic>{
         _colMovieUniqueId: uniqueId,
         _colMovieJson: dtoJson,
-        _colMovieId: id,
       };
 
   MovieResultDTO? toMovieResultDTO() {
@@ -38,7 +38,6 @@ class MovieModel {
 
 extension ModelConversion on Map<dynamic, dynamic> {
   MovieModel toMovieModel() => MovieModel(
-        id: this[_colMovieId]! as int,
         uniqueId: this[_colMovieUniqueId]!.toString(),
         dtoJson: this[_colMovieJson]!.toString(),
       );
@@ -57,14 +56,14 @@ class DatabaseHelper {
 
   // Only allow a single open connection to the database.
   static Database? _database;
-  Future<Database> get database async {
-    if (_database != null) return _database!;
-    _database = await _initDatabase();
-    return _database!;
-  }
+  Future<Database> get database async => _database ??= await _initDatabase();
 
   // open the database
   Future<Database> _initDatabase() async {
+    // Init ffi loader if needed.
+    databaseFactory = databaseFactoryFfi;
+    sqfliteFfiInit();
+
     // The path_provider plugin gets the right directory for Android or iOS.
     final documentsDirectory = await getApplicationDocumentsDirectory();
     final path = join(documentsDirectory.path, _databaseName);
@@ -81,8 +80,7 @@ class DatabaseHelper {
     await db.execute(
       '''
       CREATE TABLE $_tableMovie (
-        $_colMovieId INTEGER PRIMARY KEY,
-        $_colMovieUniqueId TEXT NOT NULL,
+        $_colMovieUniqueId TEXT PRIMARY KEY,
         $_colMovieJson INTEGER NOT NULL
       )
       ''',
@@ -93,7 +91,11 @@ class DatabaseHelper {
 
   Future<int> insert(MovieModel movie) async {
     final Database db = await database;
-    final id = await db.insert(_tableMovie, movie.toMap());
+    final id = await db.insert(
+      _tableMovie,
+      movie.toMap(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
     return id;
   }
 
@@ -102,8 +104,8 @@ class DatabaseHelper {
     final int id = await db.update(
       _tableMovie,
       movie.toMap(),
-      where: '$_colMovieId = ?',
-      whereArgs: [movie.id],
+      where: '$_colMovieUniqueId = ?',
+      whereArgs: [movie.uniqueId],
     );
     return id;
   }
@@ -112,20 +114,20 @@ class DatabaseHelper {
     final Database db = await database;
     final int id = await db.delete(
       _tableMovie,
-      where: '$_colMovieId = ?',
-      whereArgs: [movie.id],
+      where: '$_colMovieUniqueId = ?',
+      whereArgs: [movie.uniqueId],
     );
     return id;
   }
 
-  Future<MovieModel?> queryMovie(int id) async {
+  Future<MovieModel?> queryMovieUniqueId(String uniqueId) async {
     final Database db = await database;
     //db.query(tableMovie) can be used to return a list of every row as a Map.
     final List<Map<dynamic, dynamic>> movieMap = await db.query(
       _tableMovie,
-      columns: [_colMovieId, _colMovieUniqueId, _colMovieJson],
-      where: '$_colMovieId = ?',
-      whereArgs: [id],
+      columns: [_colMovieUniqueId, _colMovieJson],
+      where: '$_colMovieUniqueId = ?',
+      whereArgs: [uniqueId],
     );
     if (movieMap.isNotEmpty) {
       return movieMap.first.toMovieModel();

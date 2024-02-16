@@ -147,7 +147,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run getYearRange() long truncated', () {
       final input = {
-        'og:title': 'title blah blah blah (TV Series 1988–1993...'
+        'og:title': 'title blah blah blah (TV Series 1988–1993...',
       };
       const expectedOutput = '1988–1993';
 
