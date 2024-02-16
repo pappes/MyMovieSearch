@@ -213,7 +213,8 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBFinder(criteria)..myClearCache();
+      final testClass = QueryTMDBFinder(criteria);
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -239,7 +240,8 @@ void main() {
     test('invalid json', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBFinder(criteria)..myClearCache();
+      final testClass = QueryTMDBFinder(criteria);
+      await testClass.myClearCache();
       const expectedException =
           '[tmdbFinder] Error in tmdbFinder with criteria ttImdbId123 '
           'convert error interpreting web text as a map '
@@ -262,7 +264,8 @@ void main() {
           ':tmdb results data not detected for criteria ttImdbId123'
           ' in json:[{"hello":"world"}]';
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBFinder(criteria)..myClearCache();
+      final testClass = QueryTMDBFinder(criteria);
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass

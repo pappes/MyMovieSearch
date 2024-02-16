@@ -161,9 +161,10 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryYtsDetails(criteria)..myClearCache();
+      final testClass = QueryYtsDetails(criteria);
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
+      await testClass.myClearCache();
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
@@ -193,7 +194,8 @@ void main() {
         ),
       );
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryYtsDetails(criteria)..myClearCache();
+      final testClass = QueryYtsDetails(criteria);
+      await testClass.myClearCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -217,7 +219,8 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('7602562');
-      final testClass = QueryYtsDetails(criteria)..myClearCache();
+      final testClass = QueryYtsDetails(criteria);
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -247,7 +250,8 @@ void main() {
           ':yts data not detected for criteria 123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('123');
-      final testClass = QueryYtsDetails(criteria)..myClearCache();
+      final testClass = QueryYtsDetails(criteria);
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -265,7 +269,8 @@ void main() {
           ':yts data not detected for criteria 123';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('123');
-      final testClass = QueryYtsDetails(criteria)..myClearCache();
+      final testClass = QueryYtsDetails(criteria);
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass

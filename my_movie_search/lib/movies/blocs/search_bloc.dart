@@ -118,7 +118,7 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
 
   /// Maintain map of fetched movie snippets and details.
   /// Update bloc state to indicate that new data is available.
-  void _receiveDTO(MovieResultDTO newValue) {
+  Future<void> _receiveDTO(MovieResultDTO newValue) async {
     final key = newValue.uniqueId;
 
     if (newValue.isMessage()) {
@@ -127,7 +127,7 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
       // Merge value with existing information and insert value into list
 
       final subsequentFetch = _allResults.containsKey(key);
-      _allResults[key] = DtoCache.singleton().merge(newValue);
+      _allResults[key] = await DtoCache.singleton().merge(newValue);
       if (!subsequentFetch) {
         // Check navigation history to see if this result has been viewed
         if (key.startsWith(imdbPersonPrefix) ||
@@ -151,12 +151,15 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
       }
     }
 
-    _findTemporaryDTO(_allResults, newValue);
+    await _findTemporaryDTO(_allResults, newValue);
     _throttleUpdates();
   }
 
   /// update record into the map with new key and values
-  void _findTemporaryDTO(MovieCollection collection, MovieResultDTO newValue) {
+  Future<void> _findTemporaryDTO(
+    MovieCollection collection,
+    MovieResultDTO newValue,
+  ) async {
     final tmdbSources = [
       DataSourceType.tmdbFinder,
       DataSourceType.tmdbMovie,
@@ -169,25 +172,25 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
         if (null != tmdbid &&
             tmdbid != imdbid &&
             _allResults.containsKey(tmdbid)) {
-          _replaceTemporaryDTO(_allResults, imdbid, tmdbid);
+          await _replaceTemporaryDTO(_allResults, imdbid, tmdbid);
         }
       }
     }
   }
 
   /// Reinsert record into the map because we cant update the key directly.
-  void _replaceTemporaryDTO(
+  Future<void> _replaceTemporaryDTO(
     MovieCollection collection,
     String imdbId,
     String tmdbId,
-  ) {
+  ) async {
     // Delete TMDB record from collection
     // and merge combined TMDB data with IMDB record
     // e.g. tmdbid="11234" imdbid="nm0109036"
     final temporaryRecord = collection[tmdbId]!;
     if (MovieContentType.error != temporaryRecord.type) {
       temporaryRecord.uniqueId = imdbId;
-      _allResults[imdbId] = DtoCache.singleton().merge(temporaryRecord);
+      _allResults[imdbId] = await DtoCache.singleton().merge(temporaryRecord);
 
       collection.remove(tmdbId);
     }

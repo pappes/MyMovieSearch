@@ -29,6 +29,15 @@ void main() async {
 
       expect(result, completion(isPositive));
     });
+    test('upsert', () async {
+      final model1 = MovieModel(uniqueId: 'tt12345', dtoJson: 'myjsonresult1');
+      final model2 = MovieModel(uniqueId: 'tt12345', dtoJson: 'myjsonresult2');
+      await db.insert(model1);
+      await db.insert(model2);
+      final result = await db.queryMovieUniqueId('tt12345');
+
+      expect(result!.dtoJson, model2.dtoJson);
+    });
     test('fetch', () async {
       final model = MovieModel(uniqueId: 'tt1234', dtoJson: 'myjsonresult');
       await db.insert(model);

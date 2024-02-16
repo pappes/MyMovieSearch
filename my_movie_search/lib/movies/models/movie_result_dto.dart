@@ -346,7 +346,8 @@ class DtoCache {
 
   /// Retrieve data from the cache.
   ///
-  MovieResultDTO fetch(MovieResultDTO newValue) => merge(newValue);
+  Future<MovieResultDTO> fetch(MovieResultDTO newValue) async =>
+      merge(newValue);
 
   /// remove [newValue] from the cache.
   ///
@@ -356,9 +357,9 @@ class DtoCache {
   /// Store information from [newValue] into a cache and
   /// merge with any existing record.
   ///
-  MovieResultDTO merge(MovieResultDTO newValue) {
+  Future<MovieResultDTO> merge(MovieResultDTO newValue) async {
     final key = _key(newValue);
-    if (_globalDtoCache.isCached(key)) {
+    if (await _globalDtoCache.isCached(key)) {
       return _globalDtoCache.get(key)..merge(newValue);
     }
     _globalDtoCache.add(key, newValue);
@@ -368,10 +369,10 @@ class DtoCache {
   /// Update cache to merge in movies from [newDtos] and
   /// return the same records with updated values.
   ///
-  MovieCollection mergeCollection(MovieCollection newDtos) {
+  Future<MovieCollection> mergeCollection(MovieCollection newDtos) async {
     final MovieCollection merged = {};
     for (final dto in newDtos.entries) {
-      merged[dto.key] = merge(dto.value);
+      merged[dto.key] = await merge(dto.value);
     }
     return merged;
   }

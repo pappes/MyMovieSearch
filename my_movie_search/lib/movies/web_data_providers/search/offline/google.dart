@@ -18,10 +18,10 @@ in test('Run dtoFromCompleteJsonMap()'*/
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 final expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt0074074","bestSource":"DataSourceType.google","title":"Wonder Woman ","type":"MovieContentType.series","year":"1979","yearRange":"1975–1979","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjAxYTcxMDUtZTRmMi00NTk3LThkZTItNGNlZTQ3NWRhMjY5XkEyXkFqcGdeQXVyNjExODE1MDc@._V1_UY1200_CR107,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0074074"}}
+{"uniqueId":"tt0074074","bestSource":"DataSourceType.google","title":"Wonder Woman ","type":"MovieContentType.series","year":"1979","yearRange":"1975-1979","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjAxYTcxMDUtZTRmMi00NTk3LThkZTItNGNlZTQ3NWRhMjY5XkEyXkFqcGdeQXVyNjExODE1MDc@._V1_UY1200_CR107,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0074074"}}
 ''',
   r'''
-{"uniqueId":"tt0094582","bestSource":"DataSourceType.google","title":"The Wonder Years ","type":"MovieContentType.series","year":"1993","yearRange":"1988–1993","imageUrl":"https://m.media-amazon.com/images/M/MV5BMWRhYjZjOTQtOGNiNC00MTQ0LWE2MTYtMTQxYzEwNDE3NjYyXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_UY1200_CR114,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0094582"}}
+{"uniqueId":"tt0094582","bestSource":"DataSourceType.google","title":"The Wonder Years ","type":"MovieContentType.series","year":"1993","yearRange":"1988-1993","imageUrl":"https://m.media-amazon.com/images/M/MV5BMWRhYjZjOTQtOGNiNC00MTQ0LWE2MTYtMTQxYzEwNDE3NjYyXkEyXkFqcGdeQXVyNTA4NzY1MzY@._V1_UY1200_CR114,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0094582"}}
 ''',
   r'''
 {"uniqueId":"tt0185014","bestSource":"DataSourceType.google","title":"Wonder Boys ","type":"MovieContentType.movie","year":"2000","yearRange":"2000","imageUrl":"https://m.media-amazon.com/images/M/MV5BZGFlZDI5OGMtMmVhMS00NTQxLTgzZmEtZDJlMGVjNWViZThmXkEyXkFqcGdeQXVyMTAwMzUyOTc@._V1_UY1200_CR91,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0185014"}}
@@ -39,7 +39,7 @@ final expectedDtoJsonStringList = [
 {"uniqueId":"tt1740828","bestSource":"DataSourceType.google","title":"Wonder Woman ","type":"MovieContentType.movie","year":"2011","yearRange":"2011","imageUrl":"https://m.media-amazon.com/images/M/MV5BMjA0MzYzNzY3OV5BMl5BanBnXkFtZTcwMzM4ODM4NA@@._V1_UX630_CR0,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt1740828"}}
 ''',
   r'''
-{"uniqueId":"tt2543472","bestSource":"DataSourceType.google","title":"Wonderful movie with real long title that google truncates ","type":"MovieContentType.series","yearRange":"2021–","imageUrl":"https://m.media-amazon.com/images/M/MV5BYjFhOWY0OTgtNDkzMC00YWJkLTk1NGEtYWUxNjhmMmQ5ZjYyXkEyXkFqcGdeQXVyMjMxOTE0ODA@._V1_UY1200_CR74,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt2543472"}}
+{"uniqueId":"tt2543472","bestSource":"DataSourceType.google","title":"Wonderful movie with real long title that google truncates ","type":"MovieContentType.series","year":"2021","yearRange":"2021-","imageUrl":"https://m.media-amazon.com/images/M/MV5BYjFhOWY0OTgtNDkzMC00YWJkLTk1NGEtYWUxNjhmMmQ5ZjYyXkEyXkFqcGdeQXVyMjMxOTE0ODA@._V1_UY1200_CR74,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt2543472"}}
 ''',
   r'''
 {"uniqueId":"tt7126948","bestSource":"DataSourceType.google","title":"Wonder Woman 1984 ","type":"MovieContentType.movie","year":"2020","yearRange":"2020","imageUrl":"https://m.media-amazon.com/images/M/MV5BYTlhNzJjYzYtNGU3My00ZDI5LTgzZDUtYzllYjU1ZmU0YTgwXkEyXkFqcGdeQXVyMjQwMDg0Ng@@._V1_UY1200_CR90,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt7126948"}}

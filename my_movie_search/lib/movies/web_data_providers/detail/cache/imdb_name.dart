@@ -84,9 +84,9 @@ mixin ThreadedCacheIMDBNameDetails
 
   @override
   @visibleForTesting
-  void clearThreadedCache() {
+  Future<void> clearThreadedCache() async {
     // ignore: invalid_use_of_visible_for_testing_member
-    super.clearThreadedCache();
+    await super.clearThreadedCache();
     normalQueue.clear();
     verySlowQueue.clear();
   }

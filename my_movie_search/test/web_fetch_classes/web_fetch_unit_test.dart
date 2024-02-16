@@ -176,7 +176,7 @@ class WebFetchCached extends WebFetchBasic {
   String lastResult = '';
 
   @override
-  bool myIsResultCached() => criteria == lastCriteria;
+  Future<bool> myIsResultCached() async => criteria == lastCriteria;
   @override
   bool myIsCacheStale() => false;
   @override
@@ -194,7 +194,7 @@ class WebFetchCached extends WebFetchBasic {
   }
 
   @override
-  void myClearCache() {
+  Future<void> myClearCache() async {
     lastCriteria = '';
     lastResult = '';
   }
@@ -284,17 +284,17 @@ void main() {
       expect(testClass.myFormatInputAsText(), criteriaDto.criteriaTitle);
     });
     // Default not cached.
-    test('myIsResultCached()', () {
-      expect(testClass.myIsResultCached(), false);
+    test('myIsResultCached()', () async {
+      expect(testClass.myIsResultCached(), completion(false));
     });
     // Default not stale cache.
     test('myIsCacheStale()', () {
       expect(testClass.myIsCacheStale(), false);
     });
     // Default no caching.
-    test('myIsResultCached()', () {
+    test('myIsResultCached()', () async {
       //testClass.myAddResultToCache(input);
-      expect(testClass.myIsResultCached(), false);
+      expect(testClass.myIsResultCached(), completion(false));
     });
   });
 
@@ -430,7 +430,7 @@ void main() {
         source: (_) => Future.value(Stream.value('Polo')),
       );
       expect(listResult, <void>[]);
-      final resultIsCached = testClass.myIsResultCached();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, false);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);
@@ -449,7 +449,7 @@ void main() {
         source: (_) => Future.value(Stream.value('Who Is Marco?')),
       );
       expect(listResult, ['Polo']);
-      final resultIsCached = testClass.myIsResultCached();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, true);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);
@@ -462,7 +462,7 @@ void main() {
         source: (_) => Future.value(Stream.value('Polo')),
       );
       expect(listResult, ['Polo']);
-      final resultIsCached = testClass.myIsResultCached();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, true);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);
@@ -473,7 +473,7 @@ void main() {
       await testClass.myAddResultToCache('Polo');
       final listResult = testClass.myFetchResultFromCache().toList();
       expect(listResult, ['Polo']);
-      final resultIsCached = testClass.myIsResultCached();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, true);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);
@@ -482,10 +482,10 @@ void main() {
     test('clear cache', () async {
       final testClass = WebFetchCached('Marco');
       await testClass.myAddResultToCache('Polo');
-      testClass.myClearCache();
+      await testClass.myClearCache();
       final listResult = await testClass.readCachedList();
       expect(listResult, <void>[]);
-      final resultIsCached = testClass.myIsResultCached();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, false);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);

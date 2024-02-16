@@ -51,7 +51,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   @override
   void initState() {
     super.initState();
-    _movie = DtoCache.singleton().fetch(widget.movie);
+    unawaited(DtoCache.singleton().fetch(widget.movie).then(_gotPerson));
+  }
+
+  void _gotPerson(MovieResultDTO movie) {
+    _movie = movie;
     _getDetails(
       SearchCriteriaDTO().init(
         SearchCriteriaType.movieTitle,
@@ -60,7 +64,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     );
   }
 
-  /// Fetch full person details from imdb.
+  /// Fetch full movie details from imdb.
   void _getDetails(SearchCriteriaDTO criteria) {
     if (_movie.uniqueId.startsWith(imdbTitlePrefix)) {
       /// Fetch movie details

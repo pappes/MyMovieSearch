@@ -10,6 +10,10 @@ import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path_provider_linux/path_provider_linux.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedHtmlSample(_) =>
@@ -115,6 +119,9 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('ThreadedCacheIMDBTitleDetails unit tests', () {
+    setUp(() async {
+      PathProviderPlatform.instance = PathProviderLinux();
+    });
     test('empty cache', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final testClass = QueryIMDBTitleDetails(criteria);
@@ -122,7 +129,7 @@ void main() {
         source: (_) async => Stream.value('Polo'),
       );
       expect(listResult, <MovieResultDTO>[]);
-      final resultIsCached = testClass.myIsResultCached();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, false);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);
@@ -137,7 +144,7 @@ void main() {
         source: (_) async => Stream.value('Polo'),
       );
       expect(listResult, [dto]);
-      final resultIsCached = testClass.myIsResultCached();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, true);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);
@@ -148,8 +155,8 @@ void main() {
       final testClass = QueryIMDBTitleDetails(criteria);
       final dto = MovieResultDTO().testDto('Polo');
       await testClass.myAddResultToCache(dto);
-      testClass.myClearCache();
-      final resultIsCached = testClass.myIsResultCached();
+      await testClass.myClearCache();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, false);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);
@@ -157,12 +164,13 @@ void main() {
 
     test('read empty cache via readCachedList', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria);
+      await testClass.myClearCache();
       final listResult = await testClass.readCachedList(
         source: (_) async => Stream.value('Who Is Marco?'),
       );
       expect(listResult, MovieResultDTOListMatcher([]));
-      final resultIsCached = testClass.myIsResultCached();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, false);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);
@@ -170,14 +178,15 @@ void main() {
 
     test('read populated cache via readCachedList', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria);
+      await testClass.myClearCache();
       final dto = MovieResultDTO().testDto('Polo');
       await testClass.myAddResultToCache(dto);
       final listResult = await testClass.readCachedList(
         source: (_) async => Stream.value('Who Is Marco?'),
       );
       expect(listResult, MovieResultDTOListMatcher([dto]));
-      final resultIsCached = testClass.myIsResultCached();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, true);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);
@@ -185,7 +194,8 @@ void main() {
 
     test('read populated cache via readList', () async {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria);
+      await testClass.myClearCache();
       // ignore: unused_result
       await testClass.readList(
         source: streamImdbHtmlOfflineData,
@@ -194,7 +204,7 @@ void main() {
         source: (_) async => Stream.value('"Dummy HTML"'),
       );
       expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
-      final resultIsCached = testClass.myIsResultCached();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, true);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);
@@ -202,12 +212,13 @@ void main() {
 
     test('fetch result from cache', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria);
+      await testClass.myClearCache();
       final dto = MovieResultDTO().testDto('Polo');
       await testClass.myAddResultToCache(dto);
       final listResult = testClass.myFetchResultFromCache();
       expect(listResult, MovieResultDTOListMatcher([dto]));
-      final resultIsCached = testClass.myIsResultCached();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, true);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);
@@ -215,14 +226,15 @@ void main() {
 
     test('fetch multiple results from cache', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria);
+      await testClass.myClearCache();
       final dto1 = MovieResultDTO().testDto('Polo1');
       final dto2 = MovieResultDTO().testDto('Polo2');
       await testClass.myAddResultToCache(dto1);
       await testClass.myAddResultToCache(dto2);
       final listResult = testClass.myFetchResultFromCache();
       expect(listResult, MovieResultDTOListMatcher([dto1, dto2]));
-      final resultIsCached = testClass.myIsResultCached();
+      final resultIsCached = await testClass.myIsResultCached();
       expect(resultIsCached, true);
       final resultIsStale = testClass.myIsCacheStale();
       expect(resultIsStale, false);
@@ -255,9 +267,10 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria);
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
+      await testClass.myClearCache();
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
@@ -287,7 +300,8 @@ void main() {
         ),
       );
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryIMDBTitleDetails(criteria)..myClearCache();
+      final testClass = QueryIMDBTitleDetails(criteria);
+      await testClass.myClearCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -304,6 +318,10 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search query', () {
+    setUp(() async {
+      PathProviderPlatform.instance = PathProviderLinux();
+    });
+
     // Read imdb search results from a simulated byte stream
     // and convert JSON to dtos.
     test('Run readList()', () async {
@@ -311,8 +329,8 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final testClass =
-          QueryIMDBTitleDetails(SearchCriteriaDTO().fromString('tt123'))
-            ..myClearCache();
+          QueryIMDBTitleDetails(SearchCriteriaDTO().fromString('tt123'));
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -345,7 +363,8 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails(
         SearchCriteriaDTO().fromString('tt123'),
-      )..myClearCache();
+      );
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -366,7 +385,8 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryIMDBTitleDetails(
         SearchCriteriaDTO().fromString('tt123'),
-      )..myClearCache();
+      );
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass

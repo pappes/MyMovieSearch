@@ -12,6 +12,10 @@ import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_na
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path_provider_linux/path_provider_linux.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedHtmlSample(_) =>
@@ -136,8 +140,12 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('ThreadedCacheIMDBNameDetails unit tests', () {
-    test('cache queueing', () {
-      QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
+    setUp(() async {
+      PathProviderPlatform.instance = PathProviderLinux();
+    });
+
+    test('cache queueing', () async {
+      await QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 0);
       expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
       for (var iteration = 0; iteration < 100; iteration++) {
@@ -166,21 +174,21 @@ void main() {
       expect(ThreadedCacheIMDBNameDetails.verySlowQueue.length, 0);
     });
     test('empty cache', () async {
-      QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
+      await QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final testClass = QueryIMDBNameDetails(criteria);
       final listResult = await testClass.readCachedList(
         source: (_) => Future.value(Stream.value('Polo')),
       );
       expect(listResult, <MovieResultDTO>[]);
-      final resultIsCached = testClass.isThreadedResultCached();
+      final resultIsCached = await testClass.isThreadedResultCached();
       expect(resultIsCached, false);
       final resultIsStale = testClass.isThreadedCacheStale();
       expect(resultIsStale, false);
     });
 
     test('add to cache via readPrioritisedCachedList', () async {
-      QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
+      await QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
       final testClass = QueryIMDBNameDetails(criteria);
       // ignore: unused_result
@@ -198,14 +206,14 @@ void main() {
             'needs to match expected DTO List'
             '${expectedDTOList.toPrintableString()}',
       );
-      final resultIsCached = testClass.isThreadedResultCached();
+      final resultIsCached = await testClass.isThreadedResultCached();
       expect(resultIsCached, true);
       final resultIsStale = testClass.isThreadedCacheStale();
       expect(resultIsStale, false);
     });
 
     test('fetch result from cache', () async {
-      QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
+      await QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
       final testClass = QueryIMDBNameDetails(criteria);
       // ignore: unused_result
@@ -215,29 +223,29 @@ void main() {
       final listResult =
           await testClass.fetchResultFromThreadedCache().toList();
       expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
-      final resultIsCached = testClass.isThreadedResultCached();
+      final resultIsCached = await testClass.isThreadedResultCached();
       expect(resultIsCached, true);
       final resultIsStale = testClass.isThreadedCacheStale();
       expect(resultIsStale, false);
     });
 
     test('clear cache', () async {
-      QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
+      await QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
       final testClass = QueryIMDBNameDetails(criteria);
       // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
-      testClass.clearThreadedCache();
-      final resultIsCached = testClass.isThreadedResultCached();
+      await testClass.clearThreadedCache();
+      final resultIsCached = await testClass.isThreadedResultCached();
       expect(resultIsCached, false);
       final resultIsStale = testClass.isThreadedCacheStale();
       expect(resultIsStale, false);
     });
 
     test('cache prioitisation', () async {
-      QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
+      await QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       for (var iteration = 0; iteration < 100; iteration++) {
         final criteria = SearchCriteriaDTO().fromString('nm$iteration');
         // Enqueue requests but do not wait for result.
@@ -249,7 +257,7 @@ void main() {
         );
       }
       // Wait for queued requests to be intitialised but not completed.
-      await Future<void>.delayed(const Duration(milliseconds: 100));
+      await Future<void>.delayed(const Duration(milliseconds: 300));
       final queueLength = ThreadedCacheIMDBNameDetails.normalQueue.length;
       expect(queueLength, greaterThanOrEqualTo(1));
       expect(queueLength, lessThanOrEqualTo(5));
@@ -283,7 +291,8 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryIMDBNameDetails(criteria)..clearThreadedCache();
+      final testClass = QueryIMDBNameDetails(criteria);
+      await testClass.clearThreadedCache();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
@@ -315,7 +324,8 @@ void main() {
         ),
       );
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryIMDBNameDetails(criteria)..clearThreadedCache();
+      final testClass = QueryIMDBNameDetails(criteria);
+      await testClass.clearThreadedCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -339,7 +349,8 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
-      final testClass = QueryIMDBNameDetails(criteria)..myClearCache();
+      final testClass = QueryIMDBNameDetails(criteria);
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -371,7 +382,8 @@ void main() {
           'nm7602562 in not valid html';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm7602562');
-      final testClass = QueryIMDBNameDetails(criteria)..myClearCache();
+      final testClass = QueryIMDBNameDetails(criteria);
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
@@ -391,7 +403,8 @@ void main() {
           'nm7602562 in <html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm7602562');
-      final testClass = QueryIMDBNameDetails(criteria)..myClearCache();
+      final testClass = QueryIMDBNameDetails(criteria);
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass

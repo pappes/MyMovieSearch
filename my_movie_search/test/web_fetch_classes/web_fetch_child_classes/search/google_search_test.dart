@@ -131,7 +131,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run getYearRange() success', () {
       final input = {'og:title': 'title (TV Series 1988–1993)'};
-      const expectedOutput = '1988–1993';
+      const expectedOutput = '1988-1993';
 
       final actualResult = GoogleMovieSearchConverter.getYearRange(input);
       expect(actualResult, expectedOutput);
@@ -139,7 +139,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run getYearRange() short truncated', () {
       final input = {'og:title': 'title (TV Series 1988–1993...'};
-      const expectedOutput = '1988–1993';
+      const expectedOutput = '1988-1993';
 
       final actualResult = GoogleMovieSearchConverter.getYearRange(input);
       expect(actualResult, expectedOutput);
@@ -149,7 +149,7 @@ void main() {
       final input = {
         'og:title': 'title blah blah blah (TV Series 1988–1993...',
       };
-      const expectedOutput = '1988–1993';
+      const expectedOutput = '1988-1993';
 
       final actualResult = GoogleMovieSearchConverter.getYearRange(input);
       expect(actualResult, expectedOutput);

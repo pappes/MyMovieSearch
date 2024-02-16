@@ -85,9 +85,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     searchResultsLimit.limit = limit;
     try {
       unawaited(
-        baseYieldFetchedObjects(
-          source: source,
-        ).pipe(sc).onError(errorHandler),
+        baseYieldFetchedObjects(source: source)
+            .then((value) => value.pipe(sc).onError(errorHandler))
+            .onError(errorHandler),
       );
     } catch (error, stackTrace) {
       errorHandler(error, stackTrace);
@@ -99,10 +99,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
   @useResult
-  Future<List<OUTPUT_TYPE>> readList({DataSourceFn? source, int? limit}) {
+  Future<List<OUTPUT_TYPE>> readList({DataSourceFn? source, int? limit}) async {
     searchResultsLimit.limit = limit;
-    final list = baseYieldFetchedObjects(source: source).toList();
-    return list;
+    final result = await baseYieldFetchedObjects(source: source);
+    return result.toList();
   }
 
   /// Return a cached list of [OUTPUT_TYPE] objects matching [criteria].
@@ -110,12 +110,16 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Optionally inject [source] as an alternate data source for mocking/testing.
   /// Optionally [limit] the quantity of results returned from the query.
   @useResult
-  Future<List<OUTPUT_TYPE>> readCachedList({DataSourceFn? source, int? limit}) {
+  Future<List<OUTPUT_TYPE>> readCachedList({
+    DataSourceFn? source,
+    int? limit,
+  }) async {
     searchResultsLimit.limit = limit;
-    if (myIsResultCached()) {
-      return baseYieldFetchedObjects(
+    if (await myIsResultCached()) {
+      final result = await baseYieldFetchedObjects(
         source: source,
-      ).toList();
+      );
+      return result.toList();
     }
     return Future.value(<OUTPUT_TYPE>[]);
   }
@@ -266,7 +270,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Can be overridden by child classes if required.
   @visibleForOverriding
-  bool myIsResultCached() => false;
+  Future<bool> myIsResultCached() async => false;
 
   /// Check cache to see if data in cache should be refreshed.
   ///
@@ -286,7 +290,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Can be overridden by child classes if required.
   @visibleForTesting // and for override!
-  void myClearCache() {}
+  Future<void> myClearCache() async {}
 
   /// Prevent response parsing for http errors.
   ///
@@ -481,10 +485,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should not be overridden by child classes.
   /// Should not be called directly by child classes.
   @visibleForTesting
-  Stream<OUTPUT_TYPE> baseYieldFetchedObjects({
+  Future<Stream<OUTPUT_TYPE>> baseYieldFetchedObjects({
     DataSourceFn? source,
-  }) {
-    final isCached = myIsResultCached();
+  }) async {
+    final isCached = await myIsResultCached();
     // if cached yield from cache
     if (isCached && !myIsCacheStale()) {
       logger.t(

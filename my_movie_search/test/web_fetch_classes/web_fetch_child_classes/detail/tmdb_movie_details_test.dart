@@ -148,8 +148,9 @@ void main() {
 
   group('QueryTMDBMovieDetails integration tests', () {
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () {
-      final testClass = QueryTMDBMovieDetails(criteria)..myClearCache();
+    test('Run myConstructURI()', () async {
+      final testClass = QueryTMDBMovieDetails(criteria);
+      await testClass.myClearCache();
       const expected = 'https://api.themoviedb.org/3/movie/1234?api_key=';
 
       // Invoke the functionality.
@@ -166,7 +167,8 @@ void main() {
   group('QueryTMDBMovieDetails integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final testClass = QueryTMDBMovieDetails(criteria)..myClearCache();
+      final testClass = QueryTMDBMovieDetails(criteria);
+      await testClass.myClearCache();
       final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
@@ -197,7 +199,8 @@ void main() {
           ),
         ),
       );
-      final testClass = QueryTMDBMovieDetails(criteria)..myClearCache();
+      final testClass = QueryTMDBMovieDetails(criteria);
+      await testClass.myClearCache();
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -220,7 +223,8 @@ void main() {
       // Set up the test data.
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTMDBMovieDetails(criteria)..myClearCache();
+      final testClass = QueryTMDBMovieDetails(criteria);
+      await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass

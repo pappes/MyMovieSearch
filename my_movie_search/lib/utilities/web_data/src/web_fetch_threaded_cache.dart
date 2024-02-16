@@ -40,7 +40,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     var result = <OUTPUT_TYPE>[];
 
     // if cached and not stale yield from cache
-    if (isThreadedResultCached() && !isThreadedCacheStale()) {
+    if (await isThreadedResultCached() && !isThreadedCacheStale()) {
       logger.t(
         '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
         'value was pre-cached ${myFormatInputAsText()}',
@@ -125,11 +125,12 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
 
   @visibleForTesting
   @mustCallSuper
-  void clearThreadedCache() => _cache.clear();
+  Future<void> clearThreadedCache() async => _cache.clear();
 
   /// Check cache to see if data has already been fetched.
   @useResult
-  bool isThreadedResultCached() => _cache.isCached(_getCacheKey());
+  Future<bool> isThreadedResultCached() async =>
+      _cache.isCached(_getCacheKey());
 
   /// Check cache to see if data in cache should be refreshed.
   @useResult

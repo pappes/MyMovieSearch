@@ -172,7 +172,7 @@ void main() {
   /// but mocks out http calls by replacing myGetHttpClient with _onlineSearch
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('WebFetchBase ReadList', () {
+  group('WebFetchBase ReadList', () async {
     Future<void> testRead(
       List<String> criteria,
       List<MovieResultDTO> expectedValue, {
@@ -181,7 +181,7 @@ void main() {
     }) async {
       // Clear any prior test results from the cache
       final criteriaDto = SearchCriteriaDTO();
-      QueryIMDBTitleDetailsMocked(criteriaDto, '').myClearCache();
+      await QueryIMDBTitleDetailsMocked(criteriaDto, '').myClearCache();
       // Call IMDB for each criteria in the list.
       final futures = _queueDetailSearch(criteria, online, forceError);
 

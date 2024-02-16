@@ -1,13 +1,16 @@
 //import 'dart:async';
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 import 'package:my_movie_search/firebase_app_state.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 ////import 'package:my_movie_search/utilities/settings.dart';
 //import '../test_helper.dart';
 
-void main() {
+void main() async {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   // Wait for api key to be initialised
-  // setUpAll(() => Settings.singleton().init());
+  setUpAll(() async => Settings.singleton().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// integration tests
 ////////////////////////////////////////////////////////////////////////////////

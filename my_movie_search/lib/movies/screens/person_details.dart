@@ -50,7 +50,11 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   @override
   void initState() {
     super.initState();
-    _person = DtoCache.singleton().fetch(widget.person);
+    unawaited(DtoCache.singleton().fetch(widget.person).then(_gotPerson));
+  }
+
+  void _gotPerson(MovieResultDTO person) {
+    _person = person;
     _getDetails(
       SearchCriteriaDTO().init(
         SearchCriteriaType.movieTitle,

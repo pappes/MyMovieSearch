@@ -13,14 +13,15 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"nm0101000","bestSource":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdb":"nm0101000"}}
+{"uniqueId":"nm0101000","bestSource":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person",
+      "description":"Steve Bower is known for American Playhouse (1982) and Joe (1970).","sources":{"DataSourceType.imdb":"nm0101000"}}
 ''',
   r'''
-{"uniqueId":"nm0101001","bestSource":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"Steve Bower is known for Vintage Reds (1998), Late Kick Off North East and Cumbria (2010) and The Search for the Holy Grail (1998).","sources":{"DataSourceType.imdb":"nm0101001"}}
+{"uniqueId":"nm0101001","bestSource":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person",
+      "description":"Steve Bower is known for Amazon Prime Video: Every Game, Every Goal (2019), Vintage Reds (1998) and Late Kick Off North East and Cumbria (2010).","sources":{"DataSourceType.imdb":"nm0101001"}}
 ''',
   r'''
-{"uniqueId":"nm0101002","bestSource":"DataSourceType.imdb","title":"Stone Bower","type":"MovieContentType.person","languages":"[]","genres":"[]","keywords":"[]",
+{"uniqueId":"nm0101002","bestSource":"DataSourceType.imdb","title":"Stone Bower","type":"MovieContentType.person",
       "description":"Stone Bower is known for Against All Odds (1984), Death Valley (1982) and Jimmy the Kid (1982).","sources":{"DataSourceType.imdb":"nm0101002"}}
 ''',
 ];
