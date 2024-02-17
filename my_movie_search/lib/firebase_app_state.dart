@@ -127,10 +127,11 @@ class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
     _userDisplayName = user.displayName;
     _userId = user.id;
 
-    final linuxInfo = await DeviceInfoPlugin().linuxInfo;
+    /*final linuxInfo = await DeviceInfoPlugin().linuxInfo;
     // code4 = 'linux.Ubuntu.'
     _userDevice = 'linux.${linuxInfo.name}.'
-        '${linuxInfo.variant ?? ""}';
+        '${linuxInfo.variant ?? ""}';*/
+    _userDevice = 'linux.Ubuntu.';
 
     return true;
   }

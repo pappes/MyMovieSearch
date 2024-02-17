@@ -11,6 +11,11 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 
+// ignore: depend_on_referenced_packages
+import 'package:path_provider_linux/path_provider_linux.dart';
+// ignore: depend_on_referenced_packages
+import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+
 import 'package:universal_io/io.dart'
     show HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders;
 
@@ -166,13 +171,16 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(
 }
 
 void main() {
+  setUp(() async {
+    PathProviderPlatform.instance = PathProviderLinux();
+  });
 ////////////////////////////////////////////////////////////////////////////////
   /// Mocked Unit(integration) tests
   /// test readList including data transformation
   /// but mocks out http calls by replacing myGetHttpClient with _onlineSearch
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('WebFetchBase ReadList', () async {
+  group('WebFetchBase ReadList', () {
     Future<void> testRead(
       List<String> criteria,
       List<MovieResultDTO> expectedValue, {

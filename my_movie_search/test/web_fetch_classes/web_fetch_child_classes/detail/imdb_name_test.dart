@@ -31,7 +31,7 @@ class StaticJsonGenerator {
 
   // Insert artificial delay to allow tests to observe prior processing.
   static Future<Stream<String>> stuffDelayed(dynamic criteria) =>
-      Future<void>.delayed(const Duration(milliseconds: 300))
+      Future<void>.delayed(const Duration(milliseconds: 3000))
           .then((_) => stuff(criteria));
 }
 
@@ -257,7 +257,7 @@ void main() {
         );
       }
       // Wait for queued requests to be intitialised but not completed.
-      await Future<void>.delayed(const Duration(milliseconds: 300));
+      await Future<void>.delayed(const Duration(milliseconds: 2000));
       final queueLength = ThreadedCacheIMDBNameDetails.normalQueue.length;
       expect(queueLength, greaterThanOrEqualTo(1));
       expect(queueLength, lessThanOrEqualTo(5));

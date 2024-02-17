@@ -146,7 +146,7 @@ void main() {
   /// Integration tests using env
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('QueryTMDBPersonDetails integration tests', () async {
+  group('QueryTMDBPersonDetails integration tests', () {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () async {
       final testClass = QueryTMDBPersonDetails(criteria);
