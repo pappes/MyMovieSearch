@@ -71,7 +71,7 @@ void main() {
         },
       );
       test(
-        'inseert and fetch dto',
+        'insert and fetch dto',
         () async {
           final cache = TieredCache<MovieResultDTO>();
           final dto = MovieResultDTO().init(
@@ -101,6 +101,39 @@ void main() {
           expect(isCached, true);
 
           expect(cache.get(dto.uniqueId), MovieResultDTOMatcher(dto));
+        },
+      );
+      test(
+        'insert and fetch dto list',
+        () async {
+          final cache = TieredCache<List<MovieResultDTO>>();
+          final dto = MovieResultDTO().init(
+            uniqueId: 'list123',
+            title: 'myDto',
+          );
+          cache.add(dto.uniqueId, [dto]);
+          final isCached = await cache.isCached(dto.uniqueId);
+          expect(isCached, true);
+
+          expect(cache.get(dto.uniqueId), MovieResultDTOListMatcher([dto]));
+        },
+      );
+      test(
+        'encode and decode dto list',
+        () async {
+          final cache = TieredCache<List<MovieResultDTO>>();
+          final dto = MovieResultDTO().init(
+            uniqueId: 'list123',
+            title: 'myDto decoded',
+          );
+          cache
+            ..add(dto.uniqueId, [dto])
+            ..clearMemoryOnly();
+          // Fetch from disk and decode.
+          final isCached = await cache.isCached(dto.uniqueId);
+          expect(isCached, true);
+
+          expect(cache.get(dto.uniqueId), MovieResultDTOListMatcher([dto]));
         },
       );
     },
