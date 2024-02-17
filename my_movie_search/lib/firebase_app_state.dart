@@ -271,7 +271,7 @@ class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {
         return '';
       }
     } catch (exception) {
-      logger.t('Unable to fetch record to Firebase exception: $exception');
+      logger.e('Unable to fetch record to Firebase exception: $exception');
     }
     return null;
   }
@@ -304,7 +304,7 @@ class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {
 
           // Preserve existing data.
           final newDevices = [_userDevice];
-          if (msg.exists) {
+          if (msg.exists && msg.data()!.containsKey('devices')) {
             final existingDevices = msg['devices'];
             if (existingDevices != null && existingDevices is Iterable) {
               // Define unique list of devices.
@@ -320,7 +320,7 @@ class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {
         }
       }
     } catch (exception) {
-      logger.t('Unable to add record to Firebase exception: $exception');
+      logger.e('Unable to add record to Firebase exception: $exception');
     }
     return false;
   }
