@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/database_helpers.dart';
 
@@ -23,9 +24,10 @@ class TieredCache<T> {
       } else {
         memoryCache[key] = item;
       }
+      final json = jsonEncode(item);
       unawaited(
         DatabaseHelper.instance.insert(
-          MovieModel(uniqueId: key.toString(), dtoJson: jsonEncode(item)),
+          MovieModel(uniqueId: key.toString(), dtoJson: json),
         ),
       );
     }
@@ -44,10 +46,17 @@ class TieredCache<T> {
 
   /// Remove all items from the cache.
   ///
+  @visibleForTesting
+  void clearMemoryOnly() {
+    memoryCache.clear();
+  }
+
+  /// Remove all items from the cache.
+  ///
   Future<void> clear() async {
     memoryCache.clear();
 
-// Delete all records from the database.
+    // Delete all records from the database.
     final records = await DatabaseHelper.instance.queryAllMovies();
     for (final record in records) {
       if (record.containsKey('uniqueId')) {

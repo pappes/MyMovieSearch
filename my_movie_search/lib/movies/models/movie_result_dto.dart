@@ -42,11 +42,11 @@ class MovieResultDTO {
   // Related DTOs are in a category, then keyed by uniqueId
   RelatedMovieCategories related = {};
 
-  /// Convert a [MovieResultDTO] to a json [String].
+  /// Convert a [MovieResultDTO] to a map tha can be consumed by jsonEncode.
   ///
-  String toJson({bool includeRelated = true}) =>
+  Map<String, dynamic> toJson({bool includeRelated = true}) =>
       // ignore: unnecessary_this
-      jsonEncode(this.toMap(includeRelated: includeRelated));
+      this.toMap(includeRelated: includeRelated);
 }
 
 enum MovieContentType {
@@ -210,7 +210,7 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   List<String> encodeList() {
     final result = <String>[];
     for (final dto in this) {
-      result.add(dto.toJson());
+      result.add(dto.toJsonText());
     }
     return result;
   }
@@ -546,7 +546,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Convert a [MovieResultDTO] to a json [String].
   ///
-  String toJson({bool includeRelated = true}) =>
+  String toJsonText({bool includeRelated = true}) =>
       jsonEncode(toMap(includeRelated: includeRelated));
 
   /// Convert a [MovieResultDTO] object into a [Map].
@@ -1186,7 +1186,7 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
     final listContents = StringBuffer();
     String separator = '';
     for (final entry in this) {
-      listContents.write('$separator${entry.toJson()}');
+      listContents.write('$separator${entry.toJsonText()}');
       separator = ',\n';
     }
     return "List<MovieResultDTO>($length)\nr'''\n[\n$listContents\n]\n'''";
@@ -1198,7 +1198,7 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
   String toListOfDartJsonStrings({bool includeRelated = true}) {
     final listContents = StringBuffer();
     for (final entry in this) {
-      final json = entry.toJson(includeRelated: includeRelated);
+      final json = entry.toJsonText(includeRelated: includeRelated);
       final dartString = "r'''\n${json.replaceAll("'", "'")}\n''',\n";
       listContents.write(formatDtoJson(dartString));
     }

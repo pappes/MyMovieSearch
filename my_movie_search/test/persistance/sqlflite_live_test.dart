@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/database_helpers.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path_provider_linux/path_provider_linux.dart';
@@ -39,7 +40,10 @@ void main() async {
       expect(result!.dtoJson, model2.dtoJson);
     });
     test('fetch', () async {
-      final model = MovieModel(uniqueId: 'tt1234', dtoJson: 'myjsonresult');
+      final json = MovieResultDTO()
+          .init(uniqueId: 'tt123', title: 'fetch test')
+          .toJsonText();
+      final model = MovieModel(uniqueId: 'tt1234', dtoJson: json);
       await db.insert(model);
       final result = await db.queryMovieUniqueId('tt1234');
 

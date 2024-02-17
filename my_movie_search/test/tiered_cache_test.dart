@@ -1,9 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path_provider_linux/path_provider_linux.dart';
 // ignore: depend_on_referenced_packages
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
+
+import 'test_helper.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Unit tests
@@ -65,6 +68,39 @@ void main() {
             ],
             {'a': 'd'},
           );
+        },
+      );
+      test(
+        'inseert and fetch dto',
+        () async {
+          final cache = TieredCache<MovieResultDTO>();
+          final dto = MovieResultDTO().init(
+            uniqueId: 'test123',
+            title: 'myDto',
+          );
+          cache.add(dto.uniqueId, dto);
+          final isCached = await cache.isCached(dto.uniqueId);
+          expect(isCached, true);
+
+          expect(cache.get(dto.uniqueId), MovieResultDTOMatcher(dto));
+        },
+      );
+      test(
+        'encode and decode dto',
+        () async {
+          final cache = TieredCache<MovieResultDTO>();
+          final dto = MovieResultDTO().init(
+            uniqueId: 'test123',
+            title: 'myDto decoded',
+          );
+          cache
+            ..add(dto.uniqueId, dto)
+            ..clearMemoryOnly();
+          // Fetch from disk and decode.
+          final isCached = await cache.isCached(dto.uniqueId);
+          expect(isCached, true);
+
+          expect(cache.get(dto.uniqueId), MovieResultDTOMatcher(dto));
         },
       );
     },

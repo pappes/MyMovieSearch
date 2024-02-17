@@ -51,10 +51,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   @override
   void initState() {
     super.initState();
-    unawaited(DtoCache.singleton().fetch(widget.movie).then(_gotPerson));
+    _movie = widget.movie;
+    unawaited(DtoCache.singleton().fetch(widget.movie).then(_goMovie));
   }
 
-  void _gotPerson(MovieResultDTO movie) {
+  void _goMovie(MovieResultDTO movie) {
     _movie = movie;
     _getDetails(
       SearchCriteriaDTO().init(

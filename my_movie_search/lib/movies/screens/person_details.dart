@@ -50,6 +50,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   @override
   void initState() {
     super.initState();
+    _person = widget.person;
     unawaited(DtoCache.singleton().fetch(widget.person).then(_gotPerson));
   }
 
