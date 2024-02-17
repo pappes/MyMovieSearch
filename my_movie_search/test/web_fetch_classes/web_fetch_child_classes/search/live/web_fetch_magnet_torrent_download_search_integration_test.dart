@@ -51,7 +51,7 @@ void main() {
 
   group('live QueryTorrentDownloadSearch test', () {
     // Search for a rare movie.
-    test('Run a search on Tpb that is likely to have static results', () async {
+    test('Run a search on Tds that is likely to have static results', () async {
       final criteria = SearchCriteriaDTO().fromString('rize');
       final actualOutput =
           await QueryTorrentDownloadSearch(criteria).readList(limit: 10);
@@ -61,6 +61,10 @@ void main() {
 
       // Uncomment this line to update expectedOutput if sample data changes
       // printTestData(actualOutput);
+      // TDS website is partially functional
+      // but not performing searches as at 16 Feb 2024
+      // check for site being fixed using this URL
+      // https://www.torrentdownload.info/search?q=batman&p=1
 
       // Check the results.
       expect(

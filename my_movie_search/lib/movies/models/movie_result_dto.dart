@@ -198,8 +198,12 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   static List<MovieResultDTO> decodeList(Iterable<dynamic> encoded) {
     final result = <MovieResultDTO>[];
     for (final json in encoded) {
-      final decoded = jsonDecode(json.toString());
-      if (decoded is Map) result.add(decoded.toMovieResultDTO());
+      if (json is Map) {
+        result.add(json.toMovieResultDTO());
+      } else {
+        final decoded = jsonDecode(json.toString());
+        if (decoded is Map) result.add(decoded.toMovieResultDTO());
+      }
     }
     return result;
   }
