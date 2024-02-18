@@ -1,14 +1,17 @@
 import 'dart:convert' show json;
 
+import 'package:mutex/mutex.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
+// ignore: depend_on_referenced_packages
+import 'package:path_provider_linux/path_provider_linux.dart';
 //import 'package:sqflite/sqflite.dart' show Database, openDatabase;
 
 //import 'package:sqflite_common/sqlite_api.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
+import 'package:universal_io/io.dart';
 
 // database table and column names
 const _tableMovie = 'Movie';
@@ -53,26 +56,47 @@ class DatabaseHelper {
   static const _databaseName = 'MyMovieSearch.db';
   // Increment this version when you need to change the schema.
   static const _databaseVersion = 1;
+  static final mutexLock = Mutex();
 
   // Only allow a single open connection to the database.
   static Database? _database;
-  Future<Database> get database async => _database ??= await _initDatabase();
+  Future<Database> get database async {
+    await mutexLock.protect(_initDatabase);
+
+    return _database!;
+  }
 
   // open the database
-  Future<Database> _initDatabase() async {
-    // Init ffi loader if needed.
-    databaseFactory = databaseFactoryFfi;
-    sqfliteFfiInit();
+  Future<void> _initDatabase() async {
+    if (_database == null) {
+      print('init');
+      // Init ffi loader if needed.
+      databaseFactory = databaseFactoryFfi;
+      sqfliteFfiInit();
 
-    // The path_provider plugin gets the right directory for Android or iOS.
-    final documentsDirectory = await getApplicationDocumentsDirectory();
-    final path = join(documentsDirectory.path, _databaseName);
-    // Open the database. Can also add an onUpdate callback parameter.
-    return openDatabase(
-      path,
-      version: _databaseVersion,
-      onCreate: _onCreate,
-    );
+      // Open the database.
+      _database = await openDatabase(
+        await _getDbLocation(),
+        version: _databaseVersion,
+        onCreate: _onCreate,
+      );
+    }
+  }
+
+  Future<String> _getDbLocation() async {
+    var location = '/tmp';
+    if (Platform.environment.containsKey('FLUTTER_TEST')) {
+      // For testing the PathProvider is not set up correctly
+      // so need special handling
+      final linuxLocation =
+          await PathProviderLinux().getApplicationDocumentsPath();
+      if (linuxLocation != null) location = linuxLocation;
+    } else {
+      // for runtime environments use the runtim PathProvider
+      final platformDirectory = await getApplicationDocumentsDirectory();
+      location = platformDirectory.path;
+    }
+    return join(location, _databaseName);
   }
 
   // SQL string to create the database

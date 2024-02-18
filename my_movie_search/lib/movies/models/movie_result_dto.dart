@@ -180,7 +180,7 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
         return ListDTOConversion.decodeList(decoded);
       }
     }
-    return [];
+    return createDefaultValue();
   }
 
   @override

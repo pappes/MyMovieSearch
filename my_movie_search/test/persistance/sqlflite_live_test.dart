@@ -1,10 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/database_helpers.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path_provider_linux/path_provider_linux.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 void main() async {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -17,12 +13,10 @@ void main() async {
 
   group('sqlflite', () {
     final db = DatabaseHelper.instance;
-    setUp(() async {
-      PathProviderPlatform.instance = PathProviderLinux();
-    });
     // Confirm anonymous login is successful.
     test('Run login', () async {
-      expect(db.database, isNotNull);
+      final dbInstance = await db.database;
+      expect(dbInstance, isNotNull);
     });
     test('add', () async {
       final model = MovieModel(uniqueId: 'tt123', dtoJson: 'myjson');

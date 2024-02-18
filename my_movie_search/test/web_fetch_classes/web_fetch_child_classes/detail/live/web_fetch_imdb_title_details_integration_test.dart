@@ -67,9 +67,6 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryIMDBTitleDetails test', () {
-    setUp(() async {
-      PathProviderPlatform.instance = PathProviderLinux();
-    });
     // Convert 3 IMDB pages into dtos.
     test('Run read 3 pages from IMDB', () async {
       final queries = _makeQueries(3);

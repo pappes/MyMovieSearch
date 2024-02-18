@@ -58,6 +58,7 @@ dependencies:
   logger: ^2.0.2                        # Log trace messages to console.
   ####logger_flutter: ^0.7.1            # Shake device to see trace messages.
   meta: ^1.9.1                          # extended annotations
+  mutex: ^3.1.0
   path: ^1.8.0                          # File path manipulation library
   path_provider: ^2.0.9                 # Device filesystem access for accessing database files.
 

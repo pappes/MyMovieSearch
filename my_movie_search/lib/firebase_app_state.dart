@@ -16,6 +16,16 @@ import 'package:my_movie_search/firebase_options.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 //import 'package:provider/provider.dart';
 
+enum Fields { devices, text }
+
+const runtimeDevices = {
+  'android.Google.Pixel 8 Pro': 'dave', // Google Pixel 8 Pro
+  'android.samsung.SM-F926B': 'dave', // Samsung Fold 3
+  'linux.Ubuntu.': 'dave', // development VM
+  'android.samsung.SM-G950F': 'dave', // Samsung S8
+  'TBD': 'tash',
+};
+
 /// Grants access to firebase persistent data
 abstract class FirebaseApplicationState extends ChangeNotifier {
   /// Singleton for the current platform
@@ -94,11 +104,11 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   }
 
   Map<String, dynamic> _newRecord(String message) => {
-        'text': message,
+        Fields.text.name: message,
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'userName': _userDisplayName,
         'userId': _userId,
-        'devices': [_userDevice],
+        Fields.devices.name: [_userDevice],
       };
 }
 
@@ -127,10 +137,6 @@ class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
     _userDisplayName = user.displayName;
     _userId = user.id;
 
-    /*final linuxInfo = await DeviceInfoPlugin().linuxInfo;
-    // code4 = 'linux.Ubuntu.'
-    _userDevice = 'linux.${linuxInfo.name}.'
-        '${linuxInfo.variant ?? ""}';*/
     _userDevice = 'linux.Ubuntu.';
 
     return true;
@@ -149,8 +155,11 @@ class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
         final doc = fbcollection.document(id);
         final msg = await doc.get();
         // Check the currentuser
-        if (_derivedUserMatch(_userDevice, msg['devices'])) {
-          return msg['text']?.toString() ?? '';
+
+        final recordedDevices = msg[Fields.devices.name] ??
+            [runtimeDevices.keys.first]; // assume dave
+        if (_derivedUserMatch(_userDevice, recordedDevices)) {
+          return msg[Fields.text.name]?.toString() ?? '';
         }
         return '';
       }
@@ -188,13 +197,14 @@ class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
           // Preserve existing data.
           final newDevices = [_userDevice];
           if (await doc.exists) {
-            final existingDevices = msg['devices'];
+            final existingDevices = msg[Fields.devices.name];
             if (existingDevices != null && existingDevices is Iterable) {
               // Define unique list of devices.
-              map['devices'] = {...existingDevices, ...newDevices}.toList();
+              map[Fields.devices.name] =
+                  {...existingDevices, ...newDevices}.toList();
             }
           } else {
-            map['devices'] = newDevices;
+            map[Fields.devices.name] = newDevices;
           }
           // Write data to0 firestore.
           await doc.update(map);
@@ -265,8 +275,16 @@ class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {
         final msg = await doc.get();
 
         // Check the currentuser
-        if (_derivedUserMatch(_userDevice, msg['devices'])) {
-          return msg['text']?.toString() ?? '';
+        if (msg.exists && msg.data()!.containsKey(Fields.text.name)) {
+          dynamic recordedDevices = runtimeDevices.keys.first; // assume dave
+          if (msg.data()!.containsKey(Fields.devices.name)) {
+            recordedDevices = msg[Fields.devices.name];
+          } else {
+            recordedDevices = [runtimeDevices.keys.first];
+          }
+          if (_derivedUserMatch(_userDevice, recordedDevices)) {
+            return msg[Fields.text.name]?.toString() ?? '';
+          }
         }
         return '';
       }
@@ -304,14 +322,15 @@ class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {
 
           // Preserve existing data.
           final newDevices = [_userDevice];
-          if (msg.exists && msg.data()!.containsKey('devices')) {
-            final existingDevices = msg['devices'];
+          if (msg.exists && msg.data()!.containsKey(Fields.devices.name)) {
+            final existingDevices = msg[Fields.devices.name];
             if (existingDevices != null && existingDevices is Iterable) {
               // Define unique list of devices.
-              map['devices'] = {...existingDevices, ...newDevices}.toList();
+              map[Fields.devices.name] =
+                  {...existingDevices, ...newDevices}.toList();
             }
           } else {
-            map['devices'] = newDevices;
+            map[Fields.devices.name] = newDevices;
           }
 
           // Write data to firestore.
@@ -326,16 +345,7 @@ class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {
   }
 }
 
-String _derivedUser(String? device) =>
-    (device == 'android.Google.Pixel 8 Pro' ||
-            device == 'android.samsung.SM-F926B' ||
-            // samsung s8 = 'android.samsung.SM-G950F'
-            device == 'linux.Ubuntu.' ||
-            device == 'android.samsung.SM-G950F' ||
-            // samsung s8 = 'android.samsung.SM-G950F'
-            device == null)
-        ? 'dave'
-        : 'tash';
+String _derivedUser(String? device) => runtimeDevices[device] ?? 'tash';
 bool _derivedUserMatch(String? device, dynamic devices) {
   if (devices is Iterable) {
     final currentUser = _derivedUser(device);

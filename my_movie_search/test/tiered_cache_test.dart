@@ -16,9 +16,6 @@ void main() {
   group(
     'Store In Memory',
     () {
-      setUp(() async {
-        PathProviderPlatform.instance = PathProviderLinux();
-      });
       test(
         'String',
         () async {

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
@@ -18,8 +17,7 @@ class MovieSearchCriteriaPage extends StatefulWidget {
       _MovieSearchCriteriaPageState();
 
   /// Instruct goroute how to navigate to this page.
-  static MaterialPage<dynamic> goRoute(_, GoRouterState state) =>
-      const MaterialPage(
+  static MaterialPage<dynamic> goRoute(_, __) => const MaterialPage(
         restorationId: 'MovieSearchCriteriaPage',
         child: MovieSearchCriteriaPage(restorationId: 'MovieSearchCriteria'),
       );
@@ -53,7 +51,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
     // All restorable properties must be registered with the mixin. After
-    // registration, the counter either has its old value restored or is
+    // registration, the restorable either has its old value restored or is
     // initialized to its default value.
     registerForRestoration(_textController, 'criteriatext');
   }

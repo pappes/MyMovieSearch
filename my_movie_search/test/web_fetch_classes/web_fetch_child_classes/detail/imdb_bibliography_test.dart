@@ -132,9 +132,6 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('WebFetchThreadedCache unit tests', () {
-    setUp(() async {
-      PathProviderPlatform.instance = PathProviderLinux();
-    });
     test('empty cache', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final testClass = QueryIMDBBibliographyDetails(criteria);

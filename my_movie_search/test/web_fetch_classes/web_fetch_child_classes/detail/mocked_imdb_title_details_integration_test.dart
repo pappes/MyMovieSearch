@@ -171,9 +171,6 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(
 }
 
 void main() {
-  setUp(() async {
-    PathProviderPlatform.instance = PathProviderLinux();
-  });
 ////////////////////////////////////////////////////////////////////////////////
   /// Mocked Unit(integration) tests
   /// test readList including data transformation

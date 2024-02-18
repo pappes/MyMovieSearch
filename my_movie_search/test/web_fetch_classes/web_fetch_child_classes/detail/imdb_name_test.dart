@@ -140,10 +140,6 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
   group('ThreadedCacheIMDBNameDetails unit tests', () {
-    setUp(() async {
-      PathProviderPlatform.instance = PathProviderLinux();
-    });
-
     test('cache queueing', () async {
       await QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       expect(ThreadedCacheIMDBNameDetails.normalQueue.length, 0);
