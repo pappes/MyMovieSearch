@@ -7,10 +7,6 @@ import 'package:my_movie_search/movies/web_data_providers/detail/imdb_more_keywo
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_more_keywords.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path_provider_linux/path_provider_linux.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedHtmlSample(_) =>
