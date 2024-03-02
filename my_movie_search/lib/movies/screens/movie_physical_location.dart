@@ -30,7 +30,7 @@ class MoviePhysicalLocationPage extends StatefulWidget {
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
         restorationId: RestorableMovie.getRestorationId(state),
         child: MoviePhysicalLocationPage(
-          movieDto: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+          movieDto: RestorableMovie.getDto(state),
           restorationId: RestorableMovie.getRestorationId(state),
         ),
       );
@@ -40,7 +40,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
     with RestorationMixin {
   _MoviePhysicalLocationPageState();
 
-  final _restorableMovie = RestorableMovie();
+  final _restorableMovie = RestorableMovie(MovieResultDTO());
   late final RestorableTextEditingController _stackerController;
   late final RestorableTextEditingController _locationController;
   late final RestorableTextEditingController _titleController;

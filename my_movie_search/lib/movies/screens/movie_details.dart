@@ -32,7 +32,7 @@ class MovieDetailsPage extends StatefulWidget {
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
         restorationId: RestorableMovie.getRestorationId(state),
         child: MovieDetailsPage(
-          movie: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+          movie: RestorableMovie.getDto(state),
           restorationId: RestorableMovie.getRestorationId(state),
         ),
       );
@@ -42,7 +42,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     with RestorationMixin {
   _MovieDetailsPageState();
 
-  late MovieResultDTO _movie;
   bool _redrawRequired = true;
   final RestorableBool _descriptionExpanded = RestorableBool(false);
   final _restorableMovie = RestorableMovie();
@@ -51,23 +50,21 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   @override
   void initState() {
     super.initState();
-    _movie = widget.movie;
-    unawaited(DtoCache.singleton().fetch(widget.movie).then(_goMovie));
   }
 
-  void _goMovie(MovieResultDTO movie) {
-    _movie = movie;
+  void _gotMovie(MovieResultDTO movie) {
+    _restorableMovie.value = movie;
     _getDetails(
       SearchCriteriaDTO().init(
         SearchCriteriaType.movieTitle,
-        title: _movie.uniqueId,
+        title: _restorableMovie.value.uniqueId,
       ),
     );
   }
 
   /// Fetch full movie details from imdb.
   void _getDetails(SearchCriteriaDTO criteria) {
-    if (_movie.uniqueId.startsWith(imdbTitlePrefix)) {
+    if (_restorableMovie.value.uniqueId.startsWith(imdbTitlePrefix)) {
       /// Fetch movie details
       unawaited(
         QueryIMDBTitleDetails(criteria).readList().then(_requestShowDetails),
@@ -89,7 +86,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     }
     _redrawRequired = true;
     EasyThrottle.throttle(
-      'MovieDetails${_movie.uniqueId}',
+      'MovieDetails${_restorableMovie.value.uniqueId}',
       const Duration(milliseconds: 500), // limit refresh to 2 per second
       _showDetails, // Initial screen draw
       onAfter: _showDetails, // Process throttled updates
@@ -101,12 +98,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     // Check the user has not navigated away
     if (!mounted || !_redrawRequired) return;
 
-    setState(() => _movie);
+    setState(() => _restorableMovie.value);
     _redrawRequired = false;
   }
 
   void _mergeDetails(List<MovieResultDTO> details) =>
-      details.forEach(_movie.merge);
+      details.forEach(_restorableMovie.value.merge);
 
   @override
   // The restoration bucket id for this page.
@@ -114,10 +111,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    _restorableMovie.defaultVal = widget.movie;
     // Register our property to be saved every time it changes,
     // and to be restored every time our app is killed by the OS!
     registerForRestoration(_restorableMovie, 'movie');
     registerForRestoration(_descriptionExpanded, 'expanded');
+
+    unawaited(
+      DtoCache.singleton().fetch(_restorableMovie.value).then(_gotMovie),
+    );
   }
 
   @override
@@ -130,12 +132,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
   @override
   Widget build(BuildContext context) {
-    _restorableMovie.value = _movie;
     _mobileLayout = useMobileLayout(context);
     return SelectionArea(
       child: Scaffold(
         appBar: AppBar(
-          title: Text(_movie.title),
+          title: Text(_restorableMovie.value.title),
         ),
         body: Scrollbar(
           thumbVisibility: true,
@@ -146,19 +147,22 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   }
 
   ScrollView _bodySection() => ListView(
-        primary: true, //attach scrollbar controller to primary view
+        primary: true, // Attach scrollbar controller to primary view.
         children: <Widget>[
-          Text(_movie.title, style: hugeFont),
+          Text(_restorableMovie.value.title, style: hugeFont),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              if (_movie.yearRange.isEmpty)
-                Text('Year: ${_movie.year}')
+              if (_restorableMovie.value.yearRange.isEmpty)
+                Text('Year: ${_restorableMovie.value.year}')
               else
-                Text('Year Range: ${_movie.yearRange}'),
+                Text('Year Range: ${_restorableMovie.value.yearRange}'),
               Align(
                 alignment: Alignment.centerRight,
-                child: Text('Run Time: ${_movie.runTime.toFormattedTime()}'),
+                child: Text(
+                  'Run Time: '
+                  '${_restorableMovie.value.runTime.toFormattedTime()}',
+                ),
               ),
             ],
           ),
@@ -172,7 +176,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
                   children: <Widget>[
                     LeftAligendColumn(children: <Widget>[_leftColumn()]),
 
-                    // Only show right column on tablet
+                    // Only show right column on tablet.
                     if (!_mobileLayout)
                       LeftAligendColumn(children: [_posterSection()]),
                   ],
@@ -187,7 +191,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         children: [
           ..._leftHeader(),
           ..._description(),
-          // Only show poster in left column on mobile
+          // Only show poster in left column on mobile.
           if (_mobileLayout) _posterSection(),
 
           Column(
@@ -205,9 +209,13 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         children: [
           Poster(
             context,
-            url: _movie.imageUrl,
-            showImages: () async => MMSNav(context)
-                .viewWebPage(makeImdbUrl(_movie.uniqueId, photos: true)),
+            url: _restorableMovie.value.imageUrl,
+            showImages: () async => MMSNav(context).viewWebPage(
+              makeImdbUrl(
+                _restorableMovie.value.uniqueId,
+                photos: true,
+              ),
+            ),
           ),
         ],
       );
@@ -215,15 +223,16 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   Widget _movieFacts() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Type: ${_movie.type.name}'),
+          Text('Type: ${_restorableMovie.value.type.name}'),
           Text(
-            'User Rating: ${_movie.userRating} '
-            '(${formatter.format(_movie.userRatingCount)})',
+            'User Rating: ${_restorableMovie.value.userRating} '
+            '(${formatter.format(_restorableMovie.value.userRatingCount)})',
           ),
           Wrap(
             children: <Widget>[
-              Text('Censor Rating: ${_movie.censorRating.name}     '),
-              Text('Language: ${_movie.language.name}'),
+              Text('Censor Rating: '
+                  '${_restorableMovie.value.censorRating.name}     '),
+              Text('Language: ${_restorableMovie.value.language.name}'),
             ],
           ),
         ],
@@ -233,16 +242,19 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         InkWell(
           child: _movieFacts(),
           onTap: () async => MMSNav(context).viewWebPage(
-            makeImdbUrl(_movie.uniqueId, parentalGuide: true),
+            makeImdbUrl(_restorableMovie.value.uniqueId, parentalGuide: true),
           ),
         ),
         Wrap(
           children: <Widget>[
-            Text('Source: ${_movie.bestSource.name}      '),
-            Text('UniqueId: ${_movie.uniqueId}'),
+            Text('Source: ${_restorableMovie.value.bestSource.name}      '),
+            Text('UniqueId: ${_restorableMovie.value.uniqueId}'),
             ElevatedButton(
-              onPressed: () async =>
-                  MMSNav(context).viewWebPage(makeImdbUrl(_movie.uniqueId)),
+              onPressed: () async => MMSNav(context).viewWebPage(
+                makeImdbUrl(
+                  _restorableMovie.value.uniqueId,
+                ),
+              ),
               child: const Text('IMDB'),
             ),
             ..._externalSearchButtons(),
@@ -255,14 +267,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         InkWell(
           onTap: _toggleDescription,
           child: Text(
-            _movie.description,
+            _restorableMovie.value.description,
             style: biggerFont,
             overflow: _descriptionExpanded.value ? null : TextOverflow.ellipsis,
             maxLines: _descriptionExpanded.value ? null : 8,
           ),
         ),
-        Text('Languages: ${_movie.languages}'),
-        Text('Genres: ${_movie.genres}'),
+        Text('Languages: ${_restorableMovie.value.languages}'),
+        Text('Genres: ${_restorableMovie.value.genres}'),
         _keywords(),
       ];
 
@@ -274,7 +286,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       RegExp('[sS][uU][gG][gG][eE][sS][tT][iI][oO][nN]');
 
   List<Widget> _locations() => movieLocationTable(
-        locationsWithCustomTitle(_movie),
+        locationsWithCustomTitle(_restorableMovie.value),
         onTap: _addLocations,
         ifEmpty: [
           ElevatedButton(
@@ -283,7 +295,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           ),
         ],
       );
-  Future<Object?> _addLocations() async => MMSNav(context).addLocation(_movie);
+  Future<Object?> _addLocations() async => MMSNav(context).addLocation(
+        _restorableMovie.value,
+      );
 
   List<Widget> _cast() =>
       _related(_caseInsensativeSuggestion, invertFilter: true);
@@ -295,13 +309,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         );
 
     final hyperlinks = <Widget>[];
-    for (final keyword in _movie.keywords) {
+    for (final keyword in _restorableMovie.value.keywords) {
       hyperlinks.add(makeHyperlink(keyword));
     }
 
     final label = InkWell(
       child: const Text('Keywords: '),
-      onTap: () async => MMSNav(context).getMoreKeywords(_movie),
+      onTap: () async =>
+          MMSNav(context).getMoreKeywords(_restorableMovie.value),
     );
 
     return Wrap(
@@ -320,7 +335,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     }
 
     final categories = <Widget>[];
-    for (final category in _movie.related.entries) {
+    for (final category in _restorableMovie.value.related.entries) {
       if (filterIncludes(category.key)) {
         final rolesMap = category.value;
         final rolesLabel = category.key;
@@ -331,7 +346,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
             Center(
               child: InkWell(
                 onTap: () async => MMSNav(context).searchForRelated(
-                  '$rolesLabel ${_movie.title}',
+                  '$rolesLabel ${_restorableMovie.value.title}',
                   rolesMap.values.toList(),
                 ),
                 child: Text(
@@ -347,15 +362,15 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   }
 
   List<Widget> _externalSearchButtons() => <Widget>[
-        _externalSearchButton(_movie.title),
-        if (_movie.alternateTitle.isNotEmpty)
-          _externalSearchButton(_movie.alternateTitle),
+        _externalSearchButton(_restorableMovie.value.title),
+        if (_restorableMovie.value.alternateTitle.isNotEmpty)
+          _externalSearchButton(_restorableMovie.value.alternateTitle),
       ];
 
   Widget _externalSearchButton(String title) => ElevatedButton(
         onPressed: () async => MMSNav(context).showDownloads(
-          '$title ${_movie.year}',
-          _movie,
+          '$title ${_restorableMovie.value.year}',
+          _restorableMovie.value,
         ),
         child: Text(title),
       );

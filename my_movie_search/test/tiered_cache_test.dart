@@ -1,10 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path_provider_linux/path_provider_linux.dart';
-// ignore: depend_on_referenced_packages
-import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 
 import 'test_helper.dart';
 

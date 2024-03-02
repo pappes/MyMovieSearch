@@ -29,10 +29,14 @@ class MovieSearchResultsNewPage extends StatefulWidget {
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
         restorationId: RestorableSearchCriteria.getRestorationId(state),
         child: MovieSearchResultsNewPage(
-          criteria: state.extra as SearchCriteriaDTO? ?? SearchCriteriaDTO(),
+          criteria: getCriteria(state.extra),
           restorationId: RestorableSearchCriteria.getRestorationId(state),
         ),
       );
+  static SearchCriteriaDTO getCriteria(dynamic input) =>
+      (input != null && input is SearchCriteriaDTO)
+          ? input
+          : SearchCriteriaDTO();
 }
 
 class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>

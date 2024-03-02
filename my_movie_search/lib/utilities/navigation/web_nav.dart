@@ -16,7 +16,6 @@ import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
 import 'package:my_movie_search/movies/screens/popup.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -24,18 +23,19 @@ import 'package:url_launcher/url_launcher.dart' as launcher;
 
 const webAddressPrefix = 'http';
 
-const routeHome = '';
-const routeSearchCriteria = 'search';
-const routeSearchResults = 'searchresults';
-const routePersonDetails = 'persondetails';
-const routeMovieDetails = 'moviedetails';
-const routeMovieLocation = 'addlocation';
-const routeErrorDetails = 'errordetails';
+enum ScreenRoute {
+  search,
+  searchresults,
+  persondetails,
+  moviedetails,
+  addlocation,
+  errordetails,
+}
 
 class RouteInfo {
   RouteInfo(this.routePath, this.params, this.reference);
 
-  final String routePath;
+  final ScreenRoute routePath;
   final Object params;
   final String reference;
 
@@ -65,44 +65,12 @@ class MMSNav {
   /// the URL is displayed to the user.
   Future<void> viewWebPage(String url) async => canvas.viewWebPage(url);
 
-  /// Construct route to Material user interface page
-  /// as appropriate for the dto.
-  ///
-  /// Chooses a MovieDetailsPage or PersonDetailsPage
-  /// based on the IMDB unique ID or ErrorDetailsPage otherwise
-  RouteInfo getDetailsPage(
-    MovieResultDTO movie,
-  ) {
-    if (movie.uniqueId.startsWith(imdbPersonPrefix) ||
-        movie.type == MovieContentType.person) {
-      // Open person details.
-      return RouteInfo(routePersonDetails, movie, movie.uniqueId);
-    } else if (movie.uniqueId.startsWith(imdbTitlePrefix) ||
-        movie.type == MovieContentType.movie ||
-        movie.type == MovieContentType.series ||
-        movie.type == MovieContentType.miniseries ||
-        movie.type == MovieContentType.short ||
-        movie.type == MovieContentType.series ||
-        movie.type == MovieContentType.episode ||
-        movie.type == MovieContentType.title) {
-      // Open Movie details.
-      return RouteInfo(routeMovieDetails, movie, movie.uniqueId);
-    } else {
-      // Open error details.
-      return RouteInfo(
-        routeErrorDetails,
-        movie,
-        MovieContentType.error.toString(),
-      );
-    }
-  }
-
   /// Navigates to a search results page populated with a movie list.
   ///
   Future<Object?> showResultsPage(SearchCriteriaDTO criteria) async =>
       canvas.viewFlutterPage(
         RouteInfo(
-          routeSearchResults,
+          ScreenRoute.searchresults,
           criteria,
           criteria.toUniqueReference(),
         ),
@@ -173,7 +141,7 @@ class MMSNav {
   ///
   Future<Object?> addLocation(MovieResultDTO movie) async =>
       canvas.viewFlutterPage(
-        RouteInfo(routeMovieLocation, movie, movie.uniqueId),
+        RouteInfo(ScreenRoute.addlocation, movie, movie.uniqueId),
       );
 
   /// Display more details for the selected card.
@@ -230,19 +198,10 @@ class MMSNav {
       case MovieContentType.information:
         movie.setReadIndicator(ReadHistory.reading.toString());
         // Show details screen (movie details or person details)
-        return canvas.viewFlutterPage(getDetailsPage(movie)).then(
+        return canvas.viewFlutterPage(movie.getDetailsPage()).then(
               (_) => movie.setReadIndicator(ReadHistory.read.toString()),
             );
     }
-  }
-
-  static String getRestorationId(GoRouterState state) {
-    final criteria = state.extra;
-    String? id;
-    if (criteria != null && criteria is SearchCriteriaDTO) {
-      id = criteria.toUniqueReference();
-    }
-    return '_${state.fullPath}_${id ?? criteria}';
   }
 
   /// Defines known routes handled by MMSNav.
@@ -250,33 +209,33 @@ class MMSNav {
   static List<RouteBase> getRoutes() => [
         GoRoute(path: '/', pageBuilder: MovieSearchCriteriaPage.goRoute),
         GoRoute(
-          name: routeSearchCriteria,
-          path: '/$routeSearchCriteria',
+          name: ScreenRoute.search.name,
+          path: '/$ScreenRoute.search.name',
           pageBuilder: MovieSearchCriteriaPage.goRoute,
         ),
         GoRoute(
-          name: routeSearchResults,
-          path: '/$routeSearchResults',
+          name: ScreenRoute.searchresults.name,
+          path: '/$ScreenRoute.searchresults.name',
           pageBuilder: MovieSearchResultsNewPage.goRoute,
         ),
         GoRoute(
-          name: routePersonDetails,
-          path: '/$routePersonDetails',
+          name: ScreenRoute.persondetails.name,
+          path: '/$ScreenRoute.persondetails.name',
           pageBuilder: PersonDetailsPage.goRoute,
         ),
         GoRoute(
-          name: routeMovieDetails,
-          path: '/$routeMovieDetails',
+          name: ScreenRoute.moviedetails.name,
+          path: '/$ScreenRoute.moviedetails.name',
           pageBuilder: MovieDetailsPage.goRoute,
         ),
         GoRoute(
-          name: routeMovieLocation,
-          path: '/$routeMovieLocation',
+          name: ScreenRoute.addlocation.name,
+          path: '/$ScreenRoute.addlocation.name',
           pageBuilder: MoviePhysicalLocationPage.goRoute,
         ),
         GoRoute(
-          name: routeErrorDetails,
-          path: '/$routeErrorDetails',
+          name: ScreenRoute.errordetails.name,
+          path: '/$ScreenRoute.errordetails.name',
           pageBuilder: ErrorDetailsPage.goRoute,
         ),
       ];
@@ -309,12 +268,12 @@ class MMSFlutterCanvas {
   /// based on the IMDB unique ID or ErrorDetailsPage otherwise
   Future<Object?> viewFlutterPage(RouteInfo page) {
     if (null != context) {
-      NavLog(context!).logPageOpen(page.routePath, page.reference);
+      NavLog(context!).logPageOpen(page.routePath.name, page.reference);
       try {
-        return context!.pushNamed(page.routePath, extra: page.params)
+        return context!.pushNamed(page.routePath.name, extra: page.params)
           ..then((val) {
             NavLog(context!)
-                .logPageClose(page.routePath, page.reference, page.params);
+                .logPageClose(page.routePath.name, page.reference, page.params);
           });
       } catch (e) {
         logger.t(e);

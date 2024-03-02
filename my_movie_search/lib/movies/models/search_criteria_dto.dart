@@ -146,7 +146,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   static List<MovieResultDTO> getMovieList(dynamic inputString) {
     final converter = RestorableMovieList();
     final stringList = DynamicHelper.toString_(inputString);
-    return converter.dtoFromPrimitives(stringList);
+    return converter.fromPrimitives(stringList);
   }
 
   SearchCriteriaDTO fromString(String criteria) => SearchCriteriaDTO()

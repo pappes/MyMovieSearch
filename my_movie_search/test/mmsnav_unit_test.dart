@@ -28,7 +28,7 @@ class TestMMSFlutterCanvas {
     // ignore: discarded_futures
     when(mockCanvas.viewFlutterPage(any)).thenAnswer((invocation) {
       final page = invocation.positionalArguments[0] as RouteInfo;
-      result = page.routePath;
+      result = page.routePath.name;
       return Future.value(null);
     });
   }
@@ -82,11 +82,12 @@ void main() {
         String? type,
       }) {
         final movie = MovieResultDTO().init(uniqueId: id, type: type);
-        final actual = testClass.getDetailsPage(movie);
-        final dto = actual.params as MovieResultDTO;
+        final actual = movie.getDetailsPage();
+        final param = actual.params as Map;
+        final dto = param['dto'] as MovieResultDTO;
 
         expect(
-          actual.routePath,
+          actual.routePath.name,
           route,
           reason: 'criteria: id=$id , route = $route, type=$type',
         );

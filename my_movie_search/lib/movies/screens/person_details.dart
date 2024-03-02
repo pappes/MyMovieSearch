@@ -31,7 +31,7 @@ class PersonDetailsPage extends StatefulWidget {
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
         restorationId: RestorableMovie.getRestorationId(state),
         child: PersonDetailsPage(
-          person: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+          person: RestorableMovie.getDto(state),
           restorationId: RestorableMovie.getRestorationId(state),
         ),
       );
@@ -41,7 +41,6 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     with RestorationMixin {
   _PersonDetailsPageState();
 
-  late MovieResultDTO _person;
   final RestorableBool _descriptionExpanded = RestorableBool(false);
   bool _redrawRequired = true;
   final _restorablePerson = RestorableMovie();
@@ -50,23 +49,21 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   @override
   void initState() {
     super.initState();
-    _person = widget.person;
-    unawaited(DtoCache.singleton().fetch(widget.person).then(_gotPerson));
   }
 
   void _gotPerson(MovieResultDTO person) {
-    _person = person;
+    _restorablePerson.value = person;
     _getDetails(
       SearchCriteriaDTO().init(
         SearchCriteriaType.movieTitle,
-        title: _person.uniqueId,
+        title: _restorablePerson.value.uniqueId,
       ),
     );
   }
 
   /// Fetch full person details from imdb.
   void _getDetails(SearchCriteriaDTO criteria) {
-    if (MovieContentType.person == _person.type) {
+    if (MovieContentType.person == _restorablePerson.value.type) {
       /// Fetch person details from cache using a separate thread.
       unawaited(
         QueryIMDBNameDetails(criteria)
@@ -90,7 +87,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     }
     _redrawRequired = true;
     EasyThrottle.throttle(
-      'PersonDetails${_person.uniqueId}',
+      'PersonDetails${_restorablePerson.value.uniqueId}',
       const Duration(milliseconds: 500), // limit refresh to 2 per second
       _showDetails, // Initial screen draw
       onAfter: _showDetails, // Process throttled updates
@@ -102,12 +99,12 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     // Check the user has not navigated away
     if (!mounted || !_redrawRequired) return;
 
-    setState(() => _person);
+    setState(() => _restorablePerson.value);
     _redrawRequired = false;
   }
 
   void _mergeDetails(List<MovieResultDTO> details) =>
-      details.forEach(_person.merge);
+      details.forEach(_restorablePerson.value.merge);
 
   @override
   // The restoration bucket id for this page.
@@ -115,10 +112,14 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    _restorablePerson.defaultVal = widget.person;
     // Register our property to be saved every time it changes,
     // and to be restored every time our app is killed by the OS!
     registerForRestoration(_restorablePerson, 'person');
     registerForRestoration(_descriptionExpanded, 'expanded');
+    unawaited(
+      DtoCache.singleton().fetch(_restorablePerson.value).then(_gotPerson),
+    );
   }
 
   @override
@@ -132,12 +133,11 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   @override
   Widget build(BuildContext context) {
     _mobileLayout = useMobileLayout(context);
-    _restorablePerson.value = _person;
     return SelectionArea(
       child: Scaffold(
         appBar: AppBar(
           // Get title from the StatefulWidget PersonDetailsPage.
-          title: Text(_person.title),
+          title: Text(_restorablePerson.value.title),
         ),
         body: Scrollbar(
           thumbVisibility: true,
@@ -150,14 +150,14 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   ScrollView _bodySection() => ListView(
         primary: true, //attach scrollbar controller to primary view
         children: <Widget>[
-          Text(_person.title, style: hugeFont),
+          Text(_restorablePerson.value.title, style: hugeFont),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              if (_person.yearRange.isEmpty)
-                Text('Born: ${_person.year}')
+              if (_restorablePerson.value.yearRange.isEmpty)
+                Text('Born: ${_restorablePerson.value.year}')
               else
-                Text('Lifespan: ${_person.yearRange}'),
+                Text('Lifespan: ${_restorablePerson.value.yearRange}'),
             ],
           ),
           Flex(
@@ -185,12 +185,12 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
   Widget _leftColumn() => Wrap(
         children: <Widget>[
-          Text('Source: ${_person.bestSource.name}      '),
-          Text('UniqueId: ${_person.uniqueId}      '),
-          Text('Popularity: ${_person.userRatingCount}'),
+          Text('Source: ${_restorablePerson.value.bestSource.name}      '),
+          Text('UniqueId: ${_restorablePerson.value.uniqueId}      '),
+          Text('Popularity: ${_restorablePerson.value.userRatingCount}'),
           ElevatedButton(
-            onPressed: () async =>
-                MMSNav(context).viewWebPage(makeImdbUrl(_person.uniqueId)),
+            onPressed: () async => MMSNav(context)
+                .viewWebPage(makeImdbUrl(_restorablePerson.value.uniqueId)),
             child: const Text('IMDB'),
           ),
 
@@ -206,7 +206,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
             child: InkWell(
               onTap: _toggleDescription,
               child: Text(
-                _person.description,
+                _restorablePerson.value.description,
                 style: biggerFont,
                 overflow:
                     _descriptionExpanded.value ? null : TextOverflow.ellipsis,
@@ -225,9 +225,9 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         children: [
           Poster(
             context,
-            url: _person.imageUrl,
+            url: _restorablePerson.value.imageUrl,
             showImages: () async => MMSNav(context).viewWebPage(
-              makeImdbUrl(_person.uniqueId, photos: true),
+              makeImdbUrl(_restorablePerson.value.uniqueId, photos: true),
             ),
           ),
         ],
@@ -235,7 +235,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
   List<Widget> _related() {
     final categories = <Widget>[];
-    for (final category in _person.related.entries) {
+    for (final category in _restorablePerson.value.related.entries) {
       final rolesMap = category.value;
       final rolesLabel = category.key;
       final description = rolesMap.toShortString(); // Get a list of movie roles
@@ -246,7 +246,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
             child: InkWell(
               onTap: () async => MMSNav(context).searchForRelated(
                 // Open search details when tapped.
-                '$rolesLabel: ${_person.title}',
+                '$rolesLabel: ${_restorablePerson.value.title}',
                 rolesMap.values.toList(),
               ),
               child: Text(

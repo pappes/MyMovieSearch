@@ -13,6 +13,7 @@ import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 typedef MovieCollection = Map<String, MovieResultDTO>;
 typedef RelatedMovieCategories = Map<String, MovieCollection>;
@@ -113,26 +114,58 @@ const String movieDTOUninitialized = '-1';
 const String movieDTOMessagePrefix = '-';
 
 class RestorableMovie extends RestorableValue<MovieResultDTO> {
+  RestorableMovie([MovieResultDTO? def]) {
+    if (def != null) defaultVal = def;
+  }
+
+  static int nextId = 0;
+  MovieResultDTO defaultVal = MovieResultDTO();
+
   @override
-  @factory
-  MovieResultDTO createDefaultValue() => MovieResultDTO();
+  MovieResultDTO createDefaultValue() => defaultVal;
 
   @override
   void didUpdateValue(MovieResultDTO? oldValue) {
-    if (null == oldValue || !oldValue.matches(value)) {
+    if (null == oldValue || oldValue.uniqueId != value.uniqueId) {
       notifyListeners();
     }
   }
 
+  static Map<String, dynamic> _getMap(GoRouterState state) {
+    final criteria = state.extra;
+    if (criteria != null && criteria is Map<String, dynamic>) return criteria;
+    return {};
+  }
+
+  static Map<String, dynamic> routeState(MovieResultDTO dto) =>
+      {'id': nextId++, 'dto': dto};
+
+  static MovieResultDTO getDto(GoRouterState state) {
+    final input = _getMap(state);
+    if (input.containsKey('dto')) {
+      final criteria = input['dto'];
+      if (criteria != null && criteria is MovieResultDTO) {
+        return criteria;
+      }
+      return dtoFromPrimitives(criteria);
+    }
+    return MovieResultDTO();
+  }
+
   /// Get a unique identifier for this data.
   ///
+  /// Will generate a unique if if none supplied.
+  /// Will update the next id if it is out of sync.
   static String getRestorationId(GoRouterState state) {
-    final criteria = state.extra;
-    String? id;
-    if (criteria != null && criteria is MovieResultDTO) {
-      id = criteria.uniqueId;
+    final input = _getMap(state);
+    if (input.containsKey('id')) {
+      final criteria = input['id'];
+      if (criteria != null && criteria is int) {
+        if (criteria > nextId) nextId = criteria + 1;
+        return criteria.toString();
+      }
     }
-    return '_${state.fullPath}$id'.hashCode.toString().padRight(17000, '0');
+    return 'RestorableMovie${nextId++}';
   }
 
   @override
@@ -140,19 +173,21 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   // ignore: invalid_factory_method_impl
   MovieResultDTO fromPrimitives(Object? data) => dtoFromPrimitives(data);
   @factory
-  MovieResultDTO dtoFromPrimitives(Object? data) {
+  static MovieResultDTO dtoFromPrimitives(Object? data) {
     if (data is String) {
       final decoded = jsonDecode(data);
-      if (decoded is Map) {
-        return decoded.toMovieResultDTO();
+      if (decoded != null && decoded is String) {
+        return MovieResultDTO().init(uniqueId: decoded);
       }
     }
     return MovieResultDTO();
   }
 
   @override
+  // Need 2 functions because access to [value] is not initialised for testing!
   Object toPrimitives() => dtoToPrimitives(value);
-  Object dtoToPrimitives(MovieResultDTO dto) => jsonEncode(dto.toMap());
+  Object dtoToPrimitives(MovieResultDTO dto) =>
+      printSizeAndReturn(jsonEncode(dto.uniqueId));
 }
 
 class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
@@ -170,10 +205,7 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
   @override
   @factory
   // ignore: invalid_factory_method_impl
-  List<MovieResultDTO> fromPrimitives(Object? data) => dtoFromPrimitives(data);
-  @factory
-  // ignore: invalid_factory_method_impl
-  List<MovieResultDTO> dtoFromPrimitives(Object? data) {
+  List<MovieResultDTO> fromPrimitives(Object? data) {
     if (data is String) {
       final decoded = jsonDecode(data);
       if (decoded is List) {
@@ -184,9 +216,15 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
   }
 
   @override
+  // Need 2 functions because access to [value] is not initialised for testing!
   Object toPrimitives() => listToPrimitives(value);
   Object listToPrimitives(List<MovieResultDTO> list) =>
-      jsonEncode(list.encodeList());
+      printSizeAndReturn(jsonEncode(list.encodeList()));
+}
+
+String printSizeAndReturn(String str) {
+  print('Restorable size = ${str.length}');
+  return str;
 }
 
 extension ListDTOConversion on Iterable<MovieResultDTO> {
@@ -951,6 +989,44 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     final type = _lookupMovieContentType(string, seconds, id);
     if (null != type || null == info) return type;
     return null;
+  }
+
+  /// Construct route to Material user interface page
+  /// as appropriate for the dto.
+  ///
+  /// Chooses a MovieDetailsPage or PersonDetailsPage
+  /// based on the IMDB unique ID or ErrorDetailsPage otherwise
+  RouteInfo getDetailsPage() {
+    if (uniqueId.startsWith(imdbPersonPrefix) ||
+        type == MovieContentType.person) {
+      // Open person details.
+      return RouteInfo(
+        ScreenRoute.persondetails,
+        RestorableMovie.routeState(this),
+        uniqueId,
+      );
+    } else if (uniqueId.startsWith(imdbTitlePrefix) ||
+        type == MovieContentType.movie ||
+        type == MovieContentType.series ||
+        type == MovieContentType.miniseries ||
+        type == MovieContentType.short ||
+        type == MovieContentType.series ||
+        type == MovieContentType.episode ||
+        type == MovieContentType.title) {
+      // Open Movie details.
+      return RouteInfo(
+        ScreenRoute.moviedetails,
+        RestorableMovie.routeState(this),
+        uniqueId,
+      );
+    } else {
+      // Open error details.
+      return RouteInfo(
+        ScreenRoute.errordetails,
+        RestorableMovie.routeState(this),
+        MovieContentType.error.toString(),
+      );
+    }
   }
 
   /// Compare 2 fields and describe the difference

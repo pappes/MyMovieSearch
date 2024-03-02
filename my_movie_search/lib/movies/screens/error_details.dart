@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -27,7 +29,7 @@ class ErrorDetailsPage extends StatefulWidget {
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
         restorationId: RestorableMovie.getRestorationId(state),
         child: ErrorDetailsPage(
-          errorDto: state.extra as MovieResultDTO? ?? MovieResultDTO(),
+          errorDto: RestorableMovie.getDto(state),
           restorationId: RestorableMovie.getRestorationId(state),
         ),
       );
@@ -43,11 +45,25 @@ class _ErrorDetailsPageState extends State<ErrorDetailsPage>
   // The restoration bucket id for this page.
   String get restorationId => widget.restorationId;
 
+  void _gotError(MovieResultDTO dto) {
+    _restorableMovie.value = dto;
+
+    // Check the user has not navigated away
+    if (!mounted) return;
+
+    setState(() => _restorableMovie.value);
+  }
+
   @override
-  void restoreState(RestorationBucket? oldBucket, bool initialRestore) =>
-      // Register our property to be saved every time it changes,
-      // and to be restored every time our app is killed by the OS!
-      registerForRestoration(_restorableMovie, 'dto');
+  void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    _restorableMovie.defaultVal = widget.errorDto;
+    // Register our property to be saved every time it changes,
+    // and to be restored every time our app is killed by the OS!
+    registerForRestoration(_restorableMovie, 'dto');
+    unawaited(
+      DtoCache.singleton().fetch(_restorableMovie.value).then(_gotError),
+    );
+  }
 
   @override
   void dispose() {
@@ -57,25 +73,22 @@ class _ErrorDetailsPageState extends State<ErrorDetailsPage>
   }
 
   @override
-  Widget build(BuildContext context) {
-    _restorableMovie.value = widget.errorDto;
-    return SelectionArea(
-      child: Scaffold(
-        appBar: AppBar(
-          title: Text(widget.errorDto.title),
+  Widget build(BuildContext context) => SelectionArea(
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(_restorableMovie.value.title),
+          ),
+          body: Scrollbar(
+            thumbVisibility: true,
+            child: bodySection(),
+          ),
         ),
-        body: Scrollbar(
-          thumbVisibility: true,
-          child: bodySection(),
-        ),
-      ),
-    );
-  }
+      );
 
   ScrollView bodySection() => ListView(
         primary: true, //attach scrollbar controller to primary view
         children: <Widget>[
-          Text(widget.errorDto.title),
+          Text(_restorableMovie.value.title),
         ],
       );
 }
