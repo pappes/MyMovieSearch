@@ -13,34 +13,34 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt0376554","bestSource":"DataSourceType.imdbSearch","title":"Danehaye rize barf","type":"MovieContentType.movie","year":"2003","yearRange":"2003","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSearch":"tt0376554"},"related":{}}
+{"uniqueId":"tt0436724","bestSource":"DataSourceType.imdbSearch","title":"Rize","type":"MovieContentType.movie","year":"2005","yearRange":"2005","sources":{"DataSourceType.imdbSearch":"tt0436724"}}
 ''',
   r'''
-{"uniqueId":"tt0436724","bestSource":"DataSourceType.imdbSearch","title":"Rize","type":"MovieContentType.movie","year":"2005","yearRange":"2005","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSearch":"tt0436724"},"related":{}}
+{"uniqueId":"tt2078714","bestSource":"DataSourceType.imdbSearch","title":"Rize N Grind","type":"MovieContentType.movie","year":"2011","yearRange":"2011","sources":{"DataSourceType.imdbSearch":"tt2078714"}}
 ''',
   r'''
-{"uniqueId":"tt13345606","bestSource":"DataSourceType.imdbSearch","title":"Evil Dead Rise","type":"MovieContentType.movie","year":"2023","yearRange":"2023","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSearch":"tt13345606"},"related":{}}
+{"uniqueId":"tt24637510","bestSource":"DataSourceType.imdbSearch","title":"Rize","type":"MovieContentType.series","yearRange":"2022– ","sources":{"DataSourceType.imdbSearch":"tt24637510"}}
 ''',
   r'''
-{"uniqueId":"tt14761860","bestSource":"DataSourceType.imdbSearch","title":"The Big Door Prize","type":"MovieContentType.series","yearRange":"2023– ","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSearch":"tt14761860"},"related":{}}
+{"uniqueId":"tt29045530","bestSource":"DataSourceType.imdbSearch","title":"Rize of the Collapse","type":"MovieContentType.short","year":"2023","yearRange":"2023","sources":{"DataSourceType.imdbSearch":"tt29045530"}}
 ''',
   r'''
-{"uniqueId":"tt2078714","bestSource":"DataSourceType.imdbSearch","title":"Rize N Grind","type":"MovieContentType.movie","year":"2011","yearRange":"2011","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSearch":"tt2078714"},"related":{}}
+{"uniqueId":"tt3166426","bestSource":"DataSourceType.imdbSearch","title":"Die-Rize","type":"MovieContentType.movie","sources":{"DataSourceType.imdbSearch":"tt3166426"}}
 ''',
   r'''
-{"uniqueId":"tt21043326","bestSource":"DataSourceType.imdbSearch","title":"Ride","type":"MovieContentType.series","yearRange":"2023– ","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSearch":"tt21043326"},"related":{}}
+{"uniqueId":"tt4173306","bestSource":"DataSourceType.imdbSearch","title":"The Rizen","type":"MovieContentType.movie","year":"2017","yearRange":"2017","sources":{"DataSourceType.imdbSearch":"tt4173306"}}
 ''',
   r'''
-{"uniqueId":"tt24637510","bestSource":"DataSourceType.imdbSearch","title":"Rize","type":"MovieContentType.series","yearRange":"2022– ","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSearch":"tt24637510"},"related":{}}
+{"uniqueId":"tt4521338","bestSource":"DataSourceType.imdbSearch","title":"The Rizen: Possession","type":"MovieContentType.movie","year":"2019","yearRange":"2019","sources":{"DataSourceType.imdbSearch":"tt4521338"}}
 ''',
   r'''
-{"uniqueId":"tt3166426","bestSource":"DataSourceType.imdbSearch","title":"Die-Rize","type":"MovieContentType.movie","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSearch":"tt3166426"},"related":{}}
+{"uniqueId":"tt5363184","bestSource":"DataSourceType.imdbSearch","title":"Rize Action","type":"MovieContentType.movie","sources":{"DataSourceType.imdbSearch":"tt5363184"}}
 ''',
   r'''
-{"uniqueId":"tt5363184","bestSource":"DataSourceType.imdbSearch","title":"Rize Action","type":"MovieContentType.movie","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSearch":"tt5363184"},"related":{}}
+{"uniqueId":"tt7529532","bestSource":"DataSourceType.imdbSearch","title":"Tenacious D: Rize of the Fenix","type":"MovieContentType.custom","year":"2012","yearRange":"2012","sources":{"DataSourceType.imdbSearch":"tt7529532"}}
 ''',
   r'''
-{"uniqueId":"tt7529532","bestSource":"DataSourceType.imdbSearch","title":"Tenacious D: Rize of the Fenix","type":"MovieContentType.custom","year":"2012","yearRange":"2012","languages":"[]","genres":"[]","keywords":"[]","sources":{"DataSourceType.imdbSearch":"tt7529532"},"related":{}}
+{"uniqueId":"tt8067018","bestSource":"DataSourceType.imdbSearch","title":"The Rize & Fall of Tephlon Ent","type":"MovieContentType.movie","year":"2016","yearRange":"2016","sources":{"DataSourceType.imdbSearch":"tt8067018"}}
 ''',
 ];
 

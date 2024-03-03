@@ -1,6 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:math' show max;
+import 'dart:math' show max, min;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -162,7 +162,7 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
       final criteria = input['id'];
       if (criteria != null && criteria is int) {
         if (criteria > nextId) nextId = criteria + 1;
-        return criteria.toString();
+        return 'RestorableMovie$criteria';
       }
     }
     return 'RestorableMovie${nextId++}';
@@ -185,8 +185,8 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
 
   @override
   // Need 2 functions because access to [value] is not initialised for testing!
-  Object toPrimitives() => dtoToPrimitives(value);
-  Object dtoToPrimitives(MovieResultDTO dto) =>
+  Object toPrimitives() => RestorableMovie.dtoToPrimitives(value);
+  static Object dtoToPrimitives(MovieResultDTO dto) =>
       printSizeAndReturn(jsonEncode(dto.uniqueId));
 }
 
@@ -223,7 +223,8 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
 }
 
 String printSizeAndReturn(String str) {
-  print('Restorable size = ${str.length}');
+  final len = str.length;
+  print('Restorable size = $len, content = ${str.substring(0, min(50, len))}');
   return str;
 }
 

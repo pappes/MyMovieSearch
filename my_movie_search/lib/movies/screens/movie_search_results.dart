@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
 import 'package:go_router/go_router.dart';
-import 'package:my_movie_search/movies/blocs/repositories/barcode_repository.dart';
-import 'package:my_movie_search/movies/blocs/repositories/more_keywords_repository.dart';
-import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
-import 'package:my_movie_search/movies/blocs/repositories/movies_for_keyword_repository.dart';
-import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
-import 'package:my_movie_search/movies/blocs/repositories/tor_repository.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -18,6 +12,7 @@ class MovieSearchResultsNewPage extends StatefulWidget {
     required this.criteria,
     super.key,
   });
+
   final SearchCriteriaDTO criteria;
   final String restorationId;
 
@@ -29,14 +24,10 @@ class MovieSearchResultsNewPage extends StatefulWidget {
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
         restorationId: RestorableSearchCriteria.getRestorationId(state),
         child: MovieSearchResultsNewPage(
-          criteria: getCriteria(state.extra),
+          criteria: RestorableSearchCriteria.getDto(state),
           restorationId: RestorableSearchCriteria.getRestorationId(state),
         ),
       );
-  static SearchCriteriaDTO getCriteria(dynamic input) =>
-      (input != null && input is SearchCriteriaDTO)
-          ? input
-          : SearchCriteriaDTO();
 }
 
 class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
@@ -44,8 +35,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   _MovieSearchResultsPageState();
 
   SearchBloc? _searchBloc;
-  List<MovieResultDTO> _sortedList = [];
-  late final RestorableMovieList _restorableList;
+  late final _restorableCriteria = RestorableSearchCriteria();
+  late final _restorableList = RestorableMovieList();
   late final RestorableTextEditingController _textController;
   late final FocusNode _criteriaFocusNode = FocusNode();
   late final FocusNode _searchFocusNode = FocusNode();
@@ -57,7 +48,6 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
           ? 'Keywords for ${widget.criteria.criteriaList.first.title}'
           : widget.criteria.criteriaTitle,
     );
-    _restorableList = RestorableMovieList();
     super.initState();
     //final controller = _textController.value;
     //final text = controller.text;
@@ -68,42 +58,32 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     }*/
   }
 
-  BaseMovieRepository getDatasource() {
-    switch (widget.criteria.criteriaType) {
-      case SearchCriteriaType.downloadSimple:
-      case SearchCriteriaType.downloadAdvanced:
-        return TorRepository();
-      case SearchCriteriaType.moviesForKeyword:
-        return MoviesForKeywordRepository();
-      case SearchCriteriaType.barcode:
-        return BarcodeRepository();
-      case SearchCriteriaType.moreKeywords:
-        return MoreKeywordsRepository();
-      case SearchCriteriaType.none:
-      case SearchCriteriaType.custom:
-      case SearchCriteriaType.movieDTOList:
-      case SearchCriteriaType.movieTitle:
-        return MovieSearchRepository();
-    }
-  }
-
   @override
   String get restorationId => widget.restorationId;
   @override
   void restoreState(RestorationBucket? oldBucket, bool initialRestore) {
+    _restorableCriteria.defaultVal = widget.criteria;
     // Register our property to be saved every time it changes,
     // and to be restored every time our app is killed by the OS!
+    registerForRestoration(_restorableCriteria, 'criteriaDto');
     registerForRestoration(_restorableList, 'sortedList');
     registerForRestoration(_textController, 'inputText');
-    _searchBloc = SearchBloc(movieRepository: getDatasource());
-    if (oldBucket == null && _searchBloc != null && !_searchBloc!.isClosed) {
-      _searchBloc!.add(SearchRequested(widget.criteria));
+
+    _searchBloc ??= SearchBloc(
+      movieRepository: SearchCriteriaDTOHelpers.getDatasource(
+        _restorableCriteria.value.criteriaType,
+      ),
+    );
+    // Initiate a search if not restoring data.
+    if (oldBucket == null && !_searchBloc!.isClosed) {
+      _searchBloc!.add(SearchRequested(_restorableCriteria.value));
     }
   }
 
   @override
   void dispose() {
     // Restorables must be disposed when no longer used.
+    _restorableCriteria.dispose();
     _restorableList.dispose();
     _textController.dispose();
     // Clean up the focus node when the Form is disposed.
@@ -114,9 +94,6 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
 
   @override
   Widget build(BuildContext context) {
-    // Save state for restoration in case app is put to sleep.
-    _restorableList.value = _sortedList;
-
     final criteriaText = TextField(
       controller: _textController.value,
       focusNode: _criteriaFocusNode,
@@ -158,23 +135,23 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   }
 
   void _newSearch(String text) {
-    widget.criteria.criteriaTitle = text;
-    if (widget.criteria.criteriaList.isNotEmpty) {
-      widget.criteria.criteriaList.clear();
+    _restorableCriteria.value.criteriaTitle = text;
+    if (_restorableCriteria.value.criteriaList.isNotEmpty) {
+      _restorableCriteria.value.criteriaList.clear();
     }
-    _searchBloc!.add(SearchRequested(widget.criteria));
+    _searchBloc!.add(SearchRequested(_restorableCriteria.value));
     _searchFocusNode.requestFocus();
   }
 
   Widget _buildMovieResults() => BlocBuilder<SearchBloc, SearchState>(
         bloc: _searchBloc,
         builder: (context, state) {
-          _sortedList = _searchBloc!.sortedResults;
+          _restorableList.value = _searchBloc!.sortedResults;
           return Scrollbar(
             thumbVisibility: true,
             child: ListView.builder(
               padding: const EdgeInsets.all(16),
-              itemCount: _sortedList.length,
+              itemCount: _restorableList.value.length,
               itemBuilder: _movieListBuilder,
               primary: true, //attach scrollbar controller to primary view
             ),
@@ -183,14 +160,14 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
       );
 
   Widget _movieListBuilder(BuildContext context, int listIndex) {
-    if (listIndex >= _sortedList.length) {
+    if (listIndex >= _restorableList.value.length) {
       return const ListTile(
         title: Text('More widgets than available data to populate them!'),
       );
     }
     return MovieTile(
       context,
-      _sortedList[listIndex],
+      _restorableList.value[listIndex],
     );
   }
 }

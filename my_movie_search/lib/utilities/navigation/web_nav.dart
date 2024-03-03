@@ -68,13 +68,7 @@ class MMSNav {
   /// Navigates to a search results page populated with a movie list.
   ///
   Future<Object?> showResultsPage(SearchCriteriaDTO criteria) async =>
-      canvas.viewFlutterPage(
-        RouteInfo(
-          ScreenRoute.searchresults,
-          criteria,
-          criteria.toUniqueReference(),
-        ),
-      );
+      canvas.viewFlutterPage(criteria.getDetailsPage());
 
   /// Navigates to a search results page
   /// populated with a predefined list of dtos.

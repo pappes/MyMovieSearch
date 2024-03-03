@@ -489,14 +489,15 @@ void main() {
     //and then convert the JSON to a restorable dto.
     test('RestorableMovie', () {
       final movie = makeResultDTO('abcd');
+      final expected = MovieResultDTO().init(uniqueId: 'abcd');
       final rtp = RestorationTestParent(movie.uniqueId)
         ..restoreState(null, true);
 
-      final encoded = rtp._movie.dtoToPrimitives(movie);
+      final encoded = RestorableMovie.dtoToPrimitives(expected);
       rtp._movie.initWithValue(rtp._movie.fromPrimitives(encoded));
       final encoded2 = rtp._movie.toPrimitives();
 
-      expect(movie, MovieResultDTOMatcher(rtp._movie.value));
+      expect(expected, MovieResultDTOMatcher(rtp._movie.value));
       expect(encoded, encoded2);
     });
     // Convert a restorable dto list to JSON

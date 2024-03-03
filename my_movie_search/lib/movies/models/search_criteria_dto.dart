@@ -3,9 +3,16 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart' show Equatable;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_movie_search/movies/blocs/repositories/barcode_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/more_keywords_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/movies_for_keyword_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/tor_repository.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class SearchRequest extends Equatable {
   const SearchRequest(this.title);
@@ -52,8 +59,14 @@ const String movieCriteriaDTOCriteriaType = 'criteriaType';
 const String movieCriteriaDTOCriteriaList = 'criteriaList';
 
 class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
+  RestorableSearchCriteria([SearchCriteriaDTO? def]) {
+    if (def != null) defaultVal = def;
+  }
+
+  static int nextId = 0;
+  SearchCriteriaDTO defaultVal = SearchCriteriaDTO();
   @override
-  SearchCriteriaDTO createDefaultValue() => SearchCriteriaDTO();
+  SearchCriteriaDTO createDefaultValue() => defaultVal;
 
   @override
   void didUpdateValue(SearchCriteriaDTO? oldValue) {
@@ -65,9 +78,49 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
             value.criteriaList.toPrintableString()) notifyListeners();
   }
 
+  static Map<String, dynamic> _getMap(GoRouterState state) {
+    final criteria = state.extra;
+    if (criteria != null && criteria is Map<String, dynamic>) return criteria;
+    return {};
+  }
+
+  static Map<String, dynamic> routeState(SearchCriteriaDTO dto) =>
+      {'id': nextId++, 'dto': dto};
+
+  static SearchCriteriaDTO getDto(GoRouterState state) {
+    final input = _getMap(state);
+    if (input.containsKey('dto')) {
+      final criteria = input['dto'];
+      if (criteria != null && criteria is SearchCriteriaDTO) {
+        return criteria;
+      }
+      return dtoFromPrimitives(criteria);
+    }
+    return SearchCriteriaDTO();
+  }
+
+  /// Get a unique identifier for this data.
+  ///
+  /// Will generate a unique if if none supplied.
+  /// Will update the next id if it is out of sync.
+  static String getRestorationId(GoRouterState state) {
+    final input = _getMap(state);
+    if (input.containsKey('id')) {
+      final criteria = input['id'];
+      if (criteria != null && criteria is int) {
+        if (criteria > nextId) nextId = criteria + 1;
+        return 'RestorableSearchCriteria$criteria';
+      }
+    }
+    return 'RestorableSearchCriteria${nextId++}';
+  }
+
   @override
+  @factory
+  // ignore: invalid_factory_method_impl
   SearchCriteriaDTO fromPrimitives(Object? data) => dtoFromPrimitives(data);
-  SearchCriteriaDTO dtoFromPrimitives(Object? data) {
+  @factory
+  static SearchCriteriaDTO dtoFromPrimitives(Object? data) {
     if (data is String) {
       final decoded = jsonDecode(data);
       if (decoded is Map) {
@@ -77,7 +130,7 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
     return SearchCriteriaDTO();
   }
 
-  SearchCriteriaDTO getDTO(Map<String, String> map) {
+  /*SearchCriteriaDTO getDTO(Map<String, String> map) {
     final result = SearchCriteriaDTO();
     result
       ..searchId = map[movieCriteriaDTOSearchId] ?? result.searchId
@@ -92,22 +145,12 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
         map[movieCriteriaDTOCriteriaList],
       );
     return result;
-  }
-
-  /// Get a unique ideintifier for this data.
-  ///
-  static String getRestorationId(GoRouterState state) {
-    final criteria = state.extra;
-    String? id;
-    if (criteria != null && criteria is SearchCriteriaDTO) {
-      id = criteria.toPrintableIdOrText();
-    }
-    return '_${state.fullPath}$id'.hashCode.toString();
-  }
+  }*/
 
   @override
   Object toPrimitives() => dtoToPrimitives(value);
-  Object dtoToPrimitives(SearchCriteriaDTO value) => jsonEncode(value.toMap());
+  Object dtoToPrimitives(SearchCriteriaDTO value) =>
+      printSizeAndReturn(jsonEncode(value.toMap()));
 }
 
 extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
@@ -152,6 +195,36 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   SearchCriteriaDTO fromString(String criteria) => SearchCriteriaDTO()
     ..criteriaTitle = criteria
     ..criteriaType = SearchCriteriaType.movieTitle;
+
+  /// Construct route to Material user interface page
+  /// as appropriate for the dto.
+  ///
+  /// Always chooses MovieSearchResultsNewPage.
+  RouteInfo getDetailsPage() => RouteInfo(
+        ScreenRoute.searchresults,
+        RestorableSearchCriteria.routeState(this),
+        toUniqueReference(),
+      );
+
+  /// Determine which WebFetch to use to gather data
+  static BaseMovieRepository getDatasource(SearchCriteriaType criteriaType) {
+    switch (criteriaType) {
+      case SearchCriteriaType.downloadSimple:
+      case SearchCriteriaType.downloadAdvanced:
+        return TorRepository();
+      case SearchCriteriaType.moviesForKeyword:
+        return MoviesForKeywordRepository();
+      case SearchCriteriaType.barcode:
+        return BarcodeRepository();
+      case SearchCriteriaType.moreKeywords:
+        return MoreKeywordsRepository();
+      case SearchCriteriaType.none:
+      case SearchCriteriaType.custom:
+      case SearchCriteriaType.movieDTOList:
+      case SearchCriteriaType.movieTitle:
+        return MovieSearchRepository();
+    }
+  }
 
   SearchCriteriaDTO init(
     SearchCriteriaType source, {
