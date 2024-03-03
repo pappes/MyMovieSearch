@@ -257,6 +257,14 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
     }
     return result;
   }
+
+  /// Create a new list with the same values
+  ///
+  Iterable<MovieResultDTO> shallowCopy() {
+    final newList = <MovieResultDTO>[];
+    forEach(newList.add);
+    return newList;
+  }
 }
 
 extension MapResultDTOConversion on Map<dynamic, dynamic> {

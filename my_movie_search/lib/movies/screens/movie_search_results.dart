@@ -40,6 +40,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   late final RestorableTextEditingController _textController;
   late final FocusNode _criteriaFocusNode = FocusNode();
   late final FocusNode _searchFocusNode = FocusNode();
+  bool searchRequested = false;
 
   @override
   void initState() {
@@ -75,7 +76,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
       ),
     );
     // Initiate a search if not restoring data.
-    if (oldBucket == null && !_searchBloc!.isClosed) {
+    if (_restorableList.value.isEmpty) {
+      searchRequested = true;
       _searchBloc!.add(SearchRequested(_restorableCriteria.value));
     }
   }
@@ -129,12 +131,13 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
         ),
       ),
       body: Center(
-        child: _buildMovieResults(),
+        child: searchRequested ? _buildMovieResults() : _movieListSection(),
       ),
     );
   }
 
   void _newSearch(String text) {
+    searchRequested = true;
     _restorableCriteria.value.criteriaTitle = text;
     if (_restorableCriteria.value.criteriaList.isNotEmpty) {
       _restorableCriteria.value.criteriaList.clear();
@@ -146,17 +149,23 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   Widget _buildMovieResults() => BlocBuilder<SearchBloc, SearchState>(
         bloc: _searchBloc,
         builder: (context, state) {
-          _restorableList.value = _searchBloc!.sortedResults;
-          return Scrollbar(
-            thumbVisibility: true,
-            child: ListView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: _restorableList.value.length,
-              itemBuilder: _movieListBuilder,
-              primary: true, //attach scrollbar controller to primary view
-            ),
-          );
+          if (_searchBloc!.sortedResults.isNotEmpty) {
+            // if a search has been conducted use the new search results
+            _restorableList.value =
+                _searchBloc!.sortedResults.shallowCopy().toList();
+          }
+          return _movieListSection();
         },
+      );
+
+  Scrollbar _movieListSection() => Scrollbar(
+        thumbVisibility: true,
+        child: ListView.builder(
+          padding: const EdgeInsets.all(16),
+          itemCount: _restorableList.value.length,
+          itemBuilder: _movieListBuilder,
+          primary: true, //attach scrollbar controller to primary view
+        ),
       );
 
   Widget _movieListBuilder(BuildContext context, int listIndex) {
