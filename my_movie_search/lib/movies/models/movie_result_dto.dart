@@ -241,7 +241,11 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
         result.add(json.toMovieResultDTO());
       } else {
         final decoded = jsonDecode(json.toString());
-        if (decoded is Map) result.add(decoded.toMovieResultDTO());
+        if (decoded is Map) {
+          result.add(decoded.toMovieResultDTO());
+        } else {
+          result.add(MovieResultDTO().init(uniqueId: decoded.toString()));
+        }
       }
     }
     return result;
@@ -253,7 +257,7 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   List<String> encodeList() {
     final result = <String>[];
     for (final dto in this) {
-      result.add(dto.toJsonText());
+      result.add(jsonEncode(dto.uniqueId));
     }
     return result;
   }

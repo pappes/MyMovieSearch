@@ -473,9 +473,9 @@ void main() {
     //and then convert the JSON back to a list.
     test('multiple_DTO', () {
       final list = <MovieResultDTO>[
-        makeResultDTO('abc'),
-        makeResultDTO('def'),
-        makeResultDTO('ghi'),
+        MovieResultDTO().init(uniqueId: 'abc'),
+        MovieResultDTO().init(uniqueId: 'def'),
+        MovieResultDTO().init(uniqueId: 'ghi'),
       ];
       final encoded = list.encodeList();
 
@@ -504,9 +504,9 @@ void main() {
     //and then convert the JSON to a restorable dto list.
     test('RestorableMovieList', () {
       final list = <MovieResultDTO>[
-        makeResultDTO('abc'),
-        makeResultDTO('def'),
-        makeResultDTO('ghi'),
+        MovieResultDTO().init(uniqueId: 'abc'),
+        MovieResultDTO().init(uniqueId: 'def'),
+        MovieResultDTO().init(uniqueId: 'ghi'),
       ];
       final rtp = RestorationTestParent(list[1].uniqueId)
         ..restoreState(null, true);
@@ -633,7 +633,7 @@ void main() {
       () => testContent(MovieContentType.none, 'info', null, '-1'),
     );
     test(
-      'error',
+      'error2',
       () => testContent(MovieContentType.error, 'info', null, '-2'),
     );
     test(

@@ -32,13 +32,15 @@ void compareCriteria(SearchCriteriaDTO actual, SearchCriteriaDTO matcher) {
   expect(actual.criteriaTitle, matcher.criteriaTitle);
   expect(actual.searchId, matcher.searchId);
   expect(
-    actual.criteriaList.first,
-    MovieResultDTOMatcher(matcher.criteriaList.first),
+    actual.criteriaList.first.uniqueId,
+    matcher.criteriaList.first.uniqueId,
   );
   expect(
-    actual.criteriaList.last,
-    MovieResultDTOMatcher(matcher.criteriaList.last),
+    actual.criteriaList.last.uniqueId,
+    matcher.criteriaList.last.uniqueId,
   );
+
+  MovieResultDTOMatcher(matcher.criteriaList.first);
 }
 
 ////////////////////////////////////////////////////////////////////////////////

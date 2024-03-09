@@ -9,12 +9,10 @@ import 'package:firebase_core/firebase_core.dart';
 //import 'package:firebase_ui_auth/firebase_ui_auth.dart'; //does not compile on linux
 import 'package:firedart/firedart.dart' as linux_firedart;
 import 'package:flutter/material.dart';
-//import 'package:go_router/go_router.dart';
 import 'package:grpc/grpc.dart' as linux_firedartstatus;
 
 import 'package:my_movie_search/firebase_options.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
-//import 'package:provider/provider.dart';
 
 enum Fields { devices, text }
 
@@ -23,6 +21,7 @@ const runtimeDevices = {
   'android.samsung.SM-F926B': 'dave', // Samsung Fold 3
   'linux.Ubuntu.': 'dave', // development VM
   'android.samsung.SM-G950F': 'dave', // Samsung S8
+  'Subsystem for Android TM': 'dave', // Windows Subsystem for Android
   'TBD': 'tash',
 };
 
@@ -347,6 +346,7 @@ class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {
 
 String _derivedUser(String? device) => runtimeDevices[device] ?? 'tash';
 bool _derivedUserMatch(String? device, dynamic devices) {
+  print('checking $device IN IN THIS LIST $devices');
   if (devices is Iterable) {
     final currentUser = _derivedUser(device);
     for (final storedDevice in devices) {

@@ -354,8 +354,8 @@ SearchCriteriaDTO makeCriteriaDTO(String sample) => SearchCriteriaDTO()
   ..criteriaTitle = '${sample}_criteriaTitle'
   ..searchId = '${sample}_searchId'
   ..criteriaList = [
-    makeResultDTO('first'),
-    makeResultDTO('second'),
+    MovieResultDTO().init(uniqueId: 'first'),
+    MovieResultDTO().init(uniqueId: 'second'),
   ];
 
 class TestApp extends StatelessWidget {

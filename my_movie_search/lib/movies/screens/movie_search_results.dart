@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
 import 'package:go_router/go_router.dart';
@@ -75,10 +77,12 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
         _restorableCriteria.value.criteriaType,
       ),
     );
-    // Initiate a search if not restoring data.
     if (_restorableList.value.isEmpty) {
+      // Initiate a search if not restoring data.
       searchRequested = true;
       _searchBloc!.add(SearchRequested(_restorableCriteria.value));
+    } else {
+      _populateFromCache(_restorableList.value);
     }
   }
 
@@ -92,6 +96,25 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     _criteriaFocusNode.dispose();
     _searchFocusNode.dispose();
     super.dispose();
+  }
+
+  void _populateFromCache(List<MovieResultDTO> dtos) async {
+    final futures = <Future<dynamic>>[];
+    for (final dto in dtos) {
+      final cached = DtoCache.singleton().merge(dto);
+      futures.add(_replaceEntry(dtos, dtos.indexOf(dto), cached));
+    }
+    // When all cached data has been merged, call setState to update the screen.
+    unawaited(Future.wait(futures).then((_) => setState(() => {})));
+  }
+
+  Future<void> _replaceEntry(
+    List<MovieResultDTO> dtos,
+    int index,
+    Future<MovieResultDTO> cached,
+  ) async {
+    final newValue = await cached;
+    if (dtos[index].uniqueId == newValue.uniqueId) dtos[index] = newValue;
   }
 
   @override
