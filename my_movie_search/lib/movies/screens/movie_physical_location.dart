@@ -352,7 +352,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         //onSubmitted: _newSearch,
         showCursor: true,
         decoration: InputDecoration(
-          hintText: 'What is the name if the disc?',
+          hintText: 'What is the name of the disc?',
           suffixIcon: IconButton(
             icon: const Icon(Icons.clear),
             onPressed: () {

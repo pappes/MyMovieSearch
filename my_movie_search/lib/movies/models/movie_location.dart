@@ -1,6 +1,16 @@
+import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 
 import 'package:meta/meta.dart';
+import 'package:my_movie_search/firebase_app_state.dart';
+
+enum Fields {
+  libnum,
+  location,
+  id,
+  title,
+}
 
 /// Position of the movie including stacker [libNum] and slot [location].
 ///
@@ -64,13 +74,46 @@ class StackerContents implements Comparable<StackerContents> {
       other.titleName == titleName;
 }
 
+/// Position of the movie including stacker/slot [address] and id/title [movie].
+///
+class DvdLocation {
+  DvdLocation([this.address, this.movie]);
+  StackerAddress? address;
+  StackerContents? movie;
+
+  @override
+  String toString() => 'address:{$address}, movie:{$movie}';
+
+  String encode() {
+    if (address == null || movie == null) return '';
+    return jsonEncode({
+      Fields.libnum.name: address!.libNum,
+      Fields.location.name: address!.location,
+      Fields.id.name: movie!.uniqueId,
+      Fields.title.name: movie!.titleName,
+    });
+  }
+
+  void decode(String json) {
+    final map = jsonDecode(json) as Map;
+    address = StackerAddress(
+      libNum: map[Fields.libnum.name] as String,
+      location: map[Fields.location.name] as String,
+    );
+    movie = StackerContents(
+      uniqueId: map[Fields.id.name] as String,
+      titleName: map[Fields.title.name] as String,
+    );
+  }
+}
+
 /// Cache of movies and locations to allow location data to be easily displayed.
 class MovieLocation {
   /// Public constructor returns a singleton.
   factory MovieLocation() => _instance ??= MovieLocation._internal();
 
   MovieLocation._internal() {
-    _loadTestData();
+    unawaited(_loadCloudLocationData());
   }
   static MovieLocation? _instance;
 
@@ -91,12 +134,36 @@ class MovieLocation {
   List<StackerAddress> getLocationsForMovie(StackerContents movie) =>
       _movies[movie.uniqueId] ?? [];
 
-  /// Insert a record into tthe cache.
+  /// Store location of movie.
   void storeMovieAtLocation(StackerContents movie, StackerAddress location) {
+    if (_writeToCache(movie, location)) _writeToCloud(movie, location);
+  }
+
+  /// Insert a record into the memory cache.
+  ///
+  /// Returns false if the movie title was already in the cache.
+  bool _writeToCache(StackerContents movie, StackerAddress location) {
     _movies[movie.uniqueId] ??= [];
-    _movies[movie.uniqueId]!.add(location);
     _locations[location] ??= [];
-    _locations[location]!.add(movie);
+    if (!_movies[movie.uniqueId]!.contains(location)) {
+      _movies[movie.uniqueId]!.add(location);
+    }
+    if (!_locations[location]!.contains(movie)) {
+      _locations[location]!.add(movie);
+      return true;
+    }
+    return false;
+  }
+
+  /// Insert a record into the cloud datastore.
+  void _writeToCloud(StackerContents movie, StackerAddress location) {
+    unawaited(
+      FirebaseApplicationState().addRecord(
+        '/dvds',
+        id: movie.uniqueId,
+        message: DvdLocation(location, movie).encode(),
+      ),
+    );
   }
 
   /// [StackerAddress] location values
@@ -157,6 +224,19 @@ class MovieLocation {
     return title;
   }
 
+  Future<void> _loadCloudLocationData() async {
+    // TODO: extend FirebaseApplicationState to return a list of documents for a collection
+    final cloudData = FirebaseApplicationState().fetchRecord('/dvds', id: 'id');
+    final recs = await cloudData;
+    //final records = <String>[];
+    for (final record in recs as Iterable) {
+      final location = DvdLocation()..decode(record.toString());
+      if (location.movie != null && location.address != null) {
+        _writeToCache(location.movie!, location.address!);
+      }
+    }
+  }
+
   // will be deleted.
   void _loadTestData() {
     storeMovieAtLocation(
@@ -172,6 +252,14 @@ class MovieLocation {
         titleName: 'The taking of Pelham 123 [directors cut]',
       ),
       const StackerAddress(libNum: '007', location: '009'),
+    );
+
+    storeMovieAtLocation(
+      const StackerContents(
+        uniqueId: 'tt0130827',
+        titleName: 'Lola rennt',
+      ),
+      const StackerAddress(libNum: '002', location: '137'),
     );
   }
 }

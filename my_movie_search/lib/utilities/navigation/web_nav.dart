@@ -135,7 +135,11 @@ class MMSNav {
   ///
   Future<Object?> addLocation(MovieResultDTO movie) async =>
       canvas.viewFlutterPage(
-        RouteInfo(ScreenRoute.addlocation, movie, movie.uniqueId),
+        RouteInfo(
+          ScreenRoute.addlocation,
+          RestorableMovie.routeState(movie),
+          movie.uniqueId,
+        ),
       );
 
   /// Display more details for the selected card.

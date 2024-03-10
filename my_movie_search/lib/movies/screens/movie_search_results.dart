@@ -82,7 +82,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
       searchRequested = true;
       _searchBloc!.add(SearchRequested(_restorableCriteria.value));
     } else {
-      _populateFromCache(_restorableList.value);
+      unawaited(_populateFromCache(_restorableList.value));
     }
   }
 
@@ -98,7 +98,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     super.dispose();
   }
 
-  void _populateFromCache(List<MovieResultDTO> dtos) async {
+  Future<void> _populateFromCache(List<MovieResultDTO> dtos) async {
     final futures = <Future<dynamic>>[];
     for (final dto in dtos) {
       final cached = DtoCache.singleton().merge(dto);

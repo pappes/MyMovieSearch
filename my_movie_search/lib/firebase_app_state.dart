@@ -21,7 +21,7 @@ const runtimeDevices = {
   'android.samsung.SM-F926B': 'dave', // Samsung Fold 3
   'linux.Ubuntu.': 'dave', // development VM
   'android.samsung.SM-G950F': 'dave', // Samsung S8
-  'Subsystem for Android TM': 'dave', // Windows Subsystem for Android
+  'android.Microsoft Corporation.Subsystem for Android(TM)': 'dave', // Chair
   'TBD': 'tash',
 };
 
@@ -190,19 +190,22 @@ class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
           await fbrecord;
           return true;
         } else {
+          final newDevices = [_userDevice];
+
           // Get reference to supplied ID
           final doc = fbcollection.document(id);
-          final msg = await doc.get();
-          // Preserve existing data.
-          final newDevices = [_userDevice];
-          if (await doc.exists) {
-            final existingDevices = msg[Fields.devices.name];
-            if (existingDevices != null && existingDevices is Iterable) {
-              // Define unique list of devices.
-              map[Fields.devices.name] =
-                  {...existingDevices, ...newDevices}.toList();
+          try {
+            final msg = await doc.get();
+            // Preserve existing data.
+            if (await doc.exists) {
+              final existingDevices = msg[Fields.devices.name];
+              if (existingDevices != null && existingDevices is Iterable) {
+                // Define unique list of devices.
+                map[Fields.devices.name] =
+                    {...existingDevices, ...newDevices}.toList();
+              }
             }
-          } else {
+          } catch (_) {
             map[Fields.devices.name] = newDevices;
           }
           // Write data to0 firestore.
