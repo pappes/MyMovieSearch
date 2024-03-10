@@ -231,7 +231,7 @@ class MovieTile extends ListTile {
     Widget? icon,
   }) =>
       ElevatedButton(
-        onPressed: () async => _navigate,
+        onPressed: () async => _navigate(context, movie),
         child: icon ?? _getIcon(movie),
       );
 }
