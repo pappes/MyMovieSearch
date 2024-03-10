@@ -46,12 +46,10 @@ class _ErrorDetailsPageState extends State<ErrorDetailsPage>
   String get restorationId => widget.restorationId;
 
   void _gotError(MovieResultDTO dto) {
-    _restorableMovie.value = dto;
-
     // Check the user has not navigated away
     if (!mounted) return;
 
-    setState(() => _restorableMovie.value);
+    setState(() => _restorableMovie.value = dto);
   }
 
   @override

@@ -98,7 +98,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     // Check the user has not navigated away
     if (!mounted || !_redrawRequired) return;
 
-    setState(() => _restorableMovie.value);
+    setState(() => {});
     _redrawRequired = false;
   }
 

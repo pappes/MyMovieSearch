@@ -99,7 +99,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     // Check the user has not navigated away
     if (!mounted || !_redrawRequired) return;
 
-    setState(() => _restorablePerson.value);
+    setState(() => {});
     _redrawRequired = false;
   }
 
