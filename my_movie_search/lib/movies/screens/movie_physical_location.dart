@@ -261,7 +261,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
           ),
           ...[
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 ElevatedButton(
                   onPressed: () {
@@ -272,10 +272,6 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
                     context.pop();
                   },
                   child: const Text('Add'),
-                ),
-                ElevatedButton(
-                  onPressed: () => context.pop(),
-                  child: const Text('Done'),
                 ),
               ],
             ),

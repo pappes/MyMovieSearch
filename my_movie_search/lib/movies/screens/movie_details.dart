@@ -190,6 +190,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   Widget _leftColumn() => Wrap(
         children: [
           ..._leftHeader(),
+          ..._locations(),
           ..._description(),
           // Only show poster in left column on mobile.
           if (_mobileLayout) _posterSection(),
@@ -197,7 +198,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ..._locations(),
               ..._related(_caseInsensativeSuggestion),
               ..._cast(),
             ],
@@ -249,21 +249,29 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           children: <Widget>[
             Text('Source: ${_restorableMovie.value.bestSource.name}      '),
             Text('UniqueId: ${_restorableMovie.value.uniqueId}'),
-            ElevatedButton(
-              onPressed: () async => MMSNav(context).viewWebPage(
-                makeImdbUrl(
-                  _restorableMovie.value.uniqueId,
+            Wrap(
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () async => MMSNav(context).viewWebPage(
+                    makeImdbUrl(
+                      _restorableMovie.value.uniqueId,
+                    ),
+                  ),
+                  child: const Text('IMDB'),
                 ),
-              ),
-              child: const Text('IMDB'),
+                Wrap(children: _externalSearchButtons()),
+              ],
             ),
-            ..._externalSearchButtons(),
           ],
         ),
       ];
 
   List<Widget> _description() => [
-        BoldLabel('Description:'),
+        Row(
+          children: <Widget>[
+            BoldLabel('Description:'),
+          ],
+        ),
         InkWell(
           onTap: _toggleDescription,
           child: Text(
