@@ -87,6 +87,22 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
     return true;
   }
 
+  /// Extract data from Firebase
+  ///
+  /// Implimentations need to ensure superclass has successfully completed
+  /// by calling
+  /// await super.fetchRecords(collectionPath).drain<dynamic>(
+  Stream<dynamic> fetchRecords(
+    String collectionPath,
+  ) async* {
+    if (!await _loggedIn) {
+      logger.t('Must be logged in');
+      throw MMSFirebaseException('not logged in');
+    }
+
+    logger.t('Fetching collection $collectionPath');
+  }
+
   /// Insert data into Firebase.
   Future<dynamic>? addRecord(
     String collectionPath, {
@@ -170,6 +186,32 @@ class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
       }
     }
     return null;
+  }
+
+  @override
+  Stream<Map<String, String>> fetchRecords(
+    String collectionPath,
+  ) async* {
+    try {
+      await super.fetchRecords(collectionPath).drain<dynamic>();
+      final fbcollection =
+          linux_firedart.Firestore.instance.collection(collectionPath);
+
+      yield* fbcollection.stream.asyncExpand(_collectionConverter);
+    } on linux_firedart.GrpcError catch (exception) {
+      logger.t('Unable to fetch collection Firebase exception: $exception');
+      rethrow;
+    }
+    return;
+  }
+
+  Stream<Map<String, String>> _collectionConverter(
+    List<linux_firedart.Document> documents,
+  ) async* {
+    for (final document in documents) {
+      final message = document[Fields.text.name]?.toString();
+      yield {document.id: message ?? ''};
+    }
   }
 
   @override
@@ -297,6 +339,32 @@ class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {
   }
 
   @override
+  Stream<Map<String, String>> fetchRecords(
+    String collectionPath,
+  ) async* {
+    try {
+      await super.fetchRecords(collectionPath).drain<dynamic>();
+      final fbcollection =
+          FirebaseFirestore.instance.collection(collectionPath);
+
+      yield* fbcollection.snapshots().asyncExpand(_collectionConverter);
+    } catch (exception) {
+      logger.t('Unable to fetch collection Firebase exception: $exception');
+      rethrow;
+    }
+    return;
+  }
+
+  Stream<Map<String, String>> _collectionConverter(
+    QuerySnapshot<Map<String, dynamic>> documents,
+  ) async* {
+    for (final document in documents.docs) {
+      final message = document[Fields.text.name]?.toString();
+      yield {document.id: message ?? ''};
+    }
+  }
+
+  @override
   Future<bool> addRecord(
     String collectionPath, {
     String? message,
@@ -349,7 +417,6 @@ class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {
 
 String _derivedUser(String? device) => runtimeDevices[device] ?? 'tash';
 bool _derivedUserMatch(String? device, dynamic devices) {
-  print('checking $device IN IN THIS LIST $devices');
   if (devices is Iterable) {
     final currentUser = _derivedUser(device);
     for (final storedDevice in devices) {
@@ -359,4 +426,13 @@ bool _derivedUserMatch(String? device, dynamic devices) {
     }
   }
   return false;
+}
+
+/// Exception used in FirebaseApplicationState.
+class MMSFirebaseException implements Exception {
+  MMSFirebaseException(this.cause);
+  String cause;
+
+  @override
+  String toString() => cause;
 }

@@ -113,12 +113,19 @@ class MovieLocation {
   factory MovieLocation() => _instance ??= MovieLocation._internal();
 
   MovieLocation._internal() {
-    unawaited(_loadCloudLocationData());
+    unawaited(init());
   }
   static MovieLocation? _instance;
 
+  Future<void>? _initialised;
   final _movies = <String, List<StackerAddress>>{};
   final _locations = <StackerAddress, List<StackerContents>>{};
+
+  /// Load data from the cloud only once.
+  Future<void> init() async {
+    _initialised ??= _loadCloudLocationData();
+    await _initialised;
+  }
 
   /// Removes all entries from the cache.
   void clear() {
@@ -136,7 +143,7 @@ class MovieLocation {
 
   /// Store location of movie.
   void storeMovieAtLocation(StackerContents movie, StackerAddress location) {
-    if (_writeToCache(movie, location)) _writeToCloud(movie, location);
+    if (_writeToCache(movie, location)) _writeToCloud(movie);
   }
 
   /// Insert a record into the memory cache.
@@ -156,12 +163,16 @@ class MovieLocation {
   }
 
   /// Insert a record into the cloud datastore.
-  void _writeToCloud(StackerContents movie, StackerAddress location) {
+  void _writeToCloud(StackerContents movie) {
+    final locations = <String>[];
+    for (final location in getLocationsForMovie(movie)) {
+      locations.add(DvdLocation(location, movie).encode());
+    }
     unawaited(
       FirebaseApplicationState().addRecord(
         '/dvds',
         id: movie.uniqueId,
-        message: DvdLocation(location, movie).encode(),
+        message: jsonEncode(locations),
       ),
     );
   }
@@ -225,41 +236,24 @@ class MovieLocation {
   }
 
   Future<void> _loadCloudLocationData() async {
-    // TODO: extend FirebaseApplicationState to return a list of documents for a collection
-    final cloudData = FirebaseApplicationState().fetchRecord('/dvds', id: 'id');
-    final recs = await cloudData;
-    //final records = <String>[];
-    for (final record in recs as Iterable) {
-      final location = DvdLocation()..decode(record.toString());
-      if (location.movie != null && location.address != null) {
-        _writeToCache(location.movie!, location.address!);
+    FirebaseApplicationState()
+        .fetchRecords('/dvds')
+        .timeout(
+          const Duration(seconds: 10),
+          onTimeout: (sink) => sink.close(),
+        )
+        .listen((event) {
+      if (event is Map && event.isNotEmpty) {
+        final locations = jsonDecode(event.values.first.toString());
+        if (locations is Iterable) {
+          for (final encodedLocation in locations) {
+            final location = DvdLocation()..decode(encodedLocation.toString());
+            if (location.movie != null && location.address != null) {
+              _writeToCache(location.movie!, location.address!);
+            }
+          }
+        }
       }
-    }
-  }
-
-  // will be deleted.
-  void _loadTestData() {
-    storeMovieAtLocation(
-      const StackerContents(
-        uniqueId: 'tt1111422',
-        titleName: 'The taking of Pelham 123 [box set]',
-      ),
-      const StackerAddress(libNum: '007', location: '008'),
-    );
-    storeMovieAtLocation(
-      const StackerContents(
-        uniqueId: 'tt1111422',
-        titleName: 'The taking of Pelham 123 [directors cut]',
-      ),
-      const StackerAddress(libNum: '007', location: '009'),
-    );
-
-    storeMovieAtLocation(
-      const StackerContents(
-        uniqueId: 'tt0130827',
-        titleName: 'Lola rennt',
-      ),
-      const StackerAddress(libNum: '002', location: '137'),
-    );
+    });
   }
 }

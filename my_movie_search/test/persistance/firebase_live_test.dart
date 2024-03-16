@@ -24,7 +24,7 @@ void main() async {
 
       expect(result, completion(true));
     });
-    test('fetch', () async {
+    test('fetch single record', () async {
       final fb = FirebaseApplicationState();
       await fb.addRecord('testing', id: '123456', message: 'addme');
       final result = fb.fetchRecord('testing', id: '123456');
@@ -42,6 +42,27 @@ void main() async {
       result = fb.fetchRecord('testing', id: '123456');
 
       expect(result, completion('updateme'));
+    });
+    test('fetch multiple records', () async {
+      final expected = {'123456': 'addme', '123457': 'addmetoo'};
+      final actual = <String, String>{};
+      final fb = FirebaseApplicationState();
+      await fb.addRecord('testing', id: '123456', message: 'addme');
+      await fb.addRecord('testing', id: '123457', message: 'addmetoo');
+      final result = await fb
+          .fetchRecords('testing')
+          .timeout(
+            const Duration(seconds: 1),
+            onTimeout: (sink) => sink.close(),
+          )
+          .toList();
+      expect(result, isA<List<Map<String, String>>>());
+      // Combine list of maps into a single map
+      for (final m in result as List<Map<String, String>>) {
+        actual[m.entries.first.key] = m.entries.first.value;
+      }
+
+      expect(actual, expected);
     });
   });
 }
