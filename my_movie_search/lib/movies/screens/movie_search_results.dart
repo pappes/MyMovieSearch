@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
 import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
+import 'package:my_movie_search/movies/models/movie_location.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/movie_card_small.dart';
@@ -78,12 +79,17 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
         _restorableCriteria.value.criteriaType,
       ),
     );
-    if (_restorableList.value.isEmpty) {
+    if (_restorableCriteria.value.criteriaType ==
+        SearchCriteriaType.dvdLocations) {
+      // Initiate a search if not restoring data.
+      searchRequested = false;
+      unawaited(_populateFromDvdCache());
+    } else if (_restorableList.value.isEmpty) {
       // Initiate a search if not restoring data.
       searchRequested = true;
       _searchBloc!.add(SearchRequested(_restorableCriteria.value));
     } else {
-      unawaited(_populateFromCache(_restorableList.value));
+      unawaited(_populateFromDtoCache(_restorableList.value));
     }
   }
 
@@ -99,14 +105,23 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     super.dispose();
   }
 
-  Future<void> _populateFromCache(List<MovieResultDTO> dtos) async {
+  Future<void> _populateFromDtoCache(List<MovieResultDTO> dtos) async {
     final futures = <Future<dynamic>>[];
     for (final dto in dtos) {
       final cached = DtoCache.singleton().merge(dto);
       futures.add(_replaceEntry(dtos, dtos.indexOf(dto), cached));
     }
     // When all cached data has been merged, call setState to update the screen.
-    unawaited(Future.wait(futures).then((_) => setState(() => {})));
+    unawaited(Future.wait(futures).then((dto) => setState(() => {})));
+  }
+
+  Future<void> _populateFromDvdCache() async {
+    // Load data by combining internal caches.
+    unawaited(
+      MovieLocation()
+          .getUnmatchedDvds()
+          .then((dtos) => setState(() => _restorableList.value = dtos)),
+    );
   }
 
   Future<void> _replaceEntry(

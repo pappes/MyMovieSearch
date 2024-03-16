@@ -36,6 +36,7 @@ enum SearchCriteriaType {
   downloadSimple,
   downloadAdvanced,
   barcode,
+  dvdLocations,
   custom,
 }
 
@@ -218,6 +219,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
         return BarcodeRepository();
       case SearchCriteriaType.moreKeywords:
         return MoreKeywordsRepository();
+      case SearchCriteriaType.dvdLocations:
       case SearchCriteriaType.none:
       case SearchCriteriaType.custom:
       case SearchCriteriaType.movieDTOList:

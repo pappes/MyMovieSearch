@@ -25,7 +25,6 @@ const webAddressPrefix = 'http';
 
 enum ScreenRoute {
   search,
-  dvds,
   searchresults,
   persondetails,
   moviedetails,
@@ -79,8 +78,8 @@ class MMSNav {
 
   /// Navigates to the list of old DVD locations.
   ///
-  Future<Object?> showDVDsPage() async => canvas.viewFlutterRootPage(
-        ScreenRoute.dvds,
+  Future<Object?> showDVDsPage() async => showResultsPage(
+        SearchCriteriaDTO().init(SearchCriteriaType.dvdLocations),
       );
 
   /// Navigates to a search results page
@@ -164,6 +163,7 @@ class MMSNav {
         return showMoviesForKeyword(movie.title);
 
       case MovieContentType.barcode:
+      case MovieContentType.searchprompt:
         // Search for movies based on the data fetched for the barcode.
 
         return showResultsPage(

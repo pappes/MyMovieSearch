@@ -19,7 +19,7 @@ class Settings {
 
   String? get(String key) => _settingsMap[key];
 
-  Future<Map<String, dynamic>> loadFile([
+  Future<Map<String, dynamic>> _loadFile([
     String location = 'assets/settings.json',
   ]) async {
     final json = await rootBundle.loadString(location);
@@ -36,9 +36,9 @@ class Settings {
     // Manually initalise flutter to ensure setting can be loaded before RunApp
     // and to ensure tests are not prevented from calling real http enpoints
     WidgetsFlutterBinding.ensureInitialized();
-    final map = await loadFile();
+    final map = await _loadFile();
     logger?.t('settings loaded : $map');
-    final secrets = await loadFile('assets/secrets.json');
+    final secrets = await _loadFile('assets/secrets.json');
     logger?.t('secrets loaded : $secrets');
   }
 }

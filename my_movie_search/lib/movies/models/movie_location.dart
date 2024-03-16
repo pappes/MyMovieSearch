@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 
-import 'package:meta/meta.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_movie_search/firebase_app_state.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 enum Fields {
   libnum,
@@ -146,6 +148,19 @@ class MovieLocation {
     if (_writeToCache(movie, location)) _writeToCloud(movie);
   }
 
+  Future<List<MovieResultDTO>> getUnmatchedDvds() async {
+    final dtos = <MovieResultDTO>[];
+    for (final dvd in await _getDvds()) {
+      final movies = getMoviesAtLocation(dvd['location'] as StackerAddress);
+      bool unmatched = true;
+      for (final movie in movies) {
+        if (movie.titleName == dvd['title']) unmatched = false;
+      }
+      if (unmatched) dtos.add(dvd['dto'] as MovieResultDTO);
+    }
+    return dtos;
+  }
+
   /// Insert a record into the memory cache.
   ///
   /// Returns false if the movie title was already in the cache.
@@ -256,4 +271,60 @@ class MovieLocation {
       }
     });
   }
+
+  Future<List<Map<String, dynamic>>> _getDvds() async {
+    final allDvds = <Map<String, dynamic>>[];
+    final rawContent = await _loadDvdFile();
+    final table = rawContent.last as Map;
+    final cdlib = table['data'] as List;
+
+    for (final oldDvd in cdlib) {
+      oldDvd as List;
+
+      final newDvd = <String, dynamic>{};
+      newDvd['location'] = StackerAddress(
+        libNum: oldDvd[DvdColumns.libnum.index].toString(),
+        location: oldDvd[DvdColumns.location.index].toString(),
+      );
+      newDvd['title'] = oldDvd[DvdColumns.title.index].toString();
+      newDvd['dto'] = MovieResultDTO().init(
+        title: '${oldDvd[DvdColumns.title.index]} '
+            '${oldDvd[DvdColumns.artist.index]} '
+            '${oldDvd[DvdColumns.year.index]} ',
+        alternateTitle: 'stacker:${oldDvd[DvdColumns.libnum.index]} '
+            'disk:${oldDvd[DvdColumns.location.index]}',
+        type: MovieContentType.searchprompt.name,
+      );
+      allDvds.add(newDvd);
+    }
+
+    return allDvds;
+  }
+
+  Future<List<dynamic>> _loadDvdFile() async {
+    // Manually initalise flutter to ensure setting can be loaded before RunApp
+    // and to ensure tests are not prevented from calling real http enpoints
+    WidgetsFlutterBinding.ensureInitialized();
+
+    const location = 'assets/OldCDLibrary.json';
+    final json = await rootBundle.loadString(location);
+    return jsonDecode(json) as List<dynamic>;
+  }
+  //MovieResultDTO _dvdToDto(dvd) {}
+}
+
+enum DvdColumns {
+  id,
+  libnum,
+  location,
+  title,
+  artist,
+  disctype,
+  genre,
+  year,
+  rootname,
+  details,
+  frontimg,
+  cdkey,
+  comments,
 }

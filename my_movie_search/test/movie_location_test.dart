@@ -94,5 +94,12 @@ Future<void> main() async {
         expect(actualOutput, expectedOutput);
       },
     );
+    test(
+      'dvdlocations',
+      () async {
+        final data = await MovieLocation().getUnmatchedDvds();
+        expect(data.length, 1440);
+      },
+    );
   });
 }

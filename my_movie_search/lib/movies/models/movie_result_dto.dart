@@ -56,6 +56,7 @@ enum MovieContentType {
   information,
   keyword,
   barcode,
+  searchprompt, // freetext dto to be used in a search criteria
   person,
   title, //      unknown movie type
   download, //   e.g. magnet from tpb
@@ -468,6 +469,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       case MovieContentType.none:
       case MovieContentType.keyword:
       case MovieContentType.barcode:
+      case MovieContentType.searchprompt:
       case MovieContentType.person:
       case MovieContentType.download:
       case MovieContentType.movie:
@@ -1450,6 +1452,7 @@ extension DTOCompare on MovieResultDTO {
       case MovieContentType.download:
         return downloadCompare(other);
       case MovieContentType.barcode:
+      case MovieContentType.searchprompt:
         return barcodeCompare(other);
       case MovieContentType.movie:
       case MovieContentType.error:
@@ -1619,6 +1622,7 @@ extension DTOCompare on MovieResultDTO {
         return 5;
       case MovieContentType.keyword:
       case MovieContentType.barcode:
+      case MovieContentType.searchprompt:
         return 4;
       case MovieContentType.download:
         return 3;

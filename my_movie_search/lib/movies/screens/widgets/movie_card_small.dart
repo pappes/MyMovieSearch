@@ -1,18 +1,4 @@
-import 'package:flutter/material.dart'
-    show
-        Align,
-        Alignment,
-        BuildContext,
-        ElevatedButton,
-        Icon,
-        Icons,
-        Image,
-        ListTile,
-        MainAxisSize,
-        NetworkImage,
-        Row,
-        Text,
-        Widget;
+import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
 
@@ -53,6 +39,7 @@ class MovieTile extends ListTile {
         middle.add(movie.bestSource.excludeNone);
       case MovieContentType.person:
       case MovieContentType.barcode:
+      case MovieContentType.searchprompt:
         break;
 
       case MovieContentType.movie:
@@ -96,6 +83,7 @@ class MovieTile extends ListTile {
         start.add(movie.charactorName);
         end.add(ratingCount);
       case MovieContentType.barcode:
+      case MovieContentType.searchprompt:
         start.add(movie.bestSource.excludeNone);
         end.add(movie.alternateTitle);
 
@@ -134,6 +122,8 @@ class MovieTile extends ListTile {
       // See available icons at https://fonts.google.com/icons
       case MovieContentType.barcode:
         return const Icon(Icons.skip_next);
+      case MovieContentType.searchprompt:
+        return const Icon(Icons.manage_search);
       case MovieContentType.error:
         return const Icon(Icons.unfold_more);
       case MovieContentType.information:
@@ -170,14 +160,15 @@ class MovieTile extends ListTile {
   }
 
   static Widget? _getNavigateButtons(
-      BuildContext context, MovieResultDTO movie) {
+    BuildContext context,
+    MovieResultDTO movie,
+  ) {
     final widgets = <Widget>[];
     switch (movie.type) {
       case MovieContentType.navigation:
-        widgets.add(_navigateButton(context, movie));
       case MovieContentType.keyword:
-        widgets.add(_navigateButton(context, movie));
       case MovieContentType.barcode:
+      case MovieContentType.searchprompt:
         widgets.add(_navigateButton(context, movie));
       case MovieContentType.download:
         if (movie.imageUrl.isNotEmpty) {
