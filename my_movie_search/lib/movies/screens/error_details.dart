@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 
 /// Display details of an error meessag to the user.
 ///
@@ -76,6 +77,7 @@ class _ErrorDetailsPageState extends State<ErrorDetailsPage>
           appBar: AppBar(
             title: Text(_restorableMovie.value.title),
           ),
+          endDrawer: getDrawer(context),
           body: Scrollbar(
             thumbVisibility: true,
             child: bodySection(),

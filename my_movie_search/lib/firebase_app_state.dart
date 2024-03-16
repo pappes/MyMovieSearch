@@ -256,7 +256,8 @@ class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
         }
       }
     } catch (exception) {
-      logger.t('Unable to add record to Firebase exception: $exception');
+      logger.t('Unable to add record to Firebase exception: $exception '
+          'collection: $collectionPath id: $id message: $message');
     }
     return false;
   }

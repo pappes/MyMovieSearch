@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/models/movie_location.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
+import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 
 /// Add information about storage of physical media.
 ///
@@ -93,6 +94,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         appBar: AppBar(
           title: Text(_restorableMovie.value.title),
         ),
+        endDrawer: getDrawer(context),
         body: Padding(
           padding: const EdgeInsets.all(8),
           child: _bodySection(),

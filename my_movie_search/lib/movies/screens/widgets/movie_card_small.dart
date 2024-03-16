@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart'
     show
+        Align,
+        Alignment,
         BuildContext,
         ElevatedButton,
         Icon,
         Icons,
         Image,
         ListTile,
+        MainAxisSize,
         NetworkImage,
+        Row,
         Text,
         Widget;
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
+import 'package:my_movie_search/movies/models/movie_location.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
@@ -25,7 +30,7 @@ class MovieTile extends ListTile {
       : super(
           leading: _getImage(movie),
           title: _getTitle(movie),
-          trailing: _getButton(context, movie),
+          trailing: _getNavigateButtons(context, movie),
           subtitle: _getDescription(movie),
           onTap: () => _navigate(context, movie),
         );
@@ -164,16 +169,20 @@ class MovieTile extends ListTile {
     return _getIcon(movie);
   }
 
-  static Widget? _getButton(BuildContext context, MovieResultDTO movie) {
+  static Widget? _getNavigateButtons(
+      BuildContext context, MovieResultDTO movie) {
+    final widgets = <Widget>[];
     switch (movie.type) {
       case MovieContentType.navigation:
-        return _navigateButton(context, movie);
+        widgets.add(_navigateButton(context, movie));
       case MovieContentType.keyword:
-        return _navigateButton(context, movie);
+        widgets.add(_navigateButton(context, movie));
       case MovieContentType.barcode:
-        return _navigateButton(context, movie);
+        widgets.add(_navigateButton(context, movie));
       case MovieContentType.download:
-        return movie.imageUrl == '' ? null : _navigateButton(context, movie);
+        if (movie.imageUrl.isNotEmpty) {
+          widgets.add(_navigateButton(context, movie));
+        }
 
       case MovieContentType.person:
       case MovieContentType.movie:
@@ -187,36 +196,51 @@ class MovieTile extends ListTile {
       case MovieContentType.error:
       case MovieContentType.information:
         {
-          final read = movie.getReadIndicator();
-          try {
-            final readHistory = getEnumValue<ReadHistory>(
-              read,
-              ReadHistory.values,
-            );
-            logger.t('read indicator = ${movie.uniqueId} $read');
-            switch (readHistory) {
-              case ReadHistory.starred:
-                return const Icon(Icons.star);
-              case ReadHistory.reading:
-                return const Icon(Icons.visibility, fill: 1);
-              case ReadHistory.read:
-                return const Icon(Icons.visibility);
-              case null:
-                return null;
-              case ReadHistory.none:
-              case ReadHistory.custom:
-                return const Icon(Icons.question_mark);
-            }
-            // ignore: avoid_catching_errors
-          } on ArgumentError {
-            logger.t('old inidcator = ${movie.uniqueId} $read');
-            if (read != null && read.isNotEmpty) {
-              return const Icon(Icons.visibility_off, fill: 1);
-            }
-          }
+          getReadIcon(movie, widgets);
+          getDVDIcon(movie, widgets);
         }
     }
-    return null;
+    if (widgets.isEmpty) return null;
+    return Row(mainAxisSize: MainAxisSize.min, children: widgets);
+  }
+
+  static void getReadIcon(MovieResultDTO movie, List<Widget> widgets) {
+    final read = movie.getReadIndicator();
+    try {
+      final readHistory = getEnumValue<ReadHistory>(
+        read,
+        ReadHistory.values,
+      );
+      logger.t('read indicator = ${movie.uniqueId} $read');
+      switch (readHistory) {
+        case ReadHistory.starred:
+          widgets.add(const Icon(Icons.star));
+        case ReadHistory.reading:
+          widgets.add(const Icon(Icons.visibility, fill: 1));
+        case ReadHistory.read:
+          widgets.add(const Icon(Icons.visibility));
+        case ReadHistory.none:
+        case ReadHistory.custom:
+          widgets.add(const Icon(Icons.question_mark));
+        case null:
+      }
+      // ignore: avoid_catching_errors
+    } on ArgumentError {
+      logger.t('old inidcator = ${movie.uniqueId} $read');
+      if (read != null && read.isNotEmpty) {
+        widgets.add(const Icon(Icons.visibility_off, fill: 1));
+      }
+    }
+  }
+
+  static void getDVDIcon(MovieResultDTO movie, List<Widget> widgets) {
+    final contents = StackerContents(
+      titleName: movie.title,
+      uniqueId: movie.uniqueId,
+    );
+    if (MovieLocation().getLocationsForMovie(contents).isNotEmpty) {
+      widgets.add(const Icon(Icons.album));
+    }
   }
 
   static Future<Object?> _navigate(

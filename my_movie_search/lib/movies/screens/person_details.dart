@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
+import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_bibliography.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
@@ -139,6 +140,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
           // Get title from the StatefulWidget PersonDetailsPage.
           title: Text(_restorablePerson.value.title),
         ),
+        endDrawer: getDrawer(context),
         body: Scrollbar(
           thumbVisibility: true,
           child: _bodySection(),

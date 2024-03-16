@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
+import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
@@ -138,6 +139,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         appBar: AppBar(
           title: Text(_restorableMovie.value.title),
         ),
+        endDrawer: getDrawer(context),
         body: Scrollbar(
           thumbVisibility: true,
           child: _bodySection(),

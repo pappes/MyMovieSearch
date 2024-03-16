@@ -25,6 +25,7 @@ const webAddressPrefix = 'http';
 
 enum ScreenRoute {
   search,
+  dvds,
   searchresults,
   persondetails,
   moviedetails,
@@ -69,6 +70,18 @@ class MMSNav {
   ///
   Future<Object?> showResultsPage(SearchCriteriaDTO criteria) async =>
       canvas.viewFlutterPage(criteria.getDetailsPage());
+
+  /// Navigates to a search criteria page with no criteria populated.
+  ///
+  Future<Object?> showCriteriaPage() async => canvas.viewFlutterRootPage(
+        ScreenRoute.search,
+      );
+
+  /// Navigates to the list of old DVD locations.
+  ///
+  Future<Object?> showDVDsPage() async => canvas.viewFlutterRootPage(
+        ScreenRoute.dvds,
+      );
 
   /// Navigates to a search results page
   /// populated with a predefined list of dtos.
@@ -278,6 +291,40 @@ class MMSFlutterCanvas {
       }
     }
     return Future.value(null);
+  }
+
+  /// Construct route to a top level Material user interface page.
+  ///
+  /// Valid options are: ScreenRoute.search
+  Future<Object?> viewFlutterRootPage(ScreenRoute page) async {
+    if (null != context && context!.mounted) {
+      NavLog(context!).logPageOpen(page.name, 'root');
+      while (closeCurrentScreen()) {
+        await Future<dynamic>.delayed(Duration.zero);
+      }
+      try {
+        if (null != context && context!.mounted) {
+          // ignore: use_build_context_synchronously
+          context!.pushReplacementNamed(page.name);
+        }
+      } catch (e) {
+        logger.t(e);
+      }
+    }
+    return Future.value(null);
+  }
+
+  /// Closes the visible screen.
+  ///
+  /// returns false if the current screen to the root node.
+  bool closeCurrentScreen() {
+    if (null != context && context!.mounted) {
+      if (context!.canPop()) {
+        context!.pop();
+        return true;
+      }
+    }
+    return false;
   }
 
   Future<Object?> _invokeChromeCustomTabs(String url) async {

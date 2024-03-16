@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
+import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
@@ -77,9 +78,13 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     // This method is rerun every time setState is called.
     final page = Scaffold(
       appBar: AppBar(
+        leading: (ModalRoute.of(context)?.canPop ?? false)
+            ? const BackButton()
+            : null,
         // Get title from the StatefulWidget MovieSearchCriteriaPage.
         title: const Text(MovieSearchCriteriaPage.title),
       ),
+      endDrawer: getDrawer(context),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
