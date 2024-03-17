@@ -30,8 +30,10 @@ class MovieResultDTO {
   int year = 0;
   String yearRange = '';
   int creditsOrder = 0; // 100 = star, 0 = extra
+  // creditsOrder also stores Stacker and number ofSeeders
   double userRating = 0;
   int userRatingCount = 0;
+  // userRatingCount also stores Stacker Disk and number of Leechers
   CensorRatingType censorRating = CensorRatingType.none;
   Duration runTime = Duration.zero;
   String imageUrl = '';
@@ -579,15 +581,18 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         ) ??
         getLanguageType(this.languages);
 
-    this.type = bestValue(
-      getMovieContentType(
-            '$genres $yearRange',
-            IntHelper.fromText(runTime),
-            this.uniqueId,
-          ) ??
-          this.type,
-      this.type,
-    );
+    if (this.type != MovieContentType.searchprompt &&
+        this.type != MovieContentType.episode) {
+      this.type = bestValue(
+        getMovieContentType(
+              '$genres $yearRange',
+              IntHelper.fromText(runTime),
+              this.uniqueId,
+            ) ??
+            this.type,
+        this.type,
+      );
+    }
     return this;
   }
 
@@ -1022,7 +1027,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       );
     } else if (uniqueId.startsWith(imdbTitlePrefix) ||
         type == MovieContentType.movie ||
-        type == MovieContentType.series ||
         type == MovieContentType.miniseries ||
         type == MovieContentType.short ||
         type == MovieContentType.series ||
@@ -1609,11 +1613,13 @@ extension DTOCompare on MovieResultDTO {
       case MovieContentType.person:
         return 99;
       case MovieContentType.movie:
+        return 98;
+      case MovieContentType.series:
+        return 90;
       case MovieContentType.none:
       case MovieContentType.title:
-        return 90;
+        return 80;
       case MovieContentType.episode:
-      case MovieContentType.series:
       case MovieContentType.miniseries:
         return 7;
       case MovieContentType.short:

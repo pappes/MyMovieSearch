@@ -170,6 +170,7 @@ class MMSNav {
           SearchCriteriaDTO().init(
             SearchCriteriaType.movieTitle,
             title: getSearchTitle(movie),
+            list: [movie],
           ),
         );
 

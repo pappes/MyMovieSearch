@@ -85,7 +85,7 @@ String getSearchTitle(MovieResultDTO movie) {
   if (movie.title.isEmpty) {
     return movie.alternateTitle;
   }
-  return '${movie.title} ${movie.year}';
+  return '${movie.title} ${movie.yearRange}';
 }
 
 /// Extract the DVDtitle from a sales pitch.

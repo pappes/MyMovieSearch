@@ -65,12 +65,38 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
 
   @override
   void initState() {
-    _stackerController = RestorableTextEditingController(text: '001');
-    _locationController = RestorableTextEditingController(text: '001');
+    _stackerController = RestorableTextEditingController(text: _getStacker());
+    _locationController = RestorableTextEditingController(text: _getDisk());
     _titleController = RestorableTextEditingController(
       text: widget.movieDto.title,
     );
     super.initState();
+  }
+
+  String _getStacker() {
+    final related = widget.movieDto.related;
+    if (related.containsKey('Stacker')) {
+      final stackerDto = related['Stacker']!.values.first;
+      return stackerDto.creditsOrder.toString().padLeft(3, '0');
+    }
+    return '009';
+  }
+
+  String _getDisk() {
+    final related = widget.movieDto.related;
+    if (related.containsKey('Stacker')) {
+      final stackerDto = related['Stacker']!.values.first;
+      return stackerDto.userRatingCount.toString().padLeft(3, '0');
+    }
+    return '009';
+  }
+
+  String? _getDvdId() {
+    final related = widget.movieDto.related;
+    if (related.containsKey('Stacker')) {
+      final stackerDto = related['Stacker']!.values.first;
+      return stackerDto.uniqueId;
+    }
   }
 
   @override
@@ -284,6 +310,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
   StackerAddress currentLocation() => StackerAddress(
         libNum: _stackerController.value.text,
         location: _locationController.value.text,
+        dvdId: _getDvdId(),
       );
   StackerContents currentMovie() => StackerContents(
         uniqueId: _restorableMovie.value.uniqueId,

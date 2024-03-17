@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
@@ -12,16 +15,17 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 class MovieTile extends ListTile {
-  MovieTile(this.context, this.movie, {super.key})
+  MovieTile(this.context, this.movie, this.dvdDto, {super.key})
       : super(
           leading: _getImage(movie),
           title: _getTitle(movie),
-          trailing: _getNavigateButtons(context, movie),
+          trailing: _getNavigateButtons(context, movie, dvdDto),
           subtitle: _getDescription(movie),
-          onTap: () => _navigate(context, movie),
+          onTap: () => _navigate(context, movie, dvdDto),
         );
   final BuildContext context;
   final MovieResultDTO movie;
+  final MovieResultDTO? dvdDto;
 
   static Widget _getTitle(MovieResultDTO movie) {
     var year = '';
@@ -83,9 +87,13 @@ class MovieTile extends ListTile {
         start.add(movie.charactorName);
         end.add(ratingCount);
       case MovieContentType.barcode:
-      case MovieContentType.searchprompt:
         start.add(movie.bestSource.excludeNone);
         end.add(movie.alternateTitle);
+      case MovieContentType.searchprompt:
+        end.add(movie.alternateTitle);
+        final location =
+            'Stacker:${movie.creditsOrder} Disk:${movie.userRatingCount}';
+        end.add(location);
 
       case MovieContentType.movie:
       case MovieContentType.none:
@@ -162,6 +170,7 @@ class MovieTile extends ListTile {
   static Widget? _getNavigateButtons(
     BuildContext context,
     MovieResultDTO movie,
+    MovieResultDTO? dvdDto,
   ) {
     final widgets = <Widget>[];
     switch (movie.type) {
@@ -169,10 +178,10 @@ class MovieTile extends ListTile {
       case MovieContentType.keyword:
       case MovieContentType.barcode:
       case MovieContentType.searchprompt:
-        widgets.add(_navigateButton(context, movie));
+        widgets.add(_navigateButton(context, movie, dvdDto));
       case MovieContentType.download:
         if (movie.imageUrl.isNotEmpty) {
-          widgets.add(_navigateButton(context, movie));
+          widgets.add(_navigateButton(context, movie, dvdDto));
         }
 
       case MovieContentType.person:
@@ -234,19 +243,27 @@ class MovieTile extends ListTile {
     }
   }
 
-  static Future<Object?> _navigate(
+  static void _navigate(
     BuildContext context,
     MovieResultDTO movie,
-  ) async =>
-      MMSNav(context).resultDrillDown(movie);
+    MovieResultDTO? dvdDto,
+  ) {
+    if (dvdDto != null) {
+      movie.related['Stacker'] = {movie.uniqueId: dvdDto!};
+      unawaited(MMSNav(context).addLocation(movie));
+    } else {
+      unawaited(MMSNav(context).resultDrillDown(movie));
+    }
+  }
 
   static ElevatedButton _navigateButton(
     BuildContext context,
-    MovieResultDTO movie, {
+    MovieResultDTO movie,
+    MovieResultDTO? dvdDto, {
     Widget? icon,
   }) =>
       ElevatedButton(
-        onPressed: () async => _navigate(context, movie),
+        onPressed: () => _navigate(context, movie, dvdDto),
         child: icon ?? _getIcon(movie),
       );
 }

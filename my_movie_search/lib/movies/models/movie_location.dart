@@ -10,6 +10,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 enum Fields {
   libnum,
   location,
+  dvdId,
   id,
   title,
 }
@@ -18,21 +19,29 @@ enum Fields {
 ///
 @immutable
 class StackerAddress implements Comparable<StackerAddress> {
-  const StackerAddress({required this.libNum, required this.location});
+  const StackerAddress({
+    required this.libNum,
+    required this.location,
+    this.dvdId,
+  });
   final String libNum;
   final String location;
+  final String? dvdId;
 
   @override
-  String toString() => 'libNum:$libNum, location:$location';
+  String toString() => 'libNum:$libNum, location:$location, dvdId:$dvdId';
 
   @override
   int compareTo(StackerAddress other) {
+    // Do not include dvdId in comparison!
     final libcompare = libNum.compareTo(other.libNum);
     return (libcompare != 0) ? libcompare : location.compareTo(other.location);
   }
 
   // Override hashCode using the static hashing methods
   // provided by the `Object` class.
+  //
+  // Do not include dvdId in hash!
   @override
   int get hashCode => Object.hash(libNum, location);
 
@@ -40,6 +49,7 @@ class StackerAddress implements Comparable<StackerAddress> {
   // override `hashCode`.
   @override
   bool operator ==(Object other) =>
+      // Do not include dvdId in comparison!
       other is StackerAddress &&
       other.libNum == libNum &&
       other.location == location;
@@ -91,6 +101,7 @@ class DvdLocation {
     return jsonEncode({
       Fields.libnum.name: address!.libNum,
       Fields.location.name: address!.location,
+      Fields.dvdId.name: address!.dvdId,
       Fields.id.name: movie!.uniqueId,
       Fields.title.name: movie!.titleName,
     });
@@ -101,6 +112,7 @@ class DvdLocation {
     address = StackerAddress(
       libNum: map[Fields.libnum.name] as String,
       location: map[Fields.location.name] as String,
+      dvdId: map[Fields.dvdId.name] as String?,
     );
     movie = StackerContents(
       uniqueId: map[Fields.id.name] as String,
@@ -144,19 +156,20 @@ class MovieLocation {
       _movies[movie.uniqueId] ?? [];
 
   /// Store location of movie.
-  void storeMovieAtLocation(StackerContents movie, StackerAddress location) {
+  void storeMovieAtLocation(
+    StackerContents movie,
+    StackerAddress location,
+  ) {
     if (_writeToCache(movie, location)) _writeToCloud(movie);
   }
 
   Future<List<MovieResultDTO>> getUnmatchedDvds() async {
+    await init();
     final dtos = <MovieResultDTO>[];
     for (final dvd in await _getDvds()) {
-      final movies = getMoviesAtLocation(dvd['location'] as StackerAddress);
-      bool unmatched = true;
-      for (final movie in movies) {
-        if (movie.titleName == dvd['title']) unmatched = false;
+      if (!_locations.keys.contains(dvd['location'])) {
+        dtos.add(dvd['dto'] as MovieResultDTO);
       }
-      if (unmatched) dtos.add(dvd['dto'] as MovieResultDTO);
     }
     return dtos;
   }
@@ -251,7 +264,7 @@ class MovieLocation {
   }
 
   Future<void> _loadCloudLocationData() async {
-    FirebaseApplicationState()
+    final streamSubscription = FirebaseApplicationState()
         .fetchRecords('/dvds')
         .timeout(
           const Duration(seconds: 10),
@@ -270,6 +283,8 @@ class MovieLocation {
         }
       }
     });
+    await streamSubscription.asFuture();
+    await streamSubscription.cancel();
   }
 
   Future<List<Map<String, dynamic>>> _getDvds() async {
@@ -283,17 +298,19 @@ class MovieLocation {
 
       final newDvd = <String, dynamic>{};
       newDvd['location'] = StackerAddress(
-        libNum: oldDvd[DvdColumns.libnum.index].toString(),
-        location: oldDvd[DvdColumns.location.index].toString(),
+        libNum: oldDvd[DvdColumns.libnum.index].toString().padLeft(3, '0'),
+        location: oldDvd[DvdColumns.location.index].toString().padLeft(3, '0'),
+        dvdId: oldDvd[DvdColumns.id.index].toString(),
       );
       newDvd['title'] = oldDvd[DvdColumns.title.index].toString();
       newDvd['dto'] = MovieResultDTO().init(
-        title: '${oldDvd[DvdColumns.title.index]} '
-            '${oldDvd[DvdColumns.artist.index]} '
-            '${oldDvd[DvdColumns.year.index]} ',
-        alternateTitle: 'stacker:${oldDvd[DvdColumns.libnum.index]} '
-            'disk:${oldDvd[DvdColumns.location.index]}',
+        uniqueId: oldDvd[DvdColumns.id.index].toString(),
+        title: oldDvd[DvdColumns.title.index].toString(),
+        alternateTitle: oldDvd[DvdColumns.artist.index].toString(),
+        creditsOrder: oldDvd[DvdColumns.libnum.index].toString(), // Stacker
+        userRatingCount: oldDvd[DvdColumns.location.index].toString(), // Disk
         type: MovieContentType.searchprompt.name,
+        yearRange: oldDvd[DvdColumns.year.index].toString(),
       );
       allDvds.add(newDvd);
     }
