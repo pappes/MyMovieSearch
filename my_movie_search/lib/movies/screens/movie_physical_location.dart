@@ -97,6 +97,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
       final stackerDto = related['Stacker']!.values.first;
       return stackerDto.uniqueId;
     }
+    return null;
   }
 
   @override
@@ -187,7 +188,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
               children: [
                 const VerticalDivider(),
                 Flexible(
-                  flex: 1,
+                  flex: 2, // 2/5ths is required to see location on Tash's phone
                   child: Column(
                     children: [
                       _locationInputField(),
@@ -196,7 +197,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
                 ),
                 const VerticalDivider(),
                 Flexible(
-                  flex: 2,
+                  flex: 3,
                   child: Column(
                     children: [
                       _titleInputField(),
@@ -213,11 +214,11 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         _createStackerWidgets(_getStackerLabels()),
       );
   Widget _usedLocationsLayout() => _scrollableColumn(
-        flex: 1,
+        flex: 4,
         _usedLocationsContent(),
       );
   Widget _emptyLocationsLayout() => _scrollableColumn(
-        flex: 4,
+        flex: 1, // Only need 1/5th the screen for available slots
         _emptyLocationsContent(),
         primary: true,
       );
@@ -238,7 +239,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
                   child: Scrollbar(
                     thumbVisibility: true,
                     child: ListView(
-                      primary: primary, //there can be only one
+                      primary: primary, // There can be only one.
                       children: contents.toList(),
                     ),
                   ),
@@ -254,10 +255,10 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
       );
 
   Iterable<Widget> _usedLocationsContent() => _createLocationsWidgets(
-        MovieLocation().usedLocations(_stackerController.value.text),
+        MovieLocation().usedLocations(_stackerController.value.text).entries,
       );
 
-  Iterable<Widget> _createLocationsWidgets(Iterable<String> locations) sync* {
+  Iterable<Widget> _createLocationsWidgets(Iterable<dynamic> locations) sync* {
     for (final location in locations) {
       yield selectableText(location, _locationController.value);
     }
@@ -273,19 +274,39 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
     return widgets;
   }
 
-  Widget selectableText(String text, TextEditingController controller) =>
-      InkWell(
-        child: Text(text),
-        onTap: () => setState(() => controller.text = text),
+  Widget selectableText(dynamic text, TextEditingController controller) {
+    if (text is MapEntry) {
+      return InkWell(
+        child: Text('${text.key} - ${text.value}'),
+        onTap: () => setState(() => controller.text = '${text.key}'),
       );
+    }
+    if (text is StackerAddress) {
+      return InkWell(
+        child: Text(text.location),
+        onTap: () => setState(() => controller.text = text.location),
+      );
+    }
+    return InkWell(
+      child: Text(text.toString()),
+      onTap: () => setState(() => controller.text = text.toString()),
+    );
+  }
 
   Widget _existingContentsSectionContents() => Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ...[BoldLabel('Existing Contents')],
-          ...movieLocations(
-            _restorableMovie.value,
-            proposedLocation: currentLocation(),
+          SizedBox(
+            height: 150,
+            child: SingleChildScrollView(
+              child: Row(
+                children: movieLocations(
+                  _restorableMovie.value,
+                  proposedLocation: currentLocation(),
+                ),
+              ),
+            ),
           ),
           ...[
             Row(
@@ -323,7 +344,8 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
   }) =>
       movieLocationTable(
         [
-          ...moviesAtLocation(proposedLocation),
+          // ...moviesAtLocation(proposedLocation),
+          // Tt was too confusing seeing BSG at 009:009.
           ...locationsWithCustomTitle(movie),
         ],
       );
@@ -332,7 +354,11 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
     if (location != null) {
       final movies = MovieLocation().getMoviesAtLocation(location);
       for (final movie in movies) {
-        yield movieLocationRow(location, movie.titleName);
+        yield movieLocationRow(
+          location,
+          movie.titleName,
+          onLongPress: () => _deleteLocation(location, movie.titleName),
+        );
       }
     }
   }
@@ -395,4 +421,34 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
     }
     return labels;
   }
+
+  Future<void> _deleteLocation(
+    StackerAddress location,
+    String titleName,
+  ) async =>
+      showDialog<String>(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Are you sure?'),
+          content: Text('You have requested delete of $titleName '
+              'from stacker ${location.libNum} position ${location.location}.'),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context), // Closes the dialog
+              child: const Text('Stop!'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                if (await MovieLocation()
+                    .deleteLocationForMovie(location, titleName)) {}
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context); // Closes the dialog
+                // ignore: use_build_context_synchronously
+                context.pop();
+              },
+              child: const Text('Kill it...'),
+            ),
+          ],
+        ),
+      );
 }

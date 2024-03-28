@@ -252,6 +252,7 @@ class MovieTile extends ListTile {
       movie.related['Stacker'] = {movie.uniqueId: dvdDto!};
       unawaited(MMSNav(context).addLocation(movie));
     } else {
+      movie.related.remove('Stacker'); // Clear prior movie location data.
       unawaited(MMSNav(context).resultDrillDown(movie));
     }
   }

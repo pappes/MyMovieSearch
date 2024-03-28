@@ -122,7 +122,13 @@ Iterable<DataRow> locationsWithCustomTitle(MovieResultDTO movie) sync* {
   }
 }
 
-DataRow movieLocationRow(StackerAddress location, String title) => DataRow(
+DataRow movieLocationRow(
+  StackerAddress location,
+  String title, {
+  void Function()? onLongPress,
+}) =>
+    DataRow(
+      onLongPress: onLongPress,
       cells: [
         DataCell(Text(location.libNum)),
         DataCell(Text(location.location)),

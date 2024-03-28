@@ -155,12 +155,29 @@ class MovieLocation {
   List<StackerAddress> getLocationsForMovie(StackerContents movie) =>
       _movies[movie.uniqueId] ?? [];
 
+  /// Remove a movie from a specific location
+  Future<bool> deleteLocationForMovie(
+    StackerAddress location,
+    String movieTtile,
+  ) async {
+    final movies = getMoviesAtLocation(location);
+    for (final movie in movies) {
+      if (movie.titleName == movieTtile) {
+        _locations[location]?.remove(movie);
+        _movies[movie.uniqueId]?.remove(location);
+        await _writeToCloud(movie);
+        return true;
+      }
+    }
+    return false;
+  }
+
   /// Store location of movie.
   void storeMovieAtLocation(
     StackerContents movie,
     StackerAddress location,
   ) {
-    if (_writeToCache(movie, location)) _writeToCloud(movie);
+    if (_writeToCache(movie, location)) unawaited(_writeToCloud(movie));
   }
 
   Future<List<MovieResultDTO>> getUnmatchedDvds() async {
@@ -191,39 +208,43 @@ class MovieLocation {
   }
 
   /// Insert a record into the cloud datastore.
-  void _writeToCloud(StackerContents movie) {
+  Future<dynamic>? _writeToCloud(StackerContents movie) {
     final locations = <String>[];
     for (final location in getLocationsForMovie(movie)) {
       locations.add(DvdLocation(location, movie).encode());
     }
-    unawaited(
-      FirebaseApplicationState().addRecord(
-        '/dvds',
-        id: movie.uniqueId,
-        message: jsonEncode(locations),
-      ),
+    return FirebaseApplicationState().addRecord(
+      '/dvds',
+      id: movie.uniqueId,
+      message: jsonEncode(locations),
     );
   }
 
   /// [StackerAddress] location values
   /// not used to store any movies in [libNum].
-  Iterable<String> emptyLocations(String libNum) sync* {
+  Iterable<StackerAddress> emptyLocations(String libNum) sync* {
     for (int i = 1; i <= 150; i++) {
       final str = i.toString().padLeft(3, '0');
       final location = StackerAddress(
         libNum: libNum,
         location: str,
       );
-      if (!_locations.containsKey(location)) yield str;
+      if (!_locations.containsKey(location)) yield location;
     }
   }
 
   /// [StackerAddress] location values
   /// currently used to store movies in [libNum].
-  Iterable<String> usedLocations(String libNum) {
-    final locations = SplayTreeSet<String>();
+  Map<String, String> usedLocations(String libNum) {
+    // final locations = SplayTreeSet<String>();
+    final locations = SplayTreeMap<String, String>(); // Sorted map keys.
     for (final address in _locations.keys) {
-      if (address.libNum == libNum) locations.add(address.location);
+      if (address.libNum == libNum) {
+        final movies = getMoviesAtLocation(address);
+        if (movies.isNotEmpty) {
+          locations[address.location] = movies.first.titleName;
+        }
+      }
     }
 
     return locations;
@@ -240,7 +261,7 @@ class MovieLocation {
 
   /// [StackerAddress] LibNum values currently used to store movies.
   Iterable<String> usedLibNums() {
-    final locations = SplayTreeSet<String>();
+    final locations = SplayTreeSet<String>(); // Sorted Set
     for (final address in _locations.keys) {
       if (!locations.contains(address.libNum)) locations.add(address.libNum);
     }
@@ -267,7 +288,7 @@ class MovieLocation {
     final streamSubscription = FirebaseApplicationState()
         .fetchRecords('/dvds')
         .timeout(
-          const Duration(seconds: 10),
+          const Duration(seconds: 5),
           onTimeout: (sink) => sink.close(),
         )
         .listen((event) {
@@ -283,7 +304,7 @@ class MovieLocation {
         }
       }
     });
-    await streamSubscription.asFuture();
+    await streamSubscription.asFuture<dynamic>();
     await streamSubscription.cancel();
   }
 
