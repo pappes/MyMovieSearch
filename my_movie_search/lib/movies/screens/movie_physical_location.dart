@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
@@ -264,7 +266,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
     }
   }
 
-  List<Widget> _createStackerWidgets(List<String> indexes) {
+  List<Widget> _createStackerWidgets(Iterable<String> indexes) {
     final widgets = <Widget>[];
     for (final index in indexes) {
       widgets.add(
@@ -298,8 +300,9 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         children: [
           ...[BoldLabel('Existing Contents')],
           SizedBox(
-            height: 150,
+            height: 150, // Ensure copious locations do not fill up the screen.
             child: SingleChildScrollView(
+              primary: false,
               child: Row(
                 children: movieLocations(
                   _restorableMovie.value,
@@ -310,8 +313,12 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
           ),
           ...[
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
+                ElevatedButton(
+                  onPressed: () async => _deleteAllConfirmation(),
+                  child: const Text('Delete All'),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     MovieLocation().storeMovieAtLocation(
@@ -345,7 +352,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
       movieLocationTable(
         [
           // ...moviesAtLocation(proposedLocation),
-          // Tt was too confusing seeing BSG at 009:009.
+          // It was too confusing seeing BSG at 009:009 all the time.
           ...locationsWithCustomTitle(movie),
         ],
       );
@@ -357,7 +364,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         yield movieLocationRow(
           location,
           movie.titleName,
-          onLongPress: () => _deleteLocation(location, movie.titleName),
+          onLongPress: () async => _deleteLocation(location, movie.titleName),
         );
       }
     }
@@ -414,13 +421,10 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         ),
       );
 
-  List<String> _getStackerLabels() {
-    final labels = <String>[];
-    for (int i = 1; i < 100; i++) {
-      labels.add(i.toString().padLeft(3, '0'));
-    }
-    return labels;
-  }
+  Iterable<String> _getStackerLabels() => [
+        ...MovieLocation().usedLibNums(),
+        ...MovieLocation().emptyLibNums(),
+      ];
 
   Future<void> _deleteLocation(
     StackerAddress location,
@@ -441,6 +445,32 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
               onPressed: () async {
                 if (await MovieLocation()
                     .deleteLocationForMovie(location, titleName)) {}
+                // ignore: use_build_context_synchronously
+                Navigator.pop(context); // Closes the dialog
+                // ignore: use_build_context_synchronously
+                context.pop();
+              },
+              child: const Text('Kill it...'),
+            ),
+          ],
+        ),
+      );
+
+  Future<void> _deleteAllConfirmation() async => showDialog<String>(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: const Text('Are you sure?'),
+          content: Text('You have requested delete all locations '
+              'for ${_restorableMovie.value.title} '),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () => Navigator.pop(context), // Closes the dialog
+              child: const Text('Stop!'),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                await MovieLocation()
+                    .deleteLocationsForMovie(_restorableMovie.value.uniqueId);
                 // ignore: use_build_context_synchronously
                 Navigator.pop(context); // Closes the dialog
                 // ignore: use_build_context_synchronously

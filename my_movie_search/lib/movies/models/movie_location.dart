@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_movie_search/firebase_app_state.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:universal_io/io.dart';
 
 enum Fields {
   libnum,
@@ -137,7 +138,8 @@ class MovieLocation {
 
   /// Load data from the cloud only once.
   Future<void> init() async {
-    _initialised ??= _loadCloudLocationData();
+    _initialised ??=
+        Platform.isLinux ? _loadBackupLocationData() : _loadCloudLocationData();
     await _initialised;
   }
 
@@ -156,6 +158,8 @@ class MovieLocation {
       _movies[movie.uniqueId] ?? [];
 
   /// Remove a movie from a specific location
+  ///
+  /// May be prolematic if used when looping through locations or movies!
   Future<bool> deleteLocationForMovie(
     StackerAddress location,
     String movieTtile,
@@ -168,6 +172,29 @@ class MovieLocation {
         await _writeToCloud(movie);
         return true;
       }
+    }
+    return false;
+  }
+
+  /// Remove all locations associated with a movie
+  Future<dynamic> deleteLocationsForMovie(String uniqueId) async {
+    if (_movies.containsKey(uniqueId) && _movies[uniqueId]!.isNotEmpty) {
+      final id = StackerContents(uniqueId: uniqueId, titleName: '');
+      for (final location in getLocationsForMovie(id)) {
+        // build up list of deletions while iterating,
+        // then delete when not iterating.
+        final deletions = <StackerContents>[];
+        for (final movie in getMoviesAtLocation(location)) {
+          if (movie.uniqueId == uniqueId) deletions.add(movie);
+        }
+        // ignore: prefer_foreach
+        for (final deleteme in deletions) {
+          _locations[location]?.remove(deleteme);
+        }
+      }
+
+      _movies[uniqueId]!.clear();
+      return _writeToCloud(id);
     }
     return false;
   }
@@ -308,6 +335,48 @@ class MovieLocation {
     await streamSubscription.cancel();
   }
 
+  Future<void> _loadBackupLocationData() async {
+    // Manually initalise flutter to ensure setting can be loaded before RunApp
+    // and to ensure tests are not prevented from calling real http enpoints
+    WidgetsFlutterBinding.ensureInitialized();
+
+    const location = 'assets/newDVDLibrary.json';
+    final json = await rootBundle.loadString(location);
+    final movies = jsonDecode(json) as Map<String, dynamic>;
+
+    final oldLib = await _getDvds();
+    for (final movie in movies.entries) {
+      final locations = movie.value;
+      if (locations is Iterable) {
+        for (final location in locations) {
+          if (location is Map) {
+            final address = StackerAddress(
+              libNum: location['libNum'].toString(),
+              location: location['location'].toString(),
+              dvdId: location['dvdId']?.toString(),
+            );
+            String title = 'backup';
+            for (final record in oldLib) {
+              final dto = record['dto'] as MovieResultDTO;
+              if (record['location'] == address) {
+                title = dto.title;
+              }
+            }
+            final contents = StackerContents(
+              uniqueId: movie.key,
+              titleName: title,
+            );
+            _writeToCache(contents, address);
+          }
+        }
+      }
+    }
+  }
+
+  /// Returns a [List] containing a map with keys:
+  ///    'location':[StackerAddress],
+  ///    'title':[String]
+  ///    'dto':[MovieResultDTO]
   Future<List<Map<String, dynamic>>> _getDvds() async {
     final allDvds = <Map<String, dynamic>>[];
     final rawContent = await _loadDvdFile();

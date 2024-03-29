@@ -126,9 +126,12 @@ DataRow movieLocationRow(
   StackerAddress location,
   String title, {
   void Function()? onLongPress,
+  // ignore: avoid_positional_boolean_parameters
+  void Function(bool?)? onSelectChanged,
 }) =>
     DataRow(
       onLongPress: onLongPress,
+      onSelectChanged: onSelectChanged,
       cells: [
         DataCell(Text(location.libNum)),
         DataCell(Text(location.location)),

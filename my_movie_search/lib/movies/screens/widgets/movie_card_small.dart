@@ -5,7 +5,6 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
@@ -249,7 +248,7 @@ class MovieTile extends ListTile {
     MovieResultDTO? dvdDto,
   ) {
     if (dvdDto != null) {
-      movie.related['Stacker'] = {movie.uniqueId: dvdDto!};
+      movie.related['Stacker'] = {movie.uniqueId: dvdDto};
       unawaited(MMSNav(context).addLocation(movie));
     } else {
       movie.related.remove('Stacker'); // Clear prior movie location data.
