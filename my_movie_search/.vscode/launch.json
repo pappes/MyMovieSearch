@@ -13,7 +13,9 @@
                 "--dart-define",
                 "MY_VAR=MY_VALUE",
                 "--dart-define",
-                "MY_OTHER_VAR=MY_OTHER_VALUE"
+                "MY_OTHER_VAR=MY_OTHER_VALUE",
+                "--dart-define",
+                "MY_OTHEROTHER_VAR=MY_OTHER_VALUE"
 		]
         }
     ]
