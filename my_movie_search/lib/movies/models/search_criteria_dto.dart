@@ -44,6 +44,7 @@ class SearchCriteriaDTO {
   String searchId = '';
   String criteriaTitle = '';
   SearchCriteriaType criteriaType = SearchCriteriaType.none;
+  MovieResultDTO? criteriaContext;
   List<MovieResultDTO> criteriaList = [];
 
   /// Convert a [MovieResultDTO] to a json [String].
@@ -57,6 +58,7 @@ class SearchCriteriaDTO {
 const String movieCriteriaDTOSearchId = 'searchId';
 const String movieCriteriaDTOCriteriaTitle = 'criteriaTitle';
 const String movieCriteriaDTOCriteriaType = 'criteriaType';
+const String movieCriteriaDTOCriteriaContext = 'criteriaContext';
 const String movieCriteriaDTOCriteriaList = 'criteriaList';
 
 class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
@@ -75,6 +77,7 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
         oldValue.searchId != value.searchId ||
         oldValue.criteriaTitle != value.criteriaTitle ||
         oldValue.criteriaType != value.criteriaType ||
+        oldValue.criteriaContext != value.criteriaContext ||
         oldValue.criteriaList.toPrintableString() !=
             value.criteriaList.toPrintableString()) notifyListeners();
   }
@@ -131,23 +134,6 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
     return SearchCriteriaDTO();
   }
 
-  /*SearchCriteriaDTO getDTO(Map<String, String> map) {
-    final result = SearchCriteriaDTO();
-    result
-      ..searchId = map[movieCriteriaDTOSearchId] ?? result.searchId
-      ..criteriaTitle =
-          map[movieCriteriaDTOCriteriaTitle] ?? result.criteriaTitle
-      ..criteriaType = getEnumValue<SearchCriteriaType>(
-            map[movieCriteriaDTOCriteriaType],
-            SearchCriteriaType.values,
-          ) ??
-          result.criteriaType
-      ..criteriaList = SearchCriteriaDTOHelpers.getMovieList(
-        map[movieCriteriaDTOCriteriaList],
-      );
-    return result;
-  }*/
-
   @override
   Object toPrimitives() => dtoToPrimitives(value);
   Object dtoToPrimitives(SearchCriteriaDTO value) =>
@@ -167,7 +153,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     for (final dto in criteriaList) {
       if (!dto.isMessage()) ids.add(dto.uniqueId);
     }
-    if (ids.isEmpty) return null;
+    if (ids.isEmpty) return criteriaContext?.uniqueId;
     if (ids.length == 1) return ids.first;
     return ids.join(',');
   }
@@ -184,6 +170,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
         movieCriteriaDTOSearchId: searchId,
         movieCriteriaDTOCriteriaTitle: criteriaTitle,
         movieCriteriaDTOCriteriaType: criteriaType.toString(),
+        movieCriteriaDTOCriteriaContext: jsonEncode(criteriaContext?.toJson()),
         movieCriteriaDTOCriteriaList: criteriaList.toJson(),
       };
 
@@ -231,10 +218,12 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   SearchCriteriaDTO init(
     SearchCriteriaType source, {
     String title = '',
+    MovieResultDTO? context,
     List<MovieResultDTO> list = const [],
   }) {
-    criteriaType = source;
     criteriaTitle = title;
+    criteriaType = source;
+    criteriaContext = context;
     criteriaList = list;
     return this;
   }
@@ -252,17 +241,20 @@ extension MapCriteriaDTOConversion on Map<dynamic, dynamic> {
   SearchCriteriaDTO toSearchCriteriaDTO() {
     final dto = SearchCriteriaDTO()
       ..searchId = dynamicToString(this[movieCriteriaDTOSearchId])
-      ..criteriaTitle = dynamicToString(this[movieCriteriaDTOCriteriaTitle]);
-
-    dto
-      ..criteriaType = getEnumValue<SearchCriteriaType>(
-            this[movieCriteriaDTOCriteriaType],
-            SearchCriteriaType.values,
-          ) ??
-          dto.criteriaType
+      ..criteriaTitle = dynamicToString(this[movieCriteriaDTOCriteriaTitle])
       ..criteriaList = SearchCriteriaDTOHelpers.getMovieList(
         this[movieCriteriaDTOCriteriaList],
       );
+
+    if (this[movieCriteriaDTOCriteriaContext] != 'null') {
+      dto.criteriaContext =
+          MovieResultDTO().fromJson(this[movieCriteriaDTOCriteriaContext]);
+    }
+    dto.criteriaType = getEnumValue<SearchCriteriaType>(
+          this[movieCriteriaDTOCriteriaType],
+          SearchCriteriaType.values,
+        ) ??
+        dto.criteriaType;
     return dto;
   }
 }

@@ -119,12 +119,12 @@ class MMSNav {
   /// Navigates to a search results page populated with keywords for the movie.
   ///
   Future<Object?> getMoreKeywords(MovieResultDTO movie) async =>
-      // Fetch first batch of movies that match the keyword.
+      // Next first batch of movies that match the keyword.
       showResultsPage(
         SearchCriteriaDTO().init(
           SearchCriteriaType.moreKeywords,
           title: movie.uniqueId,
-          list: [movie],
+          context: movie,
         ),
       );
 
@@ -138,7 +138,7 @@ class MMSNav {
       SearchCriteriaDTO().init(
         SearchCriteriaType.downloadSimple,
         title: criteria,
-        list: [dto],
+        context: dto,
       ),
     );
   }
@@ -170,7 +170,7 @@ class MMSNav {
           SearchCriteriaDTO().init(
             SearchCriteriaType.movieTitle,
             title: getSearchTitle(movie),
-            list: [movie],
+            context: movie,
           ),
         );
 
@@ -188,7 +188,7 @@ class MMSNav {
             SearchCriteriaDTO().init(
               SearchCriteriaType.downloadAdvanced,
               title: criteria,
-              list: [movie],
+              context: movie,
             ),
           );
         }

@@ -80,7 +80,7 @@ class QueryIMDBMoviesForKeyword
 
   static String _getCriteriaJsonValue(SearchCriteriaDTO criteria, String key) {
     try {
-      final jsonText = criteria.criteriaList.first.description;
+      final jsonText = criteria.criteriaContext?.description ?? '';
       if (jsonText.isNotEmpty) {
         final map = jsonDecode(jsonText) as Map;
         return map[key] as String;
@@ -101,7 +101,7 @@ class QueryIMDBMoviesForKeyword
   static SearchCriteriaDTO convertMovieDtoToCriteriaDto(MovieResultDTO card) {
     final newCriteria = SearchCriteriaDTO()
       ..init(SearchCriteriaType.moviesForKeyword)
-      ..criteriaList = [card];
+      ..criteriaContext = card;
     newCriteria.criteriaTitle =
         _getCriteriaJsonValue(newCriteria, jsonKeywordKey);
     return newCriteria;

@@ -69,7 +69,7 @@ class BaseMovieRepository {
     }
   }
 
-  /// Initiates a the primary data fetch.
+  /// Initiates the primary data fetch.
   ///
   /// May be overridden by specific implementations, calling:
   ///   initProvider() before requesting data for a source.
@@ -78,6 +78,9 @@ class BaseMovieRepository {
   @protected
   Future<void> initSearch(int searchUID, SearchCriteriaDTO criteria) async {
     if (criteria.criteriaList.isEmpty) {
+      await _searchText(searchUID);
+    }
+    if (criteria.criteriaType == SearchCriteriaType.barcode) {
       await _searchText(searchUID);
     } else {
       await _searchList(searchUID);

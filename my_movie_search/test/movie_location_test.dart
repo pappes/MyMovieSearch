@@ -9,16 +9,17 @@ Future<void> main() async {
   group('Movie location test data', () {
     // Formatted time includes the correct values.
     test(
-      'default test data',
-      () {
+      'default backup data',
+      () async {
+        await MovieLocation().init();
         const contents = StackerContents(
-          uniqueId: 'tt1111422',
+          uniqueId: 'tt0033467',
           titleName: 'Batman',
         );
         final actualOutput = MovieLocation().getLocationsForMovie(contents);
         const expectedOutput = [
-          StackerAddress(libNum: '007', location: '008'),
-          StackerAddress(libNum: '007', location: '009'),
+          StackerAddress(libNum: '002', location: '044', dvdId: '1254'),
+          StackerAddress(libNum: '002', location: '045', dvdId: '1255'),
         ];
         expect(actualOutput[0], expectedOutput[0]);
         expect(actualOutput[1], expectedOutput[1]);
@@ -26,7 +27,8 @@ Future<void> main() async {
     );
     test(
       'getLocationsForMovie',
-      () {
+      () async {
+        await MovieLocation().init();
         const contents = StackerContents(
           uniqueId: 'tt111111111',
           titleName: 'Batman',
@@ -41,7 +43,8 @@ Future<void> main() async {
     );
     test(
       'getMoviesAtLocation',
-      () {
+      () async {
+        await MovieLocation().init();
         const contents =
             StackerContents(uniqueId: 'tt111111111', titleName: 'Batman');
         const address = StackerAddress(libNum: '007', location: '002');
@@ -54,7 +57,8 @@ Future<void> main() async {
     );
     test(
       'add second record',
-      () {
+      () async {
+        await MovieLocation().init();
         const contents = StackerContents(
           uniqueId: 'tt111111111',
           titleName: 'Batman',
@@ -71,7 +75,8 @@ Future<void> main() async {
     );
     test(
       'usedLocations',
-      () {
+      () async {
+        await MovieLocation().init();
         const contents = StackerContents(
           uniqueId: 'tt111111111',
           titleName: 'Batman',
@@ -90,13 +95,15 @@ Future<void> main() async {
           );
         }
         final actualOutput = MovieLocation().emptyLocations('007');
-        final expectedOutput = [address1.location, address2.location];
+        final expectedOutput = [address1, address2];
         expect(actualOutput, expectedOutput);
       },
     );
     test(
       'dvdlocations',
       () async {
+        await MovieLocation().init();
+        MovieLocation().clear();
         final data = await MovieLocation().getUnmatchedDvds();
         expect(data.length, 1440);
       },

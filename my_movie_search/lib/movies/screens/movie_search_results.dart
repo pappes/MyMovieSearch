@@ -44,14 +44,13 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   late final RestorableTextEditingController _textController;
   late final FocusNode _criteriaFocusNode = FocusNode();
   late final FocusNode _searchFocusNode = FocusNode();
-  MovieResultDTO? dvdDto;
   bool searchRequested = false;
 
   @override
   void initState() {
     _textController = RestorableTextEditingController(
       text: (widget.criteria.criteriaType == SearchCriteriaType.moreKeywords)
-          ? 'Keywords for ${widget.criteria.criteriaList.first.title}'
+          ? 'Keywords for ${widget.criteria.criteriaContext?.title}'
           : widget.criteria.criteriaTitle,
     );
     super.initState();
@@ -92,7 +91,6 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     } else if (_restorableList.value.isEmpty) {
       // Initiate a search if not restoring data.
       searchRequested = true;
-      saveDvdDto();
       _searchBloc!.add(SearchRequested(_restorableCriteria.value));
     } else {
       unawaited(_populateFromDtoCache(_restorableList.value));
@@ -128,15 +126,6 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
           .getUnmatchedDvds()
           .then((dtos) => setState(() => _restorableList.value = dtos)),
     );
-  }
-
-  void saveDvdDto() {
-    final criteriaList = _restorableCriteria.value.criteriaList;
-    if (criteriaList.isNotEmpty &&
-        criteriaList.first.type == MovieContentType.searchprompt) {
-      dvdDto = criteriaList.first;
-      criteriaList.clear();
-    }
   }
 
   Future<void> _replaceEntry(
@@ -192,16 +181,10 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   }
 
   void _newSearch(String text) {
-    //searchRequested = true;
+    _restorableList.value.clear();
+    _restorableCriteria.value.criteriaList.clear();
     _restorableCriteria.value.criteriaTitle = text;
-    if (_restorableCriteria.value.criteriaList.isNotEmpty) {
-      _restorableCriteria.value.criteriaList.clear();
-    }
-    if (_restorableList.value.isNotEmpty) {
-      _restorableList.value.clear();
-    }
     _performSearch();
-    //_searchBloc!.add(SearchRequested(_restorableCriteria.value));
     _searchFocusNode.requestFocus();
   }
 
@@ -233,10 +216,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
         title: Text('More widgets than available data to populate them!'),
       );
     }
-    return MovieTile(
-      context,
-      _restorableList.value[listIndex],
-      dvdDto,
-    );
+
+    return MovieTile(context, _restorableList.value[listIndex]);
   }
 }

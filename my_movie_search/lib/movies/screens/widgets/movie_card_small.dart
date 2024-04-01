@@ -14,17 +14,16 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 class MovieTile extends ListTile {
-  MovieTile(this.context, this.movie, this.dvdDto, {super.key})
+  MovieTile(this.context, this.movie, {super.key})
       : super(
           leading: _getImage(movie),
           title: _getTitle(movie),
-          trailing: _getNavigateButtons(context, movie, dvdDto),
+          trailing: _getNavigateButtons(context, movie),
           subtitle: _getDescription(movie),
-          onTap: () => _navigate(context, movie, dvdDto),
+          onTap: () => _navigate(context, movie),
         );
   final BuildContext context;
   final MovieResultDTO movie;
-  final MovieResultDTO? dvdDto;
 
   static Widget _getTitle(MovieResultDTO movie) {
     var year = '';
@@ -169,7 +168,6 @@ class MovieTile extends ListTile {
   static Widget? _getNavigateButtons(
     BuildContext context,
     MovieResultDTO movie,
-    MovieResultDTO? dvdDto,
   ) {
     final widgets = <Widget>[];
     switch (movie.type) {
@@ -177,10 +175,10 @@ class MovieTile extends ListTile {
       case MovieContentType.keyword:
       case MovieContentType.barcode:
       case MovieContentType.searchprompt:
-        widgets.add(_navigateButton(context, movie, dvdDto));
+        widgets.add(_navigateButton(context, movie));
       case MovieContentType.download:
         if (movie.imageUrl.isNotEmpty) {
-          widgets.add(_navigateButton(context, movie, dvdDto));
+          widgets.add(_navigateButton(context, movie));
         }
 
       case MovieContentType.person:
@@ -242,28 +240,17 @@ class MovieTile extends ListTile {
     }
   }
 
-  static void _navigate(
-    BuildContext context,
-    MovieResultDTO movie,
-    MovieResultDTO? dvdDto,
-  ) {
-    if (dvdDto != null) {
-      movie.related['Stacker'] = {movie.uniqueId: dvdDto};
-      unawaited(MMSNav(context).addLocation(movie));
-    } else {
-      movie.related.remove('Stacker'); // Clear prior movie location data.
-      unawaited(MMSNav(context).resultDrillDown(movie));
-    }
+  static void _navigate(BuildContext context, MovieResultDTO movie) {
+    unawaited(MMSNav(context).resultDrillDown(movie));
   }
 
   static ElevatedButton _navigateButton(
     BuildContext context,
-    MovieResultDTO movie,
-    MovieResultDTO? dvdDto, {
+    MovieResultDTO movie, {
     Widget? icon,
   }) =>
       ElevatedButton(
-        onPressed: () => _navigate(context, movie, dvdDto),
+        onPressed: () => _navigate(context, movie),
         child: icon ?? _getIcon(movie),
       );
 }

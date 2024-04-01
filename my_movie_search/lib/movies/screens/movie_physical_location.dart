@@ -90,7 +90,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
       final stackerDto = related['Stacker']!.values.first;
       return stackerDto.userRatingCount.toString().padLeft(3, '0');
     }
-    return '009';
+    return '151';
   }
 
   String? _getDvdId() {
