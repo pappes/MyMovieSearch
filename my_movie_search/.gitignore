@@ -12,7 +12,7 @@ secrets.json
 .history
 .svn/
 
-# IntelliJ related
+# IntelliJ relatedAP
 *.iml
 *.ipr
 *.iws
@@ -42,7 +42,9 @@ app.*.symbols
 
 # Obfuscation related
 app.*.map.json
-.vscode
+.vscode/launch.json
+*.sh
+*.bat
 
 # Android Studio will place build artifacts here
 /android/app/debug
