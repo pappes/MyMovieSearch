@@ -93,8 +93,6 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-   - assets/settings.json
-   - assets/secrets.json
    - assets/OldCDLibrary.json
    - assets/newDVDLibrary.json
 
