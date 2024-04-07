@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:logger/logger.dart';
@@ -15,24 +14,18 @@ import 'package:path_provider/path_provider.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
-  final settings = Settings.singleton();
-
   WidgetsFlutterBinding.ensureInitialized();
 
-  unawaited(
-    settings
-        .init(logger: Logger())
-        .then((_) => OnlineOfflineSelector.init(settings.get('OFFLINE'))),
-  );
+  Settings().init(Logger());
+  OnlineOfflineSelector.init(Settings().offline);
+
   Bloc.observer = MMSearchObserver();
   unawaited(
     FirebaseApplicationState().login().then((_) => MovieLocation().init()),
   );
 
   HydratedBloc.storage = await HydratedStorage.build(
-    storageDirectory: kIsWeb
-        ? HydratedStorage.webStorageDirectory
-        : await getTemporaryDirectory(),
+    storageDirectory: await getTemporaryDirectory(),
   );
 
   runApp(

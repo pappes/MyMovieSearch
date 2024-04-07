@@ -5,7 +5,7 @@ import 'package:my_movie_search/firebase_app_state.dart';
 
 void main() async {
   // Wait for api key to be initialised
-  //setUpAll(() async => Settings.singleton().init());
+  //setUpAll(() async => Settings());
 ////////////////////////////////////////////////////////////////////////////////
   /// integration tests
 ////////////////////////////////////////////////////////////////////////////////

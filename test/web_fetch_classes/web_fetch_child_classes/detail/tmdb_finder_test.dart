@@ -21,7 +21,7 @@ final criteria = SearchCriteriaDTO().fromString('ttImdbId123');
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() async => Settings.singleton().init());
+  setUpAll(() async => Settings().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////

@@ -55,7 +55,7 @@ abstract class QueryTMDBCommon
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     // Get key from the file assets/secrets.json (not source controlled)
-    final omdbKey = Settings.singleton().get('TMDB_KEY');
+    final omdbKey = Settings().tmdbkey;
     return Uri.parse('$baseURL$searchCriteria$midURL$omdbKey');
   }
 
@@ -63,7 +63,7 @@ abstract class QueryTMDBCommon
   @override
   void myConstructHeaders(HttpHeaders headers) {
     // Get key from the file assets/secrets.json (not source controlled)
-    final omdbKey = Settings.singleton().get('TMDB_KEY');
+    final omdbKey = Settings().tmdbkey;
     headers.add('Authorization', ' Bearer $omdbKey');
   }
 

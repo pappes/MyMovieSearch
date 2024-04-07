@@ -60,7 +60,7 @@ Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() async => Settings.singleton().init());
+  setUpAll(() async => Settings().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////

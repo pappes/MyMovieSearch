@@ -21,7 +21,7 @@ class QueryGoogleMovies
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   QueryGoogleMovies(super.criteria);
 
-  static const _baseURL =
+  static final _baseURL = Settings().googleurl ??
       'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
 
   /// Describe where the data is coming from.
@@ -60,7 +60,7 @@ class QueryGoogleMovies
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     // Get key from the file assets/secrets.json (not source controlled)
-    final googleKey = Settings.singleton().get('GOOGLE_KEY');
+    final googleKey = Settings().googlekey;
     final startRecord = (pageNumber - 1) * _googleResultsPerPage;
     final url = '$_baseURL$googleKey'
         '&q=$searchCriteria&start=$startRecord&'

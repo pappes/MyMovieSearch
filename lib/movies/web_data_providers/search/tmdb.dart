@@ -56,7 +56,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     // Get key from the file assets/secrets.json (not source controlled)
-    final tmdbKey = Settings.singleton().get('TMDB_KEY');
+    final tmdbKey = Settings().tmdbkey;
     return Uri.parse(
       '$_baseURL$tmdbKey&query=$searchCriteria&page=$pageNumber',
     );
@@ -66,7 +66,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   @override
   void myConstructHeaders(HttpHeaders headers) {
     // Get key from the file assets/secrets.json (not source controlled)
-    final tmdbKey = Settings.singleton().get('TMDB_KEY');
+    final tmdbKey = Settings().tmdbkey;
     headers.add('Authorization', ' Bearer $tmdbKey');
   }
 
