@@ -4,8 +4,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_movie_search/firebase_app_state.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:universal_io/io.dart';
 
 enum Fields {

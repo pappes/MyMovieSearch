@@ -26,19 +26,19 @@ const runtimeDevices = {
 };
 
 /// Grants access to firebase persistent data
-abstract class FirebaseApplicationState extends ChangeNotifier {
+abstract class FirebaseApplicationState_old extends ChangeNotifier {
   /// Singleton for the current platform
-  factory FirebaseApplicationState() {
+  factory FirebaseApplicationState_old() {
     _instance ??= Platform.isLinux
         ? _WebLinuxFirebaseApplicationState()
         : _NativeAndroidFirebaseApplicationState();
     return _instance!;
   }
 
-  FirebaseApplicationState._internal() {
+  FirebaseApplicationState_old._internal() {
     unawaited(init());
   }
-  static FirebaseApplicationState? _instance;
+  static FirebaseApplicationState_old? _instance;
 
   Future<bool> _loggedIn = Future<bool>.value(false);
   String? _userDisplayName;
@@ -127,7 +127,8 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
       };
 }
 
-class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
+//MARK: - Linux
+class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState_old {
   _WebLinuxFirebaseApplicationState() : super._internal();
 
   // TODO(pappes): reuse tokens. https://github.com/pappes/MyMovieSearch/issues/70
@@ -201,6 +202,10 @@ class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
     } on linux_firedart.GrpcError catch (exception) {
       logger.t('Unable to fetch collection Firebase exception: $exception');
       rethrow;
+    } catch (exception) {
+      logger.t('Unable to fetch collection unknown Firebase exception: '
+          '$exception');
+      rethrow;
     }
     return;
   }
@@ -263,7 +268,9 @@ class _WebLinuxFirebaseApplicationState extends FirebaseApplicationState {
   }
 }
 
-class _NativeAndroidFirebaseApplicationState extends FirebaseApplicationState {
+//MARK: - Android
+class _NativeAndroidFirebaseApplicationState
+    extends FirebaseApplicationState_old {
   _NativeAndroidFirebaseApplicationState() : super._internal();
 
   @override
@@ -429,7 +436,7 @@ bool _derivedUserMatch(String? device, dynamic devices) {
   return false;
 }
 
-/// Exception used in FirebaseApplicationState.
+/// Exception used in FirebaseApplicationState_old.
 class MMSFirebaseException implements Exception {
   MMSFirebaseException(this.cause);
   String cause;

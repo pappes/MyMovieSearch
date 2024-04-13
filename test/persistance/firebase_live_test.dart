@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_movie_search/firebase_app_state.dart';
+import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
+//import 'package:my_movie_search/firebase_app_state.dart';
 ////import 'package:my_movie_search/utilities/settings.dart';
 //import '../test_helper.dart';
 
