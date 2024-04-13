@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
-import 'package:universal_io/io.dart';
 
 enum Fields {
   libnum,
@@ -16,7 +15,7 @@ enum Fields {
   title,
 }
 
-const lastFirebaseBackupDate = 'lastBackupDate'; //1712983693268
+const lastFirebaseBackupDate = '1712983693268';
 
 /// Position of the movie including stacker [libNum] and slot [location].
 ///
