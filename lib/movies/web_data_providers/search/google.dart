@@ -10,8 +10,12 @@ const _googleResultsPerPage = 10; // More than 10 results in an error!
 
 /// Implements [WebFetchBase] for searching using google.
 ///
-/// The Google API is allows 10000 free requests per day to
-/// programmablesearchengine.goggle.com
+/// The Google API is allows 100 free requests per day as per
+/// https://developers.google.com/custom-search/v1/overview
+/// The Google JSON API is limited to 10000 requests per day as per
+/// https://developers.google.com/custom-search/docs/overview
+/// and can be controlled from
+/// https://programmablesearchengine.google.com/controlpanel/all
 /// This custom search filters to imdb.com/title with safesearch turned off.
 ///
 /// ```dart
