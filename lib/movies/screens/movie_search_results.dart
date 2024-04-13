@@ -181,8 +181,10 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   }
 
   void _newSearch(String text) {
-    _restorableList.value.clear();
-    _restorableCriteria.value.criteriaList.clear();
+    if (_restorableList.value.isNotEmpty) _restorableList.value.clear();
+    if (_restorableCriteria.value.criteriaList.isNotEmpty) {
+      _restorableCriteria.value.criteriaList.clear();
+    }
     _restorableCriteria.value.criteriaTitle = text;
     _performSearch();
     _searchFocusNode.requestFocus();
