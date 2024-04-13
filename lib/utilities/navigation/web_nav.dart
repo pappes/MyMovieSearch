@@ -188,7 +188,6 @@ class MMSNav {
             SearchCriteriaDTO().init(
               SearchCriteriaType.downloadAdvanced,
               title: criteria,
-              context: movie,
             ),
           );
         }
