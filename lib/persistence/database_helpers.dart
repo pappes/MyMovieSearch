@@ -69,7 +69,6 @@ class DatabaseHelper {
   // open the database
   Future<void> _initDatabase() async {
     if (_database == null) {
-      print('init');
       // Init ffi loader if needed.
       databaseFactory = databaseFactoryFfi;
       sqfliteFfiInit();

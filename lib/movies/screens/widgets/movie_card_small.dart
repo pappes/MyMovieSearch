@@ -231,11 +231,7 @@ class MovieTile extends ListTile {
   }
 
   static void getDVDIcon(MovieResultDTO movie, List<Widget> widgets) {
-    final contents = StackerContents(
-      titleName: movie.title,
-      uniqueId: movie.uniqueId,
-    );
-    if (MovieLocation().getLocationsForMovie(contents).isNotEmpty) {
+    if (MovieLocation().getLocationsForMovie(movie.uniqueId).isNotEmpty) {
       widgets.add(const Icon(Icons.album));
     }
   }

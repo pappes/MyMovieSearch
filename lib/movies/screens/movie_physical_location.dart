@@ -362,8 +362,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
       final movies = MovieLocation().getMoviesAtLocation(location);
       for (final movie in movies) {
         yield movieLocationRow(
-          location,
-          movie.titleName,
+          DenomalizedLocation.combine(movie, location),
           onLongPress: () async => _deleteLocation(location, movie.titleName),
         );
       }
@@ -469,8 +468,8 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
             ),
             ElevatedButton(
               onPressed: () async {
-                await MovieLocation()
-                    .deleteLocationsForMovie(_restorableMovie.value.uniqueId);
+                await MovieLocation().deleteAllLocationsForMovie(
+                    _restorableMovie.value.uniqueId);
                 // ignore: use_build_context_synchronously
                 Navigator.pop(context); // Closes the dialog
                 // ignore: use_build_context_synchronously

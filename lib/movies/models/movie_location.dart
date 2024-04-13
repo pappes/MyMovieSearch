@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
+import 'package:universal_io/io.dart';
 
 enum Fields {
   libnum,
@@ -15,6 +16,44 @@ enum Fields {
   title,
 }
 
+class DenomalizedLocation {
+  DenomalizedLocation({
+    required this.uniqueId,
+    required this.title,
+    required this.libNum,
+    required this.location,
+    required this.dvdId,
+  });
+  DenomalizedLocation.combine(
+    StackerContents contents,
+    StackerAddress address,
+  ) {
+    uniqueId = contents.uniqueId;
+    title = contents.titleName;
+    libNum = address.libNum;
+    location = address.location;
+    dvdId = address.dvdId;
+  }
+
+  /// {};
+  late String uniqueId;
+  late String title;
+  late String libNum;
+  late String location;
+  String? dvdId;
+
+  /// Convert a [StackerAddress] to a json encodeable primitive.
+  ///
+  Map<String, String?> toJson() => {
+        'uniqueId': uniqueId,
+        'title': title,
+        'libNum': libNum,
+        'location': location,
+        'dvdId': dvdId,
+      };
+}
+
+// DateTime().millisecondsSinceEpoch
 const lastFirebaseBackupDate = '1712983693268';
 
 /// Position of the movie including stacker [libNum] and slot [location].
@@ -55,12 +94,6 @@ class StackerAddress implements Comparable<StackerAddress> {
       other is StackerAddress &&
       other.libNum == libNum &&
       other.location == location;
-
-  /// Convert a [StackerAddress] to a json encodeable primitive.
-  ///
-  Map<String, String> toJson() => (dvdId == null)
-      ? {'libNum': libNum, 'location': location}
-      : {'libNum': libNum, 'location': location, 'dvdId': dvdId!};
 }
 
 /// Contents of the location including key [uniqueId]
@@ -145,7 +178,8 @@ class MovieLocation {
 
   /// Load data from the cloud only once.
   Future<void> init() async {
-    _initialised ??= _loadCloudLocationData();
+    _initialised ??=
+        Platform.isLinux ? _loadBackupLocationData() : _loadCloudLocationData();
     await _initialised;
   }
 
@@ -159,9 +193,9 @@ class MovieLocation {
   List<StackerContents> getMoviesAtLocation(StackerAddress location) =>
       _locations[location] ?? [];
 
-  /// [List] of locations known to hold movie keyed by [movie].uniqueId
-  List<StackerAddress> getLocationsForMovie(StackerContents movie) =>
-      _movies[movie.uniqueId] ?? [];
+  /// [List] of locations known to hold movie keyed by uniqueId
+  List<StackerAddress> getLocationsForMovie(String uniqueId) =>
+      _movies[uniqueId] ?? [];
 
   /// Remove a movie from a specific location
   ///
@@ -183,10 +217,9 @@ class MovieLocation {
   }
 
   /// Remove all locations associated with a movie
-  Future<dynamic> deleteLocationsForMovie(String uniqueId) async {
+  Future<dynamic> deleteAllLocationsForMovie(String uniqueId) async {
     if (_movies.containsKey(uniqueId) && _movies[uniqueId]!.isNotEmpty) {
-      final id = StackerContents(uniqueId: uniqueId, titleName: '');
-      for (final location in getLocationsForMovie(id)) {
+      for (final location in getLocationsForMovie(uniqueId)) {
         // build up list of deletions while iterating,
         // then delete when not iterating.
         final deletions = <StackerContents>[];
@@ -200,6 +233,7 @@ class MovieLocation {
       }
 
       _movies[uniqueId]!.clear();
+      final id = StackerContents(uniqueId: uniqueId, titleName: '');
       return _writeToCloud(id);
     }
     return false;
@@ -243,7 +277,7 @@ class MovieLocation {
   /// Insert a record into the cloud datastore.
   Future<dynamic>? _writeToCloud(StackerContents movie) {
     final locations = <String>[];
-    for (final location in getLocationsForMovie(movie)) {
+    for (final location in getLocationsForMovie(movie.uniqueId)) {
       locations.add(DvdLocation(location, movie).encode());
     }
     return FirebaseApplicationState().addRecord(
@@ -300,21 +334,6 @@ class MovieLocation {
     }
 
     return locations;
-  }
-
-  /// Retrieve the title used for a specific movie at a specifica location.
-  String customTitleForMovieAtLocation(
-    StackerAddress location,
-    StackerContents movie,
-  ) {
-    final descriptions = MovieLocation().getMoviesAtLocation(location);
-    String title = movie.titleName;
-    for (final description in descriptions) {
-      if (description.uniqueId == movie.uniqueId) {
-        title = description.titleName;
-      }
-    }
-    return title;
   }
 
   Future<void> _loadCloudLocationData() async {
@@ -379,7 +398,37 @@ class MovieLocation {
     }
   }
 
-  String getBackupData() => jsonEncode(_movies);
+  /// Dump in-memory cache to json for saving to a file.
+  String getBackupData2() => jsonEncode(_movies);
+  String getBackupData() {
+    final movies = <String, dynamic>{};
+    for (final uniqueId in _movies.keys) {
+      movies[uniqueId] = getTitlesForMovie(uniqueId);
+    }
+    return jsonEncode(movies);
+  }
+
+  /// Find all titles associated with [uniqueId]
+  /// and the loactions where they are stored.
+  List<DenomalizedLocation> getTitlesForMovie(String uniqueId) {
+    final titles = <DenomalizedLocation>[];
+    for (final location in getLocationsForMovie(uniqueId)) {
+      for (final content in getMoviesAtLocation(location)) {
+        if (content.uniqueId == uniqueId) {
+          titles.add(
+            DenomalizedLocation(
+              uniqueId: uniqueId,
+              libNum: location.libNum,
+              location: location.location,
+              dvdId: location.dvdId,
+              title: content.titleName,
+            ),
+          );
+        }
+      }
+    }
+    return titles;
+  }
 
   /// Returns a [List] containing a map with keys:
   ///    'location':[StackerAddress],
@@ -425,7 +474,6 @@ class MovieLocation {
     final json = await rootBundle.loadString(location);
     return jsonDecode(json) as List<dynamic>;
   }
-  //MovieResultDTO _dvdToDto(dvd) {}
 }
 
 enum DvdColumns {

@@ -108,23 +108,14 @@ List<Widget> movieLocationTable(
           ];
 
 Iterable<DataRow> locationsWithCustomTitle(MovieResultDTO movie) sync* {
-  final contents = StackerContents(
-    titleName: movie.title,
-    uniqueId: movie.uniqueId,
-  );
-  final locations = MovieLocation().getLocationsForMovie(contents);
-  for (final location in locations) {
-    final customTitle = MovieLocation().customTitleForMovieAtLocation(
-      location,
-      contents,
-    );
-    yield movieLocationRow(location, customTitle);
+  final customTitles = MovieLocation().getTitlesForMovie(movie.uniqueId);
+  for (final customTitle in customTitles) {
+    yield movieLocationRow(customTitle);
   }
 }
 
 DataRow movieLocationRow(
-  StackerAddress location,
-  String title, {
+  DenomalizedLocation title, {
   void Function()? onLongPress,
   // ignore: avoid_positional_boolean_parameters
   void Function(bool?)? onSelectChanged,
@@ -133,9 +124,9 @@ DataRow movieLocationRow(
       onLongPress: onLongPress,
       onSelectChanged: onSelectChanged,
       cells: [
-        DataCell(Text(location.libNum)),
-        DataCell(Text(location.location)),
-        DataCell(Text(title)),
+        DataCell(Text(title.libNum)),
+        DataCell(Text(title.location)),
+        DataCell(Text(title.title)),
       ],
     );
 
