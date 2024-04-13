@@ -1,8 +1,25 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_movie_search/movies/models/movie_location.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
-//import 'package:my_movie_search/firebase_app_state.dart';
-////import 'package:my_movie_search/utilities/settings.dart';
-//import '../test_helper.dart';
+
+Future<void> createBackupData() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  print('backup started at timestamp ${DateTime.now().millisecondsSinceEpoch}'
+      '\nConstant lastFirebaseBackupDate needs to be updated in '
+      'lib/movies/models/movie_location.dart');
+  final fb = MovieLocation();
+  await fb.init();
+  final data = fb.getBackupData();
+
+  final filename = '/tmp/firebaseBackup${DateTime.now().toIso8601String()}.txt';
+
+  await File(filename).writeAsString(data, flush: true);
+  print('Backup written to $filename');
+}
 
 void main() async {
   // Wait for api key to be initialised
@@ -10,6 +27,8 @@ void main() async {
 ////////////////////////////////////////////////////////////////////////////////
   /// integration tests
 ////////////////////////////////////////////////////////////////////////////////
+
+  await createBackupData();
 
   group('firebase', () {
     // Confirm anonymous login is successful.

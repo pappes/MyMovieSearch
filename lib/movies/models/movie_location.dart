@@ -16,6 +16,8 @@ enum Fields {
   title,
 }
 
+const lastFirebaseBackupDate = 'lastBackupDate'; //1712983693268
+
 /// Position of the movie including stacker [libNum] and slot [location].
 ///
 @immutable
@@ -54,6 +56,12 @@ class StackerAddress implements Comparable<StackerAddress> {
       other is StackerAddress &&
       other.libNum == libNum &&
       other.location == location;
+
+  /// Convert a [StackerAddress] to a json encodeable primitive.
+  ///
+  Map<String, String> toJson() => (dvdId == null)
+      ? {'libNum': libNum, 'location': location}
+      : {'libNum': libNum, 'location': location, 'dvdId': dvdId!};
 }
 
 /// Contents of the location including key [uniqueId]
@@ -138,8 +146,7 @@ class MovieLocation {
 
   /// Load data from the cloud only once.
   Future<void> init() async {
-    _initialised ??=
-        Platform.isLinux ? _loadBackupLocationData() : _loadCloudLocationData();
+    _initialised ??= _loadCloudLocationData();
     await _initialised;
   }
 
@@ -372,6 +379,8 @@ class MovieLocation {
       }
     }
   }
+
+  String getBackupData() => jsonEncode(_movies);
 
   /// Returns a [List] containing a map with keys:
   ///    'location':[StackerAddress],
