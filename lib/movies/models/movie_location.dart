@@ -166,7 +166,23 @@ class MovieLocation {
   }
 
   /// Dump in-memory cache to json for saving to a file.
-  String getBackupData() {
+  ///
+  /// To update backup data run createBackupData() in
+  /// test/persistance/firebase_live_test.dart
+  Future<String> getBackupData() async {
+    // Wait for stream to be populated with initial data.
+    await init();
+    // Wait for data to be consumed from the stream.
+    await Future<void>.delayed(const Duration(seconds: 2));
+    clear();
+
+    final streamSubscription = FirebaseApplicationState()
+        .fetchRecords('/dvds')
+        .listen(_cloudDataReceived);
+
+    await Future<void>.delayed(const Duration(seconds: 10));
+    await streamSubscription.cancel();
+
     final movies = <String, dynamic>{};
     for (final uniqueId in _movies.keys) {
       movies[uniqueId] = getTitlesForMovie(uniqueId);
@@ -257,7 +273,7 @@ class MovieLocation {
         for (final location in locations) {
           if (location is Map) {
             final address = StackerAddress(
-              libNum: location['libNum'].toString(),
+              libNum: location['libnum'].toString(),
               location: location['location'].toString(),
               dvdId: location['dvdId']?.toString(),
             );
@@ -405,10 +421,9 @@ class DenomalizedLocation {
   /// Convert a [StackerAddress] to a json encodeable primitive.
   ///
   Map<String, String?> toJson() => {
-        //Fields.uniqueId.name: uniqueId,
-        'uniqueId': uniqueId,
+        Fields.id.name: uniqueId,
         Fields.title.name: title,
-        'libNum': libNum,
+        Fields.libnum.name: libNum,
         Fields.location.name: location,
         Fields.dvdId.name: dvdId,
       };
