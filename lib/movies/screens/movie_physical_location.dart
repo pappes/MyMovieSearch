@@ -469,7 +469,8 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
             ElevatedButton(
               onPressed: () async {
                 await MovieLocation().deleteAllLocationsForMovie(
-                    _restorableMovie.value.uniqueId);
+                  _restorableMovie.value.uniqueId,
+                );
                 // ignore: use_build_context_synchronously
                 Navigator.pop(context); // Closes the dialog
                 // ignore: use_build_context_synchronously

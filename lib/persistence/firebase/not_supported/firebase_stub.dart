@@ -22,8 +22,19 @@ class FirebaseApplicationStateStub extends FirebaseApplicationState {
 
   @override
   Stream<Map<String, String>> fetchRecords(
-    String collectionPath,
-  ) async* {
+    String collectionPath, {
+    String? filterFieldPath,
+    dynamic isEqualTo,
+    dynamic isLessThan,
+    dynamic isLessThanOrEqualTo,
+    dynamic isGreaterThan,
+    dynamic isGreaterThanOrEqualTo,
+    dynamic arrayContains,
+    List<dynamic>? arrayContainsAny,
+    List<dynamic>? whereIn,
+    bool isNull = false,
+    Completer<bool>? initalDataLoadComplete,
+  }) async* {
     throw MMSFirebaseException('platform not supported');
   }
 

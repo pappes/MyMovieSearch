@@ -14,13 +14,18 @@ Future<void> createBackupData() async {
           '\nConstant lastFirebaseBackupDate needs to be updated in '
           'lib/movies/models/movie_location.dart');
   final fb = MovieLocation();
+  // Wait for stream to be populated with data.
   await fb.init();
+  // Wait for data to be consumed from the stream.
+  await Future<void>.delayed(const Duration(seconds: 2));
   final data = fb.getBackupData();
 
   final filename = '/tmp/firebaseBackup${DateTime.now().toIso8601String()}.txt';
 
   await File(filename).writeAsString(data, flush: true);
-  logger.w('Backup written to $filename');
+  logger.w('Backup written to $filename '
+      'file size: ${data.length} '
+      'stats: ${fb.statistics()}');
 }
 
 void main() async {
@@ -30,7 +35,7 @@ void main() async {
   /// integration tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  await createBackupData();
+  //await createBackupData();
 
   group('firebase', () {
     // Confirm anonymous login is successful.
@@ -74,7 +79,7 @@ void main() async {
       final result = await fb
           .fetchRecords('testing')
           .timeout(
-            const Duration(seconds: 1),
+            const Duration(seconds: 2),
             onTimeout: (sink) => sink.close(),
           )
           .toList();

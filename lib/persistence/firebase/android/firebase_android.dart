@@ -89,17 +89,74 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
 
   @override
   Stream<Map<String, String>> fetchRecords(
-    String collectionPath,
-  ) async* {
+    String collectionPath, {
+    String? filterFieldPath,
+    dynamic isEqualTo,
+    dynamic isLessThan,
+    dynamic isLessThanOrEqualTo,
+    dynamic isGreaterThan,
+    dynamic isGreaterThanOrEqualTo,
+    dynamic arrayContains,
+    List<dynamic>? arrayContainsAny,
+    List<dynamic>? whereIn,
+    bool isNull = false,
+    Completer<bool>? initalDataLoadComplete,
+  }) async* {
     try {
       await super.fetchRecords(collectionPath).drain<dynamic>();
       final fbcollection =
           FirebaseFirestore.instance.collection(collectionPath);
 
-      yield* fbcollection.snapshots().asyncExpand(_collectionConverter);
+      if (filterFieldPath == null) {
+        // For Android, we can access an ongoing stream regardless of filtering.
+        yield* fbcollection.snapshots().asyncExpand(_collectionConverter);
+      } else {
+        // Stream initial filtered data.
+        final initalData = await fbcollection
+            .where(
+              filterFieldPath,
+              isEqualTo: isEqualTo,
+              isLessThan: isLessThan,
+              isLessThanOrEqualTo: isLessThanOrEqualTo,
+              isGreaterThan: isGreaterThan,
+              isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+              arrayContains: arrayContains,
+              arrayContainsAny: arrayContainsAny,
+              whereIn: whereIn,
+              isNull: isNull,
+            )
+            .get();
+        final list = await _collectionConverter(initalData).toList();
+        yield* Stream.fromIterable(list);
+        initalDataLoadComplete?.complete(true);
+        // For Android, we keep the stream open for receiving realtime changes.
+        yield* fbcollection
+            .where(
+              filterFieldPath,
+              isEqualTo: isEqualTo,
+              isLessThan: isLessThan,
+              isLessThanOrEqualTo: isLessThanOrEqualTo,
+              isGreaterThan: isGreaterThan,
+              isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+              arrayContains: arrayContains,
+              arrayContainsAny: arrayContainsAny,
+              whereIn: whereIn,
+              isNull: isNull,
+            )
+            .snapshots()
+            .asyncExpand(_collectionConverter);
+      }
     } catch (exception) {
       logger.t('Unable to fetch collection Firebase exception: $exception');
       rethrow;
+    }
+    if (initalDataLoadComplete != null && !initalDataLoadComplete.isCompleted) {
+      // Do not know when initial data load is completre
+      // so just wait a fixed amount of time then notify the caller.
+      unawaited(
+        Future<void>.delayed(const Duration(seconds: 5))
+            .then((_) => initalDataLoadComplete.complete(true)),
+      );
     }
     return;
   }

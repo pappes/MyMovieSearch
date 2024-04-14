@@ -77,10 +77,23 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   ///
   /// Implimentations need to ensure superclass has successfully completed
   /// by calling
-  /// await super.fetchRecords(collectionPath).drain<dynamic>(
+  /// await super.fetchRecords(collectionPath).drain<dynamic>();
+  ///
+  ///
   Stream<dynamic> fetchRecords(
-    String collectionPath,
-  ) async* {
+    String collectionPath, {
+    String? filterFieldPath,
+    dynamic isEqualTo,
+    dynamic isLessThan,
+    dynamic isLessThanOrEqualTo,
+    dynamic isGreaterThan,
+    dynamic isGreaterThanOrEqualTo,
+    dynamic arrayContains,
+    List<dynamic>? arrayContainsAny,
+    List<dynamic>? whereIn,
+    bool isNull = false,
+    Completer<bool>? initalDataLoadComplete,
+  }) async* {
     if (!await loggedIn) {
       logger.t('Must be logged in');
       throw MMSFirebaseException('not logged in');

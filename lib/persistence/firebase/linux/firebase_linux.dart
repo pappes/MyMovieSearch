@@ -72,16 +72,57 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
 
   @override
   Stream<Map<String, String>> fetchRecords(
-    String collectionPath,
-  ) async* {
+    String collectionPath, {
+    String? filterFieldPath,
+    dynamic isEqualTo,
+    dynamic isLessThan,
+    dynamic isLessThanOrEqualTo,
+    dynamic isGreaterThan,
+    dynamic isGreaterThanOrEqualTo,
+    dynamic arrayContains,
+    List<dynamic>? arrayContainsAny,
+    List<dynamic>? whereIn,
+    bool isNull = false,
+    Completer<bool>? initalDataLoadComplete,
+  }) async* {
     try {
+      // Let parent class prepare for data.
       await super.fetchRecords(collectionPath).drain<dynamic>();
       final fbcollection = Firestore.instance.collection(collectionPath);
+      if (filterFieldPath == null) {
+        // For Linux we can accept an ongoing stream if there is no filtering.
+        yield* fbcollection.stream.asyncExpand(_collectionConverter);
+      } else {
+        // For Linux we cannot access an ongoing stream for filtered data.
+        final val = await fbcollection
+            .where(
+              filterFieldPath,
+              isEqualTo: isEqualTo,
+              isLessThan: isLessThan,
+              isLessThanOrEqualTo: isLessThanOrEqualTo,
+              isGreaterThan: isGreaterThan,
+              isGreaterThanOrEqualTo: isGreaterThanOrEqualTo,
+              arrayContains: arrayContains,
+              arrayContainsAny: arrayContainsAny,
+              whereIn: whereIn,
+              isNull: isNull,
+            )
+            .get();
 
-      yield* fbcollection.stream.asyncExpand(_collectionConverter);
+        yield* _collectionConverter(val);
+        initalDataLoadComplete?.complete(true);
+      }
     } on GrpcError catch (exception) {
       logger.t('Unable to fetch collection Firebase exception: $exception');
       rethrow;
+    }
+    if (initalDataLoadComplete != null && !initalDataLoadComplete.isCompleted) {
+      // Do not know when initial data load is completre
+      // so just wait a fixed amount of time then notify the caller.
+      unawaited(
+        Future<void>.delayed(const Duration(seconds: 5))
+            .then((_) => initalDataLoadComplete.complete(true)),
+      );
     }
     return;
   }
