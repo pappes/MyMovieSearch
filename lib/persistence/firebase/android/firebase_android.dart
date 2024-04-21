@@ -150,15 +150,19 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
       logger.t('Unable to fetch collection Firebase exception: $exception');
       rethrow;
     }
-    if (initalDataLoadComplete != null && !initalDataLoadComplete.isCompleted) {
-      // Do not know when initial data load is completre
-      // so just wait a fixed amount of time then notify the caller.
-      unawaited(
-        Future<void>.delayed(const Duration(seconds: 5))
-            .then((_) => initalDataLoadComplete.complete(true)),
-      );
-    }
+    unawaited(_notifyIntitialLoadCompleted(initalDataLoadComplete));
     return;
+  }
+
+  Future<void> _notifyIntitialLoadCompleted(Completer<bool>? completer) async {
+    if (completer != null) {
+      if (!completer.isCompleted) {
+        // Do not know when initial data load is completre
+        // so just wait a fixed amount of time then notify the caller.
+        await Future<void>.delayed(const Duration(seconds: 5));
+      }
+      if (!completer.isCompleted) completer.complete(true);
+    }
   }
 
   Stream<Map<String, String>> _collectionConverter(

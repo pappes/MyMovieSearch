@@ -244,7 +244,6 @@ class MovieLocation {
   Future<void> _loadAndroidLocationData(Completer<bool> completer) async {
     await _loadBackupLocationData();
     unawaited(_loadCloudLocationData(completer));
-    completer.complete(true);
   }
 
   Future<void> _loadLinuxLocationData(Completer<bool> completer) async {
@@ -266,27 +265,19 @@ class MovieLocation {
     final json = await rootBundle.loadString(location);
     final movies = jsonDecode(json) as Map<String, dynamic>;
 
-    final oldLib = await _getDvds();
     for (final movie in movies.entries) {
       final locations = movie.value;
       if (locations is Iterable) {
         for (final location in locations) {
           if (location is Map) {
             final address = StackerAddress(
-              libNum: location['libnum'].toString(),
-              location: location['location'].toString(),
-              dvdId: location['dvdId']?.toString(),
+              libNum: location[Fields.libnum.name].toString(),
+              location: location[Fields.location.name].toString(),
+              dvdId: location[Fields.dvdId.name]?.toString(),
             );
-            String title = 'backup';
-            for (final record in oldLib) {
-              final dto = record['dto'] as MovieResultDTO;
-              if (record['location'] == address) {
-                title = dto.title;
-              }
-            }
             final contents = StackerContents(
-              uniqueId: movie.key,
-              titleName: title,
+              uniqueId: location[Fields.id.name].toString(),
+              titleName: location[Fields.title.name].toString(),
             );
             _writeToCache(contents, address);
           }
