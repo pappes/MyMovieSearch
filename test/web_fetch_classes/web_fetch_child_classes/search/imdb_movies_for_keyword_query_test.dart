@@ -53,7 +53,7 @@ testing and punctuation
         expectedPage.toString(),
         expectedUrl,
       );
-      input.criteriaList.add(MovieResultDTO().init(description: jsonText));
+      input.criteriaContext = MovieResultDTO().init(description: jsonText);
       expect(
         QueryIMDBMoviesForKeyword(input).myFormatInputAsText(),
         expectedKeyword,
