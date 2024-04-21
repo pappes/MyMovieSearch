@@ -76,12 +76,26 @@ void main() {
       final rtp = RestorationTestParent(criteria.criteriaTitle)
         ..restoreState(null, true);
 
+      RestorableSearchCriteria.nextId = 100;
       final encoded = rtp._criteria.dtoToPrimitives(criteria);
+      RestorableSearchCriteria.nextId = 50; // Temporary set to a lower value;
       rtp._criteria.initWithValue(rtp._criteria.fromPrimitives(encoded));
+
+      expect(
+        100,
+        lessThanOrEqualTo(RestorableSearchCriteria.nextId),
+        reason: 'RestorationId not in sync after restoration',
+      );
+
+      RestorableSearchCriteria.nextId = 100;
       final encoded2 = rtp._criteria.toPrimitives();
 
       compareCriteria(criteria, rtp._criteria.value);
-      expect(encoded, encoded2);
+      expect(
+        encoded,
+        encoded2,
+        reason: 'primitives not restored correctly',
+      );
     });
   });
 }

@@ -12,6 +12,7 @@ import 'package:my_movie_search/movies/blocs/repositories/tor_repository.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class SearchRequest extends Equatable {
@@ -110,10 +111,10 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
   static String getRestorationId(GoRouterState state) {
     final input = _getMap(state);
     if (input.containsKey('id')) {
-      final criteria = input['id'];
-      if (criteria != null && criteria is int) {
-        if (criteria > nextId) nextId = criteria + 1;
-        return 'RestorableSearchCriteria$criteria';
+      final criteriaRestorationId = input['id'];
+      if (criteriaRestorationId != null && criteriaRestorationId is int) {
+        if (criteriaRestorationId >= nextId) nextId = criteriaRestorationId + 1;
+        return 'RestorableSearchCriteria$criteriaRestorationId';
       }
     }
     return 'RestorableSearchCriteria${nextId++}';
@@ -128,6 +129,13 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
     if (data is String) {
       final decoded = jsonDecode(data);
       if (decoded is Map) {
+        // Restore nextId if it is out of sync.
+        if (decoded.containsKey('nextId')) {
+          final storedId = IntHelper.fromText(decoded['nextId']) ?? nextId;
+          if (storedId > nextId) {
+            nextId = storedId + 1;
+          }
+        }
         return decoded.toSearchCriteriaDTO();
       }
     }
@@ -136,8 +144,12 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
 
   @override
   Object toPrimitives() => dtoToPrimitives(value);
-  Object dtoToPrimitives(SearchCriteriaDTO value) =>
-      printSizeAndReturn(jsonEncode(value.toMap()));
+  Object dtoToPrimitives(SearchCriteriaDTO value) {
+    final map = value.toMap()..addAll({'nextId': '${nextId + 1}'});
+    final json = jsonEncode(map);
+    printSizeAndReturn(json);
+    return json;
+  }
 }
 
 extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {

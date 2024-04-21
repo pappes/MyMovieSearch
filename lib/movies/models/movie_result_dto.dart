@@ -162,10 +162,10 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   static String getRestorationId(GoRouterState state) {
     final input = _getMap(state);
     if (input.containsKey('id')) {
-      final criteria = input['id'];
-      if (criteria != null && criteria is int) {
-        if (criteria > nextId) nextId = criteria + 1;
-        return 'RestorableMovie$criteria';
+      final dtoRestorationId = input['id'];
+      if (dtoRestorationId != null && dtoRestorationId is int) {
+        if (dtoRestorationId > nextId) nextId = dtoRestorationId + 1;
+        return 'RestorableMovie$dtoRestorationId';
       }
     }
     return 'RestorableMovie${nextId++}';
@@ -179,8 +179,17 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   static MovieResultDTO dtoFromPrimitives(Object? data) {
     if (data is String) {
       final decoded = jsonDecode(data);
-      if (decoded != null && decoded is String) {
-        return MovieResultDTO().init(uniqueId: decoded);
+      if (decoded is Map) {
+        // Restore nextId if it is out of sync.
+        if (decoded.containsKey('nextId')) {
+          final storedId = IntHelper.fromText(decoded['nextId']) ?? nextId;
+          if (storedId > nextId) {
+            nextId = storedId + 1;
+          }
+        }
+        if (decoded.containsKey('dto')) {
+          return MovieResultDTO().init(uniqueId: decoded['dto']?.toString());
+        }
       }
     }
     return MovieResultDTO();
@@ -189,8 +198,15 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   @override
   // Need 2 functions because access to [value] is not initialised for testing!
   Object toPrimitives() => RestorableMovie.dtoToPrimitives(value);
-  static Object dtoToPrimitives(MovieResultDTO dto) =>
-      printSizeAndReturn(jsonEncode(dto.uniqueId));
+  static Object dtoToPrimitives(MovieResultDTO dto) {
+    final map = {
+      'dto': dto.uniqueId,
+      'nextId': '${nextId + 1}',
+    };
+    final json = jsonEncode(map);
+    printSizeAndReturn(json);
+    return json;
+  }
 }
 
 class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {

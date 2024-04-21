@@ -493,12 +493,30 @@ void main() {
       final rtp = RestorationTestParent(movie.uniqueId)
         ..restoreState(null, true);
 
+      RestorableMovie.nextId = 100;
       final encoded = RestorableMovie.dtoToPrimitives(expected);
+      RestorableMovie.nextId = 50; // Temporary set to a lower value;
       rtp._movie.initWithValue(rtp._movie.fromPrimitives(encoded));
+
+      expect(
+        100,
+        lessThanOrEqualTo(RestorableMovie.nextId),
+        reason: 'RestorationId not in sync after restoration',
+      );
+
+      RestorableMovie.nextId = 100;
       final encoded2 = rtp._movie.toPrimitives();
 
-      expect(expected, MovieResultDTOMatcher(rtp._movie.value));
-      expect(encoded, encoded2);
+      expect(
+        expected,
+        MovieResultDTOMatcher(rtp._movie.value),
+        reason: 'dto not restored correctly',
+      );
+      expect(
+        encoded,
+        encoded2,
+        reason: 'primitives not restored correctly',
+      );
     });
     // Convert a restorable dto list to JSON
     //and then convert the JSON to a restorable dto list.
