@@ -75,6 +75,7 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
     String collectionPath, {
     String? filterFieldPath,
     dynamic isEqualTo,
+    dynamic isNotEqualTo,
     dynamic isLessThan,
     dynamic isLessThanOrEqualTo,
     dynamic isGreaterThan,
@@ -82,6 +83,7 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
     dynamic arrayContains,
     List<dynamic>? arrayContainsAny,
     List<dynamic>? whereIn,
+    List<dynamic>? whereNotIn,
     bool isNull = false,
     Completer<bool>? initalDataLoadComplete,
   }) async* {

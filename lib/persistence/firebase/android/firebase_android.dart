@@ -91,7 +91,8 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
   Stream<Map<String, String>> fetchRecords(
     String collectionPath, {
     String? filterFieldPath,
-    dynamic isEqualTo,
+    dynamic isEqualTo = notSetQueryParam,
+    dynamic isNotEqualTo = notSetQueryParam,
     dynamic isLessThan,
     dynamic isLessThanOrEqualTo,
     dynamic isGreaterThan,
@@ -99,7 +100,8 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
     dynamic arrayContains,
     List<dynamic>? arrayContainsAny,
     List<dynamic>? whereIn,
-    bool isNull = false,
+    List<dynamic>? whereNotIn,
+    bool? isNull,
     Completer<bool>? initalDataLoadComplete,
   }) async* {
     try {
@@ -116,6 +118,7 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
             .where(
               filterFieldPath,
               isEqualTo: isEqualTo,
+              isNotEqualTo: isNotEqualTo,
               isLessThan: isLessThan,
               isLessThanOrEqualTo: isLessThanOrEqualTo,
               isGreaterThan: isGreaterThan,
@@ -123,6 +126,7 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
               arrayContains: arrayContains,
               arrayContainsAny: arrayContainsAny,
               whereIn: whereIn,
+              whereNotIn: whereNotIn,
               isNull: isNull,
             )
             .get();
@@ -134,6 +138,7 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
             .where(
               filterFieldPath,
               isEqualTo: isEqualTo,
+              isNotEqualTo: isNotEqualTo,
               isLessThan: isLessThan,
               isLessThanOrEqualTo: isLessThanOrEqualTo,
               isGreaterThan: isGreaterThan,
@@ -141,6 +146,7 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
               arrayContains: arrayContains,
               arrayContainsAny: arrayContainsAny,
               whereIn: whereIn,
+              whereNotIn: whereNotIn,
               isNull: isNull,
             )
             .snapshots()

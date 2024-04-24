@@ -84,6 +84,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
     String collectionPath, {
     String? filterFieldPath,
     dynamic isEqualTo,
+    dynamic isNotEqualTo,
     dynamic isLessThan,
     dynamic isLessThanOrEqualTo,
     dynamic isGreaterThan,
@@ -91,6 +92,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
     dynamic arrayContains,
     List<dynamic>? arrayContainsAny,
     List<dynamic>? whereIn,
+    List<dynamic>? whereNotIn,
     bool isNull = false,
     Completer<bool>? initalDataLoadComplete,
   }) async* {
