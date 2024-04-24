@@ -7,7 +7,6 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_bibliography.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_bibliography.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_bibliography.dart';
-import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 
@@ -25,7 +24,8 @@ class StaticJsonGenerator {
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() async => Settings().init());
+  setUpAll(() async => lockWebFetchTreadedCache);
+  tearDownAll(() async => lockWebFetchTreadedCache);
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////

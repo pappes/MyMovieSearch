@@ -8,7 +8,6 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
-import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 
@@ -20,7 +19,8 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() async => Settings().init());
+  setUpAll(() async => lockWebFetchTreadedCache);
+  tearDownAll(() async => lockWebFetchTreadedCache);
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////

@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Helper functions
@@ -59,6 +61,27 @@ Matcher containsSubstring(String substring, {String startsWith = ''}) {
 
   return predicate(testFunction);
 }
+
+Future<bool> waitForExcusiveAccess(String mutexName) async {
+  final lockFile = File('/tmp/testMutex_$mutexName.txt');
+  while (lockFile.existsSync()) {
+    await Future<void>.delayed(const Duration(seconds: 1));
+  }
+  lockFile.openSync(mode: FileMode.write).closeSync();
+  return true;
+}
+
+Future<void> releaseExcusiveAccess(String mutexName) async {
+  File('/tmp/testMutex_$mutexName.txt').deleteSync();
+}
+
+Future<bool> lockWebFetchTreadedCache() async {
+  Settings().init();
+  return waitForExcusiveAccess('WebFetchTreadedCache');
+}
+
+Future<void> unlockWebFetchTreadedCache() async =>
+    releaseExcusiveAccess('WebFetchTreadedCache');
 
 /// Expectation matcher for test framework to compare DTOs
 class MovieResultDTOMatcher extends Matcher {
