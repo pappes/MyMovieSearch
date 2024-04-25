@@ -84,7 +84,6 @@ void main() {
         final movie = MovieResultDTO().init(uniqueId: id, type: type);
         final actual = movie.getDetailsPage();
         final param = actual.params as Map;
-        final dto = param['dto'] as MovieResultDTO;
 
         expect(
           actual.routePath.name,
@@ -92,17 +91,10 @@ void main() {
           reason: 'criteria: id=$id , route = $route, type=$type',
         );
         expect(
-          dto.uniqueId,
+          param['dtoId'],
           id,
           reason: 'criteria: id=$id , route = $route, type=$type',
         );
-        if (type != null) {
-          expect(
-            dto.type.toString(),
-            type,
-            reason: 'criteria: id=$id , route = $route, type=$type',
-          );
-        }
         //expect(actual.reference, ref, reason: 'criteria: id=$id type=$type');
       }
 

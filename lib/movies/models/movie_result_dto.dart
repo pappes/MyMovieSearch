@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:math' show max, min;
@@ -140,15 +141,18 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
     return {};
   }
 
-  static Map<String, dynamic> routeState(MovieResultDTO dto) =>
-      {'id': nextId++, 'dto': dto};
+  static Map<String, dynamic> routeState(MovieResultDTO dto) {
+    unawaited(DtoCache.singleton().merge(dto));
+    return {'id': nextId++, 'dtoId': dto.uniqueId};
+  }
 
   static MovieResultDTO getDto(GoRouterState state) {
     final input = _getMap(state);
-    if (input.containsKey('dto')) {
-      final criteria = input['dto'];
-      if (criteria != null && criteria is MovieResultDTO) {
-        return criteria;
+    if (input.containsKey('dtoId')) {
+      final criteria = input['dtoId'];
+      if (criteria != null && criteria is String) {
+        return DtoCache.singleton().fetchSynchronously(criteria) ??
+            MovieResultDTO().init(uniqueId: criteria);
       }
       return dtoFromPrimitives(criteria);
     }
@@ -418,6 +422,16 @@ class DtoCache {
     return cache;
   }
 
+  /// Retrieve data from the memory cache if available.
+  ///
+  MovieResultDTO? fetchSynchronously(String uniqueId) {
+    try {
+      return _globalDtoCache.get(uniqueId);
+    } catch (e) {
+      return null;
+    }
+  }
+
   /// Retrieve data from the cache.
   ///
   Future<MovieResultDTO> fetch(MovieResultDTO newValue) async =>
@@ -631,85 +645,90 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   ///
   /// All returned objects are compatible with the StandardMessageCodec class.
   /// i.e. only contain string, number, bool, map or list.
-  Map<String, Object> toMap({bool includeRelated = true}) {
+  Map<String, Object> toMap({
+    bool includeRelated = true,
+    bool condensed = false,
+  }) {
     final result = <String, Object>{};
     final defaultValues = MovieResultDTO();
     result[movieDTOUniqueId] = uniqueId;
-    if (bestSource != defaultValues.bestSource) {
-      result[movieDTOBestSource] = bestSource.toString();
-    }
     if (title != defaultValues.title) result[movieDTOTitle] = title;
-    if (alternateTitle != defaultValues.alternateTitle) {
-      result[movieDTOAlternateTitle] = alternateTitle;
-    }
-    if (charactorName != defaultValues.charactorName) {
-      result[movieDTOCharactorName] = charactorName;
-    }
-
-    if (type != defaultValues.type) {
-      result[movieDTOType] = type.toString();
-    }
-    if (year != defaultValues.year) {
-      result[movieDTOYear] = year.toString();
-    }
-    if (yearRange != defaultValues.yearRange) {
-      result[movieDTOYearRange] = yearRange;
-    }
-    if (runTime != defaultValues.runTime) {
-      result[movieDTORunTime] = runTime.inSeconds.toString();
-    }
-    if (language != defaultValues.language) {
-      result[movieDTOLanguage] = language.toString();
-    }
-    if (creditsOrder != defaultValues.creditsOrder) {
-      result[movieDTOcreditsOrder] = creditsOrder.toString();
-    }
-
-    if (languages != defaultValues.languages && languages.isNotEmpty) {
-      result[movieDTOLanguages] = json.encode(languages.toList());
-    }
-    if (genres != defaultValues.genres && genres.isNotEmpty) {
-      result[movieDTOGenres] = json.encode(genres.toList());
-    }
-    if (keywords != defaultValues.keywords && keywords.isNotEmpty) {
-      result[movieDTOKeywords] = json.encode(keywords.toList());
-    }
-    if (description != defaultValues.description) {
-      result[movieDTODescription] = description;
-    }
-    if (userRating != defaultValues.userRating) {
-      result[movieDTOUserRating] = userRating.toString();
-    }
-    if (userRatingCount != defaultValues.userRatingCount) {
-      result[movieDTOUserRatingCount] = userRatingCount.toString();
-    }
-    if (censorRating != defaultValues.censorRating) {
-      result[movieDTOCensorRating] = censorRating.toString();
-    }
-    if (imageUrl != defaultValues.imageUrl) {
-      result[movieDTOImageUrl] = imageUrl;
-    }
-
-    if (sources.isNotEmpty) {
-      final sourcesMap = <String, String>{};
-      for (final source in sources.entries) {
-        sourcesMap[source.key.toString()] = source.value;
+    if (!condensed) {
+      if (bestSource != defaultValues.bestSource) {
+        result[movieDTOBestSource] = bestSource.toString();
       }
-      result[movieDTOSources] = sourcesMap;
-    }
+      if (alternateTitle != defaultValues.alternateTitle) {
+        result[movieDTOAlternateTitle] = alternateTitle;
+      }
+      if (charactorName != defaultValues.charactorName) {
+        result[movieDTOCharactorName] = charactorName;
+      }
 
-    if (includeRelated && related.isNotEmpty) {
-      // convert each related dto to a string
-      final relatedMap = <String, Object>{};
-      for (final category in related.entries) {
-        final movies = <String, dynamic>{};
-        for (final dto in category.value.entries) {
-          final movieMap = dto.value.toMap();
-          movies[dto.value.uniqueId] = movieMap;
+      if (type != defaultValues.type) {
+        result[movieDTOType] = type.toString();
+      }
+      if (year != defaultValues.year) {
+        result[movieDTOYear] = year.toString();
+      }
+      if (yearRange != defaultValues.yearRange) {
+        result[movieDTOYearRange] = yearRange;
+      }
+      if (runTime != defaultValues.runTime) {
+        result[movieDTORunTime] = runTime.inSeconds.toString();
+      }
+      if (language != defaultValues.language) {
+        result[movieDTOLanguage] = language.toString();
+      }
+      if (creditsOrder != defaultValues.creditsOrder) {
+        result[movieDTOcreditsOrder] = creditsOrder.toString();
+      }
+
+      if (languages != defaultValues.languages && languages.isNotEmpty) {
+        result[movieDTOLanguages] = json.encode(languages.toList());
+      }
+      if (genres != defaultValues.genres && genres.isNotEmpty) {
+        result[movieDTOGenres] = json.encode(genres.toList());
+      }
+      if (keywords != defaultValues.keywords && keywords.isNotEmpty) {
+        result[movieDTOKeywords] = json.encode(keywords.toList());
+      }
+      if (description != defaultValues.description) {
+        result[movieDTODescription] = description;
+      }
+      if (userRating != defaultValues.userRating) {
+        result[movieDTOUserRating] = userRating.toString();
+      }
+      if (userRatingCount != defaultValues.userRatingCount) {
+        result[movieDTOUserRatingCount] = userRatingCount.toString();
+      }
+      if (censorRating != defaultValues.censorRating) {
+        result[movieDTOCensorRating] = censorRating.toString();
+      }
+      if (imageUrl != defaultValues.imageUrl) {
+        result[movieDTOImageUrl] = imageUrl;
+      }
+
+      if (sources.isNotEmpty) {
+        final sourcesMap = <String, String>{};
+        for (final source in sources.entries) {
+          sourcesMap[source.key.toString()] = source.value;
         }
-        relatedMap[category.key] = movies;
+        result[movieDTOSources] = sourcesMap;
       }
-      result[movieDTORelated] = relatedMap;
+
+      if (includeRelated && related.isNotEmpty) {
+        // convert each related dto to a string
+        final relatedMap = <String, Object>{};
+        for (final category in related.entries) {
+          final movies = <String, dynamic>{};
+          for (final dto in category.value.entries) {
+            final movieMap = dto.value.toMap();
+            movies[dto.value.uniqueId] = movieMap;
+          }
+          relatedMap[category.key] = movies;
+        }
+        result[movieDTORelated] = relatedMap;
+      }
     }
     return result;
   }
@@ -1278,9 +1297,13 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     }
   }
 
+  MovieResultDTO inflate() =>
+      DtoCache.singleton().fetchSynchronously(uniqueId) ?? this;
+
   @factory
   // ignore: invalid_factory_method_impl
-  MovieResultDTO clone() => toMap().toMovieResultDTO();
+  MovieResultDTO clone({bool condensed = false}) =>
+      toMap(condensed: condensed).toMovieResultDTO();
 }
 
 extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
@@ -1360,10 +1383,10 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
 
   /// Create a json encoded representation of a [List]<[MovieResultDTO]>.
   ///
-  String toJson() {
+  String toJson({bool condensed = false}) {
     final listContents = <String>[];
     for (final dto in this) {
-      listContents.add(jsonEncode(dto.toMap()));
+      listContents.add(jsonEncode(dto.toMap(condensed: condensed)));
     }
     return jsonEncode(listContents);
   }

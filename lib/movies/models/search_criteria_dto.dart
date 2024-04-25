@@ -89,15 +89,17 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
     return {};
   }
 
-  static Map<String, dynamic> routeState(SearchCriteriaDTO dto) =>
-      {'id': nextId++, 'dto': dto};
+  static Map<String, dynamic> routeState(SearchCriteriaDTO criteriaDto) =>
+      // Condense movieDTO contentes to prevent crashing on restoration.
+      {'id': nextId++, 'dto': criteriaDto.clone(condensed: true)};
 
   static SearchCriteriaDTO getDto(GoRouterState state) {
     final input = _getMap(state);
     if (input.containsKey('dto')) {
       final criteria = input['dto'];
       if (criteria != null && criteria is SearchCriteriaDTO) {
-        return criteria;
+        // Return a clone to prevent unintentional inflation of data.
+        return criteria.clone(inflate: true);
       }
       return dtoFromPrimitives(criteria);
     }
@@ -145,7 +147,8 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
   @override
   Object toPrimitives() => dtoToPrimitives(value);
   Object dtoToPrimitives(SearchCriteriaDTO value) {
-    final map = value.toMap()..addAll({'nextId': '${nextId + 1}'});
+    final map = value.toMap(condensed: true)
+      ..addAll({'nextId': '${nextId + 1}'});
     final json = jsonEncode(map);
     printSizeAndReturn(json);
     return json;
@@ -178,12 +181,12 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
 
   /// Convert a [Map] into a [SearchCriteriaDTO] object.
   ///
-  Map<String, String> toMap() => <String, String>{
+  Map<String, String> toMap({bool condensed = false}) => <String, String>{
         movieCriteriaDTOSearchId: searchId,
         movieCriteriaDTOCriteriaTitle: criteriaTitle,
         movieCriteriaDTOCriteriaType: criteriaType.toString(),
         movieCriteriaDTOCriteriaContext: jsonEncode(criteriaContext?.toJson()),
-        movieCriteriaDTOCriteriaList: criteriaList.toJson(),
+        movieCriteriaDTOCriteriaList: criteriaList.toJson(condensed: condensed),
       };
 
   static List<MovieResultDTO> getMovieList(dynamic inputString) {
@@ -242,7 +245,8 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
 
   @factory
   // ignore: invalid_factory_method_impl
-  SearchCriteriaDTO clone() => toMap().toSearchCriteriaDTO();
+  SearchCriteriaDTO clone({bool condensed = false, bool inflate = false}) =>
+      toMap(condensed: condensed).toSearchCriteriaDTO(inflate: inflate);
 }
 
 extension MapCriteriaDTOConversion on Map<dynamic, dynamic> {
@@ -250,7 +254,7 @@ extension MapCriteriaDTOConversion on Map<dynamic, dynamic> {
   ///
   @factory
   // ignore: invalid_factory_method_impl
-  SearchCriteriaDTO toSearchCriteriaDTO() {
+  SearchCriteriaDTO toSearchCriteriaDTO({bool inflate = false}) {
     final dto = SearchCriteriaDTO()
       ..searchId = dynamicToString(this[movieCriteriaDTOSearchId])
       ..criteriaTitle = dynamicToString(this[movieCriteriaDTOCriteriaTitle])
@@ -267,6 +271,11 @@ extension MapCriteriaDTOConversion on Map<dynamic, dynamic> {
           SearchCriteriaType.values,
         ) ??
         dto.criteriaType;
+    if (inflate) {
+      for (final dto in dto.criteriaList) {
+        dto.merge(dto.inflate());
+      }
+    }
     return dto;
   }
 }

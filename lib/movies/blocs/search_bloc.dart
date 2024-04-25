@@ -2,7 +2,7 @@ import 'dart:async' show StreamSubscription, unawaited;
 
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:equatable/equatable.dart';
-import 'package:hydrated_bloc/hydrated_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -22,7 +22,7 @@ part 'bloc_parts/search_state.dart';
 ///
 /// In progress search results can be accessed from
 /// [SearchBloc].[sortedResults].
-class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
+class SearchBloc extends Bloc<SearchEvent, SearchState> {
   SearchBloc({required this.movieRepository})
       : super(const SearchState.awaitingInput()) {
     on<SearchCompleted>(
@@ -53,23 +53,6 @@ class SearchBloc extends HydratedBloc<SearchEvent, SearchState> {
   bool _throttleActive = false; // There hase been a recent result.
   bool _throttledDataPending = false; // There has been multple recent results.
   String _throttleName = '';
-
-  @override
-  String get id => '';
-
-  @override
-  SearchState fromJson(Map<String, dynamic> json) {
-    //update sorted results
-    if (json.containsKey('sorted_results')) {
-      final jsonList = json['sorted_results']! as String;
-      sortedResults = jsonList.jsonToList();
-    }
-    return SearchState.displayingResults(_searchProgress);
-  }
-
-  @override
-  Map<String, dynamic> toJson(SearchState state) =>
-      {'sorted_results': sortedResults.toJson()};
 
   @override
   // Clean up all open objects.
