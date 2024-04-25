@@ -57,4 +57,23 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
         ),
         returnValue: _i4.Future<Object?>.value(),
       ) as _i4.Future<Object?>);
+
+  @override
+  _i4.Future<Object?> viewFlutterRootPage(_i2.ScreenRoute? page) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #viewFlutterRootPage,
+          [page],
+        ),
+        returnValue: _i4.Future<Object?>.value(),
+      ) as _i4.Future<Object?>);
+
+  @override
+  bool closeCurrentScreen() => (super.noSuchMethod(
+        Invocation.method(
+          #closeCurrentScreen,
+          [],
+        ),
+        returnValue: false,
+      ) as bool);
 }

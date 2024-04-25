@@ -133,6 +133,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should throw TreeConvertException
   /// when unable to covert the tree to [OUTPUT_TYPE].
   @visibleForOverriding
+  @mustBeOverridden
   Future<List<OUTPUT_TYPE>> myConvertTreeToOutputType(
     dynamic listOrMapOrDocument,
   );
@@ -209,6 +210,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Describe where the data is coming from.
   ///
   /// Should be overridden by child classes.
+  @mustBeOverridden
   String myDataSourceName() => 'unknown';
 
   /// Define alternate [Stream] of data for offline operation.
@@ -221,6 +223,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Should be overridden by child classes.
   @visibleForOverriding
+  @mustBeOverridden
   DataSourceFn myOfflineData();
 
   /// Generates an error message in the format of <OUTPUT_TYPE>.
@@ -230,6 +233,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should be overridden by child classes.
   /// Called when an error occurs.
   @visibleForOverriding
+  @mustBeOverridden
   OUTPUT_TYPE myYieldError(String contents);
 
   /// Define the [Uri] called to fetch online data
@@ -239,12 +243,14 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// an empty Uri() must be returned.
   ///
   /// Should be overridden by child classes.
+  @mustBeOverridden
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1});
 
   /// converts [criteria] as a string representation.
   ///
   /// Can be overridden by child classes.
   /// If this is blank the query will not run!
+  @mustBeOverridden
   String myFormatInputAsText() => criteria?.toString() ?? '';
 
   /// converts [criteria] as a unique path.

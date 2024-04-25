@@ -330,13 +330,14 @@ class MMSFlutterCanvas {
   Future<Object?> _invokeChromeCustomTabs(String url) async {
     Object? retval;
     await tabs
-        .launch(
-          url,
-          customTabsOption: tabs.CustomTabsOption(
-            toolbarColor: Theme.of(context!).primaryColor,
-            enableDefaultShare: true,
-            enableUrlBarHiding: true,
-            showPageTitle: true,
+        .launchUrl(
+          Uri.parse(url),
+          customTabsOptions: tabs.CustomTabsOptions(
+            urlBarHidingEnabled: true,
+            showTitle: true,
+            colorSchemes: tabs.CustomTabsColorSchemes.defaults(
+              toolbarColor: Theme.of(context!).primaryColor,
+            ),
           ),
         )
         .onError((error, stackTrace) => retval = _customTabsError(error, url));

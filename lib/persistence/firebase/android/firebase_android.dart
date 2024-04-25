@@ -91,8 +91,8 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
   Stream<Map<String, String>> fetchRecords(
     String collectionPath, {
     String? filterFieldPath,
-    dynamic isEqualTo = notSetQueryParam,
-    dynamic isNotEqualTo = notSetQueryParam,
+    dynamic isEqualTo,
+    dynamic isNotEqualTo,
     dynamic isLessThan,
     dynamic isLessThanOrEqualTo,
     dynamic isGreaterThan,
