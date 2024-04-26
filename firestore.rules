@@ -1,9 +1,94 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
+  
+    function longExpiry() {
+      let futureDate = timestamp.date(2025, 12, 31);
+      return  request.time < futureDate;
+    }
+  
+    function pastExpiry() {
+      let futureDate = timestamp.date(2023, 12, 31);
+      return  request.time < futureDate;
+    }
+    
+    // specific top level rules
+    match /{document} {
+      allow read: if
+          longExpiry() &&
+          (document == 'testing' || document == 'dvds')
+    }
+    // generic top level rules (were used for initial setup)
+    match /{document} {
       allow read, write: if
-          request.time < timestamp.date(2021, 8, 31);
+          pastExpiry();
+    }
+    // generic top level rules (were used for initial setup)
+    match /{document} {
+      allow read: if
+          pastExpiry();
+    }
+    match /MMSNavLog/{document=**} {
+      allow read, write: if
+          pastExpiry();
+    }
+    // tests
+    match /testing/{testID} {
+      allow read, write: if
+          longExpiry() 
+          // Looks like we need access too all records to query the collection
+          // && (testID == '123456' || testID == '123457');
+    }
+    // DVD catalogue
+    match /dvds/{document=**} {
+      allow read, write: if
+          longExpiry();
+    }
+    // new screens
+    match /MMSNavLog/screen/errordetails/{document=**} {
+      allow read, write: if
+          longExpiry();
+    }
+    match /MMSNavLog/screen/moviedetails/{document=**} {
+      allow read, write: if
+          longExpiry();
+    }
+    match /MMSNavLog/screen/persondetails/{document=**} {
+      allow read, write: if
+          longExpiry();
+    }
+    match /MMSNavLog/screen/searchresults/{document=**} {
+      allow read, write: if
+          longExpiry();
+    }
+    match /MMSNavLog/screen/addlocation/{document=**} {
+      allow read, write: if
+          longExpiry();
+    }
+    match /MMSNavLog/screen/search/{document=**} {
+      allow read, write: if
+          longExpiry();
+    }
+    match /MMSNavLog/screen/dvds/{document=**} {
+      allow read, write: if
+          longExpiry();
+    }
+    // old screens
+    match /MMSNavLog%5Cerrordetails/{document=**} {
+      allow read, write: if
+          pastExpiry();
+    }
+    match /MMSNavLog%5Cmoviedetails/{document=**} {
+      allow read, write: if
+          pastExpiry();
+    }
+    match /MMSNavLog%5Cpersondetails/{document=**} {
+      allow read, write: if
+          pastExpiry();
+    }
+    match /MMSNavLog%5Csearchresults/{document=**} {
+      allow read, write: if
+          pastExpiry();
     }
   }
 }

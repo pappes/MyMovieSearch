@@ -30,8 +30,9 @@ lib/secret.dart
 .buildlog/
 .history
 .svn/
+migrate_working_dir/
 
-# IntelliJ relatedAP
+# IntelliJ related
 *.iml
 *.ipr
 *.iws

@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+//import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart' as android_firebase
     hide EmailAuthProvider, PhoneAuthProvider;
 import 'package:firebase_core/firebase_core.dart';
@@ -30,12 +30,13 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
     loginStatusEvent(user);
     stream.listen(loginStatusEvent);
 
-    final androidInfo = await DeviceInfoPlugin().androidInfo;
+    //final androidInfo = await DeviceInfoPlugin().androidInfo;
+
     // Pixel 8 = 'android.Google.Pixel 8 Pro'
     // samsung fold = 'android.samsung.SM-F926B'
     // samsung s8 = 'android.samsung.SM-G950F'
-    deviceType = 'android.'
-        '${androidInfo.manufacturer}.${androidInfo.model}';
+    //deviceType = 'android.' '${androidInfo.manufacturer}.${androidInfo.model}';
+    deviceType = 'android.Google.Pixel 8 Pro';
 
     return user != null;
   }
