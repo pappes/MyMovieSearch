@@ -36,7 +36,7 @@ final expectedEmptyDTOList =
     ListDTOConversion.decodeList(expectedEmptyDtoJsonStringList);
 const expectedEmptyDtoJsonStringList = [
   r'''
-{"uniqueId":"-1","bestSource":"DataSourceType.tmdbPerson","title":"[tmdbPerson] Error in tmdbPerson with criteria 0 convert error interpreting web text as a map :tmdb call for criteria 0 returned error:Invalid id: The pre-requisite id is invalid or not found.","type":"MovieContentType.error"}
+{"uniqueId":"-1","bestSource":"DataSourceType.tmdbPerson","title":"[tmdbPerson] Error in QueryTMDBPersonDetails with criteria 0 convert error interpreting web text as a map :tmdb call for criteria 0 returned error:Invalid id: The pre-requisite id is invalid or not found.","type":"MovieContentType.error"}
 ''',
 ];
 

@@ -29,7 +29,7 @@ void main() {
   group('tmdb finder unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryTMDBFinder(criteria).myDataSourceName(), 'tmdbFinder');
+      expect(QueryTMDBFinder(criteria).myDataSourceName(), 'QueryTMDBFinder');
     });
 
     // Confirm criteria is displayed as expected.
@@ -243,7 +243,7 @@ void main() {
       final testClass = QueryTMDBFinder(criteria);
       await testClass.myClearCache();
       const expectedException =
-          '[tmdbFinder] Error in tmdbFinder with criteria ttImdbId123 '
+          '[tmdbFinder] Error in QueryTMDBFinder with criteria ttImdbId123 '
           'convert error interpreting web text as a map '
           ':Invalid json returned from web call not valid json';
 
@@ -259,7 +259,7 @@ void main() {
     test('unexpected json contents', () async {
       // Set up the test data.
       const expectedException =
-          '[tmdbFinder] Error in tmdbFinder with criteria ttImdbId123 '
+          '[tmdbFinder] Error in QueryTMDBFinder with criteria ttImdbId123 '
           'convert error interpreting web text as a map '
           ':tmdb results data not detected for criteria ttImdbId123'
           ' in json:[{"hello":"world"}]';

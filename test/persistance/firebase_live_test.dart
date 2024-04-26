@@ -31,7 +31,7 @@ void main() async {
   /// integration tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  await createBackupData();
+  // await createBackupData();
 
   group('firebase', () {
     // Confirm anonymous login is successful.

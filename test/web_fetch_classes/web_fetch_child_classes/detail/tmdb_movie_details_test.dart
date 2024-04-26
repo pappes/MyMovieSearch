@@ -29,7 +29,8 @@ void main() {
   group('tmdb details unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryTMDBMovieDetails(criteria).myDataSourceName(), 'tmdbMovie');
+      expect(QueryTMDBMovieDetails(criteria).myDataSourceName(),
+          'QueryTMDBMovieDetails');
     });
 
     // Confirm criteria is displayed as expected.
@@ -252,7 +253,7 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBMovieDetails(criteria);
       const expectedException =
-          '[tmdbMovie] Error in tmdbMovie with criteria 123 '
+          '[tmdbMovie] Error in QueryTMDBMovieDetails with criteria 123 '
           'convert error interpreting web text as a map '
           ':Invalid json returned from web call not valid json';
 
@@ -268,7 +269,7 @@ void main() {
     test('unexpected json contents', () async {
       // Set up the test data.
       const expectedException =
-          '[tmdbMovie] Error in tmdbMovie with criteria 123 '
+          '[tmdbMovie] Error in QueryTMDBMovieDetails with criteria 123 '
           'convert error interpreting web text as a map '
           ':tmdb results data not detected for criteria '
           '123 in json:[{"hello":"world"}]';

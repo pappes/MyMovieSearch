@@ -288,7 +288,7 @@ void main() {
 
     // Default data source name.
     test('myDataSourceName()', () {
-      expect(testClass.myDataSourceName(), 'unknown');
+      expect(testClass.myDataSourceName(), 'QueryUnknownSourceMocked');
     });
     // Simple criteria text.
     test('myFormatInputAsText()', () {
@@ -411,7 +411,7 @@ void main() {
       }
       expect(
           actualResult,
-          'Error in unknown with criteria $jsonpText '
+          'Error in WebFetchBasic with criteria $jsonpText '
           'fetching web text :Exception: $jsonpText\n');
     });
 
@@ -429,7 +429,7 @@ void main() {
       }
       expect(
           actualResult,
-          'Error in unknown with criteria $jsonpText '
+          'Error in WebFetchBasic with criteria $jsonpText '
           'fetching web text :$jsonpText\n');
     });
   });
@@ -569,11 +569,12 @@ void main() {
           Stream.fromIterable(['Conversion Failed1', 'Conversion Failed2']),
         );
         final expectedOutput = [
-          testClass.myYieldError('Error in unknown with criteria '
+          testClass.myYieldError(
+              'Error in QueryUnknownSourceMocked with criteria '
               '${criteriaDto.criteriaTitle} convert error translating page map '
               'to objects :Unknown: Conversion Failed1'),
           testClass.myYieldError(
-            'Error in unknown with criteria '
+            'Error in QueryUnknownSourceMocked with criteria '
             '${criteriaDto.criteriaTitle} convert error translating page map '
             'to objects :Unknown: Conversion Failed2',
           ),
@@ -603,13 +604,13 @@ void main() {
           Stream.fromIterable(_makeMaps(2)),
         );
         final expectedOutput = [
-          testClass.myYieldError('Error in unknown with criteria '
-              '${criteriaDto.criteriaTitle} '
+          testClass.myYieldError('Error in QueryUnknownSourceMocked '
+              'with criteria ${criteriaDto.criteriaTitle} '
               'non-confomant baseConvertTreeToOutputType error '
               'translating page map to objects '
               ':Exception: Conversion Failed'),
           testClass.myYieldError(
-            'Error in unknown with criteria '
+            'Error in QueryUnknownSourceMocked with criteria '
             '${criteriaDto.criteriaTitle} '
             'non-confomant baseConvertTreeToOutputType error '
             'translating page map to objects '
@@ -642,11 +643,12 @@ void main() {
           Stream.fromIterable(_makeMaps(2)),
         );
         final expectedOutput = [
-          testClass.myYieldError('Error in unknown with criteria '
+          testClass.myYieldError('Error in QueryUnknownSourceMocked '
+              'with criteria '
               '${criteriaDto.criteriaTitle} convert error translating page map '
               'to objects :Conversion Failed'),
           testClass.myYieldError(
-            'Error in unknown with criteria '
+            'Error in QueryUnknownSourceMocked with criteria '
             '${criteriaDto.criteriaTitle} convert error translating page map '
             'to objects :Conversion Failed',
           ),
@@ -670,8 +672,8 @@ void main() {
       'stream exception handling',
       () async {
         final testClass = QueryUnknownSourceMocked(criteriaDto);
-        final expectedError =
-            '[QueryIMDBTitleDetails] Error in unknown with criteria '
+        final expectedError = '[QueryIMDBTitleDetails] '
+            'Error in QueryUnknownSourceMocked with criteria '
             '${criteriaDto.criteriaTitle} stream error translating page map '
             'to objects :more exception handling';
         final actualOutput = testClass.baseConvertTreeToOutputType(
@@ -697,7 +699,7 @@ void main() {
       final expectedOutput = [
         ..._makeDTOs(1),
         testClass.myYieldError(
-          'Error in unknown with criteria '
+          'Error in QueryUnknownSourceMocked with criteria '
           '${criteriaDto.criteriaTitle} convert error translating page map '
           'to objects :Unknown: Conversion Failed2',
         ),
@@ -727,7 +729,7 @@ void main() {
       final expectedOutput = [
         ..._makeDTOs(1),
         testClass.myYieldError(
-          'Error in unknown with criteria '
+          'Error in QueryUnknownSourceMocked with criteria '
           '${criteriaDto.criteriaTitle} convert error translating page map '
           'to objects :Unknown: Conversion Failed2',
         ),
@@ -746,7 +748,7 @@ void main() {
     timeout: const Timeout(Duration(seconds: 5)),
   );
 
-  group('WebFetchBase mocked baseConvertWebTextToTraversableTree', () {
+  group('WebFetchBase mocked WebFetchBasic', () {
     void testConvert(
       String input,
       List<dynamic>? expectedValue, [
@@ -821,7 +823,8 @@ void main() {
         await expectLater(
           actualOutput,
           emitsError(
-            'Error in unknown with criteria ${criteriaDto.criteriaTitle} '
+            'Error in QueryUnknownSourceMocked with criteria'
+            ' ${criteriaDto.criteriaTitle} '
             'non-confomant baseConvertWebTextToTraversableTree '
             'error interpreting web text as a map :Exception: Search Failed',
           ),
@@ -844,7 +847,7 @@ void main() {
         await expectLater(
           actualOutput,
           emitsError(
-            'Error in unknown with criteria ${criteriaDto.criteriaTitle} '
+            'Error in QueryUnknownSourceMocked with criteria ${criteriaDto.criteriaTitle} '
             'convert error interpreting web text as a map :Search Failed',
           ),
         );
@@ -866,7 +869,7 @@ void main() {
         await expectLater(
           actualOutput,
           emitsError(
-            'Error in unknown with criteria ${criteriaDto.criteriaTitle} '
+            'Error in QueryUnknownSourceMocked with criteria ${criteriaDto.criteriaTitle} '
             'stream error interpreting web text as a map '
             ':more exception handling',
           ),
@@ -1007,7 +1010,8 @@ void main() {
         await expectLater(
           actualOutput,
           emitsError(
-            'Error in unknown with criteria ${criteriaDto.criteriaTitle} '
+            'Error in QueryUnknownSourceMocked with criteria'
+            ' ${criteriaDto.criteriaTitle} '
             'non-confomant baseConvertCriteriaToWebText error '
             'fetching web text chunks :Exception: Convert Failed',
           ),
@@ -1025,7 +1029,8 @@ void main() {
         await expectLater(
           actualOutput,
           emitsError(
-            'Error in unknown with criteria ${criteriaDto.criteriaTitle} '
+            'Error in QueryUnknownSourceMocked with criteria '
+            '${criteriaDto.criteriaTitle} '
             'fetching web text chunks :Convert Failed',
           ),
         );
@@ -1057,8 +1062,9 @@ void main() {
     test('http exception', () async {
       final criteria = SearchCriteriaDTO().fromString('EXCEPTION');
       final testClass = QueryUnknownSourceMocked(criteria);
-      final expectedResult = 'Error in unknown with criteria '
-          '${criteria.criteriaTitle} fetching web text: :Exception: go away!';
+      final expectedResult = 'Error in QueryUnknownSourceMocked '
+          'with criteria ${criteria.criteriaTitle} '
+          'fetching web text: :Exception: go away!';
       final fetchResult = await testClass.baseFetchWebText(criteria);
       expect(fetchResult, emitsError(expectedResult));
     });
@@ -1066,8 +1072,8 @@ void main() {
     test('socket exception', () async {
       final criteria = SearchCriteriaDTO().fromString('SOCKETEXCEPTION');
       final testClass = QueryUnknownSourceMocked(criteria);
-      final expectedResult = 'Error in unknown with criteria '
-          '${criteria.criteriaTitle} '
+      final expectedResult = 'Error in QueryUnknownSourceMocked '
+          'with criteria ${criteria.criteriaTitle} '
           'unable to contact website, has the host moved? : '
           ":SocketException: Failed host lookup: 'solidtorrents.eu'";
       final fetchResult = await testClass.baseFetchWebText(criteria);
@@ -1113,8 +1119,9 @@ void main() {
       'http error code 404',
       () async {
         const input = 'HTTP404';
-        const output =
-            '[QueryIMDBTitleDetails] Error in unknown with criteria $input '
+        const output = '[QueryIMDBTitleDetails] '
+            'Error in QueryUnknownSourceMocked '
+            'with criteria $input '
             'stream error interpreting web text as a map :Error in http read, '
             'HTTP status code : 404 for https://www.unknown.com/title/HTTP404/?ref_=fn_tt_tt_1';
         await testTransform(input, null, output);
@@ -1125,8 +1132,9 @@ void main() {
       'http EXCEPTION',
       () async {
         const input = 'EXCEPTION';
-        const output =
-            '[QueryIMDBTitleDetails] Error in unknown with criteria $input '
+        const output = '[QueryIMDBTitleDetails] '
+            'Error in QueryUnknownSourceMocked '
+            'with criteria $input '
             'fetching web text: :Exception: go away!';
         await testTransform(input, null, output);
       },
