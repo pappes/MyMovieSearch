@@ -29,8 +29,10 @@ void main() {
   group('tmdb details unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(QueryTMDBPersonDetails(criteria).myDataSourceName(),
-          'QueryTMDBPersonDetails');
+      expect(
+        QueryTMDBPersonDetails(criteria).myDataSourceName(),
+        'QueryTMDBPersonDetails',
+      );
     });
 
     // Confirm criteria is displayed as expected.

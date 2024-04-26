@@ -259,7 +259,8 @@ void main() {
         const startId = 5000;
         final queries = _makeQueries(startId, 1);
         final errorMessage = MovieResultDTO().error(
-          '[QueryIMDBTitleDetails] Error in QueryIMDBTitleDetailsMocked with criteria '
+          '[QueryIMDBTitleDetails] Error in QueryIMDBTitleDetailsMocked '
+          'with criteria '
           'tt$startId stream error interpreting web text as a map '
           ':Error in http read, HTTP status code : 404 for '
           'https://www.imdb.com/title/tt$startId/?ref_=fn_tt_tt_1',

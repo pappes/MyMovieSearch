@@ -847,7 +847,8 @@ void main() {
         await expectLater(
           actualOutput,
           emitsError(
-            'Error in QueryUnknownSourceMocked with criteria ${criteriaDto.criteriaTitle} '
+            'Error in QueryUnknownSourceMocked with criteria '
+            '${criteriaDto.criteriaTitle} '
             'convert error interpreting web text as a map :Search Failed',
           ),
         );
@@ -869,7 +870,8 @@ void main() {
         await expectLater(
           actualOutput,
           emitsError(
-            'Error in QueryUnknownSourceMocked with criteria ${criteriaDto.criteriaTitle} '
+            'Error in QueryUnknownSourceMocked with criteria '
+            '${criteriaDto.criteriaTitle} '
             'stream error interpreting web text as a map '
             ':more exception handling',
           ),
