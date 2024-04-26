@@ -35,7 +35,7 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
     // Pixel 8 = 'android.Google.Pixel 8 Pro'
     // samsung fold = 'android.samsung.SM-F926B'
     // samsung s8 = 'android.samsung.SM-G950F'
-    //deviceType = 'android.' '${androidInfo.manufacturer}.${androidInfo.model}';
+    //deviceType = 'android.''${androidInfo.manufacturer}.${androidInfo.model}';
     deviceType = 'android.Google.Pixel 8 Pro';
 
     return user != null;

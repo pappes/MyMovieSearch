@@ -13,11 +13,15 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// ```dart
 /// QueryTMDBPersonDetails().readList(criteria);
 /// ```
+// ignore: missing_override_of_must_be_overridden
 class QueryTMDBPersonDetails extends QueryTMDBCommon {
   QueryTMDBPersonDetails(super.criteria) {
     baseURL = 'https://api.themoviedb.org/3/person/';
     source = DataSourceType.tmdbPerson;
   }
+
+  @override
+  String myDataSourceName() => 'QueryTMDBPersonDetails';
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.

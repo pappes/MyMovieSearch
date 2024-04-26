@@ -16,6 +16,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// ```dart
 /// QueryTMDBFinder().readList(criteria);
 /// ```
+// ignore: missing_override_of_must_be_overridden
 class QueryTMDBFinder extends QueryTMDBCommon {
   QueryTMDBFinder(super.criteria) {
     baseURL = 'https://api.themoviedb.org/3/find/';
@@ -24,6 +25,9 @@ class QueryTMDBFinder extends QueryTMDBCommon {
     imdbId = criteria.criteriaTitle;
   }
   String imdbId = '';
+
+  @override
+  String myDataSourceName() => 'QueryTMDBFinder';
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.

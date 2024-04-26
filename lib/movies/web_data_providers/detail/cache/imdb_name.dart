@@ -10,6 +10,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 ///
 /// Caches results in default thread but moves data retrieval to
 /// a different thread.  Runs lower priority requests on a slower thread.
+// ignore: missing_override_of_must_be_overridden
 mixin ThreadedCacheIMDBNameDetails
     on WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> {
   static final normalQueue = <String>{};

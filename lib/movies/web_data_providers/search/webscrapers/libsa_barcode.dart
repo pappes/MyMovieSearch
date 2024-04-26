@@ -20,6 +20,7 @@ const yearSelector = '.displayElementText.PUBDATE';
 /// ```dart
 /// ScrapeLibsaBarcodeSearch().readList(criteria, limit: 10)
 /// ```
+// ignore: missing_override_of_must_be_overridden
 mixin ScrapeLibsaBarcodeSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   final movieData = <Map<String, dynamic>>[];

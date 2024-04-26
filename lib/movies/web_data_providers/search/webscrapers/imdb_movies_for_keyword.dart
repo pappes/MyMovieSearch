@@ -30,6 +30,7 @@ const keywordKeywords = 'keywords';
 /// ```dart
 /// ScrapeIMDBMoviesForKeyword().readList(criteria, limit: 10)
 /// ```
+// ignore: missing_override_of_must_be_overridden
 mixin ScrapeIMDBMoviesForKeyword
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final htmlDecode = HtmlUnescape();

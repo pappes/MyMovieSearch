@@ -29,12 +29,16 @@ import '../../web_fetch_unit_test.mocks.dart';
 //HttpClientRequest.close() = HttpClientResponse
 //HttpClientResponse.statusCode = 200
 //HttpClientResponse.transform(utf8.decoder) = stream<String>
+// ignore: missing_override_of_must_be_overridden
 class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
   QueryIMDBTitleDetailsMocked(
     super.criteria,
     this.expectedCriteria, {
     this.httpStatus = 200,
   });
+
+  @override
+  String myDataSourceName() => 'QueryIMDBTitleDetailsMocked';
 
   /// Returns a new [HttpClient] instance to allow mocking in tests.
   late int httpStatus;

@@ -20,6 +20,7 @@ const sizeSelector = '.quality-size';
 const descriptionSelector = '#movie-tech-specs .tech-spec-info';
 
 /// Implements a web scraper for retrieving download details from yts.
+// ignore: missing_override_of_must_be_overridden
 mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Convert web text to a traversable tree of [List] or [Map] data.
   @override

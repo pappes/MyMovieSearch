@@ -17,6 +17,7 @@ const detailSelector = 'dd';
 /// ```dart
 /// ScrapeTorrentz2Search().readList(criteria, limit: 10)
 /// ```
+// ignore: missing_override_of_must_be_overridden
 mixin ScrapeTorrentz2Search on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   final movieData = <Map<String, dynamic>>[];
   bool validPage = false;

@@ -15,6 +15,7 @@ const columnMovieText = 'result_text';
 const columnMoviePoster = 'primary_photo';
 
 /// Implements a web scraper for retrieving movie details from IMDB.
+// ignore: missing_override_of_must_be_overridden
 mixin ScrapeIMDBTitleDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Reduce computation effort for html extraction.

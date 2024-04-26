@@ -15,6 +15,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 ///   priority: ThreadRunner.verySlow,
 /// );
 /// ```
+// ignore: missing_override_of_must_be_overridden
 abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     extends WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   WebFetchThreadedCache(super.criteria);

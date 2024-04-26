@@ -19,6 +19,7 @@ const leechSelector = '.l';
 /// ```dart
 /// ScrapeMagnetDlSearch().readList(criteria, limit: 10)
 /// ```
+// ignore: missing_override_of_must_be_overridden
 mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   final movieData = <Map<String, dynamic>>[];
   bool validPage = false;

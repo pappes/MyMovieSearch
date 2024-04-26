@@ -133,7 +133,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should throw TreeConvertException
   /// when unable to covert the tree to [OUTPUT_TYPE].
   @visibleForOverriding
-  @mustBeOverridden
   Future<List<OUTPUT_TYPE>> myConvertTreeToOutputType(
     dynamic listOrMapOrDocument,
   );
@@ -223,7 +222,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Should be overridden by child classes.
   @visibleForOverriding
-  @mustBeOverridden
   DataSourceFn myOfflineData();
 
   /// Generates an error message in the format of <OUTPUT_TYPE>.

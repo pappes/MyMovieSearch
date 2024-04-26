@@ -24,6 +24,7 @@ const _searchResultMovieActors = 'topCredits';
 /// ```dart
 /// QueryIMDBSearch().readList(criteria, limit: 10)
 /// ```
+// ignore: missing_override_of_must_be_overridden
 mixin ScrapeIMDBSearchDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Reduce computation effort for html extraction.

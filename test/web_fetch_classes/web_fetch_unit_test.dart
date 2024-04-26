@@ -47,6 +47,9 @@ class QueryUnknownSourceMocked
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   QueryUnknownSourceMocked(this.mockedCriteria) : super(mockedCriteria);
 
+  @override
+  String myDataSourceName() => 'QueryUnknownSourceMocked';
+
   int httpReturnCode = 200;
   SearchCriteriaDTO mockedCriteria;
 
@@ -148,12 +151,16 @@ class QueryUnknownSourceMocked
 
 typedef ConvertTreeToOutputTypeFn = Future<List<String>> Function(dynamic m);
 
+// ignore: missing_override_of_must_be_overridden
 class WebFetchBasic extends WebFetchBase<String, String> {
   WebFetchBasic(super.criteria) {
     selectedDataSource = loopBackDataSource;
   }
   Future<Stream<String>> loopBackDataSource(dynamic s) =>
       Future.value(Stream.value(s.toString()));
+
+  @override
+  String myDataSourceName() => 'WebFetchBasic';
 
   ConvertTreeToOutputTypeFn overriddenMyConvertTreeToOutputType =
       (dynamic map) async => [map.toString()];
@@ -169,8 +176,12 @@ class WebFetchBasic extends WebFetchBase<String, String> {
   String myYieldError(String contents) => contents;
 }
 
+// ignore: missing_override_of_must_be_overridden
 class WebFetchCached extends WebFetchBasic {
   WebFetchCached(super.criteria);
+
+  @override
+  String myDataSourceName() => 'WebFetchCached';
 
   String lastCriteria = '';
   String lastResult = '';

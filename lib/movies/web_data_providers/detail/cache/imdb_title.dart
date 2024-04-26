@@ -6,6 +6,8 @@ import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [TieredCache] for retrieving movie details from IMDB.
+
+// ignore: missing_override_of_must_be_overridden
 mixin ThreadedCacheIMDBTitleDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final _cache = TieredCache<List<MovieResultDTO>>();
