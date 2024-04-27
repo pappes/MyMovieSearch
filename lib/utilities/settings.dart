@@ -9,6 +9,7 @@ import 'package:universal_io/io.dart';
 /// currently supported settings are:
 /// 'OMDB_KEY': 'xxxxxxxx',
 /// 'TMDB_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+/// 'BRAVE_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'GOOGLE_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'GOOGLE_URL': 'https://customsearch.googleapis.com/customsearch/v1?cx=xxxxxxxxxxxx&key='
 /// 'OFFLINE': '!true', // defaults to null (hence online)
@@ -19,6 +20,7 @@ import 'package:universal_io/io.dart';
 /// foo@bar:~$ flutter run \
 ///   --dart-define OMDB_KEY="xxxxxxxx" \
 ///   --dart-define TMDB_KEY="xxxxxxxx" \
+///   --dart-define BRAVE_KEY="xxxxxxxx" \
 ///   --dart-define GOOGLE_KEY="xxxxxxxx" \
 ///   --dart-define GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=" \
 ///   --dart-define OFFLINE="true"
@@ -29,6 +31,7 @@ import 'package:universal_io/io.dart';
 /// foo@bar:~$ flutter build apk \
 ///   --dart-define OMDB_KEY="xxxxxxxx" \
 ///   --dart-define TMDB_KEY="xxxxxxxx" \
+///   --dart-define BRAVE_KEY="xxxxxxxx" \
 ///   --dart-define GOOGLE_KEY="xxxxxxxx" \
 ///   --dart-define GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
 /// ```
@@ -36,6 +39,7 @@ import 'package:universal_io/io.dart';
 /// or from the linux .profile/.bashrc at login time (recommended)
 /// ```shell
 /// export OMDB_KEY="xxxxxxxx"
+/// export BRAVE_KEY="xxxxxxxx"
 /// export GOOGLE_KEY="xxxxxxxx"
 /// export GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
 /// export OMDB_KEY="xxxxxxxx"
@@ -45,6 +49,7 @@ import 'package:universal_io/io.dart';
 /// or from the command line at run time
 /// ```shell
 /// foo@bar:~$ export OMDB_KEY="xxxxxxxx"
+/// foo@bar:~$ export BRAVE_KEY="xxxxxxxx"
 /// foo@bar:~$ export GOOGLE_KEY="xxxxxxxx"
 /// foo@bar:~$ export GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
 /// foo@bar:~$ export OMDB_KEY="xxxxxxxx"
@@ -65,6 +70,8 @@ import 'package:universal_io/io.dart';
 ///                 "--dart-define",
 ///                 "TMDB_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///                 "--dart-define",
+///                 "BRAVE_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///                 "--dart-define",
 ///                 "GOOGLE_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///                 "--dart-define",
 ///                 "GOOGLE_URL=https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
@@ -84,6 +91,8 @@ class Settings {
   String? omdbkey;
   // ignore: prefer_const_constructors
   String? tmdbkey;
+  // ignore: prefer_const_constructors
+  String? bravekey;
   // ignore: prefer_const_constructors
   String? googlekey;
   // ignore: prefer_const_constructors
@@ -108,6 +117,10 @@ class Settings {
       'TMDB_KEY',
       const String.fromEnvironment('TMDB_KEY'),
     );
+    bravekey = _getDynamicEnvOrCompiledEnv(
+      'BRAVE_KEY',
+      const String.fromEnvironment('BRAVE_KEY'),
+    );
     googlekey = _getDynamicEnvOrCompiledEnv(
       'GOOGLE_KEY',
       const String.fromEnvironment('GOOGLE_KEY'),
@@ -125,6 +138,7 @@ class Settings {
     if (omdbkey == null) logger?.t('OMDB_KEY is null');
     logger?.t('settings fetched OMDB_KEY: $omdbkey');
     logger?.t('settings fetched TMDB_KEY: $tmdbkey');
+    logger?.t('settings fetched BRAVE_KEY: $bravekey');
     logger?.t('settings fetched GOOGLE_KEY: $googlekey');
     logger?.t('settings fetched GOOGLE_URL: $googleurl');
     logger?.t('settings fetched OFFLINE: $offline');
