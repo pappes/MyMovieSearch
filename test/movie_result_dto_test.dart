@@ -457,14 +457,23 @@ void main() {
     ) {
       final actual = map.toMovieResultDTO();
 
-      expect(expected, MovieResultDTOMatcher(actual));
+      expect(actual, MovieResultDTOMatcher(expected));
     }
 
     // Convert a dto to a map.
-    test('single_DTO', () {
+    test('single_DTO related map', () {
       final dto = makeResultDTO('abc');
 
       final map = dto.toMap();
+
+      testToMovieResultDTO(dto, map);
+    });
+
+    // Convert a dto to a map.
+    test('single_DTO related list', () {
+      final dto = makeResultDTO('abc');
+
+      final map = dto.toMap(flattenRelated: true);
 
       testToMovieResultDTO(dto, map);
     });

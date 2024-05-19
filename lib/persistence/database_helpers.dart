@@ -66,7 +66,7 @@ class DatabaseHelper {
     return _database!;
   }
 
-  // open the database
+  /// Open the database.
   Future<void> _initDatabase() async {
     if (_database == null) {
       // Init ffi loader if needed.
@@ -82,11 +82,12 @@ class DatabaseHelper {
     }
   }
 
+  /// Get the path to the database.
   Future<String> _getDbLocation() async {
     var location = '/tmp';
     if (Platform.environment.containsKey('FLUTTER_TEST')) {
-      // For testing the PathProvider is not set up correctly
-      // so need special handling
+      // When testing the PathProvider is not set up correctly
+      // so need special handling.
       final linuxLocation =
           await PathProviderLinux().getApplicationDocumentsPath();
       if (linuxLocation != null) location = linuxLocation;
@@ -98,7 +99,7 @@ class DatabaseHelper {
     return join(location, _databaseName);
   }
 
-  // SQL string to create the database
+  /// Uas a SQL string to create the database.
   Future<void> _onCreate(Database db, int version) async {
     await db.execute(
       '''
@@ -111,55 +112,70 @@ class DatabaseHelper {
   }
 
   // Database helper methods:
-
+  /// Insert a movie record into the database.
   Future<int> insert(MovieModel movie) async {
     final Database db = await database;
-    final id = await db.insert(
-      _tableMovie,
-      movie.toMap(),
-      conflictAlgorithm: ConflictAlgorithm.replace,
-    );
-    return id;
+    return mutexLock.protect(() => _insert(db, movie));
   }
 
+  /// Update a movie record in the database.
   Future<int> update(MovieModel movie) async {
     final Database db = await database;
-    final int id = await db.update(
-      _tableMovie,
-      movie.toMap(),
-      where: '$_colMovieUniqueId = ?',
-      whereArgs: [movie.uniqueId],
-    );
-    return id;
+    return mutexLock.protect(() => _update(db, movie));
   }
 
+  /// Delete a movie record from the database.
   Future<int> delete(MovieModel movie) async {
     final Database db = await database;
-    final int id = await db.delete(
-      _tableMovie,
-      where: '$_colMovieUniqueId = ?',
-      whereArgs: [movie.uniqueId],
-    );
-    return id;
+    return mutexLock.protect(() => _delete(db, movie));
   }
 
+  /// Query the database for all stored movie records.
+  Future<List<Map<dynamic, dynamic>>> queryAllMovies() async {
+    final Database db = await database;
+    return mutexLock.protect(() => _queryAllMovies(db));
+  }
+
+  /// Query the database for a specific movie record based on its unique ID.
   Future<MovieModel?> queryMovieUniqueId(String uniqueId) async {
     final Database db = await database;
-    //db.query(tableMovie) can be used to return a list of every row as a Map.
-    final List<Map<dynamic, dynamic>> movieMap = await db.query(
+    return mutexLock.protect(() => _queryMovieUniqueId(db, uniqueId));
+  }
+
+  Future<int> _insert(Database db, MovieModel movie) => db.insert(
+        _tableMovie,
+        movie.toMap(),
+        conflictAlgorithm: ConflictAlgorithm.replace,
+      );
+
+  Future<int> _update(Database db, MovieModel movie) => db.update(
+        _tableMovie,
+        movie.toMap(),
+        where: '$_colMovieUniqueId = ?',
+        whereArgs: [movie.uniqueId],
+      );
+
+  Future<int> _delete(Database db, MovieModel movie) => db.delete(
+        _tableMovie,
+        where: '$_colMovieUniqueId = ?',
+        whereArgs: [movie.uniqueId],
+      );
+
+  Future<List<Map<dynamic, dynamic>>> _queryAllMovies(Database db) =>
+      db.query(_tableMovie);
+
+  /// Query the database for a specific movie record based on its unique ID.
+  Future<MovieModel?> _queryMovieUniqueId(Database db, String uniqueId) async {
+    final movieMap = await db.query(
       _tableMovie,
       columns: [_colMovieUniqueId, _colMovieJson],
       where: '$_colMovieUniqueId = ?',
       whereArgs: [uniqueId],
     );
+    // If a movie record is found, return the corresponding MovieModel object.
     if (movieMap.isNotEmpty) {
       return movieMap.first.toMovieModel();
     }
     return null;
-  }
-
-  Future<List<Map<dynamic, dynamic>>> queryAllMovies() async {
-    final Database db = await database;
-    return db.query(_tableMovie);
   }
 }

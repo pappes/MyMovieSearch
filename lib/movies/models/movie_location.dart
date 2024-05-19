@@ -165,11 +165,11 @@ class MovieLocation {
     return locations;
   }
 
-  /// Dump in-memory cache to json for saving to a file.
+  /// Reload in-memory cache ready for exporting
   ///
-  /// To update backup data run createBackupData() in
-  /// test/persistance/firebase_live_test.dart
-  Future<String> getBackupData() async {
+  /// To update backup data and search engine data run tests in
+  /// test/persistance/firebase_backup_is_not_a_test.dart
+  Future<Map<String, dynamic>> getBackupData() async {
     // Wait for stream to be populated with initial data.
     await init();
     // Wait for data to be consumed from the stream.
@@ -187,7 +187,7 @@ class MovieLocation {
     for (final uniqueId in _movies.keys) {
       movies[uniqueId] = getTitlesForMovie(uniqueId);
     }
-    return jsonEncode(movies);
+    return movies;
   }
 
   /// Find all titles associated with [uniqueId]

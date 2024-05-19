@@ -380,18 +380,25 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
       // Find the categories that movie are collected under
       // e.g. "director", "writer", etc
       for (final category in categories.entries) {
-        if (category.value is Map) {
+        if (category.value is Map || category.value is Iterable) {
           final categoryText = category.key.toString();
-          final categoryContents = category.value as Map;
-          // Build a collection of movies keyed by the unique id.
+          final categoryContents = category.value;
+
+          // Convert the contents of the category to a list.
+          Iterable<dynamic> movieList = [];
+          if (categoryContents is Map) {
+            movieList = categoryContents.values;
+          } else if (categoryContents is Iterable<Map>) {
+            movieList = categoryContents;
+          }
+
+          // Build a collection of movie DTOs keyed by the unique id.
           final MovieCollection movies = {};
-          for (final movieEntry in categoryContents.entries) {
-            final movieMap = movieEntry.value;
-            if (movieMap is Map) {
-              final movieId = movieEntry.key.toString();
+          for (final movieEntry in movieList) {
+            if (movieEntry is Map) {
               // Build DTO based on attributes encoded in the map.
-              final dto = movieMap.toMovieResultDTO();
-              movies[movieId] = dto;
+              final dto = movieEntry.toMovieResultDTO();
+              movies[dto.uniqueId] = dto;
             }
           }
           if (movies.isNotEmpty) {
@@ -648,6 +655,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   Map<String, Object> toMap({
     bool includeRelated = true,
     bool condensed = false,
+    bool flattenRelated = false,
   }) {
     final result = <String, Object>{};
     final defaultValues = MovieResultDTO();
@@ -717,15 +725,25 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       }
 
       if (includeRelated && related.isNotEmpty) {
-        // convert each related dto to a string
         final relatedMap = <String, Object>{};
         for (final category in related.entries) {
-          final movies = <String, dynamic>{};
-          for (final dto in category.value.entries) {
-            final movieMap = dto.value.toMap();
-            movies[dto.value.uniqueId] = movieMap;
+          if (flattenRelated) {
+            // Present related values as a List.
+            final movies = <Map<String, Object>>[];
+            for (final dto in category.value.entries) {
+              final movieMap = dto.value.toMap();
+              movies.add(movieMap);
+            }
+            relatedMap[category.key] = movies;
+          } else {
+            // Present related values as a Map.
+            final movies = <String, dynamic>{};
+            for (final dto in category.value.entries) {
+              final movieMap = dto.value.toMap();
+              movies[dto.value.uniqueId] = movieMap;
+            }
+            relatedMap[category.key] = movies;
           }
-          relatedMap[category.key] = movies;
         }
         result[movieDTORelated] = relatedMap;
       }

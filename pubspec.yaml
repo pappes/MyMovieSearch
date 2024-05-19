@@ -64,6 +64,7 @@ dependencies:
   lint: ^2.0.1
   logger: ^2.0.2                        # Log trace messages to console.
   ####logger_flutter: ^0.7.1             # Shake device to see trace messages.
+  meilisearch: ^0.16.0
   meta: ^1.11.0                          # extended annotations
   mutex: ^3.1.0
   path: ^1.8.3                          # File path manipulation library
