@@ -8,9 +8,10 @@ import 'dart:convert';
 
 import 'package:meilisearch/meilisearch.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 
 const host = 'https://search.dvds.mms.pappes.net';
-const apiKey = 'xxxxxxxxxx';
+final apiKey = Settings().meilikey;
 
 class MeiliSearch {
   MeiliSearch({

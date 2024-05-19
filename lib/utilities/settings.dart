@@ -9,6 +9,7 @@ import 'package:universal_io/io.dart';
 /// currently supported settings are:
 /// 'OMDB_KEY': 'xxxxxxxx',
 /// 'TMDB_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+/// 'MEILISEARCH_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'GOOGLE_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'GOOGLE_URL': 'https://customsearch.googleapis.com/customsearch/v1?cx=xxxxxxxxxxxx&key='
 /// 'OFFLINE': '!true', // defaults to null (hence online)
@@ -18,8 +19,9 @@ import 'package:universal_io/io.dart';
 /// ```shell
 /// foo@bar:~$ flutter run \
 ///   --dart-define OMDB_KEY="xxxxxxxx" \
-///   --dart-define TMDB_KEY="xxxxxxxx" \
-///   --dart-define GOOGLE_KEY="xxxxxxxx" \
+///   --dart-define TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///   --dart-define GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
 ///   --dart-define GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=" \
 ///   --dart-define OFFLINE="true"
 /// ```
@@ -28,15 +30,18 @@ import 'package:universal_io/io.dart';
 /// ```shell
 /// foo@bar:~$ flutter build apk \
 ///   --dart-define OMDB_KEY="xxxxxxxx" \
-///   --dart-define TMDB_KEY="xxxxxxxx" \
-///   --dart-define GOOGLE_KEY="xxxxxxxx" \
+///   --dart-define TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///   --dart-define GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
 ///   --dart-define GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
 /// ```
 ///
 /// or from the linux .profile/.bashrc at login time (recommended)
 /// ```shell
 /// export OMDB_KEY="xxxxxxxx"
-/// export GOOGLE_KEY="xxxxxxxx"
+/// export TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// export MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// export GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// export GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
 /// export OMDB_KEY="xxxxxxxx"
 /// ```
@@ -45,7 +50,9 @@ import 'package:universal_io/io.dart';
 /// or from the command line at run time
 /// ```shell
 /// foo@bar:~$ export OMDB_KEY="xxxxxxxx"
-/// foo@bar:~$ export GOOGLE_KEY="xxxxxxxx"
+/// foo@bar:~$ export TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// foo@bar:~$ export MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// foo@bar:~$ export GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// foo@bar:~$ export GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
 /// foo@bar:~$ export OMDB_KEY="xxxxxxxx"
 /// foo@bar:~$ export OFFLINE="true"
@@ -64,6 +71,8 @@ import 'package:universal_io/io.dart';
 ///                 "OMDB_KEY=xxxxxxxx",
 ///                 "--dart-define",
 ///                 "TMDB_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///                 "--dart-define",
+///                 "MEILISEARCH_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///                 "--dart-define",
 ///                 "GOOGLE_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///                 "--dart-define",
@@ -84,6 +93,8 @@ class Settings {
   String? omdbkey;
   // ignore: prefer_const_constructors
   String? tmdbkey;
+  // ignore: prefer_const_constructors
+  String? meilikey;
   // ignore: prefer_const_constructors
   String? googlekey;
   // ignore: prefer_const_constructors
@@ -108,6 +119,10 @@ class Settings {
       'TMDB_KEY',
       const String.fromEnvironment('TMDB_KEY'),
     );
+    meilikey = _getDynamicEnvOrCompiledEnv(
+      'MEILISEARCH_KEY',
+      const String.fromEnvironment('MEILISEARCH_KEY'),
+    );
     googlekey = _getDynamicEnvOrCompiledEnv(
       'GOOGLE_KEY',
       const String.fromEnvironment('GOOGLE_KEY'),
@@ -125,6 +140,7 @@ class Settings {
     if (omdbkey == null) logger?.t('OMDB_KEY is null');
     logger?.t('settings fetched OMDB_KEY: $omdbkey');
     logger?.t('settings fetched TMDB_KEY: $tmdbkey');
+    logger?.t('settings fetched MEILISEARCH_KEY: $meilikey');
     logger?.t('settings fetched GOOGLE_KEY: $googlekey');
     logger?.t('settings fetched GOOGLE_URL: $googleurl');
     logger?.t('settings fetched OFFLINE: $offline');

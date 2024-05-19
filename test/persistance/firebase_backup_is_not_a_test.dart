@@ -22,7 +22,7 @@ void main() async {
     );
     test(
       timeout: const Timeout(Duration(minutes: 60)),
-      skip: false,
+      skip: true,
       'getDataForSearchEngine',
       () async {
         await getDataForSearchEngine();
