@@ -1,6 +1,7 @@
 // ignore_for_file: do_not_use_environment
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:google_secret_manager/google_secret_manager.dart';
@@ -14,8 +15,10 @@ import 'package:universal_io/io.dart';
 /// currently supported setting locations are:
 /// 0) source code
 /// 1) compiled dart-define values
-/// 2) runtime environment variables
-/// 3) google secrets (cloud)
+/// 2) google secrets (cloud)
+/// 3) runtime environment variables
+/// it is recommended to use 2) for API keys and other sensitive information
+/// it is recommended to use 3) for test environments
 ///
 ///
 /// currently supported settings are:
@@ -120,7 +123,6 @@ class Settings {
   Settings._internal();
   static final Settings _singleton = Settings._internal();
 
-  late FirebaseApplicationState _fb;
   String googleurl =
       'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
   String? googlekey;
@@ -135,11 +137,17 @@ class Settings {
   bool get offline => 'true' == (_offlineText?.toLowerCase() ?? '');
   set offline(bool val) => _offlineText = val ? 'true' : '!true';
 
+  late FirebaseApplicationState _fb;
+
+  Future<bool> cloudSettingsInitialised = Future.value(false);
+  final _cloudSettingsInit = Completer<bool>();
+
   /// Establish logger for use at runtime and schedules cloud retrieval.
   ///
   /// To be called once during application initialisation and in tests
   /// before accessing values.
   void init([Logger? logger]) {
+    cloudSettingsInitialised = _cloudSettingsInit.future;
     this.logger = logger ?? this.logger;
     // Manually initalise flutter to ensure setting can be loaded before RunApp
     // and to ensure tests are not prevented from calling real http endpoints
@@ -160,7 +168,7 @@ class Settings {
         'GOOGLE_URL',
         const String.fromEnvironment('GOOGLE_URL'),
       ),
-    )!;
+    );
     googlekey = getSecretFromEnv(
       'GOOGLE_KEY',
       const String.fromEnvironment('GOOGLE_KEY'),
@@ -191,13 +199,16 @@ class Settings {
   // Update secrets from the cloud if available.
   Future<void> updateSecretsFromCloud(GoogleSecretManager secrets) async {
     googleurl = googleurl.orBetterYet(
-      await getSecretFromCloud(secrets, 'mms_gc', googleurl),
-    )!;
-    googlekey = await getSecretFromCloud(secrets, 'mms_gk', googlekey);
-    omdbkey = await getSecretFromCloud(secrets, 'mms_o', omdbkey);
-    tmdbkey = await getSecretFromCloud(secrets, 'mms_t', tmdbkey);
-    meilikey = await getSecretFromCloud(secrets, 'mms_s', meilikey);
-    seVmKey = await getSecretFromCloud(secrets, 'mms_se', seVmKey);
+      await getSecretFromCloud(secrets, 'mms_gc', googleurl, 'GOOGLE_URL'),
+    );
+    googlekey =
+        await getSecretFromCloud(secrets, 'mms_gk', googlekey, 'GOOGLE_KEY');
+    omdbkey = await getSecretFromCloud(secrets, 'mms_o', omdbkey, 'OMDB_KEY');
+    tmdbkey = await getSecretFromCloud(secrets, 'mms_t', tmdbkey, 'TMDB_KEY');
+    meilikey =
+        await getSecretFromCloud(secrets, 'mms_s', meilikey, 'MEILISEARCH_KEY');
+    seVmKey = await getSecretFromCloud(
+        secrets, 'mms_se', seVmKey, 'SECRETS_LOCATION');
   }
 
   void logValues() {
@@ -245,18 +256,37 @@ class Settings {
     return null;
   }
 
-  // Retrieves a secret from the cloud.
+// Retrieves a secret from the cloud.
+//
+// Takes four arguments:
+//
+// * [secrets]: An instance of the [GoogleSecretManager] class,
+//         for interacting with the Google Secret Manager service.
+// * [secretName]: The name of the secret to retrieve.
+// * [originalValue]: The original value of the setting.
+// * [environmentVar]: The name of the environment variable to check
+//                     for a better value.
+//
+// Returns a `Future` that resolves to the secret value if it is found,
+// or `null` if the secret is not found or there is an error.
   Future<String?> getSecretFromCloud(
     GoogleSecretManager secrets,
     String secretName,
-    String? orignalValue,
+    String? originalValue,
+    String? environmentVar,
   ) async {
+    if (Platform.environment.containsKey(environmentVar)) return originalValue;
     try {
+      // Attempt to retrieve the secret from the cloud.
       final secret = await secrets.get(secretName);
-      return secret?.payload?.data ?? orignalValue;
+
+      // If the secret is found, decode it and return the value.
+      final decoded = utf8.decode(base64.decode(secret?.payload?.data ?? ''));
+      return decoded.isEmpty ? originalValue : decoded;
     } catch (exception) {
+      // Log any errors that occur during retrieval.
       logger?.e(exception.toString());
-      return orignalValue;
+      return originalValue;
     }
   }
 
@@ -272,6 +302,9 @@ class Settings {
         logger?.t('Settings reinitialised');
         logValues();
       }
+    }
+    if (!_cloudSettingsInit.isCompleted) {
+      _cloudSettingsInit.complete(true);
     }
   }
 

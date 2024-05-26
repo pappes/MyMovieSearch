@@ -68,7 +68,9 @@ void main() {
 
       // Act
       final result = await settings.getSecretsServiceAccount(
-          mockFb, 'deeply/stored/collection/id');
+        mockFb,
+        'deeply/stored/collection/id',
+      );
 
       // Assert
       expect(result, 'secret');
@@ -103,8 +105,8 @@ void main() {
       });
 
       test(
-          'returns null if both environment variable and compiled value are not set',
-          () {
+          'returns null if both environment variable '
+          'and compiled value are not set', () {
         // Arrange
         const environmentVar = 'MissingTEST_ENV_VAR';
         const compiledValue = '';

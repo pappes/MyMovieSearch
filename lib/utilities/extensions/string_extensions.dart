@@ -52,6 +52,6 @@ extension StringHelper on String {
   ///
   /// ```dart
   /// final cleanText = '2001'.orBetterYet('2001: a space odyssey');
-  String? orBetterYet(String? replacement) =>
+  String orBetterYet(String? replacement) =>
       (replacement != null) ? replacement : this;
 }

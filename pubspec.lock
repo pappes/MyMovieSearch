@@ -552,7 +552,7 @@ packages:
     source: hosted
     version: "1.1.0"
   googleapis:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: googleapis
       sha256: c2f311bcd1b3e4052234162edc6b626a9013a7e1385d6aad37e9e6a6c5f89908
@@ -560,7 +560,7 @@ packages:
     source: hosted
     version: "11.4.0"
   googleapis_auth:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: googleapis_auth
       sha256: befd71383a955535060acde8792e7efc11d2fccd03dd1d3ec434e85b68775938
