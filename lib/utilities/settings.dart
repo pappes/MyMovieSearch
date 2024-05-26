@@ -1,61 +1,91 @@
 // ignore_for_file: do_not_use_environment
 
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:google_secret_manager/google_secret_manager.dart';
 import 'package:logger/logger.dart';
+import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:universal_io/io.dart';
 
 /// Load application defined settings.
 ///
+/// currently supported setting locations are:
+/// 0) source code
+/// 1) compiled dart-define values
+/// 2) runtime environment variables
+/// 3) google secrets (cloud)
+///
+///
 /// currently supported settings are:
+/// 'GOOGLE_URL': 'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&key='
+/// 'GOOGLE_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'OMDB_KEY': 'xxxxxxxx',
 /// 'TMDB_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'MEILISEARCH_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-/// 'GOOGLE_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
-/// 'GOOGLE_URL': 'https://customsearch.googleapis.com/customsearch/v1?cx=xxxxxxxxxxxx&key='
+/// not applicable to cloud storage:
+/// 'SECRETS_LOCATION': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 /// 'OFFLINE': '!true', // defaults to null (hence online)
+/// not applicable to non-cloud storage:
+/// 'SE_VM_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 ///
 ///
-/// This can be configured from the command line at compile time (recommended)
+/// This can be configured from google secrets (cloud)
+/// mms_gc = "https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
+/// mms_gk = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// mms_o = "xxxxxxxx"
+/// mms_t = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// mms_s = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// mms_se = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// SECRETS_LOCATION and OFFLINE are not applicable to cloud storage.
+///
+/// or from the linux .profile/.bashrc at login time
 /// ```shell
-/// foo@bar:~$ flutter run \
-///   --dart-define OMDB_KEY="xxxxxxxx" \
-///   --dart-define TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
-///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-///   --dart-define GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
-///   --dart-define GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=" \
-///   --dart-define OFFLINE="true"
-/// ```
-///
-/// or from the command line at build time (recommended)
-/// ```shell
-/// foo@bar:~$ flutter build apk \
-///   --dart-define OMDB_KEY="xxxxxxxx" \
-///   --dart-define TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
-///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-///   --dart-define GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
-///   --dart-define GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
-/// ```
-///
-/// or from the linux .profile/.bashrc at login time (recommended)
-/// ```shell
+/// export GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
+/// export GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// export OMDB_KEY="xxxxxxxx"
 /// export TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// export MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-/// export GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-/// export GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
-/// export OMDB_KEY="xxxxxxxx"
+/// export SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// export OFFLINE="true"
 /// ```
 ///
 ///
 /// or from the command line at run time
 /// ```shell
+/// foo@bar:~$ export GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
+/// foo@bar:~$ export GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// foo@bar:~$ export OMDB_KEY="xxxxxxxx"
 /// foo@bar:~$ export TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-/// foo@bar:~$ export MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-/// foo@bar:~$ export GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-/// foo@bar:~$ export GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
-/// foo@bar:~$ export OMDB_KEY="xxxxxxxx"
+/// foo@bar:~$ export MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// foo@bar:~$ export SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// foo@bar:~$ export OFFLINE="true"
+///
+///
+/// or from the command line at compile time
+/// ```shell
+/// foo@bar:~$ flutter run \
+///   --dart-define GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=" \
+///   --dart-define GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define OMDB_KEY="xxxxxxxx" \
+///   --dart-define TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///   --dart-define SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define OFFLINE="true"
+/// ```
+///
+/// or from the command line at build time
+/// ```shell
+/// foo@bar:~$ flutter build apk \
+///   --dart-define GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
+///   --dart-define GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define OMDB_KEY="xxxxxxxx" \
+///   --dart-define TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///   --dart-define SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+///   --dart-define OFFLINE="true"
+/// ```
 ///
 /// or configured in vscode; but it should be noted
 /// you need to explicitly select this launch configuration when running,
@@ -68,15 +98,17 @@ import 'package:universal_io/io.dart';
 ///             "type": "dart",
 ///             "toolArgs": [
 ///                 "--dart-define",
+///                 "GOOGLE_URL=https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
+///                 "--dart-define",
+///                 "GOOGLE_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///                 "--dart-define",
 ///                 "OMDB_KEY=xxxxxxxx",
 ///                 "--dart-define",
 ///                 "TMDB_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///                 "--dart-define",
 ///                 "MEILISEARCH_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///                 "--dart-define",
-///                 "GOOGLE_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-///                 "--dart-define",
-///                 "GOOGLE_URL=https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
+///                 "SECRETS_LOCATION=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///                 "--dart-define",
 ///                 "OFFLINE=true"
 ///             ]
@@ -88,80 +120,186 @@ class Settings {
   Settings._internal();
   static final Settings _singleton = Settings._internal();
 
-  Logger? logger;
-  // ignore: prefer_const_constructors
-  String? omdbkey;
-  // ignore: prefer_const_constructors
-  String? tmdbkey;
-  // ignore: prefer_const_constructors
-  String? meilikey;
-  // ignore: prefer_const_constructors
+  late FirebaseApplicationState _fb;
+  String googleurl =
+      'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
   String? googlekey;
-  // ignore: prefer_const_constructors
-  String? googleurl;
+  Logger? logger;
+  String? omdbkey;
+  String? tmdbkey;
+  String? meilikey;
+  String? secretsLocation;
+  String? seVmKey;
 
-  String? offlineText = const String.fromEnvironment('OFFLINE');
-  bool get offline => 'true' == (offlineText?.toLowerCase() ?? '');
-  set offline(bool val) => offlineText = val ? 'true' : 'false';
+  String? _offlineText = '!true';
+  bool get offline => 'true' == (_offlineText?.toLowerCase() ?? '');
+  set offline(bool val) => _offlineText = val ? 'true' : '!true';
 
-  /// Establish logger for use at runtime.
+  /// Establish logger for use at runtime and schedules cloud retrieval.
   ///
-  /// To be called once during application initialisation
+  /// To be called once during application initialisation and in tests
   /// before accessing values.
   void init([Logger? logger]) {
     this.logger = logger ?? this.logger;
+    // Manually initalise flutter to ensure setting can be loaded before RunApp
+    // and to ensure tests are not prevented from calling real http endpoints
+    WidgetsFlutterBinding.ensureInitialized();
+    _fb = FirebaseApplicationState();
 
-    omdbkey = _getDynamicEnvOrCompiledEnv(
-      'OMDB_KEY',
-      const String.fromEnvironment('OMDB_KEY'),
-    );
-    tmdbkey = _getDynamicEnvOrCompiledEnv(
-      'TMDB_KEY',
-      const String.fromEnvironment('TMDB_KEY'),
-    );
-    meilikey = _getDynamicEnvOrCompiledEnv(
-      'MEILISEARCH_KEY',
-      const String.fromEnvironment('MEILISEARCH_KEY'),
-    );
-    googlekey = _getDynamicEnvOrCompiledEnv(
+    getSecretsFromEnvironment();
+    logger?.t('Settings initialised');
+    logValues();
+
+    unawaited(_fb.init().then((_) => _updateFromCloud()));
+  }
+
+  // Update secrets from runtime environment or compiled environment.
+  void getSecretsFromEnvironment() {
+    googleurl = googleurl.orBetterYet(
+      getSecretFromEnv(
+        'GOOGLE_URL',
+        const String.fromEnvironment('GOOGLE_URL'),
+      ),
+    )!;
+    googlekey = getSecretFromEnv(
       'GOOGLE_KEY',
       const String.fromEnvironment('GOOGLE_KEY'),
     );
-    googleurl = _getDynamicEnvOrCompiledEnv(
-      'GOOGLE_URL',
-      const String.fromEnvironment('GOOGLE_URL'),
+    omdbkey = getSecretFromEnv(
+      'OMDB_KEY',
+      const String.fromEnvironment('OMDB_KEY'),
     );
-
-    // Manually initalise flutter to ensure setting can be loaded before RunApp
-    // and to ensure tests are not prevented from calling real http enpoints
-    WidgetsFlutterBinding.ensureInitialized();
-    logger?.t('settings Initialised');
-    if (omdbkey == '') logger?.t('OMDB_KEY is empty');
-    if (omdbkey == null) logger?.t('OMDB_KEY is null');
-    logger?.t('settings fetched OMDB_KEY: $omdbkey');
-    logger?.t('settings fetched TMDB_KEY: $tmdbkey');
-    logger?.t('settings fetched MEILISEARCH_KEY: $meilikey');
-    logger?.t('settings fetched GOOGLE_KEY: $googlekey');
-    logger?.t('settings fetched GOOGLE_URL: $googleurl');
-    logger?.t('settings fetched OFFLINE: $offline');
+    tmdbkey = getSecretFromEnv(
+      'TMDB_KEY',
+      const String.fromEnvironment('TMDB_KEY'),
+    );
+    meilikey = getSecretFromEnv(
+      'MEILISEARCH_KEY',
+      const String.fromEnvironment('MEILISEARCH_KEY'),
+    );
+    // Environment only values.
+    secretsLocation = getSecretFromEnv(
+      'SECRETS_LOCATION',
+      const String.fromEnvironment('SECRETS_LOCATION'),
+    );
+    _offlineText = getSecretFromEnv(
+      'OFFLINE',
+      const String.fromEnvironment('OFFLINE'),
+    );
   }
 
-  // Allow compiler to supply a value for [compiledEnv] e.g.
-  // const String.fromEnvironment('OMDB_KEY')
-  // if the runtime environemnt does not define [environmentVar] e.g. 'OMDB_KEY'
-  String? _getDynamicEnvOrCompiledEnv(
+  // Update secrets from the cloud if available.
+  Future<void> updateSecretsFromCloud(GoogleSecretManager secrets) async {
+    googleurl = googleurl.orBetterYet(
+      await getSecretFromCloud(secrets, 'mms_gc', googleurl),
+    )!;
+    googlekey = await getSecretFromCloud(secrets, 'mms_gk', googlekey);
+    omdbkey = await getSecretFromCloud(secrets, 'mms_o', omdbkey);
+    tmdbkey = await getSecretFromCloud(secrets, 'mms_t', tmdbkey);
+    meilikey = await getSecretFromCloud(secrets, 'mms_s', meilikey);
+    seVmKey = await getSecretFromCloud(secrets, 'mms_se', seVmKey);
+  }
+
+  void logValues() {
+    logValue('GOOGLE_URL', googleurl);
+    logValue('GOOGLE_KEY', googlekey);
+    logValue('OMDB_KEY', omdbkey);
+    logValue('TMDB_KEY', tmdbkey);
+    logValue('MEILISEARCH_KEY', meilikey);
+    logValue('SECRETS_LOCATION', secretsLocation);
+    logValue('OFFLINE', _offlineText);
+  }
+
+  void logValue(String label, String? value) {
+    logger?.t('settings fetched $label: $value');
+    if (value == '') logger?.t('$label is empty');
+    if (value == null) logger?.t('$label is null');
+  }
+
+  // Retrieve the secret from the best location available.
+  //
+  // 1) retrieve from the cloud (most up to date)
+  // 2) retrieve from the runtime environment [environmentVar] e.g. 'OMDB_KEY'
+  // 3) Allow compiler to supply a default value for [compiledEnv] e.g.
+  //    const String.fromEnvironment('OMDB_KEY')
+  String? getSecretFromEnv(
     String environmentVar,
     String? compiledEnv,
   ) {
+    // Check if the runtime environment variable is set and not empty.
     final dynamicEnv = Platform.environment[environmentVar];
-    if (dynamicEnv == null || dynamicEnv.isEmpty || dynamicEnv == 'not set') {
-      if (compiledEnv == null ||
-          compiledEnv.isEmpty ||
-          compiledEnv == 'not set') {
-        return null;
-      }
+    if (dynamicEnv != null &&
+        dynamicEnv.isNotEmpty &&
+        dynamicEnv != 'not set') {
+      return dynamicEnv;
+    }
+
+    // If the environment variable is not set, use the compiled value.
+    if (compiledEnv != null &&
+        compiledEnv.isNotEmpty &&
+        compiledEnv != 'not set') {
       return compiledEnv;
     }
-    return dynamicEnv;
+
+    // If neither value is set, return null.
+    return null;
+  }
+
+  // Retrieves a secret from the cloud.
+  Future<String?> getSecretFromCloud(
+    GoogleSecretManager secrets,
+    String secretName,
+    String? orignalValue,
+  ) async {
+    try {
+      final secret = await secrets.get(secretName);
+      return secret?.payload?.data ?? orignalValue;
+    } catch (exception) {
+      logger?.e(exception.toString());
+      return orignalValue;
+    }
+  }
+
+  // Update secrets from the cloud.
+  Future<void> _updateFromCloud() async {
+    if (secretsLocation != null) {
+      final account = await getSecretsServiceAccount(_fb, secretsLocation!);
+      if (account != null) {
+        await GoogleSecretManagerInitializer.initViaServiceAccountJson(
+          account,
+        );
+        await updateSecretsFromCloud(GoogleSecretManager.instance);
+        logger?.t('Settings reinitialised');
+        logValues();
+      }
+    }
+  }
+
+  // Retrieves a service account from a specified location in firebase.
+  //
+  // Takes two arguments:
+  //
+  // * [fb]: An instance of the [FirebaseApplicationState] class,
+  //         for interacting with the Firebase cloud storage service.
+  // * [secretsLocation]: The path to the secret in Firebase.
+  //
+  // Returns a `Futurethe secret value if it is found,
+  // or `null` if the secret is not found or there is an error.
+  Future<String?> getSecretsServiceAccount(
+    FirebaseApplicationState fb,
+    String secretsLocation,
+  ) async {
+    // Extract collection and id from the secretsLocation.
+    final match = RegExp(r'(.*)/([^/]*)$').firstMatch(secretsLocation);
+    if (match == null || match.groupCount != 2) {
+      return null; // Invalid secretsLocation format.
+    }
+    final collection = match.group(1)!;
+    final id = match.group(2)!;
+
+    // Fetch the record from the cloud storage.
+    final record = await fb.fetchRecord(collection, id: id);
+
+    return record?.toString();
   }
 }

@@ -8,7 +8,10 @@ Before compiling it is recommended to generate your own API keys.
 For all supported options for API keys see [Settings] in lib/utlities/settings.dart
 From the command line at build time:
 ```shell
-flutter build apk --dart-define OMDB_KEY="xxxxxxxx" --dart-define TMDB_KEY="xxxxxxxx" --dart-define MEILISEARCH_KEY="xxxxxxxx"  --dart-define GOOGLE_KEY="xxxxxxxx" --dart-define GOOGLE_URL="https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key="
+flutter build apk --dart-define OMDB_KEY="xxxxxxxx" --dart-define TMDB_KEY="xxxxxxxx" \
+        --dart-define MEILISEARCH_KEY="xxxxxxxx"  --dart-define GOOGLE_KEY="xxxxxxxx" \
+        --dart-define GOOGLE_URL="xxxxxxxx" --dart-define SECRETS_LOCATION="xxxxxxxx" \
+        --dart-define OFFLINE="!true" 
 ```
 
 ## Tips and Tricks

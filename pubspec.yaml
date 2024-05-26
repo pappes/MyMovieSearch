@@ -56,6 +56,8 @@ dependencies:
 
 
   go_router: ^14.0.0                    # screen navigation
+  google_cloud: ^0.2.0                  # control GCP cloud resources
+  google_secret_manager: ^1.1.0
   grpc: ^3.2.4                          # extended firedart error handling
   html: ^0.15.0                         # Dart dom and html utilities.
   html_unescape: ^2.0.0                 # decode &apos;

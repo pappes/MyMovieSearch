@@ -28,6 +28,7 @@ def dartEnvironmentVariables = [
     MEILISEARCH_KEY: 'not set',
     GOOGLE_KEY: 'not set',
     GOOGLE_URL: 'not set'
+    SECRETS_LOCATION: 'not set'
 ];
 
 

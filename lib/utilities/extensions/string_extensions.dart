@@ -28,7 +28,8 @@ extension StringHelper on String {
     return temp.replaceAll('_', substitution);
   }
 
-  /// Remove any duplicate whitespace from inside the string and remove leading/trairling whitespace
+  /// Remove any duplicate whitespace from inside the string
+  /// and remove leading/trailing whitespace
   ///
   /// Substitutes a blank space by default
   ///
@@ -45,4 +46,12 @@ extension StringHelper on String {
     final temp = replaceAll(RegExp(twoBlanks), substitution);
     return temp.trim();
   }
+
+  /// Replace the value in the string with a new value
+  /// if the new value is not null
+  ///
+  /// ```dart
+  /// final cleanText = '2001'.orBetterYet('2001: a space odyssey');
+  String? orBetterYet(String? replacement) =>
+      (replacement != null) ? replacement : this;
 }
