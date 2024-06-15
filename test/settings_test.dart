@@ -47,7 +47,7 @@ void main() {
       final mockFb = MockFirebaseApplicationState();
       final settings = Settings();
       when(mockFb.fetchRecord('collection', id: 'id'))
-          .thenAnswer((_) async => {'file': 'secret'});
+          .thenAnswer((_) async => 'secret');
 
       // Act
       final result = await settings.getSecretsServiceAccount(
@@ -64,7 +64,7 @@ void main() {
       final mockFb = MockFirebaseApplicationState();
       final settings = Settings();
       when(mockFb.fetchRecord('deeply/stored/collection', id: 'id'))
-          .thenAnswer((_) async => {'file': 'secret'});
+          .thenAnswer((_) async => 'secret');
 
       // Act
       final result = await settings.getSecretsServiceAccount(

@@ -24,6 +24,14 @@ typedef DataSourceFn = Future<Stream<String>> Function(dynamic s);
 
 /// Fetch data from web sources (web services or web pages).
 ///
+/// Inludes functionality for:
+/// * Retries when encountering server errors with retry delay
+/// * Ability cache results based on search criteria
+/// * Error handling
+/// * Conversion from json, jsonp or html to native objects
+/// * Ability to perform fetch and decode on a separate computation thread
+/// * Return results as a stream or list
+///
 /// Extend [WebFetchBase]
 /// to provide a dynamically switchable stream of <[OUTPUT_TYPE]>
 /// from online and offline sources.
@@ -44,6 +52,24 @@ typedef DataSourceFn = Future<Stream<String>> Function(dynamic s);
 ///   *  is converted to Objects of type [OUTPUT_TYPE]
 ///   *  via [baseConvertTreeToOutputType]
 /// * Exception handling via [myYieldError]
+///
+/// Internal call heirarchy is:
+///   * populateStream or readList or readCachedList
+///     * baseYieldFetchedObjects
+///       * myIsResultCached
+///       * myIsCacheStale
+///       * myFetchResultFromCache
+///       * baseTransform
+///         * baseConvertCriteriaToWebText
+///           * myConvertCriteriaToWebText
+///         * baseFetchWebText (via selectedDataSource)
+///           * myFetchWebText
+///         * baseConvertWebTextToTraversableTree
+///           * myConvertWebTextToTraversableTree
+///             * jsonDecode/parse
+///         * baseConvertTreeToOutputType
+///           * myAddResultToCache
+///           * myConvertTreeToOutputType
 ///
 /// Naming convention for internal methods in this class:
 ///   myMethodName - should be overridden by child class
@@ -204,6 +230,36 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     } else {
       return webStream;
     }
+  }
+
+  /// Call URL or API to get raww response.
+  ///
+  /// Can be overridden by child classes.
+  /// Default implementation pulls HTML.
+  ///
+  /// Should throw SocketException for any networking errors.
+  @visibleForOverriding
+  Future<Stream<String>> myFetchWebText(INPUT_TYPE criteria) async {
+    final encoded = Uri.encodeQueryComponent(
+      myFormatInputAsText(),
+    );
+    final address = myConstructURI(encoded, pageNumber: myGetPageNumber());
+    logger.t('requesting: $address');
+    final client = await baseGetHttpClient().getUrl(address);
+    myConstructHeaders(client.headers);
+    final response = await client.close();
+
+    // Retry with exponential backoff for server errors
+    if (response.statusCode >= 500 && retryDelay <= maxDelay) {
+      final oldDelay = retryDelay;
+      retryDelay = retryDelay * 2;
+      return Future<void>.delayed(Duration(milliseconds: oldDelay))
+          .then((value) => myFetchWebText(criteria));
+    }
+
+    // Check for successful HTTP status before transforming (avoid HTTP 404)
+    return myHttpError(address, response.statusCode, response) ??
+        response.transform(utf8.decoder);
   }
 
   /// Describe where the data is coming from.
@@ -412,19 +468,23 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         .handleError(captureStreamError)
         .timeout(const Duration(seconds: 25))
         .toList();
-    final webText = list.join();
-    final rawObjects = await myConvertWebTextToTraversableTree(webText)
-        .onError<WebConvertException>(captureConvertError)
-        .onError(captureGenericConvertError);
+    if (list.isNotEmpty) {
+      final webText = list.join();
+      final rawObjects = await myConvertWebTextToTraversableTree(webText)
+          .onError<WebConvertException>(captureConvertError)
+          .onError(captureGenericConvertError);
 
-    for (final object in rawObjects) {
-      yield object;
+      for (final object in rawObjects) {
+        yield object;
+      }
     }
 
     for (final error in errors) {
       yield* Stream.error(error);
     }
   }
+
+  Stream<String> broken(Stream<String> webStream) => Stream.error('stuiff');
 
   /// Convert dart [Map] to [OUTPUT_TYPE] object data with exception handling.
   ///
@@ -529,22 +589,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should not be overridden by child classes.
   @visibleForTesting
   Future<Stream<String>> baseFetchWebText(dynamic criteria) async {
-    Uri address;
-    HttpClientResponse response;
-
     try {
       criteria as INPUT_TYPE;
-      final encoded = Uri.encodeQueryComponent(
-        myFormatInputAsText(),
-      );
-      address = myConstructURI(encoded, pageNumber: myGetPageNumber());
-
-      logger.t('requesting: $address');
-      final client = await baseGetHttpClient().getUrl(address);
-      myConstructHeaders(client.headers);
-      final request = client.close();
-
-      response = await request;
+      final text = await myFetchWebText(criteria);
+      return text;
     } on SocketException catch (error) {
       final errorMessage = baseConstructErrorMessage(
         'unable to contact website, has the host moved? :',
@@ -558,18 +606,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       );
       return Stream.error(errorMessage);
     }
-
-    // Retry with exponential backoff for server errors
-    if (response.statusCode >= 500 && retryDelay <= maxDelay) {
-      final oldDelay = retryDelay;
-      retryDelay = retryDelay * 2;
-      return Future<void>.delayed(Duration(milliseconds: oldDelay))
-          .then((value) => baseFetchWebText(criteria));
-    }
-
-    // Check for successful HTTP status before transforming (avoid HTTP 404)
-    return myHttpError(address, response.statusCode, response) ??
-        response.transform(utf8.decoder);
   }
 
   /// Wrap raw error message in web_fetch context.
@@ -592,7 +628,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   HttpClient baseGetHttpClient() => HttpClient();
 }
 
-/// Exception used in myConvertCriteriaToWebText.
+/// Exception used in [WebFetchBase.myConvertCriteriaToWebText].
 class WebFetchException implements Exception {
   WebFetchException(this.cause);
   String cause;
@@ -601,7 +637,7 @@ class WebFetchException implements Exception {
   String toString() => cause;
 }
 
-/// Exception used in myConvertWebTextToTraversableTree.
+/// Exception used in [WebFetchBase.myConvertWebTextToTraversableTree].
 class WebConvertException implements Exception {
   WebConvertException(this.cause);
   String cause;
@@ -610,7 +646,7 @@ class WebConvertException implements Exception {
   String toString() => cause;
 }
 
-/// Exception used in myConvertTreeToOutputType.
+/// Exception used in [WebFetchBase.myConvertTreeToOutputType].
 class TreeConvertException implements Exception {
   TreeConvertException(this.cause);
   String cause;

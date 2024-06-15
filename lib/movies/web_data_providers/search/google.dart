@@ -16,6 +16,7 @@ const _googleResultsPerPage = 10; // More than 10 results in an error!
 /// https://developers.google.com/custom-search/docs/overview
 /// and can be controlled from
 /// https://programmablesearchengine.google.com/controlpanel/all
+///
 /// This custom search filters to imdb.com/title with safesearch turned off.
 ///
 /// ```dart

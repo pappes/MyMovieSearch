@@ -809,6 +809,55 @@ void main() {
       timeout: const Timeout(Duration(seconds: 5)),
     );
 
+    //override myConvertWebTextToTraversableTree to provide a streamed error
+    test(
+      'stream throws error message',
+      () async {
+        final testClass = QueryUnknownSourceMocked(criteriaDto);
+        final actualOutput = testClass.baseConvertWebTextToTraversableTree(
+          Stream<String>.error('error on the stream'),
+        );
+
+        await expectLater(
+          actualOutput.toList,
+          throwsA(
+              'Error in QueryUnknownSourceMocked with criteria criteria stream '
+              'error interpreting web text as a map :error on the stream'),
+        );
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+
+    //override myConvertWebTextToTraversableTree to provide a streamed error
+    test(
+      'stream contents after error',
+      () async {
+        List<String> captureStreamError(dynamic error, StackTrace _) {
+          expect(
+            error,
+            'Error in QueryUnknownSourceMocked with criteria criteria '
+            'stream error interpreting web text as a map :error on the stream',
+            reason: 'myConvertWebTextToTraversableTree was called '
+                'when logic should have stopped due to an error',
+          );
+          return [];
+        }
+
+        final testClass = QueryUnknownSourceMocked(criteriaDto)
+          ..overriddenConvertWebTextToTraversableTree = (_) => throw Exception(
+                'Do Not Want calls to myConvertWebTextToTraversableTree!',
+              );
+        final streamOutput = testClass.baseConvertWebTextToTraversableTree(
+          Stream<String>.error('error on the stream'),
+        );
+        final actualOutput =
+            await streamOutput.handleError(captureStreamError).toList();
+
+        expect(actualOutput, <String>[]);
+      },
+      timeout: const Timeout(Duration(seconds: 5)),
+    );
+
     //override myConvertWebTextToTraversableTree to encapsulate errors
     test(
       'child function generic exception handling',

@@ -14,7 +14,7 @@ import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 const host = 'https://search.dvds.mms.pappes.net';
-final apiKey = Settings().meilikey;
+final apiKey = Settings().meiliadminkey;
 
 class MeiliSearch {
   MeiliSearch({
@@ -46,11 +46,17 @@ class MeiliSearch {
 }
 
 class GCP {
-  String? accountJson = Settings().seVmKey;
+  String? accountJson;
+  Future<void> init() async {
+    Settings().init();
+    await Settings().cloudSettingsInitialised;
+    accountJson = Settings().seVmKey;
+  }
+
   Future<bool> startSearchEngine() async {
     if (accountJson != null) {
-      final zone = 'australia-southeast1-b';
-      final instanceName = 'mms-search-engine';
+      const zone = 'australia-southeast1-b';
+      const instanceName = 'mms-search-engine';
       try {
         final account = jsonDecode(accountJson!) as Map;
         final projectId = account['project_id'] as String;

@@ -6,6 +6,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:google_secret_manager/google_secret_manager.dart';
 import 'package:logger/logger.dart';
+import 'package:mutex/mutex.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:universal_io/io.dart';
@@ -26,7 +27,9 @@ import 'package:universal_io/io.dart';
 /// 'GOOGLE_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'OMDB_KEY': 'xxxxxxxx',
 /// 'TMDB_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+/// 'MEILIADMIN_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'MEILISEARCH_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+/// 'MEILISEARCH_URL': 'https://cloud.meilisearch.com/',
 /// not applicable to cloud storage:
 /// 'SECRETS_LOCATION': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 /// 'OFFLINE': '!true', // defaults to null (hence online)
@@ -40,6 +43,8 @@ import 'package:universal_io/io.dart';
 /// mms_o = "xxxxxxxx"
 /// mms_t = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// mms_s = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// mms_sk = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// mms_su = "https://cloud.meilisearch.com/"
 /// mms_se = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// SECRETS_LOCATION and OFFLINE are not applicable to cloud storage.
 ///
@@ -49,7 +54,9 @@ import 'package:universal_io/io.dart';
 /// export GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// export OMDB_KEY="xxxxxxxx"
 /// export TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// export MEILIADMIN_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// export MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// export MEILISEARCH_URL="https://cloud.meilisearch.com/"
 /// export SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// export OFFLINE="true"
 /// ```
@@ -61,7 +68,9 @@ import 'package:universal_io/io.dart';
 /// foo@bar:~$ export GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// foo@bar:~$ export OMDB_KEY="xxxxxxxx"
 /// foo@bar:~$ export TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// foo@bar:~$ export MEILIADMIN_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// foo@bar:~$ export MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// foo@bar:~$ export MEILISEARCH_URL="https://cloud.meilisearch.com/"
 /// foo@bar:~$ export SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// foo@bar:~$ export OFFLINE="true"
 ///
@@ -73,7 +82,9 @@ import 'package:universal_io/io.dart';
 ///   --dart-define GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
 ///   --dart-define OMDB_KEY="xxxxxxxx" \
 ///   --dart-define TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MEILIADMIN_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///   --dart-define MEILISEARCH_URL="https://cloud.meilisearch.com/",
 ///   --dart-define SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
 ///   --dart-define OFFLINE="true"
 /// ```
@@ -85,7 +96,9 @@ import 'package:universal_io/io.dart';
 ///   --dart-define GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
 ///   --dart-define OMDB_KEY="xxxxxxxx" \
 ///   --dart-define TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MEILIADMIN_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///   --dart-define MEILISEARCH_URL="https://cloud.meilisearch.com/",
 ///   --dart-define SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ///   --dart-define OFFLINE="true"
 /// ```
@@ -109,7 +122,11 @@ import 'package:universal_io/io.dart';
 ///                 "--dart-define",
 ///                 "TMDB_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///                 "--dart-define",
+///                 "MEILIADMIN_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///                 "--dart-define",
 ///                 "MEILISEARCH_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///                 "--dart-define",
+///                 "MEILISEARCH_URL=https://cloud.meilisearch.com/",
 ///                 "--dart-define",
 ///                 "SECRETS_LOCATION=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///                 "--dart-define",
@@ -123,13 +140,15 @@ class Settings {
   Settings._internal();
   static final Settings _singleton = Settings._internal();
 
+  Logger? logger;
   String googleurl =
       'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
   String? googlekey;
-  Logger? logger;
   String? omdbkey;
   String? tmdbkey;
-  String? meilikey;
+  String? meiliadminkey;
+  String? meilisearchkey;
+  String meiliurl = 'https://cloud.meilisearch.com/';
   String? secretsLocation;
   String? seVmKey;
 
@@ -141,24 +160,30 @@ class Settings {
 
   Future<bool> cloudSettingsInitialised = Future.value(false);
   final _cloudSettingsInit = Completer<bool>();
+  bool secretsManagerInitialised = false;
+
+  static final secretsManagermutexLock = Mutex();
 
   /// Establish logger for use at runtime and schedules cloud retrieval.
   ///
   /// To be called once during application initialisation and in tests
   /// before accessing values.
   void init([Logger? logger]) {
-    cloudSettingsInitialised = _cloudSettingsInit.future;
-    this.logger = logger ?? this.logger;
-    // Manually initalise flutter to ensure setting can be loaded before RunApp
-    // and to ensure tests are not prevented from calling real http endpoints
-    WidgetsFlutterBinding.ensureInitialized();
-    _fb = FirebaseApplicationState();
+    if (!_cloudSettingsInit.isCompleted) {
+      cloudSettingsInitialised = _cloudSettingsInit.future;
+      this.logger = logger ?? this.logger;
+      // Manually initialise flutter to ensure that
+      // settings can be loaded before RunApp
+      // and to ensure tests are not prevented from calling real http endpoints
+      WidgetsFlutterBinding.ensureInitialized();
+      _fb = FirebaseApplicationState();
 
-    getSecretsFromEnvironment();
-    logger?.t('Settings initialised');
-    logValues();
+      getSecretsFromEnvironment();
+      logger?.t('Settings initialised');
+      logValues();
 
-    unawaited(_fb.init().then((_) => _updateFromCloud()));
+      unawaited(_fb.init().then((_) => _updateFromCloud()));
+    }
   }
 
   // Update secrets from runtime environment or compiled environment.
@@ -181,9 +206,19 @@ class Settings {
       'TMDB_KEY',
       const String.fromEnvironment('TMDB_KEY'),
     );
-    meilikey = getSecretFromEnv(
+    meiliadminkey = getSecretFromEnv(
+      'MEILIADMIN_KEY',
+      const String.fromEnvironment('MEILIADMIN_KEY'),
+    );
+    meilisearchkey = getSecretFromEnv(
       'MEILISEARCH_KEY',
       const String.fromEnvironment('MEILISEARCH_KEY'),
+    );
+    meiliurl = meiliurl.orBetterYet(
+      getSecretFromEnv(
+        'MEILISEARCH_URL',
+        const String.fromEnvironment('MEILISEARCH_URL'),
+      ),
     );
     // Environment only values.
     secretsLocation = getSecretFromEnv(
@@ -205,10 +240,22 @@ class Settings {
         await getSecretFromCloud(secrets, 'mms_gk', googlekey, 'GOOGLE_KEY');
     omdbkey = await getSecretFromCloud(secrets, 'mms_o', omdbkey, 'OMDB_KEY');
     tmdbkey = await getSecretFromCloud(secrets, 'mms_t', tmdbkey, 'TMDB_KEY');
-    meilikey =
-        await getSecretFromCloud(secrets, 'mms_s', meilikey, 'MEILISEARCH_KEY');
-    seVmKey = await getSecretFromCloud(
-        secrets, 'mms_se', seVmKey, 'SECRETS_LOCATION');
+    meiliadminkey = await getSecretFromCloud(
+      secrets,
+      'mms_s',
+      meiliadminkey,
+      'MEILIADMIN_KEY',
+    );
+    meilisearchkey = await getSecretFromCloud(
+      secrets,
+      'mms_sk',
+      meilisearchkey,
+      'MEILISEARCH_KEY',
+    );
+    meiliurl = meiliurl.orBetterYet(
+      await getSecretFromCloud(secrets, 'mms_su', meiliurl, 'MEILISEARCH_URL'),
+    );
+    seVmKey = await getSecretFromCloud(secrets, 'mms_se', seVmKey, '');
   }
 
   void logValues() {
@@ -216,7 +263,9 @@ class Settings {
     logValue('GOOGLE_KEY', googlekey);
     logValue('OMDB_KEY', omdbkey);
     logValue('TMDB_KEY', tmdbkey);
-    logValue('MEILISEARCH_KEY', meilikey);
+    logValue('MEILIADMIN_KEY', meiliadminkey);
+    logValue('MEILISEARCH_KEY', meilisearchkey);
+    logValue('MEILISEARCH_URL', meiliurl);
     logValue('SECRETS_LOCATION', secretsLocation);
     logValue('OFFLINE', _offlineText);
   }
@@ -295,9 +344,8 @@ class Settings {
     if (secretsLocation != null) {
       final account = await getSecretsServiceAccount(_fb, secretsLocation!);
       if (account != null) {
-        await GoogleSecretManagerInitializer.initViaServiceAccountJson(
-          account,
-        );
+        await secretsManagermutexLock
+            .protect(() => initSecretsManager(account));
         await updateSecretsFromCloud(GoogleSecretManager.instance);
         logger?.t('Settings reinitialised');
         logValues();
@@ -305,6 +353,16 @@ class Settings {
     }
     if (!_cloudSettingsInit.isCompleted) {
       _cloudSettingsInit.complete(true);
+    }
+  }
+
+  // Initialise google secrets manager (only once!)
+  Future<void> initSecretsManager(String account) async {
+    if (!secretsManagerInitialised) {
+      secretsManagerInitialised = true;
+      await GoogleSecretManagerInitializer.initViaServiceAccountJson(
+        account,
+      );
     }
   }
 
