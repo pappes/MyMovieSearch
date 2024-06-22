@@ -252,8 +252,11 @@ class MovieLocation {
   }
 
 // To update backup data run createBackupData() in
-// test/persistance/firebase_live_test.dart
-  static const lastFirebaseBackupDate = 1712983693268;
+// test/persistance/firebase_backup_is_not_a_test.dart
+// then copy data from /tmp/firebaseBackupXXXX.txt to
+// assets/newDVDLibrary.json
+// and update lastFirebaseBackupDate with the new timestamp printed by the test.
+  static const lastFirebaseBackupDate = 1719017443517;
 // DateTime().millisecondsSinceEpoch
 
   Future<void> _loadBackupLocationData() async {
