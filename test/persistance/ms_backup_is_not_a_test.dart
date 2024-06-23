@@ -77,16 +77,21 @@ Future<void> writeJsonFile(String filename, JsonCallback jsonGenerator) async {
 
 Future<void> writeHtmlFile(String filename, List<MovieResultDTO> movies) async {
   logger.w('Writing HTML to $filename ');
-  final html = StringBuffer()
-    ..write(htmlHeader)
-    ..write(jsonToHtml(movies))
+  final html = StringBuffer()..write(htmlHeader);
+  movies.sort((m1, m2) => m1.year.compareTo(m2.year));
+  html.write(jsonToHtml(movies.take(95)));
+  movies.sort((m1, m2) => m2.year.compareTo(m1.year));
+  html.write(jsonToHtml(movies.take(95)));
+  movies.sort((m1, m2) => m2.userRatingCount.compareTo(m1.userRatingCount));
+  html
+    ..write(jsonToHtml(movies.take(50)))
     ..write(htmlFooter);
 
   await File('$filename.html').writeAsString(html.toString(), flush: true);
   logger.w('HTML size ${html.toString().length} ');
 }
 
-String jsonToHtml(List<MovieResultDTO> movies) {
+String jsonToHtml(Iterable<MovieResultDTO> movies) {
   final fb = MovieLocation();
   final html = StringBuffer();
   for (final movie in movies) {
@@ -95,12 +100,12 @@ String jsonToHtml(List<MovieResultDTO> movies) {
       ..write('<div class="image-container">\n')
       ..write('<img class="image-poster" '
           'src="${movie.imageUrl}" alt="${movie.title}">\n')
-      ..write('<div class="image-text">${movie.title}</div>\n');
+      ..write('<div class="image-text">${movie.title}</div>\n')
+      ..write('<div class="stacker-locations">');
     for (final location in locations) {
-      html.write('<div class="image-text">Stacker:${location.libNum} '
-          'position:${location.location}</div>\n');
+      html.write('${location.libNum}:${location.location}, ');
     }
-    html.write('</div>');
+    html.write('</div>\n</div>\n');
   }
   return html.toString();
 }
@@ -205,12 +210,17 @@ const htmlHeader = '''
       }
       .image-text {
         page-break-before: avoid;  /* Discourage page break before the text */
+                font-size: 12px;
+      }
+      .stacker-locations {
+          page-break-before: avoid;/* Discourage page break before the text */
+          font-size: 12px;
       }
     }
     /* Styles for screen viewing */
     .image-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(5, 1fr);
       grid-gap: 10px;
       border: 2px solid #ddd;
     }
@@ -223,6 +233,13 @@ const htmlHeader = '''
         text-align: center;
         border: 1px solid #ddd;
         padding: 5px;
+    }
+    .image-poster {
+        max-height: 300px;
+        max-width: 180px;
+    }
+    .stacker-locations {
+        max-height: 50px;
     }
   </style>
 <body>
