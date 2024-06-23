@@ -3,6 +3,7 @@ import 'dart:io';
 
 //import 'package:firebase_ui_auth/firebase_ui_auth.dart'; //does not compile on linux
 import 'package:flutter/material.dart';
+import 'package:mutex/mutex.dart';
 
 import 'package:my_movie_search/persistence/firebase/android/firebase_android.dart';
 import 'package:my_movie_search/persistence/firebase/linux/firebase_linux.dart';
@@ -38,13 +39,18 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   }
   static FirebaseApplicationState? instance;
 
+  static final loginMutexLock = Mutex();
+
   Future<bool> loggedIn = Future<bool>.value(false);
+
   String? userDisplayName;
   String? userId;
   String? deviceType;
 
   /// Initialise firebase ready for use.
-  Future<void> init() async => loggedIn = login();
+  Future<void> init() async => loggedIn = loginMutexLock.protect(_loginOnce);
+
+  Future<bool> _loginOnce() async => login();
 
   Future<bool> login() async {
     try {

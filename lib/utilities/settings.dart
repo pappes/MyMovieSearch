@@ -156,13 +156,15 @@ class Settings {
   bool get offline => 'true' == (_offlineText?.toLowerCase() ?? '');
   set offline(bool val) => _offlineText = val ? 'true' : '!true';
 
-  late FirebaseApplicationState _fb;
+  late FirebaseApplicationState _firebaseData;
+  bool _firebaseInitialised = false;
 
   Future<bool> cloudSettingsInitialised = Future.value(false);
   final _cloudSettingsInit = Completer<bool>();
   bool secretsManagerInitialised = false;
 
-  static final secretsManagermutexLock = Mutex();
+  static final secretsManagerMutexLock = Mutex();
+  static final secretsInitiaisedMutexLock = Mutex();
 
   /// Establish logger for use at runtime and schedules cloud retrieval.
   ///
@@ -174,16 +176,25 @@ class Settings {
       this.logger = logger ?? this.logger;
       // Manually initialise flutter to ensure that
       // settings can be loaded before RunApp
-      // and to ensure tests are not prevented from calling real http endpoints
+      // and to ensure tests are not prevented from calling real http endpoints.
       WidgetsFlutterBinding.ensureInitialized();
-      _fb = FirebaseApplicationState();
+      _firebaseData = FirebaseApplicationState();
 
       getSecretsFromEnvironment();
       logger?.t('Settings initialised');
       logValues();
 
-      unawaited(_fb.init().then((_) => _updateFromCloud()));
+      // Ensure that only one copy of _asyncInit is running at a time.
+      unawaited(secretsInitiaisedMutexLock.protect(_asyncInit));
     }
+  }
+
+  Future<void> _asyncInit() async {
+    if (!_firebaseInitialised) {
+      _firebaseInitialised = true;
+      await _firebaseData.init();
+    }
+    return _updateFromCloud();
   }
 
   // Update secrets from runtime environment or compiled environment.
@@ -342,9 +353,11 @@ class Settings {
   // Update secrets from the cloud.
   Future<void> _updateFromCloud() async {
     if (secretsLocation != null) {
-      final account = await getSecretsServiceAccount(_fb, secretsLocation!);
+      final account =
+          await getSecretsServiceAccount(_firebaseData, secretsLocation!);
       if (account != null) {
-        await secretsManagermutexLock
+        // Ensure that only one copy of initSecretsManager is running at a time.
+        await secretsManagerMutexLock
             .protect(() => initSecretsManager(account));
         await updateSecretsFromCloud(GoogleSecretManager.instance);
         logger?.t('Settings reinitialised');

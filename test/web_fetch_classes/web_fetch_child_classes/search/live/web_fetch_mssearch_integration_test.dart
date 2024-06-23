@@ -40,7 +40,7 @@ void main() {
 
   group('live QueryMsSearchMovies test', () {
     // Search for a rare movie.
-    test('Run read 3 pages from MsSearch', () async {
+    test('Run read 2 pages from MsSearch', () async {
       final criteria = SearchCriteriaDTO().fromString('humdrum');
       final actualOutput =
           await QueryMsSearchMovies(criteria).readList(limit: 1000);

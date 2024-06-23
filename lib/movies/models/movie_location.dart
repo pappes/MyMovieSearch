@@ -169,20 +169,21 @@ class MovieLocation {
   ///
   /// To update backup data and search engine data run tests in
   /// test/persistance/firebase_backup_is_not_a_test.dart
-  Future<Map<String, dynamic>> getBackupData() async {
+  Future<Map<String, dynamic>> getBackupData({bool clearCache = true}) async {
     // Wait for stream to be populated with initial data.
     await init();
     // Wait for data to be consumed from the stream.
     await Future<void>.delayed(const Duration(seconds: 2));
-    clear();
+    if (clearCache) {
+      clear();
 
-    final streamSubscription = FirebaseApplicationState()
-        .fetchRecords('/dvds')
-        .listen(_cloudDataReceived);
+      final streamSubscription = FirebaseApplicationState()
+          .fetchRecords('/dvds')
+          .listen(_cloudDataReceived);
 
-    await Future<void>.delayed(const Duration(seconds: 10));
-    await streamSubscription.cancel();
-
+      await Future<void>.delayed(const Duration(seconds: 10));
+      await streamSubscription.cancel();
+    }
     final movies = <String, dynamic>{};
     for (final uniqueId in _movies.keys) {
       movies[uniqueId] = getTitlesForMovie(uniqueId);

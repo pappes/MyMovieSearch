@@ -54,7 +54,7 @@ class QueryMsSearchMovies
     final url = Settings().meiliurl;
     final key = Settings().meilisearchkey;
 
-    final MeiliSearchClient client = initialiseApi(url, key);
+    final client = initialiseApi(url, key);
 
     final list = await fetchFromApi(client);
 
