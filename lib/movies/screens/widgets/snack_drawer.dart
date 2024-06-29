@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 Drawer getDrawer(BuildContext context) => Drawer(
@@ -13,7 +14,10 @@ Drawer getDrawer(BuildContext context) => Drawer(
             title: const Text('New Movie Search'),
             onTap: () async {
               Navigator.pop(context);
-              await MMSNav(context).showCriteriaPage();
+              final searchType = SearchCriteriaDTO().init(
+                SearchCriteriaType.movieTitle,
+              );
+              await MMSNav(context).showCriteriaPage(searchType);
             },
           ),
           ListTile(
@@ -21,6 +25,16 @@ Drawer getDrawer(BuildContext context) => Drawer(
             onTap: () async {
               Navigator.pop(context);
               await MMSNav(context).showDVDsPage();
+            },
+          ),
+          ListTile(
+            title: const Text('DVD Search'),
+            onTap: () async {
+              Navigator.pop(context);
+              final searchType = SearchCriteriaDTO().init(
+                SearchCriteriaType.meilisearch,
+              );
+              await MMSNav(context).showCriteriaPage(searchType);
             },
           ),
         ],

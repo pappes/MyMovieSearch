@@ -59,7 +59,7 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
       ) as _i4.Future<Object?>);
 
   @override
-  _i4.Future<Object?> viewFlutterRootPage(_i2.ScreenRoute? page) =>
+  _i4.Future<Object?> viewFlutterRootPage(_i2.RouteInfo? page) =>
       (super.noSuchMethod(
         Invocation.method(
           #viewFlutterRootPage,

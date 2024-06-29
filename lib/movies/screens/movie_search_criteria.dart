@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
@@ -8,9 +9,14 @@ import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
-  const MovieSearchCriteriaPage({required this.restorationId, super.key});
+  const MovieSearchCriteriaPage({
+    required this.restorationId,
+    required this.criteria,
+    super.key,
+  });
 
   static const String title = 'Movie Search Criteria';
+  final SearchCriteriaDTO criteria;
   final String restorationId;
 
   @override
@@ -18,9 +24,12 @@ class MovieSearchCriteriaPage extends StatefulWidget {
       _MovieSearchCriteriaPageState();
 
   /// Instruct goroute how to navigate to this page.
-  static MaterialPage<dynamic> goRoute(_, __) => const MaterialPage(
+  static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
         restorationId: 'MovieSearchCriteriaPage',
-        child: MovieSearchCriteriaPage(restorationId: 'MovieSearchCriteria'),
+        child: MovieSearchCriteriaPage(
+          criteria: RestorableSearchCriteria.getDto(state),
+          restorationId: 'MovieSearchCriteria',
+        ),
       );
 }
 
@@ -39,12 +48,10 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
         ),
       );
 
-  void searchForMovie() => performSearch(
-        SearchCriteriaDTO().init(
-          SearchCriteriaType.movieTitle,
-          title: _textController.value.text,
-        ),
-      );
+  void searchForMovie() {
+    widget.criteria.criteriaTitle = _textController.value.text;
+    return performSearch(widget.criteria);
+  }
 
   @override
   String? get restorationId => 'MovieSearchCriteriaPage${widget.restorationId}';

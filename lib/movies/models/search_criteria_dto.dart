@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/blocs/repositories/barcode_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/more_keywords_repository.dart';
+import 'package:my_movie_search/movies/blocs/repositories/movie_meilisearch_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movies_for_keyword_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
@@ -38,6 +39,7 @@ enum SearchCriteriaType {
   downloadAdvanced,
   barcode,
   dvdLocations,
+  meilisearch,
   custom,
 }
 
@@ -199,12 +201,21 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     ..criteriaTitle = criteria
     ..criteriaType = SearchCriteriaType.movieTitle;
 
-  /// Construct route to Material user interface page
+  /// Construct route to the search results page MovieSearchResultsNewPage
+  /// as appropriate for the dto.
+  ///
+  RouteInfo getSearchResultsPage() => RouteInfo(
+        ScreenRoute.searchresults,
+        RestorableSearchCriteria.routeState(this),
+        toUniqueReference(),
+      );
+
+  /// Construct route to the search criteria page MovieSearchCriteriaPage
   /// as appropriate for the dto.
   ///
   /// Always chooses MovieSearchResultsNewPage.
-  RouteInfo getDetailsPage() => RouteInfo(
-        ScreenRoute.searchresults,
+  RouteInfo getSearchCriteriaPage() => RouteInfo(
+        ScreenRoute.search,
         RestorableSearchCriteria.routeState(this),
         toUniqueReference(),
       );
@@ -221,6 +232,8 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
         return BarcodeRepository();
       case SearchCriteriaType.moreKeywords:
         return MoreKeywordsRepository();
+      case SearchCriteriaType.meilisearch:
+        return MovieMeiliSearchRepository();
       case SearchCriteriaType.dvdLocations:
       case SearchCriteriaType.none:
       case SearchCriteriaType.custom:

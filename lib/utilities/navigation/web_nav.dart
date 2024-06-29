@@ -68,13 +68,12 @@ class MMSNav {
   /// Navigates to a search results page populated with a movie list.
   ///
   Future<Object?> showResultsPage(SearchCriteriaDTO criteria) async =>
-      canvas.viewFlutterPage(criteria.getDetailsPage());
+      canvas.viewFlutterPage(criteria.getSearchResultsPage());
 
   /// Navigates to a search criteria page with no criteria populated.
   ///
-  Future<Object?> showCriteriaPage() async => canvas.viewFlutterRootPage(
-        ScreenRoute.search,
-      );
+  Future<Object?> showCriteriaPage(SearchCriteriaDTO criteria) async =>
+      canvas.viewFlutterRootPage(criteria.getSearchCriteriaPage());
 
   /// Navigates to the list of old DVD locations.
   ///
@@ -278,13 +277,21 @@ class MMSFlutterCanvas {
   /// Chooses a MovieDetailsPage or PersonDetailsPage
   /// based on the IMDB unique ID or ErrorDetailsPage otherwise
   Future<Object?> viewFlutterPage(RouteInfo page) {
-    if (null != context) {
+    if (null != context && context!.mounted) {
+      // Record page open event.
       NavLog(context!).logPageOpen(page.routePath.name, page.reference);
       try {
-        return context!.pushNamed(page.routePath.name, extra: page.params)
-          ..then((val) {
-            NavLog(context!)
-                .logPageClose(page.routePath.name, page.reference, page.params);
+        // Open the page.
+        return context!.pushNamed(
+          page.routePath.name,
+          extra: page.params,
+        )..then((val) {
+            // Record page closure event.
+            NavLog(context!).logPageClose(
+              page.routePath.name,
+              page.reference,
+              page.params,
+            );
           });
       } catch (e) {
         logger.t(e);
@@ -296,16 +303,20 @@ class MMSFlutterCanvas {
   /// Construct route to a top level Material user interface page.
   ///
   /// Valid options are: ScreenRoute.search
-  Future<Object?> viewFlutterRootPage(ScreenRoute page) async {
-    if (null != context && context!.mounted) {
-      NavLog(context!).logPageOpen(page.name, 'root');
+  Future<Object?> viewFlutterRootPage(RouteInfo page) async {
+    if (null != context) {
+      // Record page open event.
+      NavLog(context!).logPageOpen(page.routePath.name, 'root');
       while (closeCurrentScreen()) {
         await Future<dynamic>.delayed(Duration.zero);
       }
       try {
         if (null != context && context!.mounted) {
-          // ignore: use_build_context_synchronously
-          context!.pushReplacementNamed(page.name);
+          // Open the page.
+          context!.pushReplacementNamed(
+            page.routePath.name,
+            extra: page.params,
+          );
         }
       } catch (e) {
         logger.t(e);
