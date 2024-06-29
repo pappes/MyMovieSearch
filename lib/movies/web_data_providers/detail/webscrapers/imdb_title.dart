@@ -10,10 +10,6 @@ import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-const searchResultsTable = 'findList';
-const columnMovieText = 'result_text';
-const columnMoviePoster = 'primary_photo';
-
 /// Implements a web scraper for retrieving movie details from IMDB.
 // ignore: missing_override_of_must_be_overridden
 mixin ScrapeIMDBTitleDetails

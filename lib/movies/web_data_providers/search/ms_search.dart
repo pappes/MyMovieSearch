@@ -106,7 +106,9 @@ class QueryMsSearchMovies
 
   /// Convert MsSearch map to MovieResultDTO records.
   @override
-  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic tree) async {
+  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
+    dynamic tree,
+  ) async {
     if (tree is List<dynamic>) {
       return MsSearchMovieSearchConverter.dtoFromCompleteJsonMap(tree).toList();
     }

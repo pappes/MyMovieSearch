@@ -14,10 +14,19 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"gangster","bestSource":"DataSourceType.imdbKeywords","title":"gangster","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"gangster"}}
+{"uniqueId":"-2","title":"[QueryIMDBMoreKeywordsDetails] Error in imdb_more_keywords with criteria tt0101000 convert error interpreting web text as a map :imdb more keywords data not detected for criteria tt0101000","bestSource":"DataSourceType.imdb","type":"MovieContentType.error"}
 ''',
   r'''
-{"uniqueId":"ghost","bestSource":"DataSourceType.imdbKeywords","title":"ghost","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"ghost"}}
+{"uniqueId":"daughter","title":"daughter","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"daughter"}}
+''',
+  r'''
+{"uniqueId":"gangster","title":"gangster","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"gangster"}}
+''',
+  r'''
+{"uniqueId":"ghost","title":"ghost","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"ghost"}}
+''',
+  r'''
+{"uniqueId":"young","title":"young","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"young"}}
 ''',
 ];
 
@@ -59,7 +68,7 @@ void main() {
   /// Integration tests
 ////////////////////////////////////////////////////////////////////////////////
 
-  group('live QueryIMDBBibliographyDetails test', () {
+  group('live QueryIMDBMoreKeywordsDetails test', () {
     // Convert 3 IMDB pages into dtos.
     test('Run read 3 pages from IMDB', () async {
       final queries = _makeQueries(3);

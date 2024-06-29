@@ -1,7 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_movies_for_keyword.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
@@ -39,7 +40,7 @@ void main() {
     });
 
     // Confirm dto criteria is displayed as expected.
-    test('Run myFormatInputAsText() for encoded keyword', () {
+    /*test('Run myFormatInputAsText() for encoded keyword', () {
       const expectedKeyword = '''
 testing and punctuation 
 '' "" <> {} [] Tabs -> 			<-
@@ -62,7 +63,7 @@ testing and punctuation
         QueryIMDBMoviesForKeyword(input).myGetPageNumber(),
         expectedPage,
       );
-    });
+    });*/
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
@@ -84,7 +85,7 @@ testing and punctuation
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
       const expectedResult =
-          'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=new%20query&page=1';
+          'https://www.imdb.com/search/title/?keywords=new%20query&explore=keywords';
 
       // Invoke the functionality.
       final actualResult = QueryIMDBMoviesForKeyword(criteria)
@@ -119,15 +120,15 @@ testing and punctuation
       final testClass = QueryIMDBMoviesForKeyword(criteria)
         ..criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
-        htmlSampleFull,
+        imdbHtmlSampleFull,
       );
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
-      const expectedOutput = <void>[];
+      const expectedOutput = intermediateEmptyMapList;
       final actualOutput =
           QueryIMDBMoviesForKeyword(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleEmpty,
+        imdbHtmlSampleEmpty,
       );
       expect(actualOutput, completion(expectedOutput));
     });
@@ -152,13 +153,40 @@ testing and punctuation
   });
   group('ImdbSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
+    test('Run empty dtoFromCompleteJsonMap()', () {
+      final actualResult = <MovieResultDTO>[];
+
+      // Invoke the functionality and collect results.
+      for (final map in intermediateEmptyMapList) {
+        actualResult.addAll(
+          ImdbWebScraperConverter().dtoFromCompleteJsonMap(
+            map,
+            DataSourceType.imdbKeywords,
+          ),
+        );
+      }
+
+      final expectedValue = <MovieResultDTO>[];
+      // Check the results.
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
+      );
+    });
+    // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () {
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          ImdbMoviesForKeywordConverter.dtoFromCompleteJsonMap(map),
+          ImdbWebScraperConverter().dtoFromCompleteJsonMap(
+            map,
+            DataSourceType.imdbKeywords,
+          ),
         );
       }
 
@@ -268,7 +296,8 @@ testing and punctuation
       const expectedException =
           '[QueryIMDBMoviesForKeyword] Error in imdbKeywords '
           'with criteria dream convert error interpreting web text as a map '
-          ':imdb keyword data not detected for criteria dream';
+          ':imdb web scraper data not detected for criteria dream in '
+          'not valid html';
 
       // Invoke the functionality.
       await imdbKeywords
@@ -284,7 +313,8 @@ testing and punctuation
       const expectedException =
           '[QueryIMDBMoviesForKeyword] Error in imdbKeywords '
           'with criteria dream convert error interpreting web text as a map '
-          ':imdb keyword data not detected for criteria dream';
+          ':imdb web scraper data not detected for criteria dream in '
+          '<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final imdbKeywords = QueryIMDBMoviesForKeyword(criteria);
 

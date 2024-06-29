@@ -4,6 +4,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 const dataSource = 'source';
 const outerElementIdentity = 'id';
+const outerElementSearchResults = 'searchResults';
 
 const outerElementOfficialTitle = 'name';
 const outerElementAlternateTitle = 'alternateTitle';
@@ -49,12 +50,14 @@ const deepRelatedMovieContainer = 'node';
 const deepRelatedHeader = 'mainColumnData';
 
 // Fields exclusive to title
-const deepTitleId = 'tconst';
+const deepTitleId1 = 'titleId';
+const deepTitleId2 = 'tconst';
 const deepTitleRelatedCastHeader = 'cast';
 const deepTitleRelatedCastContainer = 'node';
 const deepTitleRelatedDirectorHeader = 'directors';
 const deepTitleRelatedDirectorContainer = 'name';
 const deepTitleRelatedTitlesHeader = 'moreLikeThisTitles';
+const deepTitleResults = 'titleListItems';
 
 // Fields exclusive to person
 const deepPersonId = 'nmconst';
@@ -82,6 +85,7 @@ const deepRelatedMovieParentCharactorHeader = 'characters';
 const deepRelatedMovieParentCharactorField = 'name';
 // id is repeated inside other children of the title - do not do a deep search
 const deepRelatedMovieId = 'id';
+const deepRelatedMoviePlot = 'plotText';
 const deepRelatedMoviePlotHeader = 'plotText';
 const deepRelatedMoviePlotField = 'plainText';
 // originalTitleText, akas, titleText and titleType child key = text

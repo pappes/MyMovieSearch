@@ -32,7 +32,8 @@ mixin ScrapeIMDBMoreKeywordsDetails
 
   /// Extract the keywords for the current movie.
   void _scrapeRelated(Document document, Map<String, dynamic> movieData) {
-    final links = document.querySelectorAll('[href*="search/keyword"]');
+    final links =
+        document.querySelectorAll('[href*="/search/"][href*="keyword"]');
     for (final link in links) {
       movieData[link.text] = 'keyword';
     }

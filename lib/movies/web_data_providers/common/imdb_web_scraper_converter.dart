@@ -21,36 +21,37 @@ const relatedDirectorsLabel = 'Directed by:';
 /// Using IMDB search on an IMDBID redirects to the details page for that ID.
 class ImdbWebScraperConverter {
   late final DataSourceType source;
-  List<MovieResultDTO> dtoFromCompleteJsonMap(
+  Iterable<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
     DataSourceType source,
   ) {
     this.source = source;
-    final dto = dtoFromMap(map, '');
-    return [dto];
+    return dtoFromMap(map, '');
   }
 
   /// Take a [Map] of IMDB data and create a [MovieResultDTO] from it.
-  MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map, String a) {
+  Iterable<MovieResultDTO> dtoFromMap(Map<dynamic, dynamic> map, String a) {
     final movie = MovieResultDTO().init();
-    if (map.containsKey(outerElementIdentity)) {
+    if (null != map.deepSearch(outerElementSearchResults)) {
+      return _deepConvertSearchResults(map);
+    } else if (map.containsKey(outerElementIdentity)) {
       _shallowConvert(movie, map);
     } else if (null != map.deepSearch(deepPersonId)) {
       _deepConvertPerson(movie, map);
-    } else if (null != map.deepSearch(deepTitleId)) {
+    } else if (null != map.deepSearch(deepTitleId2)) {
       _deepConvertTitle(movie, map);
     } else {
-      return movie.error(
-        'Unable to interpret IMDB contents from map $map',
-        source,
-      );
+      return [
+        movie.error(
+          'Unable to interpret IMDB contents from map $map',
+          source,
+        ),
+      ];
     }
-    // Reintialise the source after setting the ID
-    movie.setSource(newSource: source);
-    return movie;
+    return [movie];
   }
 
-  /// Parse [Map] to pull IMDB data out.
+  /// Parse [Map] to pull IMDB data out for a single person.
   void _deepConvertPerson(MovieResultDTO movie, Map<dynamic, dynamic> map) {
     movie.uniqueId = map.deepSearch(deepPersonId)!.first!.toString();
     // ...{'nameText':...{...'text':<value>...}};
@@ -92,25 +93,34 @@ class ImdbWebScraperConverter {
       ),
     );
 
-    movie.merge(
-      MovieResultDTO().init(
-        uniqueId: movie.uniqueId,
-        bestSource: DataSourceType.imdbSuggestions,
-        title: name,
-        description: description,
-        year: startDate,
-        yearRange: yearRange,
-        userRatingCount: popularity,
-        imageUrl: url,
-        related: related,
-      ),
-    );
+    movie
+      ..merge(
+        MovieResultDTO().init(
+          uniqueId: movie.uniqueId,
+          bestSource: DataSourceType.imdbSuggestions,
+          title: name,
+          description: description,
+          year: startDate,
+          yearRange: yearRange,
+          userRatingCount: popularity,
+          imageUrl: url,
+          related: related,
+        ),
+      )
+
+      // Reintialise the source after setting the ID
+      ..setSource(newSource: source);
   }
 
-  /// Parse [Map] to pull IMDB data out.
-  void _deepConvertTitle(MovieResultDTO movie, Map<dynamic, dynamic> map) {
+  /// Parse [Map] to pull IMDB data out for a singl movie.
+  void _deepConvertTitle(
+    MovieResultDTO movie,
+    Map<dynamic, dynamic> map,
+  ) {
+    final uniqueIds =
+        map.deepSearch(deepTitleId1) ?? map.deepSearch(deepTitleId2);
     movie
-      ..uniqueId = map.deepSearch(deepTitleId)!.first!.toString()
+      ..uniqueId = uniqueIds!.first!.toString()
       ..merge(_getDeepTitleCommon(map, movie.uniqueId));
     final relatedMap = map.deepSearch(
       deepRelatedHeader, // mainColumnData
@@ -119,6 +129,28 @@ class ImdbWebScraperConverter {
     if (null != relatedMap) {
       movie.related = _getDeepTitleRelated(relatedMap);
     }
+
+    // Reintialise the source after setting the ID
+    movie.setSource(newSource: source);
+  }
+
+  /// Parse [Map] to pull IMDB data out.
+  Iterable<MovieResultDTO> _deepConvertSearchResults(
+    Map<dynamic, dynamic> map,
+  ) {
+    final movies = <MovieResultDTO>[];
+    for (final searchResults in map.deepSearch(deepTitleResults) ?? []) {
+      if (searchResults is Iterable) {
+        for (final movieMap in searchResults) {
+          if (movieMap is Map) {
+            final movieDto = MovieResultDTO().init();
+            _deepConvertTitle(movieDto, movieMap);
+            movies.add(movieDto);
+          }
+        }
+      }
+    }
+    return movies;
   }
 
   /// extract related movie details from [map].
@@ -133,11 +165,13 @@ class ImdbWebScraperConverter {
           map.deepSearch(deepRelatedMovieAlternateTitle)?.searchForString();
     }
 
-    // ...{'plotText':...{...'plainText':<value>...}}
+    // ...{'plotText':...{...'plainText':<value>...}} or
+    // ...{'plot':<value>...}
     final description =
         map.deepSearch(deepRelatedMoviePlotHeader)?.searchForString(
-              key: deepRelatedMoviePlotField,
-            );
+                  key: deepRelatedMoviePlotField,
+                ) ??
+            map.deepSearch(deepRelatedMoviePlot)?.first?.toString();
     // ...{'primaryImage':...{...'url':<value>...}}
     final url = map.deepSearch(deepImageHeader)?.searchForString(
           key: deepImageField,
@@ -147,11 +181,13 @@ class ImdbWebScraperConverter {
     // ...{...'voteCount':<value>...}
     final userRatingCount =
         map.searchForString(key: deepRelatedMovieUserRatingCount);
-    // ...{'runtime':...{...'seconds':<value>...}}
+    // ...{'runtime':...{...'seconds':<value>...}} or
+    // ...{'runtime':<value>...}
     final duration =
         map.deepSearch(deepRelatedMovieDurationHeader)?.searchForString(
-              key: deepRelatedMovieDurationField,
-            );
+                  key: deepRelatedMovieDurationField,
+                ) ??
+            map.deepSearch(deepRelatedMovieDurationHeader)?.first?.toString();
 
     final yearHeader = map.deepSearch(deepRelatedMovieYearHeader);
     // ...{'releaseYear':...{...'year':<value>...}}
@@ -475,18 +511,23 @@ class ImdbWebScraperConverter {
 
     final related = map[outerElementRelated];
     _getRelatedSections(related, movie);
+
+    // Reintialise the source after setting the ID
+    movie.setSource(newSource: source);
   }
 
   void _getRelated(MovieResultDTO movie, dynamic related, String label) {
     // Do nothing if related is null
     if (related is Map) {
-      final dto = dtoFromMap(related, '');
-      movie.addRelated(label, dto);
+      for (final dto in dtoFromMap(related, '')) {
+        movie.addRelated(label, dto);
+      }
     } else if (related is Iterable) {
       for (final relatedMap in related) {
         if (relatedMap is Map) {
-          final dto = dtoFromMap(relatedMap, '');
-          movie.addRelated(label, dto);
+          for (final dto in dtoFromMap(relatedMap, '')) {
+            movie.addRelated(label, dto);
+          }
         }
       }
     }

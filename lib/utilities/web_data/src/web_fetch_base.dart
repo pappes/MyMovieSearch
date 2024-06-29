@@ -159,7 +159,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should throw TreeConvertException
   /// when unable to covert the tree to [OUTPUT_TYPE].
   @visibleForOverriding
-  Future<List<OUTPUT_TYPE>> myConvertTreeToOutputType(
+  Future<Iterable<OUTPUT_TYPE>> myConvertTreeToOutputType(
     dynamic listOrMapOrDocument,
   );
 
@@ -520,7 +520,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     ) =>
         captureError(error, 'convert error translating page map to objects');
 
-    List<OUTPUT_TYPE> filterList(List<OUTPUT_TYPE> objects) {
+    List<OUTPUT_TYPE> filterList(Iterable<OUTPUT_TYPE> objects) {
       objects.forEach(myAddResultToCache);
       // Construct result set with a subset of results.
       final capacity = searchResultsLimit.consume(objects.length);

@@ -16,7 +16,6 @@ import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
 import 'package:my_movie_search/movies/screens/popup.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
@@ -175,10 +174,12 @@ class MMSNav {
 
       case MovieContentType.navigation:
         if (movie.uniqueId.startsWith(webAddressPrefix)) {
+          // Open web page.
+          return canvas.viewWebPage(movie.uniqueId);
           // Search for more movies that match the keyword.
-          return showResultsPage(
+          /*return showResultsPage(
             QueryIMDBMoviesForKeyword.convertMovieDtoToCriteriaDto(movie),
-          );
+          );*/
         } else {
           // replace space with . for more specific searching
           final criteria = movie.uniqueId;

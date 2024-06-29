@@ -34,7 +34,9 @@ class QueryLibsaBarcodeSearch
 
   /// Convert map to MovieResultDTO records.
   @override
-  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
+  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
+    dynamic map,
+  ) async {
     if (map is Map) {
       return LibsaBarcodeSearchConverter.dtoFromCompleteJsonMap(map);
     }

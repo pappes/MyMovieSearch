@@ -34,7 +34,7 @@ abstract class QueryTMDBCommon
   /// Must be orerridden by child classes.
   /// Convert TMDB map to MovieResultDTO records.
   @override
-  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map);
+  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(dynamic map);
 
   /// Describe where the data is coming from.
   @override

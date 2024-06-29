@@ -97,7 +97,9 @@ class QueryUnknownSourceMocked
   // convert dart [List] or [Map] to [OUTPUT_TYPE] object data
   // but allow it to be overridden
   @override
-  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic tree) async =>
+  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
+    dynamic tree,
+  ) async =>
       overriddenConvertTreeToOutputType(tree);
   ConvertTreeToOutputType overriddenConvertTreeToOutputType = treeToDto;
 

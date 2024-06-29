@@ -1,6 +1,6 @@
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
-const imdbHtmlSampleStart = ' <!DOCTYPE html> <html     <head>';
+const imdbHtmlSampleStart = ' <!DOCTYPE html>     <head>';
 const imdbHtmlSampleMiddle = ' </head> <body id="styleguide-v2" class="fixed">';
 const imdbHtmlSampleEnd = ' </body> </html>';
 const imdbHtmlSampleFull = '$imdbHtmlSampleStart $imdbJsonSampleInner '

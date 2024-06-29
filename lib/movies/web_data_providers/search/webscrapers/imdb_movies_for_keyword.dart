@@ -1,29 +1,14 @@
 import 'dart:convert';
 
-import 'package:html/dom.dart' show Document, Element;
+import 'package:html/dom.dart' show Document;
 import 'package:html/parser.dart' show parse;
-import 'package:html_unescape/html_unescape_small.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/imdb_movies_for_keyword.dart';
-import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
-
-const keywordId = 'id';
-const keywordName = 'titleNameText';
-const keywordDescription = 'titleDescription';
-const keywordImage = 'titleImage';
-const keywordYearRange = 'titleReleaseText';
-const keywordTypeInfo = 'titleInfo';
-const keywordCensorRating = 'titleCensorRating';
-const keywordPopularityRating = 'titlePopulartyRating';
-const keywordPopularityRatingCount = 'titlePopulartyRatingCount';
-const keywordDuration = 'titleDuration';
-const keywordDirectors = 'directors';
-const keywordActors = 'topCredits';
-const keywordKeywords = 'keywords';
 
 /// Implements [WebFetchBase] for the IMDB Keywords html web scraper.
 ///
@@ -33,6 +18,73 @@ const keywordKeywords = 'keywords';
 // ignore: missing_override_of_must_be_overridden
 mixin ScrapeIMDBMoviesForKeyword
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
+  /// Reduce computation effort for html extraction.
+  @override
+  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+    String webText,
+  ) async {
+    try {
+      return fastParse(webText);
+    } on FastParseException {
+      return slowConvertWebTextToTraversableTree(webText);
+    }
+  }
+
+  /// Convert web text to a traversable tree of [List] or [Map] data.
+  ///
+  ///
+  Future<List<dynamic>> slowConvertWebTextToTraversableTree(
+    String webText,
+  ) async {
+    final document = parse(webText);
+    final movieData = _scrapeWebPage(document);
+    if (movieData[outerElementDescription] == null &&
+        movieData['props'] == null) {
+      throw WebConvertException(
+          'imdb web scraper data not detected for criteria '
+          '$getCriteriaText in $webText');
+    }
+    return [movieData];
+  }
+
+  /// Collect JSON and webpage text to construct a map of the movie data.
+  Map<dynamic, dynamic> _scrapeWebPage(Document document) {
+    final movieData = json.decode(_getMovieJson(document)) as Map;
+    return movieData;
+  }
+
+  /// Use CSS selector to find the JSON script on the page
+  /// and extract values from the JSON.
+  String _getMovieJson(Document document) {
+    final scriptElement = document.querySelector(jsonScript);
+    if (scriptElement == null || scriptElement.innerHtml.isEmpty) {
+      logger.e('no JSON details found for Name $getCriteriaText');
+      return '{}';
+    }
+    return scriptElement.innerHtml;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+
+
+
+
   static final htmlDecode = HtmlUnescape();
   static const splitter = LineSplitter();
 
@@ -59,10 +111,6 @@ mixin ScrapeIMDBMoviesForKeyword
         if (null != id && id.toString().startsWith(imdbTitlePrefix)) {
           movieData.add(movie);
         }
-      }
-      final next = document.querySelector('.lister-page-next');
-      if (null != next) {
-        movieData.add(_addNextPage(next));
       }
     } else {
       throw WebConvertException(
@@ -217,7 +265,16 @@ mixin ScrapeIMDBMoviesForKeyword
 
     return sections;
   }
+/*IMDB has moved away from url encoding for pagination
 
+
+
+      final next = document.querySelector('.lister-page-next');
+      if (null != next) {
+        movieData.add(_addNextPage(next));
+      }
+
+      
   Map<String, dynamic> _addNextPage(Element next) {
     final keyword = criteria.criteriaTitle;
     final baseURL = myConstructURI(keyword);
@@ -234,5 +291,6 @@ mixin ScrapeIMDBMoviesForKeyword
         fullUrl.toString(),
       ),
     };
-  }
+  }*/
 }
+*/

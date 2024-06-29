@@ -1,12 +1,9 @@
-import 'dart:convert';
-
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_movies_for_keyword.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imdb_movies_for_keyword.dart';
-import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -23,9 +20,8 @@ class QueryIMDBMoviesForKeyword
     with ScrapeIMDBMoviesForKeyword {
   QueryIMDBMoviesForKeyword(super.criteria);
 
-  static const _baseURL =
-      'https://www.imdb.com/search/keyword/?ref_=tt_stry_kw&keywords=';
-  static const _pageURL = '&page=';
+  static const _baseUrl = 'https://www.imdb.com/search/title/?keywords=';
+  static const _urlSuffix = '&explore=keywords';
 
   /// Describe where the data is coming from.
   @override
@@ -38,29 +34,21 @@ class QueryIMDBMoviesForKeyword
 
   /// Convert IMDB map to MovieResultDTO records.
   @override
-  Future<List<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) async {
+  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
+    dynamic map,
+  ) async {
     if (map is Map) {
-      return ImdbMoviesForKeywordConverter.dtoFromCompleteJsonMap(map);
+      return ImdbWebScraperConverter()
+          .dtoFromCompleteJsonMap(map, DataSourceType.imdbKeywords);
     }
     throw TreeConvertException(
       'expected map got ${map.runtimeType} unable to interpret data $map',
     );
   }
 
-  /// Extract plain text or dto encoded keyword.
+  /// converts <INPUT_TYPE> to a string representation.
   @override
-  String myFormatInputAsText() {
-    String keyword = _getCriteriaJsonValue(criteria, jsonKeywordKey);
-    if (keyword.isEmpty) {
-      keyword = criteria.toPrintableString();
-    }
-    return keyword;
-  }
-
-  /// Extract page number from dto encoded data
-  @override
-  int myGetPageNumber() =>
-      IntHelper.fromText(_getCriteriaJsonValue(criteria, jsonPageKey)) ?? 1;
+  String myFormatInputAsText() => criteria.toPrintableString();
 
   /// Include entire map in the movie title when an error occurs.
   @override
@@ -74,9 +62,26 @@ class QueryIMDBMoviesForKeyword
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
     searchResultsLimit = WebFetchLimiter(55);
-    final url = '$_baseURL$encodedCriteria$_pageURL$pageNumber';
+    final url = '$_baseUrl$encodedCriteria$_urlSuffix';
     return Uri.parse(url);
   }
+
+/*IMDB has moved away from url encoding for pagination
+  /// Extract plain text or dto encoded keyword.
+  @override
+  String myFormatInputAsText() {
+    String keyword = _getCriteriaJsonValue(criteria, jsonKeywordKey);
+    if (keyword.isEmpty) {
+      keyword = criteria.toPrintableString();
+    }
+    return keyword;
+  }
+
+
+  /// Extract page number from dto encoded data
+  @override
+  int myGetPageNumber() =>
+      IntHelper.fromText(_getCriteriaJsonValue(criteria, jsonPageKey)) ?? 1;
 
   static String _getCriteriaJsonValue(SearchCriteriaDTO criteria, String key) {
     try {
@@ -105,5 +110,5 @@ class QueryIMDBMoviesForKeyword
     newCriteria.criteriaTitle =
         _getCriteriaJsonValue(newCriteria, jsonKeywordKey);
     return newCriteria;
-  }
+  }*/
 }
