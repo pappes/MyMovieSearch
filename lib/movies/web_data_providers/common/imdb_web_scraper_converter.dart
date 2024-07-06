@@ -155,11 +155,15 @@ class ImdbWebScraperConverter {
 
   /// extract related movie details from [map].
   MovieResultDTO _getDeepTitleCommon(Map<dynamic, dynamic> map, String id) {
-    // ...{'titleText':...{...'text':<value>...}}
-    final title = map.deepSearch(deepRelatedMovieTitle)?.searchForString();
-    // ...{'originalTitleText':...{...'text':<value>...}}
+    // ...{'titleText':...{...'text':<value>...}} or
+    // ...{'titleText':<value>...}
+    final title = map.deepSearch(deepRelatedMovieTitle)?.searchForString() ??
+        map.searchForString(key: deepRelatedMovieTitle);
+    // ...{'originalTitleText':...{...'text':<value>...}}or
+    // ...{'originalTitleText':<value>...}
     String? originalTitle =
-        map.deepSearch(deepRelatedMovieOriginalTitle)?.searchForString();
+        map.deepSearch(deepRelatedMovieOriginalTitle)?.searchForString() ??
+            map.searchForString(key: deepRelatedMovieOriginalTitle);
     if (title == originalTitle) {
       originalTitle =
           map.deepSearch(deepRelatedMovieAlternateTitle)?.searchForString();
@@ -190,24 +194,33 @@ class ImdbWebScraperConverter {
             map.deepSearch(deepRelatedMovieDurationHeader)?.first?.toString();
 
     final yearHeader = map.deepSearch(deepRelatedMovieYearHeader);
-    // ...{'releaseYear':...{...'year':<value>...}}
+    // ...{'releaseYear':...{...'year':<value>...}} or
+    // ...{'releaseYear':<value>...}
     final startDate =
-        yearHeader?.searchForString(key: deepRelatedMovieYearStart);
-    // ...{'releaseYear':...{...'endYear':<value>...}}
-    final endDate = yearHeader?.searchForString(key: deepRelatedMovieYearEnd);
+        yearHeader?.searchForString(key: deepRelatedMovieYearStart) ??
+            (yearHeader?.length == 1 && yearHeader!.first is int
+                ? yearHeader.first.toString()
+                : null);
+    // ...{'releaseYear':...{...'endYear':<value>...}} or
+    // ...{'endYear':<value>...}
+    final endDate = yearHeader?.searchForString(key: deepRelatedMovieYearEnd) ??
+        map.searchForString(key: deepRelatedMovieYearEnd);
     final yearRange = (null != endDate)
         ? '$startDate-$endDate'
         : (null != startDate)
             ? startDate
             : null;
 
-    // ...{'certificate':...{...'rating':<value>...}}
+    // ...{'certificate':...{...'rating':<value>...}} or
+    // ...{'certificate':<value>...}
     final censorRatingText = map
-        .deepSearch(deepRelatedMovieCensorRatingHeader)
-        ?.searchForString(key: deepRelatedMovieCensorRatingField);
+            .deepSearch(deepRelatedMovieCensorRatingHeader)
+            ?.searchForString(key: deepRelatedMovieCensorRatingField) ??
+        map.searchForString(key: deepRelatedMovieCensorRatingHeader);
     final censorRating = getImdbCensorRating(censorRatingText);
 
-    // ...{'genres':...[...{...'text':<value>...}...]}
+    // ...{'genres':...[...{...'text':<value>...}...]} or
+    // ...{'genres':[<value>,<value>,<value>,...]}
     final genreNode = map.deepSearch(deepRelatedMovieGenreHeader);
     String? genres;
     if (null != genreNode) {
@@ -217,6 +230,13 @@ class ImdbWebScraperConverter {
       );
       if (genreList is List && genreList.isNotEmpty) {
         genres = json.encode(genreList);
+      } else if (genreNode.isNotEmpty) {
+        final innerGenres = genreNode.first;
+        if (innerGenres is List &&
+            innerGenres.isNotEmpty &&
+            innerGenres.first is String) {
+          genres = json.encode(innerGenres);
+        }
       }
     }
 
@@ -242,7 +262,8 @@ class ImdbWebScraperConverter {
       }
     }
 
-    // ...{'keywords':...[...{...'text':<value>...}...]}
+    // ...{'keywords':...[...{...'text':<value>...}...]} or
+    // ...{'keywords':[<value>,<value>,<value>,...]}
     final keywordNode = map.deepSearch(deepRelatedMovieKeywordHeader);
     String? keywords;
     if (null != keywordNode) {
@@ -252,6 +273,8 @@ class ImdbWebScraperConverter {
       );
       if (keywordList is List && keywordList.isNotEmpty) {
         keywords = json.encode(keywordList);
+      } else if (keywordNode.isNotEmpty && keywordNode.first is String) {
+        keywords = json.encode(keywordNode);
       }
     }
     return MovieResultDTO().init(

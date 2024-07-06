@@ -85,7 +85,7 @@ const deepRelatedMovieParentCharactorHeader = 'characters';
 const deepRelatedMovieParentCharactorField = 'name';
 // id is repeated inside other children of the title - do not do a deep search
 const deepRelatedMovieId = 'id';
-const deepRelatedMoviePlot = 'plotText';
+const deepRelatedMoviePlot = 'plot';
 const deepRelatedMoviePlotHeader = 'plotText';
 const deepRelatedMoviePlotField = 'plainText';
 // originalTitleText, akas, titleText and titleType child key = text
