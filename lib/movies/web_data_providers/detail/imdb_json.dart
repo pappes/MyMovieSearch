@@ -16,6 +16,14 @@ const imdbQueryDirector = deepPersonDirectorHeader;
 const imdbQueryProducer = deepPersonProducerHeader;
 const imdbQueryWriter = deepPersonWriterHeader;
 
+enum ImdbJsonSource {
+  actor,
+  actress,
+  director,
+  producer,
+  writer,
+}
+
 /// Implements [WebFetchBase] for retrieving Json
 /// and crew information from IMDB.
 ///
@@ -24,7 +32,7 @@ const imdbQueryWriter = deepPersonWriterHeader;
 /// ```
 class QueryIMDBJsonDetails
     extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> {
-  QueryIMDBJsonDetails(super.criteria, {this.imdbQuery = imdbQueryActor});
+  QueryIMDBJsonDetails(super.criteria, {this.imdbQuery = ImdbJsonSource.actor});
 
   static const _baseURLprefix =
       'https://caching.graphql.imdb.com/?operationName=NameMainFilmographyPaginatedCredits&variables=%7B%22after%22%3A%22';
@@ -48,14 +56,14 @@ class QueryIMDBJsonDetails
       '2f142f86bfbb49a239bd4df6c2f40f3ed1438fecc8da45235e66d9062d321535';
 
   static const _imdbQueryMap = {
-    imdbQueryActor: _imdbShaActor,
-    imdbQueryActress: _imdbShaActress,
-    imdbQueryDirector: _imdbShaDirector,
-    imdbQueryProducer: _imdbShaProducer,
-    imdbQueryWriter: _imdbShaWriter,
+    ImdbJsonSource.actor: _imdbShaActor,
+    ImdbJsonSource.actress: _imdbShaActress,
+    ImdbJsonSource.director: _imdbShaDirector,
+    ImdbJsonSource.producer: _imdbShaProducer,
+    ImdbJsonSource.writer: _imdbShaWriter,
   };
 
-  final String imdbQuery;
+  final ImdbJsonSource imdbQuery;
 
   /// Describe where the data is coming from.
   @override
@@ -66,7 +74,7 @@ class QueryIMDBJsonDetails
   WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
     SearchCriteriaDTO criteria,
   ) =>
-      QueryIMDBJsonDetails(criteria);
+      QueryIMDBJsonDetails(criteria, imdbQuery: imdbQuery);
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.

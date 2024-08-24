@@ -14,11 +14,11 @@ const titleRelatedMoviesLabel = 'Suggestions:';
 const titleRelatedActorsLabel = 'Cast:';
 const titleRelatedDirectorsLabel = 'Directed by:';
 
-const personRelatedActressLabel = 'Actress:';
-const personRelatedActorLabel = 'Actor:';
-const personRelatedDirectorLabel = 'Director:';
-const personRelatedProducerLabel = 'Producer:';
-const personRelatedWriterLabel = 'Writer:';
+const personRelatedActressLabel = 'Actress';
+const personRelatedActorLabel = 'Actor';
+const personRelatedDirectorLabel = 'Director';
+const personRelatedProducerLabel = 'Producer';
+const personRelatedWriterLabel = 'Writer';
 
 /// Used to convert search results, movie details and person details Map
 /// to a dto list.

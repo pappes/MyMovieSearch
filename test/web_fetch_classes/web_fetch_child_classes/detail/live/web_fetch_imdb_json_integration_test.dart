@@ -23,7 +23,7 @@ const expectedDtoJsonStringList = [
 ''',
   r'''
 {"uniqueId":"nm0000149","title":"Jodie Foster","bestSource":"DataSourceType.imdbJson","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTM3MjgyOTQwNF5BMl5BanBnXkFtZTcwMDczMzEwNA@@._V1_.jpg","sources":{"DataSourceType.imdbJson":"nm0000149"},
-  "related":{"Actress:":{"tt0046593":{"uniqueId":"tt0046593","title":"The Magical World of Disney","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" Disneyland","charactorName":" [Suellen McIver]","type":"MovieContentType.series","year":"1954","yearRange":"1954-1997","runTime":"7200",
+  "related":{"Actress":{"tt0046593":{"uniqueId":"tt0046593","title":"The Magical World of Disney","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" Disneyland","charactorName":" [Suellen McIver]","type":"MovieContentType.series","year":"1954","yearRange":"1954-1997","runTime":"7200",
       "genres":"[\"Adventure\",\"Drama\",\"Family\"]",
       "userRating":"8.4","userRatingCount":"2323","censorRating":"CensorRatingType.family","imageUrl":"https://m.media-amazon.com/images/M/MV5BNzEzMzQzMDc0Nl5BMl5BanBnXkFtZTcwMTk5ODczMQ@@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0046593"}},
       "tt0047736":{"uniqueId":"tt0047736","title":"Gunsmoke","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","charactorName":" [Marieanne, Patricia, Susan Sadler]","type":"MovieContentType.series","year":"1955","yearRange":"1955-1975","runTime":"3600",
@@ -272,7 +272,7 @@ const expectedDtoJsonStringList = [
 ''',
   r'''
 {"uniqueId":"nm0000149","title":"Jodie Foster","bestSource":"DataSourceType.imdbJson","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTM3MjgyOTQwNF5BMl5BanBnXkFtZTcwMDczMzEwNA@@._V1_.jpg","sources":{"DataSourceType.imdbJson":"nm0000149"},
-  "related":{"Director:":{"tt0086814":{"uniqueId":"tt0086814","title":"Tales from the Darkside","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.series","year":"1983","yearRange":"1983-1988","runTime":"1800",
+  "related":{"Director":{"tt0086814":{"uniqueId":"tt0086814","title":"Tales from the Darkside","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.series","year":"1983","yearRange":"1983-1988","runTime":"1800",
       "genres":"[\"Comedy\",\"Drama\",\"Fantasy\"]",
       "userRating":"7.4","userRatingCount":"7053","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BZGUxOTU5YmYtZTk3NC00MjM0LWEwOGQtMGI3NDJlODUxMTM4XkEyXkFqcGdeQXVyMjExMzc2MTY@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0086814"}},
       "tt0102316":{"uniqueId":"tt0102316","title":"Little Man Tate","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"1991","yearRange":"1991","runTime":"5940",
@@ -307,7 +307,7 @@ const expectedDtoJsonStringList = [
 ''',
   r'''
 {"uniqueId":"nm0000149","title":"Jodie Foster","bestSource":"DataSourceType.imdbJson","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTM3MjgyOTQwNF5BMl5BanBnXkFtZTcwMDczMzEwNA@@._V1_.jpg","sources":{"DataSourceType.imdbJson":"nm0000149"},
-  "related":{"Producer:":{"tt0091513":{"uniqueId":"tt0091513","title":"Mesmerized","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"1985","yearRange":"1985","runTime":"5640",
+  "related":{"Producer":{"tt0091513":{"uniqueId":"tt0091513","title":"Mesmerized","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"1985","yearRange":"1985","runTime":"5640",
       "genres":"[\"Drama\"]",
       "userRating":"4.7","userRatingCount":"1027","censorRating":"CensorRatingType.family","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTY3NTcyNTE5MF5BMl5BanBnXkFtZTcwMzIzMzU1MQ@@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0091513"}},
       "tt0110638":{"uniqueId":"tt0110638","title":"Nell","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"1994","yearRange":"1994","runTime":"6720",
@@ -340,12 +340,12 @@ const expectedDtoJsonStringList = [
 ''',
   r'''
 {"uniqueId":"nm0000149","title":"Jodie Foster","bestSource":"DataSourceType.imdbJson","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTM3MjgyOTQwNF5BMl5BanBnXkFtZTcwMDczMzEwNA@@._V1_.jpg","sources":{"DataSourceType.imdbJson":"nm0000149"},
-  "related":{"Writer:":{"tt27626554":{"uniqueId":"tt27626554","title":"The Hands of Time","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.short","year":"1978","yearRange":"1978",
+  "related":{"Writer":{"tt27626554":{"uniqueId":"tt27626554","title":"The Hands of Time","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.short","year":"1978","yearRange":"1978",
       "genres":"[\"Documentary\",\"Short\"]","sources":{"DataSourceType.imdbSuggestions":"tt27626554"}}}}}
 ''',
   r'''
 {"uniqueId":"nm0000233","title":"Quentin Tarantino","bestSource":"DataSourceType.imdbJson","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTgyMjI3ODA3Nl5BMl5BanBnXkFtZTcwNzY2MDYxOQ@@._V1_.jpg","sources":{"DataSourceType.imdbJson":"nm0000233"},
-  "related":{"Actor:":{"tt0072562":{"uniqueId":"tt0072562","title":"Saturday Night Live","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","charactorName":" [Camper, Chester Millbrush, Self - Guest Host]","type":"MovieContentType.custom","year":"1975","yearRange":"1975","runTime":"5400",
+  "related":{"Actor":{"tt0072562":{"uniqueId":"tt0072562","title":"Saturday Night Live","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","charactorName":" [Camper, Chester Millbrush, Self - Guest Host]","type":"MovieContentType.custom","year":"1975","yearRange":"1975","runTime":"5400",
       "genres":"[\"Comedy\",\"Music\"]",
       "userRating":"8.0","userRatingCount":"53290","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BYTlkZTZmZTctM2QyMy00MDFkLTk2ZjMtYjRmNjg4ZjJmMWFlXkEyXkFqcGdeQXVyMzQ2MDI5NjU@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0072562"}},
       "tt0088526":{"uniqueId":"tt0088526","title":"The Golden Girls","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","charactorName":" [Elvis Impersonator]","type":"MovieContentType.series","year":"1985","yearRange":"1985-1992","runTime":"1800",
@@ -465,7 +465,7 @@ const expectedDtoJsonStringList = [
 ''',
   r'''
 {"uniqueId":"nm0000233","title":"Quentin Tarantino","bestSource":"DataSourceType.imdbJson","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTgyMjI3ODA3Nl5BMl5BanBnXkFtZTcwNzY2MDYxOQ@@._V1_.jpg","sources":{"DataSourceType.imdbJson":"nm0000233"},
-  "related":{"Actor:":{"tt0072562":{"uniqueId":"tt0072562","title":"Saturday Night Live","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","charactorName":" [Camper, Chester Millbrush, Self - Guest Host]","type":"MovieContentType.custom","year":"1975","yearRange":"1975","runTime":"5400",
+  "related":{"Actor":{"tt0072562":{"uniqueId":"tt0072562","title":"Saturday Night Live","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","charactorName":" [Camper, Chester Millbrush, Self - Guest Host]","type":"MovieContentType.custom","year":"1975","yearRange":"1975","runTime":"5400",
       "genres":"[\"Comedy\",\"Music\"]",
       "userRating":"8.0","userRatingCount":"53290","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BYTlkZTZmZTctM2QyMy00MDFkLTk2ZjMtYjRmNjg4ZjJmMWFlXkEyXkFqcGdeQXVyMzQ2MDI5NjU@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0072562"}},
       "tt0088526":{"uniqueId":"tt0088526","title":"The Golden Girls","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","charactorName":" [Elvis Impersonator]","type":"MovieContentType.series","year":"1985","yearRange":"1985-1992","runTime":"1800",
@@ -588,7 +588,7 @@ const expectedDtoJsonStringList = [
 ''',
   r'''
 {"uniqueId":"nm0000233","title":"Quentin Tarantino","bestSource":"DataSourceType.imdbJson","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTgyMjI3ODA3Nl5BMl5BanBnXkFtZTcwNzY2MDYxOQ@@._V1_.jpg","sources":{"DataSourceType.imdbJson":"nm0000233"},
-  "related":{"Director:":{"tt0105236":{"uniqueId":"tt0105236","title":"Reservoir Dogs","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"1992","yearRange":"1992","runTime":"5940",
+  "related":{"Director":{"tt0105236":{"uniqueId":"tt0105236","title":"Reservoir Dogs","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"1992","yearRange":"1992","runTime":"5940",
       "genres":"[\"Crime\",\"Thriller\"]",
       "userRating":"8.3","userRatingCount":"1100587","censorRating":"CensorRatingType.restricted","imageUrl":"https://m.media-amazon.com/images/M/MV5BZmExNmEwYWItYmQzOS00YjA5LTk2MjktZjEyZDE1Y2QxNjA1XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0105236"}},
       "tt0108757":{"uniqueId":"tt0108757","title":"ER","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.series","year":"1994","yearRange":"1994-2009","runTime":"2640",
@@ -651,7 +651,7 @@ const expectedDtoJsonStringList = [
 ''',
   r'''
 {"uniqueId":"nm0000233","title":"Quentin Tarantino","bestSource":"DataSourceType.imdbJson","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTgyMjI3ODA3Nl5BMl5BanBnXkFtZTcwNzY2MDYxOQ@@._V1_.jpg","sources":{"DataSourceType.imdbJson":"nm0000233"},
-  "related":{"Producer:":{"tt0105108":{"uniqueId":"tt0105108","title":"Past Midnight","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"1991","yearRange":"1991","runTime":"6000",
+  "related":{"Producer":{"tt0105108":{"uniqueId":"tt0105108","title":"Past Midnight","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"1991","yearRange":"1991","runTime":"6000",
       "genres":"[\"Drama\",\"Mystery\",\"Romance\"]",
       "userRating":"5.6","userRatingCount":"1590","censorRating":"CensorRatingType.restricted","imageUrl":"https://m.media-amazon.com/images/M/MV5BNGM1NWMwOTAtMWM1Yy00OTg4LWJiNmEtZTllZjlhNzM3MTgzXkEyXkFqcGdeQXVyMTk0MjQ3Nzk@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0105108"}},
       "tt0108148":{"uniqueId":"tt0108148","title":"Iron Monkey","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":"Siu nin Wong Fei Hung chi: Tit ma lau","type":"MovieContentType.movie","year":"1993","yearRange":"1993","runTime":"5100",
@@ -720,7 +720,7 @@ const expectedDtoJsonStringList = [
 ''',
   r'''
 {"uniqueId":"nm0000233","title":"Quentin Tarantino","bestSource":"DataSourceType.imdbJson","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTgyMjI3ODA3Nl5BMl5BanBnXkFtZTcwNzY2MDYxOQ@@._V1_.jpg","sources":{"DataSourceType.imdbJson":"nm0000233"},
-  "related":{"Writer:":{"tt0105236":{"uniqueId":"tt0105236","title":"Reservoir Dogs","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"1992","yearRange":"1992","runTime":"5940",
+  "related":{"Writer":{"tt0105236":{"uniqueId":"tt0105236","title":"Reservoir Dogs","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"1992","yearRange":"1992","runTime":"5940",
       "genres":"[\"Crime\",\"Thriller\"]",
       "userRating":"8.3","userRatingCount":"1100587","censorRating":"CensorRatingType.restricted","imageUrl":"https://m.media-amazon.com/images/M/MV5BZmExNmEwYWItYmQzOS00YjA5LTk2MjktZjEyZDE1Y2QxNjA1XkEyXkFqcGdeQXVyMTQxNzMzNDI@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0105236"}},
       "tt0108399":{"uniqueId":"tt0108399","title":"True Romance","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"1993","yearRange":"1993","runTime":"7140",
@@ -806,23 +806,17 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
   final List<Future<List<MovieResultDTO>>> futures = [];
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
-    futures
-      ..add(QueryIMDBJsonDetails(criteria).readList())
-      ..add(
-        QueryIMDBJsonDetails(criteria, imdbQuery: imdbQueryActor).readList(),
-      )
-      ..add(
-        QueryIMDBJsonDetails(criteria, imdbQuery: imdbQueryActress).readList(),
-      )
-      ..add(
-        QueryIMDBJsonDetails(criteria, imdbQuery: imdbQueryDirector).readList(),
-      )
-      ..add(
-        QueryIMDBJsonDetails(criteria, imdbQuery: imdbQueryWriter).readList(),
-      )
-      ..add(
-        QueryIMDBJsonDetails(criteria, imdbQuery: imdbQueryProducer).readList(),
-      );
+    futures.add(QueryIMDBJsonDetails(criteria).readList());
+
+    for (final source in [
+      ImdbJsonSource.actor,
+      ImdbJsonSource.actress,
+      ImdbJsonSource.director,
+      ImdbJsonSource.writer,
+      ImdbJsonSource.producer,
+    ]) {
+      futures.add(QueryIMDBJsonDetails(criteria, imdbQuery: source).readList());
+    }
   }
   return futures;
 }

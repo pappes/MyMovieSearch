@@ -312,10 +312,10 @@ void main() {
       expect(
         queryResult.first.related.length,
         1,
-        reason: 'Related should contain a list on movies with the label Actor:',
+        reason: 'Related should contain a list on movies with the label Actor',
       );
       expect(
-        queryResult.first.related['Actor:']!.length,
+        queryResult.first.related['Actor']!.length,
         3,
         reason: 'Related should list 3 movies',
       );
