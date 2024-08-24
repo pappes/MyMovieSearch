@@ -5,6 +5,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 const dataSource = 'source';
 const outerElementIdentity = 'id';
 const outerElementSearchResults = 'searchResults';
+const outerElementDetailResults = 'data';
 
 const outerElementOfficialTitle = 'name';
 const outerElementAlternateTitle = 'alternateTitle';
@@ -71,12 +72,17 @@ const deepPersonEndDateHeader = 'deathDate';
 const deepPersonEndDateField = 'year';
 const deepPersonPopularityHeader = 'meterRanking';
 const deepPersonPopularityField = 'currentRank';
+const deepPersonActorHeader = 'actor_credits';
+const deepPersonActressHeader = 'actress_credits';
+const deepPersonProducerHeader = 'producer_credits';
+const deepPersonDirectorHeader = 'director_credits';
+const deepPersonWriterHeader = 'writer_credits';
 
 // Credits is repeated inside the category as "credits"
 // so use case sensative compare
 const deepPersonRelatedSuffix = 'Credits';
 // category repeated inside the node
-// souse the first instance for the credits section
+// source the first instance for the credits section
 const deepRelatedCategoryHeader = 'category';
 const deepRelatedMovieHeader = 'title';
 // characters are same map depth as title
@@ -100,6 +106,7 @@ const deepRelatedMovieYearHeader = 'releaseYear';
 const deepRelatedMovieYearStart = 'year';
 const deepRelatedMovieYearEnd = 'endYear';
 const deepRelatedMovieDurationHeader = 'runtime';
+const deepRelatedMovieDURATIONHeader = 'runTime';
 const deepRelatedMovieDurationField = 'seconds';
 const deepRelatedMovieCensorRatingHeader = 'certificate';
 const deepRelatedMovieCensorRatingField = 'rating';

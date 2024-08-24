@@ -34,15 +34,14 @@ void sortDtoList(
 }
 
 void printTestData(
-  List<MovieResultDTO> actualResult, {
+  Iterable<MovieResultDTO> actualResult, {
   bool includeRelated = true,
 }) {
-  sortDtoList(actualResult, includeRelated: includeRelated);
+  final sorted = actualResult.toList();
+  sortDtoList(sorted, includeRelated: includeRelated);
   // ignore: avoid_print
   print(
-    actualResult.toListOfDartJsonStrings(
-      includeRelated: includeRelated,
-    ),
+    sorted.toListOfDartJsonStrings(includeRelated: includeRelated),
   );
   expect(
     'debug code has been left uncommented!',

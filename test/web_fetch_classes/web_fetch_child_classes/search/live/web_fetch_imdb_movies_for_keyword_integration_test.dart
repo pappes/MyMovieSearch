@@ -181,7 +181,7 @@ void main() {
       actualOutput.clearCopyrightedData();
 
       // Uncomment this line to update expectedOutput if sample data changes
-      printTestData(actualOutput);
+      // printTestData(actualOutput);
 
       // Check the results.
       expect(

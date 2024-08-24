@@ -10,9 +10,15 @@ import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 
-const _relatedMoviesLabel = 'Suggestions:';
-const relatedActorsLabel = 'Cast:';
-const relatedDirectorsLabel = 'Directed by:';
+const titleRelatedMoviesLabel = 'Suggestions:';
+const titleRelatedActorsLabel = 'Cast:';
+const titleRelatedDirectorsLabel = 'Directed by:';
+
+const personRelatedActressLabel = 'Actress:';
+const personRelatedActorLabel = 'Actor:';
+const personRelatedDirectorLabel = 'Director:';
+const personRelatedProducerLabel = 'Producer:';
+const personRelatedWriterLabel = 'Writer:';
 
 /// Used to convert search results, movie details and person details Map
 /// to a dto list.
@@ -154,7 +160,10 @@ class ImdbWebScraperConverter {
   }
 
   /// extract related movie details from [map].
-  MovieResultDTO _getDeepTitleCommon(Map<dynamic, dynamic> map, String id) {
+  static MovieResultDTO _getDeepTitleCommon(
+    Map<dynamic, dynamic> map,
+    String id,
+  ) {
     // ...{'titleText':...{...'text':<value>...}} or
     // ...{'titleText':<value>...}
     final title = map.deepSearch(deepRelatedMovieTitle)?.searchForString() ??
@@ -189,6 +198,9 @@ class ImdbWebScraperConverter {
     // ...{'runtime':<value>...}
     final duration =
         map.deepSearch(deepRelatedMovieDurationHeader)?.searchForString(
+                  key: deepRelatedMovieDurationField,
+                ) ??
+            map.deepSearch(deepRelatedMovieDURATIONHeader)?.searchForString(
                   key: deepRelatedMovieDurationField,
                 ) ??
             map.deepSearch(deepRelatedMovieDurationHeader)?.first?.toString();
@@ -305,19 +317,19 @@ class ImdbWebScraperConverter {
         ?.deepSearch(deepTitleRelatedCastHeader)
         ?.deepSearch(deepTitleRelatedCastContainer, multipleMatch: true);
     final cast = _getDeepTitleRelatedPeopleForCategory(castTree);
-    combineMovies(result, relatedActorsLabel, cast);
+    combineMovies(result, titleRelatedActorsLabel, cast);
 
     final directorsTree = list
         ?.deepSearch(deepTitleRelatedDirectorHeader)
         ?.deepSearch(deepTitleRelatedDirectorContainer, multipleMatch: true);
     final directors = _getDeepTitleRelatedPeopleForCategory(directorsTree);
-    combineMovies(result, relatedDirectorsLabel, directors);
+    combineMovies(result, titleRelatedDirectorsLabel, directors);
 
     final relatedTree = list
         ?.deepSearch(deepTitleRelatedTitlesHeader)
         ?.deepSearch(deepRelatedMovieContainer, multipleMatch: true);
     final related = _getDeepTitleRelatedMoviesForCategory(relatedTree);
-    combineMovies(result, _relatedMoviesLabel, related);
+    combineMovies(result, titleRelatedMoviesLabel, related);
 
     return result;
   }
@@ -365,7 +377,9 @@ class ImdbWebScraperConverter {
 
   /// extract collections of movies for a specific category for the person
   /// from a map or a list.
-  MovieCollection _getDeepPersonRelatedMoviesForCategory(dynamic category) {
+  static MovieCollection _getDeepPersonRelatedMoviesForCategory(
+    dynamic category,
+  ) {
     final MovieCollection result = {};
     final nodes = TreeHelper(category).deepSearch(
       deepRelatedMovieContainer,
@@ -465,18 +479,71 @@ class ImdbWebScraperConverter {
   }
 
   /// extract related movie details from [map].
-  MovieResultDTO _getDeepTitle(Map<dynamic, dynamic> map) {
+  static MovieResultDTO _getDeepTitle(Map<dynamic, dynamic> map) {
     final id = map.deepSearch(deepRelatedMovieId)!.first!.toString();
     final dto = _getDeepTitleCommon(map, id);
     return dto;
   }
 
   void _shallowConvert(MovieResultDTO movie, Map<dynamic, dynamic> map) {
+    movie.setSource(
+      newSource: map[dataSource],
+      newUniqueId: map[outerElementIdentity]!.toString(),
+    );
+    if (movie.uniqueId.startsWith(imdbPersonPrefix)) {
+      _shallowConvertPerson(movie, map);
+    } else if (movie.uniqueId.startsWith(imdbTitlePrefix)) {
+      _shallowConvertTitle(movie, map);
+    }
+  }
+
+  void _shallowConvertPerson(MovieResultDTO movie, Map<dynamic, dynamic> map) {
+    final name = map[deepPersonNameHeader];
+    if (name != null && name is Map) {
+      movie.title = name.searchForString() ?? movie.imageUrl;
+    } else {
+      movie.title = name?.toString() ?? movie.imageUrl;
+    }
+    final url = map[deepImageHeader];
+    if (url != null && url is Map) {
+      movie.imageUrl =
+          url.searchForString(key: outerElementLink) ?? movie.imageUrl;
+    } else {
+      movie.imageUrl = url?.toString() ?? movie.imageUrl;
+    }
+
+    combineMovies(
+      movie.related,
+      personRelatedActorLabel,
+      _getDeepPersonRelatedMoviesForCategory(map[deepPersonActorHeader]),
+    );
+    combineMovies(
+      movie.related,
+      personRelatedActressLabel,
+      _getDeepPersonRelatedMoviesForCategory(map[deepPersonActressHeader]),
+    );
+    combineMovies(
+      movie.related,
+      personRelatedDirectorLabel,
+      _getDeepPersonRelatedMoviesForCategory(map[deepPersonDirectorHeader]),
+    );
+    combineMovies(
+      movie.related,
+      personRelatedProducerLabel,
+      _getDeepPersonRelatedMoviesForCategory(map[deepPersonProducerHeader]),
+    );
+    combineMovies(
+      movie.related,
+      personRelatedWriterLabel,
+      _getDeepPersonRelatedMoviesForCategory(map[deepPersonWriterHeader]),
+    );
+
+    // Reintialise the source after setting the ID
+    movie.setSource(newSource: source);
+  }
+
+  void _shallowConvertTitle(MovieResultDTO movie, Map<dynamic, dynamic> map) {
     movie
-      ..setSource(
-        newSource: map[dataSource],
-        newUniqueId: map[outerElementIdentity]!.toString(),
-      )
       ..title = map[outerElementOfficialTitle]?.toString() ?? movie.title
       ..alternateTitle =
           map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;
@@ -524,13 +591,13 @@ class ImdbWebScraperConverter {
       ..getLanguageType();
 
     for (final person in getPeopleFromJson(map[outerElementDirector])) {
-      movie.addRelated(relatedDirectorsLabel, person);
+      movie.addRelated(titleRelatedDirectorsLabel, person);
     }
     for (final person in getPeopleFromJson(map[outerElementActors])) {
-      movie.addRelated(relatedActorsLabel, person);
+      movie.addRelated(titleRelatedActorsLabel, person);
     }
     //_getRelated(movie, map[outerElementActors], relatedActorsLabel);
-    _getRelated(movie, map[outerElementRelated], _relatedMoviesLabel);
+    _getRelated(movie, map[outerElementRelated], titleRelatedMoviesLabel);
 
     final related = map[outerElementRelated];
     _getRelatedSections(related, movie);
