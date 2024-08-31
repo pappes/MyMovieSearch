@@ -293,12 +293,36 @@ class MMSFlutterCanvas {
               page.reference,
               page.params,
             );
+            _hideKeyboard();
           });
       } catch (e) {
         logger.t(e);
       }
     }
     return Future.value(null);
+  }
+
+  /// Stop the keyboard from popping up when navigating pages.
+  ///
+  /// Uses exponential backoff to wait for the keyboard to appear
+  /// but close it quickly.
+  /// If the keyboard does not appear within 1 second
+  /// then the operation is cancelled.
+  void _hideKeyboard([Duration delay = const Duration(microseconds: 1)]) {
+    unawaited(
+      Future.delayed(delay).then((_) {
+        final focusArea = FocusManager.instance.primaryFocus;
+        final widgetType = focusArea?.context?.widget.toString() ?? '';
+        if (widgetType.contains('EditableText')) {
+          // hide the keyboard
+          focusArea?.unfocus();
+        } else {
+          if (delay.inSeconds <= 1) {
+            _hideKeyboard(Duration(microseconds: delay.inMicroseconds * 10));
+          }
+        }
+      }),
+    );
   }
 
   /// Construct route to a top level Material user interface page.
