@@ -10,7 +10,6 @@ import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
 import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb_bibliography.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
@@ -70,13 +69,6 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       unawaited(
         QueryIMDBNameDetails(criteria)
             .readPrioritisedCachedList(priority: ThreadRunner.fast)
-            .then(_requestShowDetails),
-      );
-
-      /// Fetch related movie from cache using a separate thread.
-      unawaited(
-        QueryIMDBBibliographyDetails(criteria)
-            .readPrioritisedCachedList(priority: ThreadRunner.slow)
             .then(_requestShowDetails),
       );
 

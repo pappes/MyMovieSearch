@@ -18,7 +18,9 @@ class QueryIMDBNameDetails
     with ScrapeIMDBNameDetails, ThreadedCacheIMDBNameDetails {
   QueryIMDBNameDetails(super.criteria);
 
-  static const _baseURL = 'https://www.imdb.com/name/';
+  static const _urlBase = 'https://www.imdb.com/name/';
+  static const _urlSuffix = '?showAllCredits=true';
+
   static const defaultSearchResultsLimit = 100;
 
   /// Describe where the data is coming from.
@@ -43,7 +45,7 @@ class QueryIMDBNameDetails
   /// API call to IMDB person details for person id.
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final url = '$_baseURL$searchCriteria';
+    final url = '$_urlBase$searchCriteria$_urlSuffix';
     return Uri.parse(url);
   }
 
