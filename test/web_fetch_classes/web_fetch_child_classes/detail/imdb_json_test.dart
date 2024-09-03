@@ -37,8 +37,8 @@ void main() {
     test('Run myDataSourceName()', () {
       final criteria = SearchCriteriaDTO();
       expect(
-        QueryIMDBJsonDetails(criteria).myDataSourceName(),
-        'imdb_Json',
+        QueryIMDBJsonPaginatedFilmographyDetails(criteria).myDataSourceName(),
+        'imdb_Json-NameMainFilmographyPaginatedCredits-ImdbJsonSource.actor',
       );
     });
 
@@ -46,7 +46,7 @@ void main() {
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO()..criteriaTitle = 'nmtesting';
       expect(
-        QueryIMDBJsonDetails(input).myFormatInputAsText(),
+        QueryIMDBJsonPaginatedFilmographyDetails(input).myFormatInputAsText(),
         'nmtesting',
       );
     });
@@ -59,11 +59,11 @@ void main() {
           makeResultDTO('nmtest2'),
         ];
       expect(
-        QueryIMDBJsonDetails(input).myFormatInputAsText(),
+        QueryIMDBJsonPaginatedFilmographyDetails(input).myFormatInputAsText(),
         '',
       );
       expect(
-        QueryIMDBJsonDetails(input).myFormatInputAsText(),
+        QueryIMDBJsonPaginatedFilmographyDetails(input).myFormatInputAsText(),
         '',
       );
     });
@@ -72,12 +72,14 @@ void main() {
     test('Run myYieldError()', () {
       const expectedResult = {
         'bestSource': 'DataSourceType.imdb',
-        'title': '[QueryIMDBJsonDetails] new query',
+        'title': '[imdb_Json-'
+            'NameMainFilmographyPaginatedCredits-ImdbJsonSource.actor] '
+            'new query',
         'type': 'MovieContentType.error',
       };
       final criteria = SearchCriteriaDTO();
       // Invoke the functionality.
-      final actualResult = QueryIMDBJsonDetails(criteria)
+      final actualResult = QueryIMDBJsonPaginatedFilmographyDetails(criteria)
           .myYieldError('new query')
           .toMap()
         ..remove('uniqueId');
@@ -89,7 +91,7 @@ void main() {
     test('Run myConvertWebTextToTraversableTree()', () async {
       const expectedOutput = [imdbJsonInnerSample];
       final criteria = SearchCriteriaDTO().fromString('nm1913125');
-      final testClass = QueryIMDBJsonDetails(criteria);
+      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
         jsonEncode(imdbJsonSample),
       );
@@ -129,7 +131,7 @@ void main() {
   group('WebFetchThreadedCache unit tests', () {
     test('empty cache', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryIMDBJsonDetails(criteria);
+      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
       await testClass.clearThreadedCache();
       final listResult = await testClass.readCachedList(
         source: (_) => Future.value(Stream.value('Polo')),
@@ -143,11 +145,11 @@ void main() {
 
     test('add to cache via readPrioritisedCachedList', () async {
       final criteria = SearchCriteriaDTO().fromString('nm1913125');
-      final testClass = QueryIMDBJsonDetails(criteria);
+      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
       await testClass.clearThreadedCache();
       // ignore: unused_result
       await testClass.readPrioritisedCachedList(
-        source: streamImdbHtmlOfflineData,
+        source: streamImdbHtmlOfflinePaginatedData,
       );
       final listResult = await testClass.readPrioritisedCachedList(
         source: StaticJsonGenerator.stuff,
@@ -169,11 +171,11 @@ void main() {
 
     test('fetch result from cache', () async {
       final criteria = SearchCriteriaDTO().fromString('nm1913125');
-      final testClass = QueryIMDBJsonDetails(criteria);
+      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
       await testClass.clearThreadedCache();
       // ignore: unused_result
       await testClass.readPrioritisedCachedList(
-        source: streamImdbHtmlOfflineData,
+        source: streamImdbHtmlOfflinePaginatedData,
       );
       final listResult =
           await testClass.fetchResultFromThreadedCache().toList();
@@ -186,11 +188,11 @@ void main() {
 
     test('clear cache', () async {
       final criteria = SearchCriteriaDTO().fromString('nm1913125');
-      final testClass = QueryIMDBJsonDetails(criteria);
+      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
       await testClass.clearThreadedCache();
       // ignore: unused_result
       await testClass.readPrioritisedCachedList(
-        source: streamImdbHtmlOfflineData,
+        source: streamImdbHtmlOfflinePaginatedData,
       );
       await testClass.clearThreadedCache();
       final resultIsCached = await testClass.isThreadedResultCached();
@@ -219,8 +221,9 @@ void main() {
       final criteria = SearchCriteriaDTO();
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBJsonDetails(criteria).myConstructURI('1234').toString();
+      final actualResult = QueryIMDBJsonPaginatedFilmographyDetails(criteria)
+          .myConstructURI('1234')
+          .toString();
 
       // Check the results.
       expect(actualResult, expected);
@@ -234,7 +237,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryIMDBJsonDetails(criteria);
+      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
       final expectedValue = expectedDTOList;
       await testClass.myClearCache();
 
@@ -263,7 +266,7 @@ void main() {
         ),
       );
       final criteria = SearchCriteriaDTO();
-      final testClass = QueryIMDBJsonDetails(criteria);
+      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
       await testClass.myClearCache();
 
       // Invoke the functionality and collect results.
@@ -288,12 +291,12 @@ void main() {
       final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm1913125');
-      final testClass = QueryIMDBJsonDetails(criteria);
+      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
       await testClass.myClearCache();
 
       // Invoke the functionality.
       await testClass
-          .readList(source: streamImdbHtmlOfflineData)
+          .readList(source: streamImdbHtmlOfflinePaginatedData)
           .then(queryResult.addAll)
           .onError(
             // ignore: avoid_print
@@ -325,7 +328,9 @@ void main() {
     // and report error due to invalid html.
     test('invalid json', () async {
       // Set up the test data.
-      const expectedException = '[QueryIMDBJsonDetails] Error in imdb_Json '
+      const expectedException = '[imdb_Json-'
+          'NameMainFilmographyPaginatedCredits-ImdbJsonSource.actor] Error in '
+          'imdb_Json-NameMainFilmographyPaginatedCredits-ImdbJsonSource.actor '
           'with criteria nm123 convert error interpreting web text as a map '
           ':Invalid json FormatException: '
           'Unexpected character (at character 1)\n'
@@ -333,7 +338,7 @@ void main() {
           '^\n';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm123');
-      final testClass = QueryIMDBJsonDetails(criteria);
+      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
       await testClass.myClearCache();
 
       // Invoke the functionality.
@@ -347,16 +352,17 @@ void main() {
     // and report error due to unexpected html.
     test('unexpected json contents', () async {
       // Set up the test data.
-      const expectedException =
-          '[QueryIMDBJsonDetails] Error in imdb_Json with '
-          'criteria nm123 convert error interpreting web text as a map '
+      const expectedException = '[imdb_Json-'
+          'NameMainFilmographyPaginatedCredits-ImdbJsonSource.actor] Error in '
+          'imdb_Json-NameMainFilmographyPaginatedCredits-ImdbJsonSource.actor '
+          'with criteria nm123 convert error interpreting web text as a map '
           ':Invalid json FormatException: '
           'Unexpected character (at character 2)\n'
           '{{[]}}\n'
           ' ^\n';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm123');
-      final testClass = QueryIMDBJsonDetails(criteria);
+      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
       await testClass.myClearCache();
 
       // Invoke the functionality.

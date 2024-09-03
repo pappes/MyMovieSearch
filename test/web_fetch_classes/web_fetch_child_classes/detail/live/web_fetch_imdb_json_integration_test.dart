@@ -806,7 +806,7 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
   final List<Future<List<MovieResultDTO>>> futures = [];
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
-    futures.add(QueryIMDBJsonDetails(criteria).readList());
+    futures.add(QueryIMDBJsonPaginatedFilmographyDetails(criteria).readList());
 
     for (final source in [
       ImdbJsonSource.actor,
@@ -815,7 +815,10 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
       ImdbJsonSource.writer,
       ImdbJsonSource.producer,
     ]) {
-      futures.add(QueryIMDBJsonDetails(criteria, imdbQuery: source).readList());
+      futures.add(
+        QueryIMDBJsonPaginatedFilmographyDetails(criteria, imdbQuery: source)
+            .readList(),
+      );
     }
   }
   return futures;
@@ -859,7 +862,8 @@ void main() {
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
       final actualOutput =
-          await QueryIMDBJsonDetails(criteria).readList(limit: 10);
+          await QueryIMDBJsonPaginatedFilmographyDetails(criteria)
+              .readList(limit: 10);
       final expectedOutput = <MovieResultDTO>[];
 
       // Check the results.

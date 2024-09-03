@@ -24,7 +24,10 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-Future<Stream<String>> streamImdbHtmlOfflineData(_) =>
+Future<Stream<String>> streamImdbHtmlOfflineFilteredData(_) =>
+    Future.value(Stream.value(jsonEncode(imdbJsonSample)));
+
+Future<Stream<String>> streamImdbHtmlOfflinePaginatedData(_) =>
     Future.value(Stream.value(jsonEncode(imdbJsonSample)));
 
 const imdbJsonSample = {

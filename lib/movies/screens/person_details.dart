@@ -82,7 +82,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         ImdbJsonSource.producer,
       ]) {
         unawaited(
-          QueryIMDBJsonDetails(criteria, imdbQuery: source)
+          QueryIMDBJsonPaginatedFilmographyDetails(criteria, imdbQuery: source)
               .readPrioritisedCachedList(priority: ThreadRunner.fast)
               .then(_requestShowDetails),
         );
