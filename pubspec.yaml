@@ -18,7 +18,7 @@ publish_to: nnone # Remove this line if you wish to publish to pub.dev
 version: 1.0.3
 
 environment:
-  sdk: '>=3.1.2 <4.0.0'
+  sdk: '>=3.4.4 <4.0.0'
 
 dependencies:
   
@@ -84,7 +84,8 @@ dependencies:
   url_launcher: ^6.0.20                 # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
   webview_flutter: ^4.7.0               # Show web page
 
-
+dependency_overrides:
+  win32: ^5.5.3
 
 dev_dependencies:
   build_runner: ^2.1.7
