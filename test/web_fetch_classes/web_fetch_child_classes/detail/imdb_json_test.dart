@@ -88,7 +88,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree() paginated', () async {
       final expectedOutput = [imdbJsonInnerPaginatedSample];
       final criteria = SearchCriteriaDTO().fromString('nm1913125');
       final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
@@ -97,21 +97,53 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
+    // Confirm web text is parsed  as expected.
+    test('Run myConvertWebTextToTraversableTree() filtered', () async {
+      final expectedOutput = [imdbJsonInnerFilteredSample];
+      final criteria = SearchCriteriaDTO().fromString('nm1913125');
+      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
+      final actualOutput = testClass.myConvertWebTextToTraversableTree(
+        jsonEncode(imdbJsonWrappedFilteredSample),
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
   });
 
   group('ImdbJsonConverter unit tests', () {
     // Confirm map can be converted to DTO.
-    test('Run dtoFromCompleteJsonMap()', () {
+    test('Run dtoFromCompleteJsonMap() paginated', () {
       // Invoke the functionality and collect results.
       final actualResult = ImdbWebScraperConverter().dtoFromCompleteJsonMap(
-        imdbJsonInnerPaginatedSample!,
+        imdbJsonInnerPaginatedSample,
         DataSourceType.imdbJson,
       );
 
       // Uncomment this line to update expectedDTOList if sample data changes
       // printTestData(actualResult);
 
-      final expectedValue = expectedDTOPaginatedList;
+      final expectedValue = expectedDTOList;
+      expectedValue.first.uniqueId = 'nm1913125';
+      // Check the results.
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
+      );
+    });
+    // Confirm map can be converted to DTO.
+    test('Run dtoFromCompleteJsonMap() filtered', () {
+      // Invoke the functionality and collect results.
+      final actualResult = ImdbWebScraperConverter().dtoFromCompleteJsonMap(
+        imdbJsonInnerFilteredSample,
+        DataSourceType.imdbJson,
+      );
+
+      // Uncomment this line to update expectedDTOList if sample data changes
+      // printTestData(actualResult);
+
+      final expectedValue = expectedDTOList;
       expectedValue.first.uniqueId = 'nm1913125';
       // Check the results.
       expect(
@@ -158,10 +190,10 @@ void main() {
       );
       expect(
         listResult,
-        MovieResultDTOListMatcher(expectedDTOPaginatedList),
+        MovieResultDTOListMatcher(expectedDTOList),
         reason: 'Emitted DTO list ${listResult.toPrintableString()} '
             'needs to match expected DTO List'
-            '${expectedDTOPaginatedList.toPrintableString()}',
+            '${expectedDTOList.toPrintableString()}',
       );
       final resultIsCached = await testClass.isThreadedResultCached();
       expect(resultIsCached, true);
@@ -179,7 +211,7 @@ void main() {
       );
       final listResult =
           await testClass.fetchResultFromThreadedCache().toList();
-      expect(listResult, MovieResultDTOListMatcher(expectedDTOPaginatedList));
+      expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
       final resultIsCached = await testClass.isThreadedResultCached();
       expect(resultIsCached, true);
       final resultIsStale = testClass.isThreadedCacheStale();
@@ -238,7 +270,7 @@ void main() {
     test('Run myConvertTreeToOutputType()', () async {
       final criteria = SearchCriteriaDTO();
       final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
-      final expectedValue = expectedDTOPaginatedList;
+      final expectedValue = expectedDTOList;
       await testClass.myClearCache();
 
       // Invoke the functionality and collect results.
@@ -288,7 +320,7 @@ void main() {
     // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
-      final expectedValue = expectedDTOPaginatedList;
+      final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('nm1913125');
       final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);

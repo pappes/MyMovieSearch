@@ -5,12 +5,11 @@ import 'dart:convert';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
-final expectedDTOPaginatedList =
-    ListDTOConversion.decodeList(expectedDtoJsonPaginatedStringList);
+final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
-const expectedDtoJsonPaginatedStringList = [
+const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"nm1913125","title":"Raman Rodger","bestSource":"DataSourceType.imdbJson","imageUrl":"https://m.media-amazon.com/images/M/MV5BNWMyMGQxZVyNTAyNTY1NA@@._V1_CR243,0,986,1479_.jpg","sources":{"DataSourceType.imdbJson":"nm1913125"},
   "related":{"Actor":{"tt11123818":{"uniqueId":"tt11123818","title":"Our Tupple","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"2002","yearRange":"2002",
@@ -30,21 +29,6 @@ Future<Stream<String>> streamImdbHtmlOfflineFilteredData(_) =>
 
 Future<Stream<String>> streamImdbHtmlOfflinePaginatedData(_) =>
     Future.value(Stream.value(jsonEncode(imdbJsonWrappedPaginatedSample)));
-
-const oneEdge = {
-  'total': 1,
-  'edges': [imdbJsonNode1Sample],
-};
-
-const twoEdges = {
-  'total': 2,
-  'edges': [imdbJsonNode2Sample, imdbJsonNode3Sample],
-};
-
-const threeEdges = {
-  'total': 3,
-  'edges': [imdbJsonNode1Sample, imdbJsonNode2Sample, imdbJsonNode3Sample],
-};
 
 const imdbJsonWrappedPaginatedSample = {
   'data': {
@@ -100,6 +84,21 @@ const imdbJsonInnerFilteredSampleResults = {
       'credits': twoEdges
     },
   ],
+};
+
+const oneEdge = {
+  'total': 1,
+  'edges': [imdbJsonNode1Sample],
+};
+
+const twoEdges = {
+  'total': 2,
+  'edges': [imdbJsonNode2Sample, imdbJsonNode3Sample],
+};
+
+const threeEdges = {
+  'total': 3,
+  'edges': [imdbJsonNode1Sample, imdbJsonNode2Sample, imdbJsonNode3Sample],
 };
 
 const imdbJsonNode1Sample = {

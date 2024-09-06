@@ -511,6 +511,13 @@ class ImdbWebScraperConverter {
     } else {
       movie.imageUrl = url?.toString() ?? movie.imageUrl;
     }
+    movie.related = _getDeepPersonRelatedCategories(
+      map.deepSearch(
+        deepPersonRelatedSuffix, //'*Credits' e.g. releasedCredits
+        suffixMatch: true,
+        multipleMatch: true,
+      ),
+    );
 
     combineMovies(
       movie.related,

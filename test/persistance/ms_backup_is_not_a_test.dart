@@ -21,7 +21,7 @@ void main() async {
     // that the data is up to date.
     test(
       timeout: const Timeout(Duration(minutes: 60)),
-      skip: false,
+      skip: true,
       'getDataFromSearchEngine',
       () async {
         await getDataFromSearchEngine();
