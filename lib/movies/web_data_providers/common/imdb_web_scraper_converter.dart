@@ -39,12 +39,16 @@ class ImdbWebScraperConverter {
   Iterable<MovieResultDTO> dtoFromMap(Map<dynamic, dynamic> map, String a) {
     final movie = MovieResultDTO().init();
     if (null != map.deepSearch(outerElementSearchResults)) {
+      // Used by QueryIMDBMoviesForKeyword.
       return _deepConvertSearchResults(map);
     } else if (map.containsKey(outerElementIdentity)) {
+      // Used by QueryIMDBJson* and QueryIMDBSearch
       _shallowConvert(movie, map);
     } else if (null != map.deepSearch(deepPersonId)) {
+      // Used by QueryIMDBNameDetails.
       _deepConvertPerson(movie, map);
     } else if (null != map.deepSearch(deepTitleId2)) {
+      // Used by QueryIMDBTitleDetails.
       _deepConvertTitle(movie, map);
     } else {
       return [
@@ -498,26 +502,31 @@ class ImdbWebScraperConverter {
   }
 
   void _shallowConvertPerson(MovieResultDTO movie, Map<dynamic, dynamic> map) {
-    final name = map[deepPersonNameHeader];
+    movie.type = MovieContentType.person;
+    final name = map[outerElementOfficialTitle] ?? map[deepPersonNameHeader];
     if (name != null && name is Map) {
       movie.title = name.searchForString() ?? movie.imageUrl;
     } else {
       movie.title = name?.toString() ?? movie.imageUrl;
     }
-    final url = map[deepImageHeader];
+    final url = map[deepImageHeader] ?? map[outerElementImage];
     if (url != null && url is Map) {
       movie.imageUrl =
           url.searchForString(key: outerElementLink) ?? movie.imageUrl;
     } else {
       movie.imageUrl = url?.toString() ?? movie.imageUrl;
     }
-    movie.related = _getDeepPersonRelatedCategories(
-      map.deepSearch(
-        deepPersonRelatedSuffix, //'*Credits' e.g. releasedCredits
-        suffixMatch: true,
-        multipleMatch: true,
-      ),
-    );
+
+    movie
+      ..description =
+          map[outerElementDescription]?.toString() ?? movie.description
+      ..related = _getDeepPersonRelatedCategories(
+        map.deepSearch(
+          deepPersonRelatedSuffix, //'*Credits' e.g. releasedCredits
+          suffixMatch: true,
+          multipleMatch: true,
+        ),
+      );
 
     combineMovies(
       movie.related,
@@ -551,6 +560,7 @@ class ImdbWebScraperConverter {
 
   void _shallowConvertTitle(MovieResultDTO movie, Map<dynamic, dynamic> map) {
     movie
+      ..type = MovieContentType.title
       ..title = map[outerElementOfficialTitle]?.toString() ?? movie.title
       ..alternateTitle =
           map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;

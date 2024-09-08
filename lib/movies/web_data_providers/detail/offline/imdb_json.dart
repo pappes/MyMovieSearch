@@ -11,7 +11,7 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"nm1913125","title":"Raman Rodger","bestSource":"DataSourceType.imdbJson","imageUrl":"https://m.media-amazon.com/images/M/MV5BNWMyMGQxZVyNTAyNTY1NA@@._V1_CR243,0,986,1479_.jpg","sources":{"DataSourceType.imdbJson":"nm1913125"},
+{"uniqueId":"nm1913125","title":"Raman Rodger","bestSource":"DataSourceType.imdbJson","type":"MovieContentType.person","imageUrl":"https://m.media-amazon.com/images/M/MV5BNWMyMGQxZVyNTAyNTY1NA@@._V1_CR243,0,986,1479_.jpg","sources":{"DataSourceType.imdbJson":"nm1913125"},
   "related":{"Actor":{"tt11123818":{"uniqueId":"tt11123818","title":"Our Tupple","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"2002","yearRange":"2002",
       "genres":"[\"Drama\"]",
       "userRating":"6.7","userRatingCount":"8","imageUrl":"https://m.media-amazon.com/images/M/MV5BNTE0NWNhZGdeQXVyMTY1ODE1NTk@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt11123818"}},

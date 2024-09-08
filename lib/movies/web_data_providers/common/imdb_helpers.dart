@@ -5,6 +5,8 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 const dataSource = 'source';
 const outerElementIdentity = 'id';
 const outerElementSearchResults = 'searchResults';
+const outerElementNameResults = 'nameResults';
+const outerElementTitleResults = 'titleResults';
 const outerElementDetailResults = 'data';
 
 const outerElementOfficialTitle = 'name';
