@@ -25,18 +25,18 @@ dependencies:
   # Note: use "dart pub outdated" to find libraries that should be upgraded
   bloc: ^8.0.3
   
-  cached_network_image: ^3.3.0          # preload large images
-  cloud_firestore: ^4.9.1
+  cached_network_image: ^3.4.1          # preload large images
+  cloud_firestore: ^5.4.0               # Store data in Firebase Firestore cloud database
   
   cupertino_icons: ^1.0.4               # iOS style icons.
   #device_info_plus: ^10.1.0             # get infomation about the manufacturer of the phone
   
   easy_debounce: ^2.0.3                 # manage the frequency fo requests
-  easy_image_viewer: ^1.2.1
+  easy_image_viewer: ^1.5.1
   equatable: ^2.0.3                     # Simplify object comparisons.
 
-  firebase_auth: ^4.9.0
-  firebase_core: ^2.15.1
+  firebase_auth: ^5.2.0
+  firebase_core: ^3.4.0
   #firebase_ui_auth: ^1.7.0              # does not work on linux :(
   #firebase_core: ^1.0.3                 # Firebase initialisation
   #firebase_auth: ^3.0.1                 # Authenticate users against Firebase
@@ -45,8 +45,8 @@ dependencies:
   firedart: ^0.9.7                      # dart native wrapper to firebase API
   flutter:
     sdk: flutter
-  flutter_bloc: ^8.0.1                  # Assist with the BLoC design pattern.
-  flutter_custom_tabs: ^2.0.0           # replace webview with android chrome browser
+  flutter_bloc: ^8.1.6                  # Assist with the BLoC design pattern.
+  flutter_custom_tabs: ^2.1.0           # replace webview with android chrome browser
   flutter_dotenv: ^5.0.2                # Read secrests and settings from .env file.
 
 
@@ -55,41 +55,43 @@ dependencies:
 
 
 
-  go_router: ^14.0.0                    # screen navigation
+  go_router: ^14.2.7                    # screen navigation
   google_cloud: ^0.2.0                  # control GCP cloud resources
   google_secret_manager: ^1.1.0         # retrieve secrets from GCP
-  googleapis: ^11.4.0                   # interact with GCP resources  
+  googleapis: ^13.2.0                   # interact with GCP resources  
   googleapis_auth: ^1.6.0               # log in to google API with service accounts
-  grpc: ^3.2.4                          # extended firedart error handling
+  # grpc: ^3.2.4                          # extended firedart error handling
   html: ^0.15.0                         # Dart dom and html utilities.
   html_unescape: ^2.0.0                 # decode &apos;
   # hydrated_bloc: ^9.1.2                # automatic restoration for bloc data
   intl: ^0.19.0                         # internationalisation including number and data formatting.
   lint: ^2.0.1
-  logger: ^2.0.2                        # Log trace messages to console.
+  logger: ^2.4.0                        # Log trace messages to console.
   ####logger_flutter: ^0.7.1             # Shake device to see trace messages.
   meilisearch: ^0.16.0
   meta: ^1.11.0                          # extended annotations
   mutex: ^3.1.0
   path: ^1.8.3                          # File path manipulation library
-  path_provider: ^2.0.9                 # Device filesystem access for accessing database files.
+  path_provider: ^2.1.4                 # Device filesystem access for accessing database files.
 
   provider: ^6.0.5                      # so ChangeNotifierProvider can notify change to firebase login state
 
-  simple_barcode_scanner: ^0.1.1
+  #simple_barcode_scanner: ^0.1.1       # DOES NOT COMPILE with flutter 3.24
   #sqflite: ^2.0.2                       # Database storage for persisting state across sessions.
   sqflite_common_ffi: ^2.3.2+1          # Database storage for persisting state across sessions.
-  sqlite3_flutter_libs: ^0.5.20         # Database storage for persisting state across sessions.
+  sqlite3_flutter_libs: ^0.5.24         # Database storage for persisting state across sessions.
   universal_io: ^2.0.4                  # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
-  url_launcher: ^6.0.20                 # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
+  url_launcher: ^6.3.0                  # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
   webview_flutter: ^4.7.0               # Show web page
 
 dependency_overrides:
-  win32: ^5.5.3
+  googleapis: ^13.2.0                   # force google_secret_manager to use latest googleapis
+  web: ^1.0.0                           # force firebase to use newer version of web
+ # win32: ^5.5.3                        # if above libraries need to be forced to use updated versions of a dependent library
 
 dev_dependencies:
-  build_runner: ^2.1.7
-  flutter_lints: ^3.0.1
+  build_runner: ^2.4.12
+  flutter_lints: ^4.0.0
   flutter_test:
     sdk: flutter
   integration_test:

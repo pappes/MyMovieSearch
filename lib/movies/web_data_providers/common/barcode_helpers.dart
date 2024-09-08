@@ -5,7 +5,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
-import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+// import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import 'package:universal_io/io.dart';
 
 typedef BarcodeAction = void Function(String barcode);
@@ -31,12 +31,13 @@ class DVDBarcodeScanner {
     return false;
   }
 
-  Future<dynamic> _showScanner() => Navigator.push(
+  Future<dynamic> _showScanner() async => null;
+  /*Future<dynamic> _showScanner() => Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => const SimpleBarcodeScannerPage(),
         ),
-      );
+      );*/
 
   void _retryScanIfFailed(bool success) {
     if (!success) {
