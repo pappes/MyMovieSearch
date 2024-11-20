@@ -1,6 +1,6 @@
 /// This library provides a framework for fetching different types of web data
 /// in a concsistent manner.
-library web_fetch;
+library;
 
 import 'dart:async' show StreamController, unawaited;
 import 'dart:convert' show jsonDecode, utf8;

@@ -72,7 +72,7 @@ const imdbJsonInnerFilteredSampleResults = {
         'id': 'actor',
         'text': 'Actor',
       },
-      'credits': oneEdge
+      'credits': oneEdge,
     },
   ],
   'releasedCredits': [
@@ -81,7 +81,7 @@ const imdbJsonInnerFilteredSampleResults = {
         'id': 'actor',
         'text': 'Actor',
       },
-      'credits': twoEdges
+      'credits': twoEdges,
     },
   ],
 };

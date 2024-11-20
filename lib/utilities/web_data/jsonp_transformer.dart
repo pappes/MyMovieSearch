@@ -61,7 +61,7 @@ class JsonPDecoder extends Converter<String, String> {
   // Internal function to strip [_criteria] from the start of the string stream.
   String stripCriteria(String input) {
     if (null != _jsFunction) {
-      return input.replaceFirst(_jsFunction!, '');
+      return input.replaceFirst(_jsFunction, '');
     }
     return input;
   }
