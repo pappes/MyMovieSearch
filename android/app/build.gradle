@@ -45,12 +45,12 @@ if (project.hasProperty('dart-defines')) {
 
 android {
     namespace "com.example.my_movie_search"
-    compileSdk 34 //flutter.compileSdkVersion
-    ndkVersion flutter.ndkVersion
+    compileSdk 35 //flutter.compileSdkVersion
+    ndkVersion = "28.1.13356709" // flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     kotlinOptions {
