@@ -64,7 +64,7 @@ dependencies:
   html: ^0.15.5                         # Dart dom and html utilities.
   html_unescape: ^2.0.0                 # decode &apos;
   # hydrated_bloc: ^9.1.2                # automatic restoration for bloc data
-  intl: ^0.20.2                         # internationalisation including number and data formatting.
+  intl: ^0.19.0                         # internationalisation including number and data formatting.
   lint: ^2.0.1
   logger: ^2.5.0                        # Log trace messages to console.
   ####logger_flutter: ^0.7.1             # Shake device to see trace messages.

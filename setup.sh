@@ -24,10 +24,8 @@ else
 fi
 
 echo "Adding Flutter to PATH..."
-export PATH="$PATH:/tmp/flutter/bin"
-echo export PATH="$PATH:/tmp/flutter/bin" >> $HOME/.bashrc
-export PATH="$PATH:/tmp/flutter/.pub-cache/bin" # Add pub global executables to PATH
-echo export PATH="$PATH:/tmp/flutter/.pub-cache/bin" >> $HOME/.bashrc
+export PATH="$PATH:/tmp/flutter/bin:/tmp/flutter/.pub-cache/bin"
+echo export PATH="$PATH:/tmp/flutter/bin:/tmp/flutter/.pub-cache/bin" >> $HOME/.bashrc
 echo "Flutter version:"
 flutter --version
 
@@ -61,5 +59,9 @@ flutter doctor
 echo "Verifying Android SDK setup..."
 adb version
 emulator -list-avds # This might require further setup of AVDs
+
+echo "Ensuring fluter is ready to go..."
+flutter doctor
+flutter pub get
 
 echo "Setup script completed."
