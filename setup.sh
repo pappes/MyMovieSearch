@@ -12,21 +12,22 @@ sudo apt install -y curl git unzip  libsqlite3-0 libsqlite3-dev
 
 # --- Install Flutter Version 3.29.2 ---
 echo "Downloading Flutter SDK version 3.29.2..."
-if [ ! -d "flutter" ]; then
+if [ ! -d "/tmp/flutter" ]; then
+  cd /tmp/flutter
   git clone https://github.com/flutter/flutter.git --depth 1 --branch 3.29.2
+  cd -
 else
   echo "Flutter SDK already exists. Attempting to checkout version 3.29.2..."
-  cd flutter
+  cd /tmp/flutter
   git checkout 3.29.2
-  cd ..
+  cd -
 fi
 
 echo "Adding Flutter to PATH..."
-mkdir /tools
-export PATH="$PATH:/tools/flutter/bin"
-echo export PATH="$PATH:/tools/flutter/bin" >> $HOME/.bashrc
-export PATH="$PATH:/tools/flutter/.pub-cache/bin" # Add pub global executables to PATH
-echo export PATH="$PATH:/tools/flutter/.pub-cache/bin" >> $HOME/.bashrc
+export PATH="$PATH:/tmp/flutter/bin"
+echo export PATH="$PATH:/tmp/flutter/bin" >> $HOME/.bashrc
+export PATH="$PATH:/tmp/flutter/.pub-cache/bin" # Add pub global executables to PATH
+echo export PATH="$PATH:/tmp/flutter/.pub-cache/bin" >> $HOME/.bashrc
 echo "Flutter version:"
 flutter --version
 
@@ -34,14 +35,14 @@ flutter --version
 echo "Downloading and installing Android SDK command-line tools..."
 if [ ! -d "android-sdk-cmdline-tools" ]; then
   wget https://dl.google.com/android/repository/commandlinetools-linux-11310580_latest.zip -O android-cmdline-tools.zip
-  unzip android-cmdline-tools.zip -d android-sdk-cmdline-tools
+  unzip android-cmdline-tools.zip -d /tmp/android-sdk-cmdline-tools
   rm android-cmdline-tools.zip
 else
   echo "Android SDK command-line tools already exist."
 fi
 
-export ANDROID_HOME=/tools/android-sdk-cmdline-tools
-echo export ANDROID_HOME=/tools/android-sdk-cmdline-tools >> $HOME/.bashrc
+export ANDROID_HOME=/tmp/android-sdk-cmdline-tools
+echo export ANDROID_HOME=/tmp/android-sdk-cmdline-tools >> $HOME/.bashrc
 export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator"
 echo export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator" >> $HOME/.bashrc
 
