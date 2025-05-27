@@ -8,7 +8,7 @@ echo "Updating package lists..."
 sudo apt update
 
 echo "Installing required dependencies..."
-sudo apt install -y curl git unzip
+sudo apt install -y curl git unzip  libsqlite3-0 libsqlite3-dev
 
 # --- Install Flutter Version 3.29.2 ---
 echo "Downloading Flutter SDK version 3.29.2..."
@@ -23,7 +23,9 @@ fi
 
 echo "Adding Flutter to PATH..."
 export PATH="$PATH:$(pwd)/flutter/bin"
+echo export PATH="$PATH:$(pwd)/flutter/bin" >> $HOME/.bashrc
 export PATH="$PATH:$(pwd)/flutter/.pub-cache/bin" # Add pub global executables to PATH
+echo export PATH="$PATH:$(pwd)/flutter/.pub-cache/bin" >> $HOME/.bashrc
 echo "Flutter version:"
 flutter --version
 
@@ -38,7 +40,9 @@ else
 fi
 
 export ANDROID_HOME=$(pwd)/android-sdk-cmdline-tools
+echo export ANDROID_HOME=$(pwd)/android-sdk-cmdline-tools >> $HOME/.bashrc
 export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator"
+echo export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator" >> $HOME/.bashrc
 
 echo "Accepting Android SDK licenses..."
 yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses
