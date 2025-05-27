@@ -10,10 +10,40 @@ sudo apt update
 echo "Installing required dependencies..."
 sudo apt install -y curl git unzip  libsqlite3-0 libsqlite3-dev
 
+# --- Install Android SDK ---
+echo "Downloading and installing Android SDK command-line tools..."
+if [ ! -d "android-sdk-cmdline-tools" ]; then
+  mkdir -p /tmp/android-sdk-cmdline-tools
+  cd android-sdk-cmdline-tools
+  wget https://dl.google.com/android/repository/sdk-tools-linux-*.zip
+  unzip sdk-tools-linux-*.zip
+  tools/bin/sdkmanager --update
+  rm sdk-tools-linux-*.zip
+
+  #wget https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip -O android-cmdline-tools.zip
+  #unzip android-cmdline-tools.zip -d /tmp/android-sdk-cmdline-tools
+  #rm android-cmdline-tools.zip
+else
+  echo "Android SDK command-line tools already exist."
+fi
+
+export ANDROID_HOME=/tmp/android-sdk-cmdline-tools
+export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator"
+export extra_path="$extra_path:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator"
+echo export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator" >> $HOME/.bashrc
+
+echo "Accepting Android SDK licenses..."
+yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses
+
+# --- Install necessary Android SDK components ---
+echo "Installing required Android SDK components..."
+sdkmanager --sdk_root="$ANDROID_HOME" "platforms;android-34" "build-tools;34.0.0" # Adjust versions as needed
+sdkmanager --sdk_root="$ANDROID_HOME" "emulator" "platform-tools"
+
 # --- Install Flutter Version 3.29.2 ---
 echo "Downloading Flutter SDK version 3.29.2..."
 if [ ! -d "/tmp/flutter" ]; then
-  cd /tmp/flutter
+  cd /tmp
   git clone https://github.com/flutter/flutter.git --depth 1 --branch 3.29.2
   cd -
 else
@@ -25,32 +55,9 @@ fi
 
 echo "Adding Flutter to PATH..."
 export PATH="$PATH:/tmp/flutter/bin:/tmp/flutter/.pub-cache/bin"
-echo export PATH="$PATH:/tmp/flutter/bin:/tmp/flutter/.pub-cache/bin" >> $HOME/.bashrc
+export extra_path="/tmp/flutter/bin:/tmp/flutter/.pub-cache/bin"
 echo "Flutter version:"
 flutter --version
-
-# --- Install Android SDK ---
-echo "Downloading and installing Android SDK command-line tools..."
-if [ ! -d "android-sdk-cmdline-tools" ]; then
-  wget https://dl.google.com/android/repository/commandlinetools-linux-11310580_latest.zip -O android-cmdline-tools.zip
-  unzip android-cmdline-tools.zip -d /tmp/android-sdk-cmdline-tools
-  rm android-cmdline-tools.zip
-else
-  echo "Android SDK command-line tools already exist."
-fi
-
-export ANDROID_HOME=/tmp/android-sdk-cmdline-tools
-echo export ANDROID_HOME=/tmp/android-sdk-cmdline-tools >> $HOME/.bashrc
-export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator"
-echo export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator" >> $HOME/.bashrc
-
-echo "Accepting Android SDK licenses..."
-yes | sdkmanager --sdk_root="$ANDROID_HOME" --licenses
-
-# --- Install necessary Android SDK components ---
-echo "Installing required Android SDK components..."
-sdkmanager --sdk_root="$ANDROID_HOME" "platforms;android-34" "build-tools;34.0.0" # Adjust versions as needed
-sdkmanager --sdk_root="$ANDROID_HOME" "emulator" "platform-tools"
 
 # --- Verify setup ---
 echo "Verifying Flutter installation..."
@@ -63,5 +70,11 @@ emulator -list-avds # This might require further setup of AVDs
 echo "Ensuring fluter is ready to go..."
 flutter doctor
 flutter pub get
+
+echo export PATH="\$PATH:$extra_path" >> $HOME/.bashrc
+echo export PATH="\$PATH:$extra_path" >> $HOME/.bash_profile
+echo export PATH="\$PATH:$extra_path" >> $HOME/.profile
+
+echo "IMPORTANT: For the PATH changes to take effect in your current interactive terminal session, you may need to source your .bashrc file (e.g., run 'source $HOME/.bashrc') or open a new terminal."
 
 echo "Setup script completed."
