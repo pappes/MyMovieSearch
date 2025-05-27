@@ -22,10 +22,11 @@ else
 fi
 
 echo "Adding Flutter to PATH..."
-export PATH="$PATH:$(pwd)/flutter/bin"
-echo export PATH="$PATH:$(pwd)/flutter/bin" >> $HOME/.bashrc
-export PATH="$PATH:$(pwd)/flutter/.pub-cache/bin" # Add pub global executables to PATH
-echo export PATH="$PATH:$(pwd)/flutter/.pub-cache/bin" >> $HOME/.bashrc
+mkdir /tools
+export PATH="$PATH:/tools/flutter/bin"
+echo export PATH="$PATH:/tools/flutter/bin" >> $HOME/.bashrc
+export PATH="$PATH:/tools/flutter/.pub-cache/bin" # Add pub global executables to PATH
+echo export PATH="$PATH:/tools/flutter/.pub-cache/bin" >> $HOME/.bashrc
 echo "Flutter version:"
 flutter --version
 
@@ -39,8 +40,8 @@ else
   echo "Android SDK command-line tools already exist."
 fi
 
-export ANDROID_HOME=$(pwd)/android-sdk-cmdline-tools
-echo export ANDROID_HOME=$(pwd)/android-sdk-cmdline-tools >> $HOME/.bashrc
+export ANDROID_HOME=/tools/android-sdk-cmdline-tools
+echo export ANDROID_HOME=/tools/android-sdk-cmdline-tools >> $HOME/.bashrc
 export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator"
 echo export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator" >> $HOME/.bashrc
 
