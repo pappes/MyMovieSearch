@@ -13,16 +13,11 @@ sudo apt install -y curl git unzip  libsqlite3-0 libsqlite3-dev
 # --- Install Android SDK ---
 echo "Downloading and installing Android SDK command-line tools..."
 if [ ! -d "android-sdk-cmdline-tools" ]; then
-  mkdir -p /tmp/android-sdk-cmdline-tools
-  cd android-sdk-cmdline-tools
-  wget https://dl.google.com/android/repository/sdk-tools-linux-*.zip
-  unzip sdk-tools-linux-*.zip
-  tools/bin/sdkmanager --update
-  rm sdk-tools-linux-*.zip
-
-  #wget https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip -O android-cmdline-tools.zip
-  #unzip android-cmdline-tools.zip -d /tmp/android-sdk-cmdline-tools
-  #rm android-cmdline-tools.zip
+  # while 8512546_latest is not the latest version it has been up for a long time.
+  # newer versions may only exisit for a short period of time!
+  wget https://dl.google.com/android/repository/commandlinetools-linux-8512546_latest.zip -O android-cmdline-tools.zip
+  unzip android-cmdline-tools.zip -d /tmp/android-sdk-cmdline-tools
+  rm android-cmdline-tools.zip
 else
   echo "Android SDK command-line tools already exist."
 fi
