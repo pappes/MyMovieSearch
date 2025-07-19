@@ -12,7 +12,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements a web scraper for retrieving movie details from IMDB.
 // ignore: missing_override_of_must_be_overridden
-mixin ScrapeIMDBTitleDetails
+mixin ScrapeIMDBJsonDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Reduce computation effort for html extraction.
   @override
@@ -45,16 +45,16 @@ mixin ScrapeIMDBTitleDetails
 
   /// Collect JSON and webpage text to construct a map of the movie data.
   Map<dynamic, dynamic> _scrapeWebPage(Document document) {
-    final movieData = json.decode(_getMovieJson(document)) as Map;
+    final movieData = json.decode(_getImdbJson(document)) as Map;
     return movieData;
   }
 
   /// Use CSS selector to find the JSON script on the page
   /// and extract values from the JSON.
-  String _getMovieJson(Document document) {
+  String _getImdbJson(Document document) {
     final scriptElement = document.querySelector(jsonScript);
     if (scriptElement == null || scriptElement.innerHtml.isEmpty) {
-      logger.e('no JSON details found for Name $getCriteriaText');
+      logger.e('no JSON details found for $getCriteriaText');
       return '{}';
     }
     return scriptElement.innerHtml;
