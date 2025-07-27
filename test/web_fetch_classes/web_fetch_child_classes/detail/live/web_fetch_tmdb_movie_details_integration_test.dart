@@ -14,21 +14,29 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt0101000","bestSource":"DataSourceType.tmdbMovie","title":"Začátek dlouhého podzimu","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
+{"uniqueId":"tt0101000","title":"Začátek dlouhého podzimu","bestSource":"DataSourceType.tmdbMovie","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
       "languages":"[\"Czech\"]",
-      "genres":"[\"Drama\",\"Family\"]",
+      "genres":"[\"Drama\"]",
+      "description":"The film about curious children who discover a sunken statue of Masaryk in a disused well was interfered with by the events of November and the filmmakers tried to incorporate their echoes into the flow of the narrative. However, the result is at times confusing, as the originally childish adventure has thus grown into a naive social poster child.",
       "userRating":"6.0","userRatingCount":"1","sources":{"DataSourceType.tmdbMovie":"913986"}}
 ''',
   r'''
-{"uniqueId":"tt0101002","bestSource":"DataSourceType.tmdbMovie","title":"Return Engagement","alternateTitle":"再戰江湖","type":"MovieContentType.title","year":"1990","runTime":"6480","language":"LanguageType.foreign",
+{"uniqueId":"tt0101001","title":"A Haunted Romance","bestSource":"DataSourceType.tmdbMovie","alternateTitle":"再世風流劫","type":"MovieContentType.title","year":"1985","runTime":"5280","language":"LanguageType.foreign",
+      "languages":"[\"Cantonese\"]",
+      "genres":"[\"Horror\"]",
+      "description":"Hong Kong horror movie from 1985.","sources":{"DataSourceType.tmdbMovie":"1341041"}}
+''',
+  r'''
+{"uniqueId":"tt0101002","title":"Return Engagement","bestSource":"DataSourceType.tmdbMovie","alternateTitle":"再戰江湖","type":"MovieContentType.title","year":"1990","runTime":"6480","language":"LanguageType.foreign",
       "languages":"[\"Cantonese\"]",
       "genres":"[\"Crime\",\"Action\",\"Drama\"]",
       "description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.",
-      "userRating":"6.643","userRatingCount":"7","imageUrl":"https://image.tmdb.org/t/p/w500/7zwS6ttVbgHXpgehTCcVg1f8nbM.jpg","sources":{"DataSourceType.tmdbMovie":"230839"}}
+      "userRating":"6.6","userRatingCount":"7","imageUrl":"https://image.tmdb.org/t/p/w500/7zwS6ttVbgHXpgehTCcVg1f8nbM.jpg","sources":{"DataSourceType.tmdbMovie":"230839"}}
 ''',
 ];
-final expectedEmptyDTOList =
-    ListDTOConversion.decodeList(expectedEmptyDtoJsonStringList);
+final expectedEmptyDTOList = ListDTOConversion.decodeList(
+  expectedEmptyDtoJsonStringList,
+);
 const expectedEmptyDtoJsonStringList = [
   r'''
 {"uniqueId":"-1","bestSource":"DataSourceType.tmdbMovie","title":"[tmdbMovie] Error in QueryTMDBMovieDetails with criteria 0 convert error interpreting web text as a map :tmdb call for criteria 0 returned error:Invalid id: The pre-requisite id is invalid or not found.","type":"MovieContentType.error"}
@@ -71,15 +79,15 @@ Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
 void main() {
   // Wait for api key to be initialised
   setUpAll(() async => Settings().init());
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryTMDBMovieDetails test', () {
     // Convert 3 TMDB pages into dtos.
     test('Run read 3 pages from TMDB', () async {
-      final expectedOutput = expectedDTOList
-        ..sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+      final expectedOutput =
+          expectedDTOList..sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
@@ -95,25 +103,26 @@ void main() {
       expect(
         actualOutput,
         MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
     });
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('0');
-      final actualOutput =
-          await QueryTMDBMovieDetails(criteria).readList(limit: 10);
+      final actualOutput = await QueryTMDBMovieDetails(
+        criteria,
+      ).readList(limit: 10);
       final expectedOutput = expectedEmptyDTOList;
       expectedOutput[0].uniqueId = '-1';
 
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(
-          expectedOutput,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );

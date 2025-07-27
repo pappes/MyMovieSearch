@@ -28,8 +28,9 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    if (webText
-        .contains('No hits. Try adding an asterisk in you search phrase')) {
+    if (webText.contains(
+      'No hits. Try adding an asterisk in you search phrase',
+    )) {
       return [];
     }
     final document = parse(webText);
@@ -37,8 +38,10 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     if (validPage) {
       return movieData;
     }
-    throw WebConvertException('tpb results data not detected for criteria '
-        '$getCriteriaText in html:$webText');
+    throw WebConvertException(
+      'tpb results data not detected for criteria '
+      '$getCriteriaText in html:$webText',
+    );
   }
 
   /// extract each row from the table.
@@ -64,6 +67,22 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
           columns[1].querySelector(detailSelector)?.cleanText;
       result[jsonSeedersKey] = columns[2].cleanText;
       result[jsonLeechersKey] = columns[3].cleanText;
+
+      if (result[jsonMagnetKey]!.toString().isNotEmpty &&
+          result[jsonNameKey]!.toString().isNotEmpty &&
+          result[jsonSeedersKey]!.toString().isNotEmpty) {
+        movieData.add(result);
+      }
+    }
+    if (8 == columns.length) {
+      final result = <String, dynamic>{};
+      result[jsonCategoryKey] = columns[0].cleanText;
+      result[jsonMagnetKey] =
+          row.querySelector(magnetSelector)?.attributes['href'] ?? '';
+      result[jsonNameKey] = columns[1].cleanText;
+      result[jsonDescriptionKey] = columns[4].cleanText;
+      result[jsonSeedersKey] = columns[5].cleanText;
+      result[jsonLeechersKey] = columns[6].cleanText;
 
       if (result[jsonMagnetKey]!.toString().isNotEmpty &&
           result[jsonNameKey]!.toString().isNotEmpty &&

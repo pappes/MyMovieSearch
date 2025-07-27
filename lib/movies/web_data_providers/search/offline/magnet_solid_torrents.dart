@@ -48,11 +48,12 @@ const intermediateMapList = [
     'name': 'Space.Babes.from.Outer.Space.2017.1080p.BluRay.x265-RARBG',
     'seeders': '19',
     'leechers': '14',
-  }
+  },
 ];
 const htmlSampleMidEmpty =
-    '<span class="w3-bar-item">Found <b>0</b> results in 74ms for '
-    '<b>kjhkjhzzzzzzzzzzk</b></span>';
+    'Found <span class="font-semibold">0</span> results in '
+    '<span class="font-semibold">73ms</span> for '
+    '<span class="font-semibold">"therearenoresultszzzz"</span>';
 
 const htmlSampleMid = r'''
         <li class="card search-result my-2">

@@ -29,7 +29,8 @@ mixin ScrapeSolidTorrentsSearch
   Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    if (webText.contains('Found <b>0</b> results')) {
+    RegExp regex = RegExp(r'Found.*>0<.* results');
+    if (regex.hasMatch(webText)) {
       return [];
     }
     final document = parse(webText);
@@ -38,8 +39,9 @@ mixin ScrapeSolidTorrentsSearch
       return movieData;
     }
     throw WebConvertException(
-        'SolidTorrents results data not detected for criteria '
-        '$getCriteriaText in html:$webText');
+      'SolidTorrents results data not detected for criteria '
+      '$getCriteriaText in html:$webText',
+    );
   }
 
   /// extract each row from the table.

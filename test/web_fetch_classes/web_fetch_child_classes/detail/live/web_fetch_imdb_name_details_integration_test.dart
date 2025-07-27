@@ -13,16 +13,16 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"nm0101000","bestSource":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person",
-      "description":"Steve Bower is known for American Playhouse (1982) and Joe (1970).","sources":{"DataSourceType.imdb":"nm0101000"}}
+{"uniqueId":"nm0101000","title":"Steve Bower","bestSource":"DataSourceType.imdb","type":"MovieContentType.person",
+      "description":"Steve Bower is known for Sweet Savior (1971).","sources":{"DataSourceType.imdb":"nm0101000"}}
 ''',
   r'''
-{"uniqueId":"nm0101001","bestSource":"DataSourceType.imdb","title":"Steve Bower","type":"MovieContentType.person",
+{"uniqueId":"nm0101001","title":"Steve Bower","bestSource":"DataSourceType.imdb","type":"MovieContentType.person",
       "description":"Steve Bower is known for Amazon Prime Video: Every Game, Every Goal (2019), Vintage Reds (1998) and Late Kick Off North East and Cumbria (2010).","sources":{"DataSourceType.imdb":"nm0101001"}}
 ''',
   r'''
-{"uniqueId":"nm0101002","bestSource":"DataSourceType.imdb","title":"Stone Bower","type":"MovieContentType.person",
-      "description":"Stone Bower is known for Against All Odds (1984), Death Valley (1982) and Jimmy the Kid (1982).","sources":{"DataSourceType.imdb":"nm0101002"}}
+{"uniqueId":"nm0101002","title":"Stone Bower","bestSource":"DataSourceType.imdb","type":"MovieContentType.person",
+      "description":"Stone Bower is known for Against All Odds (1984), Death Valley (1981) and Jimmy the Kid (1982).","sources":{"DataSourceType.imdb":"nm0101002"}}
 ''',
 ];
 
@@ -60,9 +60,9 @@ Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
 }
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryIMDBNameDetails test', () {
     // Convert 3 IMDB pages into dtos.
@@ -78,24 +78,25 @@ void main() {
       expect(
         actualOutput,
         MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
     });
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
-      final actualOutput =
-          await QueryIMDBNameDetails(criteria).readList(limit: 10);
+      final actualOutput = await QueryIMDBNameDetails(
+        criteria,
+      ).readList(limit: 10);
       final expectedOutput = <MovieResultDTO>[];
 
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(
-          expectedOutput,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );

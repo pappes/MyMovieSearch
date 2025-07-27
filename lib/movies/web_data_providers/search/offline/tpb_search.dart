@@ -13,13 +13,17 @@ const expectedDtoJsonStringList = [
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
 Future<Stream<String>> streamTpbHtmlOfflineData(_) =>
-    Future.value(Stream.value(htmlSampleFull));
+    Future.value(Stream.value(htmlSample4Columns));
 
-const htmlSampleFull = '$tpbHtmlSampleStart$tpbSampleMid$tpbHtmlSampleEnd';
+const htmlSample8Columns =
+    '$tpbHtmlSampleStart$tpbSampleMid8Columns$tpbHtmlSampleEnd';
+const htmlSample4Columns =
+    '$tpbHtmlSampleStart$tpbSampleMid4Columns$tpbHtmlSampleEnd';
 const htmlSampleEmpty =
     '$tpbHtmlSampleStart$tpbSampleErrorMid$tpbHtmlSampleEnd';
 const htmlSampleError = '$tpbHtmlSampleStart$tpbHtmlSampleEnd';
-const tpbSampleErrorMid = '<h2><span>Search results: newzzzquery</span> '
+const tpbSampleErrorMid =
+    '<h2><span>Search results: newzzzquery</span> '
     '&nbsp;No hits. Try adding an asterisk in you search phrase.</h2>';
 const tpbHtmlSampleStart = '''
 
@@ -51,10 +55,10 @@ const intermediateMapList = [
     'description': 'Uploaded 01-14 03:33, Size 699.41 MiB, ULed by .BONE.',
     'seeders': '34',
     'leechers': '5',
-  }
+  },
 ];
 
-const tpbSampleMid = r'''
+const tpbSampleMid4Columns = r'''
 <table id="searchResult">
 <tbody>
 	<tr>
@@ -80,6 +84,44 @@ const tpbSampleMid = r'''
 		<td align="right">34</td>
 		<td align="right">5</td>
 	</tr>
+</tbody>
+</table>
+''';
+
+const tpbSampleMid8Columns = r'''
+<table id="searchResult">
+<tbody>
+  <tr>
+    <td class="vertTh">
+      <a href="https://tpb.party/browse/207" title="More from this category">
+        Video (Movies)
+      </a>
+    </td>
+    <td>
+      <a href="https://tpb.party/torrent/65314273/Gangnam_Zombie_2023_720p_Korean_HDRip_H264_BONE" title="Details for Gangnam Zombie 2023 720p Korean HDRip H264 BONE">
+        Gangnam Zombie 2023 720p Korean HDRip H264 BONE
+      </a>
+    </td>
+    <td>04-21&nbsp;2024</td>
+    <td><nobr>
+      <a 
+        href="magnet:?xt=urn:btih:0FB175C5B10BE4B874E0AD60FF8155639013C316&amp;dn=Gangnam+Zombie+2023+720p+Korean+HDRip+H264+BONE&amp;tr=http%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&amp;tr=udp%3A%2F%2F47.ip-51-68-199.eu%3A6969%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.me%3A2780%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.to%3A2710%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.to%3A2730%2Fannounce&amp;tr=udp%3A%2F%2F9.rarbg.to%3A2920%2Fannounce&amp;tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&amp;tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.coppersurfer.tk%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.cyberia.is%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.leechers-paradise.org%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.openbittorrent.com%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&amp;tr=udp%3A%2F%2Ftracker.pirateparty.gr%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.tiny-vps.com%3A6969%2Fannounce&amp;tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce" 
+        title="Download this torrent using magnet">
+        <img src="https://tpb.party/static/img/icon-magnet.gif" alt="Magnet link">
+      </a>
+      <a href="https://tpb.party/user/GalaxyRG/">
+      <img src="https://tpb.party/static/img/trusted.png" alt="Trusted" title="Trusted" style="width:11px;" border="0" height="11" width="11">
+      </a>
+    </td>
+    <td align="right">Uploaded 01-14&nbsp;03:33, Size 699.41&nbsp;MiB, ULed by .BONE.</td>
+    <td align="right">34</td>
+    <td align="right">5</td>
+    <td>
+      <a href="/user/GalaxyRG/" title="Browse GalaxyRG">
+        GalaxyRG
+      </a>
+    </td>
+  </tr>
 </tbody>
 </table>
 ''';

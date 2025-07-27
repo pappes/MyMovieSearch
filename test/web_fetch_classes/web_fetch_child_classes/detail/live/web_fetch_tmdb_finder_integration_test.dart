@@ -13,15 +13,21 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"tt0101000","bestSource":"DataSourceType.tmdbFinder","title":"Začátek dlouhého podzimu","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
+{"uniqueId":"tt0101000","title":"Začátek dlouhého podzimu","bestSource":"DataSourceType.tmdbFinder","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
       "languages":"[\"cs\"]",
+      "description":"The film about curious children who discover a sunken statue of Masaryk in a disused well was interfered with by the events of November and the filmmakers tried to incorporate their echoes into the flow of the narrative. However, the result is at times confusing, as the originally childish adventure has thus grown into a naive social poster child.",
       "userRating":"6.0","userRatingCount":"1","sources":{"DataSourceType.tmdbFinder":"913986"}}
 ''',
   r'''
-{"uniqueId":"tt0101002","bestSource":"DataSourceType.tmdbFinder","title":"Return Engagement","alternateTitle":"再戰江湖","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
+{"uniqueId":"tt0101001","title":"A Haunted Romance","bestSource":"DataSourceType.tmdbFinder","alternateTitle":"再世風流劫","type":"MovieContentType.title","year":"1985","language":"LanguageType.foreign",
+      "languages":"[\"cn\"]",
+      "description":"Hong Kong horror movie from 1985.","sources":{"DataSourceType.tmdbFinder":"1341041"}}
+''',
+  r'''
+{"uniqueId":"tt0101002","title":"Return Engagement","bestSource":"DataSourceType.tmdbFinder","alternateTitle":"再戰江湖","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
       "languages":"[\"cn\"]",
       "description":"A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.",
-      "userRating":"6.643","userRatingCount":"7","sources":{"DataSourceType.tmdbFinder":"230839"}}
+      "userRating":"6.6","userRatingCount":"7","sources":{"DataSourceType.tmdbFinder":"230839"}}
 ''',
 ];
 
@@ -61,9 +67,9 @@ Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
 void main() {
   // Wait for api key to be initialised
   setUpAll(() async => Settings().init());
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryTMDBFinder test', () {
     // Convert 3 TMDB pages into dtos.
@@ -71,8 +77,8 @@ void main() {
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-      final expectedOutput = expectedDTOList
-        ..sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+      final expectedOutput =
+          expectedDTOList..sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
       // printTestData(actualOutput);
@@ -81,7 +87,8 @@ void main() {
       expect(
         actualOutput,
         MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
@@ -94,10 +101,9 @@ void main() {
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(
-          expectedOutput,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );

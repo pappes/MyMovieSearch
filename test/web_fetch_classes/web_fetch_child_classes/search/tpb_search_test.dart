@@ -17,9 +17,9 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 final criteria = SearchCriteriaDTO().fromString('dream');
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('tpb search unit tests', () {
     // Confirm class description is constructed as expected.
@@ -37,20 +37,15 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO()
-        ..criteriaTitle = 'List of errors'
-        ..criteriaList = [
-          MovieResultDTO().init(uniqueId: 'test1'),
-          MovieResultDTO().init(uniqueId: 'test2'),
-        ];
-      expect(
-        QueryTpbSearch(input).myFormatInputAsText(),
-        'test1,test2',
-      );
-      expect(
-        QueryTpbSearch(input).myFormatInputAsText(),
-        'test1,test2',
-      );
+      final input =
+          SearchCriteriaDTO()
+            ..criteriaTitle = 'List of errors'
+            ..criteriaList = [
+              MovieResultDTO().init(uniqueId: 'test1'),
+              MovieResultDTO().init(uniqueId: 'test2'),
+            ];
+      expect(QueryTpbSearch(input).myFormatInputAsText(), 'test1,test2');
+      expect(QueryTpbSearch(input).myFormatInputAsText(), 'test1,test2');
     });
 
     // Confirm URL is constructed as expected.
@@ -74,52 +69,58 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryTpbSearch(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult =
+          QueryTpbSearch(criteria).myYieldError('new query').toMap()
+            ..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
     });
 
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree() for 4 columns', () async {
       const expectedOutput = intermediateMapList;
       final testClass = QueryTpbSearch(criteria)..criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
-        htmlSampleFull,
+        htmlSample4Columns,
+      );
+      expect(actualOutput, completion(expectedOutput));
+    });
+    test('Run myConvertWebTextToTraversableTree() for 8 columns', () async {
+      const expectedOutput = intermediateMapList;
+      final testClass = QueryTpbSearch(criteria)..criteria = criteria;
+      final actualOutput = testClass.myConvertWebTextToTraversableTree(
+        htmlSample8Columns,
       );
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
       final expectedOutput = <void>[];
-      final actualOutput =
-          QueryTpbSearch(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleEmpty,
-      );
+      final actualOutput = QueryTpbSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () async {
-      final expectedOutput = throwsA(
-        isA<WebConvertException>().having(
-          (e) => e.cause,
-          'cause',
-          contains('results data not detected for criteria '
-              '${criteria.toPrintableIdOrText().toLowerCase()} in html:'),
-        ),
-      );
-      final actualOutput =
-          QueryTpbSearch(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleError,
-      );
-      // NOTE: Using expect on an async result
-      // only works as the last line of the test!
-      expect(
-        actualOutput,
-        expectedOutput,
-      );
-    });
+    test(
+      'Run myConvertWebTextToTraversableTree() for invalid results',
+      () async {
+        final expectedOutput = throwsA(
+          isA<WebConvertException>().having(
+            (e) => e.cause,
+            'cause',
+            contains(
+              'results data not detected for criteria '
+              '${criteria.toPrintableIdOrText().toLowerCase()} in html:',
+            ),
+          ),
+        );
+        final actualOutput = QueryTpbSearch(
+          criteria,
+        ).myConvertWebTextToTraversableTree(htmlSampleError);
+        // NOTE: Using expect on an async result
+        // only works as the last line of the test!
+        expect(actualOutput, expectedOutput);
+      },
+    );
   });
   group('TpbSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
@@ -128,9 +129,7 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          TpbSearchConverter.dtoFromCompleteJsonMap(map),
-        );
+        actualResult.addAll(TpbSearchConverter.dtoFromCompleteJsonMap(map));
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
@@ -141,15 +140,16 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using TpbSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('TpbSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
@@ -160,16 +160,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await tpbSearch.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await tpbSearch.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -197,10 +196,10 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase
   ///  and ScrapeTpbSearchDetails and TpbSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('tpb search query', () {
     // Read Tpb search results from a simulated byte stream
@@ -225,7 +224,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue, related: false),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -237,7 +237,8 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final tpbSearch = QueryTpbSearch(criteria);
-      final expectedException = '[QueryTpbSearch] Error in tpb with criteria '
+      final expectedException =
+          '[QueryTpbSearch] Error in tpb with criteria '
           '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :tpb '
           'results data not detected for criteria '
@@ -246,9 +247,7 @@ void main() {
 
       // Invoke the functionality.
       await tpbSearch
-          .readList(
-            source: _emitInvalidHtmlSample,
-          )
+          .readList(source: _emitInvalidHtmlSample)
           .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
     });
@@ -257,7 +256,8 @@ void main() {
     // and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      final expectedException = '[QueryTpbSearch] Error in tpb with criteria '
+      final expectedException =
+          '[QueryTpbSearch] Error in tpb with criteria '
           '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :tpb '
           'results data not detected for criteria '
