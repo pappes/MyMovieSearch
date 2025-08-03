@@ -23,6 +23,10 @@ check_adb() {
         echo "Please ensure Android SDK Platform Tools are installed and 'adb' is in your system's PATH."
         exit 1
     fi
+
+    export ADB_MDNS_OPENSCREEN=1
+    adb kill-server
+    adb start-server
 }
 
 # Function to get a port for a specific service and IP
@@ -87,7 +91,7 @@ pair_device() {
     echo ""
 
     # Discover Pairing Port
-    PAIRING_PORT=$(get_port_for_service "_adb-tls-pairing._tcp.local." "$ANDROID_IP")
+    PAIRING_PORT=$(get_port_for_service "_adb-tls-pairing._tcp." "$ANDROID_IP")
     if [ $? -ne 0 ]; then
         echo "Please ensure 'Wireless debugging' is enabled and 'Pair device with pairing code' is open on your Android device."
         return 1
@@ -122,7 +126,7 @@ connect_device() {
     echo "Attempting to connect to device..."
 
     # Discover Connection Port
-    CONNECTION_PORT=$(get_port_for_service "_adb-tls-connect._tcp.local." "$ANDROID_IP")
+    CONNECTION_PORT=$(get_port_for_service "_adb-tls-connect._tcp." "$ANDROID_IP")
     if [ $? -ne 0 ]; then
         echo "Could not find the connection port. This might happen if the device is not yet ready or the service is not broadcasting."
         echo "You might need to manually connect using 'adb connect $ANDROID_IP:XXXXX' where XXXXX is the port shown on your device."
