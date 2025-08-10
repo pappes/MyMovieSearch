@@ -5,13 +5,15 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 const imdbHtmlSampleStart = ' <!DOCTYPE html>    <head>';
 const imdbHtmlSampleMiddle = ' </head> <body id="styleguide-v2" class="fixed">';
 const imdbHtmlSampleEnd = ' </body> </html>';
-const imdbHtmlSampleFull = '$imdbHtmlSampleStart $imdbJsonSampleInner '
+const imdbHtmlSampleFull =
+    '$imdbHtmlSampleStart $imdbJsonSampleInner '
     '$imdbHtmlSampleMiddle $imdbHtmlSampleEnd';
 const imdbJsonSampleInner = '''
 <script type="application/json">$_embeddedJson</script>
 ''';
 
-const imdbHtmlSampleEmpty = '$imdbHtmlSampleStart $imdbJsonEmptySampleInner '
+const imdbHtmlSampleEmpty =
+    '$imdbHtmlSampleStart $imdbJsonEmptySampleInner '
     '$imdbHtmlSampleMiddle $imdbHtmlSampleEnd';
 const imdbJsonEmptySampleInner = '''
 <script type="application/json">$_embeddedEmptyJson</script>
@@ -44,14 +46,11 @@ const intermediateEmptyMapList = [
     'props': {
       'pageProps': {
         'searchResults': {
-          'titleResults': {
-            'titleListItems': <dynamic>[],
-            'total': 0,
-          },
+          'titleResults': {'titleListItems': <dynamic>[], 'total': 0},
         },
       },
     },
-  }
+  },
 ];
 
 const intermediateMapList = [
@@ -96,21 +95,19 @@ const intermediateMapList = [
                 'titleId': 'tt1123256',
                 'titleText': 'Darlingly',
                 'titleType': {'id': 'movie', 'text': ''},
-              }
+              },
             ],
             'total': 2,
           },
         },
       },
     },
-  }
+  },
 ];
 
 const _embeddedEmptyJson = r'''
 {
-  "props": {
-    "pageProps": {
-      "searchResults": {
+  "props": {"pageProps": {"searchResults": {
         "titleResults": {
           "titleListItems": [
           ],
@@ -122,8 +119,7 @@ const _embeddedEmptyJson = r'''
 }''';
 
 const _embeddedJson = r'''
-{"props":{"pageProps":{
-      "searchResults": {
+{"props":{"pageProps":{"searchResults": {
         "titleResults": {
           "titleListItems": [
             {

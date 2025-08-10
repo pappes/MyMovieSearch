@@ -8,8 +8,7 @@ import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 class TorrentDownloadSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
-  ) =>
-      [dtoFromMap(map)];
+  ) => [dtoFromMap(map)];
 
   static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
     // TorrentDownloadSearch always overestimates the number of seeders
@@ -20,7 +19,7 @@ class TorrentDownloadSearchConverter {
       type: MovieContentType.download.toString(),
       uniqueId: map[jsonDetailLink]?.toString(),
       title: map[jsonNameKey]?.toString(),
-      charactorName: map[jsonCategoryKey]?.toString(),
+      characterName: map[jsonCategoryKey]?.toString(),
       description: 'placeholder: ${map[jsonDescriptionKey]}',
       creditsOrder: reducedSeeders.toString(),
       userRatingCount: map[jsonLeechersKey]?.toString(),

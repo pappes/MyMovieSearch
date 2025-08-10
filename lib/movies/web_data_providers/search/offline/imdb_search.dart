@@ -120,12 +120,11 @@ const intermediateMapList = [
     'image': 'https://www.microsoft.com/U1NmNmNT@.jpg',
     'description': 'staring [elli illhan, RussKer PasPed]',
     '@type': MovieContentType.movie,
-  }
+  },
 ];
 
 const imdbSampleJson = '''
-{"props":{"pageProps":{
-            "nameResults": {
+{"props":{"pageProps":{"nameResults": {
                 "results": [
                     {
                         "id": "nm0152436",

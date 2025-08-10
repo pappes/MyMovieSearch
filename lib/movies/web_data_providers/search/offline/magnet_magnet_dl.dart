@@ -6,7 +6,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"magnet:?xt=urn:btih:ac8c26d936b1da5ce94d415fb07a71384db7cb80&dn=Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS+%5BTGx%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Fexodus.desync.com%3A6969","bestSource":"DataSourceType.magnetDl","title":"Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS [TGx]","charactorName":"Movie","type":"MovieContentType.download","creditsOrder":"1",
+{"uniqueId":"magnet:?xt=urn:btih:ac8c26d936b1da5ce94d415fb07a71384db7cb80&dn=Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS+%5BTGx%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Fexodus.desync.com%3A6969","bestSource":"DataSourceType.magnetDl","title":"Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS [TGx]","characterName":"Movie","type":"MovieContentType.download","creditsOrder":"1",
       "description":"857.10 MB","imageUrl":"magnet:?xt=urn:btih:ac8c26d936b1da5ce94d415fb07a71384db7cb80&dn=Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS+%5BTGx%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Fexodus.desync.com%3A6969","sources":{"DataSourceType.magnetDl":"magnet:?xt=urn:btih:ac8c26d936b1da5ce94d415fb07a71384db7cb80&dn=Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS+%5BTGx%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Fexodus.desync.com%3A6969"}}
 ''',
 ];
@@ -49,7 +49,7 @@ const intermediateMapList = [
     'description': '857.10 MB',
     'seeders': '1',
     'leechers': '0',
-  }
+  },
 ];
 
 const mdlSampleEmptyMid = r'''

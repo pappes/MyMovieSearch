@@ -1,8 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_cast.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_cast.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
@@ -24,9 +25,9 @@ void main() {
   // Wait for api key to be initialised
   setUpAll(() async => lockWebFetchTreadedCache);
   tearDownAll(() async => lockWebFetchTreadedCache);
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryIMDBCastDetails unit tests', () {
     // Confirm class description is constructed as expected.
@@ -38,27 +39,19 @@ void main() {
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO().fromString('tttesting');
-      expect(
-        QueryIMDBCastDetails(input).myFormatInputAsText(),
-        'tttesting',
-      );
+      expect(QueryIMDBCastDetails(input).myFormatInputAsText(), 'tttesting');
     });
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO()
-        ..criteriaList = [
-          MovieResultDTO().error('test1'),
-          MovieResultDTO().error('test2'),
-        ];
-      expect(
-        QueryIMDBCastDetails(input).myFormatInputAsText(),
-        '',
-      );
-      expect(
-        QueryIMDBCastDetails(input).myFormatInputAsText(),
-        '',
-      );
+      final input =
+          SearchCriteriaDTO()
+            ..criteriaList = [
+              MovieResultDTO().error('test1'),
+              MovieResultDTO().error('test2'),
+            ];
+      expect(QueryIMDBCastDetails(input).myFormatInputAsText(), '');
+      expect(QueryIMDBCastDetails(input).myFormatInputAsText(), '');
     });
 
     // Confirm error is constructed as expected.
@@ -71,17 +64,16 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryIMDBCastDetails(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult =
+          QueryIMDBCastDetails(criteria).myYieldError('new query').toMap()
+            ..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () async {
-      const expectedOutput = intermediateMapList;
+      final expectedOutput = intermediateMapList;
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBCastDetails(criteria);
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
@@ -99,7 +91,10 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          ImdbCastConverter.dtoFromCompleteJsonMap(map),
+          ImdbWebScraperConverter().dtoFromCompleteJsonMap(
+            map,
+            DataSourceType.imdbCast,
+          ),
         );
       }
 
@@ -107,21 +102,21 @@ void main() {
       // printTestData(actualResult);
 
       final expectedValue = expectedDTOList;
-      expectedValue.first.uniqueId = 'tt7602562';
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchThreadedCache
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('WebFetchThreadedCache unit tests', () {
     test('empty cache', () async {
@@ -154,7 +149,8 @@ void main() {
       expect(
         listResult,
         MovieResultDTOListMatcher(expectedDTOList),
-        reason: 'Emitted DTO list ${listResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${listResult.toPrintableString()} '
             'needs to match expected DTO List'
             '${expectedDTOList.toPrintableString()}',
       );
@@ -197,9 +193,9 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryIMDBCastDetails integration tests', () {
     // Confirm URL is constructed as expected.
@@ -215,9 +211,9 @@ void main() {
       expect(actualResult, expected);
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using QueryIMDBCastDetails
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryIMDBCastDetails integration tests', () {
     // Confirm map can be converted to DTO.
@@ -230,16 +226,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -269,9 +264,9 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase and env and QueryIMDBCastDetails
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search query', () {
     // Read imdb search results from a simulated byte stream
@@ -297,18 +292,20 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
       // Explicitly check related because MovieResultDTOListMatcher won't
       expect(
         queryResult.first.related.length,
-        3,
-        reason: 'Related should list 1 director, 3 writers and 3 actors',
+        4,
+        reason:
+            'Related should list 1 director, 3 writers 1 actress, and 1 actor',
       );
       expect(
-        queryResult.first.related['Writing Credits:']!.length,
+        queryResult.first.related['writer']!.length,
         3,
         reason: 'Related should list 3 writers',
       );
@@ -318,9 +315,11 @@ void main() {
     // and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
-      const expectedException = '[QueryIMDBCastDetails] Error in imdb_cast '
+      const expectedException =
+          '[QueryIMDBCastDetails] Error in imdb_cast '
           'with criteria tt123 convert error interpreting web text as a map '
-          ':imdb cast data not detected for criteria tt123';
+          ':imdb web scraper data not detected for '
+          'criteria tt123 in not valid html';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('tt123');
       final testClass = QueryIMDBCastDetails(criteria);
@@ -337,9 +336,11 @@ void main() {
     // and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException = '[QueryIMDBCastDetails] Error in imdb_cast '
+      const expectedException =
+          '[QueryIMDBCastDetails] Error in imdb_cast '
           'with criteria tt123 convert error interpreting web text as a map '
-          ':imdb cast data not detected for criteria tt123';
+          ':imdb web scraper data not detected for '
+          'criteria tt123 in <html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('tt123');
       final testClass = QueryIMDBCastDetails(criteria);

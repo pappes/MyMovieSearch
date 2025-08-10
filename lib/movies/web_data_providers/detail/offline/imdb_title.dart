@@ -3,7 +3,8 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 const imdbHtmlSampleStart = ' <!DOCTYPE html>     <head>';
 const imdbHtmlSampleMiddle = ' </head> <body id="styleguide-v2" class="fixed">';
 const imdbHtmlSampleEnd = ' </body> </html>';
-const imdbHtmlSampleFull = '$imdbHtmlSampleStart $imdbJsonSampleInner '
+const imdbHtmlSampleFull =
+    '$imdbHtmlSampleStart $imdbJsonSampleInner '
     '$imdbHtmlSampleMiddle $imdbHtmlSampleInner $imdbHtmlSampleEnd';
 
 Future<Stream<String>> streamImdbHtmlOfflineData(_) =>
@@ -20,8 +21,8 @@ const expectedDtoJsonStringList = [
       "keywords":"[\"exorcism\",\"boxer\",\"chihuahua\"]",
       "description":"Then Kramer said, \"Everybody is Mescalon Smoochington\".",
       "userRating":"7.5","userRatingCount":"5123","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BYjAxMz.jpg","sources":{"DataSourceType.imdb":"tt6123456"},
-  "related":{"Cast:":{"nm0012370":{"uniqueId":"nm0012370","bestSource":"DataSourceType.imdbSuggestions","title":"Bill Jole","alternateTitle":" ","charactorName":" [Willy Rutter, Jimmy Banter]","type":"MovieContentType.person","creditsOrder":"100","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0012370"}},
-      "nm0012372":{"uniqueId":"nm0012372","bestSource":"DataSourceType.imdbSuggestions","title":"Jenny Jole","alternateTitle":" ","charactorName":" [Jilly Rutter, Jenny Banter]","type":"MovieContentType.person","creditsOrder":"99","imageUrl":"https://www.microsoft.com/images/M/MV5BY.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0012372"}}},
+  "related":{"Cast:":{"nm0012370":{"uniqueId":"nm0012370","bestSource":"DataSourceType.imdbSuggestions","title":"Bill Jole","alternateTitle":" ","characterName":" [Willy Rutter, Jimmy Banter]","type":"MovieContentType.person","creditsOrder":"100","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0012370"}},
+      "nm0012372":{"uniqueId":"nm0012372","bestSource":"DataSourceType.imdbSuggestions","title":"Jenny Jole","alternateTitle":" ","characterName":" [Jilly Rutter, Jenny Banter]","type":"MovieContentType.person","creditsOrder":"99","imageUrl":"https://www.microsoft.com/images/M/MV5BY.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0012372"}}},
     "Directed by:":{"nm0214370":{"uniqueId":"nm0214370","bestSource":"DataSourceType.imdbSuggestions","title":"Andy Jole","type":"MovieContentType.person","creditsOrder":"100","imageUrl":"https://www.microsoft.com/images/M/M2V5BM.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0214370"}},
       "nm0214372":{"uniqueId":"nm0214372","bestSource":"DataSourceType.imdbSuggestions","title":"Shazza Jole","type":"MovieContentType.person","creditsOrder":"99","imageUrl":"https://www.microsoft.com/images/M/M2V5BY.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0214372"}}},
     "Suggestions:":{"tt0012370":{"uniqueId":"tt0012370","bestSource":"DataSourceType.imdbSuggestions","title":"Walk Skip Run","alternateTitle":"Run Forrest Run","type":"MovieContentType.series","year":"1973","yearRange":"1973-1974","runTime":"7140",
@@ -71,7 +72,7 @@ const intermediateMapList = [
               },
               {
                 'node': {'text': 'chihuahua'},
-              }
+              },
             ],
           },
           'plot': {
@@ -118,7 +119,7 @@ const intermediateMapList = [
                     },
                   },
                 },
-              }
+              },
             ],
           },
           'directors': [
@@ -143,7 +144,7 @@ const intermediateMapList = [
                   },
                 },
               ],
-            }
+            },
           ],
           'moreLikeThisTitles': {
             'edges': [

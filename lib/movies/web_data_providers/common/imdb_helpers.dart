@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 const dataSource = 'source';
+const rootAttribute = 'props';
+const rootAttributeChild = 'pageProps';
 const outerElementIdentity = 'id';
 const outerElementSearchResults = 'searchResults';
 const outerElementNameResults = 'nameResults';
@@ -11,7 +13,7 @@ const outerElementDetailResults = 'data';
 
 const outerElementOfficialTitle = 'name';
 const outerElementAlternateTitle = 'alternateTitle';
-const outerElementCharactorName = 'charactorName';
+const outerElementCharacterName = 'characterName';
 const outerElementDescription = 'description';
 const outerElementKeywords = 'keywords';
 const outerElementGenre = 'genre';
@@ -80,6 +82,14 @@ const deepPersonProducerHeader = 'producer_credits';
 const deepPersonDirectorHeader = 'director_credits';
 const deepPersonWriterHeader = 'writer_credits';
 
+// Fields exclusive to json cast search results
+const deepEntityHeader = 'contentData';
+const deepEntityMetadata = 'entityMetadata';
+const deepEntityRelatedCastContainer = 'creditCategories';
+const deepEntityCastinstance = 'node';
+const deepEntityMetadataId = 'id';
+const deepEntityPersonName = 'name';
+
 // Credits is repeated inside the category as "credits"
 // so use case sensative compare
 const deepPersonRelatedSuffix = 'Credits';
@@ -88,9 +98,9 @@ const deepPersonRelatedSuffix = 'Credits';
 const deepRelatedCategoryHeader = 'category';
 const deepRelatedMovieHeader = 'title';
 // characters are same map depth as title
-const deepRelatedMovieParentCharactorHeader = 'characters';
+const deepRelatedMovieParentCharacterHeader = 'characters';
 // name is same map depth as title
-const deepRelatedMovieParentCharactorField = 'name';
+const deepRelatedMovieParentCharacterField = 'name';
 // id is repeated inside other children of the title - do not do a deep search
 const deepRelatedMovieId = 'id';
 const deepRelatedMoviePlot = 'plot';
@@ -174,12 +184,14 @@ String getIdFromIMDBLink(String? link) {
 
   // Convert /title/tt0145681/?ref_=nm_sims_nm_t_9 to tt0145681
   // Or      /title/tt0145681?ref_=nm_sims_nm_t_9 to tt0145681
-  const titleRegexpFormula = '$regexStartString$imdbTitlePath'
+  const titleRegexpFormula =
+      '$regexStartString$imdbTitlePath'
       '($regexMultipleAlphaNumericUnderscore)'
       '$regexMultipleAnything$regexEndString';
   // Convert /name/nm0145681/?ref_=nm_sims_nm_t_9 to nm0145681
   // Or      /name/nm0145681?ref_=nm_sims_nm_t_9 to nm0145681
-  const nameRegexpFormula = '$regexStartString$imdbPersonPath'
+  const nameRegexpFormula =
+      '$regexStartString$imdbPersonPath'
       '($regexMultipleAlphaNumericUnderscore)'
       '$regexMultipleAnything$regexEndString';
 
@@ -279,7 +291,8 @@ String getBigImage(String? smallImage) {
     const regexFileExtension = r'\.jpg';
     const regexEndString = r'$';
 
-    const imageRegexpFormula = '$regexStartString'
+    const imageRegexpFormula =
+        '$regexStartString'
         '($regexBeforeLastFulStop)'
         '$regexLastFulStopOnwards$regexFileExtension$regexEndString';
     var truncated = _getRegexGroupInBrackets(smallImage, imageRegexpFormula);

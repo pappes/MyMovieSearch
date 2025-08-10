@@ -13,10 +13,7 @@ import 'package:my_movie_search/utilities/settings.dart';
 /// Helper functions
 ////////////////////////////////////////////////////////////////////////////////
 
-void sortDtoList(
-  List<MovieResultDTO> dtos, {
-  bool includeRelated = true,
-}) {
+void sortDtoList(List<MovieResultDTO> dtos, {bool includeRelated = true}) {
   dtos.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
   if (includeRelated) {
     for (final entry in dtos) {
@@ -40,9 +37,7 @@ void printTestData(
   final sorted = actualResult.toList();
   sortDtoList(sorted, includeRelated: includeRelated);
   // ignore: avoid_print
-  print(
-    sorted.toListOfDartJsonStrings(includeRelated: includeRelated),
-  );
+  print(sorted.toListOfDartJsonStrings(includeRelated: includeRelated));
   expect(
     'debug code has been left uncommented!',
     'all call to printTestData must be commented out',
@@ -98,8 +93,8 @@ class MovieResultDTOMatcher extends Matcher {
   @override
   // Tell test framework what content was expected.
   Description describe(Description description) => description.add(
-        '$expected (set MovieResultDTOMatcher verbose:true for full details)',
-      );
+    '$expected (set MovieResultDTOMatcher verbose:true for full details)',
+  );
 
   @override
   // Tell test framework what difference was found.
@@ -148,9 +143,9 @@ class MovieResultDTOListMatcher extends Matcher {
   @override
   // Tell test framework what content was expected.
   Description describe(Description description) => description.add(
-        '$expected (set MovieResultDTOListMatcher '
-        'verbose:true for full details)',
-      );
+    '$expected (set MovieResultDTOListMatcher '
+    'verbose:true for full details)',
+  );
 
   @override
   // Tell test framework what difference was found.
@@ -281,9 +276,9 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
 /// Converts a [text] to a stream.
 Stream<String> emitString(String text) => Stream.value(text);
 
-/// Converts a [text] to a stream of charactors.
+/// Converts a [text] to a stream of characters.
 ///
-/// Emits one charactor at a time.
+/// Emits one character at a time.
 Stream<String> emitStringChars(String text) async* {
   for (final chr in text.characters) {
     yield chr;
@@ -328,30 +323,31 @@ MovieResultDTO makeResultDTOWithRelatedDTO(String sample) {
 
 /// Helper function to make a unique dto containing unique values.
 MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
-  final dto = MovieResultDTO()
-    ..bestSource = DataSourceType.wiki
-    ..uniqueId = '${sample}_uniqueId'
-    ..title = '${sample}_title'
-    ..alternateTitle = '${sample}_alternateTitle'
-    ..charactorName = '${sample}_charactorName'
-    ..description = '${sample}_description'
-    ..type = MovieContentType.custom
-    ..year = 123
-    ..yearRange = '${sample}_yearRange'
-    ..creditsOrder = 42
-    ..userRating = 456
-    ..userRatingCount = 789
-    ..censorRating = CensorRatingType.family
-    ..runTime = const Duration(hours: 1, minutes: 2, seconds: 3)
-    ..imageUrl = '${sample}_imageUrl'
-    ..language = LanguageType.mostlyEnglish
-    ..languages = {'English', '${sample}_language1', '${sample}_language2'}
-    ..genres = {'${sample}_genre1', '${sample}_genre2'}
-    ..keywords = {'${sample}_keyword1', '${sample}_keyword2'}
-    ..sources = {
-      DataSourceType.tmdbMovie: '${sample}_alternateTitle',
-      DataSourceType.wiki: '${sample}_uniqueId',
-    };
+  final dto =
+      MovieResultDTO()
+        ..bestSource = DataSourceType.wiki
+        ..uniqueId = '${sample}_uniqueId'
+        ..title = '${sample}_title'
+        ..alternateTitle = '${sample}_alternateTitle'
+        ..characterName = '${sample}_characterName'
+        ..description = '${sample}_description'
+        ..type = MovieContentType.custom
+        ..year = 123
+        ..yearRange = '${sample}_yearRange'
+        ..creditsOrder = 42
+        ..userRating = 456
+        ..userRatingCount = 789
+        ..censorRating = CensorRatingType.family
+        ..runTime = const Duration(hours: 1, minutes: 2, seconds: 3)
+        ..imageUrl = '${sample}_imageUrl'
+        ..language = LanguageType.mostlyEnglish
+        ..languages = {'English', '${sample}_language1', '${sample}_language2'}
+        ..genres = {'${sample}_genre1', '${sample}_genre2'}
+        ..keywords = {'${sample}_keyword1', '${sample}_keyword2'}
+        ..sources = {
+          DataSourceType.tmdbMovie: '${sample}_alternateTitle',
+          DataSourceType.wiki: '${sample}_uniqueId',
+        };
   if (makeRelated) {
     final ref = 'rel$sample';
     dto.related = {
@@ -371,37 +367,27 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
 }
 
 /// Helper function to make a unique dto containing unique values.
-SearchCriteriaDTO makeCriteriaDTO(String sample) => SearchCriteriaDTO()
-  ..criteriaType = SearchCriteriaType.movieDTOList
-  ..criteriaTitle = '${sample}_criteriaTitle'
-  ..searchId = '${sample}_searchId'
-  ..criteriaList = [
-    MovieResultDTO().init(uniqueId: 'first'),
-    MovieResultDTO().init(uniqueId: 'second'),
-  ];
+SearchCriteriaDTO makeCriteriaDTO(String sample) =>
+    SearchCriteriaDTO()
+      ..criteriaType = SearchCriteriaType.movieDTOList
+      ..criteriaTitle = '${sample}_criteriaTitle'
+      ..searchId = '${sample}_searchId'
+      ..criteriaList = [
+        MovieResultDTO().init(uniqueId: 'first'),
+        MovieResultDTO().init(uniqueId: 'second'),
+      ];
 
 class TestApp extends StatelessWidget {
-  const TestApp({
-    required this.children,
-    super.key,
-  });
-  const TestApp.con({
-    required this.children,
-    super.key,
-  });
+  const TestApp({required this.children, super.key});
+  const TestApp.con({required this.children, super.key});
 
   final List<Widget> children;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
-        title: 'Flutter Testing',
-        home: Scaffold(
-          body: Center(
-            child: Flex(
-              direction: Axis.vertical,
-              children: children,
-            ),
-          ),
-        ),
-      );
+    title: 'Flutter Testing',
+    home: Scaffold(
+      body: Center(child: Flex(direction: Axis.vertical, children: children)),
+    ),
+  );
 }

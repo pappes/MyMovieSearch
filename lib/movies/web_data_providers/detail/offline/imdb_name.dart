@@ -5,7 +5,8 @@ final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const imdbHtmlSampleStart = ' <!DOCTYPE html> <html     <head>';
 const imdbHtmlSampleMiddle = ' </head> <body id="styleguide-v2" class="fixed">';
 const imdbHtmlSampleEnd = ' </body> </html>';
-const imdbHtmlSampleFull = '$imdbHtmlSampleStart $imdbJsonSampleInner '
+const imdbHtmlSampleFull =
+    '$imdbHtmlSampleStart $imdbJsonSampleInner '
     '$imdbHtmlSampleMiddle $imdbHtmlSampleInner $imdbHtmlSampleEnd';
 
 Future<Stream<String>> streamImdbHtmlOfflineData(_) =>
@@ -17,10 +18,10 @@ const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"nm0123456","bestSource":"DataSourceType.imdb","title":"Mescalon Smoochington <3","type":"MovieContentType.person","year":"1933","yearRange":"1933-1977",
       "description":"THen Kramer said, \"Everybody is Mescalon Smoochington\".","userRatingCount":"184","imageUrl":"https://www.microsoft.com/images/M/MV5BNjdhNz.jpg","sources":{"DataSourceType.imdb":"nm0123456"},
-  "related":{"Actor":{"tt0012370":{"uniqueId":"tt0012370","bestSource":"DataSourceType.imdbSuggestions","title":"Walk Skip Run","alternateTitle":" Run Forrest Run","charactorName":" [Willy Rutter]","type":"MovieContentType.movie","year":"1973","yearRange":"1973","runTime":"7140",
+  "related":{"Actor":{"tt0012370":{"uniqueId":"tt0012370","bestSource":"DataSourceType.imdbSuggestions","title":"Walk Skip Run","alternateTitle":" Run Forrest Run","characterName":" [Willy Rutter]","type":"MovieContentType.movie","year":"1973","yearRange":"1973","runTime":"7140",
       "genres":"[\"Western\",\"Romance\"]",
       "userRating":"8.6","userRatingCount":"4837","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0012370"}},
-      "tt0123580":{"uniqueId":"tt0123580","bestSource":"DataSourceType.imdbSuggestions","title":"Scott And Sharlene","alternateTitle":" Aussieland","charactorName":" [Nom da Plume, Other Charactor]","type":"MovieContentType.short","year":"1985","yearRange":"1985-2023","runTime":"1234",
+      "tt0123580":{"uniqueId":"tt0123580","bestSource":"DataSourceType.imdbSuggestions","title":"Scott And Sharlene","alternateTitle":" Aussieland","characterName":" [Nom da Plume, Other Character]","type":"MovieContentType.short","year":"1985","yearRange":"1985-2023","runTime":"1234",
       "genres":"[\"Horror\",\"Romance\"]",
       "userRating":"7.5","userRatingCount":"5123","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BYjAxMz.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0123580"}}}}}
 ''',
@@ -96,7 +97,7 @@ const intermediateMapList = [
                       'category': {'text': 'Actress'},
                       'characters': [
                         {'name': 'Nom da Plume'},
-                        {'name': 'Other Charactor'},
+                        {'name': 'Other Character'},
                       ],
                       'title': {
                         'id': 'tt0123580',
@@ -122,10 +123,10 @@ const intermediateMapList = [
                         },
                       },
                     },
-                  }
+                  },
                 ],
               },
-            }
+            },
           ],
           'unreleasedPrimaryCredits': <void>[],
           'akas': {
@@ -149,12 +150,11 @@ const intermediateMapList = [
         },
       },
     },
-  }
+  },
 ];
 
 const _embeddedJson = r'''
-{"props":{"pageProps":{
-      "nmconst": "nm0123456",
+{"props":{"pageProps":{"nmconst": "nm0123456",
       "aboveTheFold": {
         "id": "nm0123456",
         "nameText": {"text": "Mescalon Smoochington \u003c3"},
@@ -215,7 +215,7 @@ const _embeddedJson = r'''
                     "category": {"text": "Actress"},
                     "characters": [
                       {"name": "Nom da Plume"},
-                      {"name": "Other Charactor"}
+                      {"name": "Other Character"}
                     ],
                     "title": {
                       "id": "tt0123580",

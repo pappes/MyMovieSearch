@@ -15,13 +15,13 @@ import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 class MovieTile extends ListTile {
   MovieTile(this.context, this.movie, {super.key})
-      : super(
-          leading: _getImage(movie),
-          title: _getTitle(movie),
-          trailing: _getNavigateButtons(context, movie),
-          subtitle: _getDescription(movie),
-          onTap: () => _navigate(context, movie),
-        );
+    : super(
+        leading: _getImage(movie),
+        title: _getTitle(movie),
+        trailing: _getNavigateButtons(context, movie),
+        subtitle: _getDescription(movie),
+        onTap: () => _navigate(context, movie),
+      );
   final BuildContext context;
   final MovieResultDTO movie;
 
@@ -59,15 +59,15 @@ class MovieTile extends ListTile {
         middle.add(movie.bestSource.excludeNone);
         end.add(movie.language.excludeNone);
     }
-    final combined = [...start, '-', ...middle, '-', ...end]
-        .trimJoin(' ', ' -')
-        .reduceWhitespace()
-        .replaceAll('- -', '-');
+    final combined = [
+      ...start,
+      '-',
+      ...middle,
+      '-',
+      ...end,
+    ].trimJoin(' ', ' -').reduceWhitespace().replaceAll('- -', '-');
 
-    return Text(
-      combined,
-      maxLines: 5,
-    );
+    return Text(combined, maxLines: 5);
   }
 
   static Widget _getDescription(MovieResultDTO movie) {
@@ -79,10 +79,10 @@ class MovieTile extends ListTile {
       case MovieContentType.download:
         final seeders = 'S:${movie.creditsOrder} L:${movie.userRatingCount}';
         start.add(seeders);
-        middle.add(movie.charactorName);
+        middle.add(movie.characterName);
         end.add(movie.description);
       case MovieContentType.person:
-        start.add(movie.charactorName);
+        start.add(movie.characterName);
         end.add(ratingCount);
       case MovieContentType.barcode:
         start.add(movie.bestSource.excludeNone);
@@ -111,16 +111,16 @@ class MovieTile extends ListTile {
         middle.add(movie.userRating.toString());
         middle.add(ratingCount);
         end.add(movie.alternateTitle);
-        end.add(movie.charactorName);
+        end.add(movie.characterName);
     }
-    final combined = [...start, '-', ...middle, '-', ...end]
-        .trimJoin(' ', ' -')
-        .reduceWhitespace()
-        .replaceAll('- -', '-');
-    return Text(
-      combined,
-      maxLines: 5,
-    );
+    final combined = [
+      ...start,
+      '-',
+      ...middle,
+      '-',
+      ...end,
+    ].trimJoin(' ', ' -').reduceWhitespace().replaceAll('- -', '-');
+    return Text(combined, maxLines: 5);
   }
 
   static Widget _getIcon(MovieResultDTO movie) {
@@ -204,10 +204,7 @@ class MovieTile extends ListTile {
   static void getReadIcon(MovieResultDTO movie, List<Widget> widgets) {
     final read = movie.getReadIndicator();
     try {
-      final readHistory = getEnumValue<ReadHistory>(
-        read,
-        ReadHistory.values,
-      );
+      final readHistory = getEnumValue<ReadHistory>(read, ReadHistory.values);
       logger.t('read indicator = ${movie.uniqueId} $read');
       switch (readHistory) {
         case ReadHistory.starred:
@@ -244,9 +241,8 @@ class MovieTile extends ListTile {
     BuildContext context,
     MovieResultDTO movie, {
     Widget? icon,
-  }) =>
-      ElevatedButton(
-        onPressed: () => _navigate(context, movie),
-        child: icon ?? _getIcon(movie),
-      );
+  }) => ElevatedButton(
+    onPressed: () => _navigate(context, movie),
+    child: icon ?? _getIcon(movie),
+  );
 }

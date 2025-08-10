@@ -7,8 +7,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 class ImdbCastConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
-  ) =>
-      [_dtoFromMap(map)];
+  ) => [_dtoFromMap(map)];
 
   static MovieResultDTO _dtoFromMap(Map<dynamic, dynamic> map) {
     final movie = MovieResultDTO().init(
@@ -17,11 +16,7 @@ class ImdbCastConverter {
     );
 
     for (final category in map.entries) {
-      _getMovies(
-        movie,
-        category.key.toString(),
-        category.value,
-      );
+      _getMovies(movie, category.key.toString(), category.value);
     }
 
     return movie;
@@ -54,7 +49,7 @@ class ImdbCastConverter {
       uniqueId: id,
       title: map[outerElementOfficialTitle]?.toString(),
       alternateTitle: map[outerElementAlternateTitle]?.toString(),
-      charactorName: map[outerElementCharactorName]?.toString(),
+      characterName: map[outerElementCharacterName]?.toString(),
     );
 
     return movie;

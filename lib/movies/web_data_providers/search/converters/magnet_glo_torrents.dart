@@ -8,8 +8,7 @@ import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 class GloTorrentsSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
-  ) =>
-      [dtoFromMap(map)];
+  ) => [dtoFromMap(map)];
 
   static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
     // Compensate for gloTorrents overrestimation
@@ -20,7 +19,7 @@ class GloTorrentsSearchConverter {
       type: MovieContentType.download.toString(),
       uniqueId: map[jsonMagnetKey]?.toString(),
       title: map[jsonNameKey]?.toString(),
-      charactorName: map[jsonCategoryKey]?.toString(),
+      characterName: map[jsonCategoryKey]?.toString(),
       description: map[jsonDescriptionKey]?.toString(),
       imageUrl: map[jsonMagnetKey]?.toString(),
       creditsOrder: seeders.toString(),

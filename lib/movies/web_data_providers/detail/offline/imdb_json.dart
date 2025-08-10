@@ -15,10 +15,10 @@ const expectedDtoJsonStringList = [
   "related":{"Actor":{"tt11123818":{"uniqueId":"tt11123818","title":"Our Tupple","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"2002","yearRange":"2002",
       "genres":"[\"Drama\"]",
       "userRating":"6.7","userRatingCount":"8","imageUrl":"https://m.media-amazon.com/images/M/MV5BNTE0NWNhZGdeQXVyMTY1ODE1NTk@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt11123818"}},
-      "tt11812323":{"uniqueId":"tt11812323","title":"lilly","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","charactorName":" [Jacob]","type":"MovieContentType.movie","year":"2002","yearRange":"2002","runTime":"5123",
+      "tt11812323":{"uniqueId":"tt11812323","title":"lilly","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","characterName":" [Jacob]","type":"MovieContentType.movie","year":"2002","yearRange":"2002","runTime":"5123",
       "genres":"[\"Horror\"]",
       "userRating":"7.5","userRatingCount":"2123","imageUrl":"https://m.media-amazon.com/images/M/MV5BNWFhNcGdeQXVyMTcyODY0OTE@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt11812323"}},
-      "tt17512392":{"uniqueId":"tt17512392","title":"Willman Tryer","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","charactorName":" [Willman Tryer]","type":"MovieContentType.episode","year":"2003","yearRange":"2003","runTime":"2123",
+      "tt17512392":{"uniqueId":"tt17512392","title":"Willman Tryer","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","characterName":" [Willman Tryer]","type":"MovieContentType.episode","year":"2003","yearRange":"2003","runTime":"2123",
       "genres":"[\"Crime\",\"Drama\"]",
       "userRating":"3.3","userRatingCount":"11235","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNjZhZWMwNTMmVmXkEyXkFqcGdeQXVyMTY0Njc2MTUx._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt17512392"}}}}}
 ''',
@@ -31,15 +31,11 @@ Future<Stream<String>> streamImdbHtmlOfflinePaginatedData(_) =>
     Future.value(Stream.value(jsonEncode(imdbJsonWrappedPaginatedSample)));
 
 const imdbJsonWrappedPaginatedSample = {
-  'data': {
-    'name': imdbJsonInnerPaginatedSample,
-  },
+  'data': {'name': imdbJsonInnerPaginatedSample},
 };
 
 const imdbJsonWrappedFilteredSample = {
-  'data': {
-    'name': imdbJsonInnerFilteredSample,
-  },
+  'data': {'name': imdbJsonInnerFilteredSample},
 };
 
 const imdbJsonInnerNameSample = <String, Object>{
@@ -68,19 +64,13 @@ const imdbJsonInnerFilteredSample = {
 const imdbJsonInnerFilteredSampleResults = {
   'unreleasedCredits': [
     {
-      'category': {
-        'id': 'actor',
-        'text': 'Actor',
-      },
+      'category': {'id': 'actor', 'text': 'Actor'},
       'credits': oneEdge,
     },
   ],
   'releasedCredits': [
     {
-      'category': {
-        'id': 'actor',
-        'text': 'Actor',
-      },
+      'category': {'id': 'actor', 'text': 'Actor'},
       'credits': twoEdges,
     },
   ],
@@ -144,9 +134,7 @@ const imdbJsonNode1Sample = {
             'https://m.media-amazon.com/images/M/MV5BNjZhZWMwNTMmVmXkEyXkFqcGdeQXVyMTY0Njc2MTUx._V1_.jpg',
         'height': 1351,
         'width': 1080,
-        'caption': {
-          'plainText': 'Raman Rodger in Willman Tryer (2003)',
-        },
+        'caption': {'plainText': 'Raman Rodger in Willman Tryer (2003)'},
       },
       'ratingsSummary': {'aggregateRating': 3.3, 'voteCount': 11235},
       'releaseYear': {'year': 2003, 'endYear': null},
@@ -159,7 +147,7 @@ const imdbJsonNode1Sample = {
           },
           {
             'genre': {'text': 'Drama'},
-          }
+          },
         ],
       },
     },
@@ -203,7 +191,7 @@ const imdbJsonNode2Sample = {
         'genres': [
           {
             'genre': {'text': 'Horror'},
-          }
+          },
         ],
       },
     },
@@ -244,7 +232,7 @@ const imdbJsonNode3Sample = {
         'genres': [
           {
             'genre': {'text': 'Drama'},
-          }
+          },
         ],
       },
     },

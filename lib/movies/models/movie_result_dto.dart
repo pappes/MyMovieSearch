@@ -25,7 +25,7 @@ class MovieResultDTO {
   String uniqueId = movieDTOUninitialized; // ID in current data source
   String title = '';
   String alternateTitle = '';
-  String charactorName = '';
+  String characterName = '';
   String description = '';
   MovieContentType type = MovieContentType.none;
   int year = 0;
@@ -49,8 +49,8 @@ class MovieResultDTO {
   /// Convert a [MovieResultDTO] to a map tha can be consumed by jsonEncode.
   ///
   Map<String, dynamic> toJson({bool includeRelated = true}) =>
-      // ignore: unnecessary_this
-      this.toMap(includeRelated: includeRelated);
+  // ignore: unnecessary_this
+  this.toMap(includeRelated: includeRelated);
 }
 
 enum MovieContentType {
@@ -97,7 +97,7 @@ const String movieDTOBestSource = 'bestSource';
 const String movieDTOUniqueId = 'uniqueId';
 const String movieDTOTitle = 'title';
 const String movieDTOAlternateTitle = 'alternateTitle';
-const String movieDTOCharactorName = 'charactorName';
+const String movieDTOCharacterName = 'characterName';
 const String movieDTODescription = 'description';
 const String movieDTOType = 'type';
 const String movieDTOYear = 'year';
@@ -203,10 +203,7 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   // Need 2 functions because access to [value] is not initialised for testing!
   Object toPrimitives() => RestorableMovie.dtoToPrimitives(value);
   static Object dtoToPrimitives(MovieResultDTO dto) {
-    final map = {
-      'dto': dto.uniqueId,
-      'nextId': '${nextId + 1}',
-    };
+    final map = {'dto': dto.uniqueId, 'nextId': '${nextId + 1}'};
     final json = jsonEncode(map);
     printSizeAndReturn(json);
     return json;
@@ -300,41 +297,46 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
   @factory
   // ignore: invalid_factory_method_impl
   MovieResultDTO toMovieResultDTO() {
-    final dto = MovieResultDTO()
-      ..uniqueId = dynamicToString(this[movieDTOUniqueId])
-      ..title = dynamicToString(this[movieDTOTitle])
-      ..alternateTitle = dynamicToString(this[movieDTOAlternateTitle])
-      ..charactorName = dynamicToString(this[movieDTOCharactorName])
-      ..description = dynamicToString(this[movieDTODescription])
-      ..year = dynamicToInt(this[movieDTOYear])
-      ..yearRange = dynamicToString(this[movieDTOYearRange])
-      ..creditsOrder = dynamicToInt(this[movieDTOcreditsOrder])
-      ..userRating = dynamicToDouble(this[movieDTOUserRating])
-      ..userRatingCount = dynamicToInt(this[movieDTOUserRatingCount])
-      ..runTime = Duration(seconds: dynamicToInt(this[movieDTORunTime]))
-      ..imageUrl = dynamicToString(this[movieDTOImageUrl])
-      ..languages = dynamicToStringSet(this[movieDTOLanguages])
-      ..genres = dynamicToStringSet(this[movieDTOGenres])
-      ..keywords = dynamicToStringSet(this[movieDTOKeywords])
-      ..related = stringToRelated(this[movieDTORelated]);
+    final dto =
+        MovieResultDTO()
+          ..uniqueId = dynamicToString(this[movieDTOUniqueId])
+          ..title = dynamicToString(this[movieDTOTitle])
+          ..alternateTitle = dynamicToString(this[movieDTOAlternateTitle])
+          ..characterName = dynamicToString(this[movieDTOCharacterName])
+          ..description = dynamicToString(this[movieDTODescription])
+          ..year = dynamicToInt(this[movieDTOYear])
+          ..yearRange = dynamicToString(this[movieDTOYearRange])
+          ..creditsOrder = dynamicToInt(this[movieDTOcreditsOrder])
+          ..userRating = dynamicToDouble(this[movieDTOUserRating])
+          ..userRatingCount = dynamicToInt(this[movieDTOUserRatingCount])
+          ..runTime = Duration(seconds: dynamicToInt(this[movieDTORunTime]))
+          ..imageUrl = dynamicToString(this[movieDTOImageUrl])
+          ..languages = dynamicToStringSet(this[movieDTOLanguages])
+          ..genres = dynamicToStringSet(this[movieDTOGenres])
+          ..keywords = dynamicToStringSet(this[movieDTOKeywords])
+          ..related = stringToRelated(this[movieDTORelated]);
 
     dto
-      ..bestSource = getEnumValue<DataSourceType>(
+      ..bestSource =
+          getEnumValue<DataSourceType>(
             this[movieDTOBestSource],
             DataSourceType.values,
           ) ??
           dto.bestSource
-      ..type = getEnumValue<MovieContentType>(
+      ..type =
+          getEnumValue<MovieContentType>(
             this[movieDTOType],
             MovieContentType.values,
           ) ??
           dto.type
-      ..censorRating = getEnumValue<CensorRatingType>(
+      ..censorRating =
+          getEnumValue<CensorRatingType>(
             this[movieDTOCensorRating],
             CensorRatingType.values,
           ) ??
           dto.censorRating
-      ..language = getEnumValue<LanguageType>(
+      ..language =
+          getEnumValue<LanguageType>(
             this[movieDTOLanguage],
             LanguageType.values,
           ) ??
@@ -529,10 +531,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Reinitialise the source for a movie.
   ///
-  MovieResultDTO setSource({
-    Object? newSource,
-    String? newUniqueId,
-  }) {
+  MovieResultDTO setSource({Object? newSource, String? newUniqueId}) {
     uniqueId = newUniqueId ?? uniqueId;
 
     if (newSource is DataSourceType) {
@@ -560,7 +559,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String? uniqueId = movieDTOUninitialized,
     String? title = '',
     String? alternateTitle = '',
-    String? charactorName = '',
+    String? characterName = '',
     String? description = '',
     String? type = '',
     String? year = '0',
@@ -589,7 +588,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (title != alternateTitle) {
       this.alternateTitle = alternateTitle ?? '';
     }
-    this.charactorName = charactorName ?? '';
+    this.characterName = characterName ?? '';
     this.description = description ?? '';
     this.yearRange = yearRange ?? '';
     this.imageUrl = imageUrl ?? '';
@@ -602,20 +601,14 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     this.genres = dynamicToStringSet(genres);
     this.keywords = dynamicToStringSet(keywords);
     // Enumerations, work with what we get
-    this.type = getEnumValue<MovieContentType>(
-          type,
-          MovieContentType.values,
-        ) ??
+    this.type =
+        getEnumValue<MovieContentType>(type, MovieContentType.values) ??
         MovieContentType.none;
-    this.censorRating = getEnumValue<CensorRatingType>(
-          censorRating,
-          CensorRatingType.values,
-        ) ??
+    this.censorRating =
+        getEnumValue<CensorRatingType>(censorRating, CensorRatingType.values) ??
         CensorRatingType.none;
-    this.language = getEnumValue<LanguageType>(
-          language,
-          LanguageType.values,
-        ) ??
+    this.language =
+        getEnumValue<LanguageType>(language, LanguageType.values) ??
         getLanguageType(this.languages);
 
     if (this.type != MovieContentType.searchprompt &&
@@ -668,8 +661,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       if (alternateTitle != defaultValues.alternateTitle) {
         result[movieDTOAlternateTitle] = alternateTitle;
       }
-      if (charactorName != defaultValues.charactorName) {
-        result[movieDTOCharactorName] = charactorName;
+      if (characterName != defaultValues.characterName) {
+        result[movieDTOCharacterName] = characterName;
       }
 
       if (type != defaultValues.type) {
@@ -795,7 +788,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       }
 
       alternateTitle = newAlternateTitle;
-      charactorName = bestValue(newValue.charactorName, charactorName);
+      characterName = bestValue(newValue.characterName, characterName);
       description = bestValue(newValue.description, description);
       type = bestValue(newValue.type, type);
       year = bestValue(newValue.year, year);
@@ -967,10 +960,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Compare [existing] with [candidate] and return the most relevant value.
   ///
-  LanguageType bestLanguage(
-    LanguageType existing,
-    LanguageType candidate,
-  ) {
+  LanguageType bestLanguage(LanguageType existing, LanguageType candidate) {
     if (candidate.index > existing.index) return candidate;
     return existing;
   }
@@ -984,28 +974,29 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   ///
   @factory
   // ignore: invalid_factory_method_impl
-  MovieResultDTO toUnknown() => MovieResultDTO()
-    ..bestSource = bestSource
-    ..uniqueId = uniqueId
-    ..title = 'unknown'
-    ..alternateTitle = alternateTitle
-    ..charactorName = charactorName
-    ..description = description
-    ..type = type
-    ..year = year
-    ..yearRange = yearRange
-    ..creditsOrder = creditsOrder
-    ..userRating = userRating
-    ..userRatingCount = userRatingCount
-    ..censorRating = censorRating
-    ..runTime = runTime
-    ..imageUrl = imageUrl
-    ..language = language
-    ..languages = languages
-    ..genres = genres
-    ..keywords = keywords
-    ..sources = sources
-    ..related = related;
+  MovieResultDTO toUnknown() =>
+      MovieResultDTO()
+        ..bestSource = bestSource
+        ..uniqueId = uniqueId
+        ..title = 'unknown'
+        ..alternateTitle = alternateTitle
+        ..characterName = characterName
+        ..description = description
+        ..type = type
+        ..year = year
+        ..yearRange = yearRange
+        ..creditsOrder = creditsOrder
+        ..userRating = userRating
+        ..userRatingCount = userRatingCount
+        ..censorRating = censorRating
+        ..runTime = runTime
+        ..imageUrl = imageUrl
+        ..language = language
+        ..languages = languages
+        ..genres = genres
+        ..keywords = keywords
+        ..sources = sources
+        ..related = related;
 
   /// Look at information provided
   /// to see if [MovieContentType] can be determined.
@@ -1045,12 +1036,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   }
 
   /// update title type based on information in the dto.
-  MovieContentType getContentType() => type = getMovieContentType(
-        yearRange,
-        runTime.inSeconds,
-        uniqueId,
-      ) ??
-      type;
+  MovieContentType getContentType() =>
+      type =
+          getMovieContentType(yearRange, runTime.inSeconds, uniqueId) ?? type;
 
   /// Use movie type string to lookup [MovieContentType] movie type.
   static MovieContentType? getMovieContentType(
@@ -1128,7 +1116,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   ) {
     if (expected != actual) {
       if (!DoubleHelper.fuzzyMatch(actual, expected, tolerance: 80)) {
-        mismatches[fieldName] = 'is different\n'
+        mismatches[fieldName] =
+            'is different\n'
             '  Expected approx: "$expected"\n'
             '           Actual: "$actual"\n';
       }
@@ -1215,8 +1204,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       String fieldName,
       MovieSources actual,
       MovieSources expected,
-    ) =>
-        _matchCompareIdMap(mismatches, '$prefix$fieldName', actual, expected);
+    ) => _matchCompareIdMap(mismatches, '$prefix$fieldName', actual, expected);
 
     matchCompare('bestSource', actualDTO.bestSource, bestSource);
     matchCompareId('uniqueId', actualDTO.uniqueId, uniqueId);
@@ -1225,7 +1213,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     }
     matchCompare('title', actualDTO.title, title);
     matchCompare('alternateTitle', actualDTO.alternateTitle, alternateTitle);
-    matchCompare('charactorName', actualDTO.charactorName, charactorName);
+    matchCompare('characterName', actualDTO.characterName, characterName);
     matchCompare('description', actualDTO.description, description);
     matchCompare('type', actualDTO.type, type);
     matchCompare('year', actualDTO.year, year);
@@ -1364,10 +1352,7 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
   /// Format JSON for readability
   String formatDtoJson(String json) {
     var formatted = json;
-    formatted = formatted.replaceAll(
-      '"related":{"',
-      '\n  "related":{"',
-    );
+    formatted = formatted.replaceAll('"related":{"', '\n  "related":{"');
     formatted = formatted.replaceAll(
       r'"languages":"[\"',
       '\n      "languages":"[\\"',
@@ -1388,14 +1373,8 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
       '"userRating":"',
       '\n      "userRating":"',
     );
-    formatted = formatted.replaceAll(
-      '}},"',
-      '}},\n      "',
-    );
-    formatted = formatted.replaceAll(
-      '}}},\n  ',
-      '}}},\n',
-    );
+    formatted = formatted.replaceAll('}},"', '}},\n      "');
+    formatted = formatted.replaceAll('}}},\n  ', '}}},\n');
     return formatted;
   }
 
@@ -1475,9 +1454,7 @@ extension MapMapMovieResultDTOHelpers
     final listContents = StringBuffer();
     String separator = '';
     for (final key in keys) {
-      listContents.write(
-        '$separator$key:${this[key]!.toPrintableString()}',
-      );
+      listContents.write('$separator$key:${this[key]!.toPrintableString()}');
       separator = ',\n';
     }
     return '{$listContents}';
@@ -1490,9 +1467,7 @@ extension MapMapMovieResultDTOHelpers
     final listContents = StringBuffer();
     String separator = '';
     for (final key in keys) {
-      listContents.write(
-        '$separator$key:${this[key]!.toShortString()}',
-      );
+      listContents.write('$separator$key:${this[key]!.toShortString()}');
       separator = ',\n';
     }
     return '$listContents';
@@ -1553,8 +1528,9 @@ extension DTOCompare on MovieResultDTO {
   /// Compare downloads based availability.
   int barcodeCompare(MovieResultDTO other) {
     final hasYear = alternateTitle.contains(RegExp(r'.*\s\d\d\d\d\s.*'));
-    final otherHasYear =
-        other.alternateTitle.contains(RegExp(r'.*\s\d\d\d\d\s.*'));
+    final otherHasYear = other.alternateTitle.contains(
+      RegExp(r'.*\s\d\d\d\d\s.*'),
+    );
 
     // Deprioritise Ebay results
     if (isEbay(bestSource) && !isEbay(other.bestSource)) {
@@ -1626,8 +1602,10 @@ extension DTOCompare on MovieResultDTO {
       default:
         {
           try {
-            final readHistory =
-                getEnumValue<ReadHistory>(read, ReadHistory.values);
+            final readHistory = getEnumValue<ReadHistory>(
+              read,
+              ReadHistory.values,
+            );
             switch (readHistory) {
               case ReadHistory.starred:
                 return 99;
