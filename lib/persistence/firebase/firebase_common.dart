@@ -18,6 +18,7 @@ enum Fields { devices, text }
 const runtimeDevices = {
   'android.Google.Pixel 8 Pro': 'dave', // Google Pixel 8 Pro
   'android.samsung.SM-F926B': 'dave', // Samsung Fold 3
+  'android.samsung.SM-F966B': 'dave', // Samsung Fold 7
   'linux.Ubuntu.': 'dave', // development VM
   'android.samsung.SM-G950F': 'dave', // Samsung S8
   'android.Microsoft Corporation.Subsystem for Android(TM)': 'dave', // Chair
@@ -28,9 +29,10 @@ const runtimeDevices = {
 abstract class FirebaseApplicationState extends ChangeNotifier {
   /// Singleton for the current platform
   factory FirebaseApplicationState() {
-    instance ??= Platform.isLinux
-        ? FirebaseApplicationStateLinux()
-        : FirebaseApplicationStateAndriod();
+    instance ??=
+        Platform.isLinux
+            ? FirebaseApplicationStateLinux()
+            : FirebaseApplicationStateAndriod();
     return instance!;
   }
 
@@ -126,12 +128,12 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   }
 
   Map<String, dynamic> newRecord(String message) => {
-        Fields.text.name: message,
-        'timestamp': DateTime.now().millisecondsSinceEpoch,
-        'userName': userDisplayName,
-        'userId': userId,
-        Fields.devices.name: [deviceType],
-      };
+    Fields.text.name: message,
+    'timestamp': DateTime.now().millisecondsSinceEpoch,
+    'userName': userDisplayName,
+    'userId': userId,
+    Fields.devices.name: [deviceType],
+  };
 
   String derivedUser(String? device) => runtimeDevices[device] ?? 'tash';
   bool derivedUserMatch(String? device, dynamic devices) {

@@ -29,7 +29,7 @@ mixin ScrapeSolidTorrentsSearch
   Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    RegExp regex = RegExp(r'Found.*>0<.* results');
+    final RegExp regex = RegExp('Found.*>0<.* results');
     if (regex.hasMatch(webText)) {
       return [];
     }

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 // ignore_for_file: unnecessary_raw_strings
+// ignore_for_file: prefer_single_quotes
 
 //query string https://www.imdb.com/title/tt0106977/fullcredits?ref_=tt_ov_st_sm
 

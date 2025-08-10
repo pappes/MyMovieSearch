@@ -53,8 +53,8 @@ class SearchCriteriaDTO {
   /// Convert a [MovieResultDTO] to a json [String].
   ///
   String toJson({bool includeRelated = true}) =>
-      // ignore: unnecessary_this
-      jsonEncode(this.toMap());
+  // ignore: unnecessary_this
+  jsonEncode(this.toMap());
 }
 
 // member variable names
@@ -82,7 +82,9 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
         oldValue.criteriaType != value.criteriaType ||
         oldValue.criteriaContext != value.criteriaContext ||
         oldValue.criteriaList.toPrintableString() !=
-            value.criteriaList.toPrintableString()) notifyListeners();
+            value.criteriaList.toPrintableString()) {
+      notifyListeners();
+    }
   }
 
   static Map<String, dynamic> _getMap(GoRouterState state) {
@@ -92,8 +94,8 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
   }
 
   static Map<String, dynamic> routeState(SearchCriteriaDTO criteriaDto) =>
-      // Condense movieDTO contentes to prevent crashing on restoration.
-      {'id': nextId++, 'dto': criteriaDto.clone(condensed: true)};
+  // Condense movieDTO contentes to prevent crashing on restoration.
+  {'id': nextId++, 'dto': criteriaDto.clone(condensed: true)};
 
   static SearchCriteriaDTO getDto(GoRouterState state) {
     final input = _getMap(state);
@@ -184,12 +186,12 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   /// Convert a [Map] into a [SearchCriteriaDTO] object.
   ///
   Map<String, String> toMap({bool condensed = false}) => <String, String>{
-        movieCriteriaDTOSearchId: searchId,
-        movieCriteriaDTOCriteriaTitle: criteriaTitle,
-        movieCriteriaDTOCriteriaType: criteriaType.toString(),
-        movieCriteriaDTOCriteriaContext: jsonEncode(criteriaContext?.toJson()),
-        movieCriteriaDTOCriteriaList: criteriaList.toJson(condensed: condensed),
-      };
+    movieCriteriaDTOSearchId: searchId,
+    movieCriteriaDTOCriteriaTitle: criteriaTitle,
+    movieCriteriaDTOCriteriaType: criteriaType.toString(),
+    movieCriteriaDTOCriteriaContext: jsonEncode(criteriaContext?.toJson()),
+    movieCriteriaDTOCriteriaList: criteriaList.toJson(condensed: condensed),
+  };
 
   static List<MovieResultDTO> getMovieList(dynamic inputString) {
     final converter = RestorableMovieList();
@@ -197,28 +199,29 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     return converter.fromPrimitives(stringList);
   }
 
-  SearchCriteriaDTO fromString(String criteria) => SearchCriteriaDTO()
-    ..criteriaTitle = criteria
-    ..criteriaType = SearchCriteriaType.movieTitle;
+  SearchCriteriaDTO fromString(String criteria) =>
+      SearchCriteriaDTO()
+        ..criteriaTitle = criteria
+        ..criteriaType = SearchCriteriaType.movieTitle;
 
   /// Construct route to the search results page MovieSearchResultsNewPage
   /// as appropriate for the dto.
   ///
   RouteInfo getSearchResultsPage() => RouteInfo(
-        ScreenRoute.searchresults,
-        RestorableSearchCriteria.routeState(this),
-        toUniqueReference(),
-      );
+    ScreenRoute.searchresults,
+    RestorableSearchCriteria.routeState(this),
+    toUniqueReference(),
+  );
 
   /// Construct route to the search criteria page MovieSearchCriteriaPage
   /// as appropriate for the dto.
   ///
   /// Always chooses MovieSearchResultsNewPage.
   RouteInfo getSearchCriteriaPage() => RouteInfo(
-        ScreenRoute.search,
-        RestorableSearchCriteria.routeState(this),
-        toUniqueReference(),
-      );
+    ScreenRoute.search,
+    RestorableSearchCriteria.routeState(this),
+    toUniqueReference(),
+  );
 
   /// Determine which WebFetch to use to gather data
   static BaseMovieRepository getDatasource(SearchCriteriaType criteriaType) {
@@ -268,18 +271,21 @@ extension MapCriteriaDTOConversion on Map<dynamic, dynamic> {
   @factory
   // ignore: invalid_factory_method_impl
   SearchCriteriaDTO toSearchCriteriaDTO({bool inflate = false}) {
-    final dto = SearchCriteriaDTO()
-      ..searchId = dynamicToString(this[movieCriteriaDTOSearchId])
-      ..criteriaTitle = dynamicToString(this[movieCriteriaDTOCriteriaTitle])
-      ..criteriaList = SearchCriteriaDTOHelpers.getMovieList(
-        this[movieCriteriaDTOCriteriaList],
-      );
+    final dto =
+        SearchCriteriaDTO()
+          ..searchId = dynamicToString(this[movieCriteriaDTOSearchId])
+          ..criteriaTitle = dynamicToString(this[movieCriteriaDTOCriteriaTitle])
+          ..criteriaList = SearchCriteriaDTOHelpers.getMovieList(
+            this[movieCriteriaDTOCriteriaList],
+          );
 
     if (this[movieCriteriaDTOCriteriaContext] != 'null') {
-      dto.criteriaContext =
-          MovieResultDTO().fromJson(this[movieCriteriaDTOCriteriaContext]);
+      dto.criteriaContext = MovieResultDTO().fromJson(
+        this[movieCriteriaDTOCriteriaContext],
+      );
     }
-    dto.criteriaType = getEnumValue<SearchCriteriaType>(
+    dto.criteriaType =
+        getEnumValue<SearchCriteriaType>(
           this[movieCriteriaDTOCriteriaType],
           SearchCriteriaType.values,
         ) ??

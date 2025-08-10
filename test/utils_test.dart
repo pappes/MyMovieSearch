@@ -53,92 +53,71 @@ class DynamicHelperTest {
 Future<void> main() async {
   group('DurationHelper', () {
     // Formatted time includes the correct values.
-    test(
-      'toFormattedTime converts duration to string',
-      () {
-        const input = Duration(
-          days: 10,
-          hours: 20,
-          minutes: 30,
-          seconds: 40,
-          milliseconds: 50,
-          microseconds: 60,
-        );
-        const expectedOutput = '260:30:40';
-        expect(input.toFormattedTime(), expectedOutput);
-      },
-    );
+    test('toFormattedTime converts duration to string', () {
+      const input = Duration(
+        days: 10,
+        hours: 20,
+        minutes: 30,
+        seconds: 40,
+        milliseconds: 50,
+        microseconds: 60,
+      );
+      const expectedOutput = '260:30:40';
+      expect(input.toFormattedTime(), expectedOutput);
+    });
     // All ISO duration components can be encoded except year and month.
-    test(
-      'fromIso8601 values from a string',
-      () {
-        const input = 'P1W3DT20H30M40S';
-        const expectedOutput = Duration(
-          days: 10,
-          hours: 20,
-          minutes: 30,
-          seconds: 40,
-        );
-        expect(Duration.zero.fromIso8601(input), expectedOutput);
-      },
-    );
+    test('fromIso8601 values from a string', () {
+      const input = 'P1W3DT20H30M40S';
+      const expectedOutput = Duration(
+        days: 10,
+        hours: 20,
+        minutes: 30,
+        seconds: 40,
+      );
+      expect(Duration.zero.fromIso8601(input), expectedOutput);
+    });
   });
 
   group('dom extensions', () {
     // dom componenets can be referenced by enum.
-    final dom = parse(
-      '''
+    final dom = parse('''
 <html>
  <body>
   <a href=https://stuff.com>this is a alink </a>
 </html>
-''',
-    );
-    test(
-      'getAttribute uses the enum to identify the attribute to extract',
-      () {
-        const expectedOutput = 'https://stuff.com';
-        final anchors = dom.body!.getElementsByType(ElementType.anchor);
-        final anchorElement = anchors.first;
-        final url = anchorElement.getAttribute(AttributeType.address);
-        expect(url, expectedOutput);
-      },
-    );
+''');
+    test('getAttribute uses the enum to identify the attribute to extract', () {
+      const expectedOutput = 'https://stuff.com';
+      final anchors = dom.body!.getElementsByType(ElementType.anchor);
+      final anchorElement = anchors.first;
+      final url = anchorElement.getAttribute(AttributeType.address);
+      expect(url, expectedOutput);
+    });
   });
 
   group('enum extensions', () {
     // dom componenets can be referenced by enum.
-    test(
-      'getEnumValue converts a string to an enumeration',
-      () {
-        final enumeration =
-            getEnumValue<ElementType>('anchor', ElementType.values);
-        expect(enumeration, ElementType.anchor);
-      },
-    );
-    test(
-      'getEnumValue accepts null',
-      () {
-        final enumeration = getEnumValue<ElementType>(null, ElementType.values);
-        expect(enumeration, null);
-      },
-    );
-    test(
-      'getEnumValue accepts empty string',
-      () {
-        final enumeration = getEnumValue<ElementType>('', ElementType.values);
-        expect(enumeration, null);
-      },
-    );
-    test(
-      'getEnumValue rejects invalid string',
-      () {
-        expect(
-          () => getEnumValue<ElementType>('invalid', ElementType.values),
-          throwsArgumentError,
-        );
-      },
-    );
+    test('getEnumValue converts a string to an enumeration', () {
+      final enumeration = getEnumValue<ElementType>(
+        'anchor',
+        ElementType.values,
+      );
+      expect(enumeration, ElementType.anchor);
+    });
+    test('getEnumValue accepts null', () {
+      final enumeration = getEnumValue<ElementType>(null, ElementType.values);
+      expect(enumeration, null);
+    });
+    test('getEnumValue accepts empty string', () {
+      final enumeration = getEnumValue<ElementType>('', ElementType.values);
+      expect(enumeration, null);
+    });
+    test('getEnumValue rejects invalid string', () {
+      expect(
+        () => getEnumValue<ElementType>('invalid', ElementType.values),
+        throwsArgumentError,
+      );
+    });
   });
 
   group('SteamHelper printStream', () {
@@ -148,8 +127,9 @@ Future<void> main() async {
       String? expectedError,
     ]) async {
       final actualOutput = emitStringChars(input);
-      final doublePrint =
-          actualOutput.printStream('print1:').printStream('print2:');
+      final doublePrint = actualOutput
+          .printStream('print1:')
+          .printStream('print2:');
       final revivedStream = doublePrint.toList().then(Stream.fromIterable);
 
       await expectLater(
@@ -161,10 +141,10 @@ Future<void> main() async {
     // Ensure that stream can be observed multiple times and not cause issues.
     test(
       'printStream outputs the same stream',
-      () {
+      () async {
         const input = 'abc';
         const output = 'abc';
-        testPrint(input, output);
+        await testPrint(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
@@ -195,10 +175,10 @@ Future<void> main() async {
     // Ensure that stream can be observed multiple times and not cause issues.
     test(
       'printStream outputs the same stream',
-      () {
+      () async {
         const input = 'abc';
         const output = 'abc';
-        testPrint(input, output);
+        await testPrint(input, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
@@ -296,14 +276,22 @@ Future<void> main() async {
 
       final instance = ThreadTest();
 
-      final res1 =
-          threader.run<int>(instance.instanceAccumulate, 0); // expect 0
-      final res2 =
-          threader.run<int>(instance.instanceAccumulate, 1); // expect 1
-      final res3 =
-          threader.run<int>(instance.instanceAccumulate, 1); // expect 1
-      final res4 =
-          threader.run<int>(instance.instanceAccumulate, 8); // expect 8
+      final res1 = threader.run<int>(
+        instance.instanceAccumulate,
+        0,
+      ); // expect 0
+      final res2 = threader.run<int>(
+        instance.instanceAccumulate,
+        1,
+      ); // expect 1
+      final res3 = threader.run<int>(
+        instance.instanceAccumulate,
+        1,
+      ); // expect 1
+      final res4 = threader.run<int>(
+        instance.instanceAccumulate,
+        8,
+      ); // expect 8
       expect(res1, completion(0)); // 0+0
       expect(res2, completion(1)); // 0+1
       expect(res3, completion(1)); // 0+1
@@ -491,9 +479,9 @@ Future<void> main() async {
     // Convert a string to a number, substituting num values where required.
     test('fromText() null substitution', () {
       void testToNumber(String input, double expectedOutput) => expect(
-            DoubleHelper.fromText(input, nullValueSubstitute: -1),
-            expectedOutput,
-          );
+        DoubleHelper.fromText(input, nullValueSubstitute: -1),
+        expectedOutput,
+      );
 
       testToNumber('0', 0);
       testToNumber('1', 1);
@@ -505,9 +493,9 @@ Future<void> main() async {
     // Convert a string to a number, substituting 0 values where required.
     test('fromText() zero substitution', () {
       void testToNumber(String input, double? expectedOutput) => expect(
-            DoubleHelper.fromText(input, zeroValueSubstitute: null),
-            expectedOutput,
-          );
+        DoubleHelper.fromText(input, zeroValueSubstitute: null),
+        expectedOutput,
+      );
 
       testToNumber('1', 1);
       testToNumber('9,999', 9999);
@@ -684,10 +672,10 @@ Future<void> main() async {
       /// Convert JSON [input] to a [List] of [String]
       /// and compare to [expectedOutput]
       void testFromJson(String? input, List<String> expectedOutput) => expect(
-            StringIterableHelper.fromJson(input),
-            expectedOutput,
-            reason: 'input $input',
-          );
+        StringIterableHelper.fromJson(input),
+        expectedOutput,
+        reason: 'input $input',
+      );
 
       // Convert a JSON encoded array to List<String>
       test('string array', () {
@@ -721,10 +709,9 @@ Future<void> main() async {
           '{"first":"eleven", "second":"twelve" }]',
           ['{first: one, second: two}', '{first: eleven, second: twelve}'],
         );
-        testFromJson(
-          '[{"color":"red",	"value":"#f00"}]',
-          ['{color: red, value: #f00}'],
-        );
+        testFromJson('[{"color":"red",	"value":"#f00"}]', [
+          '{color: red, value: #f00}',
+        ]);
       });
     });
 
@@ -735,11 +722,7 @@ Future<void> main() async {
         List<String> expectedOutput,
       ) {
         input1.combineUnique(input2);
-        expect(
-          input1,
-          expectedOutput,
-          reason: 'input $input1,  $input2',
-        );
+        expect(input1, expectedOutput, reason: 'input $input1,  $input2');
       }
 
       // Combining a list with an empty list results in the original list.
@@ -761,27 +744,35 @@ Future<void> main() async {
       test('multiple elements', () {
         testCombineUnique(['a', 'b', 'c'], <void>[], ['a', 'b', 'c']);
         testCombineUnique([], ['a', 'b', 'c'], ['a', 'b', 'c']);
-        testCombineUnique(
-          ['a', 'b', 'c'],
-          ['d', 'e', 'f'],
-          ['a', 'b', 'c', 'd', 'e', 'f'],
-        );
+        testCombineUnique(['a', 'b', 'c'], ['d', 'e', 'f'], [
+          'a',
+          'b',
+          'c',
+          'd',
+          'e',
+          'f',
+        ]);
       });
       // Combining lists, with differnt datatypes
       // results in all elements being present.
       test('multiple elements different datatypes', () {
         testCombineUnique(['a', 'b', 'c'], [1], ['a', 'b', 'c', '1']);
         testCombineUnique([], [1, 2, 3], ['1', '2', '3']);
-        testCombineUnique(
-          ['a', 'b', 'c'],
-          [1, 2, 3],
-          ['a', 'b', 'c', '1', '2', '3'],
-        );
-        testCombineUnique(
-          ['a', 'b', 'c'],
-          {'A': '1', 'B': '2'},
-          ['a', 'b', 'c', '1', '2'],
-        );
+        testCombineUnique(['a', 'b', 'c'], [1, 2, 3], [
+          'a',
+          'b',
+          'c',
+          '1',
+          '2',
+          '3',
+        ]);
+        testCombineUnique(['a', 'b', 'c'], {'A': '1', 'B': '2'}, [
+          'a',
+          'b',
+          'c',
+          '1',
+          '2',
+        ]);
       });
       // Combining lists, with duplicate elements
       // results in all elements being present once only.
@@ -880,18 +871,16 @@ Future<void> main() async {
       });
       // Find a matching value in a tree with partial search on keys.
       test('complex tree suffix search', () {
-        expect(
-          TreeHelper(complexMap).deepSearch('needle', suffixMatch: true),
-          [
-            ['thisisahaystack'],
-          ],
-        );
+        expect(TreeHelper(complexMap).deepSearch('needle', suffixMatch: true), [
+          ['thisisahaystack'],
+        ]);
       });
       // Find a multiple matching values in a tree with partial search on keys.
       test('complex tree multi-match suffix search', () {
         expect(
-          TreeHelper(complexMap)
-              .deepSearch('needle', multipleMatch: true, suffixMatch: true),
+          TreeHelper(
+            complexMap,
+          ).deepSearch('needle', multipleMatch: true, suffixMatch: true),
           [
             ['thisisahaystack'], // list result
             'haystack1', // string result
@@ -904,8 +893,9 @@ Future<void> main() async {
       // Find a multiple matching values in a tree with partial search on keys.
       test('complex tree multi-match numeric suffix search', () {
         expect(
-          TreeHelper(complexMap)
-              .deepSearch(123, multipleMatch: true, suffixMatch: true),
+          TreeHelper(
+            complexMap,
+          ).deepSearch(123, multipleMatch: true, suffixMatch: true),
           [456, 'haystack456'],
         );
       });
@@ -921,10 +911,7 @@ Future<void> main() async {
       });
       // Find key 123 can convert the value to a string.
       test('default key search', () {
-        expect(
-          TreeHelper(complexMap).searchForString(key: 123),
-          '456',
-        );
+        expect(TreeHelper(complexMap).searchForString(key: 123), '456');
       });
     });
 
