@@ -300,13 +300,14 @@ void main() {
       // Explicitly check related because MovieResultDTOListMatcher won't
       expect(
         queryResult.first.related.length,
-        4,
+        6,
         reason:
-            'Related should list 1 director, 3 writers 1 actress, and 1 actor',
+            'Related should list a Cast 1 Actor, 1 Director, '
+            '2 Writers 1 actress, and 1 actor',
       );
       expect(
         queryResult.first.related['writer']!.length,
-        3,
+        2,
         reason: 'Related should list 3 writers',
       );
     });

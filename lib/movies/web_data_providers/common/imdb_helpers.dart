@@ -86,9 +86,17 @@ const deepPersonWriterHeader = 'writer_credits';
 const deepEntityHeader = 'contentData';
 const deepEntityMetadata = 'entityMetadata';
 const deepEntityRelatedCastContainer = 'creditCategories';
-const deepEntityCastinstance = 'node';
+const deepEntityCastInstance = 'node';
+const deepEntityCastCategoryNameBackup = 'id';
 const deepEntityMetadataId = 'id';
 const deepEntityPersonName = 'name';
+const deepEntityExtraCastId = 'id';
+const deepEntityExtraCastPersonName = 'rowTitle';
+const deepEntityExtraCastImageProps = 'imageProps';
+const deepEntityExtraCastContainer = 'categories';
+const deepEntityExtraCastCategoryName = 'name';
+const deepEntityExtraCastSection = 'section';
+const deepEntityExtraCastSectionItems = 'items';
 
 // Credits is repeated inside the category as "credits"
 // so use case sensative compare

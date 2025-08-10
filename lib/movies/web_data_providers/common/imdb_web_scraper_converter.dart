@@ -76,45 +76,100 @@ class ImdbWebScraperConverter {
 
   /// Parse [Map] to pull IMDB data out for a singl movie.
   void _deepConvertMetadata(MovieResultDTO movie, Map<dynamic, dynamic> map) {
+    final contentData = map[deepEntityHeader] as Map<dynamic, dynamic>;
     final metadata = // ...{'entityMetadata':...}
-        map.deepSearch(deepEntityMetadata);
+        contentData.deepSearch(deepEntityMetadata);
     final uniqueId = // ...{'entityMetadata':...{'id':<value>...}}
         metadata!.searchForString(key: deepEntityMetadataId)!;
     movie
       ..uniqueId = uniqueId
-      ..merge(_getDeepTitleCommon(map, movie.uniqueId));
-    final payload = // ...{'creditCategories':...}
-        map.deepSearch(deepEntityRelatedCastContainer);
-    final relatedMap = TreeHelper(
-      payload!.first,
-    ).deepSearch(deepEntityCastinstance, multipleMatch: true);
-    if (null != relatedMap && relatedMap is List && relatedMap.isNotEmpty) {
-      movie.related = _getDeepCastRelated(relatedMap);
+      ..merge(_getDeepTitleCommon(contentData, movie.uniqueId))
+      // Reintialise the source after setting the ID
+      ..setSource(newSource: source);
+
+    // ...{'creditCategories':...}
+    final mainCredits = TreeHelper(
+      contentData.deepSearch(deepEntityRelatedCastContainer)?.first,
+    ).deepSearch(deepEntityCastInstance, multipleMatch: true);
+    if (null != mainCredits && mainCredits.isNotEmpty) {
+      _getDeepCreditsMain(movie.related, mainCredits);
     }
 
-    // Reintialise the source after setting the ID
-    movie.setSource(newSource: source);
+    // ...{'categories':...}
+    final otherCredits = contentData[deepEntityExtraCastContainer];
+    if (null != otherCredits &&
+        otherCredits is List &&
+        otherCredits.isNotEmpty) {
+      _getDeepCreditsExtra(movie.related, otherCredits);
+    }
   }
 
   /// extract actor, actress, director, writer, etc
-  /// credits information from cast json from [relatedList].
-  RelatedMovieCategories _getDeepCastRelated(List<dynamic> relatedList) {
-    final RelatedMovieCategories result = {};
+  /// credits information from cast json from [relatedList]
+  /// contentData -> data -> creditCategories.
+  void _getDeepCreditsMain(
+    RelatedMovieCategories cast,
+    List<dynamic> relatedList,
+  ) {
     for (final person in relatedList) {
       if (person is Map) {
         // ...{'category':...{'id':<value>...}}
         final categoryHeader =
+            person.deepSearch(deepRelatedCategoryHeader)!.searchForString() ??
             person
                 .deepSearch(deepRelatedCategoryHeader)!
-                .searchForString(key: outerElementIdentity) ??
+                .searchForString(key: deepEntityCastCategoryNameBackup) ??
             'Unknown';
-        final cast = _getDeepNodeRelatedPerson(person);
+        final credit = _getDeepNodeRelatedPerson(person);
 
-        combineMovies(result, categoryHeader, cast);
+        combineMovies(cast, categoryHeader, credit);
       }
     }
+  }
 
-    return result;
+  /// extract Cast, Director, Writer, etc
+  /// credits information from cast json from [relatedList].
+  /// contentData -> categories.
+  void _getDeepCreditsExtra(
+    RelatedMovieCategories cast,
+    List<dynamic> relatedList,
+  ) {
+    for (final category in relatedList) {
+      if (category is Map) {
+        final categoryName =
+            category[deepEntityExtraCastCategoryName] as String? ?? 'Unknown';
+        final section = category[deepEntityExtraCastSection];
+        if (null != section && section is Map) {
+          final people = section[deepEntityExtraCastSectionItems];
+          if (null != people && people is List) {
+            for (final person in people) {
+              if (person is Map) {
+                final credit = _getDeepCreditsExtraPerson(person);
+                combineMovies(cast, categoryName, credit);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  /// Extract movie extra data to a DTO
+  MovieCollection _getDeepCreditsExtraPerson(Map<dynamic, dynamic> person) {
+    final MovieCollection collection = {};
+
+    final imageProps = TreeHelper(person[deepEntityExtraCastImageProps]);
+
+    final movieDto = MovieResultDTO().init(
+      bestSource: DataSourceType.imdbSuggestions,
+      // get id, rowTitle and image url
+      uniqueId: person.searchForString(key: deepEntityExtraCastId),
+      title: person.searchForString(key: deepEntityExtraCastPersonName),
+      imageUrl: imageProps.searchForString(key: deepImageField),
+    );
+    collection[movieDto.uniqueId] = movieDto;
+
+    return collection;
   }
 
   /// extract collections of people for a specific category for the title

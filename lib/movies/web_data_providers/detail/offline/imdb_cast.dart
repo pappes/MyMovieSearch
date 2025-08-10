@@ -26,11 +26,12 @@ in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0106977","bestSource":"DataSourceType.imdbCast","type":"MovieContentType.movie","imageUrl":"https://m.media-amazon.com/images/M/MV5BMjI3OGJmNGEtNzA1Yi00ZGQ1LWIzNDYtZGY3ZWUzY2VhMzA2XkEyXkFqcGc@._V1_.jpg","sources":{"DataSourceType.imdbCast":"tt0106977"},
-  "related":{"actor":{"nm0000148":{"uniqueId":"nm0000148","title":"Harrison Ford","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.person","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTY4Mjg0NjIxOV5BMl5BanBnXkFtZTcwMTM2NTI3MQ@@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0000148"}}},
+  "related":{"Actor":{"nm0000148":{"uniqueId":"nm0000148","title":"Harrison Ford","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.person","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTY4Mjg0NjIxOV5BMl5BanBnXkFtZTcwMTM2NTI3MQ@@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0000148"}}},
+    "Cast":{"nm0398703":{"uniqueId":"nm0398703","title":"Rudolf Hrusínský","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.person","imageUrl":"https://m.media-amazon.com/images/M/MV5BMTY4Mjg0NjIxOV5BMl5BanBnXkFtZTcwMTM2NTI3MQ@@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0398703"}}},
+    "Director":{"nm0001112":{"uniqueId":"nm0001112","title":"Andrew Davis","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.person","imageUrl":"https://m.media-amazon.com/images/M/MV5BMjI3OGJmNGEtNzA1Yi00ZGQ1LWIzNDYtZGY3ZWUzY2VhMzA2XkEyXkFqcGc@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0001112"}}},
+    "Writer":{"nm0835732":{"uniqueId":"nm0835732","title":"Jeb Stuart","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.person","imageUrl":"https://m.media-amazon.com/images/M/MV5BNTE4MDEzMmItZTAxMi00ZmFlLTliZmYtZGY5ODFkODA0ZDg2XkEyXkFqcGc@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0835732"}}},
     "actress":{"nm0000688":{"uniqueId":"nm0000688","title":"Sela Ward","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.person","sources":{"DataSourceType.imdbSuggestions":"nm0000688"}}},
-    "director":{"nm0001112":{"uniqueId":"nm0001112","title":"Andrew Davis","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.person","imageUrl":"https://m.media-amazon.com/images/M/MV5BMjI3OGJmNGEtNzA1Yi00ZGQ1LWIzNDYtZGY3ZWUzY2VhMzA2XkEyXkFqcGc@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0001112"}}},
     "writer":{"nm0400403":{"uniqueId":"nm0400403","title":"Roy Huggins","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.person","sources":{"DataSourceType.imdbSuggestions":"nm0400403"}},
-      "nm0835732":{"uniqueId":"nm0835732","title":"Jeb Stuart","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.person","imageUrl":"https://m.media-amazon.com/images/M/MV5BNTE4MDEzMmItZTAxMi00ZmFlLTliZmYtZGY5ODFkODA0ZDg2XkEyXkFqcGc@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"nm0835732"}},
       "nm0878638":{"uniqueId":"nm0878638","title":"David Twohy","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.person","sources":{"DataSourceType.imdbSuggestions":"nm0878638"}}}}}
 ''',
 ];
@@ -143,6 +144,27 @@ const intermediateMapList = [
               ],
             },
           },
+          "categories": [
+            {
+              "id": "cast",
+              "name": "Cast",
+
+              "section": {
+                "items": [
+                  {
+                    "id": "nm0398703",
+                    "rowTitle": "Rudolf Hrusínský",
+                    "imageProps": {
+                      "imageModel": {
+                        "url":
+                            "https://m.media-amazon.com/images/M/MV5BMTY4Mjg0NjIxOV5BMl5BanBnXkFtZTcwMTM2NTI3MQ@@._V1_.jpg",
+                      },
+                    },
+                  },
+                ],
+              },
+            },
+          ],
         },
       },
     },
