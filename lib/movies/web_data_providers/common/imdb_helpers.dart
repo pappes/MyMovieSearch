@@ -97,6 +97,11 @@ const deepEntityExtraCastContainer = 'categories';
 const deepEntityExtraCastCategoryName = 'name';
 const deepEntityExtraCastSection = 'section';
 const deepEntityExtraCastSectionItems = 'items';
+const deepEntityExtraCastNameActors = 'ACTOR';
+const deepEntityExtraCastNameActresses = 'ACTRESS';
+const deepEntityExtraCastNameDirectors = 'DIRECTOR';
+const deepEntityExtraCastNameCast = 'CAST';
+const deepEntityExtraCastNameWriters = 'WRITER';
 
 // Credits is repeated inside the category as "credits"
 // so use case sensative compare
@@ -104,6 +109,7 @@ const deepPersonRelatedSuffix = 'Credits';
 // category repeated inside the node
 // source the first instance for the credits section
 const deepRelatedCategoryHeader = 'category';
+const deepRelatedCategoryLabel = 'text';
 const deepRelatedMovieHeader = 'title';
 // characters are same map depth as title
 const deepRelatedMovieParentCharacterHeader = 'characters';

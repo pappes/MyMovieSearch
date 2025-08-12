@@ -8,17 +8,20 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 
 const titleRelatedMoviesLabel = 'Suggestions:';
-const titleRelatedActorsLabel = 'Cast:';
+const titleRelatedCastLabel = 'Cast:';
 const titleRelatedDirectorsLabel = 'Directed by:';
+const titleRelatedActressLabel = 'Actress:';
+const titleRelatedActorLabel = 'Actor:';
 
-const personRelatedActressLabel = 'Actress';
-const personRelatedActorLabel = 'Actor';
-const personRelatedDirectorLabel = 'Director';
-const personRelatedProducerLabel = 'Producer';
-const personRelatedWriterLabel = 'Writer';
+const personRelatedActressLabel = 'Actress:';
+const personRelatedActorLabel = 'Actor:';
+const personRelatedDirectorLabel = 'Director:';
+const personRelatedProducerLabel = 'Producer:';
+const personRelatedWriterLabel = 'Writer:';
 
 /// Used to convert search results, movie details and person details Map
 /// to a dto list.
@@ -114,15 +117,15 @@ class ImdbWebScraperConverter {
     for (final person in relatedList) {
       if (person is Map) {
         // ...{'category':...{'id':<value>...}}
-        final categoryHeader =
-            person.deepSearch(deepRelatedCategoryHeader)!.searchForString() ??
-            person
-                .deepSearch(deepRelatedCategoryHeader)!
-                .searchForString(key: deepEntityCastCategoryNameBackup) ??
-            'Unknown';
+        final categoryName = _getDeepCategoryName(
+          person.deepSearch(deepRelatedCategoryHeader)!.searchForString() ??
+              person
+                  .deepSearch(deepRelatedCategoryHeader)!
+                  .searchForString(key: deepEntityCastCategoryNameBackup),
+        );
         final credit = _getDeepNodeRelatedPerson(person);
 
-        combineMovies(cast, categoryHeader, credit);
+        _combineMovies(cast, categoryName.addColonIfNeeded(), credit);
       }
     }
   }
@@ -136,8 +139,9 @@ class ImdbWebScraperConverter {
   ) {
     for (final category in relatedList) {
       if (category is Map) {
-        final categoryName =
-            category[deepEntityExtraCastCategoryName] as String? ?? 'Unknown';
+        final categoryName = _getDeepCategoryName(
+          category[deepEntityExtraCastCategoryName],
+        );
         final section = category[deepEntityExtraCastSection];
         if (null != section && section is Map) {
           final people = section[deepEntityExtraCastSectionItems];
@@ -145,13 +149,34 @@ class ImdbWebScraperConverter {
             for (final person in people) {
               if (person is Map) {
                 final credit = _getDeepCreditsExtraPerson(person);
-                combineMovies(cast, categoryName, credit);
+                _combineMovies(cast, categoryName.addColonIfNeeded(), credit);
               }
             }
           }
         }
       }
     }
+  }
+
+  /// extract Cast, Director, Writer, etc
+  /// credits information from cast json from [relatedList].
+  /// contentData -> categories.
+  String _getDeepCategoryName(dynamic key) {
+    if (key != null && key is String && key.isNotEmpty) {
+      switch (key.toUpperCase()) {
+        case deepEntityExtraCastNameActors:
+          return titleRelatedActorLabel;
+        case deepEntityExtraCastNameActresses:
+          return titleRelatedActressLabel;
+        case deepEntityExtraCastNameDirectors:
+          return titleRelatedDirectorsLabel;
+        case deepEntityExtraCastNameCast:
+          return titleRelatedCastLabel;
+      }
+      return '$key:';
+    }
+
+    return 'Unknown';
   }
 
   /// Extract movie extra data to a DTO
@@ -451,21 +476,21 @@ class ImdbWebScraperConverter {
         ?.deepSearch(deepTitleRelatedCastHeader)
         ?.deepSearch(deepTitleRelatedCastContainer, multipleMatch: true);
     final cast = _getDeepTitleRelatedPeopleForCategory(castTree);
-    combineMovies(result, titleRelatedActorsLabel, cast);
+    _combineMovies(result, titleRelatedCastLabel, cast);
 
     // ...{'directors':...}
     final directorsTree = list
         ?.deepSearch(deepTitleRelatedDirectorHeader)
         ?.deepSearch(deepTitleRelatedDirectorContainer, multipleMatch: true);
     final directors = _getDeepTitleRelatedPeopleForCategory(directorsTree);
-    combineMovies(result, titleRelatedDirectorsLabel, directors);
+    _combineMovies(result, titleRelatedDirectorsLabel, directors);
 
     // ...{'moreLikeThisTitles':...}
     final relatedTree = list
         ?.deepSearch(deepTitleRelatedTitlesHeader)
         ?.deepSearch(deepRelatedMovieContainer, multipleMatch: true);
     final related = _getDeepTitleRelatedMoviesForCategory(relatedTree);
-    combineMovies(result, titleRelatedMoviesLabel, related);
+    _combineMovies(result, titleRelatedMoviesLabel, related);
 
     return result;
   }
@@ -478,13 +503,17 @@ class ImdbWebScraperConverter {
         if (related is List) {
           for (final item in related) {
             if (item is Map) {
-              // ...{'category':...{id:<value>...}}
+              // ...{'category':...{id:<value>, text:<value>...}}
               final categoryHeader = item.deepSearch(deepRelatedCategoryHeader);
               final categoryText =
-                  categoryHeader?.searchForString() ?? 'Unknown';
+                  categoryHeader?.searchForString(
+                    key: deepRelatedCategoryLabel,
+                  ) ??
+                  categoryHeader?.searchForString() ??
+                  'Unknown';
 
               final movies = _getDeepPersonRelatedMoviesForCategory(item);
-              combineMovies(result, categoryText, movies);
+              _combineMovies(result, categoryText.addColonIfNeeded(), movies);
             }
           }
         }
@@ -494,7 +523,7 @@ class ImdbWebScraperConverter {
   }
 
   /// Add movies to a new category or an exisiting category
-  void combineMovies(
+  void _combineMovies(
     RelatedMovieCategories existing,
     String category,
     MovieCollection movies,
@@ -666,27 +695,27 @@ class ImdbWebScraperConverter {
         ),
       );
 
-    combineMovies(
+    _combineMovies(
       movie.related,
       personRelatedActorLabel,
       _getDeepPersonRelatedMoviesForCategory(map[deepPersonActorHeader]),
     );
-    combineMovies(
+    _combineMovies(
       movie.related,
       personRelatedActressLabel,
       _getDeepPersonRelatedMoviesForCategory(map[deepPersonActressHeader]),
     );
-    combineMovies(
+    _combineMovies(
       movie.related,
       personRelatedDirectorLabel,
       _getDeepPersonRelatedMoviesForCategory(map[deepPersonDirectorHeader]),
     );
-    combineMovies(
+    _combineMovies(
       movie.related,
       personRelatedProducerLabel,
       _getDeepPersonRelatedMoviesForCategory(map[deepPersonProducerHeader]),
     );
-    combineMovies(
+    _combineMovies(
       movie.related,
       personRelatedWriterLabel,
       _getDeepPersonRelatedMoviesForCategory(map[deepPersonWriterHeader]),
@@ -750,7 +779,7 @@ class ImdbWebScraperConverter {
       movie.addRelated(titleRelatedDirectorsLabel, person);
     }
     for (final person in getPeopleFromJson(map[outerElementActors])) {
-      movie.addRelated(titleRelatedActorsLabel, person);
+      movie.addRelated(titleRelatedCastLabel, person);
     }
     //_getRelated(movie, map[outerElementActors], relatedActorsLabel);
     _getRelated(movie, map[outerElementRelated], titleRelatedMoviesLabel);

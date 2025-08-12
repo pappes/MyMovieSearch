@@ -40,11 +40,25 @@ extension StringHelper on String {
     const whitespace = r'\s\t\v';
     const nonBreakingSpace = '\u{00a0}';
     const lineBreak = r'\r\n';
-    const twoBlanks = '[$whitespace$lineBreak$nonBreakingSpace]'
+    const twoBlanks =
+        '[$whitespace$lineBreak$nonBreakingSpace]'
         '[$whitespace$lineBreak$nonBreakingSpace]+';
 
     final temp = replaceAll(RegExp(twoBlanks), substitution);
     return temp.trim();
+  }
+
+  /// Add a colon to the end of the string if it does not already end with one.
+  ///
+  /// ```dart
+  /// final textWithColon = 'Title'.addColonIfNeeded();
+  /// ```
+  String addColonIfNeeded() {
+    // Check if the string is not empty and the last character is not a colon.
+    if (!endsWith(':')) {
+      return '$this:';
+    }
+    return this;
   }
 
   /// Replace the value in the string with a new value

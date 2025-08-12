@@ -16,13 +16,7 @@ const imdbQueryDirector = deepPersonDirectorHeader;
 const imdbQueryProducer = deepPersonProducerHeader;
 const imdbQueryWriter = deepPersonWriterHeader;
 
-enum ImdbJsonSource {
-  actor,
-  actress,
-  director,
-  producer,
-  writer,
-}
+enum ImdbJsonSource { actor, actress, director, producer, writer }
 
 /// Implements [WebFetchBase] for retrieving filtered Json
 /// crew information from IMDB.
@@ -33,7 +27,7 @@ enum ImdbJsonSource {
 // ignore: missing_override_of_must_be_overridden
 class QueryIMDBJsonFilteredFilmographyDetails extends QueryIMDBJsonDetailsBase {
   QueryIMDBJsonFilteredFilmographyDetails(SearchCriteriaDTO criteria)
-      : super(criteria, _imdbOperation);
+    : super(criteria, _imdbOperation);
 
   static const _imdbOperation = 'NameMainFilmographyFilteredCredits';
   static const _creditsSha =
@@ -43,8 +37,7 @@ class QueryIMDBJsonFilteredFilmographyDetails extends QueryIMDBJsonDetailsBase {
   @factory
   WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
     SearchCriteriaDTO criteria,
-  ) =>
-      QueryIMDBJsonFilteredFilmographyDetails(criteria);
+  ) => QueryIMDBJsonFilteredFilmographyDetails(criteria);
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
@@ -79,16 +72,21 @@ class QueryIMDBJsonPaginatedFilmographyDetails
 
   static const _imdbOperation = 'NameMainFilmographyPaginatedCredits';
 
+  // from https://www.imdb.com/name/nm0000095
   static const _imdbShaActor =
-      '4faf04583fbf1fbc7a025e5dffc7abc3486e9a04571898a27a5a1ef59c2965f3';
+      '7ed0c54ec0a95c77fde16a992d918034e8ff37dfc79934b49d8276fa40361aa2';
+  // from https://www.imdb.com/name/nm0000149
   static const _imdbShaActress =
-      '0cf092f3616dbc56105327bf09ec9f486d5fc243a1d66eb3bf791fda117c5079';
+      'e514283c305a9580f246a87d6b492695244bac357b9bf4c8b9f7c9f68abcfc1d';
+  // from https://www.imdb.com/name/nm0000095
   static const _imdbShaDirector =
-      'f01a9a65c7afc1b50f49764610257d436cf6359e48c08de26c078da0d438d0e9';
+      '229d41acc1f3a84c7797d9aa1bc9d039d4ac45dd96d98e744c12433ff40c5014';
+  // from https://www.imdb.com/name/nm0000095
   static const _imdbShaProducer =
-      '9c2aaa61b79d348988d90e7420366ff13de8508e54ba7b8cf10f959f64f049d2';
+      '8dcb18732c6bef2c1a97e4e9549f6ff0141f2c8e8b3f1dd41b2ff0be1368d5e8';
+  // from https://www.imdb.com/name/nm0000095
   static const _imdbShaWriter =
-      '2f142f86bfbb49a239bd4df6c2f40f3ed1438fecc8da45235e66d9062d321535';
+      'beb0469e88579c36dc67d25352be48e1efc749ed800aec44c468a275fc9e5fe6';
 
   static const _imdbQueryShaMap = {
     ImdbJsonSource.actor: _imdbShaActor,
@@ -108,8 +106,7 @@ class QueryIMDBJsonPaginatedFilmographyDetails
   @factory
   WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
     SearchCriteriaDTO criteria,
-  ) =>
-      QueryIMDBJsonPaginatedFilmographyDetails(criteria, imdbQuery: imdbQuery);
+  ) => QueryIMDBJsonPaginatedFilmographyDetails(criteria, imdbQuery: imdbQuery);
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
@@ -131,13 +128,16 @@ class QueryIMDBJsonPaginatedFilmographyDetails
     // {"after":"bm0wMDAwMTQ5","id":"nm0000149",
     // "includeUserRating":false,"locale":"en-GB"}
     final encodedQuery = base64Encode(utf8.encode(searchCriteria));
-    final variables = '$urlVariablesPrefix$encodedQuery'
+    final variables =
+        '$urlVariablesPrefix$encodedQuery'
         '$variablesMid$searchCriteria'
         '$urlVariablesSuffix';
 
     imdbSha = _imdbQueryShaMap[imdbQuery] ?? '';
-    final baseUri =
-        super.myConstructURI(searchCriteria, pageNumber: pageNumber);
+    final baseUri = super.myConstructURI(
+      searchCriteria,
+      pageNumber: pageNumber,
+    );
 
     // Replace value for the parameter called 'variables'.
     parameters.addAll(baseUri.queryParameters);
@@ -151,10 +151,7 @@ class QueryIMDBJsonPaginatedFilmographyDetails
 ///
 abstract class QueryIMDBJsonDetailsBase
     extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> {
-  QueryIMDBJsonDetailsBase(
-    super.criteria,
-    this.imdbOperation,
-  );
+  QueryIMDBJsonDetailsBase(super.criteria, this.imdbOperation);
 
   static const _baseURLprefix = 'caching.graphql.imdb.com';
 
@@ -181,21 +178,19 @@ abstract class QueryIMDBJsonDetailsBase
   /// for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final variables = '$urlVariablesPrefix$searchCriteria'
+    final variables =
+        '$urlVariablesPrefix$searchCriteria'
         '$urlVariablesSuffix';
-    final extensions = '$urlExtensionsPrefix'
+    final extensions =
+        '$urlExtensionsPrefix'
         '$imdbSha'
         '$urlExtensionsSuffix';
 
-    return Uri.https(
-      _baseURLprefix,
-      '/',
-      {
-        'operationName': imdbOperation,
-        'variables': variables,
-        'extensions': extensions,
-      },
-    );
+    return Uri.https(_baseURLprefix, '/', {
+      'operationName': imdbOperation,
+      'variables': variables,
+      'extensions': extensions,
+    });
   }
 
   /// converts <INPUT_TYPE> to a string representation.
@@ -214,8 +209,10 @@ abstract class QueryIMDBJsonDetailsBase
     dynamic map,
   ) async {
     if (map is Map) {
-      return ImdbWebScraperConverter()
-          .dtoFromCompleteJsonMap(map, DataSourceType.imdbJson);
+      return ImdbWebScraperConverter().dtoFromCompleteJsonMap(
+        map,
+        DataSourceType.imdbJson,
+      );
     }
     throw TreeConvertException(
       'expected map got ${map.runtimeType} unable to interpret data $map',
@@ -257,7 +254,7 @@ abstract class QueryIMDBJsonDetailsBase
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[${myDataSourceName()}] $message',
-        DataSourceType.imdb,
-      );
+    '[${myDataSourceName()}] $message',
+    DataSourceType.imdb,
+  );
 }

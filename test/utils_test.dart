@@ -613,6 +613,18 @@ Future<void> main() async {
       testRemovePunctuation('\r\n\t', '   ');
       testRemovePunctuation('\r\n\t', '---', substitution: '-');
     });
+
+    test('addColonIfNeeded()', () {
+      void testAddColonIfNeeded(String input, String expectedOutput) {
+        final result = input.addColonIfNeeded();
+        expect(result, expectedOutput, reason: 'input = $input');
+      }
+
+      testAddColonIfNeeded('Title', 'Title:');
+      testAddColonIfNeeded('Title:', 'Title:');
+      testAddColonIfNeeded('', ':');
+    });
+
     test('reduceWhitespace()', () {
       void testReduceWhitespace(
         String input,

@@ -306,7 +306,7 @@ void main() {
             '2 Writers 1 actress, and 1 actor',
       );
       expect(
-        queryResult.first.related['writer']!.length,
+        queryResult.first.related['writer:']!.length,
         2,
         reason: 'Related should list 3 writers',
       );
