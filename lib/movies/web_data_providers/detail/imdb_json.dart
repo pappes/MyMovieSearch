@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_json.dart';
+import 'package:my_movie_search/utilities/web_data/imdb_sha_extractor.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:universal_io/io.dart';
 
@@ -21,17 +23,24 @@ enum ImdbJsonSource { actor, actress, director, producer, writer }
 /// Implements [WebFetchBase] for retrieving filtered Json
 /// crew information from IMDB.
 ///
+/// This is the equivalent of clicking one of the unselected
+/// filters available under "credits" for the person.
+/// Only returns the first 20 results!!!
+///
 /// ```dart
 /// QueryIMDBJsonDetails().readList(criteria);
 /// ```
 // ignore: missing_override_of_must_be_overridden
 class QueryIMDBJsonFilteredFilmographyDetails extends QueryIMDBJsonDetailsBase {
   QueryIMDBJsonFilteredFilmographyDetails(SearchCriteriaDTO criteria)
-    : super(criteria, _imdbOperation);
+    : super(criteria, _imdbOperation) {
+    updateShaKeys();
+  }
 
   static const _imdbOperation = 'NameMainFilmographyFilteredCredits';
-  static const _creditsSha =
+  static const _imdbShaCreditsOld =
       '47ffacde22ede1b84480c604ae6cda83362ff6e4a033dd105853670fa5a0ed56';
+  late String _imdbShaCredits;
 
   @override
   @factory
@@ -51,13 +60,20 @@ class QueryIMDBJsonFilteredFilmographyDetails extends QueryIMDBJsonDetailsBase {
   /// https://caching.graphql.imdb.com/?operationName=NameMainFilmographyFilteredCredits&variables=%7B%22id%22%3A%22nm0000619%22%2C%22includeUserRating%22%3Afalse%2C%22locale%22%3A%22en-GB%22%7D&extensions=%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%2247ffacde22ede1b84480c604ae6cda83362ff6e4a033dd105853670fa5a0ed56%22%2C%22version%22%3A1%7D%7D
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    imdbSha = _creditsSha;
+    imdbSha = _imdbShaCredits;
     return super.myConstructURI(searchCriteria, pageNumber: pageNumber);
+  }
+
+  ///
+  void updateShaKeys() {
+    _imdbShaCredits = _imdbShaCreditsOld;
   }
 }
 
 /// Implements [WebFetchBase] for retrieving paginated Json
 /// crew information from IMDB.
+///
+/// This is the equivalent of clicking "see all" on the IMDB person page.
 ///
 /// ```dart
 /// QueryIMDBJsonDetails().readList(criteria);
@@ -68,10 +84,13 @@ class QueryIMDBJsonPaginatedFilmographyDetails
   QueryIMDBJsonPaginatedFilmographyDetails(
     SearchCriteriaDTO criteria, {
     this.imdbQuery = ImdbJsonSource.actor,
-  }) : super(criteria, _imdbOperation);
+  }) : super(criteria, _imdbOperation) {
+    updateShaKeys();
+  }
 
   static const _imdbOperation = 'NameMainFilmographyPaginatedCredits';
 
+  // These values are used when clicking "see all" or expanding the accordion.
   // from https://www.imdb.com/name/nm0000095
   static const _imdbShaActor =
       '7ed0c54ec0a95c77fde16a992d918034e8ff37dfc79934b49d8276fa40361aa2';
@@ -88,7 +107,8 @@ class QueryIMDBJsonPaginatedFilmographyDetails
   static const _imdbShaWriter =
       'beb0469e88579c36dc67d25352be48e1efc749ed800aec44c468a275fc9e5fe6';
 
-  static const _imdbQueryShaMap = {
+  static bool _updatedSha = false;
+  static final _ShaMap = {
     ImdbJsonSource.actor: _imdbShaActor,
     ImdbJsonSource.actress: _imdbShaActress,
     ImdbJsonSource.director: _imdbShaDirector,
@@ -133,7 +153,7 @@ class QueryIMDBJsonPaginatedFilmographyDetails
         '$variablesMid$searchCriteria'
         '$urlVariablesSuffix';
 
-    imdbSha = _imdbQueryShaMap[imdbQuery] ?? '';
+    imdbSha = _ShaMap[imdbQuery] ?? '';
     final baseUri = super.myConstructURI(
       searchCriteria,
       pageNumber: pageNumber,
@@ -144,6 +164,27 @@ class QueryIMDBJsonPaginatedFilmographyDetails
     parameters['variables'] = variables;
 
     return baseUri.replace(queryParameters: parameters);
+  }
+
+  ///
+  void updateShaKeys() {
+    if (!_updatedSha) {
+      _updatedSha = true;
+      _ShaMap[ImdbJsonSource.actor] = _imdbShaActor;
+      _ShaMap[ImdbJsonSource.actress] = _imdbShaActress;
+      _ShaMap[ImdbJsonSource.director] = _imdbShaDirector;
+      _ShaMap[ImdbJsonSource.producer] = _imdbShaProducer;
+      _ShaMap[ImdbJsonSource.writer] = _imdbShaWriter;
+      if (Platform.isAndroid || Platform.isIOS) {
+        // Mobile platforms do not need to extract the sha keys.
+        return;
+      }
+      unawaited(IMDBShaExtractor(_ShaMap, ImdbJsonSource.actor).updateSha());
+      unawaited(IMDBShaExtractor(_ShaMap, ImdbJsonSource.actress).updateSha());
+      unawaited(IMDBShaExtractor(_ShaMap, ImdbJsonSource.director).updateSha());
+      unawaited(IMDBShaExtractor(_ShaMap, ImdbJsonSource.producer).updateSha());
+      unawaited(IMDBShaExtractor(_ShaMap, ImdbJsonSource.writer).updateSha());
+    }
   }
 }
 
@@ -193,7 +234,7 @@ abstract class QueryIMDBJsonDetailsBase
     });
   }
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() {
     final text = criteria.toPrintableString();
