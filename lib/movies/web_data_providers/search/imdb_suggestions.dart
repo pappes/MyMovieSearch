@@ -37,7 +37,7 @@ class QueryIMDBSuggestions
   @override
   DataSourceFn myOfflineData() => streamImdbJsonPOfflineData;
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() => criteria.toPrintableString();
 
@@ -55,9 +55,9 @@ class QueryIMDBSuggestions
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryIMDBSuggestions] $message',
-        DataSourceType.imdbSuggestions,
-      );
+    '[QueryIMDBSuggestions] $message',
+    DataSourceType.imdbSuggestions,
+  );
 
   /// API call to IMDB search returning the top matching results
   /// for [searchCriteria].

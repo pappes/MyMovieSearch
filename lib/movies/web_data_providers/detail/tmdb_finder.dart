@@ -34,7 +34,7 @@ class QueryTMDBFinder extends QueryTMDBCommon {
   @override
   DataSourceFn myOfflineData() => streamTmdbJsonOfflineData;
 
-  /// converts <INPUT_TYPE> to a string representation
+  /// converts SearchCriteriaDTO to a string representation
   /// if criteria is an IMDB id.
   @override
   String myFormatInputAsText() {

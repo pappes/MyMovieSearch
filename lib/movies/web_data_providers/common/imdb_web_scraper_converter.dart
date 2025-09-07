@@ -158,9 +158,7 @@ class ImdbWebScraperConverter {
     }
   }
 
-  /// extract Cast, Director, Writer, etc
-  /// credits information from cast json from [relatedList].
-  /// contentData -> categories.
+  /// Get the category name based on the key.
   String _getDeepCategoryName(dynamic key) {
     if (key != null && key is String && key.isNotEmpty) {
       switch (key.toUpperCase()) {

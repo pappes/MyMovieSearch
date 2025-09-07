@@ -53,7 +53,8 @@ abstract class IMDBShaExtractor {
     return null;
   }
 
-  // Get the address of the IMDB page that contains the sha based on the [imdbSource].
+  // Get the address of the IMDB page that contains the sha
+  // based on the [imdbSource].
   Uri? getImdbAddress() => switch (imdbSource) {
     ImdbJsonSource.actor => Uri.parse(imdbAddressMale),
     ImdbJsonSource.actress => Uri.parse(imdbAddressFemale),

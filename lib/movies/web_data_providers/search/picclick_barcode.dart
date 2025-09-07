@@ -46,16 +46,16 @@ class QueryPicclickBarcodeSearch
     );
   }
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() => criteria.toPrintableIdOrText().toLowerCase();
 
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryPicclickBarcodeSearch] $message',
-        DataSourceType.picclickBarcode,
-      );
+    '[QueryPicclickBarcodeSearch] $message',
+    DataSourceType.picclickBarcode,
+  );
 
   /// API call to search
   /// returning the top matching results for [encodedCriteria].

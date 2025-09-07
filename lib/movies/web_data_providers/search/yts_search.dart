@@ -30,7 +30,7 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   @override
   DataSourceFn myOfflineData() => streamJsonOfflineData;
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() => criteria.toPrintableIdOrText().toLowerCase();
 
@@ -48,9 +48,9 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryYtsSearch] $message',
-        DataSourceType.ytsSearch,
-      );
+    '[QueryYtsSearch] $message',
+    DataSourceType.ytsSearch,
+  );
 
   /// API call to IMDB search returning the top matching results
   /// for [searchCriteria].
@@ -66,8 +66,9 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   ) async {
     if ('' == webText) {
       throw WebConvertException(
-          'No content returned from web call for criteria '
-          '$getCriteriaText');
+        'No content returned from web call for criteria '
+        '$getCriteriaText',
+      );
     }
     try {
       // Assume text is json encoded.
@@ -75,8 +76,9 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       return [tree];
     } on FormatException {
       throw WebConvertException(
-          'Invalid json returned from web call $webText for criteria '
-          '$getCriteriaText');
+        'Invalid json returned from web call $webText for criteria '
+        '$getCriteriaText',
+      );
     }
   }
 }

@@ -42,16 +42,16 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     );
   }
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() => criteria.toPrintableString();
 
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryTMDBMovies] $message',
-        DataSourceType.tmdbSearch,
-      );
+    '[QueryTMDBMovies] $message',
+    DataSourceType.tmdbSearch,
+  );
 
   /// API call to TMDB returning the top 10 matching results
   /// for [searchCriteria].

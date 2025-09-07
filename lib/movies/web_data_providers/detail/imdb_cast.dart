@@ -38,7 +38,7 @@ class QueryIMDBCastDetails
   @override
   DataSourceFn myOfflineData() => streamImdbHtmlOfflineData;
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() {
     final text = criteria.toPrintableString();

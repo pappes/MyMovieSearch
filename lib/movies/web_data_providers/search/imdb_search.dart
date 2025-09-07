@@ -32,24 +32,26 @@ class QueryIMDBSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     dynamic map,
   ) async {
     if (map is Map) {
-      return ImdbWebScraperConverter()
-          .dtoFromCompleteJsonMap(map, DataSourceType.imdbSearch);
+      return ImdbWebScraperConverter().dtoFromCompleteJsonMap(
+        map,
+        DataSourceType.imdbSearch,
+      );
     }
     throw TreeConvertException(
       'expected map got ${map.runtimeType} unable to interpret data $map',
     );
   }
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() => criteria.toPrintableString();
 
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryIMDBSearch] $message',
-        DataSourceType.imdbSearch,
-      );
+    '[QueryIMDBSearch] $message',
+    DataSourceType.imdbSearch,
+  );
 
   /// API call to IMDB search returning the top matching results
   /// for [searchCriteria].

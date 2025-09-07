@@ -23,7 +23,7 @@ class OnlineOfflineSelector {
     );
   }
 
-  /// Returns appropriate <generic> for current mode (online or offline)
+  /// Returns appropriate value of T for current mode (online or offline)
   T select<T>(T onlineDataSource, T offlineDataSource) =>
       _offline ? offlineDataSource : onlineDataSource;
 }

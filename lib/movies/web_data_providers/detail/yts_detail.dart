@@ -39,7 +39,7 @@ class QueryYtsDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   @override
   DataSourceFn myOfflineData() => streamImdbHtmlOfflineData;
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() {
     final text = criteria.criteriaTitle;
@@ -75,8 +75,6 @@ class QueryYtsDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryYtsDetails] $message',
-        DataSourceType.imdb,
-      );
+  MovieResultDTO myYieldError(String message) =>
+      MovieResultDTO().error('[QueryYtsDetails] $message', DataSourceType.imdb);
 }

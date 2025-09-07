@@ -108,7 +108,7 @@ class QueryIMDBJsonPaginatedFilmographyDetails
       'beb0469e88579c36dc67d25352be48e1efc749ed800aec44c468a275fc9e5fe6';
 
   static bool _updatedSha = false;
-  static final _ShaMap = {
+  static final _shaMap = {
     ImdbJsonSource.actor: _imdbShaActor,
     ImdbJsonSource.actress: _imdbShaActress,
     ImdbJsonSource.director: _imdbShaDirector,
@@ -153,7 +153,7 @@ class QueryIMDBJsonPaginatedFilmographyDetails
         '$variablesMid$searchCriteria'
         '$urlVariablesSuffix';
 
-    imdbSha = _ShaMap[imdbQuery] ?? '';
+    imdbSha = _shaMap[imdbQuery] ?? '';
     final baseUri = super.myConstructURI(
       searchCriteria,
       pageNumber: pageNumber,
@@ -170,20 +170,20 @@ class QueryIMDBJsonPaginatedFilmographyDetails
   void updateShaKeys() {
     if (!_updatedSha) {
       _updatedSha = true;
-      _ShaMap[ImdbJsonSource.actor] = _imdbShaActor;
-      _ShaMap[ImdbJsonSource.actress] = _imdbShaActress;
-      _ShaMap[ImdbJsonSource.director] = _imdbShaDirector;
-      _ShaMap[ImdbJsonSource.producer] = _imdbShaProducer;
-      _ShaMap[ImdbJsonSource.writer] = _imdbShaWriter;
+      _shaMap[ImdbJsonSource.actor] = _imdbShaActor;
+      _shaMap[ImdbJsonSource.actress] = _imdbShaActress;
+      _shaMap[ImdbJsonSource.director] = _imdbShaDirector;
+      _shaMap[ImdbJsonSource.producer] = _imdbShaProducer;
+      _shaMap[ImdbJsonSource.writer] = _imdbShaWriter;
       if (Platform.isAndroid || Platform.isIOS) {
         // Mobile platforms do not need to extract the sha keys.
         return;
       }
-      unawaited(IMDBShaExtractor(_ShaMap, ImdbJsonSource.actor).updateSha());
-      unawaited(IMDBShaExtractor(_ShaMap, ImdbJsonSource.actress).updateSha());
-      unawaited(IMDBShaExtractor(_ShaMap, ImdbJsonSource.director).updateSha());
-      unawaited(IMDBShaExtractor(_ShaMap, ImdbJsonSource.producer).updateSha());
-      unawaited(IMDBShaExtractor(_ShaMap, ImdbJsonSource.writer).updateSha());
+      unawaited(IMDBShaExtractor(_shaMap, ImdbJsonSource.actor).updateSha());
+      unawaited(IMDBShaExtractor(_shaMap, ImdbJsonSource.actress).updateSha());
+      unawaited(IMDBShaExtractor(_shaMap, ImdbJsonSource.director).updateSha());
+      unawaited(IMDBShaExtractor(_shaMap, ImdbJsonSource.producer).updateSha());
+      unawaited(IMDBShaExtractor(_shaMap, ImdbJsonSource.writer).updateSha());
     }
   }
 }

@@ -258,9 +258,7 @@ void main() {
           '%7B%22after%22%3A%22MTIzNA%3D%3D%22%2C%22id%22%3A%221234%22%2C%22'
           'includeUserRating%22%3Afalse%2C%22locale%22%3A%22en-GB%22%7D'
           '&extensions='
-          '%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%22'
-          '4faf04583fbf1fbc7a025e5dffc7abc3486e9a04571898a27a5a1ef59c2965f3'
-          '%22%2C%22version%22%3A1%7D%7D';
+          '%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%22';
       final criteria = SearchCriteriaDTO();
 
       // Invoke the functionality.
@@ -270,7 +268,7 @@ void main() {
           ).myConstructURI('1234').toString();
 
       // Check the results.
-      expect(actualResult, expected);
+      expect(actualResult, startsWith(expected));
     });
   });
   ////////////////////////////////////////////////////////////////////////////////

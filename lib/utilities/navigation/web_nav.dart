@@ -40,10 +40,10 @@ class RouteInfo {
 
   @override
   String toString() => json.encode({
-        'path': routePath,
-        'params': params.toString(),
-        'ref': reference,
-      });
+    'path': routePath,
+    'params': params.toString(),
+    'ref': reference,
+  });
 }
 
 /// Performs page navigation
@@ -77,8 +77,8 @@ class MMSNav {
   /// Navigates to the list of old DVD locations.
   ///
   Future<Object?> showDVDsPage() async => showResultsPage(
-        SearchCriteriaDTO().init(SearchCriteriaType.dvdLocations),
-      );
+    SearchCriteriaDTO().init(SearchCriteriaType.dvdLocations),
+  );
 
   /// Navigates to a search results page
   /// populated with a predefined list of dtos.
@@ -105,26 +105,25 @@ class MMSNav {
   /// Navigates to a search results page populated with movie for the keyword.
   ///
   Future<Object?> showMoviesForKeyword(String keyword) async =>
-      // Fetch first batch of movies that match the keyword.
-
-      showResultsPage(
-        SearchCriteriaDTO().init(
-          SearchCriteriaType.moviesForKeyword,
-          title: keyword,
-        ),
-      );
+  // Fetch first batch of movies that match the keyword.
+  showResultsPage(
+    SearchCriteriaDTO().init(
+      SearchCriteriaType.moviesForKeyword,
+      title: keyword,
+    ),
+  );
 
   /// Navigates to a search results page populated with keywords for the movie.
   ///
   Future<Object?> getMoreKeywords(MovieResultDTO movie) async =>
-      // Next first batch of movies that match the keyword.
-      showResultsPage(
-        SearchCriteriaDTO().init(
-          SearchCriteriaType.moreKeywords,
-          title: movie.uniqueId,
-          context: movie,
-        ),
-      );
+  // Next first batch of movies that match the keyword.
+  showResultsPage(
+    SearchCriteriaDTO().init(
+      SearchCriteriaType.moreKeywords,
+      title: movie.uniqueId,
+      context: movie,
+    ),
+  );
 
   /// Navigates to a search results page populated with downloads for the movie.
   ///
@@ -209,47 +208,47 @@ class MMSNav {
       case MovieContentType.information:
         movie.setReadIndicator(ReadHistory.reading.toString());
         // Show details screen (movie details or person details)
-        return canvas.viewFlutterPage(movie.getDetailsPage()).then(
-              (_) => movie.setReadIndicator(ReadHistory.read.toString()),
-            );
+        return canvas
+            .viewFlutterPage(movie.getDetailsPage())
+            .then((_) => movie.setReadIndicator(ReadHistory.read.toString()));
     }
   }
 
   /// Defines known routes handled by MMSNav.
   ///
   static List<RouteBase> getRoutes() => [
-        GoRoute(path: '/', pageBuilder: MovieSearchCriteriaPage.goRoute),
-        GoRoute(
-          name: ScreenRoute.search.name,
-          path: '/$ScreenRoute.search.name',
-          pageBuilder: MovieSearchCriteriaPage.goRoute,
-        ),
-        GoRoute(
-          name: ScreenRoute.searchresults.name,
-          path: '/$ScreenRoute.searchresults.name',
-          pageBuilder: MovieSearchResultsNewPage.goRoute,
-        ),
-        GoRoute(
-          name: ScreenRoute.persondetails.name,
-          path: '/$ScreenRoute.persondetails.name',
-          pageBuilder: PersonDetailsPage.goRoute,
-        ),
-        GoRoute(
-          name: ScreenRoute.moviedetails.name,
-          path: '/$ScreenRoute.moviedetails.name',
-          pageBuilder: MovieDetailsPage.goRoute,
-        ),
-        GoRoute(
-          name: ScreenRoute.addlocation.name,
-          path: '/$ScreenRoute.addlocation.name',
-          pageBuilder: MoviePhysicalLocationPage.goRoute,
-        ),
-        GoRoute(
-          name: ScreenRoute.errordetails.name,
-          path: '/$ScreenRoute.errordetails.name',
-          pageBuilder: ErrorDetailsPage.goRoute,
-        ),
-      ];
+    GoRoute(path: '/', pageBuilder: MovieSearchCriteriaPage.goRoute),
+    GoRoute(
+      name: ScreenRoute.search.name,
+      path: '/$ScreenRoute.search.name',
+      pageBuilder: MovieSearchCriteriaPage.goRoute,
+    ),
+    GoRoute(
+      name: ScreenRoute.searchresults.name,
+      path: '/$ScreenRoute.searchresults.name',
+      pageBuilder: MovieSearchResultsNewPage.goRoute,
+    ),
+    GoRoute(
+      name: ScreenRoute.persondetails.name,
+      path: '/$ScreenRoute.persondetails.name',
+      pageBuilder: PersonDetailsPage.goRoute,
+    ),
+    GoRoute(
+      name: ScreenRoute.moviedetails.name,
+      path: '/$ScreenRoute.moviedetails.name',
+      pageBuilder: MovieDetailsPage.goRoute,
+    ),
+    GoRoute(
+      name: ScreenRoute.addlocation.name,
+      path: '/$ScreenRoute.addlocation.name',
+      pageBuilder: MoviePhysicalLocationPage.goRoute,
+    ),
+    GoRoute(
+      name: ScreenRoute.errordetails.name,
+      path: '/$ScreenRoute.errordetails.name',
+      pageBuilder: ErrorDetailsPage.goRoute,
+    ),
+  ];
 }
 
 class MMSFlutterCanvas {
@@ -283,18 +282,18 @@ class MMSFlutterCanvas {
       NavLog(context!).logPageOpen(page.routePath.name, page.reference);
       try {
         // Open the page.
-        return context!.pushNamed(
+        final openedPage = context!.pushNamed(
           page.routePath.name,
           extra: page.params,
-        )..then((val) {
-            // Record page closure event.
-            NavLog(context!).logPageClose(
-              page.routePath.name,
-              page.reference,
-              page.params,
-            );
-            _hideKeyboard();
-          });
+        );
+        return openedPage.then((val) {
+          // Record page closure event.
+          NavLog(
+            context!,
+          ).logPageClose(page.routePath.name, page.reference, page.params);
+          _hideKeyboard();
+          return null;
+        });
       } catch (e) {
         logger.t(e);
       }

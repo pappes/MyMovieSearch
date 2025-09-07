@@ -30,15 +30,14 @@ class QueryIMDBMoreKeywordsDetails
   @factory
   WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
     SearchCriteriaDTO criteria,
-  ) =>
-      QueryIMDBMoreKeywordsDetails(criteria);
+  ) => QueryIMDBMoreKeywordsDetails(criteria);
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
   DataSourceFn myOfflineData() => streamImdbHtmlOfflineData;
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() {
     final text = criteria.criteriaTitle;
@@ -71,7 +70,7 @@ class QueryIMDBMoreKeywordsDetails
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryIMDBMoreKeywordsDetails] $message',
-        DataSourceType.imdb,
-      );
+    '[QueryIMDBMoreKeywordsDetails] $message',
+    DataSourceType.imdb,
+  );
 }

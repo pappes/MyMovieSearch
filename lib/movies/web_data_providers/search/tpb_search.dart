@@ -50,16 +50,14 @@ class QueryTpbSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     );
   }
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() => criteria.toPrintableIdOrText().toLowerCase();
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryTpbSearch] $message',
-        DataSourceType.tpb,
-      );
+  MovieResultDTO myYieldError(String message) =>
+      MovieResultDTO().error('[QueryTpbSearch] $message', DataSourceType.tpb);
 
   /// API call to tpb search
   /// returning the top matching results for [encodedCriteria].

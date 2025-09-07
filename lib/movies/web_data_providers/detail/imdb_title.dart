@@ -30,7 +30,7 @@ class QueryIMDBTitleDetails
   @override
   DataSourceFn myOfflineData() => streamImdbHtmlOfflineData;
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() {
     final text = criteria.toPrintableString();
@@ -54,8 +54,10 @@ class QueryIMDBTitleDetails
     dynamic map,
   ) async {
     if (map is Map) {
-      return ImdbWebScraperConverter()
-          .dtoFromCompleteJsonMap(map, DataSourceType.imdb);
+      return ImdbWebScraperConverter().dtoFromCompleteJsonMap(
+        map,
+        DataSourceType.imdb,
+      );
     }
     throw TreeConvertException(
       'expected map got ${map.runtimeType} unable to interpret data $map',
@@ -65,7 +67,7 @@ class QueryIMDBTitleDetails
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryIMDBTitleDetails] $message',
-        DataSourceType.imdb,
-      );
+    '[QueryIMDBTitleDetails] $message',
+    DataSourceType.imdb,
+  );
 }

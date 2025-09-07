@@ -73,7 +73,7 @@ class ThreadRunner {
   /// Function must be a static class member or
   /// global function to avoid the runtime exception
   ///     Invalid argument(s): Illegal argument in isolate message :
-  ///     (object is a closure - Function '<function_name>')
+  ///     (object is a closure - Function '&lt;function_name^gt;')
   ///
   /// Function should not call any libraries
   /// that attempt to write to common objects

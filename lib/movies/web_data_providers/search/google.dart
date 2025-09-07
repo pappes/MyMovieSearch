@@ -51,16 +51,16 @@ class QueryGoogleMovies
     );
   }
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() => criteria.toPrintableString();
 
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryGoogleMovies] $message',
-        DataSourceType.google,
-      );
+    '[QueryGoogleMovies] $message',
+    DataSourceType.google,
+  );
 
   /// API call to Google returning the top 10 matching results
   /// for [searchCriteria].
@@ -69,7 +69,8 @@ class QueryGoogleMovies
     // Get key from the file assets/secrets.json (not source controlled)
     final googleKey = Settings().googlekey;
     final startRecord = (pageNumber - 1) * _googleResultsPerPage;
-    final url = '$_baseURL$googleKey'
+    final url =
+        '$_baseURL$googleKey'
         '&q=$searchCriteria&start=$startRecord&'
         'num=$_googleResultsPerPage';
     return Uri.parse(url);

@@ -38,24 +38,26 @@ class QueryIMDBMoviesForKeyword
     dynamic map,
   ) async {
     if (map is Map) {
-      return ImdbWebScraperConverter()
-          .dtoFromCompleteJsonMap(map, DataSourceType.imdbKeywords);
+      return ImdbWebScraperConverter().dtoFromCompleteJsonMap(
+        map,
+        DataSourceType.imdbKeywords,
+      );
     }
     throw TreeConvertException(
       'expected map got ${map.runtimeType} unable to interpret data $map',
     );
   }
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() => criteria.toPrintableString();
 
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryIMDBMoviesForKeyword] $message',
-        DataSourceType.imdbKeywords,
-      );
+    '[QueryIMDBMoviesForKeyword] $message',
+    DataSourceType.imdbKeywords,
+  );
 
   /// API call to IMDB keywords returning the top matching results
   /// for [encodedCriteria].
@@ -66,7 +68,7 @@ class QueryIMDBMoviesForKeyword
     return Uri.parse(url);
   }
 
-/*IMDB has moved away from url encoding for pagination
+  /*IMDB has moved away from url encoding for pagination
   /// Extract plain text or dto encoded keyword.
   @override
   String myFormatInputAsText() {

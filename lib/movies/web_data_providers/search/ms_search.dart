@@ -73,9 +73,7 @@ class QueryMsSearchMovies
         throw const SocketException(errBadApiKey);
       }
       if (e.message.startsWith(msErrorCloudRefused)) {
-        throw const SocketException(
-          errCloudRefused,
-        );
+        throw const SocketException(errCloudRefused);
       }
       rethrow;
     } on CommunicationException catch (e) {
@@ -89,9 +87,7 @@ class QueryMsSearchMovies
         } catch (e) {
           logger.e(e);
         }
-        throw const SocketException(
-          errServerDown,
-        );
+        throw const SocketException(errServerDown);
       }
       rethrow;
     } catch (e) {
@@ -117,16 +113,16 @@ class QueryMsSearchMovies
     );
   }
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() => criteria.toPrintableString();
 
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String errBadApiKey) => MovieResultDTO().error(
-        '[QueryMsSearchMovies] $errBadApiKey',
-        DataSourceType.mssearch,
-      );
+    '[QueryMsSearchMovies] $errBadApiKey',
+    DataSourceType.mssearch,
+  );
 
   /// API call to MsSearch returning the top 10 matching results
   /// for [searchCriteria].

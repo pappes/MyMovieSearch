@@ -42,16 +42,14 @@ class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     );
   }
 
-  /// converts <INPUT_TYPE> to a string representation.
+  /// converts SearchCriteriaDTO to a string representation.
   @override
   String myFormatInputAsText() => criteria.toPrintableString();
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[QueryOMDBMovies] $message',
-        DataSourceType.omdb,
-      );
+  MovieResultDTO myYieldError(String message) =>
+      MovieResultDTO().error('[QueryOMDBMovies] $message', DataSourceType.omdb);
 
   /// API call to OMDB returning the top 10 matching results
   /// for [searchCriteria].
@@ -59,9 +57,7 @@ class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     // Get key from the file assets/secrets.json (not source controlled)
     final omdbKey = Settings().omdbkey;
-    return Uri.parse(
-      '$_baseURL$omdbKey&s=$searchCriteria&page=$pageNumber',
-    );
+    return Uri.parse('$_baseURL$omdbKey&s=$searchCriteria&page=$pageNumber');
   }
 
   @override

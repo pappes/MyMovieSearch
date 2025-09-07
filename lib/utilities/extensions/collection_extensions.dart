@@ -61,7 +61,7 @@ extension StringIterableHelper on Iterable<String> {
   }
 }
 
-/// Extend [List]<dynamic> to provide convenience functions.
+/// Extend [List] to provide convenience functions.
 ///
 extension ListHelper<T> on List<T> {
   /// Ensure value is a list.  Make it a list if it is not.
@@ -79,7 +79,7 @@ extension ListHelper<T> on List<T> {
     return this;
   }
 
-  /// Extend [List]<dynamic> to concatenate strings with a seperator
+  /// Extend [List] to concatenate strings with a seperator
   /// and remove nominated whitespace from the start and end.
   ///
   String trimJoin([String separator = '', String whitespace = ' ']) {

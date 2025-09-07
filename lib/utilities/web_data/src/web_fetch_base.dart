@@ -102,9 +102,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     int? limit,
   }) {
     void errorHandler(dynamic error, StackTrace stackTrace) {
-      logger.e(
-        'Error in WebFetch populate: $error\n$stackTrace',
-      );
+      logger.e('Error in WebFetch populate: $error\n$stackTrace');
       sc.add(myYieldError(error.toString()));
     }
 
@@ -142,9 +140,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   }) async {
     searchResultsLimit.limit = limit;
     if (await myIsResultCached()) {
-      final result = await baseYieldFetchedObjects(
-        source: source,
-      );
+      final result = await baseYieldFetchedObjects(source: source);
       return result.toList();
     }
     return Future.value(<OUTPUT_TYPE>[]);
@@ -240,9 +236,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should throw SocketException for any networking errors.
   @visibleForOverriding
   Future<Stream<String>> myFetchWebText(INPUT_TYPE criteria) async {
-    final encoded = Uri.encodeQueryComponent(
-      myFormatInputAsText(),
-    );
+    final encoded = Uri.encodeQueryComponent(myFormatInputAsText());
     final address = myConstructURI(encoded, pageNumber: myGetPageNumber());
     logger.t('requesting: $address');
     final client = await baseGetHttpClient().getUrl(address);
@@ -253,8 +247,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     if (response.statusCode >= 500 && retryDelay <= maxDelay) {
       final oldDelay = retryDelay;
       retryDelay = retryDelay * 2;
-      return Future<void>.delayed(Duration(milliseconds: oldDelay))
-          .then((value) => myFetchWebText(criteria));
+      return Future<void>.delayed(
+        Duration(milliseconds: oldDelay),
+      ).then((value) => myFetchWebText(criteria));
     }
 
     // Check for successful HTTP status before transforming (avoid HTTP 404)
@@ -280,7 +275,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   @visibleForOverriding
   DataSourceFn myOfflineData();
 
-  /// Generates an error message in the format of <OUTPUT_TYPE>.
+  /// Generates an error message in the format of OUTPUT_TYPE.
   ///
   /// Used for both online and offline operation.
   ///
@@ -342,9 +337,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Can be overridden by child classes if required.
   @visibleForTesting // and for override!
-  Future<void> myAddResultToCache(
-    OUTPUT_TYPE fetchedResult,
-  ) async {}
+  Future<void> myAddResultToCache(OUTPUT_TYPE fetchedResult) async {}
 
   /// Flush all data from the cache.
   ///
@@ -379,7 +372,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   List<OUTPUT_TYPE> myFetchResultFromCache() => [];
 
   /// Convert a HTML, JSON or JSONP [Stream] of [String]
-  /// to a [Stream] of <OUTPUT_TYPE> objects.
+  /// to a [Stream] of [OUTPUT_TYPE] objects.
   ///
   /// Should not be overridden by child classes.
   @visibleForTesting
@@ -419,9 +412,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     Stream<String> captureError(WebFetchException error, _) {
-      errors.add(
-        baseConstructErrorMessage('fetching web text chunks', error),
-      );
+      errors.add(baseConstructErrorMessage('fetching web text chunks', error));
       return const Stream.empty();
     }
 
@@ -458,16 +449,18 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         captureError(error, 'stream error interpreting web text as a map');
     List<String> captureGenericConvertError(dynamic error, StackTrace _) =>
         captureError(
-            error,
-            'non-confomant baseConvertWebTextToTraversableTree error '
-            'interpreting web text as a map');
+          error,
+          'non-confomant baseConvertWebTextToTraversableTree error '
+          'interpreting web text as a map',
+        );
     List<String> captureConvertError(WebConvertException error, StackTrace _) =>
         captureError(error, 'convert error interpreting web text as a map');
 
-    final list = await webStream
-        .handleError(captureStreamError)
-        .timeout(const Duration(seconds: 25))
-        .toList();
+    final list =
+        await webStream
+            .handleError(captureStreamError)
+            .timeout(const Duration(seconds: 25))
+            .toList();
     if (list.isNotEmpty) {
       final webText = list.join();
       final rawObjects = await myConvertWebTextToTraversableTree(webText)
@@ -511,14 +504,14 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         captureError(error, 'stream error translating page map to objects');
     List<OUTPUT_TYPE> captureGenericError(dynamic error, StackTrace _) =>
         captureError(
-            error,
-            'non-confomant baseConvertTreeToOutputType error '
-            'translating page map to objects');
+          error,
+          'non-confomant baseConvertTreeToOutputType error '
+          'translating page map to objects',
+        );
     List<OUTPUT_TYPE> captureConvertError(
       TreeConvertException error,
       StackTrace _,
-    ) =>
-        captureError(error, 'convert error translating page map to objects');
+    ) => captureError(error, 'convert error translating page map to objects');
 
     List<OUTPUT_TYPE> filterList(Iterable<OUTPUT_TYPE> objects) {
       objects.forEach(myAddResultToCache);
