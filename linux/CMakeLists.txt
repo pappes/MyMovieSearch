@@ -11,6 +11,9 @@ set(APPLICATION_ID "com.example.my_movie_search")
 
 # Explicitly opt in to modern CMake behaviors to avoid warnings with recent
 # versions of CMake.
+# Policy CMP0074 is needed to avoid a warning when the flutter_linux_webview
+# plugin is used.
+cmake_policy(SET CMP0074 NEW)
 cmake_policy(SET CMP0063 NEW)
 
 # Load bundled libraries from the lib/ directory relative to the binary.
@@ -91,6 +94,8 @@ install(CODE "
 set(INSTALL_BUNDLE_DATA_DIR "${CMAKE_INSTALL_PREFIX}/data")
 set(INSTALL_BUNDLE_LIB_DIR "${CMAKE_INSTALL_PREFIX}/lib")
 
+
+
 install(TARGETS ${BINARY_NAME} RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}"
   COMPONENT Runtime)
 
@@ -126,3 +131,10 @@ if(NOT CMAKE_BUILD_TYPE MATCHES "Debug")
   install(FILES "${AOT_LIBRARY}" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
     COMPONENT Runtime)
 endif()
+
+
+# This include() command was automatically added by the flutter_linux_webview
+# plugin when building the app with the plugin. The app executable must be
+# linked to the CEF library for the WebView plugin to work. This command links
+# the app executable to the CEF library.
+include(flutter/ephemeral/.plugin_symlinks/flutter_linux_webview/linux/cmake/link_to_cef_library.cmake)

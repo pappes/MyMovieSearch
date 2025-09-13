@@ -1,5 +1,7 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_linux_webview/flutter_linux_webview.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/utilities/web_data/imdb_sha_extractor.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -7,8 +9,26 @@ import 'package:webview_flutter/webview_flutter.dart';
 class WebPageShaExtractorPlatform extends IMDBShaExtractor {
   WebPageShaExtractorPlatform.internal(super.imdbShaMap, super.imdbSource)
     : super.internal() {
-    print("***************************initialized for Android***************");
+    print("***************************initialized for linux***************");
+    // Run `LinuxWebViewPlugin.initialize()` first before creating a WebView.
+    LinuxWebViewPlugin.initialize(
+      options: <String, String?>{
+        'user-agent': 'UA String',
+        'remote-debugging-port': '8888',
+        'autoplay-policy': 'no-user-gesture-required',
+      },
+    );
+    WebViewPlatform.instance = LinuxWebView();
   }
+
+  /*final WebViewPlatformCallbacksHandler callbacksHandler;
+  final JavascriptChannelRegistry javascriptChannelRegistry;
+  final WebViewPlatformCreatedCallback? onWebViewPlatformCreated;
+  final yyy = WebViewLinuxPlatformController(
+      creationParams: widget.creationParams,
+      callbacksHandler: widget.callbacksHandler,
+      javascriptChannelRegistry: widget.javascriptChannelRegistry,
+    );*/
 
   final _imdbPerson = WebViewController();
 

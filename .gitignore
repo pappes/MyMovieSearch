@@ -72,3 +72,14 @@ android/app/profile
 android/app/release
 android/app/.cxx
 
+# Linux build artifacts
+linux/build/
+linux/CMakeCache.txt
+linux/CMakeFiles/
+linux/cmake_install.cmake
+linux/flutter/generated_*.h
+linux/flutter/generated_*.cc
+linux/flutter/generated_plugins.cmake
+linux/runner/cmake_install.cmake
+linux/_deps/
+linux/plugins/

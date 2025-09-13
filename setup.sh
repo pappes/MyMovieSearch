@@ -1,14 +1,14 @@
 #!/bin/bash
 set -e
 
-echo "Starting setup script for Flutter (version 3.29.2) and Android SDK..."
+echo "Starting setup script for Flutter (version 3.32.8) and Android SDK..."
 
 # --- Install Dependencies (if needed) ---
 echo "Updating package lists..."
 sudo apt update
 
 echo "Installing required dependencies..."
-sudo apt install -y curl git unzip  libsqlite3-0 libsqlite3-dev
+sudo apt install -y curl git unzip libsqlite3-0 libsqlite3-dev clang cmake ninja-build pkg-config libgtk-3-dev liblzma-dev
 
 # --- Install Android SDK ---
 echo "Downloading and installing Android SDK command-line tools..."
@@ -23,6 +23,7 @@ else
 fi
 
 export ANDROID_HOME=/tmp/android-sdk-cmdline-tools
+#export ANDROID_HOME=/home/dj/Android/Sdk
 export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator"
 export extra_path="$extra_path:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator"
 echo export PATH="$PATH:$ANDROID_HOME/cmdline-tools/latest/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/emulator" >> $HOME/.bashrc
@@ -35,16 +36,16 @@ echo "Installing required Android SDK components..."
 sdkmanager --sdk_root="$ANDROID_HOME" "platforms;android-34" "build-tools;34.0.0" # Adjust versions as needed
 sdkmanager --sdk_root="$ANDROID_HOME" "emulator" "platform-tools"
 
-# --- Install Flutter Version 3.29.2 ---
-echo "Downloading Flutter SDK version 3.29.2..."
+# --- Install Flutter Version 3.32.8 ---
+echo "Downloading Flutter SDK version 3.32.8..."
 if [ ! -d "/tmp/flutter" ]; then
   cd /tmp
-  git clone https://github.com/flutter/flutter.git --depth 1 --branch 3.29.2
+  git clone https://github.com/flutter/flutter.git --depth 1 --branch 3.32.8
   cd -
 else
-  echo "Flutter SDK already exists. Attempting to checkout version 3.29.2..."
+  echo "Flutter SDK already exists. Attempting to checkout version 3.32.8..."
   cd /tmp/flutter
-  git checkout 3.29.2
+  git checkout 3.32.8
   cd -
 fi
 
@@ -53,6 +54,9 @@ export PATH="$PATH:/tmp/flutter/bin:/tmp/flutter/.pub-cache/bin"
 export extra_path="/tmp/flutter/bin:/tmp/flutter/.pub-cache/bin"
 echo "Flutter version:"
 flutter --version
+
+echo "Accepting Flutter licenses..."
+yes | flutter doctor --android-licenses
 
 # --- Verify setup ---
 echo "Verifying Flutter installation..."

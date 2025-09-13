@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'package:my_movie_search/utilities/web_data/imdb_sha_extractor.dart';
 
-class WebPageShaExtractorOther extends IMDBShaExtractor {
-  WebPageShaExtractorOther.internal(super.imdbShaMap, super.imdbSource)
-    : super.internal();
+class WebPageShaExtractorPlatform extends IMDBShaExtractor {
+  WebPageShaExtractorPlatform.internal(super.imdbShaMap, super.imdbSource)
+    : super.internal() {
+    print("***************************initialized for Other***************");
+  }
 
   // Functionality unavailable.
   @override

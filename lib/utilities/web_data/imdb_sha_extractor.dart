@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'package:logger/logger.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
-import 'package:my_movie_search/utilities/web_data/platform_android/imdb_sha_extractor.dart';
-import 'package:my_movie_search/utilities/web_data/platform_other/imdb_sha_extractor.dart';
+//import 'package:my_movie_search/utilities/web_data/platform_android/imdb_sha_extractor.dart' if (Platform.isAndroid) 'android_specific.dart'
+//  else 'package:my_movie_search/utilities/web_data/platform_other/imdb_sha_extractor.dart';
+import 'package:my_movie_search/utilities/web_data/platform_other/imdb_sha_extractor.dart'
+    if (Platform.isLinux) 'package:my_movie_search/utilities/web_data/platform_linux/imdb_sha_extractor.dart'
+    if (Platform.isAndroid) 'package:my_movie_search/utilities/web_data/platform_android/imdb_sha_extractor.dart';
 
 const imdbAddressMale = 'https://www.imdb.com/name/nm0000095';
 const imdbAddressFemale = 'https://www.imdb.com/name/nm0000149';
@@ -20,10 +23,10 @@ abstract class IMDBShaExtractor {
     // so that the compiler can tree shake unused code.
     // ignore: do_not_use_environment
     if (const bool.fromEnvironment('IS_ANDROID')) {
-      return WebPageShaExtractorAndroid.internal(imdbShaMap, imdbSource);
+      final init = WebPageShaExtractorPlatform.internal(imdbShaMap, imdbSource);
     }
 
-    return WebPageShaExtractorOther.internal(imdbShaMap, imdbSource);
+    return WebPageShaExtractorPlatform.internal(imdbShaMap, imdbSource);
   }
 
   /// Internal constructor to setup internal state for the instance.

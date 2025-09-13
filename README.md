@@ -4,6 +4,10 @@ An application for searching movies.
 
 ## Getting Started
 
+For linux builds the libc6-dev c library is used for the linux_webview dart library
+you may need to install it with:
+sudo apt-get install libc6-dev
+
 Before compiling it is recommended to generate your own API keys.
 For all supported options for API keys see [Settings] in lib/utlities/settings.dart
 From the command line at build time:
