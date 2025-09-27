@@ -18,7 +18,7 @@ const imdbQueryDirector = deepPersonDirectorHeader;
 const imdbQueryProducer = deepPersonProducerHeader;
 const imdbQueryWriter = deepPersonWriterHeader;
 
-enum ImdbJsonSource { actor, actress, director, producer, writer }
+enum ImdbJsonSource { actor, actress, director, producer, writer, credits }
 
 /// Implements [WebFetchBase] for retrieving filtered Json
 /// crew information from IMDB.
@@ -38,9 +38,18 @@ class QueryIMDBJsonFilteredFilmographyDetails extends QueryIMDBJsonDetailsBase {
   }
 
   static const _imdbOperation = 'NameMainFilmographyFilteredCredits';
-  static const _imdbShaCreditsOld =
-      '47ffacde22ede1b84480c604ae6cda83362ff6e4a033dd105853670fa5a0ed56';
-  late String _imdbShaCredits;
+  static const _imdbShaCredits =
+      '4dee7275785b471d811ea0eb35e4a73be2286ec68a7be9c304af043f00de7ee7';
+
+  static bool _updatedSha = false;
+  static final _shaMap = {
+    ImdbJsonSource.credits: _imdbShaCredits,
+  };
+
+  /// Describe where the data is coming from.
+  @override
+  String myDataSourceName() => 
+    '${super.myDataSourceName()}-${ImdbJsonSource.credits}';
 
   @override
   @factory
@@ -60,13 +69,21 @@ class QueryIMDBJsonFilteredFilmographyDetails extends QueryIMDBJsonDetailsBase {
   /// https://caching.graphql.imdb.com/?operationName=NameMainFilmographyFilteredCredits&variables=%7B%22id%22%3A%22nm0000619%22%2C%22includeUserRating%22%3Afalse%2C%22locale%22%3A%22en-GB%22%7D&extensions=%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%2247ffacde22ede1b84480c604ae6cda83362ff6e4a033dd105853670fa5a0ed56%22%2C%22version%22%3A1%7D%7D
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    imdbSha = _imdbShaCredits;
+    imdbSha = _shaMap[ImdbJsonSource.credits] ?? '';
     return super.myConstructURI(searchCriteria, pageNumber: pageNumber);
   }
 
+
   ///
   void updateShaKeys() {
-    _imdbShaCredits = _imdbShaCreditsOld;
+    if (!_updatedSha) {
+      _updatedSha = true;
+      if (Platform.isLinux) {
+        // Mobile platforms do not need to extract the sha keys.
+        return;
+      }
+      unawaited(IMDBShaExtractor(_shaMap, ImdbJsonSource.credits).updateSha());
+    }
   }
 }
 
@@ -85,7 +102,6 @@ class QueryIMDBJsonPaginatedFilmographyDetails
     SearchCriteriaDTO criteria, {
     this.imdbQuery = ImdbJsonSource.actor,
   }) : super(criteria, _imdbOperation) {
-    print('starting');
     updateShaKeys();
   }
 

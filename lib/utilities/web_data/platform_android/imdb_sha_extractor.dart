@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/utilities/web_data/imdb_sha_extractor.dart';
 
 class WebPageShaExtractorAndroid extends IMDBShaExtractor {
@@ -22,8 +23,15 @@ class WebPageShaExtractorAndroid extends IMDBShaExtractor {
   void _clickOnElement(
     InAppWebViewController controller,
     WebUri? url,
-  ) =>
+  ) {
+    if (imdbSource == ImdbJsonSource.credits) {
+      // For credits, we need to click on the "Costume Department" button.
+      unawaited(controller.evaluateJavascript(source: getClickOnCostumeDepartment()));
+    } else {
+      // For other sources, we need to click on the "See all" button.
       unawaited(controller.evaluateJavascript(source: getClickOnSeeAll()));
+    }
+  }
 
   // Check if the sha value has changed and update the map if so.
   void _searchForSha(

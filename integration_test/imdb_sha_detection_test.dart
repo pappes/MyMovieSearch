@@ -54,7 +54,8 @@ Future<Map<ImdbJsonSource, String>> _extractShas() async {
     IMDBShaExtractor(shaMap, ImdbJsonSource.actress).updateSha(),
     IMDBShaExtractor(shaMap, ImdbJsonSource.director).updateSha(),
     IMDBShaExtractor(shaMap, ImdbJsonSource.producer).updateSha(),
-    IMDBShaExtractor(shaMap, ImdbJsonSource.writer).updateSha()
+    IMDBShaExtractor(shaMap, ImdbJsonSource.writer).updateSha(),
+    IMDBShaExtractor(shaMap, ImdbJsonSource.credits).updateSha()
   });
   return shaMap;
 }
@@ -66,7 +67,7 @@ void main() {
 
   runApp(const MyApp());
 
-  testWidgets('Extract SHAs from imdb', (tester) async {
+  testWidgets('Extract SHAs from imdb for common roles', (tester) async {
       await tester.pumpWidget(const MyApp());
 
       final output =await _extractShas();
@@ -74,9 +75,9 @@ void main() {
       // Check the results.
       expect(
         output.length,
-        5,
+        6,
         reason:
-            'SHA map should have 5 entries but has ${output.length}:\n $output',
+            'SHA map should have 6 entries but has ${output.length}:\n $output',
       );
       // This test uses flutter_inappwebview which is configured for Android.
     },

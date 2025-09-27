@@ -68,16 +68,25 @@ abstract class IMDBShaExtractor {
     ImdbJsonSource.director => Uri.parse(imdbAddressDirector),
     ImdbJsonSource.producer => Uri.parse(imdbAddressProducer),
     ImdbJsonSource.writer => Uri.parse(imdbAddressWriter),
+    ImdbJsonSource.credits => Uri.parse(imdbAddressMale)
   };
 
-  // Get the CSS selector for the page element to click on.
+  // Expand all credits for the role.
+  String getClickOnCostumeDepartment() =>
+  getClickOnButton('Costume Department');
+
+  // Expand all credits for the role.
   String getClickOnSeeAll() =>
+  getClickOnButton('See all');
+
+  // Get the CSS selector for the page element to click on.
+  String getClickOnButton(String text) =>
   '''
   // The XPath expression `//button[contains(., "show all")]` means:
   // //         - Search anywhere in the document
   // button     - for a <button> element
   // [contains(., "text")] - where its text content (represented by '.') contains the given text.
-  const xpath = `//button[contains(., 'See all')]`;
+  const xpath = `//button[contains(., '$text')]`;
 
   const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
   result.singleNodeValue.click();
