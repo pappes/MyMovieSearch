@@ -85,6 +85,7 @@ class QueryIMDBJsonPaginatedFilmographyDetails
     SearchCriteriaDTO criteria, {
     this.imdbQuery = ImdbJsonSource.actor,
   }) : super(criteria, _imdbOperation) {
+    print('starting');
     updateShaKeys();
   }
 
@@ -175,7 +176,7 @@ class QueryIMDBJsonPaginatedFilmographyDetails
       _shaMap[ImdbJsonSource.director] = _imdbShaDirector;
       _shaMap[ImdbJsonSource.producer] = _imdbShaProducer;
       _shaMap[ImdbJsonSource.writer] = _imdbShaWriter;
-      if (Platform.isAndroid || Platform.isIOS) {
+      if (Platform.isLinux) {
         // Mobile platforms do not need to extract the sha keys.
         return;
       }

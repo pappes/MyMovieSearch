@@ -1,14 +1,16 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:logger/logger.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
-//import 'package:my_movie_search/utilities/web_data/platform_android/imdb_sha_extractor.dart' if (Platform.isAndroid) 'android_specific.dart'
-//  else 'package:my_movie_search/utilities/web_data/platform_other/imdb_sha_extractor.dart';
-import 'package:my_movie_search/utilities/web_data/platform_other/imdb_sha_extractor.dart'
-    if (Platform.isLinux) 'package:my_movie_search/utilities/web_data/platform_linux/imdb_sha_extractor.dart'
-    if (Platform.isAndroid) 'package:my_movie_search/utilities/web_data/platform_android/imdb_sha_extractor.dart';
+import 'package:my_movie_search/utilities/web_data/platform_android/imdb_sha_extractor.dart';
+import 'package:my_movie_search/utilities/web_data/platform_linux/imdb_sha_extractor.dart';
+import 'package:my_movie_search/utilities/web_data/platform_other/imdb_sha_extractor.dart';
 
-const imdbAddressMale = 'https://www.imdb.com/name/nm0000095';
+const imdbAddressMale = 'https://www.imdb.com/name/nm0000078';
 const imdbAddressFemale = 'https://www.imdb.com/name/nm0000149';
+const imdbAddressDirector = 'https://www.imdb.com/name/nm0000033';
+const imdbAddressWriter = 'https://www.imdb.com/name/nm0000697';
+const imdbAddressProducer = 'https://www.imdb.com/name/nm0000229';
 
 /// Extract the sha from a web page
 /// using a platform specific implementation to drive a web browser.
@@ -19,14 +21,16 @@ abstract class IMDBShaExtractor {
     Map<ImdbJsonSource, String> imdbShaMap,
     ImdbJsonSource imdbSource,
   ) {
-    // Use environemnt variable to drive platform specific implementation
+    // TODO: Use environemnt variable to drive platform specific implementation
     // so that the compiler can tree shake unused code.
-    // ignore: do_not_use_environment
-    if (const bool.fromEnvironment('IS_ANDROID')) {
-      final init = WebPageShaExtractorPlatform.internal(imdbShaMap, imdbSource);
+    if (Platform.isAndroid) {
+      return WebPageShaExtractorAndroid.internal(imdbShaMap, imdbSource);
+    }
+    if (Platform.isLinux) {
+      return WebPageShaExtractorLinux.internal(imdbShaMap, imdbSource);
     }
 
-    return WebPageShaExtractorPlatform.internal(imdbShaMap, imdbSource);
+    return WebPageShaExtractorOther.internal(imdbShaMap, imdbSource);
   }
 
   /// Internal constructor to setup internal state for the instance.
@@ -61,15 +65,28 @@ abstract class IMDBShaExtractor {
   Uri? getImdbAddress() => switch (imdbSource) {
     ImdbJsonSource.actor => Uri.parse(imdbAddressMale),
     ImdbJsonSource.actress => Uri.parse(imdbAddressFemale),
-    ImdbJsonSource.director => Uri.parse(imdbAddressFemale),
-    ImdbJsonSource.producer => Uri.parse(imdbAddressFemale),
-    ImdbJsonSource.writer => Uri.parse(imdbAddressMale),
+    ImdbJsonSource.director => Uri.parse(imdbAddressDirector),
+    ImdbJsonSource.producer => Uri.parse(imdbAddressProducer),
+    ImdbJsonSource.writer => Uri.parse(imdbAddressWriter),
   };
 
-  void setShaValue(String? newSha) {
+  // Get the CSS selector for the page element to click on.
+  String? getClickableSelectorAddress(ImdbJsonSource source) => switch (source) {
+    ImdbJsonSource.actor => '#accordion-item-actor-previous-projects > div > div > span > button',
+    ImdbJsonSource.actress =>
+      '#accordion-item-actress-previous-projects > div > div > span > button',
+    ImdbJsonSource.director => '#accordion-item-director-previous-projects > div > div > span > button',
+    ImdbJsonSource.producer => '#accordion-item-producer-previous-projects > div > div > span > button',
+    ImdbJsonSource.writer =>
+      '#accordion-item-writer-previous-projects > div > div > span > button',
+  };
+
+  bool setShaValue(String? newSha) {
     if (newSha != null) {
       Logger().i('Extracted sha for $imdbSource: $newSha');
       imdbShaMap[imdbSource] = newSha;
+      return true;
     }
+    return false;
   }
 }
