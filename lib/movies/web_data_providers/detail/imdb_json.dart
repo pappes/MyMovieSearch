@@ -94,19 +94,19 @@ class QueryIMDBJsonPaginatedFilmographyDetails
   // These values are used when clicking "see all" or expanding the accordion.
   // from https://www.imdb.com/name/nm0000095
   static const _imdbShaActor =
-      '7ed0c54ec0a95c77fde16a992d918034e8ff37dfc79934b49d8276fa40361aa2';
+      'ea0a755edec9c6292437b817e9a91e81e98262e85afd49bc1d5c7a0a498cf39b';
   // from https://www.imdb.com/name/nm0000149
   static const _imdbShaActress =
-      'e514283c305a9580f246a87d6b492695244bac357b9bf4c8b9f7c9f68abcfc1d';
+      'f0aa46008175b841ba1364b1828ab30fcf4d989f4c617e196375fa29c81d3ace';
   // from https://www.imdb.com/name/nm0000095
   static const _imdbShaDirector =
-      '229d41acc1f3a84c7797d9aa1bc9d039d4ac45dd96d98e744c12433ff40c5014';
+      'dcf16aca607e60babaf343a7417bd18e6d8fad641a1f7c8903183a48d159e548';
   // from https://www.imdb.com/name/nm0000095
   static const _imdbShaProducer =
-      '8dcb18732c6bef2c1a97e4e9549f6ff0141f2c8e8b3f1dd41b2ff0be1368d5e8';
+      'be52ea1e745e3977004643837cb6664e43dc494986f716129a5c16deed96980c';
   // from https://www.imdb.com/name/nm0000095
   static const _imdbShaWriter =
-      'beb0469e88579c36dc67d25352be48e1efc749ed800aec44c468a275fc9e5fe6';
+      'c9c5d1a847c1f0f49ed3581d36af07c5a1f113d8d415b459ebc517b6fbec9a55';
 
   static bool _updatedSha = false;
   static final _shaMap = {

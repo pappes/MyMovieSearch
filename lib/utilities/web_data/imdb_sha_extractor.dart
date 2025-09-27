@@ -71,15 +71,17 @@ abstract class IMDBShaExtractor {
   };
 
   // Get the CSS selector for the page element to click on.
-  String? getClickableSelectorAddress(ImdbJsonSource source) => switch (source) {
-    ImdbJsonSource.actor => '#accordion-item-actor-previous-projects > div > div > span > button',
-    ImdbJsonSource.actress =>
-      '#accordion-item-actress-previous-projects > div > div > span > button',
-    ImdbJsonSource.director => '#accordion-item-director-previous-projects > div > div > span > button',
-    ImdbJsonSource.producer => '#accordion-item-producer-previous-projects > div > div > span > button',
-    ImdbJsonSource.writer =>
-      '#accordion-item-writer-previous-projects > div > div > span > button',
-  };
+  String getClickOnSeeAll() =>
+  '''
+  // The XPath expression `//button[contains(., "show all")]` means:
+  // //         - Search anywhere in the document
+  // button     - for a <button> element
+  // [contains(., "text")] - where its text content (represented by '.') contains the given text.
+  const xpath = `//button[contains(., 'See all')]`;
+
+  const result = document.evaluate(xpath, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null);
+  result.singleNodeValue.click();
+''';
 
   bool setShaValue(String? newSha) {
     if (newSha != null) {

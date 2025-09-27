@@ -1,3 +1,5 @@
+//@TestOn('android')
+
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -12,8 +14,8 @@ import 'package:my_movie_search/utilities/web_data/imdb_sha_extractor.dart';
 /// which requires a real device or emulator to run
 /// hence this is an integration test with a full MyApp widget.
 ///
-/// must be launched from the command line with:
-/// flutter test integration_test/imdb_sha_detection_test.dart  -d 192.168.0.33:41471
+/// to execute on android must be launched from the command line with:
+/// flutter test integration_test/imdb_sha_detection_test.dart -d 192.168.0.33:41471
 ////////////////////////////////////////////////////////////////////////////////
 
 
@@ -45,7 +47,7 @@ class _MyWebViewWidgetState extends State<MyWebViewWidget> {
 
 Future<Map<ImdbJsonSource, String>> _extractShas() async {
 
-print('extracting shas');
+  print('extracting shas');
   final shaMap = <ImdbJsonSource, String>{};
   await Future.wait({
     IMDBShaExtractor(shaMap, ImdbJsonSource.actor).updateSha(),
@@ -65,19 +67,20 @@ void main() {
   runApp(const MyApp());
 
   testWidgets('Extract SHAs from imdb', (tester) async {
-    await tester.pumpWidget(const MyApp());
+      await tester.pumpWidget(const MyApp());
 
-    final output =await _extractShas();
+      final output =await _extractShas();
 
-    // Check the results.
-    expect(
-      output.length,
-      5,
-      reason:
-          'SHA map should have 5 entries but has ${output.length}:\n $output',
-    );
-    // This test uses flutter_inappwebview which is configured for Android.
-  },
-  timeout: const Timeout(Duration(seconds: 60)), 
-  skip: !Platform.isAndroid);
+      // Check the results.
+      expect(
+        output.length,
+        5,
+        reason:
+            'SHA map should have 5 entries but has ${output.length}:\n $output',
+      );
+      // This test uses flutter_inappwebview which is configured for Android.
+    },
+    timeout: const Timeout(Duration(seconds: 60)), 
+    skip: !Platform.isAndroid
+  );
 }

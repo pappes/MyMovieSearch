@@ -22,14 +22,8 @@ class WebPageShaExtractorAndroid extends IMDBShaExtractor {
   void _clickOnElement(
     InAppWebViewController controller,
     WebUri? url,
-  ) {
-    final element = getClickableSelectorAddress(imdbSource);
-    if (element != null) {
-      final js = 'document.querySelector("$element").click();';
-      print('clicking on $element of $url');
-      unawaited(controller.evaluateJavascript(source: js));
-    }
-  }
+  ) =>
+      unawaited(controller.evaluateJavascript(source: getClickOnSeeAll()));
 
   // Check if the sha value has changed and update the map if so.
   void _searchForSha(

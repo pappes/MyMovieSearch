@@ -17,7 +17,6 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryIMDBCastDetails
     extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBJsonDetails {
-  /////********** delete ScrapeIMDBCastDetails*/
   QueryIMDBCastDetails(super.criteria);
 
   static const _baseURL = 'https://www.imdb.com/title/';
