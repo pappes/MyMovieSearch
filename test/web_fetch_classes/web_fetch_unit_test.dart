@@ -296,6 +296,16 @@ void main() {
     test('myFormatInputAsText()', () {
       expect(testClass.myFormatInputAsText(), criteriaDto.criteriaTitle);
     });
+    // Simple URI request.
+    test('myConstructURI()', () {
+      expect(
+        testClass.myConstructURI(
+          'includes page number', 
+          pageNumber: testClass.myGetPageNumber(),
+        ).toString(), 
+        'https://www.unknown.com/title/includes%20page%20number/?ref_=fn_tt_tt_1',
+      );
+    });
     // Default not cached.
     test('myIsResultCached()', () async {
       expect(testClass.myIsResultCached(), completion(false));

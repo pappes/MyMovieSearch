@@ -1,78 +1,136 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
+import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
+import 'package:provider/provider.dart';
 import 'mmsnav_unit_test.mocks.dart';
+
+// To regenerate mocks run the following command
+// flutter pub run build_runner build --delete-conflicting-outputs
+@GenerateNiceMocks([
+  MockSpec<MMSFlutterCanvas>(), 
+  MockSpec<GoRouter>(), 
+  MockSpec<FirebaseApplicationState>(),
+])
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Mock MMSFlutterCanvas
 ////////////////////////////////////////////////////////////////////////////////
 
-// To regenerate mocks run the following command
-// flutter pub run build_runner build --delete-conflicting-outputs
-@GenerateMocks([MMSFlutterCanvas])
-class TestMMSFlutterCanvas {
-  TestMMSFlutterCanvas() {
-    // Use Mockito to return a string describing the parameters.
-    // ignore: discarded_futures
-    when(mockCanvas.viewWebPage(any)).thenAnswer((invocation) {
-      final url = invocation.positionalArguments[0] as String;
-      result = url;
-      return Future.value(null);
-    });
-    // ignore: discarded_futures
-    when(mockCanvas.viewFlutterPage(any)).thenAnswer((invocation) {
-      final page = invocation.positionalArguments[0] as RouteInfo;
-      result = page.routePath.name;
-      return Future.value(null);
-    });
-  }
-
-  String? result;
-  final mockCanvas = MockMMSFlutterCanvas();
-}
-
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
   /// Non Mocked Unit tests
 ////////////////////////////////////////////////////////////////////////////////
+      
+  group('MMSNav web page unit tests', () {
+    final testClass = RouteInfo(
+        ScreenRoute.persondetails, // Dummy object for params
+        <String, dynamic>{},
+        'uniqueId',
+      );
+
+    test('toString()', ()  {
+      expect(
+        testClass.toString(),
+        '{"path":"ScreenRoute.persondetails","params":"{}","ref":"uniqueId"}',
+      );
+    });
+  });
 
   group('MMSNav web page unit tests', () {
-    final testCanvas = TestMMSFlutterCanvas();
-    final testClass = MMSNav.headless(testCanvas.mockCanvas);
+    late MockMMSFlutterCanvas mockCanvas;
+    late MMSNav testClass;
+    late String? navigationResult;
+
+    setUp(() {
+      mockCanvas = MockMMSFlutterCanvas();
+      testClass = MMSNav.headless(mockCanvas);
+      navigationResult = null;
+
+      when(mockCanvas.viewWebPage(any)).thenAnswer((invocation) {
+        navigationResult = invocation.positionalArguments[0] as String;
+        return Future.value(null);
+      });
+      when(mockCanvas.viewFlutterPage(any)).thenAnswer((invocation) {
+        navigationResult = (invocation.positionalArguments[0] as RouteInfo).routePath.name;
+        return Future.value(null);
+      });
+    });
 
     test('viewWebPage()', () async {
       await testClass.viewWebPage('unknown');
-      expect(testCanvas.result, 'unknown');
+      expect(navigationResult, 'unknown');
+    });
+
+    test('showResultsPage()', () async {
+      await testClass.showResultsPage(
+        SearchCriteriaDTO().init(SearchCriteriaType.none)
+      );
+      expect(navigationResult, 'searchresults');
+    });
+
+    test('showCriteriaPage()', () async {
+      await testClass.showCriteriaPage(
+        SearchCriteriaDTO().init(SearchCriteriaType.none)
+      );
+      // This uses viewFlutterRootPage, which we haven't mocked yet.
+      // For now, let's verify viewFlutterPage wasn't called.
+      verifyNever(mockCanvas.viewFlutterPage(any));
+    });
+
+    test('showDVDsPage()', () async {
+      await testClass.showDVDsPage();
+      expect(navigationResult, 'searchresults');
     });
 
     test('searchForRelated()', () async {
       await testClass.searchForRelated('unknown', []);
-      expect(
-        testCanvas.result,
-        'searchresults',
+      expect(navigationResult, 'searchresults');
+    });
+
+    test('searchForRelated() 1 episode result', () async {
+      await testClass.searchForRelated(
+        'unknown',
+        [MovieResultDTO().init(type: MovieContentType.episode.toString())]
       );
+      expect(navigationResult, 'moviedetails');
+    });
+
+    test('searchForRelated() 1 error result', () async {
+      await testClass.searchForRelated(
+        'unknown',
+        [MovieResultDTO().init(type: MovieContentType.error.toString())]
+      );
+      expect(navigationResult, 'errordetails');
     });
 
     test('getMoviesForKeyword()', () async {
       await testClass.showMoviesForKeyword('unknown');
-      expect(
-        testCanvas.result,
-        'searchresults',
-      );
+      expect(navigationResult, 'searchresults');
+    });
+
+    test('getMoreKeywords()', () async {
+      await testClass.getMoreKeywords(MovieResultDTO());
+      expect(navigationResult, 'searchresults');
     });
 
     test('getDownloads()', () async {
       await testClass.showDownloads('unknown', MovieResultDTO());
-      expect(
-        testCanvas.result,
-        'searchresults',
-      );
+      expect(navigationResult, 'searchresults');
+    });
+
+    test('addLocation()', () async {
+      await testClass.addLocation(MovieResultDTO());
+      expect(navigationResult, 'addlocation');
     });
 
     test('getDetailsPage()', () {
@@ -199,8 +257,13 @@ void main() {
           imageUrl: 'http://something.com',
         );
         await testClass.resultDrillDown(movie);
+        if (expected.startsWith('http')) {
+          verify(mockCanvas.viewWebPage(expected));
+        } else {
+          verify(mockCanvas.viewFlutterPage(any));
+        }
         expect(
-          testCanvas.result,
+          navigationResult,
           expected,
           reason: 'criteria: id=$id type=$type',
         );
@@ -293,6 +356,72 @@ void main() {
         'moviedetails',
         type: MovieContentType.title.toString(),
       );
+
+      await checkCalledPage(
+        '12345',
+        'searchresults',
+        type: MovieContentType.barcode.toString(),
+      );
+
+      await checkCalledPage(
+        'http://www.google.com',
+        'http://www.google.com',
+        type: MovieContentType.navigation.toString(),
+      );
+
+      await checkCalledPage(
+        'tt1234',
+        'searchresults',
+        type: MovieContentType.navigation.toString(),
+      );
     });
   });
+
+  group('MMSFlutterCanvas with mocked GoRouter', () {
+    late MockGoRouter mockGoRouter;
+    late MockFirebaseApplicationState mockFirebaseState;
+    late String pushedRouteName;
+
+    setUp(() {
+      mockGoRouter = MockGoRouter();
+      mockFirebaseState = MockFirebaseApplicationState();
+      pushedRouteName = '';
+ 
+      when(mockGoRouter.pushNamed(
+        any,
+        extra: anyNamed('extra'),
+        pathParameters: anyNamed('pathParameters'),
+        queryParameters: anyNamed('queryParameters'),
+      )).thenAnswer((invocation) {
+        pushedRouteName = invocation.positionalArguments[0] as String;
+        return Future.value(null);
+      });
+
+      // Stub the call to prevent null pointer exceptions if your code uses it
+      when(mockFirebaseState.addRecord(any, message: anyNamed('message'), id: anyNamed('id'))).thenAnswer((_) async => true);
+    });
+/*
+    testWidgets('viewFlutterPage uses context.pushNamed',
+        (WidgetTester tester) async {
+      // To test a widget that needs a BuildContext with a GoRouter,
+      // we wrap it in an InheritedGoRouter that provides our mock.
+      await tester.pumpWidget(
+        ChangeNotifierProvider<FirebaseApplicationState>.value(
+          value: mockFirebaseState,
+          child: InheritedGoRouter(
+            goRouter: mockGoRouter,
+            child: Builder(builder: (context) {
+                final canvas = MMSFlutterCanvas(context);
+                final pageInfo = RouteInfo(ScreenRoute.moviedetails, {}, 'tt123');
+                canvas.viewFlutterPage(pageInfo);
+                // Return a placeholder widget.
+                return Container();
+              }),
+          ),
+        ),
+      );
+      expect(pushedRouteName, 'moviedetails');
+    });*/
+  });
+
 }

@@ -40,7 +40,7 @@ class RouteInfo {
 
   @override
   String toString() => json.encode({
-    'path': routePath,
+    'path': routePath.toString(),
     'params': params.toString(),
     'ref': reference,
   });

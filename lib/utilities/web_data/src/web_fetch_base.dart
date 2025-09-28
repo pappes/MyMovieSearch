@@ -1,5 +1,5 @@
 /// This library provides a framework for fetching different types of web data
-/// in a concsistent manner.
+/// in a consistent manner.
 library;
 
 import 'dart:async' show StreamController, unawaited;
@@ -261,7 +261,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Should be overridden by child classes.
   @mustBeOverridden
-  String myDataSourceName() => 'unknown';
+  String myDataSourceName();
 
   /// Define alternate [Stream] of data for offline operation.
   ///
@@ -476,8 +476,6 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       yield* Stream.error(error);
     }
   }
-
-  Stream<String> broken(Stream<String> webStream) => Stream.error('stuiff');
 
   /// Convert dart [Map] to [OUTPUT_TYPE] object data with exception handling.
   ///

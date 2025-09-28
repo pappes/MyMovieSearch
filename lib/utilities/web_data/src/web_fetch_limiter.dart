@@ -14,8 +14,6 @@ class WebFetchLimiter {
   int? _instanceLimit;
   int currentUsage = 0;
 
-  bool get limitExceeded => false;
-
   int get limit => _instanceLimit ?? _classLimit ?? double.maxFinite.toInt();
   set limit(int? newLimit) => _instanceLimit = newLimit;
 
