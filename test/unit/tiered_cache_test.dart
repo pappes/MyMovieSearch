@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
 
-import 'test_helper.dart';
+import '../test_helper.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Unit tests

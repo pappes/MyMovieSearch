@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'test_helper.dart';
+import '../test_helper.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Helper functions

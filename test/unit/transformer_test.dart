@@ -2,8 +2,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
-import 'test_data/imdb_suggestion_converter_data.dart';
-import 'test_helper.dart';
+import '../test_data/imdb_suggestion_converter_data.dart';
+import '../test_helper.dart';
 
 void main() {
 ////////////////////////////////////////////////////////////////////////////////

@@ -13,7 +13,7 @@ import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.da
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
-import 'test_helper.dart';
+import '../test_helper.dart';
 
 class ThreadTest {
   static var _counter = 0;

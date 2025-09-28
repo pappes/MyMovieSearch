@@ -1,5 +1,3 @@
-//@TestOn('android')
-
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,15 +8,13 @@ import 'package:my_movie_search/utilities/web_data/imdb_sha_extractor.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real IMDB endpoint!
-/// QueryIMDBJsonPaginatedFilmographyDetails uses a webviewController
-/// which requires a real device or emulator to run
+///     IMDBShaExtractor uses a webviewController
+/// which requires a real android device or emulator to run
 /// hence this is an integration test with a full MyApp widget.
 ///
-/// to execute on android must be launched from the command line with:
+/// Android device must be connected or launch from the command line with:
 /// flutter test integration_test/imdb_sha_detection_test.dart -d 192.168.0.33:41471
 ////////////////////////////////////////////////////////////////////////////////
-
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -44,10 +40,7 @@ class _MyWebViewWidgetState extends State<MyWebViewWidget> {
   Widget build(BuildContext context) => const Text('Sha extractor');
 }
 
-
 Future<Map<ImdbJsonSource, String>> _extractShas() async {
-
-  print('extracting shas');
   final shaMap = <ImdbJsonSource, String>{};
   await Future.wait({
     IMDBShaExtractor(shaMap, ImdbJsonSource.actor).updateSha(),
@@ -70,7 +63,7 @@ void main() {
   testWidgets('Extract SHAs from imdb for common roles', (tester) async {
       await tester.pumpWidget(const MyApp());
 
-      final output =await _extractShas();
+      final output = await _extractShas();
 
       // Check the results.
       expect(
