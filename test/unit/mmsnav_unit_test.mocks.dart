@@ -3,16 +3,15 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i5;
-import 'dart:ui' as _i8;
+import 'dart:async' as _i3;
+import 'dart:ui' as _i6;
 
-import 'package:flutter/material.dart' as _i3;
-import 'package:go_router/go_router.dart' as _i2;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:mockito/src/dummies.dart' as _i5;
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart'
-    as _i7;
-import 'package:my_movie_search/utilities/navigation/web_nav.dart' as _i4;
+    as _i4;
+import 'package:my_movie_search/persistence/nav_log.dart' as _i7;
+import 'package:my_movie_search/utilities/navigation/web_nav.dart' as _i2;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -29,77 +28,36 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart' as _i4;
 // ignore_for_file: subtype_of_sealed_class
 // ignore_for_file: invalid_use_of_internal_member
 
-class _FakeGoRouterState_0 extends _i1.SmartFake implements _i2.GoRouterState {
-  _FakeGoRouterState_0(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeRouteConfiguration_1 extends _i1.SmartFake
-    implements _i2.RouteConfiguration {
-  _FakeRouteConfiguration_1(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeBackButtonDispatcher_2 extends _i1.SmartFake
-    implements _i3.BackButtonDispatcher {
-  _FakeBackButtonDispatcher_2(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeGoRouterDelegate_3 extends _i1.SmartFake
-    implements _i2.GoRouterDelegate {
-  _FakeGoRouterDelegate_3(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeGoRouteInformationProvider_4 extends _i1.SmartFake
-    implements _i2.GoRouteInformationProvider {
-  _FakeGoRouteInformationProvider_4(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
-class _FakeGoRouteInformationParser_5 extends _i1.SmartFake
-    implements _i2.GoRouteInformationParser {
-  _FakeGoRouteInformationParser_5(Object parent, Invocation parentInvocation)
-    : super(parent, parentInvocation);
-}
-
 /// A class which mocks [MMSFlutterCanvas].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockMMSFlutterCanvas extends _i1.Mock implements _i4.MMSFlutterCanvas {
+class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
   @override
-  set context(_i3.BuildContext? value) => super.noSuchMethod(
-    Invocation.setter(#context, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  _i5.Future<Object?> viewWebPage(String? url) =>
+  _i3.Future<Object?> viewWebPage(String? url) =>
       (super.noSuchMethod(
             Invocation.method(#viewWebPage, [url]),
-            returnValue: _i5.Future<Object?>.value(),
-            returnValueForMissingStub: _i5.Future<Object?>.value(),
+            returnValue: _i3.Future<Object?>.value(),
+            returnValueForMissingStub: _i3.Future<Object?>.value(),
           )
-          as _i5.Future<Object?>);
+          as _i3.Future<Object?>);
 
   @override
-  _i5.Future<Object?> viewFlutterPage(_i4.RouteInfo? page) =>
+  _i3.Future<Object?> viewFlutterPage(_i2.RouteInfo? page) =>
       (super.noSuchMethod(
             Invocation.method(#viewFlutterPage, [page]),
-            returnValue: _i5.Future<Object?>.value(),
-            returnValueForMissingStub: _i5.Future<Object?>.value(),
+            returnValue: _i3.Future<Object?>.value(),
+            returnValueForMissingStub: _i3.Future<Object?>.value(),
           )
-          as _i5.Future<Object?>);
+          as _i3.Future<Object?>);
 
   @override
-  _i5.Future<Object?> viewFlutterRootPage(_i4.RouteInfo? page) =>
+  _i3.Future<Object?> viewFlutterRootPage(_i2.RouteInfo? page) =>
       (super.noSuchMethod(
             Invocation.method(#viewFlutterRootPage, [page]),
-            returnValue: _i5.Future<Object?>.value(),
-            returnValueForMissingStub: _i5.Future<Object?>.value(),
+            returnValue: _i3.Future<Object?>.value(),
+            returnValueForMissingStub: _i3.Future<Object?>.value(),
           )
-          as _i5.Future<Object?>);
+          as _i3.Future<Object?>);
 
   @override
   bool closeCurrentScreen() =>
@@ -111,349 +69,22 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i4.MMSFlutterCanvas {
           as bool);
 }
 
-/// A class which mocks [GoRouter].
-///
-/// See the documentation for Mockito's code generation for more information.
-class MockGoRouter extends _i1.Mock implements _i2.GoRouter {
-  @override
-  _i2.GoRouterState get state =>
-      (super.noSuchMethod(
-            Invocation.getter(#state),
-            returnValue: _FakeGoRouterState_0(this, Invocation.getter(#state)),
-            returnValueForMissingStub: _FakeGoRouterState_0(
-              this,
-              Invocation.getter(#state),
-            ),
-          )
-          as _i2.GoRouterState);
-
-  @override
-  _i2.RouteConfiguration get configuration =>
-      (super.noSuchMethod(
-            Invocation.getter(#configuration),
-            returnValue: _FakeRouteConfiguration_1(
-              this,
-              Invocation.getter(#configuration),
-            ),
-            returnValueForMissingStub: _FakeRouteConfiguration_1(
-              this,
-              Invocation.getter(#configuration),
-            ),
-          )
-          as _i2.RouteConfiguration);
-
-  @override
-  _i3.BackButtonDispatcher get backButtonDispatcher =>
-      (super.noSuchMethod(
-            Invocation.getter(#backButtonDispatcher),
-            returnValue: _FakeBackButtonDispatcher_2(
-              this,
-              Invocation.getter(#backButtonDispatcher),
-            ),
-            returnValueForMissingStub: _FakeBackButtonDispatcher_2(
-              this,
-              Invocation.getter(#backButtonDispatcher),
-            ),
-          )
-          as _i3.BackButtonDispatcher);
-
-  @override
-  _i2.GoRouterDelegate get routerDelegate =>
-      (super.noSuchMethod(
-            Invocation.getter(#routerDelegate),
-            returnValue: _FakeGoRouterDelegate_3(
-              this,
-              Invocation.getter(#routerDelegate),
-            ),
-            returnValueForMissingStub: _FakeGoRouterDelegate_3(
-              this,
-              Invocation.getter(#routerDelegate),
-            ),
-          )
-          as _i2.GoRouterDelegate);
-
-  @override
-  _i2.GoRouteInformationProvider get routeInformationProvider =>
-      (super.noSuchMethod(
-            Invocation.getter(#routeInformationProvider),
-            returnValue: _FakeGoRouteInformationProvider_4(
-              this,
-              Invocation.getter(#routeInformationProvider),
-            ),
-            returnValueForMissingStub: _FakeGoRouteInformationProvider_4(
-              this,
-              Invocation.getter(#routeInformationProvider),
-            ),
-          )
-          as _i2.GoRouteInformationProvider);
-
-  @override
-  _i2.GoRouteInformationParser get routeInformationParser =>
-      (super.noSuchMethod(
-            Invocation.getter(#routeInformationParser),
-            returnValue: _FakeGoRouteInformationParser_5(
-              this,
-              Invocation.getter(#routeInformationParser),
-            ),
-            returnValueForMissingStub: _FakeGoRouteInformationParser_5(
-              this,
-              Invocation.getter(#routeInformationParser),
-            ),
-          )
-          as _i2.GoRouteInformationParser);
-
-  @override
-  bool get overridePlatformDefaultLocation =>
-      (super.noSuchMethod(
-            Invocation.getter(#overridePlatformDefaultLocation),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  set configuration(_i2.RouteConfiguration? value) => super.noSuchMethod(
-    Invocation.setter(#configuration, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set routerDelegate(_i2.GoRouterDelegate? value) => super.noSuchMethod(
-    Invocation.setter(#routerDelegate, value),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  set routeInformationProvider(_i2.GoRouteInformationProvider? value) =>
-      super.noSuchMethod(
-        Invocation.setter(#routeInformationProvider, value),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  set routeInformationParser(_i2.GoRouteInformationParser? value) =>
-      super.noSuchMethod(
-        Invocation.setter(#routeInformationParser, value),
-        returnValueForMissingStub: null,
-      );
-
-  @override
-  bool canPop() =>
-      (super.noSuchMethod(
-            Invocation.method(#canPop, []),
-            returnValue: false,
-            returnValueForMissingStub: false,
-          )
-          as bool);
-
-  @override
-  String namedLocation(
-    String? name, {
-    Map<String, String>? pathParameters = const {},
-    Map<String, dynamic>? queryParameters = const {},
-    String? fragment,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(
-              #namedLocation,
-              [name],
-              {
-                #pathParameters: pathParameters,
-                #queryParameters: queryParameters,
-                #fragment: fragment,
-              },
-            ),
-            returnValue: _i6.dummyValue<String>(
-              this,
-              Invocation.method(
-                #namedLocation,
-                [name],
-                {
-                  #pathParameters: pathParameters,
-                  #queryParameters: queryParameters,
-                  #fragment: fragment,
-                },
-              ),
-            ),
-            returnValueForMissingStub: _i6.dummyValue<String>(
-              this,
-              Invocation.method(
-                #namedLocation,
-                [name],
-                {
-                  #pathParameters: pathParameters,
-                  #queryParameters: queryParameters,
-                  #fragment: fragment,
-                },
-              ),
-            ),
-          )
-          as String);
-
-  @override
-  void go(String? location, {Object? extra}) => super.noSuchMethod(
-    Invocation.method(#go, [location], {#extra: extra}),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void restore(_i2.RouteMatchList? matchList) => super.noSuchMethod(
-    Invocation.method(#restore, [matchList]),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void goNamed(
-    String? name, {
-    Map<String, String>? pathParameters = const {},
-    Map<String, dynamic>? queryParameters = const {},
-    Object? extra,
-    String? fragment,
-  }) => super.noSuchMethod(
-    Invocation.method(
-      #goNamed,
-      [name],
-      {
-        #pathParameters: pathParameters,
-        #queryParameters: queryParameters,
-        #extra: extra,
-        #fragment: fragment,
-      },
-    ),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  _i5.Future<T?> push<T extends Object?>(String? location, {Object? extra}) =>
-      (super.noSuchMethod(
-            Invocation.method(#push, [location], {#extra: extra}),
-            returnValue: _i5.Future<T?>.value(),
-            returnValueForMissingStub: _i5.Future<T?>.value(),
-          )
-          as _i5.Future<T?>);
-
-  @override
-  _i5.Future<T?> pushNamed<T extends Object?>(
-    String? name, {
-    Map<String, String>? pathParameters = const {},
-    Map<String, dynamic>? queryParameters = const {},
-    Object? extra,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(
-              #pushNamed,
-              [name],
-              {
-                #pathParameters: pathParameters,
-                #queryParameters: queryParameters,
-                #extra: extra,
-              },
-            ),
-            returnValue: _i5.Future<T?>.value(),
-            returnValueForMissingStub: _i5.Future<T?>.value(),
-          )
-          as _i5.Future<T?>);
-
-  @override
-  _i5.Future<T?> pushReplacement<T extends Object?>(
-    String? location, {
-    Object? extra,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(#pushReplacement, [location], {#extra: extra}),
-            returnValue: _i5.Future<T?>.value(),
-            returnValueForMissingStub: _i5.Future<T?>.value(),
-          )
-          as _i5.Future<T?>);
-
-  @override
-  _i5.Future<T?> pushReplacementNamed<T extends Object?>(
-    String? name, {
-    Map<String, String>? pathParameters = const {},
-    Map<String, dynamic>? queryParameters = const {},
-    Object? extra,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(
-              #pushReplacementNamed,
-              [name],
-              {
-                #pathParameters: pathParameters,
-                #queryParameters: queryParameters,
-                #extra: extra,
-              },
-            ),
-            returnValue: _i5.Future<T?>.value(),
-            returnValueForMissingStub: _i5.Future<T?>.value(),
-          )
-          as _i5.Future<T?>);
-
-  @override
-  _i5.Future<T?> replace<T>(String? location, {Object? extra}) =>
-      (super.noSuchMethod(
-            Invocation.method(#replace, [location], {#extra: extra}),
-            returnValue: _i5.Future<T?>.value(),
-            returnValueForMissingStub: _i5.Future<T?>.value(),
-          )
-          as _i5.Future<T?>);
-
-  @override
-  _i5.Future<T?> replaceNamed<T>(
-    String? name, {
-    Map<String, String>? pathParameters = const {},
-    Map<String, dynamic>? queryParameters = const {},
-    Object? extra,
-  }) =>
-      (super.noSuchMethod(
-            Invocation.method(
-              #replaceNamed,
-              [name],
-              {
-                #pathParameters: pathParameters,
-                #queryParameters: queryParameters,
-                #extra: extra,
-              },
-            ),
-            returnValue: _i5.Future<T?>.value(),
-            returnValueForMissingStub: _i5.Future<T?>.value(),
-          )
-          as _i5.Future<T?>);
-
-  @override
-  void pop<T extends Object?>([T? result]) => super.noSuchMethod(
-    Invocation.method(#pop, [result]),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void refresh() => super.noSuchMethod(
-    Invocation.method(#refresh, []),
-    returnValueForMissingStub: null,
-  );
-
-  @override
-  void dispose() => super.noSuchMethod(
-    Invocation.method(#dispose, []),
-    returnValueForMissingStub: null,
-  );
-}
-
 /// A class which mocks [FirebaseApplicationState].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFirebaseApplicationState extends _i1.Mock
-    implements _i7.FirebaseApplicationState {
+    implements _i4.FirebaseApplicationState {
   @override
-  _i5.Future<bool> get loggedIn =>
+  _i3.Future<bool> get loggedIn =>
       (super.noSuchMethod(
             Invocation.getter(#loggedIn),
-            returnValue: _i5.Future<bool>.value(false),
-            returnValueForMissingStub: _i5.Future<bool>.value(false),
+            returnValue: _i3.Future<bool>.value(false),
+            returnValueForMissingStub: _i3.Future<bool>.value(false),
           )
-          as _i5.Future<bool>);
+          as _i3.Future<bool>);
 
   @override
-  set loggedIn(_i5.Future<bool>? value) => super.noSuchMethod(
+  set loggedIn(_i3.Future<bool>? value) => super.noSuchMethod(
     Invocation.setter(#loggedIn, value),
     returnValueForMissingStub: null,
   );
@@ -486,46 +117,46 @@ class MockFirebaseApplicationState extends _i1.Mock
           as bool);
 
   @override
-  _i5.Future<void> init() =>
+  _i3.Future<void> init() =>
       (super.noSuchMethod(
             Invocation.method(#init, []),
-            returnValue: _i5.Future<void>.value(),
-            returnValueForMissingStub: _i5.Future<void>.value(),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
           )
-          as _i5.Future<void>);
+          as _i3.Future<void>);
 
   @override
-  _i5.Future<bool> login() =>
+  _i3.Future<bool> login() =>
       (super.noSuchMethod(
             Invocation.method(#login, []),
-            returnValue: _i5.Future<bool>.value(false),
-            returnValueForMissingStub: _i5.Future<bool>.value(false),
+            returnValue: _i3.Future<bool>.value(false),
+            returnValueForMissingStub: _i3.Future<bool>.value(false),
           )
-          as _i5.Future<bool>);
+          as _i3.Future<bool>);
 
   @override
-  _i5.Future<bool> platformLogin() =>
+  _i3.Future<bool> platformLogin() =>
       (super.noSuchMethod(
             Invocation.method(#platformLogin, []),
-            returnValue: _i5.Future<bool>.value(false),
-            returnValueForMissingStub: _i5.Future<bool>.value(false),
+            returnValue: _i3.Future<bool>.value(false),
+            returnValueForMissingStub: _i3.Future<bool>.value(false),
           )
-          as _i5.Future<bool>);
+          as _i3.Future<bool>);
 
   @override
-  _i5.Future<dynamic> fetchRecord(
+  _i3.Future<dynamic> fetchRecord(
     String? collectionPath, {
     required String? id,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#fetchRecord, [collectionPath], {#id: id}),
-            returnValue: _i5.Future<dynamic>.value(),
-            returnValueForMissingStub: _i5.Future<dynamic>.value(),
+            returnValue: _i3.Future<dynamic>.value(),
+            returnValueForMissingStub: _i3.Future<dynamic>.value(),
           )
-          as _i5.Future<dynamic>);
+          as _i3.Future<dynamic>);
 
   @override
-  _i5.Stream<dynamic> fetchRecords(
+  _i3.Stream<dynamic> fetchRecords(
     String? collectionPath, {
     String? filterFieldPath,
     dynamic isEqualTo,
@@ -539,7 +170,7 @@ class MockFirebaseApplicationState extends _i1.Mock
     List<dynamic>? whereIn,
     List<dynamic>? whereNotIn,
     bool? isNull = false,
-    _i5.Completer<bool>? initalDataLoadComplete,
+    _i3.Completer<bool>? initalDataLoadComplete,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
@@ -561,13 +192,13 @@ class MockFirebaseApplicationState extends _i1.Mock
                 #initalDataLoadComplete: initalDataLoadComplete,
               },
             ),
-            returnValue: _i5.Stream<dynamic>.empty(),
-            returnValueForMissingStub: _i5.Stream<dynamic>.empty(),
+            returnValue: _i3.Stream<dynamic>.empty(),
+            returnValueForMissingStub: _i3.Stream<dynamic>.empty(),
           )
-          as _i5.Stream<dynamic>);
+          as _i3.Stream<dynamic>);
 
   @override
-  _i5.Future<dynamic>? addRecord(
+  _i3.Future<dynamic>? addRecord(
     String? collectionPath, {
     String? message,
     String? id,
@@ -580,7 +211,7 @@ class MockFirebaseApplicationState extends _i1.Mock
             ),
             returnValueForMissingStub: null,
           )
-          as _i5.Future<dynamic>?);
+          as _i3.Future<dynamic>?);
 
   @override
   Map<String, dynamic> newRecord(String? message) =>
@@ -595,11 +226,11 @@ class MockFirebaseApplicationState extends _i1.Mock
   String derivedUser(String? device) =>
       (super.noSuchMethod(
             Invocation.method(#derivedUser, [device]),
-            returnValue: _i6.dummyValue<String>(
+            returnValue: _i5.dummyValue<String>(
               this,
               Invocation.method(#derivedUser, [device]),
             ),
-            returnValueForMissingStub: _i6.dummyValue<String>(
+            returnValueForMissingStub: _i5.dummyValue<String>(
               this,
               Invocation.method(#derivedUser, [device]),
             ),
@@ -616,13 +247,13 @@ class MockFirebaseApplicationState extends _i1.Mock
           as bool);
 
   @override
-  void addListener(_i8.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i6.VoidCallback? listener) => super.noSuchMethod(
     Invocation.method(#addListener, [listener]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void removeListener(_i8.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i6.VoidCallback? listener) => super.noSuchMethod(
     Invocation.method(#removeListener, [listener]),
     returnValueForMissingStub: null,
   );
@@ -638,4 +269,69 @@ class MockFirebaseApplicationState extends _i1.Mock
     Invocation.method(#notifyListeners, []),
     returnValueForMissingStub: null,
   );
+}
+
+/// A class which mocks [NavLog].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockNavLog extends _i1.Mock implements _i7.NavLog {
+  @override
+  bool get hasListeners =>
+      (super.noSuchMethod(
+            Invocation.getter(#hasListeners),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
+
+  @override
+  void logPageOpen(String? destination, String? request) => super.noSuchMethod(
+    Invocation.method(#logPageOpen, [destination, request]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void logPageClose(String? destination, String? request, Object? params) =>
+      super.noSuchMethod(
+        Invocation.method(#logPageClose, [destination, request, params]),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  void addListener(_i6.VoidCallback? listener) => super.noSuchMethod(
+    Invocation.method(#addListener, [listener]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void removeListener(_i6.VoidCallback? listener) => super.noSuchMethod(
+    Invocation.method(#removeListener, [listener]),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void dispose() => super.noSuchMethod(
+    Invocation.method(#dispose, []),
+    returnValueForMissingStub: null,
+  );
+
+  @override
+  void notifyListeners() => super.noSuchMethod(
+    Invocation.method(#notifyListeners, []),
+    returnValueForMissingStub: null,
+  );
+}
+
+/// A class which mocks [AppNavigator].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppNavigator extends _i1.Mock implements _i2.AppNavigator {
+  @override
+  _i3.Future<T?> pushNamed<T extends Object?>(String? name, {Object? extra}) =>
+      (super.noSuchMethod(
+            Invocation.method(#pushNamed, [name], {#extra: extra}),
+            returnValue: _i3.Future<T?>.value(),
+            returnValueForMissingStub: _i3.Future<T?>.value(),
+          )
+          as _i3.Future<T?>);
 }

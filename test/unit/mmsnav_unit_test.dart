@@ -1,35 +1,27 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:go_router/go_router.dart';
-import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 
 import 'package:mockito/annotations.dart';
-import 'package:mockito/mockito.dart';
+import 'package:mockito/mockito.dart' as mockito;
+
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
+import 'package:my_movie_search/persistence/nav_log.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
-import 'package:provider/provider.dart';
 import 'mmsnav_unit_test.mocks.dart';
 
 // To regenerate mocks run the following command
 // flutter pub run build_runner build --delete-conflicting-outputs
 @GenerateNiceMocks([
   MockSpec<MMSFlutterCanvas>(), 
-  MockSpec<GoRouter>(), 
   MockSpec<FirebaseApplicationState>(),
+  MockSpec<NavLog>(),
+  MockSpec<AppNavigator>(),
 ])
 
-////////////////////////////////////////////////////////////////////////////////
-/// Mock MMSFlutterCanvas
-////////////////////////////////////////////////////////////////////////////////
-
 void main() {
-////////////////////////////////////////////////////////////////////////////////
-  /// Non Mocked Unit tests
-////////////////////////////////////////////////////////////////////////////////
       
   group('MMSNav web page unit tests', () {
     final testClass = RouteInfo(
@@ -56,11 +48,11 @@ void main() {
       testClass = MMSNav.headless(mockCanvas);
       navigationResult = null;
 
-      when(mockCanvas.viewWebPage(any)).thenAnswer((invocation) {
+      mockito.when(mockCanvas.viewWebPage(mockito.any)).thenAnswer((invocation) {
         navigationResult = invocation.positionalArguments[0] as String;
         return Future.value(null);
       });
-      when(mockCanvas.viewFlutterPage(any)).thenAnswer((invocation) {
+      mockito.when(mockCanvas.viewFlutterPage(mockito.any)).thenAnswer((invocation) {
         navigationResult = (invocation.positionalArguments[0] as RouteInfo).routePath.name;
         return Future.value(null);
       });
@@ -84,7 +76,7 @@ void main() {
       );
       // This uses viewFlutterRootPage, which we haven't mocked yet.
       // For now, let's verify viewFlutterPage wasn't called.
-      verifyNever(mockCanvas.viewFlutterPage(any));
+      mockito.verifyNever(mockCanvas.viewFlutterPage(mockito.any));
     });
 
     test('showDVDsPage()', () async {
@@ -133,295 +125,156 @@ void main() {
       expect(navigationResult, 'addlocation');
     });
 
-    test('getDetailsPage()', () {
-      void checkCalledPage(
-        String id,
-        String route, {
-        String? type,
-      }) {
-        final movie = MovieResultDTO().init(uniqueId: id, type: type);
+    test('getDetailsPage() returns correct screen to open '
+         'for each content type',
+        () {
+
+      final testCases = <Map<String, dynamic>>[
+        {'id': '${imdbTitlePrefix}12345', 'expectedRoute': 'moviedetails'},
+        {'id': '${imdbPersonPrefix}12345', 'expectedRoute': 'persondetails'},
+        {'id': '12345', 'expectedRoute': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.movie, 'expectedRoute': 'moviedetails'},
+        {'id': '12345', 'type': MovieContentType.person, 'expectedRoute': 'persondetails'},
+        {'id': '12345', 'type': MovieContentType.custom, 'expectedRoute': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.download, 'expectedRoute': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.episode, 'expectedRoute': 'moviedetails'},
+        {'id': '12345', 'type': MovieContentType.error, 'expectedRoute': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.information, 'expectedRoute': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.keyword, 'expectedRoute': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.miniseries, 'expectedRoute': 'moviedetails'},
+        {'id': '12345', 'type': MovieContentType.navigation, 'expectedRoute': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.none, 'expectedRoute': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.series, 'expectedRoute': 'moviedetails'},
+        {'id': '12345', 'type': MovieContentType.short, 'expectedRoute': 'moviedetails'},
+        {'id': '12345', 'type': MovieContentType.title, 'expectedRoute': 'moviedetails'},
+      ];
+
+      for (final testCase in testCases) {
+        // Arrange
+        final id = testCase['id'] as String;
+        final type = testCase['type'] as MovieContentType?;
+        final expectedRoute = testCase['expectedRoute'] as String;
+        final reason = 'criteria: id=$id, type=${type?.toString()}, expected=$expectedRoute';
+
+        final movie = MovieResultDTO().init(uniqueId: id, type: type?.toString());
+
+        // Act
         final actual = movie.getDetailsPage();
         final param = actual.params as Map;
 
-        expect(
-          actual.routePath.name,
-          route,
-          reason: 'criteria: id=$id , route = $route, type=$type',
-        );
-        expect(
-          param['dtoId'],
-          id,
-          reason: 'criteria: id=$id , route = $route, type=$type',
-        );
-        //expect(actual.reference, ref, reason: 'criteria: id=$id type=$type');
+        // Assert
+        expect(actual.routePath.name, expectedRoute, reason: reason);
+        expect(param['dtoId'], id, reason: reason);
       }
-
-      checkCalledPage('${imdbTitlePrefix}12345', 'moviedetails');
-      checkCalledPage('${imdbPersonPrefix}12345', 'persondetails');
-      checkCalledPage('12345', 'errordetails');
-
-      checkCalledPage(
-        '12345',
-        'moviedetails',
-        type: MovieContentType.movie.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'persondetails',
-        type: MovieContentType.person.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'errordetails',
-        type: MovieContentType.custom.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'errordetails',
-        type: MovieContentType.download.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'moviedetails',
-        type: MovieContentType.episode.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'errordetails',
-        type: MovieContentType.error.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'errordetails',
-        type: MovieContentType.information.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'errordetails',
-        type: MovieContentType.keyword.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'moviedetails',
-        type: MovieContentType.miniseries.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'errordetails',
-        type: MovieContentType.navigation.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'errordetails',
-        type: MovieContentType.none.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'moviedetails',
-        type: MovieContentType.series.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'moviedetails',
-        type: MovieContentType.short.toString(),
-      );
-
-      checkCalledPage(
-        '12345',
-        'moviedetails',
-        type: MovieContentType.title.toString(),
-      );
     });
 
-    test('resultDrillDown()', () async {
-      Future<void> checkCalledPage(
-        String id,
-        String expected, {
-        String? type,
-      }) async {
+    test('resultDrillDown() navigates to the correct screen '
+         'for each content type',
+        () async {
+      // A data-driven approach makes this test cleaner and easier to maintain.
+      final testCases = <Map<String, dynamic>>[
+        {'id': '${imdbTitlePrefix}12345', 'expected': 'moviedetails'},
+        {'id': '${imdbPersonPrefix}12345', 'expected': 'persondetails'},
+        {'id': '12345', 'expected': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.movie, 'expected': 'moviedetails'},
+        {'id': '12345', 'type': MovieContentType.person, 'expected': 'persondetails'},
+        {'id': '12345', 'type': MovieContentType.custom, 'expected': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.download, 'expected': 'http://something.com'},
+        {'id': '12345', 'type': MovieContentType.episode, 'expected': 'moviedetails'},
+        {'id': '12345', 'type': MovieContentType.error, 'expected': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.information, 'expected': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.keyword, 'expected': 'searchresults'},
+        {'id': '12345', 'type': MovieContentType.miniseries, 'expected': 'moviedetails'},
+        {'id': '12345', 'type': MovieContentType.navigation, 'expected': 'searchresults'},
+        {'id': '12345', 'type': MovieContentType.none, 'expected': 'errordetails'},
+        {'id': '12345', 'type': MovieContentType.series, 'expected': 'moviedetails'},
+        {'id': '12345', 'type': MovieContentType.short, 'expected': 'moviedetails'},
+        {'id': '12345', 'type': MovieContentType.title, 'expected': 'moviedetails'},
+        {'id': '12345', 'type': MovieContentType.barcode, 'expected': 'searchresults'},
+        {'id': 'http://www.google.com', 'type': MovieContentType.navigation, 'expected': 'http://www.google.com'},
+        {'id': 'tt1234', 'type': MovieContentType.navigation, 'expected': 'searchresults'},
+      ];
+
+      for (final testCase in testCases) {
+        // Arrange
+        final id = testCase['id'] as String;
+        final type = testCase['type'] as MovieContentType?;
+        final expected = testCase['expected'] as String;
+        final reason = 'criteria: id=$id type=${type?.toString()}';
+
+        // Reset mocks for each iteration to ensure clean verification.
+        mockito.clearInteractions(mockCanvas);
+
         final movie = MovieResultDTO().init(
           uniqueId: id,
-          type: type,
+          type: type?.toString(),
           imageUrl: 'http://something.com',
         );
+
+        // Act
         await testClass.resultDrillDown(movie);
+
+        // Assert
         if (expected.startsWith('http')) {
-          verify(mockCanvas.viewWebPage(expected));
+          mockito.verify(mockCanvas.viewWebPage(expected)).called(1);
         } else {
-          verify(mockCanvas.viewFlutterPage(any));
+          mockito.verify(mockCanvas.viewFlutterPage(mockito.any)).called(1);
         }
-        expect(
-          navigationResult,
-          expected,
-          reason: 'criteria: id=$id type=$type',
-        );
+        expect(navigationResult, expected, reason: reason);
       }
-
-      await checkCalledPage('${imdbTitlePrefix}12345', 'moviedetails');
-      await checkCalledPage('${imdbPersonPrefix}12345', 'persondetails');
-      await checkCalledPage('12345', 'errordetails');
-
-      await checkCalledPage(
-        '12345',
-        'moviedetails',
-        type: MovieContentType.movie.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'persondetails',
-        type: MovieContentType.person.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'errordetails',
-        type: MovieContentType.custom.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'http://something.com',
-        type: MovieContentType.download.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'moviedetails',
-        type: MovieContentType.episode.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'errordetails',
-        type: MovieContentType.error.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'errordetails',
-        type: MovieContentType.information.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'searchresults',
-        type: MovieContentType.keyword.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'moviedetails',
-        type: MovieContentType.miniseries.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'searchresults',
-        type: MovieContentType.navigation.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'errordetails',
-        type: MovieContentType.none.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'moviedetails',
-        type: MovieContentType.series.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'moviedetails',
-        type: MovieContentType.short.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'moviedetails',
-        type: MovieContentType.title.toString(),
-      );
-
-      await checkCalledPage(
-        '12345',
-        'searchresults',
-        type: MovieContentType.barcode.toString(),
-      );
-
-      await checkCalledPage(
-        'http://www.google.com',
-        'http://www.google.com',
-        type: MovieContentType.navigation.toString(),
-      );
-
-      await checkCalledPage(
-        'tt1234',
-        'searchresults',
-        type: MovieContentType.navigation.toString(),
-      );
     });
   });
 
-  group('MMSFlutterCanvas with mocked GoRouter', () {
-    late MockGoRouter mockGoRouter;
-    late MockFirebaseApplicationState mockFirebaseState;
-    late String pushedRouteName;
+  group('MMSFlutterCanvas.viewFlutterPage', () {
+    late MockAppNavigator fakeNavigator;
+    late MockNavLog mockNavLog;
+    late MMSFlutterCanvas canvas;
+    late RouteInfo testPageInfo;
 
     setUp(() {
-      mockGoRouter = MockGoRouter();
-      mockFirebaseState = MockFirebaseApplicationState();
-      pushedRouteName = '';
- 
-      when(mockGoRouter.pushNamed(
-        any,
-        extra: anyNamed('extra'),
-        pathParameters: anyNamed('pathParameters'),
-        queryParameters: anyNamed('queryParameters'),
-      )).thenAnswer((invocation) {
-        pushedRouteName = invocation.positionalArguments[0] as String;
-        return Future.value(null);
-      });
-
-      // Stub the call to prevent null pointer exceptions if your code uses it
-      when(mockFirebaseState.addRecord(any, message: anyNamed('message'), id: anyNamed('id'))).thenAnswer((_) async => true);
+      fakeNavigator = MockAppNavigator();
+      mockNavLog = MockNavLog();
+      canvas = MMSFlutterCanvas(fakeNavigator, navLog: mockNavLog);
+      testPageInfo = RouteInfo(ScreenRoute.moviedetails, {'id': '123'}, 'ref123');
     });
-/*
-    testWidgets('viewFlutterPage uses context.pushNamed',
-        (WidgetTester tester) async {
-      // To test a widget that needs a BuildContext with a GoRouter,
-      // we wrap it in an InheritedGoRouter that provides our mock.
-      await tester.pumpWidget(
-        ChangeNotifierProvider<FirebaseApplicationState>.value(
-          value: mockFirebaseState,
-          child: InheritedGoRouter(
-            goRouter: mockGoRouter,
-            child: Builder(builder: (context) {
-                final canvas = MMSFlutterCanvas(context);
-                final pageInfo = RouteInfo(ScreenRoute.moviedetails, {}, 'tt123');
-                canvas.viewFlutterPage(pageInfo);
-                // Return a placeholder widget.
-                return Container();
-              }),
-          ),
-        ),
-      );
-      expect(pushedRouteName, 'moviedetails');
-    });*/
+
+    test('should log open and close, and hide keyboard on success', () async {
+      // Act
+      await canvas.viewFlutterPage(testPageInfo);
+
+      // Assert
+      // Verify navigation was triggered on the context from the canvas
+      mockito.verify(fakeNavigator.pushNamed(
+        testPageInfo.routePath.name,
+        extra: testPageInfo.params,
+      )).called(1);
+
+      // Verify logging calls
+      mockito.verify(mockNavLog.logPageOpen(
+              testPageInfo.routePath.name, testPageInfo.reference))
+          .called(1);
+      mockito.verify(mockNavLog.logPageClose(testPageInfo.routePath.name,
+              testPageInfo.reference, testPageInfo.params))
+          .called(1);
+
+      // We can't easily test the private _hideKeyboard method directly,
+      // but we know it's called after the Future from pushNamed completes.
+    });
+
+    test('should not do anything if context is null', () async {
+      // Arrange
+      final canvasWithNullContext = MMSFlutterCanvas(null, navLog: mockNavLog);
+
+      // Act
+      await canvasWithNullContext.viewFlutterPage(testPageInfo);
+
+      // Assert
+      mockito.verifyNever(mockNavLog.logPageOpen(mockito.any, mockito.any));
+      // We don't need to verify pushNamed on the fakeNavigator because it was
+      // never passed to the canvasWithNullContext. The null check inside the
+      // production code handles this case.
+    });
+
   });
 
 }

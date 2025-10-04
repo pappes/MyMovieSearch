@@ -8,10 +8,12 @@ import 'package:provider/provider.dart';
 
 class NavLog extends ChangeNotifier {
   NavLog(this._context);
-  final BuildContext _context;
+  final BuildContext? _context;
 
   FirebaseApplicationState? getFirestoreProvider() =>
-      Provider.of<FirebaseApplicationState>(_context, listen: false);
+      (_context==null || !_context.mounted) ? 
+        null : 
+        Provider.of<FirebaseApplicationState>(_context, listen: false);
 
   void logPageOpen(String destination, String request) => unawaited(
         getFirestoreProvider()?.addRecord(

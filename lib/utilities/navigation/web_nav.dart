@@ -49,14 +49,18 @@ class RouteInfo {
 /// Performs page navigation
 ///
 /// Headless testing can have a null context (no page navigation)
-/// or an alternate canvas implementation using the _headless constructor.
+/// or an alternate canvas implementation using the headless constructor.
 class MMSNav {
-  MMSNav([BuildContext? context]) {
-    canvas = MMSFlutterCanvas(context);
-  }
+  /// The default constructor for production use. It creates the dependency
+  /// chain internally from the provided BuildContext.
+  MMSNav(BuildContext context)
+      : canvas = MMSFlutterCanvas(GoRouterNavigator(context),
+            navLog: NavLog(context));
+
+  /// A named constructor for testing that allows injecting a mock canvas.
   MMSNav.headless(this.canvas);
 
-  late MMSFlutterCanvas canvas;
+  final MMSFlutterCanvas canvas;
 
   /// Render web page [url] in a child page of the current screen.
   ///
@@ -251,24 +255,92 @@ class MMSNav {
   ];
 }
 
+/// An abstraction for navigation to make testing easier.
+/// 
+/// This abstract class is satisfied by BuildContext via GoRouterNavigator.
+/// Note go_router is accesed via an extension method on BuildContext
+/// so it cannot be mocked directly.
+abstract class AppNavigator {
+  // Functions from GoRouteNavigator extension on BuildContext
+  Future<T?> pushNamed<T extends Object?>(String name, {Object? extra});
+  void pushReplacementNamed<T extends Object?>(String name, {Object? extra});
+  bool pop<T extends Object?>([T? result]);
+
+  // Functions from Theme
+  Color? getPrimaryColor();
+
+  // Function from popup.dart
+  Future<Object?> popup(
+    String dialogText,
+    String title,
+  );
+
+}
+
+/// A concrete AppNavigator implementation that uses 
+/// the go_router extension method on BuildContext
+class GoRouterNavigator implements AppNavigator {
+  GoRouterNavigator(this.context);
+  final BuildContext context;
+
+  @override
+  Future<T?> pushNamed<T extends Object?>(String name, {Object? extra}) => 
+    context.mounted ? 
+      context.pushNamed(name, extra: extra) : 
+      Future.value(null);
+  @override
+  void pushReplacementNamed<T extends Object?>(String name, {Object? extra}) => 
+    context.mounted ? 
+      context.pushReplacementNamed(name, extra: extra) : 
+      null;
+  @override
+  bool pop<T extends Object?>([T? result]) {
+    if (context.mounted && context.canPop()) {
+      context.pop(result);
+      return true;
+    }
+    return false;
+  }
+
+  @override
+  Color? getPrimaryColor() => 
+    context.mounted ? 
+      Theme.of(context).primaryColor : 
+      null;
+
+  @override
+  Future<Object?> popup(
+    String dialogText,
+    String title,
+  ) => 
+    context.mounted ? 
+      showPopup(context, dialogText, title) : 
+      Future.value(null);
+}
+
 class MMSFlutterCanvas {
-  MMSFlutterCanvas(this.context);
+  MMSFlutterCanvas(this.navigator, {NavLog? navLog})
+      : _navLog = navLog ?? NavLog(null);
 
-  BuildContext? context;
-
+  final AppNavigator? navigator;
+  final NavLog _navLog;
+  
   /// Render web page [url] in a child page of the current screen.
   ///
   /// For platforms that don't support CustomTabs
   /// the URL is displayed to the user.
   Future<Object?> viewWebPage(String url) async {
-    if (null != context) {
-      if (Platform.isAndroid && url.startsWith('http')) {
-        return _invokeChromeCustomTabs(url);
+    final useAndroidCustomTabs = Platform.isAndroid && url.startsWith('http');
+    if (navigator is GoRouterNavigator) {
+      final nav  = navigator! as GoRouterNavigator;
+      if (useAndroidCustomTabs) {
+        return _invokeChromeCustomTabs(nav, url);
       } else {
-        return _openBrowser(url);
+        return _openBrowser(nav, url);
       }
     }
-    return null;
+    // Tell the mock tests what we would have done.
+    return useAndroidCustomTabs ? 'openTab($url)' : 'openBrowser($url)';
   }
 
   /// Construct route to Material user interface page
@@ -277,20 +349,18 @@ class MMSFlutterCanvas {
   /// Chooses a MovieDetailsPage or PersonDetailsPage
   /// based on the IMDB unique ID or ErrorDetailsPage otherwise
   Future<Object?> viewFlutterPage(RouteInfo page) {
-    if (null != context && context!.mounted) {
+    if (navigator != null) {
       // Record page open event.
-      NavLog(context!).logPageOpen(page.routePath.name, page.reference);
+      _navLog.logPageOpen(page.routePath.name, page.reference);
       try {
         // Open the page.
-        final openedPage = context!.pushNamed(
+        final openedPage = navigator!.pushNamed(
           page.routePath.name,
           extra: page.params,
         );
         return openedPage.then((val) {
           // Record page closure event.
-          NavLog(
-            context!,
-          ).logPageClose(page.routePath.name, page.reference, page.params);
+          _navLog.logPageClose(page.routePath.name, page.reference, page.params);
           _hideKeyboard();
           return null;
         });
@@ -308,6 +378,8 @@ class MMSFlutterCanvas {
   /// If the keyboard does not appear within 1.111111 seconds
   /// then the operation is cancelled.
   void _hideKeyboard([Duration delay = const Duration(microseconds: 1)]) {
+    const maxRetryDelay = Duration(seconds: 1);
+
     unawaited(
       Future<void>.delayed(delay).then((_) {
         final focusArea = FocusManager.instance.primaryFocus;
@@ -319,7 +391,7 @@ class MMSFlutterCanvas {
           focusArea?.unfocus();
         } else {
           // Wait longer for the keyboard to appear.
-          if (delay.inSeconds <= 1) {
+          if (delay <= maxRetryDelay) {
             _hideKeyboard(Duration(microseconds: delay.inMicroseconds * 10));
           }
         }
@@ -331,41 +403,45 @@ class MMSFlutterCanvas {
   ///
   /// Valid options are: ScreenRoute.search
   Future<Object?> viewFlutterRootPage(RouteInfo page) async {
-    if (null != context) {
+    if (navigator is GoRouterNavigator) {
       // Record page open event.
-      NavLog(context!).logPageOpen(page.routePath.name, 'root');
+      _navLog.logPageOpen(page.routePath.name, 'root');
       while (closeCurrentScreen()) {
         await Future<dynamic>.delayed(Duration.zero);
       }
       try {
-        if (null != context && context!.mounted) {
-          // Open the page.
-          context!.pushReplacementNamed(
-            page.routePath.name,
-            extra: page.params,
-          );
-        }
+        // Open the page.
+        navigator?.pushReplacementNamed(
+          page.routePath.name,
+          extra: page.params,
+        );
       } catch (e) {
         logger.t(e);
       }
     }
-    return Future.value(null);
+    // Tell the mock tests what we would have done.
+    return 'pushReplacementNamed(${page.routePath.name}, ${page.params})';
   }
 
   /// Closes the visible screen.
   ///
   /// returns false if the current screen to the root node.
   bool closeCurrentScreen() {
-    if (null != context && context!.mounted) {
-      if (context!.canPop()) {
-        context!.pop();
+    if (navigator is GoRouterNavigator && navigator != null) {
+      final goRouterNavigator = navigator! as GoRouterNavigator;
+      if (goRouterNavigator.context.mounted && 
+          goRouterNavigator.context.canPop()) {
+        goRouterNavigator.context.pop();
         return true;
       }
     }
     return false;
   }
 
-  Future<Object?> _invokeChromeCustomTabs(String url) async {
+  Future<Object?> _invokeChromeCustomTabs(
+      GoRouterNavigator navigator, 
+      String url,
+  ) async {
     Object? retval;
     await tabs
         .launchUrl(
@@ -374,29 +450,30 @@ class MMSFlutterCanvas {
             urlBarHidingEnabled: true,
             showTitle: true,
             colorSchemes: tabs.CustomTabsColorSchemes.defaults(
-              toolbarColor: Theme.of(context!).primaryColor,
+              toolbarColor: navigator.getPrimaryColor(),
             ),
           ),
         )
-        .onError((error, stackTrace) => retval = _customTabsError(error, url));
+        .onError((error, stackTrace) => 
+          retval = _customTabsError(navigator, error, url));
     return retval;
   }
 
-  Future<Object?> _customTabsError(Object? e, String url) {
+  Future<Object?> _customTabsError(GoRouterNavigator navigator, Object? e, String url) {
     // An exception is thrown if browser app is not installed on Android device.
     debugPrint(e.toString());
-    return showPopup(
-      context!,
-      'Received error $e\nwhen opening $url',
-      'Navigation error',
-    );
+    return navigator.popup(
+        'Received error $e\nwhen opening $url',
+        'Navigation error',
+      );
   }
 
-  Future<Object?> _openBrowser(String url) async {
+  Future<Object?> _openBrowser(GoRouterNavigator navigator, String url) async {
     final success = await launcher.launchUrl(Uri.parse(url));
     // An exception is thrown if browser app is not installed on Android device.
     if (!success) {
-      return showPopup(context!, url, 'Browser error');
+      return navigator.popup(url, 'Browser error');
+
     }
     return success;
   }
