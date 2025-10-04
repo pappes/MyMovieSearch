@@ -14,9 +14,10 @@ import 'package:my_movie_search/movies/screens/movie_physical_location.dart';
 import 'package:my_movie_search/movies/screens/movie_search_criteria.dart';
 import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
-import 'package:my_movie_search/movies/screens/popup.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
+import 'package:my_movie_search/utilities/navigation/app_context.dart';
+import 'package:my_movie_search/utilities/navigation/flutter_app_context.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
@@ -53,12 +54,20 @@ class RouteInfo {
 class MMSNav {
   /// The default constructor for production use. It creates the dependency
   /// chain internally from the provided BuildContext.
-  MMSNav(BuildContext context)
-      : canvas = MMSFlutterCanvas(GoRouterNavigator(context),
-            navLog: NavLog(context));
+  factory MMSNav(BuildContext context) {
+    final appContext = FlutterAppContext(context);
+    final canvas = MMSFlutterCanvas(
+        navigator: appContext,
+        theme: appContext,
+        dialogs: appContext,
+        focus: appContext,
+        customTabsLauncher: FlutterCustomTabsLauncher(),
+        navLog: NavLog(context),);
+    return MMSNav.withCanvas(canvas);
+  }
 
   /// A named constructor for testing that allows injecting a mock canvas.
-  MMSNav.headless(this.canvas);
+  MMSNav.withCanvas(this.canvas);
 
   final MMSFlutterCanvas canvas;
 
@@ -255,74 +264,21 @@ class MMSNav {
   ];
 }
 
-/// An abstraction for navigation to make testing easier.
-/// 
-/// This abstract class is satisfied by BuildContext via GoRouterNavigator.
-/// Note go_router is accesed via an extension method on BuildContext
-/// so it cannot be mocked directly.
-abstract class AppNavigator {
-  // Functions from GoRouteNavigator extension on BuildContext
-  Future<T?> pushNamed<T extends Object?>(String name, {Object? extra});
-  void pushReplacementNamed<T extends Object?>(String name, {Object? extra});
-  bool pop<T extends Object?>([T? result]);
-
-  // Functions from Theme
-  Color? getPrimaryColor();
-
-  // Function from popup.dart
-  Future<Object?> popup(
-    String dialogText,
-    String title,
-  );
-
-}
-
-/// A concrete AppNavigator implementation that uses 
-/// the go_router extension method on BuildContext
-class GoRouterNavigator implements AppNavigator {
-  GoRouterNavigator(this.context);
-  final BuildContext context;
-
-  @override
-  Future<T?> pushNamed<T extends Object?>(String name, {Object? extra}) => 
-    context.mounted ? 
-      context.pushNamed(name, extra: extra) : 
-      Future.value(null);
-  @override
-  void pushReplacementNamed<T extends Object?>(String name, {Object? extra}) => 
-    context.mounted ? 
-      context.pushReplacementNamed(name, extra: extra) : 
-      null;
-  @override
-  bool pop<T extends Object?>([T? result]) {
-    if (context.mounted && context.canPop()) {
-      context.pop(result);
-      return true;
-    }
-    return false;
-  }
-
-  @override
-  Color? getPrimaryColor() => 
-    context.mounted ? 
-      Theme.of(context).primaryColor : 
-      null;
-
-  @override
-  Future<Object?> popup(
-    String dialogText,
-    String title,
-  ) => 
-    context.mounted ? 
-      showPopup(context, dialogText, title) : 
-      Future.value(null);
-}
-
 class MMSFlutterCanvas {
-  MMSFlutterCanvas(this.navigator, {NavLog? navLog})
-      : _navLog = navLog ?? NavLog(null);
+  MMSFlutterCanvas({
+    this.navigator,
+    this.theme,
+    this.dialogs,
+    this.focus,
+    this.customTabsLauncher,
+    NavLog? navLog,
+  }) : _navLog = navLog ?? NavLog(null);
 
   final AppNavigator? navigator;
+  final AppTheme? theme;
+  final AppDialogs? dialogs;
+  final AppFocus? focus;
+  final CustomTabsLauncher? customTabsLauncher;
   final NavLog _navLog;
   
   /// Render web page [url] in a child page of the current screen.
@@ -331,12 +287,12 @@ class MMSFlutterCanvas {
   /// the URL is displayed to the user.
   Future<Object?> viewWebPage(String url) async {
     final useAndroidCustomTabs = Platform.isAndroid && url.startsWith('http');
-    if (navigator is GoRouterNavigator) {
-      final nav  = navigator! as GoRouterNavigator;
+    if (navigator is FlutterAppContext) {
+      final nav = navigator as FlutterAppContext;
       if (useAndroidCustomTabs) {
-        return _invokeChromeCustomTabs(nav, url);
+        return _invokeChromeCustomTabs(theme, dialogs, url);
       } else {
-        return _openBrowser(nav, url);
+        return _openBrowser(dialogs, url);
       }
     }
     // Tell the mock tests what we would have done.
@@ -382,7 +338,7 @@ class MMSFlutterCanvas {
 
     unawaited(
       Future<void>.delayed(delay).then((_) {
-        final focusArea = FocusManager.instance.primaryFocus;
+        final focusArea = focus?.primaryFocus();
         final widgetType = focusArea?.context?.widget.toString() ?? '';
         if (widgetType == "Instance of 'Focus'" || // release apk
             widgetType.contains('EditableText')) // debug apk
@@ -403,7 +359,7 @@ class MMSFlutterCanvas {
   ///
   /// Valid options are: ScreenRoute.search
   Future<Object?> viewFlutterRootPage(RouteInfo page) async {
-    if (navigator is GoRouterNavigator) {
+    if (navigator is FlutterAppContext) {
       // Record page open event.
       _navLog.logPageOpen(page.routePath.name, 'root');
       while (closeCurrentScreen()) {
@@ -427,8 +383,8 @@ class MMSFlutterCanvas {
   ///
   /// returns false if the current screen to the root node.
   bool closeCurrentScreen() {
-    if (navigator is GoRouterNavigator && navigator != null) {
-      final goRouterNavigator = navigator! as GoRouterNavigator;
+    if (navigator is FlutterAppContext && navigator != null) {
+      final goRouterNavigator = navigator! as FlutterAppContext;
       if (goRouterNavigator.context.mounted && 
           goRouterNavigator.context.canPop()) {
         goRouterNavigator.context.pop();
@@ -439,40 +395,41 @@ class MMSFlutterCanvas {
   }
 
   Future<Object?> _invokeChromeCustomTabs(
-      GoRouterNavigator navigator, 
-      String url,
+    AppTheme? theme,
+    AppDialogs? dialogs,
+    String url,
   ) async {
     Object? retval;
-    await tabs
-        .launchUrl(
-          Uri.parse(url),
+    await customTabsLauncher
+        ?.launch(
+          url,
           customTabsOptions: tabs.CustomTabsOptions(
             urlBarHidingEnabled: true,
             showTitle: true,
             colorSchemes: tabs.CustomTabsColorSchemes.defaults(
-              toolbarColor: navigator.getPrimaryColor(),
+              toolbarColor: theme?.getPrimaryColor(),
             ),
           ),
         )
         .onError((error, stackTrace) => 
-          retval = _customTabsError(navigator, error, url));
+          retval = _customTabsError(dialogs, error, url));
     return retval;
   }
 
-  Future<Object?> _customTabsError(GoRouterNavigator navigator, Object? e, String url) {
+  Future<Object?> _customTabsError(AppDialogs? dialogs, Object? e, String url) {
     // An exception is thrown if browser app is not installed on Android device.
     debugPrint(e.toString());
-    return navigator.popup(
+    return dialogs?.popup(
         'Received error $e\nwhen opening $url',
         'Navigation error',
-      );
+      ) ?? Future.value(e);
   }
 
-  Future<Object?> _openBrowser(GoRouterNavigator navigator, String url) async {
+  Future<Object?> _openBrowser(AppDialogs? dialogs, String url) async {
     final success = await launcher.launchUrl(Uri.parse(url));
     // An exception is thrown if browser app is not installed on Android device.
     if (!success) {
-      return navigator.popup(url, 'Browser error');
+      return dialogs?.popup(url, 'Browser error');
 
     }
     return success;

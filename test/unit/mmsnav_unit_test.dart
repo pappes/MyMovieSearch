@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
+import 'package:my_movie_search/utilities/navigation/app_context.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 import 'mmsnav_unit_test.mocks.dart';
@@ -19,6 +20,10 @@ import 'mmsnav_unit_test.mocks.dart';
   MockSpec<FirebaseApplicationState>(),
   MockSpec<NavLog>(),
   MockSpec<AppNavigator>(),
+  MockSpec<AppTheme>(),
+  MockSpec<AppDialogs>(),
+  MockSpec<AppFocus>(),
+  MockSpec<CustomTabsLauncher>(),
 ])
 
 void main() {
@@ -38,14 +43,14 @@ void main() {
     });
   });
 
-  group('MMSNav web page unit tests', () {
+  group('MMSNav web page mocked tests', () {
     late MockMMSFlutterCanvas mockCanvas;
     late MMSNav testClass;
     late String? navigationResult;
 
     setUp(() {
       mockCanvas = MockMMSFlutterCanvas();
-      testClass = MMSNav.headless(mockCanvas);
+      testClass = MMSNav.withCanvas(mockCanvas);
       navigationResult = null;
 
       mockito.when(mockCanvas.viewWebPage(mockito.any)).thenAnswer((invocation) {
@@ -227,15 +232,30 @@ void main() {
 
   group('MMSFlutterCanvas.viewFlutterPage', () {
     late MockAppNavigator fakeNavigator;
+    late MockAppTheme mockTheme;
+    late MockAppDialogs mockDialogs;
+    late MockAppFocus mockFocus;
     late MockNavLog mockNavLog;
     late MMSFlutterCanvas canvas;
     late RouteInfo testPageInfo;
 
     setUp(() {
       fakeNavigator = MockAppNavigator();
+      mockTheme = MockAppTheme();
+      mockDialogs = MockAppDialogs();
+      mockFocus = MockAppFocus();
       mockNavLog = MockNavLog();
-      canvas = MMSFlutterCanvas(fakeNavigator, navLog: mockNavLog);
-      testPageInfo = RouteInfo(ScreenRoute.moviedetails, {'id': '123'}, 'ref123');
+      canvas = MMSFlutterCanvas(
+          navigator: fakeNavigator,
+          theme: mockTheme,
+          dialogs: mockDialogs,
+          focus: mockFocus,
+          // customTabsLauncher is not used in this test group, so it can be null.
+          navLog: mockNavLog);
+      testPageInfo = RouteInfo(
+        ScreenRoute.moviedetails, {'id': '123'}, 
+        'ref123'
+      );
     });
 
     test('should log open and close, and hide keyboard on success', () async {
@@ -263,7 +283,13 @@ void main() {
 
     test('should not do anything if context is null', () async {
       // Arrange
-      final canvasWithNullContext = MMSFlutterCanvas(null, navLog: mockNavLog);
+      final canvasWithNullContext = MMSFlutterCanvas(
+          navigator: null,
+          theme: null,
+          dialogs: null,
+          focus: null,
+          customTabsLauncher: null,
+          navLog: mockNavLog);
 
       // Act
       await canvasWithNullContext.viewFlutterPage(testPageInfo);

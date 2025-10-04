@@ -6,11 +6,13 @@
 import 'dart:async' as _i3;
 import 'dart:ui' as _i6;
 
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as _i9;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i5;
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart'
     as _i4;
 import 'package:my_movie_search/persistence/nav_log.dart' as _i7;
+import 'package:my_movie_search/utilities/navigation/app_context.dart' as _i8;
 import 'package:my_movie_search/utilities/navigation/web_nav.dart' as _i2;
 
 // ignore_for_file: type=lint
@@ -325,7 +327,7 @@ class MockNavLog extends _i1.Mock implements _i7.NavLog {
 /// A class which mocks [AppNavigator].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAppNavigator extends _i1.Mock implements _i2.AppNavigator {
+class MockAppNavigator extends _i1.Mock implements _i8.AppNavigator {
   @override
   _i3.Future<T?> pushNamed<T extends Object?>(String? name, {Object? extra}) =>
       (super.noSuchMethod(
@@ -334,4 +336,66 @@ class MockAppNavigator extends _i1.Mock implements _i2.AppNavigator {
             returnValueForMissingStub: _i3.Future<T?>.value(),
           )
           as _i3.Future<T?>);
+
+  @override
+  void pushReplacementNamed<T extends Object?>(String? name, {Object? extra}) =>
+      super.noSuchMethod(
+        Invocation.method(#pushReplacementNamed, [name], {#extra: extra}),
+        returnValueForMissingStub: null,
+      );
+
+  @override
+  bool pop<T extends Object?>([T? result]) =>
+      (super.noSuchMethod(
+            Invocation.method(#pop, [result]),
+            returnValue: false,
+            returnValueForMissingStub: false,
+          )
+          as bool);
+}
+
+/// A class which mocks [AppTheme].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppTheme extends _i1.Mock implements _i8.AppTheme {}
+
+/// A class which mocks [AppDialogs].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppDialogs extends _i1.Mock implements _i8.AppDialogs {
+  @override
+  _i3.Future<Object?> popup(String? dialogText, String? title) =>
+      (super.noSuchMethod(
+            Invocation.method(#popup, [dialogText, title]),
+            returnValue: _i3.Future<Object?>.value(),
+            returnValueForMissingStub: _i3.Future<Object?>.value(),
+          )
+          as _i3.Future<Object?>);
+}
+
+/// A class which mocks [AppFocus].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockAppFocus extends _i1.Mock implements _i8.AppFocus {}
+
+/// A class which mocks [CustomTabsLauncher].
+///
+/// See the documentation for Mockito's code generation for more information.
+class MockCustomTabsLauncher extends _i1.Mock
+    implements _i8.CustomTabsLauncher {
+  @override
+  _i3.Future<void> launch(
+    String? url, {
+    _i9.CustomTabsOptions? customTabsOptions,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #launch,
+              [url],
+              {#customTabsOptions: customTabsOptions},
+            ),
+            returnValue: _i3.Future<void>.value(),
+            returnValueForMissingStub: _i3.Future<void>.value(),
+          )
+          as _i3.Future<void>);
 }
