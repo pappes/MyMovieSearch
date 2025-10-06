@@ -10,16 +10,15 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 /// {@template mmsearch_app}
 /// A [MaterialApp] which sets the `home` to [MovieSearchCriteriaPage].
 ///
-/// [overrideBlocRepository] can be overridden
+/// [_blocRepository] can be overridden
 /// to provide an alternate datasource for mocking
 /// {@endtemplate}
 class MMSearchApp extends StatelessWidget {
   /// {@macro mmsearch_app}
-  MMSearchApp({this.overrideBlocRepository, super.key});
+  MMSearchApp({BaseMovieRepository? movieBlocRepository, super.key})
+      : _blocRepository = movieBlocRepository ?? MovieSearchRepository();
 
-  /// The default block repository is [MovieSearchRepository]
-  final BaseMovieRepository? overrideBlocRepository;
-  final BaseMovieRepository _defaultBlocRepository = MovieSearchRepository();
+  final BaseMovieRepository _blocRepository;
 
   /// Set up information for the bloc design pattern
   /// then initialise the Material application user interface.
@@ -29,10 +28,10 @@ class MMSearchApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) =>
       RepositoryProvider<BaseMovieRepository>.value(
-        value: overrideBlocRepository ?? _defaultBlocRepository,
+        value: _blocRepository,
         child: BlocProvider<SearchBloc>(
           create: (_) => SearchBloc(
-            movieRepository: overrideBlocRepository ?? _defaultBlocRepository,
+            movieRepository: _blocRepository,
           ),
           child: const _MMSearchAppView(),
         ),

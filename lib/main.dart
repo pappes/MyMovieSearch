@@ -26,8 +26,8 @@ Future<void> main() async {
   runApp(
     ChangeNotifierProvider<FirebaseApplicationState>(
       create: (_) => FirebaseApplicationState(),
-      builder: (_, __) =>
-          MMSearchApp(overrideBlocRepository: MovieSearchRepository()),
+      builder:
+          (_, __) => MMSearchApp(movieBlocRepository: MovieSearchRepository()),
     ),
   );
 }
