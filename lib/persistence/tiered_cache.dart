@@ -73,8 +73,9 @@ class TieredCache<T> {
   Future<bool> isCached(dynamic key) async {
     if (memoryCache.containsKey(key)) return true;
     // Attempt to fetch from db cache.
-    final record =
-        await DatabaseHelper.instance.queryMovieUniqueId(key.toString());
+    final record = await DatabaseHelper.instance.queryMovieUniqueId(
+      key.toString(),
+    );
     if (record != null) {
       T? result = _decodeDto(record.dtoJson);
       if (result == null) {
@@ -144,13 +145,13 @@ class TieredCache<T> {
 
 /// Exception used in myConvertTreeToOutputType.
 class CacheMissError implements Error {
-  CacheMissError(this.cause);
+  CacheMissError(this._cause);
 
-  String cause;
+  String _cause;
   StackTrace stack = StackTrace.current;
   @override
   StackTrace? get stackTrace => stack;
 
   @override
-  String toString() => cause;
+  String toString() => _cause;
 }
