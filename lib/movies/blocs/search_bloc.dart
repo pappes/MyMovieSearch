@@ -23,17 +23,20 @@ part 'bloc_parts/search_state.dart';
 /// In progress search results can be accessed from
 /// [SearchBloc].[sortedResults].
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc({required this.movieRepository})
-      : super(const SearchState.awaitingInput()) {
+  SearchBloc({required BaseMovieRepository movieRepository})
+    : _movieRepository = movieRepository,
+      super(const SearchState.awaitingInput()) {
     on<SearchCompleted>(
-      (event, emit) => isClosed
-          ? null
-          : emit(SearchState.displayingResults(_searchProgress)),
+      (event, emit) =>
+          isClosed
+              ? null
+              : emit(SearchState.displayingResults(_searchProgress)),
     );
     on<SearchDataReceived>(
-      (event, emit) => isClosed
-          ? null
-          : emit(SearchState.displayingResults(_searchProgress)),
+      (event, emit) =>
+          isClosed
+              ? null
+              : emit(SearchState.displayingResults(_searchProgress)),
     );
     on<SearchCancelled>(
       (event, emit) =>
@@ -44,7 +47,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     });
   }
 
-  BaseMovieRepository movieRepository;
+  final BaseMovieRepository _movieRepository;
   StreamSubscription<MovieResultDTO>? _searchStatusSubscription;
   final MovieCollection _allResults = {};
   List<MovieResultDTO> sortedResults = [];
@@ -58,7 +61,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   // Clean up all open objects.
   Future<void> close() async {
     await _searchStatusSubscription?.cancel();
-    await movieRepository.close();
+    await _movieRepository.close();
     return super.close();
   }
 
@@ -71,14 +74,13 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     if (!isClosed) {
       emit(const SearchState.awaitingInput());
     }
-    await movieRepository.close();
+    await _movieRepository.close();
     _allResults.clear();
     sortedResults.clear();
     _throttleName = 'SearchBloc${criteria.toPrintableString()}';
-    _searchStatusSubscription = movieRepository
-        .search(criteria)
-        .listen(_receiveDTO)
-      ..onDone(_completeSearch);
+    _searchStatusSubscription = _movieRepository
+      .search(criteria)
+      .listen(_receiveDTO)..onDone(_completeSearch);
   }
 
   /// Notify subscribers the stream of data is complete.
@@ -116,9 +118,10 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         if (key.startsWith(imdbPersonPrefix) ||
             key.startsWith(imdbTitlePrefix)) {
           const collectionPrefix = 'MMSNavLog/screen/';
-          final collection = key.startsWith(imdbTitlePrefix)
-              ? 'moviedetails'
-              : 'persondetails';
+          final collection =
+              key.startsWith(imdbTitlePrefix)
+                  ? 'moviedetails'
+                  : 'persondetails';
           unawaited(
             FirebaseApplicationState()
                 .fetchRecord(
