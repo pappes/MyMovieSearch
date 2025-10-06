@@ -26,9 +26,9 @@ class MovieModel {
   String dtoJson;
   // convenience method to create a Map from this MovieModel object
   Map<String, dynamic> toMap() => <String, dynamic>{
-        _colMovieUniqueId: uniqueId,
-        _colMovieJson: dtoJson,
-      };
+    _colMovieUniqueId: uniqueId,
+    _colMovieJson: dtoJson,
+  };
 
   MovieResultDTO? toMovieResultDTO() {
     final decoded = json.decode(dtoJson);
@@ -37,13 +37,6 @@ class MovieModel {
     }
     return null;
   }
-}
-
-extension ModelConversion on Map<dynamic, dynamic> {
-  MovieModel toMovieModel() => MovieModel(
-        uniqueId: this[_colMovieUniqueId]!.toString(),
-        dtoJson: this[_colMovieJson]!.toString(),
-      );
 }
 
 // singleton class to manage the database
@@ -101,14 +94,12 @@ class DatabaseHelper {
 
   /// Uas a SQL string to create the database.
   Future<void> _onCreate(Database db, int version) async {
-    await db.execute(
-      '''
+    await db.execute('''
       CREATE TABLE $_tableMovie (
         $_colMovieUniqueId TEXT PRIMARY KEY,
         $_colMovieJson INTEGER NOT NULL
       )
-      ''',
-    );
+      ''');
   }
 
   // Database helper methods:
@@ -143,23 +134,23 @@ class DatabaseHelper {
   }
 
   Future<int> _insert(Database db, MovieModel movie) => db.insert(
-        _tableMovie,
-        movie.toMap(),
-        conflictAlgorithm: ConflictAlgorithm.replace,
-      );
+    _tableMovie,
+    movie.toMap(),
+    conflictAlgorithm: ConflictAlgorithm.replace,
+  );
 
   Future<int> _update(Database db, MovieModel movie) => db.update(
-        _tableMovie,
-        movie.toMap(),
-        where: '$_colMovieUniqueId = ?',
-        whereArgs: [movie.uniqueId],
-      );
+    _tableMovie,
+    movie.toMap(),
+    where: '$_colMovieUniqueId = ?',
+    whereArgs: [movie.uniqueId],
+  );
 
   Future<int> _delete(Database db, MovieModel movie) => db.delete(
-        _tableMovie,
-        where: '$_colMovieUniqueId = ?',
-        whereArgs: [movie.uniqueId],
-      );
+    _tableMovie,
+    where: '$_colMovieUniqueId = ?',
+    whereArgs: [movie.uniqueId],
+  );
 
   Future<List<Map<dynamic, dynamic>>> _queryAllMovies(Database db) =>
       db.query(_tableMovie);
@@ -174,7 +165,11 @@ class DatabaseHelper {
     );
     // If a movie record is found, return the corresponding MovieModel object.
     if (movieMap.isNotEmpty) {
-      return movieMap.first.toMovieModel();
+      final map = movieMap.first;
+      return MovieModel(
+        uniqueId: map[_colMovieUniqueId]!.toString(),
+        dtoJson: map[_colMovieJson]!.toString(),
+      );
     }
     return null;
   }
