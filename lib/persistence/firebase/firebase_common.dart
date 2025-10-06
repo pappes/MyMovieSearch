@@ -9,10 +9,6 @@ import 'package:my_movie_search/persistence/firebase/android/firebase_android.da
 import 'package:my_movie_search/persistence/firebase/linux/firebase_linux.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
-/*export 'android/firebase_android.dart' // Stub implementation
-    if (Platform.isAndroid) 'android/firebase_android.dart' // dart:io implementation
-    if (Platform.isLinux) 'linux/firebase_linux.dart'; // package:web implementation*/
-
 enum Fields { devices, text }
 
 const runtimeDevices = {
@@ -152,9 +148,9 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
 
 /// Exception used in FirebaseApplicationState.
 class MMSFirebaseException implements Exception {
-  MMSFirebaseException(this.cause);
-  String cause;
+  MMSFirebaseException(this._cause);
+  final String _cause;
 
   @override
-  String toString() => cause;
+  String toString() => _cause;
 }
