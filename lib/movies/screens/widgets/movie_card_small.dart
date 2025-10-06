@@ -14,7 +14,7 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 class MovieTile extends ListTile {
-  MovieTile(this.context, this.movie, {super.key})
+  MovieTile(BuildContext context, MovieResultDTO movie, {super.key})
     : super(
         leading: _getImage(movie),
         title: _getTitle(movie),
@@ -22,8 +22,6 @@ class MovieTile extends ListTile {
         subtitle: _getDescription(movie),
         onTap: () => _navigate(context, movie),
       );
-  final BuildContext context;
-  final MovieResultDTO movie;
 
   static Widget _getTitle(MovieResultDTO movie) {
     var year = '';
