@@ -7,6 +7,9 @@ import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 typedef ExtraDetailFn = Future<List<MovieResultDTO>> Function(MovieResultDTO);
+typedef WebFetchDTO = WebFetchBase<MovieResultDTO, SearchCriteriaDTO>;
+typedef WebFetchDTOFn =
+    WebFetchBase<MovieResultDTO, SearchCriteriaDTO> Function(SearchCriteriaDTO);
 
 /// Retrieve movie data from multiple online sources.
 ///
@@ -181,7 +184,9 @@ class BaseMovieRepository {
   /// Initiates a details retrival for a specified list of movies.
   Future<void> _searchList(int searchUID) async {
     initProvider(this);
-    return addResults(searchUID, criteria.criteriaList)
-        .then((_) => finishProvider(this));
+    return addResults(
+      searchUID,
+      criteria.criteriaList,
+    ).then((_) => finishProvider(this));
   }
 }

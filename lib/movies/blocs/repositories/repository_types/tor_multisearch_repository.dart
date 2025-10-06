@@ -6,11 +6,6 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/magnet_torrent_download_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/yts_detail.dart';
-import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
-
-typedef Webfetch = WebFetchBase<MovieResultDTO, SearchCriteriaDTO> Function(
-  SearchCriteriaDTO,
-);
 
 /// Search for movie download data from multiple download sources.
 ///
@@ -69,13 +64,15 @@ class TorMultiSearchRepository extends BaseMovieRepository {
   Future<void> _search(
     int originalSearchUID,
     SearchCriteriaDTO criteria,
-    Webfetch searchClass,
+    WebFetchDTOFn searchClass,
   ) async {
     final provider = searchClass(criteria);
     initProvider(provider);
     final results = await provider.readList();
-    return _addExtraDetails(originalSearchUID, results)
-        .then((_) => finishProvider(provider));
+    return _addExtraDetails(
+      originalSearchUID,
+      results,
+    ).then((_) => finishProvider(provider));
   }
 
   /// Add fetched torrent details into the stream and search for more details.

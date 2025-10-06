@@ -7,11 +7,6 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_finder.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_person_detail.dart';
-import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
-
-typedef Webfetch = WebFetchBase<MovieResultDTO, SearchCriteriaDTO> Function(
-  SearchCriteriaDTO,
-);
 
 /// Search for movie data from multiple online search sources.
 ///
@@ -69,13 +64,15 @@ class MovieListRepository extends BaseMovieRepository {
   Future<void> _fetchDetails(
     int originalSearchUID,
     SearchCriteriaDTO criteria,
-    Webfetch searchClass,
+    WebFetchDTOFn searchClass,
   ) async {
     final provider = searchClass(criteria);
     initProvider(provider);
     final results = await provider.readList();
-    return _addExtraDetails(originalSearchUID, results)
-        .then((_) => finishProvider(provider));
+    return _addExtraDetails(
+      originalSearchUID,
+      results,
+    ).then((_) => finishProvider(provider));
   }
 
   /// Add fetch full movie details from tmdb.
@@ -93,9 +90,10 @@ class MovieListRepository extends BaseMovieRepository {
     if (null != tmdbId) {
       final detailCriteria = SearchCriteriaDTO().fromString(tmdbId);
 
-      final constructor = (MovieContentType.person == dto.type)
-          ? QueryTMDBPersonDetails.new
-          : QueryTMDBMovieDetails.new;
+      final constructor =
+          (MovieContentType.person == dto.type)
+              ? QueryTMDBPersonDetails.new
+              : QueryTMDBMovieDetails.new;
       await _fetchDetails(originalSearchUID, detailCriteria, constructor);
     }
   }
