@@ -30,12 +30,12 @@ class PersonDetailsPage extends StatefulWidget {
 
   /// Instruct goroute how to navigate to this page.
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
-        restorationId: RestorableMovie.getRestorationId(state),
-        child: PersonDetailsPage(
-          person: RestorableMovie.getDto(state),
-          restorationId: RestorableMovie.getRestorationId(state),
-        ),
-      );
+    restorationId: RestorableMovie.getRestorationId(state),
+    child: PersonDetailsPage(
+      person: RestorableMovie.getDto(state),
+      restorationId: RestorableMovie.getRestorationId(state),
+    ),
+  );
 }
 
 class _PersonDetailsPageState extends State<PersonDetailsPage>
@@ -46,6 +46,9 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   bool _redrawRequired = true;
   final _restorablePerson = RestorableMovie();
   var _mobileLayout = true;
+
+  bool get isTabletLayout => !_mobileLayout;
+  bool get isMobileLayout => _mobileLayout;
 
   @override
   void initState() {
@@ -152,97 +155,91 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         endDrawer: getDrawer(context),
         body: Scrollbar(
           thumbVisibility: true,
-          child: _bodySection(),
+          child: ListView(
+            primary: true, // attach scrollbar controller to primary view
+            children: _bodySectionChildren(context),
+          ),
         ),
       ),
     );
   }
 
-  ScrollView _bodySection() => ListView(
-        primary: true, //attach scrollbar controller to primary view
-        children: <Widget>[
-          Text(_restorablePerson.value.title, style: hugeFont),
-          Row(
+  List<Widget> _bodySectionChildren(BuildContext context) => <Widget>[
+    Text(_restorablePerson.value.title, style: hugeFont),
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+        if (_restorablePerson.value.yearRange.isEmpty)
+          Text('Born: ${_restorablePerson.value.year}')
+        else
+          Text('Lifespan: ${_restorablePerson.value.yearRange}'),
+      ],
+    ),
+    Flex(
+      direction: Axis.horizontal,
+      children: [
+        Expanded(
+          child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              if (_restorablePerson.value.yearRange.isEmpty)
-                Text('Born: ${_restorablePerson.value.year}')
-              else
-                Text('Lifespan: ${_restorablePerson.value.yearRange}'),
+              LeftAligendColumn(children: <Widget>[_leftColumn(context)]),
+              if (isTabletLayout)
+                LeftAligendColumn(children: [posterSection()]),
             ],
           ),
-          Flex(
-            direction: Axis.horizontal,
-            children: [
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    LeftAligendColumn(children: <Widget>[_leftColumn()]),
+        ),
+      ],
+    ),
+  ];
 
-                    // Only show right column on tablet
-                    if (!_mobileLayout)
-                      LeftAligendColumn(
-                        children: [posterSection()],
-                      ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      );
+  Widget _leftColumn(BuildContext context) => Wrap(
+    children: <Widget>[
+      Text('Source: ${_restorablePerson.value.bestSource.name}      '),
+      Text('UniqueId: ${_restorablePerson.value.uniqueId}      '),
+      Text('Popularity: ${_restorablePerson.value.userRatingCount}'),
+      ElevatedButton(
+        onPressed:
+            () async => MMSNav(
+              context,
+            ).viewWebPage(makeImdbUrl(_restorablePerson.value.uniqueId)),
+        child: const Text('IMDB'),
+      ),
 
-  Widget _leftColumn() => Wrap(
-        children: <Widget>[
-          Text('Source: ${_restorablePerson.value.bestSource.name}      '),
-          Text('UniqueId: ${_restorablePerson.value.uniqueId}      '),
-          Text('Popularity: ${_restorablePerson.value.userRatingCount}'),
-          ElevatedButton(
-            onPressed: () async => MMSNav(context)
-                .viewWebPage(makeImdbUrl(_restorablePerson.value.uniqueId)),
-            child: const Text('IMDB'),
-          ),
+      if (isMobileLayout) posterSection(),
 
-          // Only show poster in left column on mobile
-          if (_mobileLayout) posterSection(),
-
-          Align(
-            alignment: Alignment.topLeft,
-            child: BoldLabel('Description:'),
+      Align(alignment: Alignment.topLeft, child: BoldLabel('Description:')),
+      Align(
+        alignment: Alignment.topLeft,
+        child: InkWell(
+          onTap: _toggleDescription,
+          child: Text(
+            _restorablePerson.value.description,
+            style: biggerFont,
+            overflow: _descriptionExpanded.value ? null : TextOverflow.ellipsis,
+            maxLines: _descriptionExpanded.value ? null : 8,
           ),
-          Align(
-            alignment: Alignment.topLeft,
-            child: InkWell(
-              onTap: _toggleDescription,
-              child: Text(
-                _restorablePerson.value.description,
-                style: biggerFont,
-                overflow:
-                    _descriptionExpanded.value ? null : TextOverflow.ellipsis,
-                maxLines: _descriptionExpanded.value ? null : 8,
-              ),
-            ),
-          ),
-          ..._related(),
-        ],
-      );
+        ),
+      ),
+      ..._related(),
+    ],
+  );
 
   void _toggleDescription() =>
       setState(() => _descriptionExpanded.value = !_descriptionExpanded.value);
 
   Widget posterSection() => Row(
-        children: [
-          Poster(
-            context,
-            url: _restorablePerson.value.imageUrl,
-            showImages: () async => MMSNav(context).viewWebPage(
+    children: [
+      Poster(
+        context,
+        url: _restorablePerson.value.imageUrl,
+        showImages:
+            () async => MMSNav(context).viewWebPage(
               makeImdbUrl(_restorablePerson.value.uniqueId, photos: true),
             ),
-          ),
-        ],
-      );
+      ),
+    ],
+  );
 
   List<Widget> _related() {
     final categories = <Widget>[];
@@ -255,15 +252,13 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         ..add(
           Center(
             child: InkWell(
-              onTap: () async => MMSNav(context).searchForRelated(
-                // Open search details when tapped.
-                '$rolesLabel: ${_restorablePerson.value.title}',
-                rolesMap.values.toList(),
-              ),
-              child: Text(
-                description,
-                textAlign: TextAlign.center,
-              ),
+              onTap:
+                  () async => MMSNav(context).searchForRelated(
+                    // Open search details when tapped.
+                    '$rolesLabel: ${_restorablePerson.value.title}',
+                    rolesMap.values.toList(),
+                  ),
+              child: Text(description, textAlign: TextAlign.center),
             ),
           ),
         );
