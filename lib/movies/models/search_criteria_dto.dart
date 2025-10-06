@@ -17,12 +17,12 @@ import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class SearchRequest extends Equatable {
-  const SearchRequest(this.title);
+  const SearchRequest(this._title);
 
-  final String title;
+  final String _title;
 
   @override
-  List<Object> get props => [title];
+  List<Object> get props => [_title];
 
   static const empty = SearchRequest('-');
 }
