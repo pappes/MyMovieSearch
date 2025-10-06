@@ -3,6 +3,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 
 //query string https://api.themoviedb.org/3/search/movie?api_key={api_key}&query=wonder+woman
 //json format
@@ -53,7 +54,8 @@ class TmdbMovieSearchConverter {
         searchResults.add(dtoFromMap(movie as Map));
       }
     } else {
-      final error = map[outerElementFailureReason]?.toString() ??
+      final error =
+          map[outerElementFailureReason]?.toString() ??
           'No failure reason provided in results $map';
       searchResults.add(
         MovieResultDTO().error(
@@ -77,7 +79,7 @@ class TmdbMovieSearchConverter {
       movie.imageUrl = '$tmdbPosterPathPrefix$poster';
     }
 
-    final year = getYear(map[innerElementYear]?.toString());
+    final year = map[innerElementYear]?.toString().getYear();
     if (null != year) {
       movie.year = year;
     } else {

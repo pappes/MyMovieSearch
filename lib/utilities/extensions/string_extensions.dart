@@ -1,3 +1,5 @@
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+
 /// Extend [String] to provide convenience functions.
 ///
 extension StringHelper on String {
@@ -68,4 +70,34 @@ extension StringHelper on String {
   /// final cleanText = '2001'.orBetterYet('2001: a space odyssey');
   String orBetterYet(String? replacement) =>
       (replacement != null) ? replacement : this;
+}
+
+/// Extend [String?] to provide convenience functions.
+///
+extension OptionalStringHelper on String? {
+  /// Extract last numeric year value from a text date representation.
+  ///
+  /// Supports  values in the format 'YYYY', 'yyyy-YYYY' and 'YYYY-'
+  ///
+  /// ```dart
+  /// final number = IntHelper.getYear('2005-2009'); // returns 2009
+  /// ```
+  int? getYear() {
+    if (this != null) {
+      const lineBreak = r'[\r\n\v]';
+      const greedyAnything = '.*';
+      const fourNumbers =
+          r'\b\d\d\d\d\b'; // \d is a digit \b is a word boundary
+      const lazyAnything = '.*?';
+
+      final filter = RegExp('$greedyAnything($fourNumbers)$lazyAnything');
+      final oneLine = this!.replaceAll(RegExp(lineBreak), ' ');
+      final match = filter.firstMatch(oneLine);
+
+      // group 0 is the whole string, group 1 is the first ()
+      final fourDigits = match?.group(1);
+      return IntHelper.fromText(fourDigits);
+    }
+    return null;
+  }
 }

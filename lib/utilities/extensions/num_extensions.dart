@@ -73,28 +73,3 @@ extension IntHelper on int {
     return number.round();
   }
 }
-
-/// Extract last numeric year value from a text date representation.
-///
-/// Supports [yeartext] values in the format 'YYYY', 'yyyy-YYYY' and 'YYYY-'
-///
-/// ```dart
-/// final number = IntHelper.getYear('2005-2009'); // returns 2009
-/// ```
-int? getYear(String? yeartext) {
-  if (null != yeartext) {
-    const lineBreak = r'[\r\n\v]';
-    const greedyAnything = '.*';
-    const fourNumbers = r'\b\d\d\d\d\b'; // \d is a digit \b is a word boundary
-    const lazyAnything = '.*?';
-
-    final filter = RegExp('$greedyAnything($fourNumbers)$lazyAnything');
-    final oneLine = yeartext.replaceAll(RegExp(lineBreak), ' ');
-    final match = filter.firstMatch(oneLine);
-
-    // group 0 is the whole string, group 1 is the first ()
-    final fourDigits = match?.group(1);
-    return IntHelper.fromText(fourDigits);
-  }
-  return null;
-}

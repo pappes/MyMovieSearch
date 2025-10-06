@@ -2,7 +2,7 @@
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 
 //query string http://www.omdbapi.com/?apikey=<key>&s=wonder+woman
 //json format
@@ -50,7 +50,8 @@ class OmdbMovieSearchConverter {
         searchResults.add(dtoFromMap(movie as Map));
       }
     } else {
-      final error = map[outerElementFailureReason]?.toString() ??
+      final error =
+          map[outerElementFailureReason]?.toString() ??
           'No failure reason provided in results $map';
       searchResults.add(
         MovieResultDTO().error(
@@ -81,7 +82,7 @@ class OmdbMovieSearchConverter {
         movie.type = MovieContentType.none;
     }
 
-    final year = getYear(map[innerElementYear]?.toString());
+    final year = map[innerElementYear]?.toString().getYear();
     movie.year = year ?? movie.year;
     final yearRange = map[innerElementYear]?.toString();
     if (null != yearRange && yearRange.length > 4) {

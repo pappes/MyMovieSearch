@@ -517,12 +517,12 @@ Future<void> main() async {
     });
   });
 
-  group('NumHelper', () {
+  group('OptionalStringHelper', () {
     // Convert a string to a numeric year, stripping comma seperators and
     // ignoring non numeric input.
     test('getYear()', () {
       void testToNumber(String? input, int? expectedOutput) =>
-          expect(getYear(input), expectedOutput, reason: 'input = $input');
+          expect(input.getYear(), expectedOutput, reason: 'input = $input');
 
       testToNumber('0000', 0);
       testToNumber('0001', 1);

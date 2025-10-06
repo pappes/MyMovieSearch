@@ -5,7 +5,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/libsa_barcode.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
-import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const resultRowsSelector = '.results_cell';
@@ -63,7 +63,7 @@ mixin ScrapeLibsaBarcodeSearch
     final rawDescription = row.querySelector(titleSelector)?.cleanText ?? '';
     final rawYear =
         row.querySelector(yearSelector)?.cleanText.replaceAll('\r', ' ') ?? '';
-    final cleanYear = getYear(rawYear) ?? '';
+    final cleanYear = rawYear.getYear();
     final cleanDescription = rawDescription
         .replaceAll('dvd', '')
         .replaceAll('DVD', '')

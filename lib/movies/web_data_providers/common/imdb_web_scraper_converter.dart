@@ -736,7 +736,7 @@ class ImdbWebScraperConverter {
       ..description =
           map[outerElementDescription]?.toString() ?? movie.description
       ..imageUrl = map[outerElementImage]?.toString() ?? movie.imageUrl
-      ..year = getYear(map[outerElementYear]?.toString()) ?? movie.year
+      ..year = map[outerElementYear]?.toString().getYear() ?? movie.year
       ..yearRange = map[outerElementYearRange]?.toString() ?? movie.yearRange
       ..year = movie.maxYear()
       ..censorRating =
