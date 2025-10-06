@@ -204,7 +204,7 @@ class MovieTile extends ListTile {
   static void getReadIcon(MovieResultDTO movie, List<Widget> widgets) {
     final read = movie.getReadIndicator();
     try {
-      final readHistory = getEnumValue<ReadHistory>(read, ReadHistory.values);
+      final readHistory = ReadHistory.values.byFullName(read);
       logger.t('read indicator = ${movie.uniqueId} $read');
       switch (readHistory) {
         case ReadHistory.starred:

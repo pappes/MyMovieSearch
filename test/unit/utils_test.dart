@@ -97,24 +97,24 @@ Future<void> main() async {
 
   group('enum extensions', () {
     // dom componenets can be referenced by enum.
-    test('getEnumValue converts a string to an enumeration', () {
-      final enumeration = getEnumValue<ElementType>(
-        'anchor',
-        ElementType.values,
+    test('getEnumValue converts a qualified string to an enumeration', () {
+      expect(
+        ElementType.values.byFullName('ElementType.anchor'),
+        ElementType.anchor,
       );
-      expect(enumeration, ElementType.anchor);
+    });
+    test('getEnumValue converts a string to an enumeration', () {
+      expect(ElementType.values.byFullName('anchor'), ElementType.anchor);
     });
     test('getEnumValue accepts null', () {
-      final enumeration = getEnumValue<ElementType>(null, ElementType.values);
-      expect(enumeration, null);
+      expect(ElementType.values.byFullName(null), null);
     });
     test('getEnumValue accepts empty string', () {
-      final enumeration = getEnumValue<ElementType>('', ElementType.values);
-      expect(enumeration, null);
+      expect(ElementType.values.byFullName(''), null);
     });
     test('getEnumValue rejects invalid string', () {
       expect(
-        () => getEnumValue<ElementType>('invalid', ElementType.values),
+        () => ElementType.values.byFullName('invalid'),
         throwsArgumentError,
       );
     });

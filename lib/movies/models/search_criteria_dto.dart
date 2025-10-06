@@ -285,9 +285,8 @@ extension MapCriteriaDTOConversion on Map<dynamic, dynamic> {
       );
     }
     dto.criteriaType =
-        getEnumValue<SearchCriteriaType>(
+        SearchCriteriaType.values.byFullName(
           this[movieCriteriaDTOCriteriaType],
-          SearchCriteriaType.values,
         ) ??
         dto.criteriaType;
     if (inflate) {

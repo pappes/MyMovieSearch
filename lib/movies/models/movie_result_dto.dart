@@ -318,29 +318,15 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
 
     dto
       ..bestSource =
-          getEnumValue<DataSourceType>(
-            this[movieDTOBestSource],
-            DataSourceType.values,
-          ) ??
+          DataSourceType.values.byFullName(this[movieDTOBestSource]) ??
           dto.bestSource
       ..type =
-          getEnumValue<MovieContentType>(
-            this[movieDTOType],
-            MovieContentType.values,
-          ) ??
-          dto.type
+          MovieContentType.values.byFullName(this[movieDTOType]) ?? dto.type
       ..censorRating =
-          getEnumValue<CensorRatingType>(
-            this[movieDTOCensorRating],
-            CensorRatingType.values,
-          ) ??
+          CensorRatingType.values.byFullName(this[movieDTOCensorRating]) ??
           dto.censorRating
       ..language =
-          getEnumValue<LanguageType>(
-            this[movieDTOLanguage],
-            LanguageType.values,
-          ) ??
-          dto.language
+          LanguageType.values.byFullName(this[movieDTOLanguage]) ?? dto.language
       ..sources = stringToSources(this[movieDTOSources]);
     if (!dto.sources.containsKey(dto.bestSource) && !dto.isMessage()) {
       dto.sources[dto.bestSource] = dto.uniqueId;
@@ -358,10 +344,7 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
       for (final sourceEntry in input.entries) {
         final value = sourceEntry.value;
         if (sourceEntry.key is String && value is String) {
-          final sourceEnum = getEnumValue<DataSourceType>(
-            sourceEntry.key,
-            DataSourceType.values,
-          );
+          final sourceEnum = DataSourceType.values.byFullName(sourceEntry.key);
           if (null != sourceEnum) {
             sources[sourceEnum] = value;
           }
@@ -602,13 +585,12 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     this.keywords = dynamicToStringSet(keywords);
     // Enumerations, work with what we get
     this.type =
-        getEnumValue<MovieContentType>(type, MovieContentType.values) ??
-        MovieContentType.none;
+        MovieContentType.values.byFullName(type) ?? MovieContentType.none;
     this.censorRating =
-        getEnumValue<CensorRatingType>(censorRating, CensorRatingType.values) ??
+        CensorRatingType.values.byFullName(censorRating) ??
         CensorRatingType.none;
     this.language =
-        getEnumValue<LanguageType>(language, LanguageType.values) ??
+        LanguageType.values.byFullName(language) ??
         getLanguageType(this.languages);
 
     if (this.type != MovieContentType.searchprompt &&
@@ -1602,10 +1584,7 @@ extension DTOCompare on MovieResultDTO {
       default:
         {
           try {
-            final readHistory = getEnumValue<ReadHistory>(
-              read,
-              ReadHistory.values,
-            );
+            final readHistory = ReadHistory.values.byFullName(read);
             switch (readHistory) {
               case ReadHistory.starred:
                 return 99;

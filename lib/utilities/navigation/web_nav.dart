@@ -57,12 +57,13 @@ class MMSNav {
   factory MMSNav(BuildContext context) {
     final appContext = FlutterAppContext(context);
     final canvas = MMSFlutterCanvas(
-        navigator: appContext,
-        theme: appContext,
-        dialogs: appContext,
-        focus: appContext,
-        customTabsLauncher: FlutterCustomTabsLauncher(),
-        navLog: NavLog(context),);
+      navigator: appContext,
+      theme: appContext,
+      dialogs: appContext,
+      focus: appContext,
+      customTabsLauncher: FlutterCustomTabsLauncher(),
+      navLog: NavLog(context),
+    );
     return MMSNav.withCanvas(canvas);
   }
 
@@ -280,7 +281,7 @@ class MMSFlutterCanvas {
   final AppFocus? focus;
   final CustomTabsLauncher? customTabsLauncher;
   final NavLog _navLog;
-  
+
   /// Render web page [url] in a child page of the current screen.
   ///
   /// For platforms that don't support CustomTabs
@@ -316,7 +317,11 @@ class MMSFlutterCanvas {
         );
         return openedPage.then((val) {
           // Record page closure event.
-          _navLog.logPageClose(page.routePath.name, page.reference, page.params);
+          _navLog.logPageClose(
+            page.routePath.name,
+            page.reference,
+            page.params,
+          );
           _hideKeyboard();
           return null;
         });
@@ -385,7 +390,7 @@ class MMSFlutterCanvas {
   bool closeCurrentScreen() {
     if (navigator is FlutterAppContext && navigator != null) {
       final goRouterNavigator = navigator! as FlutterAppContext;
-      if (goRouterNavigator.context.mounted && 
+      if (goRouterNavigator.context.mounted &&
           goRouterNavigator.context.canPop()) {
         goRouterNavigator.context.pop();
         return true;
@@ -411,8 +416,9 @@ class MMSFlutterCanvas {
             ),
           ),
         )
-        .onError((error, stackTrace) => 
-          retval = _customTabsError(dialogs, error, url));
+        .onError(
+          (error, stackTrace) => retval = _customTabsError(dialogs, error, url),
+        );
     return retval;
   }
 
@@ -420,9 +426,10 @@ class MMSFlutterCanvas {
     // An exception is thrown if browser app is not installed on Android device.
     debugPrint(e.toString());
     return dialogs?.popup(
-        'Received error $e\nwhen opening $url',
-        'Navigation error',
-      ) ?? Future.value(e);
+          'Received error $e\nwhen opening $url',
+          'Navigation error',
+        ) ??
+        Future.value(e);
   }
 
   Future<Object?> _openBrowser(AppDialogs? dialogs, String url) async {
@@ -430,7 +437,6 @@ class MMSFlutterCanvas {
     // An exception is thrown if browser app is not installed on Android device.
     if (!success) {
       return dialogs?.popup(url, 'Browser error');
-
     }
     return success;
   }
