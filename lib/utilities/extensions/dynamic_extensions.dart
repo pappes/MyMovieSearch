@@ -1,8 +1,18 @@
+import 'dart:math' show min;
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 
 /// Extend datatype "dynamic" to provide convenience functions.
 ///
-extension DynamicHelper on dynamic {
+extension DynamicHelper<T> on T {
+  T observe() {
+    final str = this?.toString() ?? '';
+    final len = str.length;
+    print(
+      'Restorable size = $len, content = ${str.substring(0, min(50, len))}',
+    );
+    return this;
+  }
+
   /// Filter out non string values
   ///
   /// Sets the value to empty string if it is not currently a string

@@ -150,13 +150,10 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
 
   @override
   Object toPrimitives() => dtoToPrimitives(value);
-  Object dtoToPrimitives(SearchCriteriaDTO value) {
-    final map = value.toMap(condensed: true)
-      ..addAll({'nextId': '${nextId + 1}'});
-    final json = jsonEncode(map);
-    printSizeAndReturn(json);
-    return json;
-  }
+  Object dtoToPrimitives(SearchCriteriaDTO value) =>
+      jsonEncode(
+        value.toMap(condensed: true)..addAll({'nextId': '${nextId + 1}'}),
+      ).observe();
 }
 
 extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {

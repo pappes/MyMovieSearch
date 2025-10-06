@@ -202,12 +202,8 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   @override
   // Need 2 functions because access to [value] is not initialised for testing!
   Object toPrimitives() => RestorableMovie.dtoToPrimitives(value);
-  static Object dtoToPrimitives(MovieResultDTO dto) {
-    final map = {'dto': dto.uniqueId, 'nextId': '${nextId + 1}'};
-    final json = jsonEncode(map);
-    printSizeAndReturn(json);
-    return json;
-  }
+  static Object dtoToPrimitives(MovieResultDTO dto) =>
+      jsonEncode({'dto': dto.uniqueId, 'nextId': '${nextId + 1}'}).observe();
 }
 
 class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
@@ -239,13 +235,7 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
   // Need 2 functions because access to [value] is not initialised for testing!
   Object toPrimitives() => listToPrimitives(value);
   Object listToPrimitives(List<MovieResultDTO> list) =>
-      printSizeAndReturn(jsonEncode(list.encodeList()));
-}
-
-String printSizeAndReturn(String str) {
-  final len = str.length;
-  print('Restorable size = $len, content = ${str.substring(0, min(50, len))}');
-  return str;
+      jsonEncode(list.encodeList()).observe();
 }
 
 extension ListDTOConversion on Iterable<MovieResultDTO> {
