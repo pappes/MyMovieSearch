@@ -27,7 +27,7 @@ abstract class AppFocus {
 }
 
 /// An abstraction for launching custom tabs to make testing easier.
+// ignore: one_member_abstracts
 abstract class CustomTabsLauncher {
-  Future<void> launch(String url, {
-    tabs.CustomTabsOptions? customTabsOptions});
+  Future<void> launch(String url, {tabs.CustomTabsOptions? customTabsOptions});
 }

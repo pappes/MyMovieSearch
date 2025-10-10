@@ -288,8 +288,7 @@ class MMSFlutterCanvas {
   /// the URL is displayed to the user.
   Future<Object?> viewWebPage(String url) async {
     final useAndroidCustomTabs = Platform.isAndroid && url.startsWith('http');
-    if (navigator is FlutterAppContext) {
-      final nav = navigator as FlutterAppContext;
+    if (theme != null && dialogs != null) {
       if (useAndroidCustomTabs) {
         return _invokeChromeCustomTabs(theme, dialogs, url);
       } else {

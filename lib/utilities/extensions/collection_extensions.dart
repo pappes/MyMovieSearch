@@ -10,11 +10,11 @@ extension StringIterableHelper on Iterable<String> {
   /// Convert scalar value to a List with a single value
   /// Convert map to a List (return values, discard keys)
   ///
-  /// '''dart
+  /// ```dart
   /// StringIterableHelper.fromJson('[1,2,3]'); // returns  ['1', '2', '3']
   /// StringIterableHelper.fromJson('[[1,2,3],[4,5,6]]'); // returns  ['[1, 2, 3]', '[4, 5, 6]']
   /// StringIterableHelper.fromJson('{"first":1, "second":2 }'); // returns  ['1', '2']
-  /// '''
+  /// ```
   static Set<String> fromJson(String? jsonText) {
     final unique = <String>{};
     if (null == jsonText || jsonText.isEmpty) return unique;

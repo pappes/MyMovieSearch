@@ -7,7 +7,7 @@ class WebPageShaExtractorAndroid extends IMDBShaExtractor {
   WebPageShaExtractorAndroid.internal(super.imdbShaMap, super.imdbSource)
     : super.internal();
 
-    final _waitForSha = Completer<void>();
+  final _waitForSha = Completer<void>();
 
   // Load the data from IMDB and capture the sha used.
   @override
@@ -20,13 +20,12 @@ class WebPageShaExtractorAndroid extends IMDBShaExtractor {
 
   // Click on the "See all" button or "Previous" accordion to load the sha.
   // This is needed because the sha is not available until the list is expanded.
-  void _clickOnElement(
-    InAppWebViewController controller,
-    WebUri? url,
-  ) {
+  void _clickOnElement(InAppWebViewController controller, WebUri? url) {
     if (imdbSource == ImdbJsonSource.credits) {
       // For credits, we need to click on the "Costume Department" button.
-      unawaited(controller.evaluateJavascript(source: getClickOnCostumeDepartment()));
+      unawaited(
+        controller.evaluateJavascript(source: getClickOnCostumeDepartment()),
+      );
     } else {
       // For other sources, we need to click on the "See all" button.
       unawaited(controller.evaluateJavascript(source: getClickOnSeeAll()));
@@ -35,7 +34,7 @@ class WebPageShaExtractorAndroid extends IMDBShaExtractor {
 
   // Check if the sha value has changed and update the map if so.
   void _searchForSha(
-    InAppWebViewController controller, 
+    InAppWebViewController controller,
     LoadedResource resource,
   ) {
     final newSha = extractShaFromWebText(resource.url.toString());
@@ -51,9 +50,9 @@ class WebPageShaExtractorAndroid extends IMDBShaExtractor {
   Future<void> _observeWebView(Uri webAddress) async {
     final headlessWebView = HeadlessInAppWebView(
       initialUrlRequest: URLRequest(url: WebUri.uri(webAddress)),
-        // Once the page is loaded, we can click the element.
+      // Once the page is loaded, we can click the element.
       onLoadStop: _clickOnElement,
-        // Monitor all resources loaded to find the sha.
+      // Monitor all resources loaded to find the sha.
       onLoadResource: _searchForSha,
     );
     await headlessWebView.run();

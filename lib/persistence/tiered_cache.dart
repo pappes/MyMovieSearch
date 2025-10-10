@@ -147,7 +147,7 @@ class TieredCache<T> {
 class CacheMissError implements Error {
   CacheMissError(this._cause);
 
-  String _cause;
+  final String _cause;
   StackTrace stack = StackTrace.current;
   @override
   StackTrace? get stackTrace => stack;

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:math' show max, min;
+import 'dart:math' show max;
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';

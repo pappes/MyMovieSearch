@@ -81,9 +81,9 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   ///
   /// Implementations need to ensure superclass has successfully completed
   /// by calling
-  /// ''' dart
+  /// ``` dart
   /// await super.fetchRecords(collectionPath).drain<dynamic>();
-  /// '''
+  /// ```
   ///
   Stream<dynamic> fetchRecords(
     String collectionPath, {

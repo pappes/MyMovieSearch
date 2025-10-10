@@ -16,7 +16,7 @@ import 'mmsnav_unit_test.mocks.dart';
 // To regenerate mocks run the following command
 // flutter pub run build_runner build --delete-conflicting-outputs
 @GenerateNiceMocks([
-  MockSpec<MMSFlutterCanvas>(), 
+  MockSpec<MMSFlutterCanvas>(),
   MockSpec<FirebaseApplicationState>(),
   MockSpec<NavLog>(),
   MockSpec<AppNavigator>(),
@@ -25,17 +25,15 @@ import 'mmsnav_unit_test.mocks.dart';
   MockSpec<AppFocus>(),
   MockSpec<CustomTabsLauncher>(),
 ])
-
 void main() {
-      
   group('MMSNav web page unit tests', () {
     final testClass = RouteInfo(
-        ScreenRoute.persondetails, // Dummy object for params
-        <String, dynamic>{},
-        'uniqueId',
-      );
+      ScreenRoute.persondetails, // Dummy object for params
+      <String, dynamic>{},
+      'uniqueId',
+    );
 
-    test('toString()', ()  {
+    test('toString()', () {
       expect(
         testClass.toString(),
         '{"path":"ScreenRoute.persondetails","params":"{}","ref":"uniqueId"}',
@@ -53,12 +51,17 @@ void main() {
       testClass = MMSNav.withCanvas(mockCanvas);
       navigationResult = null;
 
-      mockito.when(mockCanvas.viewWebPage(mockito.any)).thenAnswer((invocation) {
+      mockito.when(mockCanvas.viewWebPage(mockito.any)).thenAnswer((
+        invocation,
+      ) {
         navigationResult = invocation.positionalArguments[0] as String;
         return Future.value(null);
       });
-      mockito.when(mockCanvas.viewFlutterPage(mockito.any)).thenAnswer((invocation) {
-        navigationResult = (invocation.positionalArguments[0] as RouteInfo).routePath.name;
+      mockito.when(mockCanvas.viewFlutterPage(mockito.any)).thenAnswer((
+        invocation,
+      ) {
+        navigationResult =
+            (invocation.positionalArguments[0] as RouteInfo).routePath.name;
         return Future.value(null);
       });
     });
@@ -70,14 +73,14 @@ void main() {
 
     test('showResultsPage()', () async {
       await testClass.showResultsPage(
-        SearchCriteriaDTO().init(SearchCriteriaType.none)
+        SearchCriteriaDTO().init(SearchCriteriaType.none),
       );
       expect(navigationResult, 'searchresults');
     });
 
     test('showCriteriaPage()', () async {
       await testClass.showCriteriaPage(
-        SearchCriteriaDTO().init(SearchCriteriaType.none)
+        SearchCriteriaDTO().init(SearchCriteriaType.none),
       );
       // This uses viewFlutterRootPage, which we haven't mocked yet.
       // For now, let's verify viewFlutterPage wasn't called.
@@ -95,18 +98,16 @@ void main() {
     });
 
     test('searchForRelated() 1 episode result', () async {
-      await testClass.searchForRelated(
-        'unknown',
-        [MovieResultDTO().init(type: MovieContentType.episode.toString())]
-      );
+      await testClass.searchForRelated('unknown', [
+        MovieResultDTO().init(type: MovieContentType.episode.toString()),
+      ]);
       expect(navigationResult, 'moviedetails');
     });
 
     test('searchForRelated() 1 error result', () async {
-      await testClass.searchForRelated(
-        'unknown',
-        [MovieResultDTO().init(type: MovieContentType.error.toString())]
-      );
+      await testClass.searchForRelated('unknown', [
+        MovieResultDTO().init(type: MovieContentType.error.toString()),
+      ]);
       expect(navigationResult, 'errordetails');
     });
 
@@ -131,27 +132,81 @@ void main() {
     });
 
     test('getDetailsPage() returns correct screen to open '
-         'for each content type',
-        () {
-
+        'for each content type', () {
       final testCases = <Map<String, dynamic>>[
         {'id': '${imdbTitlePrefix}12345', 'expectedRoute': 'moviedetails'},
         {'id': '${imdbPersonPrefix}12345', 'expectedRoute': 'persondetails'},
         {'id': '12345', 'expectedRoute': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.movie, 'expectedRoute': 'moviedetails'},
-        {'id': '12345', 'type': MovieContentType.person, 'expectedRoute': 'persondetails'},
-        {'id': '12345', 'type': MovieContentType.custom, 'expectedRoute': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.download, 'expectedRoute': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.episode, 'expectedRoute': 'moviedetails'},
-        {'id': '12345', 'type': MovieContentType.error, 'expectedRoute': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.information, 'expectedRoute': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.keyword, 'expectedRoute': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.miniseries, 'expectedRoute': 'moviedetails'},
-        {'id': '12345', 'type': MovieContentType.navigation, 'expectedRoute': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.none, 'expectedRoute': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.series, 'expectedRoute': 'moviedetails'},
-        {'id': '12345', 'type': MovieContentType.short, 'expectedRoute': 'moviedetails'},
-        {'id': '12345', 'type': MovieContentType.title, 'expectedRoute': 'moviedetails'},
+        {
+          'id': '12345',
+          'type': MovieContentType.movie,
+          'expectedRoute': 'moviedetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.person,
+          'expectedRoute': 'persondetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.custom,
+          'expectedRoute': 'errordetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.download,
+          'expectedRoute': 'errordetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.episode,
+          'expectedRoute': 'moviedetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.error,
+          'expectedRoute': 'errordetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.information,
+          'expectedRoute': 'errordetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.keyword,
+          'expectedRoute': 'errordetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.miniseries,
+          'expectedRoute': 'moviedetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.navigation,
+          'expectedRoute': 'errordetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.none,
+          'expectedRoute': 'errordetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.series,
+          'expectedRoute': 'moviedetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.short,
+          'expectedRoute': 'moviedetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.title,
+          'expectedRoute': 'moviedetails',
+        },
       ];
 
       for (final testCase in testCases) {
@@ -159,9 +214,12 @@ void main() {
         final id = testCase['id'] as String;
         final type = testCase['type'] as MovieContentType?;
         final expectedRoute = testCase['expectedRoute'] as String;
-        final reason = 'criteria: id=$id, type=${type?.toString()}, expected=$expectedRoute';
+        final reason = 'criteria: id=$id, type=$type, expected=$expectedRoute';
 
-        final movie = MovieResultDTO().init(uniqueId: id, type: type?.toString());
+        final movie = MovieResultDTO().init(
+          uniqueId: id,
+          type: type?.toString(),
+        );
 
         // Act
         final actual = movie.getDetailsPage();
@@ -174,30 +232,97 @@ void main() {
     });
 
     test('resultDrillDown() navigates to the correct screen '
-         'for each content type',
-        () async {
+        'for each content type', () async {
       // A data-driven approach makes this test cleaner and easier to maintain.
       final testCases = <Map<String, dynamic>>[
         {'id': '${imdbTitlePrefix}12345', 'expected': 'moviedetails'},
         {'id': '${imdbPersonPrefix}12345', 'expected': 'persondetails'},
         {'id': '12345', 'expected': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.movie, 'expected': 'moviedetails'},
-        {'id': '12345', 'type': MovieContentType.person, 'expected': 'persondetails'},
-        {'id': '12345', 'type': MovieContentType.custom, 'expected': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.download, 'expected': 'http://something.com'},
-        {'id': '12345', 'type': MovieContentType.episode, 'expected': 'moviedetails'},
-        {'id': '12345', 'type': MovieContentType.error, 'expected': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.information, 'expected': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.keyword, 'expected': 'searchresults'},
-        {'id': '12345', 'type': MovieContentType.miniseries, 'expected': 'moviedetails'},
-        {'id': '12345', 'type': MovieContentType.navigation, 'expected': 'searchresults'},
-        {'id': '12345', 'type': MovieContentType.none, 'expected': 'errordetails'},
-        {'id': '12345', 'type': MovieContentType.series, 'expected': 'moviedetails'},
-        {'id': '12345', 'type': MovieContentType.short, 'expected': 'moviedetails'},
-        {'id': '12345', 'type': MovieContentType.title, 'expected': 'moviedetails'},
-        {'id': '12345', 'type': MovieContentType.barcode, 'expected': 'searchresults'},
-        {'id': 'http://www.google.com', 'type': MovieContentType.navigation, 'expected': 'http://www.google.com'},
-        {'id': 'tt1234', 'type': MovieContentType.navigation, 'expected': 'searchresults'},
+        {
+          'id': '12345',
+          'type': MovieContentType.movie,
+          'expected': 'moviedetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.person,
+          'expected': 'persondetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.custom,
+          'expected': 'errordetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.download,
+          'expected': 'http://something.com',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.episode,
+          'expected': 'moviedetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.error,
+          'expected': 'errordetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.information,
+          'expected': 'errordetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.keyword,
+          'expected': 'searchresults',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.miniseries,
+          'expected': 'moviedetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.navigation,
+          'expected': 'searchresults',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.none,
+          'expected': 'errordetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.series,
+          'expected': 'moviedetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.short,
+          'expected': 'moviedetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.title,
+          'expected': 'moviedetails',
+        },
+        {
+          'id': '12345',
+          'type': MovieContentType.barcode,
+          'expected': 'searchresults',
+        },
+        {
+          'id': 'http://www.google.com',
+          'type': MovieContentType.navigation,
+          'expected': 'http://www.google.com',
+        },
+        {
+          'id': 'tt1234',
+          'type': MovieContentType.navigation,
+          'expected': 'searchresults',
+        },
       ];
 
       for (final testCase in testCases) {
@@ -205,7 +330,7 @@ void main() {
         final id = testCase['id'] as String;
         final type = testCase['type'] as MovieContentType?;
         final expected = testCase['expected'] as String;
-        final reason = 'criteria: id=$id type=${type?.toString()}';
+        final reason = 'criteria: id=$id type=$type';
 
         // Reset mocks for each iteration to ensure clean verification.
         mockito.clearInteractions(mockCanvas);
@@ -246,16 +371,16 @@ void main() {
       mockFocus = MockAppFocus();
       mockNavLog = MockNavLog();
       canvas = MMSFlutterCanvas(
-          navigator: fakeNavigator,
-          theme: mockTheme,
-          dialogs: mockDialogs,
-          focus: mockFocus,
-          // customTabsLauncher is not used in this test group, so it can be null.
-          navLog: mockNavLog);
-      testPageInfo = RouteInfo(
-        ScreenRoute.moviedetails, {'id': '123'}, 
-        'ref123'
+        navigator: fakeNavigator,
+        theme: mockTheme,
+        dialogs: mockDialogs,
+        focus: mockFocus,
+        // customTabsLauncher is not used in this test group, so it can be null.
+        navLog: mockNavLog,
       );
+      testPageInfo = RouteInfo(ScreenRoute.moviedetails, {
+        'id': '123',
+      }, 'ref123');
     });
 
     test('should log open and close, and hide keyboard on success', () async {
@@ -264,17 +389,32 @@ void main() {
 
       // Assert
       // Verify navigation was triggered on the context from the canvas
-      mockito.verify(fakeNavigator.pushNamed(
-        testPageInfo.routePath.name,
-        extra: testPageInfo.params,
-      )).called(1);
+      mockito
+          .verify(
+            fakeNavigator.pushNamed(
+              testPageInfo.routePath.name,
+              extra: testPageInfo.params,
+            ),
+          )
+          .called(1);
 
       // Verify logging calls
-      mockito.verify(mockNavLog.logPageOpen(
-              testPageInfo.routePath.name, testPageInfo.reference))
+      mockito
+          .verify(
+            mockNavLog.logPageOpen(
+              testPageInfo.routePath.name,
+              testPageInfo.reference,
+            ),
+          )
           .called(1);
-      mockito.verify(mockNavLog.logPageClose(testPageInfo.routePath.name,
-              testPageInfo.reference, testPageInfo.params))
+      mockito
+          .verify(
+            mockNavLog.logPageClose(
+              testPageInfo.routePath.name,
+              testPageInfo.reference,
+              testPageInfo.params,
+            ),
+          )
           .called(1);
 
       // We can't easily test the private _hideKeyboard method directly,
@@ -284,12 +424,13 @@ void main() {
     test('should not do anything if context is null', () async {
       // Arrange
       final canvasWithNullContext = MMSFlutterCanvas(
-          navigator: null,
-          theme: null,
-          dialogs: null,
-          focus: null,
-          customTabsLauncher: null,
-          navLog: mockNavLog);
+        navigator: null,
+        theme: null,
+        dialogs: null,
+        focus: null,
+        customTabsLauncher: null,
+        navLog: mockNavLog,
+      );
 
       // Act
       await canvasWithNullContext.viewFlutterPage(testPageInfo);
@@ -300,7 +441,5 @@ void main() {
       // never passed to the canvasWithNullContext. The null check inside the
       // production code handles this case.
     });
-
   });
-
 }
