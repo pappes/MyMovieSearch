@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -17,6 +17,8 @@ const imdbQueryActress = deepPersonActressHeader;
 const imdbQueryDirector = deepPersonDirectorHeader;
 const imdbQueryProducer = deepPersonProducerHeader;
 const imdbQueryWriter = deepPersonWriterHeader;
+
+const urlPlaceholder = 'searchCriteria';
 
 enum ImdbJsonSource { actor, actress, director, producer, writer, credits }
 
@@ -42,14 +44,13 @@ class QueryIMDBJsonFilteredFilmographyDetails extends QueryIMDBJsonDetailsBase {
       '4dee7275785b471d811ea0eb35e4a73be2286ec68a7be9c304af043f00de7ee7';
 
   static bool _updatedSha = false;
-  static final _shaMap = {
-    ImdbJsonSource.credits: _imdbShaCredits,
-  };
+  static final _shaMap = {ImdbJsonSource.credits: _imdbShaCredits};
+  static final _urlMap = <ImdbJsonSource, String>{};
 
   /// Describe where the data is coming from.
   @override
-  String myDataSourceName() => 
-    '${super.myDataSourceName()}-${ImdbJsonSource.credits}';
+  String myDataSourceName() =>
+      '${super.myDataSourceName()}-${ImdbJsonSource.credits}';
 
   @override
   @factory
@@ -70,19 +71,23 @@ class QueryIMDBJsonFilteredFilmographyDetails extends QueryIMDBJsonDetailsBase {
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     imdbSha = _shaMap[ImdbJsonSource.credits] ?? '';
+    if (_urlMap[ImdbJsonSource.credits] != null) {
+      replacementUrl = _urlMap[ImdbJsonSource.credits];
+    }
     return super.myConstructURI(searchCriteria, pageNumber: pageNumber);
   }
-
 
   ///
   void updateShaKeys() {
     if (!_updatedSha) {
       _updatedSha = true;
       if (Platform.isLinux) {
-        // Mobile platforms do not need to extract the sha keys.
+        // Mobile platforms are not able to extract the sha keys.
         return;
       }
-      unawaited(IMDBShaExtractor(_shaMap, ImdbJsonSource.credits).updateSha());
+      unawaited(
+        IMDBShaExtractor(_shaMap, _urlMap, ImdbJsonSource.credits).updateSha(),
+      );
     }
   }
 }
@@ -132,6 +137,7 @@ class QueryIMDBJsonPaginatedFilmographyDetails
     ImdbJsonSource.producer: _imdbShaProducer,
     ImdbJsonSource.writer: _imdbShaWriter,
   };
+  static final _urlMap = <ImdbJsonSource, String>{};
 
   final ImdbJsonSource imdbQuery;
 
@@ -157,6 +163,10 @@ class QueryIMDBJsonPaginatedFilmographyDetails
   /// https://caching.graphql.imdb.com/?operationName=NameMainFilmographyPaginatedCredits&variables=%7B%22after%22%3A%22bm0wMDAwMTQ5%22%2C%22id%22%3A%22nm0000149%22%2C%22includeUserRating%22%3Afalse%2C%22locale%22%3A%22en-GB%22%7D&extensions=%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%229c2aaa61b79d348988d90e7420366ff13de8508e54ba7b8cf10f959f64f049d2%22%2C%22version%22%3A1%7D%7D
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
+    if (_urlMap[imdbQuery] != null) {
+      replacementUrl = _urlMap[imdbQuery];
+    }
+
     urlVariablesPrefix = '{"after":"';
     const variablesMid = '","id":"';
     final parameters = <String, String>{};
@@ -196,11 +206,21 @@ class QueryIMDBJsonPaginatedFilmographyDetails
         // Mobile platforms do not need to extract the sha keys.
         return;
       }
-      unawaited(IMDBShaExtractor(_shaMap, ImdbJsonSource.actor).updateSha());
-      unawaited(IMDBShaExtractor(_shaMap, ImdbJsonSource.actress).updateSha());
-      unawaited(IMDBShaExtractor(_shaMap, ImdbJsonSource.director).updateSha());
-      unawaited(IMDBShaExtractor(_shaMap, ImdbJsonSource.producer).updateSha());
-      unawaited(IMDBShaExtractor(_shaMap, ImdbJsonSource.writer).updateSha());
+      unawaited(
+        IMDBShaExtractor(_shaMap, _urlMap, ImdbJsonSource.actor).updateSha(),
+      );
+      unawaited(
+        IMDBShaExtractor(_shaMap, _urlMap, ImdbJsonSource.actress).updateSha(),
+      );
+      unawaited(
+        IMDBShaExtractor(_shaMap, _urlMap, ImdbJsonSource.director).updateSha(),
+      );
+      unawaited(
+        IMDBShaExtractor(_shaMap, _urlMap, ImdbJsonSource.producer).updateSha(),
+      );
+      unawaited(
+        IMDBShaExtractor(_shaMap, _urlMap, ImdbJsonSource.writer).updateSha(),
+      );
     }
   }
 }
@@ -212,6 +232,7 @@ abstract class QueryIMDBJsonDetailsBase
   QueryIMDBJsonDetailsBase(super.criteria, this.imdbOperation);
 
   static const _baseURLprefix = 'caching.graphql.imdb.com';
+  String? replacementUrl;
 
   final String imdbOperation;
 
@@ -236,6 +257,17 @@ abstract class QueryIMDBJsonDetailsBase
   /// for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
+    if (replacementUrl != null) {
+      try {
+        return Uri.parse(
+          replacementUrl!.replaceAll(urlPlaceholder, searchCriteria),
+        );
+      } catch (e) {
+        if (kDebugMode) {
+          debugPrint('Invalid replacement URL $replacementUrl: $e');
+        }
+      }
+    }
     final variables =
         '$urlVariablesPrefix$searchCriteria'
         '$urlVariablesSuffix';

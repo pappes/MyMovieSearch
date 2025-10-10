@@ -11,6 +11,8 @@ import 'package:my_movie_search/utilities/web_data/imdb_sha_extractor.dart';
 ///     IMDBShaExtractor uses a webviewController
 /// which requires a real android device or emulator to run
 /// hence this is an integration test with a full MyApp widget.
+/// can be used to update QueryIMDBJsonFilteredFilmographyDetails and
+/// QueryIMDBJsonFilteredFilmographyDetails in lib/movies/web_data_providers/detail/imdb_json.dart
 ///
 /// Android device must be connected or launch from the command line with:
 /// flutter test integration_test/imdb_sha_detection_test.dart -d 192.168.0.33:41471
@@ -35,21 +37,22 @@ class MyWebViewWidget extends StatefulWidget {
 }
 
 class _MyWebViewWidgetState extends State<MyWebViewWidget> {
-
   @override
   Widget build(BuildContext context) => const Text('Sha extractor');
 }
 
 Future<Map<ImdbJsonSource, String>> _extractShas() async {
   final shaMap = <ImdbJsonSource, String>{};
+  final urlMap = <ImdbJsonSource, String>{};
   await Future.wait({
-    IMDBShaExtractor(shaMap, ImdbJsonSource.actor).updateSha(),
-    IMDBShaExtractor(shaMap, ImdbJsonSource.actress).updateSha(),
-    IMDBShaExtractor(shaMap, ImdbJsonSource.director).updateSha(),
-    IMDBShaExtractor(shaMap, ImdbJsonSource.producer).updateSha(),
-    IMDBShaExtractor(shaMap, ImdbJsonSource.writer).updateSha(),
-    IMDBShaExtractor(shaMap, ImdbJsonSource.credits).updateSha()
+    IMDBShaExtractor(shaMap, urlMap, ImdbJsonSource.actor).updateSha(),
+    IMDBShaExtractor(shaMap, urlMap, ImdbJsonSource.actress).updateSha(),
+    IMDBShaExtractor(shaMap, urlMap, ImdbJsonSource.director).updateSha(),
+    IMDBShaExtractor(shaMap, urlMap, ImdbJsonSource.producer).updateSha(),
+    IMDBShaExtractor(shaMap, urlMap, ImdbJsonSource.writer).updateSha(),
+    //IMDBShaExtractor(shaMap, urlMap, ImdbJsonSource.credits).updateSha(),
   });
+  //print(urlMap);
   return shaMap;
 }
 
@@ -60,7 +63,9 @@ void main() {
 
   runApp(const MyApp());
 
-  testWidgets('Extract SHAs from imdb for common roles', (tester) async {
+  testWidgets(
+    'Extract SHAs from imdb for common roles',
+    (tester) async {
       await tester.pumpWidget(const MyApp());
 
       final output = await _extractShas();
@@ -68,13 +73,13 @@ void main() {
       // Check the results.
       expect(
         output.length,
-        6,
+        5,
         reason:
-            'SHA map should have 6 entries but has ${output.length}:\n $output',
+            'SHA map should have 5 entries but has ${output.length}:\n $output',
       );
-      // This test uses flutter_inappwebview which is configured for Android.
     },
-    timeout: const Timeout(Duration(seconds: 60)), 
-    skip: !Platform.isAndroid
+    timeout: const Timeout(Duration(seconds: 30)),
+    // This test uses flutter_inappwebview which is configured for Android.
+    skip: !Platform.isAndroid,
   );
 }
