@@ -2,9 +2,10 @@
 
   <!-- Required to fetch data from the internet. -->
   <uses-permission android:name="android.permission.INTERNET" />
+        <!-- android:label="my_movie_search" -->  
     <application
         android:usesCleartextTraffic="true"
-        android:label="my_movie_search"
+        android:label="@string/app_name"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
