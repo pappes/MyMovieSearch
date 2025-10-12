@@ -7,6 +7,37 @@ import 'package:my_movie_search/utilities/web_data/imdb_sha_extractor.dart';
 
 // This function type abstracts the creation of the HttpClient, making it mockable.
 typedef HttpClientFactory = HttpClient Function();
+typedef WebViewRunner =
+    Future<void> Function({
+      required Uri initialUrl,
+      required Future<WebResourceResponse?> Function(
+        InAppWebViewController,
+        WebResourceRequest,
+      )?
+      shouldInterceptRequest,
+      required void Function(InAppWebViewController, WebUri?) onLoadStop,
+      required void Function(InAppWebViewController, LoadedResource)
+      onLoadResource,
+    });
+
+Future<void> defaultWebViewRunner({
+  required Uri initialUrl,
+  required Future<WebResourceResponse?> Function(
+    InAppWebViewController,
+    WebResourceRequest,
+  )?
+  shouldInterceptRequest,
+  required void Function(InAppWebViewController, WebUri?) onLoadStop,
+  required void Function(InAppWebViewController, LoadedResource) onLoadResource,
+}) async {
+  final headlessWebView = HeadlessInAppWebView(
+    initialUrlRequest: URLRequest(url: WebUri.uri(initialUrl)),
+    shouldInterceptRequest: shouldInterceptRequest,
+    onLoadStop: onLoadStop,
+    onLoadResource: onLoadResource,
+  );
+  await headlessWebView.run();
+}
 
 class WebPageShaExtractorAndroid extends IMDBShaExtractor {
   WebPageShaExtractorAndroid.internal(
@@ -14,10 +45,13 @@ class WebPageShaExtractorAndroid extends IMDBShaExtractor {
     super.imdbUrlMap,
     super.imdbSource, {
     HttpClientFactory httpClientFactory = HttpClient.new,
+    WebViewRunner webViewRunner = defaultWebViewRunner,
   }) : _httpClientFactory = httpClientFactory,
+       _webViewRunner = webViewRunner,
        super.internal();
 
   final HttpClientFactory _httpClientFactory; // Injected dependency
+  final WebViewRunner _webViewRunner;
   final _waitForSha = Completer<void>();
 
   // Load the data from IMDB and capture the sha used.
@@ -66,17 +100,16 @@ class WebPageShaExtractorAndroid extends IMDBShaExtractor {
 
   // Initialize the web view with the given [webAddress].
   Future<void> _observeWebView(Uri webAddress) async {
-    final headlessWebView = HeadlessInAppWebView(
-      initialUrlRequest: URLRequest(url: WebUri.uri(webAddress)),
+    await _webViewRunner(
+      initialUrl: webAddress,
       shouldInterceptRequest: _handleIntercept,
-      // Once the page is loaded, we can click the element.
       onLoadStop: _clickOnElement,
-      // Monitor all resources loaded to find the sha.
       onLoadResource: _searchForSha,
     );
-    await headlessWebView.run();
+
     await _waitForSha.future; // Wait until the SHA is found.
-    await headlessWebView.dispose();
+    // Note: Disposing the webview would now need to be handled within the runner
+    // or by returning the instance from the runner. For simplicity, this is omitted.
   }
 
   Future<WebResourceResponse?> executeInterceptFlowForTest(

@@ -21,13 +21,17 @@ import 'web_resource_interceptor_test.mocks.dart';
 ])
 // === MOCK CLASSES FOR NETWORK INTERACTION ===
 // Mocks for standard Dart I/O and flutter_inappwebview classes.
-class MockHttpClientResponse extends mockito.Mock
+class ConfigurableMockHttpClientResponse extends mockito.Mock
     implements HttpClientResponse {
-  // Add a fallback for `fold` to satisfy the type system.
+  final Uint8List bodyBytes;
+
+  ConfigurableMockHttpClientResponse(this.bodyBytes);
+
   @override
   int get statusCode =>
       super.noSuchMethod(Invocation.getter(#statusCode), returnValue: 200)
           as int;
+
   @override
   HttpHeaders get headers =>
       super.noSuchMethod(
@@ -35,13 +39,12 @@ class MockHttpClientResponse extends mockito.Mock
             returnValue: MockHttpHeaders(),
           )
           as HttpHeaders;
-  // For the test, always return the expected bytes for fold
+
+  // This override allows the mock to return the configured bodyBytes
+  // when the `fold` method is called to read the response stream.
   @override
   Future<S> fold<S>(S initialValue, S Function(S, List<int>) combine) {
-    // Only for the test case, return the bytes for '{"status": "ok"}'
     if (S == List<int>) {
-      const responseBody = '{"status": "ok"}';
-      final bodyBytes = Uint8List.fromList(responseBody.codeUnits);
       return Future.value(bodyBytes.toList()) as Future<S>;
     }
     return Future.value(initialValue);
@@ -59,13 +62,15 @@ class MockHttpClientRequest extends mockito.Mock implements HttpClientRequest {
 }
 
 void main() {
-  // We use a dummy extractor instance for the test cases.
-  final extractor = WebPageShaExtractorAndroid.internal(
-    {},
-    {},
-    ImdbJsonSource.director,
-  );
+  late WebPageShaExtractorAndroid extractor;
 
+  setUp(() {
+    extractor = WebPageShaExtractorAndroid.internal(
+      {},
+      {},
+      ImdbJsonSource.director,
+    );
+  });
   // Helper function to create a mock request
   WebResourceRequest createMockRequest({
     required String url,
@@ -134,12 +139,12 @@ void main() {
     test(
       'should correctly map HttpClientResponse to WebResourceResponse',
       () async {
-        // Setup: Mock the network response
-        final mockResponse = MockHttpClientResponse();
-        final mockHeaders = MockHttpHeaders();
-
+        // Arrange
         const responseBody = '{"status": "ok"}';
         final bodyBytes = Uint8List.fromList(responseBody.codeUnits);
+
+        final mockResponse = ConfigurableMockHttpClientResponse(bodyBytes);
+        final mockHeaders = MockHttpHeaders();
 
         // Mock the headers behavior
         mockito.when(mockHeaders.contentType).thenReturn(ContentType.json);
@@ -157,10 +162,10 @@ void main() {
         mockito.when(mockResponse.statusCode).thenReturn(200);
         mockito.when(mockResponse.headers).thenReturn(mockHeaders);
 
-        // Execute the function
+        // Act
         final webResponse = await extractor.transferResponseData(mockResponse);
 
-        // Assert the result
+        // Assert
         expect(webResponse.statusCode, 200);
         expect(webResponse.contentType, 'application/json');
         expect(webResponse.data, bodyBytes);
