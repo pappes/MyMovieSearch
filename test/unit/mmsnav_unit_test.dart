@@ -25,6 +25,13 @@ import 'mmsnav_unit_test.mocks.dart';
   MockSpec<AppFocus>(),
   MockSpec<CustomTabsLauncher>(),
 ])
+class _DetailsPageTestCase {
+  _DetailsPageTestCase(this.id, this.expectedRoute, {this.type});
+  final String id;
+  final MovieContentType? type;
+  final String expectedRoute;
+}
+
 void main() {
   group('MMSNav web page unit tests', () {
     final testClass = RouteInfo(
@@ -133,92 +140,90 @@ void main() {
 
     test('getDetailsPage() returns correct screen to open '
         'for each content type', () {
-      final testCases = <Map<String, dynamic>>[
-        {'id': '${imdbTitlePrefix}12345', 'expectedRoute': 'moviedetails'},
-        {'id': '${imdbPersonPrefix}12345', 'expectedRoute': 'persondetails'},
-        {'id': '12345', 'expectedRoute': 'errordetails'},
-        {
-          'id': '12345',
-          'type': MovieContentType.movie,
-          'expectedRoute': 'moviedetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.person,
-          'expectedRoute': 'persondetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.custom,
-          'expectedRoute': 'errordetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.download,
-          'expectedRoute': 'errordetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.episode,
-          'expectedRoute': 'moviedetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.error,
-          'expectedRoute': 'errordetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.information,
-          'expectedRoute': 'errordetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.keyword,
-          'expectedRoute': 'errordetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.miniseries,
-          'expectedRoute': 'moviedetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.navigation,
-          'expectedRoute': 'errordetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.none,
-          'expectedRoute': 'errordetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.series,
-          'expectedRoute': 'moviedetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.short,
-          'expectedRoute': 'moviedetails',
-        },
-        {
-          'id': '12345',
-          'type': MovieContentType.title,
-          'expectedRoute': 'moviedetails',
-        },
+      final testCases = [
+        _DetailsPageTestCase('${imdbTitlePrefix}12345', 'moviedetails'),
+        _DetailsPageTestCase('${imdbPersonPrefix}12345', 'persondetails'),
+        _DetailsPageTestCase('12345', 'errordetails'),
+        _DetailsPageTestCase(
+          '12345',
+          'moviedetails',
+          type: MovieContentType.movie,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'persondetails',
+          type: MovieContentType.person,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'errordetails',
+          type: MovieContentType.custom,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'errordetails',
+          type: MovieContentType.download,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'moviedetails',
+          type: MovieContentType.episode,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'errordetails',
+          type: MovieContentType.error,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'errordetails',
+          type: MovieContentType.information,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'errordetails',
+          type: MovieContentType.keyword,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'moviedetails',
+          type: MovieContentType.miniseries,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'errordetails',
+          type: MovieContentType.navigation,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'errordetails',
+          type: MovieContentType.none,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'moviedetails',
+          type: MovieContentType.series,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'moviedetails',
+          type: MovieContentType.short,
+        ),
+        _DetailsPageTestCase(
+          '12345',
+          'moviedetails',
+          type: MovieContentType.title,
+        ),
       ];
 
       for (final testCase in testCases) {
         // Arrange
-        final id = testCase['id'] as String;
-        final type = testCase['type'] as MovieContentType?;
-        final expectedRoute = testCase['expectedRoute'] as String;
-        final reason = 'criteria: id=$id, type=$type, expected=$expectedRoute';
+        final reason =
+            'criteria: id=${testCase.id}, type=${testCase.type}, expected=${testCase.expectedRoute}';
 
         final movie = MovieResultDTO().init(
-          uniqueId: id,
-          type: type?.toString(),
+          uniqueId: testCase.id,
+          type: testCase.type?.toString(),
         );
 
         // Act
@@ -226,8 +231,8 @@ void main() {
         final param = actual.params as Map;
 
         // Assert
-        expect(actual.routePath.name, expectedRoute, reason: reason);
-        expect(param['dtoId'], id, reason: reason);
+        expect(actual.routePath.name, testCase.expectedRoute, reason: reason);
+        expect(param['dtoId'], testCase.id, reason: reason);
       }
     });
 

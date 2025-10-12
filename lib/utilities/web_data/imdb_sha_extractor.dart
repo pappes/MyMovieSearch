@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:logger/logger.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/utilities/web_data/platform_android/imdb_sha_extractor.dart';
@@ -15,6 +16,34 @@ const imdbCritera = {
   ImdbJsonSource.writer: 'nm0000697',
   ImdbJsonSource.credits: 'nm0000078',
 };
+
+/// Defines the three possible outcomes of an interception request,
+enum InterceptionAction { delegateRequest, syntheticResponse, executeRequest }
+
+/// Represents the decision made by the orchestration layer using standard types.
+class InterceptionDecision {
+  InterceptionDecision.delegateRequest()
+    : action = InterceptionAction.delegateRequest,
+      statusCode = null,
+      contentType = null,
+      body = null;
+
+  InterceptionDecision.executeRequest()
+    : action = InterceptionAction.executeRequest,
+      statusCode = null,
+      contentType = null,
+      body = null;
+
+  InterceptionDecision.syntheticResponse({
+    required this.statusCode,
+    required this.contentType,
+    required this.body,
+  }) : action = InterceptionAction.syntheticResponse;
+  final InterceptionAction action;
+  final int? statusCode;
+  final String? contentType;
+  final Uint8List? body;
+}
 
 /// Extract the sha from a web page
 /// using a platform specific implementation to drive a web browser.
@@ -122,5 +151,51 @@ abstract class IMDBShaExtractor {
       return true;
     }
     return false;
+  }
+
+  InterceptionDecision getInterceptionDecision(String url, String? method) {
+    if (discardImageRequests(url)) {
+      // Decision: Block the request with a synthetic 404.
+      return InterceptionDecision.syntheticResponse(
+        statusCode: 404,
+        contentType: 'text/plain',
+        body: Uint8List(0),
+      );
+    }
+
+    if (shouldPassthroughRequest(url, method)) {
+      // Decision: Let the WebView handle it.
+      return InterceptionDecision.delegateRequest();
+    }
+
+    // Decision: Proxy the request over Dart network.
+    return InterceptionDecision.executeRequest();
+  }
+
+  /// Determines if a request should be executed by the WebView without Dart interception.
+  /// Returns `true` to skip interception (return null from _handleIntercept).
+  bool shouldPassthroughRequest(String url, String? method) {
+    // Pass through scripts, styles, and fonts
+    const passedExtensions = ['.js', '.css', '.woff2'];
+
+    if (passedExtensions.any((ext) => url.endsWith(ext))) {
+      return true;
+    }
+    // Pass through non-API URLs
+    if (!url.contains('/api/')) {
+      return true;
+    }
+    // Pass through non-GET requests
+    if (method != 'GET') {
+      return true;
+    }
+
+    return false; // Intercept all other requests.
+  }
+
+  /// Determines if a request targets a static image and should be blocked.
+  bool discardImageRequests(String url) {
+    const blockedExtensions = ['.png', '.gif', '.jpg', '.jpeg'];
+    return blockedExtensions.any((ext) => url.endsWith(ext));
   }
 }

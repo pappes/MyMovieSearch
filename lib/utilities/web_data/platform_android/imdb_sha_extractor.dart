@@ -1,15 +1,23 @@
 import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/utilities/web_data/imdb_sha_extractor.dart';
+
+// This function type abstracts the creation of the HttpClient, making it mockable.
+typedef HttpClientFactory = HttpClient Function();
 
 class WebPageShaExtractorAndroid extends IMDBShaExtractor {
   WebPageShaExtractorAndroid.internal(
     super.imdbShaMap,
     super.imdbUrlMap,
-    super.imdbSource,
-  ) : super.internal();
+    super.imdbSource, {
+    HttpClientFactory httpClientFactory = HttpClient.new,
+  }) : _httpClientFactory = httpClientFactory,
+       super.internal();
 
+  final HttpClientFactory _httpClientFactory; // Injected dependency
   final _waitForSha = Completer<void>();
 
   // Load the data from IMDB and capture the sha used.
@@ -60,6 +68,7 @@ class WebPageShaExtractorAndroid extends IMDBShaExtractor {
   Future<void> _observeWebView(Uri webAddress) async {
     final headlessWebView = HeadlessInAppWebView(
       initialUrlRequest: URLRequest(url: WebUri.uri(webAddress)),
+      shouldInterceptRequest: _handleIntercept,
       // Once the page is loaded, we can click the element.
       onLoadStop: _clickOnElement,
       // Monitor all resources loaded to find the sha.
@@ -68,5 +77,103 @@ class WebPageShaExtractorAndroid extends IMDBShaExtractor {
     await headlessWebView.run();
     await _waitForSha.future; // Wait until the SHA is found.
     await headlessWebView.dispose();
+  }
+
+  Future<WebResourceResponse?> executeInterceptFlowForTest(
+    InAppWebViewController controller,
+    WebResourceRequest request,
+  ) async => _handleIntercept(controller, request);
+
+  /// Handles the interception of specific URL requests (e.g., /api/)
+  /// and proxies them through a Dart HttpClient to allow for manipulation
+  /// or inspection, returning the result to the WebView.
+  ///
+  /// This method is private as it is intended only to be called by the WebView.
+  Future<WebResourceResponse?> _handleIntercept(
+    InAppWebViewController controller,
+    WebResourceRequest request,
+  ) async {
+    final decision = getInterceptionDecision(
+      request.url.toString(),
+      request.method,
+    );
+
+    switch (decision.action) {
+      case InterceptionAction.syntheticResponse:
+        // Translate SyntheticDecision into WebResourceResponse
+        return WebResourceResponse(
+          statusCode: decision.statusCode,
+          contentType: decision.contentType,
+          data: decision.body,
+        );
+
+      case InterceptionAction.delegateRequest:
+        return null;
+
+      case InterceptionAction.executeRequest:
+        final HttpClientResponse response = await _executeProxyRequest(request);
+        return transferResponseData(response);
+    }
+  }
+
+  /// Executes the proxy request using the injected HttpClient factory.
+  /// This helper encapsulates the networking aspect of the interception flow.
+  Future<HttpClientResponse> _executeProxyRequest(
+    WebResourceRequest request,
+  ) async {
+    final client = _httpClientFactory();
+    final uri = request.url.uriValue;
+    final dartRequest = await client.openUrl(request.method ?? 'GET', uri);
+
+    transferRequestData(request, dartRequest);
+
+    return dartRequest.close();
+  }
+
+  /// Processes the [HttpClientResponse]
+  /// into a [WebResourceResponse] for the WebView.
+  Future<WebResourceResponse> transferResponseData(
+    HttpClientResponse response,
+  ) async {
+    // Read the full response body stream and convert it into a Uint8List.
+    final bodyBytes = await response
+        .fold<List<int>>(
+          <int>[],
+          (previous, element) => previous..addAll(element),
+        )
+        .then(Uint8List.fromList);
+
+    // Replicate all response headers, including 'Set-Cookie'
+    final responseHeaders = <String, String>{};
+    response.headers.forEach((name, values) {
+      responseHeaders[name] = values.join(', ');
+    });
+
+    return WebResourceResponse(
+      contentType: response.headers.contentType?.mimeType ?? 'application/json',
+      contentEncoding: response.headers.contentType?.charset ?? 'utf-8',
+      statusCode: response.statusCode,
+      headers: responseHeaders,
+      data: bodyBytes,
+    );
+  }
+
+  /// Transfers headers from the [WebResourceRequest] to [HttpClientRequest].
+  static void transferRequestData(
+    WebResourceRequest request,
+    HttpClientRequest dartRequest,
+  ) {
+    final skipHeaders = [
+      'content-length',
+      'host',
+      'connection',
+      'accept-encoding',
+    ];
+
+    request.headers?.forEach((name, value) {
+      if (!skipHeaders.contains(name.toLowerCase())) {
+        dartRequest.headers.set(name, value);
+      }
+    });
   }
 }
