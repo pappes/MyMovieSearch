@@ -25,12 +25,12 @@ class MovieSearchCriteriaPage extends StatefulWidget {
 
   /// Instruct goroute how to navigate to this page.
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
-        restorationId: 'MovieSearchCriteriaPage',
-        child: MovieSearchCriteriaPage(
-          criteria: RestorableSearchCriteria.getDto(state),
-          restorationId: 'MovieSearchCriteria',
-        ),
-      );
+    restorationId: 'MovieSearchCriteriaPage',
+    child: MovieSearchCriteriaPage(
+      criteria: RestorableSearchCriteria.getDto(state),
+      restorationId: 'MovieSearchCriteria',
+    ),
+  );
 }
 
 class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
@@ -42,11 +42,8 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
       unawaited(MMSNav(context).showResultsPage(criteria));
 
   void searchForBarcode(String barcode) => performSearch(
-        SearchCriteriaDTO().init(
-          SearchCriteriaType.barcode,
-          title: barcode,
-        ),
-      );
+    SearchCriteriaDTO().init(SearchCriteriaType.barcode, title: barcode),
+  );
 
   void searchForMovie() {
     widget.criteria.criteriaTitle = _textController.value.text;
@@ -85,18 +82,28 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     // This method is rerun every time setState is called.
     final page = Scaffold(
       appBar: AppBar(
-        leading: (ModalRoute.of(context)?.canPop ?? false)
-            ? const BackButton()
-            : null,
+        leading:
+            (ModalRoute.of(context)?.canPop ?? false)
+                ? const BackButton()
+                : null,
         // Get title from the StatefulWidget MovieSearchCriteriaPage.
         title: const Text(MovieSearchCriteriaPage.title),
       ),
       endDrawer: getDrawer(context),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          _CriteriaInput(this),
-        ],
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+              'assets/images/MMS_ICON_highres_blue_desaturated.jpg',
+            ),
+            fit: BoxFit.cover,
+            opacity: 0.1, // Adjust opacity to make text readable
+          ),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[_CriteriaInput(this)],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: searchForMovie,
@@ -111,36 +118,38 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
 
 class _CriteriaInput extends Center {
   _CriteriaInput(_MovieSearchCriteriaPageState state)
-      : super(
-          child: TextField(
-            controller: state._textController.value,
-            focusNode: state._criteriaFocusNode,
-            textInputAction: TextInputAction.search,
-            autofocus: true,
-            autofillHints: const [AutofillHints.sublocality],
-            style: hugeFont,
-            decoration: InputDecoration(
-              labelText: 'Movie',
-              hintText: 'Enter movie or tv series to search for',
-              suffixIcon: IconButton(
-                icon: const Icon(Icons.clear),
-                onPressed: () {
-                  state._textController.value.clear();
-                  state._criteriaFocusNode.requestFocus();
-                },
-              ),
-              prefixIcon: IconButton(
-                icon: const Icon(Icons.qr_code_2),
-                onPressed: () {
-                  state._textController.value.clear();
-                  DVDBarcodeScanner()
-                      .scanBarcode(state.context, state.searchForBarcode);
-                },
-              ),
+    : super(
+        child: TextField(
+          controller: state._textController.value,
+          focusNode: state._criteriaFocusNode,
+          textInputAction: TextInputAction.search,
+          autofocus: true,
+          autofillHints: const [AutofillHints.sublocality],
+          style: hugeFont,
+          decoration: InputDecoration(
+            labelText: 'Movie',
+            hintText: 'Enter movie or tv series to search for',
+            suffixIcon: IconButton(
+              icon: const Icon(Icons.clear),
+              onPressed: () {
+                state._textController.value.clear();
+                state._criteriaFocusNode.requestFocus();
+              },
             ),
-            onSubmitted: (_) {
-              state.searchForMovie();
-            },
+            prefixIcon: IconButton(
+              icon: const Icon(Icons.qr_code_2),
+              onPressed: () {
+                state._textController.value.clear();
+                DVDBarcodeScanner().scanBarcode(
+                  state.context,
+                  state.searchForBarcode,
+                );
+              },
+            ),
           ),
-        );
+          onSubmitted: (_) {
+            state.searchForMovie();
+          },
+        ),
+      );
 }

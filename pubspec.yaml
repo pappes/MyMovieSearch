@@ -118,6 +118,7 @@ flutter:
   assets:
    - assets/OldCDLibrary.json
    - assets/newDVDLibrary.json
+   - assets/images/
 
 
   fonts:
