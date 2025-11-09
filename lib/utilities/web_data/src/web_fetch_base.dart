@@ -418,12 +418,17 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return const Stream.empty();
     }
 
-    yield* await myConvertCriteriaToWebText()
-        .timeout(
-          const Duration(seconds: 24),
-        ) // TODO(pappes): allow configurable
+    // Join all chunks of text into a single String and emit that on the stream.
+    final webStream = await myConvertCriteriaToWebText()
+        .timeout(const Duration(seconds: 24))
         .onError<WebFetchException>(captureError)
         .onError(captureGenericError);
+
+    final webText = await webStream.join();
+    if (webText.isNotEmpty || errors.isEmpty) {
+      yield webText;
+    }
+
     for (final error in errors) {
       yield* Stream.error(error);
     }
@@ -465,8 +470,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
             .handleError(captureStreamError)
             .timeout(const Duration(seconds: 25))
             .toList();
-    if (list.isNotEmpty) {
-      final webText = list.join();
+    for (final webText in list) {
       final rawObjects = await myConvertWebTextToTraversableTree(webText)
           .onError<WebConvertException>(captureConvertError)
           .onError(captureGenericConvertError);

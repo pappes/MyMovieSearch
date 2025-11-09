@@ -808,15 +808,15 @@ void main() {
         final testClass = QueryUnknownSourceMocked(criteriaDto);
         final streamOutput = testClass.baseConvertWebTextToTraversableTree(
           Stream.fromIterable([
-            '[{"id": "1000","description": "1000."},',
-            '{"id": "1001","description": "1001."},',
-            '{"id": "1002","description": "1002."},',
-            '{"id": "1003","description": "1003."}]',
+          '{"id": "1000","description": "1000."}',
+          '{"id": "1001","description": "1001."}',
+          '{"id": "1002","description": "1002."}',
+          '{"id": "1003","description": "1003."}',
           ]),
         );
         final expectOutput = _makeMaps(4);
 
-        expect(streamOutput, emitsInOrder([expectOutput]));
+      expect(streamOutput, emitsInOrder(expectOutput));
       },
       timeout: const Timeout(Duration(seconds: 5)),
     );
