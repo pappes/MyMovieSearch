@@ -77,19 +77,12 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
       /// Fetch full actor/director/writer/producer data
       /// from cache using a separate thread.
-      for (final source in [
-        ImdbJsonSource.actor,
-        ImdbJsonSource.actress,
-        ImdbJsonSource.director,
-        ImdbJsonSource.writer,
-        ImdbJsonSource.producer,
-      ]) {
         unawaited(
-          QueryIMDBJsonPaginatedFilmographyDetails(criteria, imdbQuery: source)
-              .readPrioritisedCachedList(priority: ThreadRunner.fast)
+        QueryIMDBJsonPaginatedFilmographyDetails(criteria)
+            //.readPrioritisedCachedList(priority: ThreadRunner.fast)
+            .readList()
               .then(_requestShowDetails),
-        );
-      }
+      );
     }
   }
 

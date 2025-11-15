@@ -64,64 +64,85 @@ android {
 // The afterEvaluate block runs *after* the project configuration is complete,
 // allowing us to modify task dependencies and add post-build steps.
 afterEvaluate {
+    // --- Task Definitions ---
+    // Release tasks
     val assembleReleaseTask = project.tasks.findByName("assembleRelease")
     val assembleProdReleaseTask = project.tasks.findByName("assembleProdRelease")
-    val assembleDevReleaseTask = project.tasks.findByName("assembleDevRelease") // The task that creates our target APK
+    val assembleDevReleaseTask = project.tasks.findByName("assembleDevRelease")
+
+    // Debug tasks
+    val assembleDebugTask = project.tasks.findByName("assembleDebug")
+    val assembleProdDebugTask = project.tasks.findByName("assembleProdDebug")
+    val assembleDevDebugTask = project.tasks.findByName("assembleDevDebug")
 
     // Check if the user explicitly requested any task containing 'prod'
     val requestedTasks = project.gradle.startParameter.taskNames
     val isProdRequested = requestedTasks.any { it.contains("prod", ignoreCase = true) }
     
-    // --- 1. Task Dependency Fix ---
+    // --- 1. Task Dependency Fix (for both Debug and Release) ---
     // Problem: By default, 'assembleRelease' depends on ALL release flavor tasks ('assembleDevRelease', 'assembleProdRelease').
-    // Solution: If the user didn't request '--flavor=prod', we disable the prod task and remove it as a dependency,
-    // ensuring only the 'dev' build runs when 'flutter build apk' is executed.
-    if (assembleProdReleaseTask != null && assembleReleaseTask != null && !isProdRequested) {
-        assembleProdReleaseTask.enabled = false
-        println("INFO: Disabling assembleProdRelease task by default. Use --flavor=prod to build.")
-
-        val newDependencies = assembleReleaseTask.taskDependencies.getDependencies(assembleReleaseTask)
-            .filter { it.name != assembleProdReleaseTask.name }
-            .toSet()
-        
-        assembleReleaseTask.setDependsOn(newDependencies)
+    // The same applies to 'assembleDebug'.
+    // Solution: If the user didn't request a 'prod' flavor, we disable the prod tasks and remove them as dependencies.
+    if (!isProdRequested) {
+        if (assembleProdReleaseTask != null && assembleReleaseTask != null) {
+            assembleProdReleaseTask.enabled = false
+            val newDependencies = assembleReleaseTask.taskDependencies.getDependencies(assembleReleaseTask)
+                .filter { it.name != assembleProdReleaseTask.name }
+                .toSet()
+            assembleReleaseTask.setDependsOn(newDependencies)
+        }
+        if (assembleProdDebugTask != null && assembleDebugTask != null) {
+            assembleProdDebugTask.enabled = false
+            val newDependencies = assembleDebugTask.taskDependencies.getDependencies(assembleDebugTask)
+                .filter { it.name != assembleProdDebugTask.name }
+                .toSet()
+            assembleDebugTask.setDependsOn(newDependencies)
+        }
+        println("INFO: Disabling 'prod' tasks by default. Use --flavor=prod to build.")
     }
 
-    // --- 2. APK Renaming Fix ---
-    // Problem: 'assembleDevRelease' creates 'app-dev-release.apk' in the flavored output directory.
-    // The Flutter CLI looks *only* for 'app-release.apk' in the 'flutter-apk' directory.
+    // --- 2. APK Renaming Fix (for both Debug and Release) ---
+    // Problem: Flavored builds create named APKs (e.g., 'app-dev-release.apk'), but the Flutter CLI
+    // looks for generic names ('app-release.apk', 'app-debug.apk').
     // Solution: We add a 'doLast' action to the 'dev' task to copy and rename the file to the location Flutter expects.
     if (assembleDevReleaseTask != null) {
-        // This doLast block executes *after* assembleDevRelease successfully creates the APK.
         assembleDevReleaseTask.doLast {
-            // 1. The actual directory where Gradle places the flavored APK:
             val gradleApkDir = file("${project.buildDir}/outputs/apk/dev/release")
             val originalApk = file("${gradleApkDir}/app-dev-release.apk")
-            
-            // 2. The directory where the Flutter CLI looks for the final APK:
-            // We use project.rootProject.buildDir to ensure the path starts correctly from the top-level 'build'.
             val flutterOutputDir = file("${project.rootProject.buildDir}/app/outputs/flutter-apk")
             val targetApk = file("${flutterOutputDir}/app-release.apk")
 
-            // Ensure the Flutter target directory exists.
             flutterOutputDir.mkdirs()
-
             if (originalApk.exists()) {
-                // Rename/move the file to the expected name.
                 originalApk.copyTo(targetApk, overwrite = true)
-                println("INFO: Successfully copied and renamed APK from ${originalApk.absolutePath} to ${targetApk.absolutePath} for Flutter compatibility.")
+                println("INFO: Copied release APK to ${targetApk.absolutePath} for Flutter.")
             } else {
-                println("WARN: Renaming failed. Could not find expected APK at: ${originalApk.absolutePath}. Did the build fail?")
+                println("WARN: Could not find release APK at: ${originalApk.absolutePath}.")
             }
         }
-        println("INFO: Added post-build action to rename APK for Flutter compatibility.")
     }
-    
-    if (assembleReleaseTask != null) {
-        // DEBUG: Confirm which tasks 'assembleRelease' actually depends on now.
-        val dependencies = assembleReleaseTask.taskDependencies.getDependencies(assembleReleaseTask)
-        println("DEBUG: assembleRelease dependencies (after dependency modification): ${dependencies.joinToString { it.name }}")
+
+    if (assembleDevDebugTask != null) {
+        assembleDevDebugTask.doLast {
+            val gradleApkDir = file("${project.buildDir}/outputs/apk/dev/debug")
+            val originalApk = file("${gradleApkDir}/app-dev-debug.apk")
+            val flutterOutputDir = file("${project.rootProject.buildDir}/app/outputs/flutter-apk")
+            val targetApk = file("${flutterOutputDir}/app-debug.apk")
+
+            flutterOutputDir.mkdirs()
+            if (originalApk.exists()) {
+                originalApk.copyTo(targetApk, overwrite = true)
+                println("INFO: Copied debug APK to ${targetApk.absolutePath} for Flutter.")
+            } else {
+                println("WARN: Could not find debug APK at: ${originalApk.absolutePath}.")
+            }
+        }
     }
+
+    if (assembleDevReleaseTask != null || assembleDevDebugTask != null) {
+        println("INFO: Added post-build actions to rename APKs for Flutter compatibility.")
+    }
+
 }
 
 

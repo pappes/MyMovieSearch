@@ -11,6 +11,7 @@ import 'package:my_movie_search/movies/screens/widgets/controls.dart';
 import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
@@ -75,6 +76,14 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       unawaited(
         QueryIMDBCastDetails(criteria)
             .readPrioritisedCachedList(priority: ThreadRunner.fast)
+            .then(_requestShowDetails),
+      );
+
+      /// Fetch full actor/director/writer/producer data
+      /// from cache using a separate thread.
+      unawaited(
+        QueryIMDBJsonCastDetails(criteria)
+            .readList()
             .then(_requestShowDetails),
       );
     }
