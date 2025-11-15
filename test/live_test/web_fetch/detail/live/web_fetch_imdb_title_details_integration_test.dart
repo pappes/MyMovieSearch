@@ -13,14 +13,14 @@ import '../../../../test_helper.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"tt0101000","bestSource":"DataSourceType.imdb","title":"Zacátek dlouhého podzimu","type":"MovieContentType.movie","year":"1990","yearRange":"1990","runTime":"4860","language":"LanguageType.foreign","sources":{"DataSourceType.imdb":"tt0101000"}}
+r'''
+{"uniqueId":"tt0101000","title":"Zacátek dlouhého podzimu","bestSource":"DataSourceType.imdb","type":"MovieContentType.movie","year":"1990","yearRange":"1990","runTime":"4860","language":"LanguageType.foreign","sources":{"DataSourceType.imdb":"tt0101000"}}
 ''',
-  r'''
-{"uniqueId":"tt0101001","bestSource":"DataSourceType.imdb","title":"Zai shi feng liu jie","alternateTitle":"A Haunted Romance","type":"MovieContentType.movie","year":"1985","yearRange":"1985","runTime":"5340","language":"LanguageType.foreign","sources":{"DataSourceType.imdb":"tt0101001"}}
+r'''
+{"uniqueId":"tt0101001","title":"A Haunted Romance","bestSource":"DataSourceType.imdb","alternateTitle":"Zai shi feng liu jie","type":"MovieContentType.movie","year":"1985","yearRange":"1985","runTime":"5340","language":"LanguageType.foreign","sources":{"DataSourceType.imdb":"tt0101001"}}
 ''',
-  r'''
-{"uniqueId":"tt0101002","bestSource":"DataSourceType.imdb","title":"Joi jin gong woo","alternateTitle":"Return Engagement","type":"MovieContentType.movie","year":"1990","yearRange":"1990","runTime":"6480","language":"LanguageType.someEnglish","censorRating":"CensorRatingType.restricted","sources":{"DataSourceType.imdb":"tt0101002"}}
+r'''
+{"uniqueId":"tt0101002","title":"Joi jin gong woo","bestSource":"DataSourceType.imdb","alternateTitle":"Return Engagement","type":"MovieContentType.movie","year":"1990","yearRange":"1990","runTime":"6480","language":"LanguageType.someEnglish","censorRating":"CensorRatingType.restricted","sources":{"DataSourceType.imdb":"tt0101002"}}
 ''',
 ];
 

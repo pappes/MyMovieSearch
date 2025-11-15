@@ -242,7 +242,7 @@ void main() {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
       final criteria = SearchCriteriaDTO();
-      const expected = 'https://www.imdb.com/title/1234/?ref_=fn_tt_tt_1';
+      const expected = 'https://www.imdb.com/title/1234';
 
       // Invoke the functionality.
       final actualResult =

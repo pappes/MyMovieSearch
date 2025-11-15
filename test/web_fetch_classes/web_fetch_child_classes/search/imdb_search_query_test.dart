@@ -73,7 +73,7 @@ void main() {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
       const expectedResult =
-          'https://www.imdb.com/find?s=tt&ref_=fn_al_tt_mr&q=new%20query';
+          'https://www.imdb.com/find?q=new%20query&ref_=fn_nv_srb_sm';
 
       // Invoke the functionality.
       final actualResult =

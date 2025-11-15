@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -19,7 +21,6 @@ class QueryIMDBTitleDetails
   QueryIMDBTitleDetails(super.criteria);
 
   static const _baseURL = 'https://www.imdb.com/title/';
-  static const _baseURLsuffix = '/?ref_=fn_tt_tt_1';
 
   /// Describe where the data is coming from.
   @override
@@ -44,7 +45,7 @@ class QueryIMDBTitleDetails
   /// for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final url = '$_baseURL$searchCriteria$_baseURLsuffix';
+    final url = '$_baseURL$searchCriteria';
     return Uri.parse(url);
   }
 

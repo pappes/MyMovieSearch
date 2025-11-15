@@ -1068,7 +1068,7 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
     // ignore: discarded_futures
-    futures.add(QueryIMDBJsonFilteredFilmographyDetails(criteria).readList());
+    futures.add(QueryIMDBJsonCastDetails(criteria).readList());
   }
   return futures;
 }
@@ -1111,7 +1111,7 @@ void main() {
     });
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
-      final actualOutput = await QueryIMDBJsonFilteredFilmographyDetails(
+      final actualOutput = await QueryIMDBJsonCastDetails(
         criteria,
       ).readList(limit: 10);
       final expectedOutput = <MovieResultDTO>[];

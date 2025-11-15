@@ -264,7 +264,7 @@ void main() {
   group('QueryIMDBNameDetails integration tests', () {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expected = 'https://www.imdb.com/name/1234?showAllCredits=true';
+      const expected = 'https://www.imdb.com/name/1234/';
       final criteria = SearchCriteriaDTO();
       final testClass = QueryIMDBNameDetails(criteria);
 

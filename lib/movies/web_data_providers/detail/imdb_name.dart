@@ -19,7 +19,7 @@ class QueryIMDBNameDetails
   QueryIMDBNameDetails(super.criteria);
 
   static const _urlBase = 'https://www.imdb.com/name/';
-  static const _urlSuffix = '?showAllCredits=true';
+  static const _urlSuffix = '/';
 
   static const defaultSearchResultsLimit = 100;
 

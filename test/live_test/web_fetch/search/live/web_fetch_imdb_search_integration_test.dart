@@ -60,7 +60,7 @@ void main() {
       actualOutput.clearCopyrightedData();
 
       // To update expected data, uncomment the following line
-      // printTestData(actualOutput);
+        printTestData(actualOutput);
 
       // Check the results.
       expect(

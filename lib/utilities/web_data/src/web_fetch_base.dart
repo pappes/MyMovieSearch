@@ -239,9 +239,17 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     final encoded = Uri.encodeQueryComponent(myFormatInputAsText());
     final address = myConstructURI(encoded, pageNumber: myGetPageNumber());
     logger.t('requesting: $address');
-    final client = await baseGetHttpClient().getUrl(address);
+    final client = await baseGetHttpClient().openUrl('GET', address);
     myConstructHeaders(client.headers);
     final response = await client.close();
+
+    if (response.statusCode == 202) {
+      // The body of a 202 response is often a JavaScript challenge.
+      // Logging it can be useful for debugging WAF issues.
+      final body = await response.transform(utf8.decoder).join();
+      logger.w('Received HTTP 202 (Accepted), likely a WAF challenge.');
+      logger.d('Response headers: ${response.headers}\nResponse body: $body');
+    }
 
     // Retry with exponential backoff for server errors
     if (response.statusCode >= 500 && retryDelay <= maxDelay) {
@@ -319,7 +327,36 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Can be overridden by child classes if required.
   @visibleForOverriding
-  void myConstructHeaders(HttpHeaders headers) {}
+  void myConstructHeaders(HttpHeaders headers) {
+    // Mimic browser header order to reduce likelihood of a WAF challenge.
+    // Note: Dart's HttpClient does not guarantee the final transmission order.
+    // Pseudo-headers (like :authority, :path) are set automatically.
+    headers
+      ..set(
+        'accept',
+        'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+      )
+      ..set('accept-encoding', 'gzip, deflate, br, zstd')
+      ..set('accept-language', 'en-GB,en;q=0.9')
+      ..set('cache-control', 'no-cache')
+      ..set('pragma', 'no-cache')
+      // The 'priority' header is not settable via dart:io's HttpClient.
+      ..set(
+        'sec-ch-ua',
+        '"Chromium";v="142", "Google Chrome";v="142", "Not_A Brand";v="99"',
+      )
+      ..set('sec-ch-ua-mobile', '?0')
+      ..set('sec-ch-ua-platform', '"Windows"')
+      ..set('sec-fetch-dest', 'document')
+      ..set('sec-fetch-mode', 'navigate')
+      ..set('sec-fetch-site', 'none')
+      ..set('sec-fetch-user', '?1')
+      ..set('upgrade-insecure-requests', '1')
+      ..set(
+        'user-agent',
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36',
+      );
+  }
 
   /// Check cache to see if data has already been fetched.
   ///
