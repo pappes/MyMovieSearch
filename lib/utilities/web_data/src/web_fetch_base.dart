@@ -467,7 +467,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     for (final error in errors) {
-      yield* Stream.error(error);
+      yield* Stream<String>.error(error);
     }
   }
 
@@ -578,7 +578,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     if (errors.isNotEmpty) {
-      yield* Stream.fromIterable(errors);
+      yield* Stream<OUTPUT_TYPE>.fromIterable(errors);
     }
   }
 

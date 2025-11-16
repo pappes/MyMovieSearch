@@ -28,12 +28,6 @@ class QueryIMDBJsonCastDetails extends QueryIMDBJsonDetailsBase {
 
   static const _imdbOperation = 'FilmographyV2Pagination';
 
-  @override
-  @factory
-  WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
-    SearchCriteriaDTO criteria,
-  ) => QueryIMDBJsonCastDetails(criteria);
-
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
@@ -67,12 +61,6 @@ class QueryIMDBJsonPaginatedFilmographyDetails
 
   static const _imdbOperation = 'FilmographyV2Pagination';
 
-  @override
-  @factory
-  WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
-    SearchCriteriaDTO criteria,
-  ) => QueryIMDBJsonPaginatedFilmographyDetails(criteria);
-
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
   @override
@@ -91,7 +79,7 @@ class QueryIMDBJsonPaginatedFilmographyDetails
 /// Implements [WebFetchBase] for retrieving Json information from IMDB.
 ///
 abstract class QueryIMDBJsonDetailsBase
-    extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> {
+    extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   QueryIMDBJsonDetailsBase(super.criteria, this.imdbOperation);
 
   String? replacementUrl;
@@ -123,10 +111,11 @@ abstract class QueryIMDBJsonDetailsBase
     final url = myConstructURI(myFormatInputAsText()).toString();
 
     final extractor = WebJsonExtractor(url, controller.add, imdbOperation);
-
-    yield* controller.stream;
     await extractor.waitForCompletion();
-    await controller.close();
+    final listener = controller.close();
+    yield* controller.stream;
+    await listener;
+    print('done');
   }
 
   /// Convert IMDB map to MovieResultDTO records.

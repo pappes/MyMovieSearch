@@ -129,21 +129,7 @@ abstract class WebJsonExtractor {
         contentType: 'text/plain',
         body: Uint8List(0),
       );
-      return InterceptionDecision.syntheticResponse(
-        statusCode: 404,
-        contentType: 'text/plain',
-        body: Uint8List(0),
-      );
     }
-
-    //TODO: stop doubleclick.net and adsystem and adtraffic and yahoo.com
-    // and m.media-amazon.com/images and googletagservices.com
-    // and cloudfront.net/jwplayer-unlimited-8.25.6/jwplayer.js
-    // and c.amazon-adsystem.com/ and ww.imdb.com/_json/getads
-    // and launchpad-wrapper.privacymanager.io
-    // and secure.cdn.fastclick.net and tags.crwdcntrl.net
-    // and cdn-ima.33across.com and cdn.hadronid.net and lexicon.33across.com
-    // and sb.scorecardresearch.com
 
     if (shouldPassthroughRequest(url, method)) {
       // Decision: Let the WebView handle it.

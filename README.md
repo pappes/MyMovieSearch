@@ -36,5 +36,5 @@ flutter install
 remote server that has already run the command ```adb -a -P 8080 nodaemon server```
 ```shell
 adb -H 192.168.86.189 -P 8080 devices
-adb -H 192.168.86.189 -P 8080 install build/app/outputs/apk/release/app-release.apk
+adb -H 192.168.86.189 -P 8080 install build/app/outputs/apk/release/prod/app-prod-release.apk
 ```

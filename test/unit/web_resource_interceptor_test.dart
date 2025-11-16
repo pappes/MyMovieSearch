@@ -1,16 +1,15 @@
-import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/annotations.dart';
 // FIX: Import mockito with a prefix to prevent ambiguity with 'any'
 import 'package:mockito/mockito.dart' as mockito;
-import 'package:mockito/annotations.dart';
 
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
-import 'package:my_movie_search/utilities/web_data/imdb_sha_extractor.dart';
-import 'package:my_movie_search/utilities/web_data/platform_android/imdb_sha_extractor.dart';
+import 'package:my_movie_search/utilities/web_data/platform_android/web_json_extractor.dart';
+import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
+
 import 'web_resource_interceptor_test.mocks.dart';
 
 @GenerateNiceMocks([
@@ -18,6 +17,7 @@ import 'web_resource_interceptor_test.mocks.dart';
   MockSpec<HttpHeaders>(),
   MockSpec<WebResourceRequest>(),
   MockSpec<WebUri>(),
+  MockSpec<HeadlessInAppWebView>(),
 ])
 // === MOCK CLASSES FOR NETWORK INTERACTION ===
 // Mocks for standard Dart I/O and flutter_inappwebview classes.
@@ -61,14 +61,24 @@ class MockHttpClientRequest extends mockito.Mock implements HttpClientRequest {
           as HttpHeaders;
 }
 
+
+// Default implementation of the WebView using HeadlessInAppWebView.
+HeadlessInAppWebView mockWebView({
+  required String initialUrl,
+  required WebResourceInterceptor proxySelector,
+  required void Function(InAppWebViewController, WebUri?) onLoadStop,
+}) => MockHeadlessInAppWebView();
+
 void main() {
-  late WebPageShaExtractorAndroid extractor;
+  late WebJsonExtractorAndroid extractor;
 
   setUp(() {
-    extractor = WebPageShaExtractorAndroid.internal(
-      {},
-      {},
-      ImdbJsonSource.director,
+    extractor = WebJsonExtractorAndroid.internal(
+      'https://www.imdb.com/name/nm0000149/',
+      (_) {},
+      'FilmographyV2Pagination',
+      httpClientFactory: () => MockHttpClient(),
+      webViewRunner: mockWebView,
     );
   });
   // Helper function to create a mock request
@@ -88,13 +98,13 @@ void main() {
   }
 
   group('getInterceptionDecision (Parent Logic Tests)', () {
-    test('should return SyntheticResponse (404) for image requests', () {
+    test('should return SyntheticResponse (204) for image requests', () {
       const url = 'https://example.com/image.png';
       final request = createMockRequest(url: url, method: 'GET');
       final decision = extractor.getInterceptionDecision(url, request.method);
 
       expect(decision.action, InterceptionAction.syntheticResponse);
-      expect(decision.statusCode, 404);
+      expect(decision.statusCode, 204);
       expect(decision.contentType, 'text/plain');
       expect(decision.body, Uint8List(0));
     });
@@ -127,7 +137,7 @@ void main() {
     );
 
     test('should return ProxyNetwork for valid API GET requests', () {
-      const url = 'https://example.com/api/data?param=1';
+      const url = 'https://example.com/api/data/FilmographyV2Pagination?param=1';
       final request = createMockRequest(url: url, method: 'GET');
       final decision = extractor.getInterceptionDecision(url, request.method);
 
@@ -163,7 +173,10 @@ void main() {
         mockito.when(mockResponse.headers).thenReturn(mockHeaders);
 
         // Act
-        final webResponse = await extractor.transferResponseData(mockResponse);
+        final webResponse = await extractor.transferResponseData(
+          MockWebResourceRequest(),
+          mockResponse,
+        );
 
         // Assert
         expect(webResponse.statusCode, 200);
@@ -198,7 +211,7 @@ void main() {
       mockito.when(mockHeaders.set(mockito.any, mockito.any)).thenReturn(null);
 
       // Execute the function
-      WebPageShaExtractorAndroid.transferRequestData(
+      WebJsonExtractorAndroid.transferRequestData(
         mockPlatformRequest,
         mockDartRequest,
       );

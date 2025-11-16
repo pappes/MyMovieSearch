@@ -807,22 +807,6 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
     // ignore: discarded_futures
     futures.add(QueryIMDBJsonPaginatedFilmographyDetails(criteria).readList());
-
-    for (final source in [
-      ImdbJsonSource.actor,
-      ImdbJsonSource.actress,
-      ImdbJsonSource.director,
-      ImdbJsonSource.writer,
-      ImdbJsonSource.producer,
-    ]) {
-      // ignore: discarded_futures
-      futures.add(
-        QueryIMDBJsonPaginatedFilmographyDetails(
-          criteria,
-          imdbQuery: source,
-        ).readList(),
-      );
-    }
   }
   return futures;
 }

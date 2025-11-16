@@ -45,35 +45,37 @@ const expectedDtoJsonStringList = [
 ];
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryIMDBSearch test', () {
     // Search for a rare movie.
-    test('Run a search on IMDB that is likely to have static results',
-        () async {
-      final criteria = SearchCriteriaDTO().fromString('rize');
-      final actualOutput = await QueryIMDBSearch(criteria).readList(limit: 10);
-      final expectedOutput = expectedDTOList;
-      expectedDTOList.clearCopyrightedData();
-      actualOutput.clearCopyrightedData();
+    test(
+      'Run a search on IMDB that is likely to have static results',
+      () async {
+        final criteria = SearchCriteriaDTO().fromString('rize');
+        final actualOutput = await QueryIMDBSearch(
+          criteria,
+        ).readList(limit: 10);
+        final expectedOutput = expectedDTOList;
+        expectedDTOList.clearCopyrightedData();
+        actualOutput.clearCopyrightedData();
 
-      // To update expected data, uncomment the following line
-        printTestData(actualOutput);
+        // To update expected data, uncomment the following line
+        // printTestData(actualOutput);
 
-      // Check the results.
-      expect(
-        actualOutput,
-        MovieResultDTOListFuzzyMatcher(
-          expectedOutput,
-          percentMatch: 60,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
-            'needs to match expected DTO list '
-            '${expectedOutput.toPrintableString()}',
-      );
-    });
+        // Check the results.
+        expect(
+          actualOutput,
+          MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),
+          reason:
+              'Emitted DTO list ${actualOutput.toPrintableString()} '
+              'needs to match expected DTO list '
+              '${expectedOutput.toPrintableString()}',
+        );
+      },
+    );
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
       final actualOutput = await QueryIMDBSearch(criteria).readList(limit: 10);
@@ -82,10 +84,9 @@ void main() {
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(
-          expectedOutput,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );

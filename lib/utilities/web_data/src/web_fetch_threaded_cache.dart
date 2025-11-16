@@ -143,7 +143,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   Stream<OUTPUT_TYPE> fetchResultFromThreadedCache() async* {
     final value = _cache.get(_getCacheKey());
     if (value is List<OUTPUT_TYPE>) {
-      yield* Stream.fromIterable(value);
+      yield* Stream<OUTPUT_TYPE>.fromIterable(value);
     }
   }
 

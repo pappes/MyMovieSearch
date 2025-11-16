@@ -80,6 +80,8 @@ class QueryUnknownSourceMocked
     });
 
     // ignore: discarded_futures
+    when(client.openUrl(any, any)).thenAnswer((_) => 
+      Future.value(clientRequest));
     when(client.getUrl(any)).thenAnswer((_) => Future.value(clientRequest));
     when(clientRequest.headers).thenAnswer((_) => headers);
 
@@ -123,7 +125,7 @@ class QueryUnknownSourceMocked
   // Define myConstructURI to return an fake Uri
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) => Uri.parse(
-        'https://www.unknown.com/title/$searchCriteria/?ref_=fn_tt_tt_1',
+        'https://www.unknown.com/title/$searchCriteria',
       );
 
   // Define myOfflineData to return an empty stream
@@ -303,7 +305,7 @@ void main() {
           'includes page number', 
           pageNumber: testClass.myGetPageNumber(),
         ).toString(), 
-        'https://www.unknown.com/title/includes%20page%20number/?ref_=fn_tt_tt_1',
+        'https://www.unknown.com/title/includes%20page%20number',
       );
     });
     // Default not cached.
@@ -1117,7 +1119,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('HTTP404');
       final testClass = QueryUnknownSourceMocked(criteria);
       const expectedResult =
-          'Error in http read, HTTP status code : 404 for https://www.unknown.com/title/HTTP404/?ref_=fn_tt_tt_1';
+          'Error in http read, HTTP status code : 404 for https://www.unknown.com/title/HTTP404';
       final fetchResult = await testClass.baseFetchWebText(criteria);
       expect(fetchResult, emitsError(expectedResult));
     });
@@ -1186,7 +1188,7 @@ void main() {
             'Error in QueryUnknownSourceMocked '
             'with criteria $input '
             'stream error interpreting web text as a map :Error in http read, '
-            'HTTP status code : 404 for https://www.unknown.com/title/HTTP404/?ref_=fn_tt_tt_1';
+            'HTTP status code : 404 for https://www.unknown.com/title/HTTP404';
         await testTransform(input, null, output);
       },
       timeout: const Timeout(Duration(seconds: 5)),

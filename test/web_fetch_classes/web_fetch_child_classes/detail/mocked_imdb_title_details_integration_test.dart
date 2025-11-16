@@ -51,7 +51,7 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
     final clientResponse = MockHttpClientResponse();
     final headers = MockHttpHeaders();
     final expectedUri = Uri.parse(
-      'https://www.imdb.com/title/$expectedCriteria/?ref_=fn_tt_tt_1',
+      'https://www.imdb.com/title/$expectedCriteria',
     );
 
     Future<MockHttpClientResponse> getClientResponse(_) =>
@@ -68,6 +68,10 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
     // ignore: discarded_futures
     when(clientRequest.close()).thenAnswer(getClientResponse);
 
+
+    // ignore: discarded_futures
+    when(client.openUrl('GET', expectedUri)).thenAnswer((_) => 
+      Future.value(clientRequest));
     // ignore: discarded_futures
     when(client.getUrl(expectedUri))
         .thenAnswer((_) => Future.value(clientRequest));
@@ -263,7 +267,7 @@ void main() {
           'with criteria '
           'tt$startId stream error interpreting web text as a map '
           ':Error in http read, HTTP status code : 404 for '
-          'https://www.imdb.com/title/tt$startId/?ref_=fn_tt_tt_1',
+          'https://www.imdb.com/title/tt$startId',
           DataSourceType.imdb,
         );
         await testRead(queries, [errorMessage], forceError: true);

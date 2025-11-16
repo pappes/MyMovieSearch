@@ -21,7 +21,7 @@ extension StreamHelper<T> on Stream<T> {
       logger.i('$prefix done');
     } catch (error, stackTrace) {
       logger.i('$prefix ERR: $error');
-      yield* Stream.error(error, stackTrace);
+      yield* Stream<T>.error(error, stackTrace);
     }
   }
 }
