@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/yts_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/yts_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/yts_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -19,7 +20,7 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     transformJsonP = true;
   }
 
-  static const _baseURL = 'https://yts.mx/ajax/search?query=';
+  static const _baseURL = '$ytsBaseUrl/ajax/search?query=';
 
   /// Describe where the data is coming from.
   @override

@@ -40,4 +40,4 @@ final intermediateMapList = [json.decode(jsonSampleFull)];
 final intermediateEmptyMapList = [json.decode(jsonSampleEmpty)];
 
 Future<Stream<String>> streamJsonOfflineData(_) =>
-    Future.value(Stream.value(jsonSampleFull));
+    Future.value(Stream.value(jsonSampleFull.replaceAll('yts.mx', 'yts.lt')));
