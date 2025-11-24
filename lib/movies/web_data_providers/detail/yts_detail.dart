@@ -1,8 +1,8 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/yts_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/yts_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/yts_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/webscrapers/yts_detail.dart';
@@ -52,10 +52,13 @@ class QueryYtsDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     final decodedCriteria = Uri.decodeComponent(searchCriteria);
-    if (decodedCriteria.startsWith(ytsDetailUrl)) {
+    final baseUrl = ytsHelper().ytsBaseUrl;
+
+    final detailUrl = '$baseUrl/movies/';
+    if (decodedCriteria.startsWith(detailUrl)) {
       return Uri.parse(decodedCriteria);
     }
-    final url = '$ytsDetailUrl$searchCriteria';
+    final url = '$detailUrl$searchCriteria';
     return Uri.parse(url);
   }
 

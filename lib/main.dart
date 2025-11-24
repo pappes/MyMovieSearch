@@ -7,6 +7,7 @@ import 'package:my_movie_search/app.dart';
 import 'package:my_movie_search/movies/blocs/bloc_parts/mm_search_observer.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/yts_helpers.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -22,6 +23,8 @@ Future<void> main() async {
   unawaited(
     FirebaseApplicationState().login().then((_) => MovieLocation().init()),
   );
+  // Initialize yts helper.
+  ytsHelper();
 
   runApp(
     ChangeNotifierProvider<FirebaseApplicationState>(

@@ -19,15 +19,15 @@ in test('Run dtoFromCompleteJsonMap()'*/
 
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"https://yts.mx/movies/space-babes-from-outer-space-2017","bestSource":"DataSourceType.ytsSearch","title":"Space Babes from Outer Space","type":"MovieContentType.information","year":"2017","sources":{"DataSourceType.ytsSearch":"https://yts.mx/movies/space-babes-from-outer-space-2017"}}
+{"uniqueId":"https://yts.lt/movies/space-babes-from-outer-space-2017","bestSource":"DataSourceType.ytsSearch","title":"Space Babes from Outer Space","type":"MovieContentType.information","year":"2017","sources":{"DataSourceType.ytsSearch":"https://yts.lt/movies/space-babes-from-outer-space-2017"}}
 ''',
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
 const ytsJsonSampleInner = '''
   {
-    "url":"https://yts.mx/movies/space-babes-from-outer-space-2017",
-    "img":"https://yts.mx/assets/images/movies/space_babes_from_outer_space_2017/small-cover.jpg",
+    "url":"https://yts.lt/movies/space-babes-from-outer-space-2017",
+    "img":"https://yts.lt/assets/images/movies/space_babes_from_outer_space_2017/small-cover.jpg",
     "title":"Space Babes from Outer Space",
     "year":"2017"
   }

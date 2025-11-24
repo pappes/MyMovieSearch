@@ -113,7 +113,7 @@ void main() {
 
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expectedResult = 'https://yts.mx/ajax/search?query=/new%20query';
+      const expectedResult = 'https://yts.lt/ajax/search?query=/new%20query';
 
       // Invoke the functionality.
       final actualResult =

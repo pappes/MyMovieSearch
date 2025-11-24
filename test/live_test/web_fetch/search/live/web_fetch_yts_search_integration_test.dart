@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/yts_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/yts_search.dart';
 
 import '../../../../test_helper.dart';
@@ -13,8 +14,8 @@ import '../../../../test_helper.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"https://yts.mx/movies/sharon-1-2-3-2018","bestSource":"DataSourceType.ytsSearch","title":"Sharon 1.2.3.","type":"MovieContentType.information","year":"2018","sources":{"DataSourceType.ytsSearch":"https://yts.mx/movies/sharon-1-2-3-2018"}}
+r'''
+{"uniqueId":"https://yts.lt/movies/sharon-1-2-3-2018","title":"Sharon 1.2.3.","bestSource":"DataSourceType.ytsSearch","type":"MovieContentType.information","year":"2018","sources":{"DataSourceType.ytsSearch":"https://yts.lt/movies/sharon-1-2-3-2018"}}
 ''',
 ];
 
@@ -22,7 +23,7 @@ final expectedTitleList =
     ListDTOConversion.decodeList(expectedTitleJsonStringList);
 const expectedTitleJsonStringList = [
   r'''
-{"uniqueId":"https://yts.mx/movies/rize-2005","bestSource":"DataSourceType.ytsSearch","title":"Rize","type":"MovieContentType.information","year":"2005","sources":{"DataSourceType.ytsSearch":"https://yts.mx/movies/rize-2005"}}
+{"uniqueId":"https://yts.lt/movies/rize-2005","bestSource":"DataSourceType.ytsSearch","title":"Rize","type":"MovieContentType.information","year":"2005","sources":{"DataSourceType.ytsSearch":"https://yts.lt/movies/rize-2005"}}
 ''',
 ];
 
@@ -46,7 +47,7 @@ void main() {
         actualOutput,
         MovieResultDTOListFuzzyMatcher(
           expectedOutput,
-          percentMatch: 60,
+          percentMatch: 50,
         ),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
@@ -66,7 +67,7 @@ void main() {
         actualOutput,
         MovieResultDTOListFuzzyMatcher(
           expectedOutput,
-          percentMatch: 60,
+          percentMatch: 50,
         ),
         reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '

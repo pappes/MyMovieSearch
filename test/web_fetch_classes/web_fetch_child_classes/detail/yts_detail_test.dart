@@ -142,7 +142,7 @@ void main() {
   group('QueryYtsDetails integration tests', () {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expected = 'https://yts.mx/movies/1234';
+      const expected = 'https://yts.lt/movies/1234';
       final criteria = SearchCriteriaDTO();
 
       // Invoke the functionality.

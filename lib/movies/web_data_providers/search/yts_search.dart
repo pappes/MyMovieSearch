@@ -20,8 +20,6 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     transformJsonP = true;
   }
 
-  static const _baseURL = '$ytsBaseUrl/ajax/search?query=';
-
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() => DataSourceType.ytsSearch.name;
@@ -56,8 +54,9 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// API call to IMDB search returning the top matching results
   /// for [searchCriteria].
   @override
-  Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final url = '$_baseURL/$searchCriteria';
+  Uri myConstructURI(String searchCriteria, {int pageNumber = 1})  {
+    final baseUrl = ytsHelper().ytsBaseUrl;
+    final url = '$baseUrl/ajax/search?query=/$searchCriteria';
     return Uri.parse(url);
   }
 
