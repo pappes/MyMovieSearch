@@ -240,15 +240,16 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     final address = myConstructURI(encoded, pageNumber: myGetPageNumber());
     logger.t('requesting: $address');
     final client = await baseGetHttpClient().openUrl('GET', address);
-    myConstructHeaders(client.headers);
+    // myConstructHeaders(client.headers);
     final response = await client.close();
 
     if (response.statusCode == 202) {
       // The body of a 202 response is often a JavaScript challenge.
       // Logging it can be useful for debugging WAF issues.
       final body = await response.transform(utf8.decoder).join();
-      logger.w('Received HTTP 202 (Accepted), likely a WAF challenge.');
-      logger.d('Response headers: ${response.headers}\nResponse body: $body');
+      logger
+        ..w('Received HTTP 202 (Accepted), likely a WAF challenge.')
+        ..d('Response headers: ${response.headers}\nResponse body: $body');
     }
 
     // Retry with exponential backoff for server errors
@@ -663,7 +664,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Should not be be overridden by child classes.
   @visibleForTesting
-  HttpClient baseGetHttpClient() => HttpClient();
+  HttpClient baseGetHttpClient() => HttpClient()
+    // Allow HttpClient to handle compressed data from web servers.
+    ..autoUncompress = true;
 }
 
 /// Exception used in [WebFetchBase.myConvertCriteriaToWebText].

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -58,6 +59,18 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     final baseUrl = ytsHelper().ytsBaseUrl;
     final url = '$baseUrl/ajax/search?query=/$searchCriteria';
     return Uri.parse(url);
+  }
+
+  // Set YTS specific headers
+  @override
+  void myConstructHeaders(HttpHeaders headers) {
+    super.myConstructHeaders(headers);
+    // prevent invalid UTF encoding.
+    headers.set(
+        'accept',
+        'text/html,application/xhtml+xml,application/xml',
+        // do not accept ;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7,
+      );
   }
 
   @override

@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
 import 'package:html/parser.dart' as html;
 import 'package:http/http.dart' as http;
@@ -29,8 +31,17 @@ class ytsHelper {
 
   Future<String> _findLatestYifyURL() async {
     const url = 'https://yifystatus.com';
-    final response = await http.get(Uri.parse(url));
-    final webPage = response.body;
+
+
+    final client = HttpClient()
+    // Allow HttpClient to handle compressed data from web servers.
+    ..autoUncompress = true;
+    final request = await client.getUrl(
+        Uri.parse(url));
+        final response = await request.close();
+      final webPage = await response.transform(utf8.decoder).join();
+
+
     if (webPage.contains('Current official domain:')) {
       unawaited(_findWorkingYifyURL(webPage));
 
@@ -65,8 +76,14 @@ class ytsHelper {
 
   Future<void> testYtsUrl(String href) async {
     //print ('testing: $href    ');
-    final page = await http.get(Uri.parse('$href/ajax/search?query=therearenoresultszzzz/'));
-    if (page.body.contains(emptySearchResult)){
+    final client = HttpClient()
+    // Allow HttpClient to handle compressed data from web servers.
+    ..autoUncompress = true;
+    final request = await client.getUrl(
+        Uri.parse('$href/ajax/search?query=therearenoresultszzzz/'));
+        final response = await request.close();
+      final page = await response.transform(utf8.decoder).join();
+    if (page.contains(emptySearchResult)){
       //print ('working: $href    ');
       _ytsBaseUrl = href;
     }
