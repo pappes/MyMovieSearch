@@ -60,6 +60,9 @@ class QueryYtsDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     if (decodedCriteria.startsWith(detailUrl)) {
       return Uri.parse(decodedCriteria);
     }
+    if (decodedCriteria.startsWith(RegExp('https://yts.*/movies'))) {
+      return Uri.parse(decodedCriteria);
+    }
     final url = '$detailUrl$searchCriteria';
     return Uri.parse(url);
   }
