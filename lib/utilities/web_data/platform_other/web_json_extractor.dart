@@ -7,6 +7,7 @@ class WebJsonExtractorOther extends WebJsonExtractor {
     super.imdbApi,
   ) : super.internal();
 
+  @override
   Future<void> waitForCompletion() async {
     // Other implementation does not use a web view,
     // so we assume immediate completion.

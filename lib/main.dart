@@ -24,7 +24,7 @@ Future<void> main() async {
     FirebaseApplicationState().login().then((_) => MovieLocation().init()),
   );
   // Initialize yts helper.
-  ytsHelper();
+  YtsHelper();
 
   runApp(
     ChangeNotifierProvider<FirebaseApplicationState>(

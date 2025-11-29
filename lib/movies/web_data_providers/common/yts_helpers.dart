@@ -3,13 +3,13 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:html/parser.dart' as html;
-import 'package:http/http.dart' as http;
 
 const String ytsDefaultUrl = 'https://yts.lt';
-const String emptySearchResult = '{"status":"false","message":"No results found."}';
+const String emptySearchResult =
+    '{"status":"false","message":"No results found."}';
 
-class ytsHelper {
-  ytsHelper() {
+class YtsHelper {
+  YtsHelper() {
     unawaited(init());
   }
 
@@ -32,15 +32,13 @@ class ytsHelper {
   Future<String> _findLatestYifyURL() async {
     const url = 'https://yifystatus.com';
 
-
-    final client = HttpClient()
-    // Allow HttpClient to handle compressed data from web servers.
-    ..autoUncompress = true;
-    final request = await client.getUrl(
-        Uri.parse(url));
-        final response = await request.close();
-      final webPage = await response.transform(utf8.decoder).join();
-
+    final client =
+        HttpClient()
+          // Allow HttpClient to handle compressed data from web servers.
+          ..autoUncompress = true;
+    final request = await client.getUrl(Uri.parse(url));
+    final response = await request.close();
+    final webPage = await response.transform(utf8.decoder).join();
 
     if (webPage.contains('Current official domain:')) {
       unawaited(_findWorkingYifyURL(webPage));
@@ -50,10 +48,10 @@ class ytsHelper {
       // href="   - Matches the literal characters 'href="'
       // ([^"]+)  - This is a capturing group.
       //   [^"]   - Matches any character that is NOT a double quote.
-      //   +      - Matches the preceding token (any char but ") 
+      //   +      - Matches the preceding token (any char but ")
       //            one or more times.
       // "        - Matches the literal closing double quote.
-      // In essence, it captures the URL from the first link after the text 
+      // In essence, it captures the URL from the first link after the text
       // "Current official domain:".
       final linkMatch = RegExp('href="([^"]+)"').firstMatch(afterDomain);
       //print('official: ${linkMatch?.group(1)}');
@@ -69,21 +67,23 @@ class ytsHelper {
     for (final link in links) {
       final href = link.attributes['href'];
       if (href != null && href.startsWith('http') && !href.contains('.onion')) {
-        unawaited (testYtsUrl(href));
+        unawaited(testYtsUrl(href));
       }
     }
   }
 
   Future<void> testYtsUrl(String href) async {
     //print ('testing: $href    ');
-    final client = HttpClient()
-    // Allow HttpClient to handle compressed data from web servers.
-    ..autoUncompress = true;
+    final client =
+        HttpClient()
+          // Allow HttpClient to handle compressed data from web servers.
+          ..autoUncompress = true;
     final request = await client.getUrl(
-        Uri.parse('$href/ajax/search?query=therearenoresultszzzz/'));
-        final response = await request.close();
-      final page = await response.transform(utf8.decoder).join();
-    if (page.contains(emptySearchResult)){
+      Uri.parse('$href/ajax/search?query=therearenoresultszzzz/'),
+    );
+    final response = await request.close();
+    final page = await response.transform(utf8.decoder).join();
+    if (page.contains(emptySearchResult)) {
       //print ('working: $href    ');
       _ytsBaseUrl = href;
     }

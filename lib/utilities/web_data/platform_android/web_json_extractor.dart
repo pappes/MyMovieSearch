@@ -88,14 +88,17 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
 
   @override
   /// Waits for the data loading to complete.
-  Future<void> waitForCompletion() async => _dataLoadedCompleter.future;
+  Future<void> waitForCompletion() async =>
+      _dataLoadedCompleter.future.then((_) => super.waitForCompletion());
 
   /// Disposes the web view after an optional [delay].
   Future<void> dispose({Duration delay = Duration.zero}) async {
     await Future<void>.delayed(delay);
-    unawaited(_headlessWebView?.dispose());
-    _headlessWebView = null;
-    _dataLoadedCompleter.complete();
+    if (_headlessWebView != null) {
+      unawaited(_headlessWebView?.dispose());
+      _headlessWebView = null;
+      _dataLoadedCompleter.complete();
+    }
   }
 
   /// Called when the web view finishes loading a page.
@@ -108,13 +111,26 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
   Future<void> _clickAllFilterOptions(InAppWebViewController controller) async {
     if (_filtersCleared) {
       // Delay disposal to allow any final requests to complete.
-      return dispose(delay: const Duration(seconds: 5));
+      return dispose(delay: const Duration(seconds: 4));
     }
 
     try {
       _filtersCleared = true;
+      // logger.t(
+      //   await controller.evaluateJavascript(
+      //     source: "document.querySelectorAll('.ipc-chip--active')",
+      //   ),
+      // );
+      // await Future<void>.delayed(const Duration(seconds: 2));
       await controller.evaluateJavascript(source: getClickOnFilter());
       logger.t('Clicked on all filter options to expand data for $imdbUrl');
+      //await Future<void>.delayed(const Duration(seconds: 2));
+      // logger.t(
+      //   await controller.evaluateJavascript(
+      //     source: "document.querySelectorAll('.ipc-chip--active')",
+      //   ),
+      // );
+      await dispose(delay: const Duration(seconds: 10));
     } catch (e) {
       logger.e('Error clicking filter options: $e for $imdbUrl');
       await dispose();

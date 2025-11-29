@@ -240,7 +240,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     final address = myConstructURI(encoded, pageNumber: myGetPageNumber());
     logger.t('requesting: $address');
     final client = await baseGetHttpClient().openUrl('GET', address);
-    // myConstructHeaders(client.headers);
+    myConstructHeaders(client.headers);
     final response = await client.close();
 
     if (response.statusCode == 202) {

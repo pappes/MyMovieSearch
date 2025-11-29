@@ -23,10 +23,11 @@ import 'web_resource_interceptor_test.mocks.dart';
 // Mocks for standard Dart I/O and flutter_inappwebview classes.
 class ConfigurableMockHttpClientResponse extends mockito.Mock
     implements HttpClientResponse {
-  final Uint8List bodyBytes;
 
   ConfigurableMockHttpClientResponse(this.bodyBytes);
 
+  final Uint8List bodyBytes;
+  
   @override
   int get statusCode =>
       super.noSuchMethod(Invocation.getter(#statusCode), returnValue: 200)
@@ -77,7 +78,7 @@ void main() {
       'https://www.imdb.com/name/nm0000149/',
       (_) {},
       'FilmographyV2Pagination',
-      httpClientFactory: () => MockHttpClient(),
+      httpClientFactory: MockHttpClient.new,
       webViewRunner: mockWebView,
     );
   });
@@ -126,7 +127,7 @@ void main() {
     });
 
     test(
-      'should return Passthrough for POST requests (if not explicitly targeted)',
+      'should return Passthrough for POST requests(if not explicitly targeted)',
       () {
         const url = 'https://example.com/api/submit';
         final request = createMockRequest(url: url, method: 'POST');

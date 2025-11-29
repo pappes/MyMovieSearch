@@ -56,7 +56,7 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1})  {
-    final baseUrl = ytsHelper().ytsBaseUrl;
+    final baseUrl = YtsHelper().ytsBaseUrl;
     final url = '$baseUrl/ajax/search?query=/$searchCriteria';
     return Uri.parse(url);
   }

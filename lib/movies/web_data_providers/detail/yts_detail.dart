@@ -54,7 +54,7 @@ class QueryYtsDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     final decodedCriteria = Uri.decodeComponent(searchCriteria);
-    final baseUrl = ytsHelper().ytsBaseUrl;
+    final baseUrl = YtsHelper().ytsBaseUrl;
 
     final detailUrl = '$baseUrl/movies/';
     if (decodedCriteria.startsWith(detailUrl)) {

@@ -51,6 +51,7 @@ const imdbParentalPath = 'parentalguide';
 // primaryImage can be repeated for related movies - use first instance only
 const deepImageHeader = 'primaryImage';
 const deepImageField = 'url';
+const deepRelatedMovieCollection = 'edges';
 const deepRelatedMovieContainer = 'node';
 const deepRelatedHeader = 'mainColumnData';
 
@@ -106,9 +107,11 @@ const deepEntityExtraCastNameWriters = 'WRITER';
 // Credits is repeated inside the category as "credits"
 // so use case sensative compare
 const deepPersonRelatedSuffix = 'Credits';
+const deepPersonRelatedChunk = 'creditsV2';
 // category repeated inside the node
 // source the first instance for the credits section
 const deepRelatedCategoryHeader = 'category';
+const deepRelatedCategoryHeaderV2 = 'creditedRoles';
 const deepRelatedCategoryLabel = 'text';
 const deepRelatedMovieHeader = 'title';
 // characters are same map depth as title

@@ -10,6 +10,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scrape
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_json.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
+
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonSample(_) => Future.value(
@@ -22,16 +23,7 @@ Future<Stream<String>> _emitUnexpectedJsonSample(_) => Future.value(
 Future<Stream<String>> _emitInvalidJsonSample(_) =>
     Future.value(Stream.value('not valid json'));
 
-// ignore: avoid_classes_with_only_static_members
-class StaticJsonGenerator {
-  static Future<Stream<String>> stuff(_) =>
-      Future.value(Stream.value('"stuff"'));
-}
-
 void main() {
-  // Wait for api key to be initialised
-  setUpAll(() async => lockWebFetchTreadedCache);
-  tearDownAll(() async => lockWebFetchTreadedCache);
   ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
   ////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +34,7 @@ void main() {
       final criteria = SearchCriteriaDTO();
       expect(
         QueryIMDBJsonPaginatedFilmographyDetails(criteria).myDataSourceName(),
-        'imdb_Json-NameMainFilmographyPaginatedCredits-ImdbJsonSource.actor',
+        'imdb_Json-FilmographyV2Pagination',
       );
     });
 
@@ -78,8 +70,7 @@ void main() {
       const expectedResult = {
         'bestSource': 'DataSourceType.imdb',
         'title':
-            '[imdb_Json-'
-            'NameMainFilmographyPaginatedCredits-ImdbJsonSource.actor] '
+            '[imdb_Json-FilmographyV2Pagination] '
             'new query',
         'type': 'MovieContentType.error',
       };
@@ -166,85 +157,6 @@ void main() {
   });
 
   ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchThreadedCache
-  ////////////////////////////////////////////////////////////////////////////////
-
-  group('WebFetchThreadedCache unit tests', () {
-    test('empty cache', () async {
-      final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
-      await testClass.clearThreadedCache();
-      final listResult = await testClass.readCachedList(
-        source: (_) => Future.value(Stream.value('Polo')),
-      );
-      expect(listResult, <MovieResultDTO>[]);
-      final resultIsCached = await testClass.isThreadedResultCached();
-      expect(resultIsCached, false);
-      final resultIsStale = testClass.isThreadedCacheStale();
-      expect(resultIsStale, false);
-    });
-
-    test('add to cache via readPrioritisedCachedList', () async {
-      final criteria = SearchCriteriaDTO().fromString('nm1913125');
-      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
-      await testClass.clearThreadedCache();
-      // ignore: unused_result
-      await testClass.readPrioritisedCachedList(
-        source: streamImdbHtmlOfflinePaginatedData,
-      );
-      final listResult = await testClass.readPrioritisedCachedList(
-        source: StaticJsonGenerator.stuff,
-        // Return some random junk
-        // that will not get used do to caching
-      );
-      expect(
-        listResult,
-        MovieResultDTOListMatcher(expectedDTOList),
-        reason:
-            'Emitted DTO list ${listResult.toPrintableString()} '
-            'needs to match expected DTO List'
-            '${expectedDTOList.toPrintableString()}',
-      );
-      final resultIsCached = await testClass.isThreadedResultCached();
-      expect(resultIsCached, true);
-      final resultIsStale = testClass.isThreadedCacheStale();
-      expect(resultIsStale, false);
-    });
-
-    test('fetch result from cache', () async {
-      final criteria = SearchCriteriaDTO().fromString('nm1913125');
-      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
-      await testClass.clearThreadedCache();
-      // ignore: unused_result
-      await testClass.readPrioritisedCachedList(
-        source: streamImdbHtmlOfflinePaginatedData,
-      );
-      final listResult =
-          await testClass.fetchResultFromThreadedCache().toList();
-      expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
-      final resultIsCached = await testClass.isThreadedResultCached();
-      expect(resultIsCached, true);
-      final resultIsStale = testClass.isThreadedCacheStale();
-      expect(resultIsStale, false);
-    });
-
-    test('clear cache', () async {
-      final criteria = SearchCriteriaDTO().fromString('nm1913125');
-      final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
-      await testClass.clearThreadedCache();
-      // ignore: unused_result
-      await testClass.readPrioritisedCachedList(
-        source: streamImdbHtmlOfflinePaginatedData,
-      );
-      await testClass.clearThreadedCache();
-      final resultIsCached = await testClass.isThreadedResultCached();
-      expect(resultIsCached, false);
-      final resultIsStale = testClass.isThreadedCacheStale();
-      expect(resultIsStale, false);
-    });
-  });
-
-  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
   ////////////////////////////////////////////////////////////////////////////////
 
@@ -252,13 +164,7 @@ void main() {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
       const expected =
-          'https://caching.graphql.imdb.com/?'
-          'operationName=NameMainFilmographyPaginatedCredits'
-          '&variables='
-          '%7B%22after%22%3A%22MTIzNA%3D%3D%22%2C%22id%22%3A%221234%22%2C%22'
-          'includeUserRating%22%3Afalse%2C%22locale%22%3A%22en-GB%22%7D'
-          '&extensions='
-          '%7B%22persistedQuery%22%3A%7B%22sha256Hash%22%3A%22';
+          'https://www.imdb.com/name/1234/';
       final criteria = SearchCriteriaDTO();
 
       // Invoke the functionality.
@@ -374,9 +280,8 @@ void main() {
     test('invalid json', () async {
       // Set up the test data.
       const expectedException =
-          '[imdb_Json-'
-          'NameMainFilmographyPaginatedCredits-ImdbJsonSource.actor] Error in '
-          'imdb_Json-NameMainFilmographyPaginatedCredits-ImdbJsonSource.actor '
+          '[imdb_Json-FilmographyV2Pagination] Error in '
+          'imdb_Json-FilmographyV2Pagination '
           'with criteria nm123 convert error interpreting web text as a map '
           ':Invalid json FormatException: '
           'Unexpected character (at character 1)\n'
@@ -399,9 +304,8 @@ void main() {
     test('unexpected json contents', () async {
       // Set up the test data.
       const expectedException =
-          '[imdb_Json-'
-          'NameMainFilmographyPaginatedCredits-ImdbJsonSource.actor] Error in '
-          'imdb_Json-NameMainFilmographyPaginatedCredits-ImdbJsonSource.actor '
+          '[imdb_Json-FilmographyV2Pagination] Error in '
+          'imdb_Json-FilmographyV2Pagination '
           'with criteria nm123 convert error interpreting web text as a map '
           ':Invalid json FormatException: '
           'Unexpected character (at character 2)\n'

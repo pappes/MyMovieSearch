@@ -219,7 +219,8 @@ void main() {
       for (final testCase in testCases) {
         // Arrange
         final reason =
-            'criteria: id=${testCase.id}, type=${testCase.type}, expected=${testCase.expectedRoute}';
+            'criteria: id=${testCase.id}, type=${testCase.type}, '
+            'expected=${testCase.expectedRoute}';
 
         final movie = MovieResultDTO().init(
           uniqueId: testCase.id,

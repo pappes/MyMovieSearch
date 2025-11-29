@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -40,7 +39,7 @@ class QueryIMDBJsonCastDetails extends QueryIMDBJsonDetailsBase {
   /// https://www.imdb.com/title/tt33852162/fullcredits/?ref_=tt_cst_sm
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) =>
-      Uri.parse('https://www.imdb.com/title/${searchCriteria}/fullcredits/');
+      Uri.parse('https://www.imdb.com/title/$searchCriteria/fullcredits/');
 }
 
 /// Implements [WebFetchBase] for retrieving paginated Json
@@ -73,7 +72,7 @@ class QueryIMDBJsonPaginatedFilmographyDetails
   /// https://www.imdb.com/name/nm0000149/
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) =>
-      Uri.parse('https://www.imdb.com/name/${searchCriteria}/');
+      Uri.parse('https://www.imdb.com/name/$searchCriteria/');
 }
 
 /// Implements [WebFetchBase] for retrieving Json information from IMDB.
@@ -110,12 +109,13 @@ abstract class QueryIMDBJsonDetailsBase
     final controller = StreamController<String>();
     final url = myConstructURI(myFormatInputAsText()).toString();
 
+    //TODO inject WebJsonExtractor
+
     final extractor = WebJsonExtractor(url, controller.add, imdbOperation);
     await extractor.waitForCompletion();
     final listener = controller.close();
     yield* controller.stream;
     await listener;
-    print('done');
   }
 
   /// Convert IMDB map to MovieResultDTO records.

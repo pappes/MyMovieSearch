@@ -1,8 +1,26 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:my_movie_search/utilities/web_data/platform_android/web_json_extractor.dart';
 import 'package:my_movie_search/utilities/web_data/platform_linux/web_json_extractor.dart';
 import 'package:my_movie_search/utilities/web_data/platform_other/web_json_extractor.dart';
+
+class WebJsonSychroniser {
+  WebJsonSychroniser(String imdbUrl, String imdbApi) {
+    base = WebJsonExtractor(imdbUrl, jsonCallback, imdbApi);
+  }
+  late WebJsonExtractor base;
+  List<String> jsonResults = [];
+
+  void jsonCallback(String json) {
+    jsonResults.add(json);
+  }
+
+  Future<List<String>> getJson() async {
+    await base.waitForCompletion();
+    return jsonResults;
+  }
+}
 
 /// Defines the three possible outcomes of an interception request,
 enum InterceptionAction { delegateRequest, syntheticResponse, executeRequest }
@@ -32,7 +50,8 @@ class InterceptionDecision {
   final Uint8List? body;
 }
 
-// This function type abstracts the creation of the HttpClient, making it mockable.
+// This function type abstracts the creation of the HttpClient,
+// making it mockable.
 typedef JsonCallback = void Function(String);
 
 /// Extract the json from a web page
@@ -62,9 +81,14 @@ abstract class WebJsonExtractor {
 
   String imdbUrl;
   JsonCallback jsonCallback;
+  bool callbackExecuted = false;
   String imdbApi;
 
-  Future<void> waitForCompletion();
+  Future<void> waitForCompletion() async {
+    if (!callbackExecuted) {
+      jsonCallback(jsonEncode('no json results'));
+    }
+  }
 
   // Get the CSS selector for the page element to click on.
   String getClickOnFilter() => '''
@@ -81,8 +105,10 @@ abstract class WebJsonExtractor {
 ''';
 
   void consumeJsonData(String json) {
+    callbackExecuted = true;
     jsonCallback(json);
   }
+
   static const List<String> _blackListedEndPoints = [
     'amazon.com/images',
     'm.media-amazon.com/images',
@@ -102,7 +128,6 @@ abstract class WebJsonExtractor {
     'adsystem',
     'adtraffic',
     'yahoo.com',
-    
   ];
 
   bool discardAdRequests(String url) {
@@ -140,7 +165,8 @@ abstract class WebJsonExtractor {
     return InterceptionDecision.executeRequest();
   }
 
-  /// Determines if a request should be executed by the WebView without Dart interception.
+  /// Determines if a request should be executed by the WebView without
+  /// Dart interception.
   /// Returns `true` to skip interception (return null from _handleIntercept).
   bool shouldPassthroughRequest(String url, String? method) {
     // Pass through scripts, styles, and fonts

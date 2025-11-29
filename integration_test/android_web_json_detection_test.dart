@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -42,7 +43,8 @@ int jsonChunkCount = 0;
 
 void callback(String jsonString) {
   print(
-    'JSON Callback: ${jsonString.substring(0, 100)}...${jsonString.length}',
+    'JSON Callback($jsonChunkCount): ${jsonString.substring(0, min(jsonString.length, 100))}'
+    '...${jsonString.length}',
   );
   jsonChunkCount++;
 }
@@ -94,6 +96,28 @@ void main() {
         jsonChunkCount,
         3,
         reason: 'Json chunks should have 3 entries but has $jsonChunkCount',
+      );
+    },
+    timeout: const Timeout(Duration(seconds: 60)),
+    // This test uses flutter_inappwebview which is configured for Android.
+    skip: !Platform.isAndroid,
+  );
+  testWidgets(
+    'Extract json using WebJsonSychroniser',
+    (tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      final extractor = WebJsonSychroniser(
+        'https://www.imdb.com/name/nm0000149/',
+        'FilmographyV2Pagination',
+      );
+      final json = await extractor.getJson();
+
+      // Check the results.
+      expect(
+        json.length,
+        3,
+        reason: 'Json chunks should have 3 entries but has ${json.length}',
       );
     },
     timeout: const Timeout(Duration(seconds: 60)),

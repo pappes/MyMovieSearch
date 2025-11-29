@@ -503,11 +503,12 @@ class ImdbWebScraperConverter {
             if (item is Map) {
               // ...{'category':...{id:<value>, text:<value>...}}
               final categoryHeader = item.deepSearch(deepRelatedCategoryHeader);
+              final categoryHeaderV2 = item.deepSearch(
+                deepRelatedCategoryHeaderV2,
+              );
               final categoryText =
-                  categoryHeader?.searchForString(
-                    key: deepRelatedCategoryLabel,
-                  ) ??
                   categoryHeader?.searchForString() ??
+                  categoryHeaderV2?.searchForString() ??
                   'Unknown';
 
               final movies = _getDeepPersonRelatedMoviesForCategory(item);
@@ -682,16 +683,23 @@ class ImdbWebScraperConverter {
       movie.imageUrl = url?.toString() ?? movie.imageUrl;
     }
 
+    final List<dynamic> credits =
+        map.deepSearch(
+          deepPersonRelatedSuffix, // '*Credits' e.g. releasedCredits
+          suffixMatch: true,
+          multipleMatch: true,
+        ) ??
+        [];
+    final List<dynamic> creditsV2 =
+        map
+            .deepSearch(deepPersonRelatedChunk) // '*CreditV2'
+            ?.deepSearch(deepRelatedMovieCollection) ??
+        []; // edges
+
     movie
       ..description =
           map[outerElementDescription]?.toString() ?? movie.description
-      ..related = _getDeepPersonRelatedCategories(
-        map.deepSearch(
-          deepPersonRelatedSuffix, //'*Credits' e.g. releasedCredits
-          suffixMatch: true,
-          multipleMatch: true,
-        ),
-      );
+      ..related = _getDeepPersonRelatedCategories([...credits, ...creditsV2]);
 
     _combineMovies(
       movie.related,
