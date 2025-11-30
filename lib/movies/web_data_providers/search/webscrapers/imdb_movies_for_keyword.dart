@@ -39,7 +39,7 @@ mixin ScrapeIMDBMoviesForKeyword
     final document = parse(webText);
     final movieData = _scrapeWebPage(document);
     if (movieData[outerElementDescription] == null &&
-        movieData['props'] == null) {
+        movieData[rootAttribute] == null) {
       throw WebConvertException(
           'imdb web scraper data not detected for criteria '
           '$getCriteriaText in $webText');

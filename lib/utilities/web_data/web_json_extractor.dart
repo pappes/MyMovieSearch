@@ -81,12 +81,12 @@ abstract class WebJsonExtractor {
 
   String imdbUrl;
   JsonCallback jsonCallback;
-  bool callbackExecuted = false;
+  bool jsonAfterInitialLoad = false;
   String imdbApi;
 
   Future<void> waitForCompletion() async {
-    if (!callbackExecuted) {
-      jsonCallback(jsonEncode('no json results'));
+    if (!jsonAfterInitialLoad) {
+      jsonCallback(jsonEncode('no dynamic json results'));
     }
   }
 
@@ -104,8 +104,10 @@ abstract class WebJsonExtractor {
       })();
 ''';
 
-  void consumeJsonData(String json) {
-    callbackExecuted = true;
+  void consumeJsonData(String json, {bool afterInitialLoad = true}) {
+    if (afterInitialLoad) {
+      jsonAfterInitialLoad = true;
+    }
     jsonCallback(json);
   }
 

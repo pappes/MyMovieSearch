@@ -232,7 +232,7 @@ void main() {
   ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase, env and QueryIMDBJsonDetails
   ////////////////////////////////////////////////////////////////////////////////
-
+/* requires native android device
   group('imdb search query', () {
     // Read imdb search results from a simulated byte stream
     // and convert JSON to dtos.
@@ -324,5 +324,5 @@ void main() {
 
       // Check the results.
     });
-  });
+  });*/
 }

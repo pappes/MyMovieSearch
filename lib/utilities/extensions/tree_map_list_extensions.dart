@@ -5,11 +5,13 @@ extension TreeListHelper on Iterable<dynamic> {
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
+    bool stopAtTopLevel = true,
   }) =>
       TreeHelper(this).deepSearch(
         tag,
         suffixMatch: suffixMatch,
         multipleMatch: multipleMatch,
+    stopAtTopLevel: stopAtTopLevel,
       );
 
   String? searchForString({Object key = 'text'}) =>
@@ -72,6 +74,7 @@ class TreeHelper {
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
+    bool stopAtTopLevel = true,
   }) {
     if (null == tree) return null;
     final matches = <dynamic>[]; // Allow mutiple results on suffix search.
@@ -83,11 +86,14 @@ class TreeHelper {
         // Simple match.
         matches.add(value);
         if (!multipleMatch) return matches;
+        if (stopAtTopLevel) continue;
       } else if (suffixMatch && key.toString().endsWith(tag.toString())) {
         // Suffix match.
         matches.add(value);
         if (!multipleMatch) return matches;
-      } else if (value is Map || value is Iterable) {
+        if (stopAtTopLevel) continue;
+      }
+      if (value is Map || value is Iterable) {
         // Recursively search children.
         final result = TreeHelper(value).deepSearch(
           tag,

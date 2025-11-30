@@ -243,13 +243,24 @@ class ImdbWebScraperConverter {
     final popularity = map
         .deepSearch(deepPersonPopularityHeader)
         ?.searchForString(key: deepPersonPopularityField);
-    final related = _getDeepPersonRelatedCategories(
-      map.deepSearch(
-        deepPersonRelatedSuffix, //'*Credits' e.g. releasedPrimaryCredits
-        suffixMatch: true,
-        multipleMatch: true,
-      ),
-    );
+
+    // ...{'edges':...{...'node':...{...'credits':...{...'node':<value>...}}
+    final List<dynamic> creditsV2 =
+        map
+            .deepSearch(
+              deepRelatedMovieCollection, // edges
+              multipleMatch: true,
+            )
+            ?.deepSearch(deepRelatedMovieContainer, multipleMatch: true) // node
+            ?.deepSearch(deepPersonRelatedleaf, multipleMatch: true) // credits
+            ?.deepSearch(
+              deepRelatedMovieContainer, // node
+              multipleMatch: true,
+              stopAtTopLevel: false,
+            ) ??
+        [];
+
+    final related = _getPersonRelatedMovies(creditsV2);
 
     movie
       ..merge(
@@ -494,26 +505,45 @@ class ImdbWebScraperConverter {
   }
 
   /// extract actor credits information from [list].
-  RelatedMovieCategories _getDeepPersonRelatedCategories(dynamic list) {
+  static RelatedMovieCategories _getDeepPersonRelatedCategories(dynamic list) {
     final RelatedMovieCategories result = {};
     if (list is List) {
       for (final related in list) {
         if (related is List) {
           for (final item in related) {
             if (item is Map) {
-              // ...{'category':...{id:<value>, text:<value>...}}
-              final categoryHeader = item.deepSearch(deepRelatedCategoryHeader);
-              final categoryHeaderV2 = item.deepSearch(
-                deepRelatedCategoryHeaderV2,
-              );
-              final categoryText =
-                  categoryHeader?.searchForString() ??
-                  categoryHeaderV2?.searchForString() ??
-                  'Unknown';
-
-              final movies = _getDeepPersonRelatedMoviesForCategory(item);
-              _combineMovies(result, categoryText.addColonIfNeeded(), movies);
+              _getDeepPersonRelatedCategoryMovie(item, result);
             }
+          }
+        } else if (related is Map) {
+          _getDeepPersonRelatedCategoryMovie(related, result);
+        }
+      }
+    }
+    return result;
+  }
+
+  /// Search within a movie credits node for movie information for the person.
+  static RelatedMovieCategories _getPersonRelatedMovies(List<dynamic> nodes) {
+    final RelatedMovieCategories result = {};
+    for (final related in nodes) {
+      if (related is Map &&
+          related.containsKey(deepRelatedMovieHeader) &&
+          related.containsKey(deepRelatedCategoryHeaderV2)) {
+        // We have a map with the movie ifo, the persns roles in the movie
+        // and possiby charactor names.
+        final movie = _getMovieFromCreditV2(
+          related[deepRelatedMovieHeader],
+          related,
+        );
+        if (movie != null) {
+          // Combine the movie info with the roles.
+          final MovieCollection indexedMovie = {movie.uniqueId: movie};
+          final roles = _getRolesFromCreditsV2(
+            related[deepRelatedCategoryHeaderV2],
+          );
+          for (final role in roles) {
+            _combineMovies(result, role.addColonIfNeeded(), indexedMovie);
           }
         }
       }
@@ -521,8 +551,22 @@ class ImdbWebScraperConverter {
     return result;
   }
 
+  /// Search in a json Map for movie information to add to the movie collection.
+  static void _getDeepPersonRelatedCategoryMovie(
+    Map<dynamic, dynamic> item,
+    RelatedMovieCategories existing,
+  ) {
+    final movies = _getDeepPersonRelatedMoviesForCategory(item);
+    final categories = _getRolesFromCreditsV2(
+      item[deepRelatedCategoryHeaderV2],
+    );
+    for (final category in categories) {
+      _combineMovies(existing, category.addColonIfNeeded(), movies);
+    }
+  }
+
   /// Add movies to a new category or an exisiting category
-  void _combineMovies(
+  static void _combineMovies(
     RelatedMovieCategories existing,
     String category,
     MovieCollection movies,
@@ -534,6 +578,48 @@ class ImdbWebScraperConverter {
         existing[category] = movies;
       }
     }
+  }
+
+  /// get movie title in from amovie credits node.
+  static MovieResultDTO? _getMovieFromCreditV2(
+    dynamic title,
+    Map<dynamic, dynamic> parent,
+  ) {
+    if (title is Map) {
+      final movieDto = _getDeepTitle(title);
+      _getMovieCharacterName(movieDto, parent);
+      return movieDto;
+    }
+    return null;
+  }
+
+  /// Find the roles a person has in a movie.
+  static List<String> _getRolesFromCreditsV2(dynamic creditedRoles) {
+    const defaultLabel = 'Unknown';
+    final categories = [defaultLabel];
+
+    // ...{'category':...{id:<value>, text:<value>...}}
+    final categoryHeader = TreeHelper(
+      creditedRoles,
+    ).deepSearch(deepRelatedCategoryHeader, multipleMatch: true);
+    // Allow a person to have multiple roles in a movie.
+    if (categoryHeader is List && categoryHeader.isNotEmpty) {
+      final labels = categoryHeader.deepSearch('text', multipleMatch: true);
+      if (labels is List && labels.isNotEmpty) {
+        for (final label in labels) {
+          if (label is String) {
+            final categoryText = label.addColonIfNeeded();
+            if (!categories.contains(categoryText)) {
+              categories.add(categoryText);
+            }
+          }
+        }
+        if (categories.length > 1) {
+          categories.remove(defaultLabel);
+        }
+      }
+    }
+    return categories;
   }
 
   /// extract collections of movies for a specific category for the person
@@ -550,9 +636,8 @@ class ImdbWebScraperConverter {
       for (final node in nodes) {
         if (node is Map) {
           final title = node.deepSearch(deepRelatedMovieHeader)?.first;
-          if (title is Map) {
-            final movieDto = _getDeepTitle(title);
-            _getMovieCharacterName(movieDto, node);
+          final movieDto = _getMovieFromCreditV2(title, node);
+          if (movieDto != null) {
             result[movieDto.uniqueId] = movieDto;
           }
         }
@@ -563,7 +648,7 @@ class ImdbWebScraperConverter {
 
   /// extract collections of movies for a specific category for the title
   /// from a map or a list.
-  MovieCollection _getDeepTitleRelatedMoviesForCategory(dynamic nodes) {
+  static MovieCollection _getDeepTitleRelatedMoviesForCategory(dynamic nodes) {
     final MovieCollection result = {};
     if (nodes is List) {
       for (final node in nodes) {
@@ -579,7 +664,7 @@ class ImdbWebScraperConverter {
 
   /// extract collections of people for a specific category for the title
   /// from a map or a list.
-  MovieCollection _getDeepTitleRelatedPeopleForCategory(dynamic nodes) {
+  static MovieCollection _getDeepTitleRelatedPeopleForCategory(dynamic nodes) {
     final MovieCollection result = {};
     int creditsOrder = 100;
     if (nodes is List) {
@@ -595,7 +680,8 @@ class ImdbWebScraperConverter {
     return result;
   }
 
-  void _getDeepRelatedPersonCredits(
+  /// Maintin credits order when extracting people involved in a movie.
+  static void _getDeepRelatedPersonCredits(
     MovieCollection collection,
     Map<dynamic, dynamic> node, [
     int? creditsOrder,
@@ -608,7 +694,7 @@ class ImdbWebScraperConverter {
     collection[movieDto.uniqueId] = movieDto;
   }
 
-  /// extract collections of movies for a specific category.
+  /// Extract collections of movies for a specific category.
   static void _getMovieCharacterName(
     MovieResultDTO dto,
     Map<dynamic, dynamic> map,
@@ -630,7 +716,7 @@ class ImdbWebScraperConverter {
   }
 
   /// extract related movie details from [map].
-  MovieResultDTO _getDeepRelatedPerson(Map<dynamic, dynamic> map) {
+  static MovieResultDTO _getDeepRelatedPerson(Map<dynamic, dynamic> map) {
     final id = // ...{'id':<value>...}
         map.searchForString(key: deepRelatedPersonId)!;
     final title = // ...{'nameText':...{...'text':<value>...}}
@@ -699,6 +785,7 @@ class ImdbWebScraperConverter {
     movie
       ..description =
           map[outerElementDescription]?.toString() ?? movie.description
+      // TODO: see if we can switch from the old _getDeepPersonRelatedCategories to the new _getPersonRelatedMovies
       ..related = _getDeepPersonRelatedCategories([...credits, ...creditsV2]);
 
     _combineMovies(

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -130,10 +131,39 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
       //     source: "document.querySelectorAll('.ipc-chip--active')",
       //   ),
       // );
-      await dispose(delay: const Duration(seconds: 10));
+      unawaited(_getExistingJson(controller));
+      // Delay disposal to allow any final requests to complete.
+
+      return dispose(delay: const Duration(seconds: 10));
     } catch (e) {
       logger.e('Error clicking filter options: $e for $imdbUrl');
-      await dispose();
+      return dispose();
+    }
+  }
+
+  Future<void> _getExistingJson(InAppWebViewController controller) async {
+    const javascriptToExecute = '''
+(function() {
+  const scripts = document.querySelectorAll('script[type="application/json"]');
+  const contents = [];
+  scripts.forEach(script => contents.push(script.innerHTML));
+  return JSON.stringify(contents);
+})();
+''';
+
+    // Execute the script and get the result.
+    final result = await controller.evaluateJavascript(
+      source: javascriptToExecute,
+    );
+    final jsonScripts = json.decode(result.toString());
+    if (jsonScripts is Iterable) {
+      for (final script in jsonScripts) {
+        consumeJsonData(script.toString());
+      }
+    }
+
+    if (result != null) {
+      logger.t('Found on initial page load: $result');
     }
   }
 

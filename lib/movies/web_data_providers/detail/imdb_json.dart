@@ -148,10 +148,20 @@ abstract class QueryIMDBJsonDetailsBase
     try {
       // Assume text is json encoded.
       final tree = jsonDecode(webText);
-      // ignore: avoid_dynamic_calls
-      final results = tree['data']!['name'];
-      if (results != null && results is Map) {
-        return [results];
+      if (tree is Map) {
+        // Map could contain descripion or props or data nodes.
+        // For description and props, return the entire map.
+        if (tree[outerElementDescription] != null ||
+            tree[rootAttribute] != null) {
+          return [tree];
+        }
+        // For data, return the results node.
+        final results =
+            // ignore: avoid_dynamic_calls
+            tree[outerElementDetailResults]![outerElementOfficialTitle];
+        if (results != null && results is Map) {
+          return [results];
+        }
       }
     } on FormatException catch (jsonException) {
       throw WebConvertException('Invalid json $jsonException');
