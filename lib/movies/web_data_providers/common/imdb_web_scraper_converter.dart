@@ -530,7 +530,7 @@ class ImdbWebScraperConverter {
       if (related is Map &&
           related.containsKey(deepRelatedMovieHeader) &&
           related.containsKey(deepRelatedCategoryHeaderV2)) {
-        // We have a map with the movie ifo, the persns roles in the movie
+        // We have a map with the movie info, the persons roles in the movie
         // and possiby charactor names.
         final movie = _getMovieFromCreditV2(
           related[deepRelatedMovieHeader],
@@ -558,7 +558,7 @@ class ImdbWebScraperConverter {
   ) {
     final movies = _getDeepPersonRelatedMoviesForCategory(item);
     final categories = _getRolesFromCreditsV2(
-      item[deepRelatedCategoryHeaderV2],
+      item.deepSearch(deepRelatedCategoryHeaderV2),
     );
     for (final category in categories) {
       _combineMovies(existing, category.addColonIfNeeded(), movies);
@@ -778,15 +778,22 @@ class ImdbWebScraperConverter {
         [];
     final List<dynamic> creditsV2 =
         map
-            .deepSearch(deepPersonRelatedChunk) // '*CreditV2'
-            ?.deepSearch(deepRelatedMovieCollection) ??
-        []; // edges
+            .deepSearch(
+              deepPersonRelatedChunk,
+              multipleMatch: true,
+            ) // '*CreditV2'
+            ?.deepSearch(
+              deepRelatedMovieCollection,
+              multipleMatch: true,
+            ) // edges;
+            ?.getGrandChildren() ??
+        [];
 
     movie
       ..description =
           map[outerElementDescription]?.toString() ?? movie.description
       // TODO: see if we can switch from the old _getDeepPersonRelatedCategories to the new _getPersonRelatedMovies
-      ..related = _getDeepPersonRelatedCategories([...credits, ...creditsV2]);
+      ..related = _getDeepPersonRelatedCategories([...creditsV2, ...credits]);
 
     _combineMovies(
       movie.related,

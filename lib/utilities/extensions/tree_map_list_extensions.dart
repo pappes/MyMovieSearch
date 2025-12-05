@@ -1,19 +1,24 @@
 /// Extend [Iterable] and [Map] to provide tree convenience functions.
 ///
 extension TreeListHelper on Iterable<dynamic> {
+  /// Recursively traverse a tree to pull a specific value out.
+  /// {@macro deepSearch}
   List<dynamic>? deepSearch(
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
     bool stopAtTopLevel = true,
-  }) =>
-      TreeHelper(this).deepSearch(
-        tag,
-        suffixMatch: suffixMatch,
-        multipleMatch: multipleMatch,
+  }) => TreeHelper(this).deepSearch(
+    tag,
+    suffixMatch: suffixMatch,
+    multipleMatch: multipleMatch,
     stopAtTopLevel: stopAtTopLevel,
-      );
+  );
 
+  /// {@macro getGrandChildren}
+  List<dynamic> getGrandChildren() => TreeHelper(this).getGrandChildren();
+
+  /// {@macro searchForString}
   String? searchForString({Object key = 'text'}) =>
       TreeHelper(this).searchForString(key: key);
 }
@@ -23,29 +28,32 @@ extension TreeMapHelper on Map<dynamic, dynamic> {
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
-  }) =>
-      TreeHelper(this).deepSearch(
-        tag,
-        suffixMatch: suffixMatch,
-        multipleMatch: multipleMatch,
-      );
+  }) => TreeHelper(
+    this,
+  ).deepSearch(tag, suffixMatch: suffixMatch, multipleMatch: multipleMatch);
 
+  /// {@macro getGrandChildren}
+  List<dynamic> getGrandChildren() => values.getGrandChildren();
+
+  /// {@macro searchForString}
   String? searchForString({Object key = 'text'}) =>
       TreeHelper(this).searchForString(key: key);
 }
 
 extension TreeSetHelper on Set<dynamic> {
+  /// {@macro deepSearch}
   List<dynamic>? deepSearch(
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
-  }) =>
-      TreeHelper(this).deepSearch(
-        tag,
-        suffixMatch: suffixMatch,
-        multipleMatch: multipleMatch,
-      );
+  }) => TreeHelper(
+    this,
+  ).deepSearch(tag, suffixMatch: suffixMatch, multipleMatch: multipleMatch);
 
+  /// {@macro getGrandChildren}
+  List<dynamic> getGrandChildren() => toList().getGrandChildren();
+
+  /// {@macro searchForString}
   String? searchForString({Object key = 'text'}) =>
       TreeHelper(this).searchForString(key: key);
 }
@@ -70,6 +78,14 @@ class TreeHelper {
   Map<dynamic, dynamic>? asMap;
 
   /// Recursively traverse a tree to pull a specific value out.
+  ///
+  /// {@template deepSearch}
+  /// Parameters:
+  /// * [tag] the key to search for.
+  /// * [suffixMatch] match on the end of the key.
+  /// * [multipleMatch] return all matches.
+  /// * [stopAtTopLevel] do not search inside result for more matches.
+  /// {@endtemplate}
   List<dynamic>? deepSearch(
     Object tag, {
     bool suffixMatch = false,
@@ -114,8 +130,26 @@ class TreeHelper {
     return null;
   }
 
-  /// Validate a [Map] or [List] tree
-  /// contains a String value identided by [key].
+  /// {@template getGrandChildren}
+  /// Collapse one level of the tree.
+  /// {@endtemplate}
+  List<dynamic> getGrandChildren() {
+    final List<dynamic> grandChildren = [];
+    for (final child in asIterable ?? []) {
+      if (child is Iterable) {
+        grandChildren.addAll(child);
+      } else if (child is Map) {
+        grandChildren.addAll(child.values);
+      }
+    }
+    return grandChildren;
+  }
+
+  /// Search tree for a map containing [key] and return its value as a String.
+  ///
+  /// {@template searchForString}
+  /// It finds the first occurrence of the [key] and returns the associated value.
+  /// {@endtemplate}
   String? searchForString({Object key = 'text'}) {
     final results = deepSearch(key);
     if (null != results && results.isNotEmpty && null != results.first) {

@@ -927,6 +927,26 @@ Future<void> main() async {
       });
     });
 
+    group('getGrandChildren', () {
+      // Test with a list of lists.
+      test('list of lists', () {
+        final tree = [
+          [1, 2],
+          [3, 4],
+        ];
+        expect(TreeHelper(tree).getGrandChildren(), [1, 2, 3, 4]);
+      });
+
+      // Test with a map of lists.
+      test('map of lists', () {
+        final tree = {
+          'a': [1, 2],
+          'b': [3, 4],
+        };
+        expect(tree.getGrandChildren(), [1, 2, 3, 4]);
+      });
+    });
+
     group('TreeHelper extensions', () {
       // Test map, list and set extension helper classes.
       test('searchForString map extension', () {

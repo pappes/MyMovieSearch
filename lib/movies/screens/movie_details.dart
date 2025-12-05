@@ -14,6 +14,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart'
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 
@@ -360,7 +361,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         final rolesLabel = category.key;
         final description = rolesMap.toShortString();
         categories
-          ..add(BoldLabel('$rolesLabel (${rolesMap.length})'))
+          ..add(
+            BoldLabel('${rolesLabel.addColonIfNeeded()} (${rolesMap.length})'),
+          )
           ..add(
             Center(
               child: InkWell(

@@ -12,6 +12,7 @@ import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 
@@ -241,7 +242,9 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       final rolesLabel = category.key;
       final description = rolesMap.toShortString(); // Get a list of movie roles
       categories
-        ..add(BoldLabel('$rolesLabel: (${rolesMap.length})'))
+        ..add(
+          BoldLabel('${rolesLabel.addColonIfNeeded()} (${rolesMap.length})'),
+        )
         ..add(
           Center(
             child: InkWell(
