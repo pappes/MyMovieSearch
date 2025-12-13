@@ -529,7 +529,8 @@ class ImdbWebScraperConverter {
     for (final related in nodes) {
       if (related is Map &&
           related.containsKey(deepRelatedMovieHeader) &&
-          related.containsKey(deepRelatedCategoryHeaderV2)) {
+          (related.containsKey(deepRelatedCategoryHeaderV2) ||
+              related.containsKey(deepRelatedMovieParentCharacterHeader))) {
         // We have a map with the movie info, the persons roles in the movie
         // and possiby charactor names.
         final movie = _getMovieFromCreditV2(
@@ -701,9 +702,12 @@ class ImdbWebScraperConverter {
   ) {
     final characters = // ...{'characters':...} or
         map.deepSearch(deepRelatedMovieParentCharacterHeader)?.first;
-    if (characters is List) {
+
+    if (characters is List || characters is Map) {
       // ...{'characters':...{...'name':<value>...}}
-      final names = characters.deepSearch(
+      final names = TreeHelper(
+        characters,
+      ).deepSearch(
         deepRelatedMovieParentCharacterField,
         multipleMatch: true,
       );

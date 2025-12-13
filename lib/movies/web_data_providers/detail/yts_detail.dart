@@ -85,11 +85,13 @@ class QueryYtsDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   void myConstructHeaders(HttpHeaders headers) {
     super.myConstructHeaders(headers);
     // prevent invalid UTF encoding.
-    headers.set(
+    headers
+      ..set(
         'accept',
         'text/html,application/xhtml+xml,application/xml',
         // do not accept ;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7,
-      );
+      )
+      ..set('accept-encoding', 'text/plain');
   }
 
   /// Include entire map in the movie title when an error occurs.

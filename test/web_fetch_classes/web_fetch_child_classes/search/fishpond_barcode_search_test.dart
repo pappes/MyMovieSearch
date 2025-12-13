@@ -59,7 +59,7 @@ void main() {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
       const expectedResult =
-          'https://www.mightyape.com.au/search?s=new%20query+';
+          'https://www.fishpond.com.au/advanced_search_result.php?keywords=new%20query&cName=Movies';
 
       // Invoke the functionality.
       final actualResult = QueryFishpondBarcodeSearch(criteria)

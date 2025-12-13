@@ -13,20 +13,20 @@ import '../../../../test_helper.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
-  r'''
+r'''
 {"uniqueId":"tt0101000","title":"Začátek dlouhého podzimu","bestSource":"DataSourceType.tmdbMovie","type":"MovieContentType.title","year":"1990","language":"LanguageType.foreign",
       "languages":"[\"Czech\"]",
       "genres":"[\"Drama\"]",
       "description":"The film about curious children who discover a sunken statue of Masaryk in a disused well was interfered with by the events of November and the filmmakers tried to incorporate their echoes into the flow of the narrative. However, the result is at times confusing, as the originally childish adventure has thus grown into a naive social poster child.",
       "userRating":"6.0","userRatingCount":"1","sources":{"DataSourceType.tmdbMovie":"913986"}}
 ''',
-  r'''
+r'''
 {"uniqueId":"tt0101001","title":"A Haunted Romance","bestSource":"DataSourceType.tmdbMovie","alternateTitle":"再世風流劫","type":"MovieContentType.title","year":"1985","runTime":"5280","language":"LanguageType.foreign",
       "languages":"[\"Cantonese\"]",
       "genres":"[\"Horror\"]",
-      "description":"Hong Kong horror movie from 1985.","sources":{"DataSourceType.tmdbMovie":"1341041"}}
+      "description":"Hong Kong horror movie from 1985.","imageUrl":"https://image.tmdb.org/t/p/w500/2TqIVoUH71ZwZBFtvG6Y8P2YY8l.jpg","sources":{"DataSourceType.tmdbMovie":"1341041"}}
 ''',
-  r'''
+r'''
 {"uniqueId":"tt0101002","title":"Return Engagement","bestSource":"DataSourceType.tmdbMovie","alternateTitle":"再戰江湖","type":"MovieContentType.title","year":"1990","runTime":"6480","language":"LanguageType.foreign",
       "languages":"[\"Cantonese\"]",
       "genres":"[\"Crime\",\"Action\",\"Drama\"]",

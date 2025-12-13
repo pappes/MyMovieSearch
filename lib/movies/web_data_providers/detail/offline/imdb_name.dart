@@ -15,13 +15,13 @@ Future<Stream<String>> streamImdbHtmlOfflineData(_) =>
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
-  r'''
+r'''
 {"uniqueId":"nm0123456","title":"Mescalon Smoochington <3","bestSource":"DataSourceType.imdb","type":"MovieContentType.person","year":"1933","yearRange":"1933-1977",
       "description":"THen Kramer said, \"Everybody is Mescalon Smoochington\".","userRatingCount":"184","imageUrl":"https://www.microsoft.com/images/M/MV5BNjdhNz.jpg","sources":{"DataSourceType.imdb":"nm0123456"},
   "related":{"Actor:":{"tt0012370":{"uniqueId":"tt0012370","title":"Walk Skip Run","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" Run Forrest Run","characterName":" [Willy Rutter]","type":"MovieContentType.movie","year":"1973","yearRange":"1973","runTime":"7140",
       "genres":"[\"Western\",\"Romance\"]",
-      "userRating":"8.6","userRatingCount":"4837","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0012370"}}},
-    "Actress:":{"tt0123580":{"uniqueId":"tt0123580","title":"Scott And Sharlene","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" Aussieland","characterName":" [Nom da Plume, Other Character]","type":"MovieContentType.short","year":"1985","yearRange":"1985-2023","runTime":"1234",
+      "userRating":"8.6","userRatingCount":"4837","imageUrl":"https://www.microsoft.com/images/M/MV5BM.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0012370"}},
+      "tt0123580":{"uniqueId":"tt0123580","title":"Scott And Sharlene","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" Aussieland","characterName":" [Nom da Plume, Other Character]","type":"MovieContentType.short","year":"1985","yearRange":"1985-2023","runTime":"1234",
       "genres":"[\"Horror\",\"Romance\"]",
       "userRating":"7.5","userRatingCount":"5123","censorRating":"CensorRatingType.family","imageUrl":"https://www.microsoft.com/images/M/MV5BYjAxMz.jpg","sources":{"DataSourceType.imdbSuggestions":"tt0123580"}}}}}
 ''',
@@ -58,90 +58,102 @@ const intermediateMapList = [
           'meterRanking': {'currentRank': 184},
         },
         'mainColumnData': {
-          'releasedPrimaryCredits': [
-            {
-              'category': {'text': 'Actor'},
-              'credits': {
-                'edges': [
-                  {
-                    'node': {
-                      'category': {'text': 'Actor'},
-                      'characters': [
-                        {'name': 'Willy Rutter'},
-                      ],
-                      'title': {
-                        'id': 'tt0012370',
-                        'originalTitleText': {'text': 'Run Forrest Run'},
-                        'titleText': {'text': 'Walk Skip Run'},
-                        'titleType': {'text': 'Movie'},
-                        'primaryImage': {
-                          'url': 'https://www.microsoft.com/images/M/MV5BM.jpg',
-                        },
-                        'ratingsSummary': {
-                          'aggregateRating': 8.6,
-                          'voteCount': 4837,
-                        },
-                        'releaseYear': {'year': 1973, 'endYear': null},
-                        'runtime': {'seconds': 7140},
-                        'genres': {
-                          'genres': [
-                            {'text': 'Western'},
-                            {'text': 'Romance'},
-                          ],
-                        },
-                      },
-                    },
-                  },
-                  {
-                    'node': {
-                      'category': {'text': 'Actress'},
-                      'characters': [
-                        {'name': 'Nom da Plume'},
-                        {'name': 'Other Character'},
-                      ],
-                      'title': {
-                        'id': 'tt0123580',
-                        'certificate': {'rating': 'TV-G'},
-                        'originalTitleText': {'text': 'Aussieland'},
-                        'titleText': {'text': 'Scott And Sharlene'},
-                        'titleType': {'text': 'TV Series'},
-                        'primaryImage': {
-                          'url':
-                              'https://www.microsoft.com/images/M/MV5BYjAxMz.jpg',
-                        },
-                        'ratingsSummary': {
-                          'aggregateRating': 7.5,
-                          'voteCount': 5123,
-                        },
-                        'releaseYear': {'year': 1985, 'endYear': 2023},
-                        'runtime': {'seconds': 1234},
-                        'genres': {
-                          'genres': [
-                            {'text': 'Horror'},
-                            {'text': 'Romance'},
-                          ],
-                        },
-                      },
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-          'unreleasedPrimaryCredits': <void>[],
-          'akas': {
+          'released': {
             'edges': [
               {
                 'node': {
-                  'displayableProperty': {
-                    'value': {'plainText': 'Spongebob'},
-                  },
-                },
-              },
-              {
-                'node': {
-                  'displayableProperty': {
-                    'value': {'plainText': 'Squarepants'},
+                  'credits': {
+                    'edges': [
+                      {
+                        '__typename': 'CreditV2Edge',
+                        'node': {
+                          'creditedRoles': {
+                            'edges': [
+                              {
+                                'node': {
+                                  'category': {'text': 'Actor'},
+                                  'characters': {
+                                    'edges': [
+                                      {
+                                        'node': {'name': 'Willy Rutter'},
+                                      },
+                                    ],
+                                  },
+                                  'title': {
+                                    'id': 'tt0012370',
+                                    'originalTitleText': {
+                                      'text': 'Run Forrest Run',
+                                    },
+                                    'titleText': {'text': 'Walk Skip Run'},
+                                    'titleType': {'text': 'Movie'},
+                                    'primaryImage': {
+                                      'url':
+                                          'https://www.microsoft.com/images/M/MV5BM.jpg',
+                                    },
+                                    'ratingsSummary': {
+                                      'aggregateRating': 8.6,
+                                      'voteCount': 4837,
+                                    },
+                                    'releaseYear': {
+                                      'year': 1973,
+                                      'endYear': null,
+                                    },
+                                    'runtime': {'seconds': 7140},
+                                    'genres': {
+                                      'genres': [
+                                        {'text': 'Western'},
+                                        {'text': 'Romance'},
+                                      ],
+                                    },
+                                  },
+                                },
+                              },
+                              {
+                                'node': {
+                                  'category': {'text': 'Actress'},
+                                  'characters': {
+                                    'edges': [
+                                      {
+                                        'node': {'name': 'Nom da Plume'},
+                                      },
+                                      {
+                                        'node': {'name': 'Other Character'},
+                                      },
+                                    ],
+                                  },
+                                  'title': {
+                                    'id': 'tt0123580',
+                                    'certificate': {'rating': 'TV-G'},
+                                    'originalTitleText': {'text': 'Aussieland'},
+                                    'titleText': {'text': 'Scott And Sharlene'},
+                                    'titleType': {'text': 'TV Series'},
+                                    'primaryImage': {
+                                      'url':
+                                          'https://www.microsoft.com/images/M/MV5BYjAxMz.jpg',
+                                    },
+                                    'ratingsSummary': {
+                                      'aggregateRating': 7.5,
+                                      'voteCount': 5123,
+                                    },
+                                    'releaseYear': {
+                                      'year': 1985,
+                                      'endYear': 2023,
+                                    },
+                                    'runtime': {'seconds': 1234},
+                                    'genres': {
+                                      'genres': [
+                                        {'text': 'Horror'},
+                                        {'text': 'Romance'},
+                                      ],
+                                    },
+                                  },
+                                },
+                              },
+                            ],
+                          },
+                        },
+                      },
+                    ],
                   },
                 },
               },
@@ -153,101 +165,177 @@ const intermediateMapList = [
   },
 ];
 
-const _embeddedJson = r'''
-{"props":{"pageProps":{"nmconst": "nm0123456",
+const _embeddedJsonbak = r'''
+{
+  "props": {
+    "pageProps": {
+      "nmconst": "nm0123456",
       "aboveTheFold": {
         "id": "nm0123456",
-        "nameText": {"text": "Mescalon Smoochington \u003c3"},
+        "nameText": {
+          "text": "Mescalon Smoochington \u003c3"
+        },
         "primaryImage": {
           "url": "https://www.microsoft.com/images/M/MV5BNjdhNz.jpg"
         },
         "bio": {
           "text": {
-            "plainText":
-                "THen Kramer said, \"Everybody is Mescalon Smoochington\"."
+            "plainText": "THen Kramer said, \"Everybody is Mescalon Smoochington\"."
           }
         },
         "birthDate": {
-          "dateComponents": {"year": 1933}
+          "dateComponents": {
+            "year": 1933
+          }
         },
         "deathDate": {
-          "dateComponents": {"year": 1977}
+          "dateComponents": {
+            "year": 1977
+          }
         },
-        "meterRanking": {"currentRank": 184}
+        "meterRanking": {
+          "currentRank": 184
+        }
       },
       "mainColumnData": {
-        "releasedPrimaryCredits": [
-          {
-            "category": {"text": "Actor"},
-            "credits": {
-              "edges": [
-                {
-                  "node": {
-                    "category": {"text": "Actor"},
-                    "characters": [
-                      {"name": "Willy Rutter"}
-                    ],
-                    "title": {
-                      "id": "tt0012370",
-                      "originalTitleText": {"text": "Run Forrest Run"},
-                      "titleText": {"text": "Walk Skip Run"},
-                      "titleType": {"text": "Movie"},
-                      "primaryImage": {
-                        "url": "https://www.microsoft.com/images/M/MV5BM.jpg"
-                      },
-                      "ratingsSummary": {
-                        "aggregateRating": 8.6,
-                        "voteCount": 4837
-                      },
-                      "releaseYear": {"year": 1973, "endYear": null},
-                      "runtime": {"seconds": 7140},
-                      "genres": {
-                        "genres": [
-                          {"text": "Western"},
-                          {"text": "Romance"}
-                        ]
+        "released": {
+          "edges": [
+            {
+              "node": {
+                "credits": {
+                  "edges": [
+                    {
+                      "__typename": "CreditV2Edge",
+                      "node": {
+                        "creditedRoles": {
+                          "edges": [
+                            {
+                              "node": {
+                                "category": {
+                                  "text": "Actor"
+                                },
+                                "characters": {
+                                  "edges": [
+                                    {
+                                      "node": {
+                                        "name": "Willy Rutter"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "title": {
+                                  "id": "tt0012370",
+                                  "originalTitleText": {
+                                    "text": "Run Forrest Run"
+                                  },
+                                  "titleText": {
+                                    "text": "Walk Skip Run"
+                                  },
+                                  "titleType": {
+                                    "text": "Movie"
+                                  },
+                                  "primaryImage": {
+                                    "url": "https://www.microsoft.com/images/M/MV5BM.jpg"
+                                  },
+                                  "ratingsSummary": {
+                                    "aggregateRating": 8.6,
+                                    "voteCount": 4837
+                                  },
+                                  "releaseYear": {
+                                    "year": 1973,
+                                    "endYear": null
+                                  },
+                                  "runtime": {
+                                    "seconds": 7140
+                                  },
+                                  "genres": {
+                                    "genres": [
+                                      {
+                                        "text": "Western"
+                                      },
+                                      {
+                                        "text": "Romance"
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "node": {
+                                "category": {
+                                  "text": "Actress"
+                                },
+                                "characters": {
+                                  "edges": [
+                                    {
+                                      "node": {
+                                        "name": "Nom da Plume"
+                                      }
+                                    },
+                                    {
+                                      "node": {
+                                        "name": "Other Character"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "title": {
+                                  "id": "tt0123580",
+                                  "certificate": {
+                                    "rating": "TV-G"
+                                  },
+                                  "originalTitleText": {
+                                    "text": "Aussieland"
+                                  },
+                                  "titleText": {
+                                    "text": "Scott And Sharlene"
+                                  },
+                                  "titleType": {
+                                    "text": "TV Series"
+                                  },
+                                  "primaryImage": {
+                                    "url": "https://www.microsoft.com/images/M/MV5BYjAxMz.jpg"
+                                  },
+                                  "ratingsSummary": {
+                                    "aggregateRating": 7.5,
+                                    "voteCount": 5123
+                                  },
+                                  "releaseYear": {
+                                    "year": 1985,
+                                    "endYear": 2023
+                                  },
+                                  "runtime": {
+                                    "seconds": 1234
+                                  },
+                                  "genres": {
+                                    "genres": [
+                                      {
+                                        "text": "Horror"
+                                      },
+                                      {
+                                        "text": "Romance"
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
                       }
                     }
-                  }
-                },
-                {
-                  "node": {
-                    "category": {"text": "Actress"},
-                    "characters": [
-                      {"name": "Nom da Plume"},
-                      {"name": "Other Character"}
-                    ],
-                    "title": {
-                      "id": "tt0123580",
-                      "certificate": {"rating": "TV-G"},
-                      "originalTitleText": {"text": "Aussieland"},
-                      "titleText": {"text": "Scott And Sharlene"},
-                      "titleType": {"text": "TV Series"},
-                      "primaryImage": {
-                        "url":
-                            "https://www.microsoft.com/images/M/MV5BYjAxMz.jpg"
-                      },
-                      "ratingsSummary": {
-                        "aggregateRating": 7.5,
-                        "voteCount": 5123
-                      },
-                      "releaseYear": {"year": 1985, "endYear": 2023},
-                      "runtime": {"seconds": 1234},
-                      "genres": {
-                        "genres": [
-                          {"text": "Horror"},
-                          {"text": "Romance"}
-                        ]
-                      }
-                    }
-                  }
+                  ]
                 }
-              ]
+              }
             }
-          }
-        ],
+          ]
+        },
+
+
+
         "unreleasedPrimaryCredits": [],
-        "akas": {
+        "akaszzz": {
           "edges": [
             {
               "node": {
@@ -260,6 +348,220 @@ const _embeddedJson = r'''
               "node": {
                 "displayableProperty": {
                   "value": {"plainText": "Squarepants"}
+                }
+              }
+            }
+          ]
+        },
+
+        "unreleased": {
+          "edges": [
+            {
+              "node": {
+                "credits": {
+                  "edges": [
+                    {
+                      "__typename": "CreditV2Edge",
+                      "node": {
+                        "credits": {
+                          "edges": [
+                            {
+                              "node": {
+                                "displayableProperty": {
+                                  "value": {
+                                    "plainText": "Spongebob"
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "node": {
+                                "displayableProperty": {
+                                  "value": {
+                                    "plainText": "Squarepants"
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+
+
+
+      }
+    }
+  }
+}''';
+
+const _embeddedJson = r'''
+{
+  "props": {
+    "pageProps": {
+      "nmconst": "nm0123456",
+      "aboveTheFold": {
+        "id": "nm0123456",
+        "nameText": {
+          "text": "Mescalon Smoochington \u003c3"
+        },
+        "primaryImage": {
+          "url": "https://www.microsoft.com/images/M/MV5BNjdhNz.jpg"
+        },
+        "bio": {
+          "text": {
+            "plainText": "THen Kramer said, \"Everybody is Mescalon Smoochington\"."
+          }
+        },
+        "birthDate": {
+          "dateComponents": {
+            "year": 1933
+          }
+        },
+        "deathDate": {
+          "dateComponents": {
+            "year": 1977
+          }
+        },
+        "meterRanking": {
+          "currentRank": 184
+        }
+      },
+      "mainColumnData": {
+        "released": {
+          "edges": [
+            {
+              "node": {
+                "credits": {
+                  "edges": [
+                    {
+                      "__typename": "CreditV2Edge",
+                      "node": {
+                        "creditedRoles": {
+                          "edges": [
+                            {
+                              "node": {
+                                "category": {
+                                  "text": "Actor"
+                                },
+                                "characters": {
+                                  "edges": [
+                                    {
+                                      "node": {
+                                        "name": "Willy Rutter"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "title": {
+                                  "id": "tt0012370",
+                                  "originalTitleText": {
+                                    "text": "Run Forrest Run"
+                                  },
+                                  "titleText": {
+                                    "text": "Walk Skip Run"
+                                  },
+                                  "titleType": {
+                                    "text": "Movie"
+                                  },
+                                  "primaryImage": {
+                                    "url": "https://www.microsoft.com/images/M/MV5BM.jpg"
+                                  },
+                                  "ratingsSummary": {
+                                    "aggregateRating": 8.6,
+                                    "voteCount": 4837
+                                  },
+                                  "releaseYear": {
+                                    "year": 1973,
+                                    "endYear": null
+                                  },
+                                  "runtime": {
+                                    "seconds": 7140
+                                  },
+                                  "genres": {
+                                    "genres": [
+                                      {
+                                        "text": "Western"
+                                      },
+                                      {
+                                        "text": "Romance"
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            },
+                            {
+                              "node": {
+                                "category": {
+                                  "text": "Actress"
+                                },
+                                "characters": {
+                                  "edges": [
+                                    {
+                                      "node": {
+                                        "name": "Nom da Plume"
+                                      }
+                                    },
+                                    {
+                                      "node": {
+                                        "name": "Other Character"
+                                      }
+                                    }
+                                  ]
+                                },
+                                "title": {
+                                  "id": "tt0123580",
+                                  "certificate": {
+                                    "rating": "TV-G"
+                                  },
+                                  "originalTitleText": {
+                                    "text": "Aussieland"
+                                  },
+                                  "titleText": {
+                                    "text": "Scott And Sharlene"
+                                  },
+                                  "titleType": {
+                                    "text": "TV Series"
+                                  },
+                                  "primaryImage": {
+                                    "url": "https://www.microsoft.com/images/M/MV5BYjAxMz.jpg"
+                                  },
+                                  "ratingsSummary": {
+                                    "aggregateRating": 7.5,
+                                    "voteCount": 5123
+                                  },
+                                  "releaseYear": {
+                                    "year": 1985,
+                                    "endYear": 2023
+                                  },
+                                  "runtime": {
+                                    "seconds": 1234
+                                  },
+                                  "genres": {
+                                    "genres": [
+                                      {
+                                        "text": "Horror"
+                                      },
+                                      {
+                                        "text": "Romance"
+                                      }
+                                    ]
+                                  }
+                                }
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    }
+                  ]
                 }
               }
             }

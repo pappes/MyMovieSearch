@@ -7,9 +7,9 @@ import 'package:my_movie_search/movies/web_data_providers/search/fishpond_barcod
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-const resultSelector = 'main[data-product]';
+const resultSelector = '.b-product-info__title';
 const resultHeaderSelector = 'header';
-const jpgPictureSelector = '.thumbnail img';
+const jpgPictureSelector = '.n-images__main-image > a';
 const titleSelector = 'h1';
 const yearSelector = '.year';
 
@@ -31,7 +31,7 @@ mixin ScrapeFishpondBarcodeSearch
   Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    if (webText.contains('did not match any items')) {
+    if (webText.contains('"totalResults": 0')) {
       return [];
     }
     final document = parse(webText);
@@ -40,8 +40,9 @@ mixin ScrapeFishpondBarcodeSearch
       return movieData;
     }
     throw WebConvertException(
-        'FishpondBarcode results data not detected log: $searchLog '
-        'for criteria $getCriteriaText in html:$webText');
+      'FishpondBarcode results data not detected log: $searchLog '
+      'for criteria $getCriteriaText in html:$webText',
+    );
   }
 
   /// extract each row from the table.
@@ -60,8 +61,10 @@ mixin ScrapeFishpondBarcodeSearch
     final rawDescription = row.querySelector(titleSelector)?.cleanText ?? '';
     final rawYear = row.querySelector(yearSelector)?.cleanText ?? '';
     result[jsonRawDescriptionKey] = '$rawDescription $rawYear';
+    // TODO get url.
+    final a = row.querySelector(jpgPictureSelector);
     result[jsonUrlKey] =
-        row.querySelector(jpgPictureSelector)?.attributes['src'];
+        a?.attributes['href'];
     movieData.add(result);
   }
 }

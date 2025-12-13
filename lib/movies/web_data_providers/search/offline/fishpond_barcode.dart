@@ -31,6 +31,7 @@ const htmlSampleEmpty = '''
                     Sorry, your search for
                     <strong>sdfsdfsdfsd</strong>
                     did not match any items.
+                    "totalResults": 0
                 </p>
             </div>
         </div>
@@ -55,7 +56,7 @@ const htmlSampleMid = r'''
 <div class="summary-top">
   <main data-product="1234">
     <header>
-        <h1>Love And Other Catastrophes</h1>
+        <h1 class=b-product-info__title>Love And Other Catastrophes</h1>
         <span class="year">1996</span>
     </header>
     <a class="thumbnail"">

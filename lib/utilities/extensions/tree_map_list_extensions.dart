@@ -115,6 +115,7 @@ class TreeHelper {
           tag,
           suffixMatch: suffixMatch,
           multipleMatch: multipleMatch,
+          stopAtTopLevel: stopAtTopLevel,
         );
         if (result is List) {
           matches.addAll(result);

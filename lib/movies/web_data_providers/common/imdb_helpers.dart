@@ -7,8 +7,6 @@ const rootAttribute = 'props';
 const rootAttributeChild = 'pageProps';
 const outerElementIdentity = 'id';
 const outerElementSearchResults = 'searchResults';
-const outerElementNameResults = 'nameResults';
-const outerElementTitleResults = 'titleResults';
 const outerElementDetailResults = 'data';
 
 const outerElementOfficialTitle = 'name';
@@ -103,6 +101,20 @@ const deepEntityExtraCastNameActresses = 'ACTRESS';
 const deepEntityExtraCastNameDirectors = 'DIRECTOR';
 const deepEntityExtraCastNameCast = 'CAST';
 const deepEntityExtraCastNameWriters = 'WRITER';
+
+// Fields exclusive to Search
+const outerSearchResults = 'searchResults';
+const outerSearchResultsContents = 'listItem';
+const outerSearchPersonId = 'nameId';
+const outerSearchResultsId = 'index';
+const outerSearchResultsMovieTitle = 'originalTitleText';
+const outerSearchResultsMovieStartYear = 'releaseYear';
+const outerSearchResultsMovieEndYear = 'endYear';
+const outerSearchResultsMovieDescription = 'plot';
+const outerSearchResultsKnownForYear = 'knownForTitleYear';
+const outerSearchResultsMovieType = 'titleType';
+const outerSearchResultsMovieTypeText = 'id';
+
 
 // Credits is repeated inside the category as "credits"
 // so use case sensative compare

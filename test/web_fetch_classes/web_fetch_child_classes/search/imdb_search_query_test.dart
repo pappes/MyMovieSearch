@@ -318,7 +318,7 @@ void main() {
         'with criteria 123 convert error interpreting web text as a map '
         ':Possible IMDB site update, no search result found for search query, '
         'json contents:[{props: {pageProps: {nameResults: '
-        '{found: [{id: nm0152436, displayNameText:';
+        '{found: [{index: nm0152436, listItem: {bio: ';
     final queryResult = <MovieResultDTO>[];
     final imdbSearch = QueryIMDBSearch(criteria);
 

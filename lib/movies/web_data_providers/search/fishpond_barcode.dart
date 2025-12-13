@@ -20,8 +20,9 @@ class QueryFishpondBarcodeSearch
     with ScrapeFishpondBarcodeSearch {
   QueryFishpondBarcodeSearch(super.criteria);
 
-  static const _baseURL = 'https://www.mightyape.com.au/search?s=';
-  static const _suffixURL = '+';
+  static const _baseURL =
+      'https://www.fishpond.com.au/advanced_search_result.php?keywords=';
+  static const _suffixURL = '&cName=Movies';
 
   /// Describe where the data is coming from.
   @override
