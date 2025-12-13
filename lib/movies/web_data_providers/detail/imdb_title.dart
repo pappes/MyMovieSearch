@@ -3,9 +3,9 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_json_web_scraper.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/cache/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
+import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_title_converter.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [WebFetchBase] for retrieving movie details from IMDB.
@@ -53,7 +53,7 @@ class QueryIMDBTitleDetails
     dynamic map,
   ) async {
     if (map is Map) {
-      return ImdbWebScraperConverter().dtoFromCompleteJsonMap(
+      return ImdbTitleConverter().dtoFromCompleteJsonMap(
         map,
         DataSourceType.imdb,
       );

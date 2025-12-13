@@ -6,7 +6,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
+import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_json_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_json.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
@@ -111,7 +111,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap() paginated', () {
       // Invoke the functionality and collect results.
-      final actualResult = ImdbWebScraperConverter().dtoFromCompleteJsonMap(
+      final actualResult = ImdbJsonConverter().dtoFromCompleteJsonMap(
         imdbJsonInnerPaginatedSample,
         DataSourceType.imdbJson,
       );
@@ -134,7 +134,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap() filtered', () {
       // Invoke the functionality and collect results.
-      final actualResult = ImdbWebScraperConverter().dtoFromCompleteJsonMap(
+      final actualResult = ImdbJsonConverter().dtoFromCompleteJsonMap(
         imdbJsonInnerFilteredSample,
         DataSourceType.imdbJson,
       );

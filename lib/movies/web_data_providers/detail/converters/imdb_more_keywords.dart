@@ -2,10 +2,11 @@
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_base.dart';
 
-class ImdbMoreKeywordsConverter {
-  static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+class ImdbMoreKeywordsConverter extends ImdbConverterBase {
+  @override
+  Iterable<MovieResultDTO> dtoFromMap(Map<dynamic, dynamic> map
   ) {
     final dtos = <MovieResultDTO>[];
     for (final entry in map.keys) {

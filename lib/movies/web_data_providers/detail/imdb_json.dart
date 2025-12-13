@@ -5,7 +5,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/common/imdb_web_scraper_converter.dart';
+import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_json_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_json.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
@@ -124,7 +124,7 @@ abstract class QueryIMDBJsonDetailsBase
     dynamic map,
   ) async {
     if (map is Map) {
-      final dtos = ImdbWebScraperConverter().dtoFromCompleteJsonMap(
+      final dtos = ImdbJsonConverter().dtoFromCompleteJsonMap(
         map,
         DataSourceType.imdbJson,
       );
