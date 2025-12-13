@@ -2,6 +2,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_json_web_scraper.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/cache/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_title_converter.dart';
@@ -14,7 +15,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// ```
 class QueryIMDBTitleDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
-    with ThreadedCacheIMDBTitleDetails {
+    with ScrapeIMDBJsonDetails, ThreadedCacheIMDBTitleDetails {
   QueryIMDBTitleDetails(super.criteria);
 
   static const _baseURL = 'https://www.imdb.com/title/';
