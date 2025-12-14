@@ -205,7 +205,6 @@ abstract class ImdbConverterBase extends ConverterHelper {
     );
   }
 
-
   /// get movie title in from a movie credits node.
   static MovieResultDTO? getMovieFromCreditV2(
     dynamic title,
@@ -259,7 +258,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
       result[movieDto.uniqueId] = movieDto;
     }
 
-    forEachType<Map<dynamic, dynamic>>(nodes, addMovie);
+    ConverterHelper().forEachMap(nodes, addMovie);
     return result;
   }
 
@@ -276,7 +275,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
       }
     }
 
-    forEachType(nodes, addToCollection);
+    ConverterHelper().forEachMap(nodes, addToCollection);
     return result;
   }
 
@@ -343,7 +342,6 @@ abstract class ImdbConverterBase extends ConverterHelper {
 }
 
 class ConverterHelper {
-
   /// Add movies to a new category or an exisiting category
   void combineMovies(
     RelatedMovieCategories existing,
@@ -357,5 +355,13 @@ class ConverterHelper {
         existing[category] = movies;
       }
     }
+  }
+
+  void forEachMap(
+    dynamic collection,
+    void Function(Map<dynamic, dynamic>) action, {
+    bool fallback = false,
+  }) {
+    forEachType<Map<dynamic, dynamic>>(collection, action, fallback: fallback);
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
@@ -47,7 +45,7 @@ class ImdbJsonConverter extends ImdbConverterBase {
 
     if (list is List) {
       for (final related in list) {
-        forEachType<Map<dynamic, dynamic>>(related, getCategory);
+        ConverterHelper().forEachMap(related, getCategory);
       }
     }
     return result;
@@ -72,7 +70,7 @@ class ImdbJsonConverter extends ImdbConverterBase {
     final nodes = TreeHelper(
       category,
     ).deepSearch(deepRelatedMovieContainer, multipleMatch: true);
-    forEachType<Map<dynamic, dynamic>>(nodes, getRelated);
+    ConverterHelper().forEachMap(nodes, getRelated);
     return result;
   }
 
@@ -234,7 +232,7 @@ class ImdbJsonConverter extends ImdbConverterBase {
       }
     }
 
-    forEachType<Map<dynamic, dynamic>>(
+    ConverterHelper().forEachMap(
       related,
       convertRelatedMapToDto,
       fallback: true,
@@ -250,7 +248,7 @@ class ImdbJsonConverter extends ImdbConverterBase {
       }
     }
 
-    forEachType<Map<dynamic, dynamic>>(people, addPerson, fallback: true);
+    ConverterHelper().forEachMap(people, addPerson, fallback: true);
     return result;
   }
 
@@ -270,7 +268,7 @@ class ImdbJsonConverter extends ImdbConverterBase {
     void processSection(Map<dynamic, dynamic> section) =>
         _getMovieCategories(section, movie);
 
-    forEachType<Map<dynamic, dynamic>>(related, processSection, fallback: true);
+    ConverterHelper().forEachMap(related, processSection, fallback: true);
   }
 
   static void _getMovieCategories(
@@ -285,7 +283,7 @@ class ImdbJsonConverter extends ImdbConverterBase {
         }
       }
 
-      forEachType<Map<dynamic, dynamic>>(category, getMovie, fallback: true);
+      ConverterHelper().forEachMap(category, getMovie, fallback: true);
     }
   }
 
