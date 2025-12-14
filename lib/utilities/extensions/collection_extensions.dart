@@ -99,3 +99,29 @@ extension ListHelper<T> on List<T> {
     return joined.substring(start, end);
   }
 }
+
+/// Perform [action] on each element of [input] that is a [T].
+/// If fallback is true and [input] is not iterable, call [action] on [input].
+///
+///
+void forEachType<T>(
+  dynamic input,
+  void Function(T element) action, {
+  bool fallback = false,
+}) {
+  void callAction(dynamic item) {
+    if (item is T) {
+      action(item);
+    }
+  }
+
+  if (input == null) return;
+  Iterable<dynamic> inputList;
+  if (input is Iterable) {
+    input.forEach(callAction);
+    return;
+  }
+  if (fallback) {
+    callAction(input);
+  }
+}

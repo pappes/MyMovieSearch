@@ -70,7 +70,7 @@ class ImdbCastConverter extends ImdbConverterBase {
         );
         final credit = _getDeepNodeRelatedPerson(person);
 
-        ImdbConverterBase.combineMovies(
+        ConverterHelper().combineMovies(
             cast, categoryName.addColonIfNeeded(), credit);
       }
     }
@@ -95,7 +95,7 @@ class ImdbCastConverter extends ImdbConverterBase {
             for (final person in people) {
               if (person is Map) {
                 final credit = _getDeepCreditsExtraPerson(person);
-                ImdbConverterBase.combineMovies(
+                ConverterHelper().combineMovies(
                     cast, categoryName.addColonIfNeeded(), credit);
               }
             }

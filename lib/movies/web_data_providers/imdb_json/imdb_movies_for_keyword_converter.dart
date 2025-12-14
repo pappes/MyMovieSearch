@@ -70,7 +70,7 @@ class ImdbMoviesForKeywordConverter extends ImdbConverterBase {
         ?.deepSearch(deepTitleRelatedCastHeader)
         ?.deepSearch(deepTitleRelatedCastContainer, multipleMatch: true);
     final cast = ImdbConverterBase.getDeepTitleRelatedPeopleForCategory(castTree);
-    ImdbConverterBase.combineMovies(result, titleRelatedCastLabel, cast);
+    ConverterHelper().combineMovies(result, titleRelatedCastLabel, cast);
 
     // ...{'directors':...}
     final directorsTree = list
@@ -78,7 +78,7 @@ class ImdbMoviesForKeywordConverter extends ImdbConverterBase {
         ?.deepSearch(deepTitleRelatedDirectorContainer, multipleMatch: true);
     final directors =
         ImdbConverterBase.getDeepTitleRelatedPeopleForCategory(directorsTree);
-    ImdbConverterBase.combineMovies(
+    ConverterHelper().combineMovies(
         result, titleRelatedDirectorsLabel, directors);
 
     // ...{'moreLikeThisTitles':...}
@@ -87,7 +87,7 @@ class ImdbMoviesForKeywordConverter extends ImdbConverterBase {
         ?.deepSearch(deepRelatedMovieContainer, multipleMatch: true);
     final related =
         ImdbConverterBase.getDeepTitleRelatedMoviesForCategory(relatedTree);
-    ImdbConverterBase.combineMovies(result, titleRelatedMoviesLabel, related);
+    ConverterHelper().combineMovies(result, titleRelatedMoviesLabel, related);
 
     return result;
   }

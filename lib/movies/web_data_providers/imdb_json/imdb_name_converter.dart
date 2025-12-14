@@ -111,7 +111,7 @@ class ImdbNameConverter extends ImdbConverterBase {
             related[deepRelatedCategoryHeaderV2],
           );
           for (final role in roles) {
-            ImdbConverterBase.combineMovies(
+            ConverterHelper().combineMovies(
                 result, role.addColonIfNeeded(), indexedMovie);
           }
         }

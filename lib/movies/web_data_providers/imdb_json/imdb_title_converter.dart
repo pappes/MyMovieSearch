@@ -51,7 +51,7 @@ class ImdbTitleConverter extends ImdbConverterBase {
     final cast = ImdbConverterBase.getDeepTitleRelatedPeopleForCategory(
       castTree,
     );
-    ImdbConverterBase.combineMovies(result, titleRelatedCastLabel, cast);
+    ConverterHelper().combineMovies(result, titleRelatedCastLabel, cast);
 
     // ...{'directors':...}
     final directorsTree = list
@@ -60,7 +60,7 @@ class ImdbTitleConverter extends ImdbConverterBase {
     final directors = ImdbConverterBase.getDeepTitleRelatedPeopleForCategory(
       directorsTree,
     );
-    ImdbConverterBase.combineMovies(
+    ConverterHelper().combineMovies(
       result,
       titleRelatedDirectorsLabel,
       directors,
@@ -73,7 +73,7 @@ class ImdbTitleConverter extends ImdbConverterBase {
     final related = ImdbConverterBase.getDeepTitleRelatedMoviesForCategory(
       relatedTree,
     );
-    ImdbConverterBase.combineMovies(result, titleRelatedMoviesLabel, related);
+    ConverterHelper().combineMovies(result, titleRelatedMoviesLabel, related);
 
     return result;
   }

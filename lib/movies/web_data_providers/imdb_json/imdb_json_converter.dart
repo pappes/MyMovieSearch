@@ -26,247 +26,31 @@ class ImdbJsonConverter extends ImdbConverterBase {
     return [movie];
   }
 
-  static MovieResultDTO _getDeepTitleCommon(
-    Map<dynamic, dynamic> map,
-    String id,
-  ) {
-    // ...{'titleText':...{...'text':<value>...}} or
-    // ...{'titleText':<value>...}
-    final title =
-        map.deepSearch(deepRelatedMovieTitle)?.searchForString() ??
-        map.searchForString(key: deepRelatedMovieTitle);
-    // ...{'originalTitleText':...{...'text':<value>...}}or
-    // ...{'originalTitleText':<value>...}
-    String? originalTitle =
-        map.deepSearch(deepRelatedMovieOriginalTitle)?.searchForString() ??
-        map.searchForString(key: deepRelatedMovieOriginalTitle);
-    if (title == originalTitle) {
-      originalTitle =
-          map.deepSearch(deepRelatedMovieAlternateTitle)?.searchForString();
-    }
-
-    // ...{'plotText':...{...'plainText':<value>...}} or
-    // ...{'plot':<value>...}
-    final description =
-        map
-            .deepSearch(deepRelatedMoviePlotHeader)
-            ?.searchForString(key: deepRelatedMoviePlotField) ??
-        map.searchForString(key: deepRelatedMoviePlot);
-    // ...{'primaryImage':...{...'url':<value>...}}
-    final url = map
-        .deepSearch(deepImageHeader)
-        ?.searchForString(key: deepImageField);
-    // ...{...'aggregateRating':<value>...}
-    final userRating = map.searchForString(key: deepRelatedMovieUserRating);
-    // ...{...'voteCount':<value>...}
-    final userRatingCount = map.searchForString(
-      key: deepRelatedMovieUserRatingCount,
-    );
-    // ...{'runtime':...{...'seconds':<value>...}} or
-    // ...{'runtime':<value>...}
-    final duration =
-        map
-            .deepSearch(deepRelatedMovieDurationHeader)
-            ?.searchForString(key: deepRelatedMovieDurationField) ??
-        map
-            .deepSearch(deepRelatedMovieDURATIONHeader)
-            ?.searchForString(key: deepRelatedMovieDurationField) ??
-        map.searchForString(key: deepRelatedMovieDurationHeader);
-
-    final yearHeader = map.deepSearch(deepRelatedMovieYearHeader);
-    // ...{'releaseYear':...{...'year':<value>...}} or
-    // ...{'releaseYear':<value>...}
-    final startDate =
-        yearHeader?.searchForString(key: deepRelatedMovieYearStart) ??
-        (yearHeader?.length == 1 && yearHeader!.first is int
-            ? yearHeader.first.toString()
-            : null);
-    // ...{'releaseYear':...{...'endYear':<value>...}} or
-    // ...{'endYear':<value>...}
-    final endDate =
-        yearHeader?.searchForString(key: deepRelatedMovieYearEnd) ??
-        map.searchForString(key: deepRelatedMovieYearEnd);
-    final yearRange =
-        (null != endDate)
-            ? '$startDate-$endDate'
-            : (null != startDate)
-            ? startDate
-            : null;
-
-    // ...{'certificate':...{...'rating':<value>...}} or
-    // ...{'certificate':<value>...}
-    final censorRatingText =
-        map
-            .deepSearch(deepRelatedMovieCensorRatingHeader)
-            ?.searchForString(key: deepRelatedMovieCensorRatingField) ??
-        map.searchForString(key: deepRelatedMovieCensorRatingHeader);
-    final censorRating = getImdbCensorRating(censorRatingText);
-
-    // ...{'genres':...[...{...'text':<value>...}...]} or
-    // ...{'genres':[<value>,<value>,<value>,...]}
-    final genreNode = map.deepSearch(deepRelatedMovieGenreHeader);
-    String? genres;
-    if (null != genreNode) {
-      final genreList = genreNode.deepSearch(
-        deepRelatedMovieGenreField,
-        multipleMatch: true,
-      );
-      if (genreList is List && genreList.isNotEmpty) {
-        genres = json.encode(genreList);
-      } else if (genreNode.isNotEmpty) {
-        final innerGenres = genreNode.first;
-        if (innerGenres is List &&
-            innerGenres.isNotEmpty &&
-            innerGenres.first is String) {
-          genres = json.encode(innerGenres);
-        }
-      }
-    }
-
-    // ...{'titleType':...{...'text':<value>...}}
-    final movieTypeString =
-        map.deepSearch(deepRelatedMovieType)?.searchForString();
-    final movieType = MovieResultDTOHelpers.getMovieContentType(
-      '$movieTypeString $genres $yearRange',
-      IntHelper.fromText(duration),
-      id,
-    );
-
-    // ...{'SpokenLanguages':...[...{...'text':<value>...}...]}
-    final languageNode = map.deepSearch(deepRelatedMovieLanguageHeader);
-    String? languages;
-    if (null != languageNode) {
-      final languageList = languageNode.deepSearch(
-        deepRelatedMovieLanguageField,
-        multipleMatch: true,
-      );
-      if (languageList is List && languageList.isNotEmpty) {
-        languages = json.encode(languageList);
-      }
-    }
-
-    // ...{'keywords':...[...{...'text':<value>...}...]} or
-    // ...{'keywords':[<value>,<value>,<value>,...]}
-    final keywordNode = map.deepSearch(deepRelatedMovieKeywordHeader);
-    String? keywords;
-    if (null != keywordNode) {
-      final keywordList = keywordNode.deepSearch(
-        deepRelatedMovieKeywordField,
-        multipleMatch: true,
-      );
-      if (keywordList is List && keywordList.isNotEmpty) {
-        keywords = json.encode(keywordList);
-      } else if (keywordNode.isNotEmpty && keywordNode.first is String) {
-        keywords = json.encode(keywordNode);
-      }
-    }
-    return MovieResultDTO().init(
-      uniqueId: id,
-      bestSource: DataSourceType.imdbSuggestions,
-      title: title,
-      alternateTitle: originalTitle,
-      description: description,
-      type: movieType?.toString(),
-      year: startDate,
-      yearRange: yearRange,
-      userRating: userRating,
-      userRatingCount: userRatingCount,
-      censorRating: censorRating?.toString(),
-      runTime: duration,
-      imageUrl: url,
-      genres: genres?.toString(),
-      keywords: keywords?.toString(),
-      languages: languages?.toString(),
-    );
-  }
-
+  /// Get the movie category information for a person.
   static RelatedMovieCategories _getDeepPersonRelatedCategories(dynamic list) {
     final RelatedMovieCategories result = {};
+
+    /// Search movie information to add to the movie collection.
+    void getCategory(Map<dynamic, dynamic> item) {
+      final movies = _getDeepPersonRelatedMoviesForCategory(item);
+      final categories = ImdbConverterBase.getRolesFromCreditsV2(
+        item.deepSearch(deepRelatedCategoryHeaderV2),
+      );
+      for (final category in categories) {
+        ConverterHelper().combineMovies(
+          result,
+          category.addColonIfNeeded(),
+          movies,
+        );
+      }
+    }
+
     if (list is List) {
       for (final related in list) {
-        if (related is List) {
-          for (final item in related) {
-            if (item is Map) {
-              _getDeepPersonRelatedCategoryMovie(item, result);
-            }
-          }
-        } else if (related is Map) {
-          _getDeepPersonRelatedCategoryMovie(related, result);
-        }
+        forEachType<Map<dynamic, dynamic>>(related, getCategory);
       }
     }
     return result;
-  }
-
-  /// Search in a json Map for movie information to add to the movie collection.
-  static void _getDeepPersonRelatedCategoryMovie(
-    Map<dynamic, dynamic> item,
-    RelatedMovieCategories existing,
-  ) {
-    final movies = _getDeepPersonRelatedMoviesForCategory(item);
-    final categories = _getRolesFromCreditsV2(
-      item.deepSearch(deepRelatedCategoryHeaderV2),
-    );
-    for (final category in categories) {
-      _combineMovies(existing, category.addColonIfNeeded(), movies);
-    }
-  }
-
-  /// Add movies to a new category or an existing category
-  static void _combineMovies(
-    RelatedMovieCategories existing,
-    String category,
-    MovieCollection movies,
-  ) {
-    if (movies.isNotEmpty) {
-      if (existing.containsKey(category)) {
-        existing[category]!.addAll(movies);
-      } else {
-        existing[category] = movies;
-      }
-    }
-  }
-
-  /// get movie title in from a movie credits node.
-  static MovieResultDTO? _getMovieFromCreditV2(
-    dynamic title,
-    Map<dynamic, dynamic> parent,
-  ) {
-    if (title is Map) {
-      final movieDto = _getDeepTitle(title);
-      _getMovieCharacterName(movieDto, parent);
-      return movieDto;
-    }
-    return null;
-  }
-
-  /// Find the roles a person has in a movie.
-  static List<String> _getRolesFromCreditsV2(dynamic creditedRoles) {
-    const defaultLabel = 'Unknown';
-    final categories = [defaultLabel];
-
-    // ...{'category':...{id:<value>, text:<value>...}}
-    final categoryHeader = TreeHelper(
-      creditedRoles,
-    ).deepSearch(deepRelatedCategoryHeader, multipleMatch: true);
-    // Allow a person to have multiple roles in a movie.
-    if (categoryHeader is List && categoryHeader.isNotEmpty) {
-      final labels = categoryHeader.deepSearch('text', multipleMatch: true);
-      if (labels is List && labels.isNotEmpty) {
-        for (final label in labels) {
-          if (label is String) {
-            final categoryText = label.addColonIfNeeded();
-            if (!categories.contains(categoryText)) {
-              categories.add(categoryText);
-            }
-          }
-        }
-        if (categories.length > 1) {
-          categories.remove(defaultLabel);
-        }
-      }
-    }
-    return categories;
   }
 
   /// extract collections of movies for a specific category for the person
@@ -275,50 +59,21 @@ class ImdbJsonConverter extends ImdbConverterBase {
     dynamic category,
   ) {
     final MovieCollection result = {};
+
+    void getRelated(Map<dynamic, dynamic> node) {
+      final title = node.deepSearch(deepRelatedMovieHeader)?.first;
+      final movieDto = ImdbConverterBase.getMovieFromCreditV2(title, node);
+      if (movieDto != null) {
+        result[movieDto.uniqueId] = movieDto;
+      }
+    }
+
     // ...{'node':...}
     final nodes = TreeHelper(
       category,
     ).deepSearch(deepRelatedMovieContainer, multipleMatch: true);
-    if (nodes is List) {
-      for (final node in nodes) {
-        if (node is Map) {
-          final title = node.deepSearch(deepRelatedMovieHeader)?.first;
-          final movieDto = _getMovieFromCreditV2(title, node);
-          if (movieDto != null) {
-            result[movieDto.uniqueId] = movieDto;
-          }
-        }
-      }
-    }
+    forEachType<Map<dynamic, dynamic>>(nodes, getRelated);
     return result;
-  }
-
-  static void _getMovieCharacterName(
-    MovieResultDTO dto,
-    Map<dynamic, dynamic> map,
-  ) {
-    final characters = // ...{'characters':...} or
-        map.deepSearch(deepRelatedMovieParentCharacterHeader)?.first;
-
-    if (characters is List || characters is Map) {
-      // ...{'characters':...{...'name':<value>...}}
-      final names = TreeHelper(
-        characters,
-      ).deepSearch(deepRelatedMovieParentCharacterField, multipleMatch: true);
-      if (names is List && names.isNotEmpty) {
-        dto
-          ..alternateTitle = ' ${dto.alternateTitle}'
-          ..characterName = ' $names';
-      }
-    }
-  }
-
-  /// extract related movie details from [map].
-  static MovieResultDTO _getDeepTitle(Map<dynamic, dynamic> map) {
-    final id = // ...{'id':<value>...}
-        map.searchForString(key: deepRelatedMovieId)!;
-    final dto = _getDeepTitleCommon(map, id);
-    return dto;
   }
 
   void _shallowConvert(MovieResultDTO movie, Map<dynamic, dynamic> map) {
@@ -375,27 +130,27 @@ class ImdbJsonConverter extends ImdbConverterBase {
       // TODO: see if we can switch from the old _getDeepPersonRelatedCategories to the new _getPersonRelatedMovies
       ..related = _getDeepPersonRelatedCategories([...creditsV2, ...credits]);
 
-    _combineMovies(
+    combineMovies(
       movie.related,
       personRelatedActorLabel,
       _getDeepPersonRelatedMoviesForCategory(map[deepPersonActorHeader]),
     );
-    _combineMovies(
+    combineMovies(
       movie.related,
       personRelatedActressLabel,
       _getDeepPersonRelatedMoviesForCategory(map[deepPersonActressHeader]),
     );
-    _combineMovies(
+    combineMovies(
       movie.related,
       personRelatedDirectorLabel,
       _getDeepPersonRelatedMoviesForCategory(map[deepPersonDirectorHeader]),
     );
-    _combineMovies(
+    combineMovies(
       movie.related,
       personRelatedProducerLabel,
       _getDeepPersonRelatedMoviesForCategory(map[deepPersonProducerHeader]),
     );
-    _combineMovies(
+    combineMovies(
       movie.related,
       personRelatedWriterLabel,
       _getDeepPersonRelatedMoviesForCategory(map[deepPersonWriterHeader]),
@@ -455,10 +210,10 @@ class ImdbJsonConverter extends ImdbConverterBase {
       ..languages.combineUnique(map[outerElementLanguages])
       ..getLanguageType();
 
-    for (final person in getPeopleFromJson(map[outerElementDirector])) {
+    for (final person in _getPeopleFromJson(map[outerElementDirector])) {
       movie.addRelated(titleRelatedDirectorsLabel, person);
     }
-    for (final person in getPeopleFromJson(map[outerElementActors])) {
+    for (final person in _getPeopleFromJson(map[outerElementActors])) {
       movie.addRelated(titleRelatedCastLabel, person);
     }
     //_getRelated(movie, map[outerElementActors], relatedActorsLabel);
@@ -467,54 +222,35 @@ class ImdbJsonConverter extends ImdbConverterBase {
     final related = map[outerElementRelated];
     _getRelatedSections(related, movie);
 
-    // Reintialise the source after setting the ID
+    // Reinitialise the source after setting the ID
     movie.setSource(newSource: source);
   }
 
   void _getRelated(MovieResultDTO movie, dynamic related, String label) {
-    // Do nothing if related is null
-    if (related is Map) {
+    void convertRelatedMapToDto(Map<dynamic, dynamic> related) {
       final converter = ImdbSearchConverter().getConverter(related);
       for (final dto in converter.dtoFromCompleteJsonMap(related, source)) {
         movie.addRelated(label, dto);
       }
-    } else if (related is Iterable) {
-      for (final relatedMap in related) {
-        if (relatedMap is Map) {
-          final converter = ImdbSearchConverter().getConverter(relatedMap);
-          for (final dto in converter.dtoFromCompleteJsonMap(
-            relatedMap,
-            source,
-          )) {
-            movie.addRelated(label, dto);
-          }
-        }
-      }
     }
+
+    forEachType<Map<dynamic, dynamic>>(
+      related,
+      convertRelatedMapToDto,
+      fallback: true,
+    );
   }
 
-  static List<MovieResultDTO> getPeopleFromJson(dynamic people) {
+  static List<MovieResultDTO> _getPeopleFromJson(dynamic people) {
     final result = <MovieResultDTO>[];
-    if (null != people) {
-      Iterable<dynamic> peopleList;
-      // Massage the data to ensure the results are a list of people
-      // (or a single person in a list)
-      if (people is Iterable) {
-        peopleList = people;
-      } else if (people is Map) {
-        peopleList = [people];
-      } else {
-        return result;
-      }
-      for (final relatedMap in peopleList) {
-        if (relatedMap is Map) {
-          final dto = _dtoFromPersonMap(relatedMap);
-          if (null != dto) {
-            result.add(dto);
-          }
-        }
+    void addPerson(Map<dynamic, dynamic> person) {
+      final dto = _dtoFromPersonMap(person);
+      if (dto != null) {
+        result.add(dto);
       }
     }
+
+    forEachType<Map<dynamic, dynamic>>(people, addPerson, fallback: true);
     return result;
   }
 
@@ -531,16 +267,10 @@ class ImdbJsonConverter extends ImdbConverterBase {
   }
 
   static void _getRelatedSections(dynamic related, MovieResultDTO movie) {
-    // Do nothing if related is null
-    if (related is Map) {
-      _getMovieCategories(related, movie);
-    } else if (related is Iterable) {
-      for (final categories in related) {
-        if (categories is Map) {
-          _getMovieCategories(categories, movie);
-        }
-      }
-    }
+    void processSection(Map<dynamic, dynamic> section) =>
+        _getMovieCategories(section, movie);
+
+    forEachType<Map<dynamic, dynamic>>(related, processSection, fallback: true);
   }
 
   static void _getMovieCategories(
@@ -548,31 +278,15 @@ class ImdbJsonConverter extends ImdbConverterBase {
     MovieResultDTO movie,
   ) {
     for (final category in related.entries) {
-      _getMovies(movie, category.value, category.key.toString());
-    }
-  }
-
-  static void _getMovies(MovieResultDTO movie, dynamic movies, String label) {
-    if (movies is Map) {
-      _getMovie(movies, movie, label);
-    } else if (movies is Iterable) {
-      for (final relatedMap in movies) {
-        if (relatedMap is Map) {
-          _getMovie(relatedMap, movie, label);
+      void getMovie(Map<dynamic, dynamic> movies) {
+        final dto = _dtoFromRelatedMap(movies);
+        if (null != dto) {
+          movie.addRelated(category.key.toString(), dto);
         }
       }
-    }
-  }
 
-  static void _getMovie(
-    Map<dynamic, dynamic> movies,
-    MovieResultDTO movie,
-    String label,
-  ) {
-    final dto = _dtoFromRelatedMap(movies);
-    if (null != dto) {
-      movie.addRelated(label, dto);
-    } else {}
+      forEachType<Map<dynamic, dynamic>>(category, getMovie, fallback: true);
+    }
   }
 
   static MovieResultDTO? _dtoFromRelatedMap(Map<dynamic, dynamic> map) {

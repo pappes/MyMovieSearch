@@ -1,9 +1,9 @@
-
 import 'dart:convert';
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
@@ -25,7 +25,7 @@ const personRelatedWriterLabel = 'Writer:';
 ///
 /// Using IMDB to search for a string returns a list.
 /// Using IMDB search on an IMDBID redirects to the details page for that ID.
-abstract class ImdbConverterBase {
+abstract class ImdbConverterBase extends ConverterHelper {
   late final DataSourceType source;
   Iterable<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
@@ -205,23 +205,8 @@ abstract class ImdbConverterBase {
     );
   }
 
-  /// Add movies to a new category or an exisiting category
-  static void combineMovies(
-    RelatedMovieCategories existing,
-    String category,
-    MovieCollection movies,
-  ) {
-    if (movies.isNotEmpty) {
-      if (existing.containsKey(category)) {
-        existing[category]!.addAll(movies);
-      } else {
-        existing[category] = movies;
-      }
-    }
-  }
 
-
-  /// get movie title in from amovie credits node.
+  /// get movie title in from a movie credits node.
   static MovieResultDTO? getMovieFromCreditV2(
     dynamic title,
     Map<dynamic, dynamic> parent,
@@ -267,15 +252,14 @@ abstract class ImdbConverterBase {
   /// from a map or a list.
   static MovieCollection getDeepTitleRelatedMoviesForCategory(dynamic nodes) {
     final MovieCollection result = {};
-    if (nodes is List) {
-      for (final node in nodes) {
-        if (node is Map) {
-          final movieDto = getDeepTitle(node);
-          getMovieCharacterName(movieDto, node);
-          result[movieDto.uniqueId] = movieDto;
-        }
-      }
+
+    void addMovie(Map<dynamic, dynamic> node) {
+      final movieDto = getDeepTitle(node);
+      getMovieCharacterName(movieDto, node);
+      result[movieDto.uniqueId] = movieDto;
     }
+
+    forEachType<Map<dynamic, dynamic>>(nodes, addMovie);
     return result;
   }
 
@@ -284,20 +268,19 @@ abstract class ImdbConverterBase {
   static MovieCollection getDeepTitleRelatedPeopleForCategory(dynamic nodes) {
     final MovieCollection result = {};
     int creditsOrder = 100;
-    if (nodes is List) {
-      for (final node in nodes) {
-        if (node is Map) {
-          getDeepRelatedPersonCredits(result, node, creditsOrder);
-          if (0 < creditsOrder) {
-            creditsOrder--;
-          }
-        }
+
+    void addToCollection(Map<dynamic, dynamic> node) {
+      getDeepRelatedPersonCredits(result, node, creditsOrder);
+      if (creditsOrder > 0) {
+        creditsOrder--;
       }
     }
+
+    forEachType(nodes, addToCollection);
     return result;
   }
 
-  /// Maintin credits order when extracting people involved in a movie.
+  /// Maintain credits order when extracting people involved in a movie.
   static void getDeepRelatedPersonCredits(
     MovieCollection collection,
     Map<dynamic, dynamic> node, [
@@ -323,10 +306,7 @@ abstract class ImdbConverterBase {
       // ...{'characters':...{...'name':<value>...}}
       final names = TreeHelper(
         characters,
-      ).deepSearch(
-        deepRelatedMovieParentCharacterField,
-        multipleMatch: true,
-      );
+      ).deepSearch(deepRelatedMovieParentCharacterField, multipleMatch: true);
       if (names is List && names.isNotEmpty) {
         dto
           ..alternateTitle = ' ${dto.alternateTitle}'
@@ -360,5 +340,22 @@ abstract class ImdbConverterBase {
     final dto = getDeepTitleCommon(map, id);
     return dto;
   }
+}
 
+class ConverterHelper {
+
+  /// Add movies to a new category or an exisiting category
+  void combineMovies(
+    RelatedMovieCategories existing,
+    String category,
+    MovieCollection movies,
+  ) {
+    if (movies.isNotEmpty) {
+      if (existing.containsKey(category)) {
+        existing[category]!.addAll(movies);
+      } else {
+        existing[category] = movies;
+      }
+    }
+  }
 }
