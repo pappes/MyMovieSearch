@@ -60,7 +60,10 @@ class QueryIMDBMoreKeywordsDetails
     dynamic map,
   ) async {
     if (map is Map) {
-      return ImdbMoreKeywordsConverter().dtoFromMap(map);
+      return ImdbMoreKeywordsConverter().dtoFromCompleteJsonMap(
+        map,
+        DataSourceType.imdbKeywords,
+      );
     }
     throw TreeConvertException(
       'expected map got ${map.runtimeType} unable to interpret data $map',

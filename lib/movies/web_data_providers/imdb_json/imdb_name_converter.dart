@@ -1,36 +1,33 @@
-
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_base.dart';
-import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 
-class ImdbNameConverter extends ImdbConverterBase {
+class ImdbNameConverter extends ImdbConverterBase
+    with RelatedMoviesForDynamicCategory, ReleatedPeopleForDynamicCategory {
   @override
-  Iterable<MovieResultDTO> dtoFromMap(Map<dynamic, dynamic> map) {
-    final movie = MovieResultDTO().init();
-    final deepContent = getDeepContent(map);
-    if (deepContent.containsKey(deepPersonId)) {
+  /// Get basic details for the movie or person from [data].
+  dynamic getMovieOrPerson(MovieResultDTO dto, Map<dynamic, dynamic> data) {
+    final deepContent = getDeepContent(data, deepPersonId);
+    if (deepContent != null) {
       // Used by QueryIMDBNameDetails.
-      _deepConvertPerson(movie, deepContent);
-    } else {
-      return [
-        movie.error('Unable to interpret IMDB contents from map $map', source),
-      ];
+      return _deepConvertPerson(dto, deepContent);
     }
-    return [movie];
+    throw Exception('$source Unable to interpret IMDB contents from map $data');
   }
 
   /// Parse [Map] to pull IMDB data out for a single person.
-  void _deepConvertPerson(MovieResultDTO movie, Map<dynamic, dynamic> map) {
+  dynamic _deepConvertPerson(MovieResultDTO movie, Map<dynamic, dynamic> map) {
     movie.uniqueId = map.searchForString(key: deepPersonId)!;
     // ...{'nameText':...{...'text':<value>...}};
     final name = map.deepSearch(deepPersonNameHeader)?.searchForString();
 
     // ...{'primaryImage':...{...'url':<value>...}};
-    final url =
-        map.deepSearch(deepImageHeader)?.searchForString(key: deepImageField);
+    final url = map
+        .deepSearch(deepImageHeader)
+        ?.searchForString(key: deepImageField);
     // ...{'bio':...{...'plainText':<value>...}};
     final description = map
         .deepSearch(deepPersonDescriptionHeader)
@@ -43,80 +40,39 @@ class ImdbNameConverter extends ImdbConverterBase {
     final endDate = map
         .deepSearch(deepPersonEndDateHeader)
         ?.searchForString(key: deepPersonEndDateField);
-    final yearRange = (null != endDate)
-        ? '$startDate-$endDate'
-        : (null != startDate)
+    final yearRange =
+        (null != endDate)
+            ? '$startDate-$endDate'
+            : (null != startDate)
             ? startDate
             : null;
     // ...{'meterRanking':...{...'currentRank':<value>...}}
     final popularity = map
         .deepSearch(deepPersonPopularityHeader)
         ?.searchForString(key: deepPersonPopularityField);
-
-    // ...{'edges':...{...'node':...{...'credits':...{...'node':<value>...}}
-    final List<dynamic> creditsV2 =
-        map
-            .deepSearch(
-              deepRelatedMovieCollection, // edges
-              multipleMatch: true,
-            )
-            ?.deepSearch(
-                deepRelatedMovieContainer, multipleMatch: true) // node
-            ?.deepSearch(deepPersonRelatedleaf, multipleMatch: true) // credits
-            ?.deepSearch(
-              deepRelatedMovieContainer, // node
-              multipleMatch: true,
-              stopAtTopLevel: false,
-            ) ??
-        [];
-
-    final related = _getPersonRelatedMovies(creditsV2);
-
     movie
-      ..merge(
-        MovieResultDTO().init(
-          uniqueId: movie.uniqueId,
-          bestSource: DataSourceType.imdbSuggestions,
-          title: name,
-          description: description,
-          year: startDate,
-          yearRange: yearRange,
-          userRatingCount: popularity,
-          imageUrl: url,
-          related: related,
-        ),
-      )
-      // Reintialise the source after setting the ID
-      ..setSource(newSource: source);
-  }
+      ..bestSource = DataSourceType.imdbSuggestions
+      ..title = name ?? movie.title
+      ..description = description ?? movie.description
+      ..imageUrl = url ?? movie.imageUrl
+      ..year = IntHelper.fromText(startDate) ?? movie.year
+      ..yearRange = yearRange ?? movie.yearRange
+      ..userRatingCount =
+          IntHelper.fromText(popularity) ?? movie.userRatingCount;
 
-  /// Search within a movie credits node for movie information for the person.
-  static RelatedMovieCategories _getPersonRelatedMovies(List<dynamic> nodes) {
-    final RelatedMovieCategories result = {};
-    for (final related in nodes) {
-      if (related is Map &&
-          related.containsKey(deepRelatedMovieHeader) &&
-          (related.containsKey(deepRelatedCategoryHeaderV2) ||
-              related.containsKey(deepRelatedMovieParentCharacterHeader))) {
-        // We have a map with the movie info, the persons roles in the movie
-        // and possibly character names.
-        final movie = ImdbConverterBase.getMovieFromCreditV2(
-          related[deepRelatedMovieHeader],
-          related,
+    // Find child nodes to be converted to related movies.
+    // ...{'edges':...{...'node':...{...'credits':...{...'node':<value>...}}
+    return map
+        .deepSearch(
+          deepRelatedMovieCollection, // edges
+          multipleMatch: true,
+        )
+        ?.deepSearch(deepRelatedMovieContainer, multipleMatch: true) // node
+        ?.deepSearch(deepPersonRelatedleaf, multipleMatch: true) // credits
+        ?.deepSearch(
+          deepRelatedMovieContainer, // node
+          multipleMatch: true,
+          stopAtTopLevel: false,
         );
-        if (movie != null) {
-          // Combine the movie info with the roles.
-          final MovieCollection indexedMovie = {movie.uniqueId: movie};
-          final roles = ImdbConverterBase.getRolesFromCreditsV2(
-            related[deepRelatedCategoryHeaderV2],
-          );
-          for (final role in roles) {
-            ConverterHelper().combineMovies(
-                result, role.addColonIfNeeded(), indexedMovie);
-          }
-        }
-      }
-    }
-    return result;
   }
 }

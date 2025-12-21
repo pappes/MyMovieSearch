@@ -1,4 +1,3 @@
-
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
@@ -8,19 +7,21 @@ import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.da
 
 class ImdbCastConverter extends ImdbConverterBase {
   @override
-  Iterable<MovieResultDTO> dtoFromMap(Map<dynamic, dynamic> map) {
-    final movie = MovieResultDTO().init();
-    final deepContent = getDeepContent(map);
-    if (deepContent.containsKey(deepEntityHeader)) {
+  /// Parse [Map] to pull IMDB data out for a single movie.
+  dynamic getMovieOrPerson(MovieResultDTO movie, Map<dynamic, dynamic> map) {
+    final deepContent = getDeepContent(map, deepEntityHeader);
+    if (deepContent != null) {
       // Used by QueryIMDBCastDetails.
-      _deepConvertMetadata(movie, deepContent);
-    } else {
-      return [
-        movie.error('Unable to interpret IMDB contents from map $map', source),
-      ];
+      return _deepConvertMetadata(movie, deepContent);
     }
-    return [movie];
+    throw Exception('$source Unable to interpret IMDB contents from map $map');
   }
+
+  /// No related movies for a movie.
+  void getRelatedMovies(RelatedMovieCategories related, dynamic data) {}
+
+  /// TODO extract people conversion logic out of _deepConvertMetadata.
+  void getRelatedPeople(RelatedMovieCategories related, dynamic data) {}
 
   // Parse [Map] to pull IMDB data out for a singl movie.
   void _deepConvertMetadata(MovieResultDTO movie, Map<dynamic, dynamic> map) {
@@ -31,7 +32,7 @@ class ImdbCastConverter extends ImdbConverterBase {
         metadata!.searchForString(key: deepEntityMetadataId)!;
     movie
       ..uniqueId = uniqueId
-      ..merge(ImdbConverterBase.getDeepTitleCommon(contentData, movie.uniqueId))
+      ..merge(getMovieAttributes(contentData, movie.uniqueId))
       // Reintialise the source after setting the ID
       ..setSource(newSource: source);
 
@@ -71,7 +72,10 @@ class ImdbCastConverter extends ImdbConverterBase {
         final credit = _getDeepNodeRelatedPerson(person);
 
         ConverterHelper().combineMovies(
-            cast, categoryName.addColonIfNeeded(), credit);
+          cast,
+          categoryName.addColonIfNeeded(),
+          credit,
+        );
       }
     }
   }
@@ -96,7 +100,10 @@ class ImdbCastConverter extends ImdbConverterBase {
               if (person is Map) {
                 final credit = _getDeepCreditsExtraPerson(person);
                 ConverterHelper().combineMovies(
-                    cast, categoryName.addColonIfNeeded(), credit);
+                  cast,
+                  categoryName.addColonIfNeeded(),
+                  credit,
+                );
               }
             }
           }
@@ -150,7 +157,7 @@ class ImdbCastConverter extends ImdbConverterBase {
       // ...{'data':...{'node':...{'name':...}}}
       final personMap = node.deepSearch(deepEntityPersonName)?.first;
       if (null != personMap && personMap is Map<dynamic, dynamic>) {
-        ImdbConverterBase.getDeepRelatedPersonCredits(result, personMap);
+        ImdbConverterBase.getRelatedPersonWithCreditsOrder(result, personMap);
       }
     }
     return result;

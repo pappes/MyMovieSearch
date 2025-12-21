@@ -43,7 +43,8 @@ int jsonChunkCount = 0;
 
 void callback(String jsonString) {
   print(
-    'JSON Callback($jsonChunkCount): ${jsonString.substring(0, min(jsonString.length, 100))}'
+    'JSON Callback($jsonChunkCount): '
+    '${jsonString.substring(0, min(jsonString.length, 100))}'
     '...${jsonString.length}',
   );
   jsonChunkCount++;

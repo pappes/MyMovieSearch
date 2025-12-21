@@ -101,7 +101,10 @@ extension ListHelper<T> on List<T> {
 }
 
 /// Perform [action] on each element of [input] that is a [T].
-/// If fallback is true and [input] is not iterable, call [action] on [input].
+/// 
+/// A fallback option is available to still call [action] if the data passed in 
+/// is not iterable. If fallback is true and [input] is not iterable, 
+/// calls [action] directly on the entire [input].
 ///
 ///
 void forEachType<T>(
@@ -116,7 +119,6 @@ void forEachType<T>(
   }
 
   if (input == null) return;
-  Iterable<dynamic> inputList;
   if (input is Iterable) {
     input.forEach(callAction);
     return;

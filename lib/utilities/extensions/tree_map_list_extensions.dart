@@ -149,7 +149,8 @@ class TreeHelper {
   /// Search tree for a map containing [key] and return its value as a String.
   ///
   /// {@template searchForString}
-  /// It finds the first occurrence of the [key] and returns the associated value.
+  /// It finds the first occurrence of the [key] 
+  /// and returns the associated value.
   /// {@endtemplate}
   String? searchForString({Object key = 'text'}) {
     final results = deepSearch(key);

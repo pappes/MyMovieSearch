@@ -9,7 +9,10 @@ import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 
-class ImdbJsonConverter extends ImdbConverterBase {
+class ImdbJsonConverter extends ImdbConverterBase
+    with
+        ReleatedMoviesForPredefinedCategory,
+        ReleatedPeopleForPredefinedCategory {
   @override
   Iterable<MovieResultDTO> dtoFromMap(Map<dynamic, dynamic> map) {
     final movie = MovieResultDTO().init();
@@ -22,56 +25,6 @@ class ImdbJsonConverter extends ImdbConverterBase {
       ];
     }
     return [movie];
-  }
-
-  /// Get the movie category information for a person.
-  static RelatedMovieCategories _getDeepPersonRelatedCategories(dynamic list) {
-    final RelatedMovieCategories result = {};
-
-    /// Search movie information to add to the movie collection.
-    void getCategory(Map<dynamic, dynamic> item) {
-      final movies = _getDeepPersonRelatedMoviesForCategory(item);
-      final categories = ImdbConverterBase.getRolesFromCreditsV2(
-        item.deepSearch(deepRelatedCategoryHeaderV2),
-      );
-      for (final category in categories) {
-        ConverterHelper().combineMovies(
-          result,
-          category.addColonIfNeeded(),
-          movies,
-        );
-      }
-    }
-
-    if (list is List) {
-      for (final related in list) {
-        ConverterHelper().forEachMap(related, getCategory);
-      }
-    }
-    return result;
-  }
-
-  /// extract collections of movies for a specific category for the person
-  /// from a map or a list.
-  static MovieCollection _getDeepPersonRelatedMoviesForCategory(
-    dynamic category,
-  ) {
-    final MovieCollection result = {};
-
-    void getRelated(Map<dynamic, dynamic> node) {
-      final title = node.deepSearch(deepRelatedMovieHeader)?.first;
-      final movieDto = ImdbConverterBase.getMovieFromCreditV2(title, node);
-      if (movieDto != null) {
-        result[movieDto.uniqueId] = movieDto;
-      }
-    }
-
-    // ...{'node':...}
-    final nodes = TreeHelper(
-      category,
-    ).deepSearch(deepRelatedMovieContainer, multipleMatch: true);
-    ConverterHelper().forEachMap(nodes, getRelated);
-    return result;
   }
 
   void _shallowConvert(MovieResultDTO movie, Map<dynamic, dynamic> map) {
@@ -125,7 +78,6 @@ class ImdbJsonConverter extends ImdbConverterBase {
     movie
       ..description =
           map[outerElementDescription]?.toString() ?? movie.description
-      // TODO: see if we can switch from the old _getDeepPersonRelatedCategories to the new _getPersonRelatedMovies
       ..related = _getDeepPersonRelatedCategories([...creditsV2, ...credits]);
 
     combineMovies(
@@ -297,5 +249,53 @@ class ImdbJsonConverter extends ImdbConverterBase {
       uniqueId: id,
       title: map[outerElementOfficialTitle]?.toString(),
     );
+  }
+
+  /// Get the movie category information for a person.
+  RelatedMovieCategories _getDeepPersonRelatedCategories(dynamic list) {
+    final RelatedMovieCategories result = {};
+
+    /// Search movie information to add to the movie collection.
+    void getCategory(Map<dynamic, dynamic> item) {
+      final movies = _getDeepPersonRelatedMoviesForCategory(item);
+      final categories = ImdbConverterBase.getRolesFromCreditsV2(
+        item.deepSearch(deepRelatedCategoryHeaderV2),
+      );
+      for (final category in categories) {
+        ConverterHelper().combineMovies(
+          result,
+          category.addColonIfNeeded(),
+          movies,
+        );
+      }
+    }
+
+    if (list is List) {
+      for (final related in list) {
+        ConverterHelper().forEachMap(related, getCategory);
+      }
+    }
+    return result;
+  }
+
+  /// extract collections of movies for a specific category for the person
+  /// from a map or a list.
+  MovieCollection _getDeepPersonRelatedMoviesForCategory(dynamic category) {
+    final MovieCollection result = {};
+
+    void getRelated(Map<dynamic, dynamic> node) {
+      final title = node.deepSearch(deepRelatedMovieHeader)?.first;
+      final movieDto = getRelatedMovieCharacter(title, node);
+      if (movieDto != null) {
+        result[movieDto.uniqueId] = movieDto;
+      }
+    }
+
+    // ...{'node':...}
+    final nodes = TreeHelper(
+      category,
+    ).deepSearch(deepRelatedMovieContainer, multipleMatch: true);
+    ConverterHelper().forEachMap(nodes, getRelated);
+    return result;
   }
 }

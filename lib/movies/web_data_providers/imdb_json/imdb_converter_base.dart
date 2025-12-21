@@ -32,29 +32,63 @@ abstract class ImdbConverterBase extends ConverterHelper {
     DataSourceType source,
   ) {
     this.source = source;
-    return dtoFromMap(map);
+    final List<MovieResultDTO> result = [];
+    getMovieList(result, map);
+    return result;
   }
 
-  /// Take a [Map] of IMDB data and create a [MovieResultDTO] from it.
-  Iterable<MovieResultDTO> dtoFromMap(Map<dynamic, dynamic> map);
+  /// Get full content of movies and people with related information.
+  void getMovieList(List<MovieResultDTO> result, Map<dynamic, dynamic> data) {
+    final movies = getMovieDataList(data);
+    for (final movie in movies) {
+      final dto = MovieResultDTO().init();
+      final childData = getMovieOrPerson(dto, movie);
+      getRelatedMovies(dto.related, childData);
+      getRelatedPeople(dto.related, childData);
 
-  // find the contents of map[props][pageProps]
-  Map<dynamic, dynamic> getDeepContent(Map<dynamic, dynamic> map) {
+      dto.setSource(newSource: source);
+      result.add(dto);
+    }
+  }
+
+  /// Break [data] up into one Map per movie.
+  /// Default behaviour is to assume there is only one movie.
+  Iterable<Map<dynamic, dynamic>> getMovieDataList(
+    Map<dynamic, dynamic> data,
+  ) => [data];
+
+  /// Get basic details for the movie or person from [data].
+  dynamic getMovieOrPerson(MovieResultDTO dto, Map<dynamic, dynamic> data) {}
+
+  /// Get movies the person has worked on or recommended simliar movies.
+  void getRelatedMovies(RelatedMovieCategories related, dynamic data) {}
+
+  /// Get people involved in making the movie.
+  void getRelatedPeople(RelatedMovieCategories related, dynamic data) {}
+
+  /// Take a [Map] of IMDB data and create a [MovieResultDTO] from it.
+  //Iterable<MovieResultDTO> dtoFromMap(Map<dynamic, dynamic> map);
+
+  /// Common function to find the contents of map["props"]["pageProps"]
+  /// returns null if child key is not present.
+  Map<dynamic, dynamic>? getDeepContent(
+    Map<dynamic, dynamic> map,
+    String childKey,
+  ) {
     final props = map[rootAttribute];
     if (null != props && props is Map) {
       final pageProps = props[rootAttributeChild];
-      if (null != pageProps && pageProps is Map) {
+      if (null != pageProps &&
+          pageProps is Map &&
+          pageProps.containsKey(childKey)) {
         return pageProps;
       }
     }
-    return {};
+    return null;
   }
 
-  /// extract related movie details from [map].
-  static MovieResultDTO getDeepTitleCommon(
-    Map<dynamic, dynamic> map,
-    String id,
-  ) {
+  /// extract basic movie details from [map].
+  MovieResultDTO getMovieAttributes(Map<dynamic, dynamic> map, String id) {
     // ...{'titleText':...{...'text':<value>...}} or
     // ...{'titleText':<value>...}
     final title =
@@ -205,55 +239,13 @@ abstract class ImdbConverterBase extends ConverterHelper {
     );
   }
 
-  /// get movie title in from a movie credits node.
-  static MovieResultDTO? getMovieFromCreditV2(
-    dynamic title,
-    Map<dynamic, dynamic> parent,
-  ) {
-    if (title is Map) {
-      final movieDto = getDeepTitle(title);
-      getMovieCharacterName(movieDto, parent);
-      return movieDto;
-    }
-    return null;
-  }
-
-  /// Find the roles a person has in a movie.
-  static List<String> getRolesFromCreditsV2(dynamic creditedRoles) {
-    const defaultLabel = 'Unknown';
-    final categories = [defaultLabel];
-
-    // ...{'category':...{id:<value>, text:<value>...}}
-    final categoryHeader = TreeHelper(
-      creditedRoles,
-    ).deepSearch(deepRelatedCategoryHeader, multipleMatch: true);
-    // Allow a person to have multiple roles in a movie.
-    if (categoryHeader is List && categoryHeader.isNotEmpty) {
-      final labels = categoryHeader.deepSearch('text', multipleMatch: true);
-      if (labels is List && labels.isNotEmpty) {
-        for (final label in labels) {
-          if (label is String) {
-            final categoryText = label.addColonIfNeeded();
-            if (!categories.contains(categoryText)) {
-              categories.add(categoryText);
-            }
-          }
-        }
-        if (categories.length > 1) {
-          categories.remove(defaultLabel);
-        }
-      }
-    }
-    return categories;
-  }
-
   /// extract collections of movies for a specific category for the title
   /// from a map or a list.
-  static MovieCollection getDeepTitleRelatedMoviesForCategory(dynamic nodes) {
+  MovieCollection getRelatedMoviesForCategory(dynamic nodes) {
     final MovieCollection result = {};
 
     void addMovie(Map<dynamic, dynamic> node) {
-      final movieDto = getDeepTitle(node);
+      final movieDto = getMovieDetails(node);
       getMovieCharacterName(movieDto, node);
       result[movieDto.uniqueId] = movieDto;
     }
@@ -262,30 +254,21 @@ abstract class ImdbConverterBase extends ConverterHelper {
     return result;
   }
 
-  /// extract collections of people for a specific category for the title
-  /// from a map or a list.
-  static MovieCollection getDeepTitleRelatedPeopleForCategory(dynamic nodes) {
-    final MovieCollection result = {};
-    int creditsOrder = 100;
-
-    void addToCollection(Map<dynamic, dynamic> node) {
-      getDeepRelatedPersonCredits(result, node, creditsOrder);
-      if (creditsOrder > 0) {
-        creditsOrder--;
-      }
-    }
-
-    ConverterHelper().forEachMap(nodes, addToCollection);
-    return result;
+  /// extract related movie details from [map].
+  MovieResultDTO getMovieDetails(Map<dynamic, dynamic> map) {
+    final id = // ...{'id':<value>...}
+        map.searchForString(key: deepRelatedMovieId)!;
+    final dto = getMovieAttributes(map, id);
+    return dto;
   }
 
   /// Maintain credits order when extracting people involved in a movie.
-  static void getDeepRelatedPersonCredits(
+  static void getRelatedPersonWithCreditsOrder(
     MovieCollection collection,
     Map<dynamic, dynamic> node, [
     int? creditsOrder,
   ]) {
-    final movieDto = getDeepRelatedPerson(node);
+    final movieDto = getRelatedPersonDetails(node);
     getMovieCharacterName(movieDto, node);
     if (creditsOrder != null) {
       movieDto.creditsOrder = creditsOrder;
@@ -315,7 +298,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
   }
 
   /// extract related movie details from [map].
-  static MovieResultDTO getDeepRelatedPerson(Map<dynamic, dynamic> map) {
+  static MovieResultDTO getRelatedPersonDetails(Map<dynamic, dynamic> map) {
     final id = // ...{'id':<value>...}
         map.searchForString(key: deepRelatedPersonId)!;
     final title = // ...{'nameText':...{...'text':<value>...}}
@@ -332,13 +315,272 @@ abstract class ImdbConverterBase extends ConverterHelper {
     return newDTO;
   }
 
-  /// extract related movie details from [map].
-  static MovieResultDTO getDeepTitle(Map<dynamic, dynamic> map) {
-    final id = // ...{'id':<value>...}
-        map.searchForString(key: deepRelatedMovieId)!;
-    final dto = getDeepTitleCommon(map, id);
-    return dto;
+  /// Find the roles a person has in a movie.
+  static List<String> getRolesFromCreditsV2(dynamic creditedRoles) {
+    const defaultLabel = 'Unknown';
+    final Set<String> categories = {defaultLabel};
+
+    // ...{'category':...{id:<value>, text:<value>...}}
+    final categoryHeader = TreeHelper(
+      creditedRoles,
+    ).deepSearch(deepRelatedCategoryHeader, multipleMatch: true);
+    // Allow a person to have multiple roles in a movie.
+    if (categoryHeader is List && categoryHeader.isNotEmpty) {
+      final labels = categoryHeader.deepSearch('text', multipleMatch: true);
+      labels?.forEach(
+        (label) => categories.add(label.toString().addColonIfNeeded()),
+      );
+    }
+    categories.remove(':');
+    if (categories.length > 1) {
+      categories.remove(defaultLabel);
+    }
+    return categories.toList();
   }
+
+  /// get movie title in from a movie creditsV2 node.
+  ///
+  MovieResultDTO? getRelatedMovieCharacter(
+    dynamic title,
+    Map<dynamic, dynamic> parent,
+  ) {
+    if (title is Map) {
+      final movieDto = getMovieDetails(title);
+      ImdbConverterBase.getMovieCharacterName(movieDto, parent);
+      return movieDto;
+    }
+    return null;
+  }
+}
+
+// Sample ReleatedMoviesForPredefinedCategory Json from imdb_json
+// { data->name->
+//   'unreleasedCredits': [
+//     {
+//       'category': {'id': 'actor', 'text': 'Actor'},
+//       'credits': {
+//         'edges': [
+//           { 'node':
+//             {'category':...,'characters':...,'title':
+//               {'id':...,'titleText':...}],
+//         ]
+//       }
+//     },
+//   ],
+//   'releasedCredits': [
+//     {
+//       'category': {'id': 'actor', 'text': 'Actor'},
+//       'credits': twoEdges,
+//     },
+//   ],
+// }
+//             OR
+// Sample ReleatedMoviesForDynamicCategory Json from imdb_title
+// { 'props'->pageProps->tconst->mainColumnData->edges->node->
+//       'cast': {...},
+//       'directors': {...},...
+//       'moreLikeThisTitles': {
+//         'edges': [
+//           { 'node':
+//             {'id':...,'titleText':...}],
+//         ]
+//       },...
+// }
+mixin ReleatedMoviesForPredefinedCategory on ImdbConverterBase {
+  @override
+  void getRelatedMovies(RelatedMovieCategories related, dynamic data) {
+    // imdb_title uses ...{'moreLikeThisTitles':...}
+    final relatedTree = TreeHelper(data)
+        .deepSearch(deepTitleRelatedTitlesHeader)
+        ?.deepSearch(deepRelatedMovieContainer, multipleMatch: true);
+    final movies = getRelatedMoviesForCategory(relatedTree);
+    ConverterHelper().combineMovies(related, titleRelatedMoviesLabel, movies);
+  }
+}
+
+// TODO  related logic for cast and json
+//       still need to be brought into the mixin classes
+// Sample ReleatedMoviesForPredefinedCategory Json from imdb_cast ???? imdb_json_converter.dart
+// { 'props'->pageProps->contentData-data->title
+//   'creditCategories': [
+//     {
+//       'category': {'id': 'actor', 'text': 'Actor'},
+//       'credits': {
+//         'edges': [
+//           { 'node':
+//             {'category:...,'name':
+//               {'id':...,'nameText':...}],
+//         ]
+//       }
+//     },
+//   ]
+// }
+//             OR
+// Sample ReleatedMoviesForDynamicCategory Json from imdb_title (AND ImdbMoviesForKeywordConverter)
+// { 'props'->pageProps->tconst->mainColumnData->edges->node->
+//       'cast': {
+//         'edges': [
+//           { 'node':
+//             {'charactors:...,'name':
+//               {'id':...,'nameText':...}],
+//         ]
+//       },
+//       'directors': {
+//         'credits': [
+//             {'name':
+//               {'id':...,'nameText':...}],
+//         ]
+//       },...
+//       'moreLikeThisTitles': {...},...
+// }
+//  , imdb_movies_for_keyword_converter.dart  ????
+mixin ReleatedPeopleForPredefinedCategory on ImdbConverterBase {
+  @override
+  void getRelatedPeople(RelatedMovieCategories related, dynamic data) {
+    final list = TreeHelper(data);
+
+    // imdb_title uses ...{'cast':...}
+    final castTree = list
+        .deepSearch(deepTitleRelatedCastHeader)
+        ?.deepSearch(deepTitleRelatedCastContainer, multipleMatch: true);
+    final cast = ReleatedPeopleForPredefinedCategory.getPeopleForCategory(
+      castTree,
+    );
+    ConverterHelper().combineMovies(related, titleRelatedCastLabel, cast);
+
+    // imdb_title uses ...{'directors':...}
+    final directorsTree = list
+        .deepSearch(deepTitleRelatedDirectorHeader)
+        ?.deepSearch(deepTitleRelatedDirectorContainer, multipleMatch: true);
+    final directors = ReleatedPeopleForPredefinedCategory.getPeopleForCategory(
+      directorsTree,
+    );
+    ConverterHelper().combineMovies(
+      related,
+      titleRelatedDirectorsLabel,
+      directors,
+    );
+
+    if (data is List) {
+      // ...{'category':...{id:<value>, text:<value>...}}
+      final categoryHeader = data.deepSearch(
+        deepRelatedCategoryHeader,
+        multipleMatch: true,
+      );
+      // Allow a person to have multiple roles in a movie.
+      if (categoryHeader is List && categoryHeader.isNotEmpty) {
+      } else {
+        getRelatedPeopleFromMainColumnData(related, data);
+      }
+    }
+  }
+
+  /// extract collections of people for a specific category for the title
+  /// from a map or a list.
+  ///
+  /// used from ImdbTitleConverter
+  static MovieCollection getPeopleForCategory(dynamic nodes) {
+    final MovieCollection result = {};
+    int creditsOrder = 100;
+
+    void addToCollection(Map<dynamic, dynamic> node) {
+      ImdbConverterBase.getRelatedPersonWithCreditsOrder(
+        result,
+        node,
+        creditsOrder,
+      );
+      if (creditsOrder > 0) {
+        creditsOrder--;
+      }
+    }
+
+    ConverterHelper().forEachMap(nodes, addToCollection);
+    return result;
+  }
+
+  /// extract actor credits information from [list].
+  ///
+  /// used from ImdbMoviesForKeywordConverter
+  void getRelatedPeopleFromMainColumnData(
+    RelatedMovieCategories related,
+    List<dynamic>? list,
+  ) {
+    // ...{'cast':...}
+    final castTree = list
+        ?.deepSearch(deepTitleRelatedCastHeader)
+        ?.deepSearch(deepTitleRelatedCastContainer, multipleMatch: true);
+    final cast = ReleatedPeopleForPredefinedCategory.getPeopleForCategory(
+      castTree,
+    );
+    ConverterHelper().combineMovies(related, titleRelatedCastLabel, cast);
+
+    // ...{'directors':...}
+    final directorsTree = list
+        ?.deepSearch(deepTitleRelatedDirectorHeader)
+        ?.deepSearch(deepTitleRelatedDirectorContainer, multipleMatch: true);
+    final directors = ReleatedPeopleForPredefinedCategory.getPeopleForCategory(
+      directorsTree,
+    );
+    ConverterHelper().combineMovies(
+      related,
+      titleRelatedDirectorsLabel,
+      directors,
+    );
+  }
+}
+
+// Sample ReleatedMoviesForDynamicCategory Json from imdb_name
+// { 'released'->edges->node->credits->edges->node->
+//       'creditedRoles': {
+//         'edges': [
+//           { 'node':
+//             {'category:...,'charactors:...,'title':
+//               {'id':...,'titleText':...}],
+//         ]
+//       }
+// }
+mixin RelatedMoviesForDynamicCategory on ImdbConverterBase {
+  /// Search within a movie credits node for movie information for the person.
+  @override
+  void getRelatedMovies(RelatedMovieCategories related, dynamic data) {
+    if (data is List) {
+      for (final credits in data) {
+        if (credits is Map &&
+            credits.containsKey(deepRelatedMovieHeader) &&
+            (credits.containsKey(deepRelatedCategoryHeaderV2) ||
+                credits.containsKey(deepRelatedMovieParentCharacterHeader))) {
+          // We have a map with the movie info, the persons roles in the movie
+          // and possibly character names.
+          final movie = getRelatedMovieCharacter(
+            credits[deepRelatedMovieHeader],
+            credits,
+          );
+          if (movie != null) {
+            // Combine the movie info with the roles.
+            final MovieCollection indexedMovie = {movie.uniqueId: movie};
+            // Search for role types from {...creditedRoles...}
+            // or current top level credits node.
+            final roles = ImdbConverterBase.getRolesFromCreditsV2(
+              credits[deepRelatedCategoryHeaderV2] ?? credits,
+            );
+            for (final role in roles) {
+              ConverterHelper().combineMovies(
+                related,
+                role.addColonIfNeeded(),
+                indexedMovie,
+              );
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+mixin ReleatedPeopleForDynamicCategory on ImdbConverterBase {
+  /// Search within a movie credits node for movie information for the person.
+  @override
+  void getRelatedPeople(RelatedMovieCategories related, dynamic data) {}
 }
 
 class ConverterHelper {
@@ -357,6 +599,14 @@ class ConverterHelper {
     }
   }
 
+  /// Perform [action] on each Map contained in [input].
+  ///
+  /// A fallback option is available
+  /// to still call [action] if the data passed in
+  /// is not iterable. If fallback is true and [input] is not iterable,
+  /// calls [action] directly on the entire [input].
+  ///
+  ///
   void forEachMap(
     dynamic collection,
     void Function(Map<dynamic, dynamic>) action, {

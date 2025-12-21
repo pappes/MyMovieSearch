@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -101,7 +102,10 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          ImdbMoreKeywordsConverter().dtoFromMap(map),
+          ImdbMoreKeywordsConverter().dtoFromCompleteJsonMap(
+            map,
+            DataSourceType.imdbKeywords,
+          ),
         );
       }
 

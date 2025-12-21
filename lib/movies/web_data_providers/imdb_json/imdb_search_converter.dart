@@ -12,20 +12,19 @@ class ImdbSearchConverter extends ImdbJsonConverter {
 
   /// Take a [Map] of IMDB data and create a [MovieResultDTO] from it.
   ImdbConverterBase getConverter(Map<dynamic, dynamic> map) {
-    final deepContent = getDeepContent(map);
-    if (map.containsKey(outerElementIdentity)) {
+    if (getDeepContent(map, outerElementIdentity) != null) {
       // Used by QueryIMDBJson* and QueryIMDBSearch
       return ImdbJsonConverter();
-    } else if (deepContent.containsKey(outerElementSearchResults)) {
+    } else if (getDeepContent(map, outerElementSearchResults) != null) {
       // Used by QueryIMDBMoviesForKeyword.
       return ImdbMoreKeywordsConverter();
-    } else if (deepContent.containsKey(deepPersonId)) {
+    } else if (getDeepContent(map, deepPersonId) != null) {
       // Used by QueryIMDBNameDetails.
       return ImdbNameConverter();
-    } else if (deepContent.containsKey(deepTitleId2)) {
+    } else if (getDeepContent(map, deepTitleId2) != null) {
       // Used by QueryIMDBTitleDetails.
       return ImdbTitleConverter();
-    } else if (deepContent.containsKey(deepEntityHeader)) {
+    } else if (getDeepContent(map, deepEntityHeader) != null) {
       // Used by QueryIMDBCastDetails.
       ImdbCastConverter();
     } 
