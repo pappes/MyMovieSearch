@@ -14,17 +14,16 @@ class ImdbJsonConverter extends ImdbConverterBase
         ReleatedMoviesForPredefinedCategory,
         ReleatedPeopleForPredefinedCategory {
   @override
-  Iterable<MovieResultDTO> dtoFromMap(Map<dynamic, dynamic> map) {
-    final movie = MovieResultDTO().init();
-    if (map.containsKey(outerElementIdentity)) {
+  /// Get basic details for the movie or person from [data].
+  dynamic getMovieOrPerson(MovieResultDTO dto, Map<dynamic, dynamic> data) {
+    if (data.containsKey(outerElementIdentity)) {
       // Used by QueryIMDBJson* and QueryIMDBSearch
-      _shallowConvert(movie, map);
+      _shallowConvert(dto, data);
     } else {
       return [
-        movie.error('Unable to interpret IMDB contents from map $map', source),
+        dto.error('Unable to interpret IMDB contents from data $data', source),
       ];
     }
-    return [movie];
   }
 
   void _shallowConvert(MovieResultDTO movie, Map<dynamic, dynamic> map) {
@@ -272,7 +271,7 @@ class ImdbJsonConverter extends ImdbConverterBase
 
     if (list is List) {
       for (final related in list) {
-        ConverterHelper().forEachMap(related, getCategory);
+        ConverterHelper().forEachMap(related, getCategory, fallback: true);
       }
     }
     return result;

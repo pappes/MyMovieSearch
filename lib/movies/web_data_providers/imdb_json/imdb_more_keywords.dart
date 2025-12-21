@@ -24,4 +24,11 @@ class ImdbMoreKeywordsConverter extends ImdbConverterBase {
     return null;
   }
 
+  @override
+  void getRelatedMovies(RelatedMovieCategories related, dynamic data) {
+    // TODO: implement getRelatedMovies
+  }
+
+  @override
+  void getRelatedPeople(RelatedMovieCategories related, dynamic data) {}
 }

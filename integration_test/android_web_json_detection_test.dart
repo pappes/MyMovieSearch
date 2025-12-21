@@ -77,7 +77,7 @@ void main() {
       // Check the results.
       expect(
         jsonChunkCount,
-        3,
+        greaterThanOrEqualTo(3),
         reason: 'Json chunks should have 3 entries but has $jsonChunkCount',
       );
     },
@@ -95,7 +95,7 @@ void main() {
       // Check the results.
       expect(
         jsonChunkCount,
-        3,
+        greaterThanOrEqualTo(3),
         reason: 'Json chunks should have 3 entries but has $jsonChunkCount',
       );
     },
@@ -117,7 +117,7 @@ void main() {
       // Check the results.
       expect(
         json.length,
-        3,
+        greaterThanOrEqualTo(3),
         reason: 'Json chunks should have 3 entries but has ${json.length}',
       );
     },

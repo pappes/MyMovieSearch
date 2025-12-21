@@ -58,13 +58,13 @@ abstract class ImdbConverterBase extends ConverterHelper {
   ) => [data];
 
   /// Get basic details for the movie or person from [data].
-  dynamic getMovieOrPerson(MovieResultDTO dto, Map<dynamic, dynamic> data) {}
+  dynamic getMovieOrPerson(MovieResultDTO dto, Map<dynamic, dynamic> data);
 
   /// Get movies the person has worked on or recommended simliar movies.
-  void getRelatedMovies(RelatedMovieCategories related, dynamic data) {}
+  void getRelatedMovies(RelatedMovieCategories related, dynamic data);
 
   /// Get people involved in making the movie.
-  void getRelatedPeople(RelatedMovieCategories related, dynamic data) {}
+  void getRelatedPeople(RelatedMovieCategories related, dynamic data);
 
   /// Take a [Map] of IMDB data and create a [MovieResultDTO] from it.
   //Iterable<MovieResultDTO> dtoFromMap(Map<dynamic, dynamic> map);
