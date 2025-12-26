@@ -113,7 +113,7 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
   Future<void> _clickAllFilterOptions(InAppWebViewController controller) async {
     if (_filtersCleared) {
       // Delay disposal to allow any final requests to complete.
-      return dispose(delay: const Duration(seconds: 10));
+      return dispose(delay: const Duration(seconds: 8));
     }
 
     try {
