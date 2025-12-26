@@ -6,6 +6,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_json.dart';
+import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_factory.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_json_converter.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
@@ -84,6 +85,7 @@ abstract class QueryIMDBJsonDetailsBase
   String? replacementUrl;
 
   final String imdbOperation;
+  MovieCollection returnedResults = {};
 
   /// Describe where the data is coming from.
   @override
@@ -124,7 +126,9 @@ abstract class QueryIMDBJsonDetailsBase
     dynamic map,
   ) async {
     if (map is Map) {
-      final dtos = ImdbJsonConverter().dtoFromCompleteJsonMap(
+      // Old IMDB data just required ImdbJsonConverter().
+      final converter = ImdbJsonConverterFactory().getConverter(map);
+      final dtos = converter.dtoFromCompleteJsonMap(
         map,
         DataSourceType.imdbJson,
       );
@@ -133,6 +137,24 @@ abstract class QueryIMDBJsonDetailsBase
     throw TreeConvertException(
       'expected map got ${map.runtimeType} unable to interpret data $map',
     );
+  }
+
+  /// Deduplicate results.
+  ///
+  /// Child classes can track previously returned data and discard
+  /// (or merge) values hat are aleady processed.
+  @override
+  Iterable<MovieResultDTO> myMergeOutputType(Iterable<MovieResultDTO> output) {
+    final newOutput = <MovieResultDTO>[];
+    for (final dto in output) {
+      if (returnedResults.containsKey(dto.uniqueId)) {
+        returnedResults[dto.uniqueId]?.merge(dto);
+      } else {
+        returnedResults[dto.uniqueId] = dto;
+        newOutput.add(dto);
+      }
+    }
+    return newOutput;
   }
 
   /// Convert json to a traversable tree of [List] or [Map] data.

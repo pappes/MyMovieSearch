@@ -467,7 +467,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     type = MovieContentType.error;
     _lastError = _lastError - 1;
     uniqueId = _lastError.toString();
-    title = errorText;
+    title = errorText.characters.take(1000).toString();
     bestSource = errorSource;
     return this;
   }
@@ -619,6 +619,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// i.e. only contain string, number, bool, map or list.
   Map<String, Object> toMap({
     bool includeRelated = true,
+    int? relatedSampleQuantity,
     bool condensed = false,
     bool flattenRelated = false,
   }) {
@@ -691,29 +692,51 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
       if (includeRelated && related.isNotEmpty) {
         final relatedMap = <String, Object>{};
-        for (final category in related.entries) {
-          if (flattenRelated) {
-            // Present related values as a List.
-            final movies = <Map<String, Object>>[];
-            for (final dto in category.value.entries) {
-              final movieMap = dto.value.toMap();
-              movies.add(movieMap);
-            }
-            relatedMap[category.key] = movies;
-          } else {
-            // Present related values as a Map.
-            final movies = <String, dynamic>{};
-            for (final dto in category.value.entries) {
-              final movieMap = dto.value.toMap();
-              movies[dto.value.uniqueId] = movieMap;
-            }
-            relatedMap[category.key] = movies;
-          }
-        }
+        toMapRelated(
+          relatedMap,
+          flattenRelated: flattenRelated,
+          relatedSampleQuantity: relatedSampleQuantity,
+        );
         result[movieDTORelated] = relatedMap;
       }
     }
     return result;
+  }
+
+  void toMapRelated(
+    Map<String, Object> relatedMap, {
+    bool flattenRelated = false,
+    int? relatedSampleQuantity,
+  }) {
+    // Progressivly add related movies to the map.
+    for (final category in related.entries) {
+      var relatedCount = 0;
+      if (flattenRelated) {
+        // Present related values as a List.
+        final movies = <Map<String, Object>>[];
+        for (final dto in category.value.entries) {
+          final movieMap = dto.value.toMap();
+          movies.add(movieMap);
+          relatedCount++;
+          if (relatedSampleQuantity != null &&
+              relatedCount >= relatedSampleQuantity)
+            break;
+        }
+        relatedMap[category.key] = movies;
+      } else {
+        // Present related values as a Map.
+        final movies = <String, dynamic>{};
+        for (final dto in category.value.entries) {
+          final movieMap = dto.value.toMap();
+          movies[dto.value.uniqueId] = movieMap;
+          relatedCount++;
+          if (relatedSampleQuantity != null &&
+              relatedCount >= relatedSampleQuantity)
+            break;
+        }
+        relatedMap[category.key] = movies;
+      }
+    }
   }
 
   /// Add [relatedDto] into the related movies list of a [MovieResultDTO]

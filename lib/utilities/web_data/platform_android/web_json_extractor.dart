@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
@@ -112,7 +113,7 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
   Future<void> _clickAllFilterOptions(InAppWebViewController controller) async {
     if (_filtersCleared) {
       // Delay disposal to allow any final requests to complete.
-      return dispose(delay: const Duration(seconds: 4));
+      return dispose(delay: const Duration(seconds: 10));
     }
 
     try {
@@ -134,7 +135,7 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
       unawaited(_getExistingJson(controller));
       // Delay disposal to allow any final requests to complete.
 
-      return dispose(delay: const Duration(seconds: 10));
+      return dispose(delay: const Duration(seconds: 15));
     } catch (e) {
       logger.e('Error clicking filter options: $e for $imdbUrl');
       return dispose();
@@ -163,7 +164,10 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
     }
 
     if (result != null) {
-      logger.t('Found on initial page load: $result');
+      logger.t(
+        'Found on initial page load: '
+        '${result.toString().characters.take(1000)}',
+      );
     }
   }
 

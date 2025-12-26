@@ -1,4 +1,5 @@
 import 'dart:math' show min;
+import 'package:flutter/material.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 
 /// Extend datatype "dynamic" to provide convenience functions.
@@ -8,7 +9,7 @@ extension DynamicHelper<T> on T {
     final str = this?.toString() ?? '';
     final len = str.length;
     print(
-      'Restorable size = $len, content = ${str.substring(0, min(50, len))}',
+      'Restorable size = $len, content = ${str.characters.take(50)}',
     );
     return this;
   }

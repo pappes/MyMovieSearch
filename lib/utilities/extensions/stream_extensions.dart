@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 extension StreamHelper<T> on Stream<T> {
@@ -7,12 +8,12 @@ extension StreamHelper<T> on Stream<T> {
   /// and prints them out then puts them on a new stream.
   ///
   /// For debugging purposes only.
-  Stream<T> printStream([String prefix = '', int limit = 4000]) async* {
+  Stream<T> printStream([String prefix = '', int limit = 1000]) async* {
     try {
       await for (final value in this) {
         final text = value.toString();
         if (text.length > limit) {
-          logger.i('$prefix ${text.substring(0, limit ~/ 4)}...');
+          logger.i('$prefix ${text.characters.take(limit)}  ...');
         } else {
           logger.i('$prefix $value');
         }

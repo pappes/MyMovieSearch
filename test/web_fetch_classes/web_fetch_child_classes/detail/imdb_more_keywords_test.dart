@@ -3,9 +3,9 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/imdb_more_keywords.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_more_keywords.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_more_keywords.dart';
+import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_more_keywords.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 

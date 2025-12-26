@@ -6,7 +6,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_na
     as person_data;
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart'
     as title_data;
-import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_search_converter.dart';
+import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_factory.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_search.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
@@ -142,7 +142,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          ImdbSearchConverter()
+          ImdbJsonConverterFactory()
               .dtoFromCompleteJsonMap(map, DataSourceType.imdbSearch),
         );
       }

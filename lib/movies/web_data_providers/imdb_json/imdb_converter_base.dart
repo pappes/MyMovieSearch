@@ -32,13 +32,13 @@ abstract class ImdbConverterBase extends ConverterHelper {
     DataSourceType source,
   ) {
     this.source = source;
-    final List<MovieResultDTO> result = [];
+    final MovieCollection result = {};
     getMovieList(result, map);
-    return result;
+    return result.values;
   }
 
   /// Get full content of movies and people with related information.
-  void getMovieList(List<MovieResultDTO> result, Map<dynamic, dynamic> data) {
+  void getMovieList(MovieCollection result, Map<dynamic, dynamic> data) {
     final movies = getMovieDataList(data);
     for (final movie in movies) {
       final dto = MovieResultDTO().init();
@@ -47,7 +47,11 @@ abstract class ImdbConverterBase extends ConverterHelper {
       getRelatedPeople(dto.related, childData);
 
       dto.setSource(newSource: source);
-      result.add(dto);
+      if (result.containsKey(dto.uniqueId)) {
+        result[dto.uniqueId]?.merge(dto);
+      } else {
+        result[dto.uniqueId] = dto;
+      }
     }
   }
 
@@ -539,38 +543,67 @@ mixin ReleatedPeopleForPredefinedCategory on ImdbConverterBase {
 //         ]
 //       }
 // }
+// Sample ReleatedMoviesForDynamicCategory Json from imdb_json
+//     (subsequent json, not inital json)
+// { 'creditsV2'->edges->node->
+//       'creditedRoles': {
+//         'edges': [
+//           { 'node':
+//             {'category:...,'charactors:...,'title':...}
+//           }
+//         ]
+//       },...
+//       'title': {
+//         'id':...,'titleText':...,
+//       }
+// }
 mixin RelatedMoviesForDynamicCategory on ImdbConverterBase {
   /// Search within a movie credits node for movie information for the person.
   @override
   void getRelatedMovies(RelatedMovieCategories related, dynamic data) {
-    if (data is List) {
-      for (final credits in data) {
-        if (credits is Map &&
-            credits.containsKey(deepRelatedMovieHeader) &&
-            (credits.containsKey(deepRelatedCategoryHeaderV2) ||
-                credits.containsKey(deepRelatedMovieParentCharacterHeader))) {
-          // We have a map with the movie info, the persons roles in the movie
-          // and possibly character names.
-          final movie = getRelatedMovieCharacter(
-            credits[deepRelatedMovieHeader],
-            credits,
+    // ...[{'creditedRoles':...,'title':...}}]...}
+    forEachMap(data, (map) => getMovieWithCategory(related, map));
+
+    // ...{'creditsV2':...{'node':{'creditedRoles':...,'title':...}}...}
+    //
+    final creditsV2 = TreeHelper(
+      data,
+    ).deepSearch(deepPersonRelatedChunk, multipleMatch: true);
+    if (creditsV2 is List && creditsV2.isNotEmpty) {
+      final nodes =
+          creditsV2.deepSearch(
+            deepRelatedMovieContainer,
+            multipleMatch: true,
+          ) ??
+          [];
+      forEachMap(nodes, (map) => getMovieWithCategory(related, map));
+    }
+  }
+
+  void getMovieWithCategory(
+    RelatedMovieCategories related,
+    Map<dynamic, dynamic> map,
+  ) {
+    if (map.containsKey(deepRelatedMovieHeader) &&
+        (map.containsKey(deepRelatedCategoryHeaderV2) ||
+            map.containsKey(deepRelatedMovieParentCharacterHeader))) {
+      // We have a map with the movie info, the persons roles in the movie
+      // and possibly character names.
+      final movie = getRelatedMovieCharacter(map[deepRelatedMovieHeader], map);
+      if (movie != null) {
+        // Combine the movie info with the roles.
+        final MovieCollection indexedMovie = {movie.uniqueId: movie};
+        // Search for role types from {...creditedRoles...}
+        // or current top level credits node.
+        final roles = ImdbConverterBase.getRolesFromCreditsV2(
+          map[deepRelatedCategoryHeaderV2] ?? map,
+        );
+        for (final role in roles) {
+          ConverterHelper().combineMovies(
+            related,
+            role.addColonIfNeeded(),
+            indexedMovie,
           );
-          if (movie != null) {
-            // Combine the movie info with the roles.
-            final MovieCollection indexedMovie = {movie.uniqueId: movie};
-            // Search for role types from {...creditedRoles...}
-            // or current top level credits node.
-            final roles = ImdbConverterBase.getRolesFromCreditsV2(
-              credits[deepRelatedCategoryHeaderV2] ?? credits,
-            );
-            for (final role in roles) {
-              ConverterHelper().combineMovies(
-                related,
-                role.addColonIfNeeded(),
-                indexedMovie,
-              );
-            }
-          }
         }
       }
     }

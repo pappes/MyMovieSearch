@@ -53,6 +53,7 @@ class ImdbNameConverter extends ImdbConverterBase
     movie
       ..bestSource = DataSourceType.imdbSuggestions
       ..title = name ?? movie.title
+      ..type = MovieContentType.person
       ..description = description ?? movie.description
       ..imageUrl = url ?? movie.imageUrl
       ..year = IntHelper.fromText(startDate) ?? movie.year

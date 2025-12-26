@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -21,10 +22,7 @@ void sortDtoList(List<MovieResultDTO> dtos, {bool includeRelated = true}) {
       entry.related = SplayTreeMap.from(entry.related);
       for (final category in entry.related.keys) {
         // sort related DTOs by converting map to a SplayTreeMap
-        entry.related[category] = SplayTreeMap.from(
-          entry.related[category]!,
-          //DTOCompare.compare,
-        );
+        entry.related[category] = SplayTreeMap.from(entry.related[category]!);
       }
     }
   }
@@ -42,6 +40,37 @@ void printTestData(
     'debug code has been left uncommented!',
     'all call to printTestData must be commented out',
   );
+}
+
+Iterable<MovieResultDTO> sampleTestData(
+  Iterable<MovieResultDTO> actualResult, {
+  bool includeRelated = true,
+  int? relatedSampleQuantity,
+}) {
+  final sorted = actualResult.toList();
+  final results = <MovieResultDTO>[];
+  sortDtoList(sorted, includeRelated: includeRelated);
+  for (final dto in actualResult) {
+    final map = dto.toMap(
+      includeRelated: includeRelated,
+      relatedSampleQuantity: relatedSampleQuantity,
+    );
+    results.add(map.toMovieResultDTO());
+  }
+  return results;
+}
+
+void writeTestData(
+  String location,
+  Iterable<MovieResultDTO> actualResult, {
+  bool includeRelated = true,
+}) {
+  final sorted = actualResult.toList();
+  sortDtoList(sorted, includeRelated: includeRelated);
+  final jsonData = json.encode(sorted);
+  // ignore: avoid_print
+  File(location).writeAsStringSync(jsonData);
+  expect('debug code has been left uncommented!', 'Test data has been updated');
 }
 
 Matcher containsSubstring(String substring, {String startsWith = ''}) {

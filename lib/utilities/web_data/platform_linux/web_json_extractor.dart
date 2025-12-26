@@ -5,7 +5,9 @@ class WebJsonExtractorLinux extends WebJsonExtractor {
     super.imdbUrl,
     super.jsonCallback,
     super.imdbApi,
-  ) : super.internal();
+  ) : super.internal() {
+    print('unsupported platform Linux');
+  }
 
   @override
   Future<void> waitForCompletion() async {

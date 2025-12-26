@@ -5,6 +5,7 @@ library;
 import 'dart:async' show StreamController, unawaited;
 import 'dart:convert' show jsonDecode, utf8;
 
+import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
@@ -573,7 +574,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
           .then(filterList)
           .onError<TreeConvertException>(captureConvertError)
           .onError(captureGenericError);
-      for (final object in processedObjects) {
+      final newOutput = myMergeOutputType(processedObjects);
+      for (final object in newOutput) {
         yield object;
       }
     }
@@ -582,6 +584,13 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       yield* Stream<OUTPUT_TYPE>.fromIterable(errors);
     }
   }
+
+  /// Deduplicate results.
+  ///
+  /// Child classes can track previously returned data and discard
+  /// (or merge) values hat are aleady processed.
+  Iterable<OUTPUT_TYPE> myMergeOutputType(Iterable<OUTPUT_TYPE> output) =>
+      output;
 
   /// Create a stream with data matching [criteria].
   ///
@@ -655,7 +664,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   @visibleForTesting
   String baseConstructErrorMessage(String context, dynamic error) {
     final boilerplate = 'Error in $_getFetchContext';
-    final errorText = error.toString();
+    final errorText = error.toString().characters.take(1000).toString();
     if (errorText.startsWith(boilerplate)) return errorText;
     return '$boilerplate $context :$errorText';
   }
@@ -664,9 +673,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Should not be be overridden by child classes.
   @visibleForTesting
-  HttpClient baseGetHttpClient() => HttpClient()
-    // Allow HttpClient to handle compressed data from web servers.
-    ..autoUncompress = true;
+  HttpClient baseGetHttpClient() =>
+      HttpClient()
+        // Allow HttpClient to handle compressed data from web servers.
+        ..autoUncompress = true;
 }
 
 /// Exception used in [WebFetchBase.myConvertCriteriaToWebText].

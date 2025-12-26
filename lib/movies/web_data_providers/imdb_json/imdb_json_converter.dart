@@ -2,7 +2,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_base.dart';
-import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_search_converter.dart';
+import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_factory.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
@@ -177,7 +177,7 @@ class ImdbJsonConverter extends ImdbConverterBase
 
   void _getRelated(MovieResultDTO movie, dynamic related, String label) {
     void convertRelatedMapToDto(Map<dynamic, dynamic> related) {
-      final converter = ImdbSearchConverter().getConverter(related);
+      final converter = ImdbJsonConverterFactory().getConverter(related);
       for (final dto in converter.dtoFromCompleteJsonMap(related, source)) {
         movie.addRelated(label, dto);
       }
