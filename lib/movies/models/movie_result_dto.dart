@@ -719,8 +719,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
           movies.add(movieMap);
           relatedCount++;
           if (relatedSampleQuantity != null &&
-              relatedCount >= relatedSampleQuantity)
+              relatedCount >= relatedSampleQuantity) {
             break;
+          }
         }
         relatedMap[category.key] = movies;
       } else {
@@ -731,8 +732,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
           movies[dto.value.uniqueId] = movieMap;
           relatedCount++;
           if (relatedSampleQuantity != null &&
-              relatedCount >= relatedSampleQuantity)
+              relatedCount >= relatedSampleQuantity) {
             break;
+          }
         }
         relatedMap[category.key] = movies;
       }

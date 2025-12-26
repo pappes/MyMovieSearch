@@ -1,4 +1,3 @@
-import 'dart:math' show min;
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 
