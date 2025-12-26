@@ -18,9 +18,11 @@ class ImdbCastConverter extends ImdbConverterBase {
   }
 
   /// No related movies for a movie.
+  @override
   void getRelatedMovies(RelatedMovieCategories related, dynamic data) {}
 
   /// TODO extract people conversion logic out of _deepConvertMetadata.
+  @override
   void getRelatedPeople(RelatedMovieCategories related, dynamic data) {}
 
   // Parse [Map] to pull IMDB data out for a singl movie.
