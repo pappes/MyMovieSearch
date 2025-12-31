@@ -104,7 +104,7 @@ class QueryMsSearchMovies
   @override
   Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
     dynamic tree,
-  ) async {
+  ) {
     if (tree is List<dynamic>) {
       return MsSearchMovieSearchConverter.dtoFromCompleteJsonMap(tree).toList();
     }

@@ -30,7 +30,8 @@ Future<void> main() async {
     ChangeNotifierProvider<FirebaseApplicationState>(
       create: (_) => FirebaseApplicationState(),
       builder:
-          (_, __) => MMSearchApp(movieBlocRepository: MovieSearchRepository()),
+          (_, _) =>
+          MMSearchApp(movieBlocRepository: MovieSearchRepository()),
     ),
   );
 }

@@ -115,7 +115,7 @@ testing and punctuation
     });
 
     // Confirm error is constructed as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
       final testClass = QueryIMDBMoviesForKeyword(criteria)
         ..criteria = criteria;
@@ -124,7 +124,7 @@ testing and punctuation
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       const expectedOutput = intermediateEmptyMapList;
       final actualOutput =
           QueryIMDBMoviesForKeyword(criteria).myConvertWebTextToTraversableTree(
@@ -133,7 +133,7 @@ testing and punctuation
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () async {
+        () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
@@ -232,7 +232,7 @@ testing and punctuation
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () async {
+    test('myConvertTreeToOutputType() errors', () {
       final expectedOutput = throwsA(
         isA<TreeConvertException>().having(
           (e) => e.cause,
@@ -273,6 +273,7 @@ testing and punctuation
           .readList(source: streamImdbKeywordsHtmlOfflineData)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors encountered during processing.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );

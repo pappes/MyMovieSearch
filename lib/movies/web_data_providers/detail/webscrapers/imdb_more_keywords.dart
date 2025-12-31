@@ -6,7 +6,6 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements a web scraper for retrieving person details from IMDB.
-// ignore: missing_override_of_must_be_overridden
 mixin ScrapeIMDBMoreKeywordsDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Convert web text to a traversable tree of [List] or [Map] data.

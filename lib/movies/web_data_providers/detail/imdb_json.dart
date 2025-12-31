@@ -178,6 +178,7 @@ abstract class QueryIMDBJsonDetailsBase
         }
         // For data, return the results node.
         final results =
+            // Invalid data will be caught by the catch block below.
             // ignore: avoid_dynamic_calls
             tree[outerElementDetailResults]![outerElementOfficialTitle];
         if (results != null && results is Map) {

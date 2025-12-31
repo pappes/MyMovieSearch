@@ -194,7 +194,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       Text('Popularity: ${_restorablePerson.value.userRatingCount}'),
       ElevatedButton(
         onPressed:
-            () async => MMSNav(
+            () => MMSNav(
               context,
             ).viewWebPage(makeImdbUrl(_restorablePerson.value.uniqueId)),
         child: const Text('IMDB'),
@@ -228,7 +228,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         context,
         url: _restorablePerson.value.imageUrl,
         showImages:
-            () async => MMSNav(context).viewWebPage(
+            () => MMSNav(context).viewWebPage(
               makeImdbUrl(_restorablePerson.value.uniqueId, photos: true),
             ),
       ),
@@ -249,7 +249,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
           Center(
             child: InkWell(
               onTap:
-                  () async => MMSNav(context).searchForRelated(
+                  () => MMSNav(context).searchForRelated(
                     // Open search details when tapped.
                     '$rolesLabel: ${_restorablePerson.value.title}',
                     rolesMap.values.toList(),

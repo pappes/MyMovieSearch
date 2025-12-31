@@ -55,7 +55,7 @@ void main() {
     });
 
     // Confirm map can be converted to DTO.
-    test('Run myConvertTreeToOutputType()', () async {
+    test('Run myConvertTreeToOutputType()', () {
       final expectedValue = expectedDTOList;
       final imdbSuggestions = QueryIMDBSuggestions(criteria);
 
@@ -145,7 +145,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           QueryIMDBSuggestions(criteria).myConvertWebTextToTraversableTree(
@@ -153,7 +153,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = intermediateEmptyMapList;
       final actualOutput =
           QueryIMDBSuggestions(criteria).myConvertWebTextToTraversableTree(
@@ -162,7 +162,7 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () async {
+        () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
@@ -198,6 +198,7 @@ void main() {
           .readList(source: emitImdbSuggestionJsonSample)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors that occur.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
@@ -225,6 +226,7 @@ void main() {
           .readList(source: emitEmptyImdbSuggestionJsonSample)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors that occur.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );

@@ -8,7 +8,7 @@ class FirebaseApplicationStateStub extends FirebaseApplicationState {
   }
 
   @override
-  Future<bool> platformLogin() async {
+  Future<bool> platformLogin() {
     throw MMSFirebaseException('platform not supported');
   }
 
@@ -16,7 +16,7 @@ class FirebaseApplicationStateStub extends FirebaseApplicationState {
   Future<String?> fetchRecord(
     String collectionPath, {
     required String id,
-  }) async {
+  }) {
     throw MMSFirebaseException('platform not supported');
   }
 
@@ -45,7 +45,7 @@ class FirebaseApplicationStateStub extends FirebaseApplicationState {
     String collectionPath, {
     String? message,
     String? id,
-  }) async {
+  }) {
     throw MMSFirebaseException('platform not supported');
   }
 }

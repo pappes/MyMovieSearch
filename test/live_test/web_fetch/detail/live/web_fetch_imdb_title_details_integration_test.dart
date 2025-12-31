@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
+import 'package:quiver/iterables.dart';
 
 import '../../../../test_helper.dart';
 
@@ -27,7 +28,7 @@ r'''
 /// Create a string list with [qty] unique criteria values.
 List<String> _makeQueries(int qty) {
   final results = <String>[];
-  for (int i = 0; i < qty; i++) {
+  for (final i in range(0, qty + 1)) {
     results.add('tt010${1000 + i}');
   }
   return results;
@@ -38,7 +39,6 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
   final List<Future<List<MovieResultDTO>>> futures = [];
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
-    // ignore: discarded_futures
     final future = QueryIMDBTitleDetails(criteria).readList();
     futures.add(future);
   }

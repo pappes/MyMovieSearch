@@ -100,7 +100,7 @@ void main() {
       // Check the results.
       expect(actualResult, expectedResult);
     });
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
       final actualOutput =
           QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
@@ -108,7 +108,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       const expectedOutput = <void>[];
       final actualOutput =
           QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
@@ -117,7 +117,7 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () async {
+        () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
@@ -189,7 +189,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () async {
+    test('myConvertTreeToOutputType() errors', () {
       final expectedOutput = throwsA(
         isA<TreeConvertException>().having(
           (e) => e.cause,
@@ -230,6 +230,7 @@ void main() {
           .readList(source: streamImdbSearchHtmlOfflineData)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors encountered during processing.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
@@ -257,6 +258,7 @@ void main() {
           .readList(source: emitEmptyImdbSearchSample)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors encountered during processing.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
@@ -357,7 +359,7 @@ void main() {
 
   group('imdb search redirect', () {
     test('Run QueryIMDBTitleDetails myConvertWebTextToTraversableTree()',
-        () async {
+        () {
       const expectedOutput = title_data.intermediateMapList;
 
       final imdbSearch = QueryIMDBSearch(criteria);
@@ -385,6 +387,7 @@ void main() {
           .readList(source: title_data.streamImdbHtmlOfflineData)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors encountered during processing.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
@@ -400,7 +403,7 @@ void main() {
     });
 
     test('Run QueryIMDBNameDetails myConvertWebTextToTraversableTree()',
-        () async {
+        () {
       const expectedOutput = person_data.intermediateMapList;
 
       final imdbSearch = QueryIMDBSearch(criteria);
@@ -427,6 +430,7 @@ void main() {
           .readList(source: person_data.streamImdbHtmlOfflineData)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors encountered during processing.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );

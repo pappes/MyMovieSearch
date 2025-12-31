@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:html/dom.dart' show Document;
 import 'package:html/parser.dart' show parse;
 
@@ -20,7 +21,6 @@ const sizeSelector = '.quality-size';
 const descriptionSelector = '#movie-tech-specs .tech-spec-info';
 
 /// Implements a web scraper for retrieving download details from yts.
-// ignore: missing_override_of_must_be_overridden
 mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Convert web text to a traversable tree of [List] or [Map] data.
   @override
@@ -36,6 +36,7 @@ mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Allow response parsing for http 404
   @override
+  @visibleForTesting
   Stream<String>? myHttpError(
     Uri address,
     int statusCode,
@@ -43,6 +44,7 @@ mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   ) =>
       (404 == statusCode)
           ? null
+      // Cascade tp parent implementation.
           // ignore: invalid_use_of_visible_for_testing_member
           : super.myHttpError(
               address,

@@ -322,7 +322,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
   /// Find the roles a person has in a movie.
   static List<String> getRolesFromCreditsV2(dynamic creditedRoles) {
     const defaultLabel = 'Unknown';
-    final Set<String> categories = {defaultLabel};
+    final categories = {defaultLabel};
 
     // ...{'category':...{id:<value>, text:<value>...}}
     final categoryHeader = TreeHelper(
@@ -485,7 +485,7 @@ mixin ReleatedPeopleForPredefinedCategory on ImdbConverterBase {
   /// used from ImdbTitleConverter
   static MovieCollection getPeopleForCategory(dynamic nodes) {
     final MovieCollection result = {};
-    int creditsOrder = 100;
+    var creditsOrder = 100;
 
     void addToCollection(Map<dynamic, dynamic> node) {
       ImdbConverterBase.getRelatedPersonWithCreditsOrder(
@@ -632,12 +632,12 @@ class ConverterHelper {
     }
   }
 
-  /// Perform [action] on each Map contained in [input].
+  /// Perform [action] on each Map contained in [collection].
   ///
   /// A fallback option is available
   /// to still call [action] if the data passed in
-  /// is not iterable. If fallback is true and [input] is not iterable,
-  /// calls [action] directly on the entire [input].
+  /// is not iterable. If fallback is true and [collection] is not iterable,
+  /// calls [action] directly on the entire [collection].
   ///
   ///
   void forEachMap(

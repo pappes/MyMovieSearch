@@ -1,16 +1,17 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 
 void main() async {
   // Wait for api key to be initialised
-  //setUpAll(() async => Settings());
+  setUpAll(() async => Settings().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// integration tests
 ////////////////////////////////////////////////////////////////////////////////
 
   group('firebase', () {
     // Confirm anonymous login is successful.
-    test('Run login', () async {
+    test('Run login', () {
       final fb = FirebaseApplicationState();
       final result = fb.login();
 

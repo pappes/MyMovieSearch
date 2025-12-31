@@ -1,5 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
+import 'package:quiver/iterables.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Unit tests
@@ -83,7 +84,7 @@ Future<void> main() async {
         const address2 = StackerAddress(libNum: '007', location: '150');
         MovieLocation().clear();
 
-        for (int i = 2; i <= 149; i++) {
+      for (final i in range(2, 150)) {
           MovieLocation().storeMovieAtLocation(
             contents,
             StackerAddress(

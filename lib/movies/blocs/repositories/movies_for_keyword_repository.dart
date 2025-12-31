@@ -10,7 +10,7 @@ class MoviesForKeywordRepository extends MovieListRepository {
   ///
   /// [searchUID] is a unique correlation ID identifying this search request
   @override
-  Future<void> initSearch(int searchUID, SearchCriteriaDTO criteria) async {
+  Future<void> initSearch(int searchUID, SearchCriteriaDTO criteria) {
     initProvider(criteria);
     return QueryIMDBMoviesForKeyword(criteria)
         .readList(limit: 10)

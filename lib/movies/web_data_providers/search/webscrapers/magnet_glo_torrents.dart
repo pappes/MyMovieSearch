@@ -16,7 +16,6 @@ const magnetSelector = "[href^='magnet:']";
 /// ```dart
 /// ScrapeGloTorrentsSearch().readList(criteria, limit: 10)
 /// ```
-// ignore: missing_override_of_must_be_overridden
 mixin ScrapeGloTorrentsSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   final movieData = <Map<String, dynamic>>[];

@@ -5,7 +5,7 @@ Future<Object?> showPopup(
   String dialogText,
   String title, {
   List<Widget>? buttons,
-}) async {
+}) {
   final actions = buttons ??
       <Widget>[
         TextButton(

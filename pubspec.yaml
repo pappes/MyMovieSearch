@@ -18,7 +18,7 @@ publish_to: nnone # Remove this line if you wish to publish to pub.dev
 version: 1.0.5
 
 environment:
-  sdk: '>=3.10.0'
+  sdk: '>=3.10.4'
 
 dependencies:
   
@@ -62,6 +62,7 @@ dependencies:
   googleapis: ^13.2.0                   # interact with GCP resources  
   googleapis_auth: ^1.6.0               # log in to google API with service accounts
   # grpc: ^3.2.4                          # extended firedart error handling
+  grpc: ^3.2.4                          # required to check firebase return code
   html: ^0.15.5                         # Dart dom and html utilities.
   html_unescape: ^2.0.0                 # decode &apos;
   # hydrated_bloc: ^9.1.2                # automatic restoration for bloc data
@@ -75,10 +76,12 @@ dependencies:
   path: ^1.9.0                          # File path manipulation library
   path_provider: ^2.1.5                 # Device filesystem access for accessing database files.
 
+  path_provider_linux: ^2.2.1           # Device filesystem access for accessing filesytstem during testing. 
   provider: ^6.0.5                      # so ChangeNotifierProvider can notify change to firebase login state
 
   #simple_barcode_scanner: ^0.1.1       # DOES NOT COMPILE with flutter 3.24
   #sqflite: ^2.0.2                       # Database storage for persisting state across sessions.
+  quiver: ^3.2.2                        # mega library incluing ranges, caches, collections, etc.
   sqflite_common_ffi: ^2.3.2+1          # Database storage for persisting state across sessions.
   sqlite3_flutter_libs: ^0.5.24         # Database storage for persisting state across sessions.
   universal_io: ^2.0.4                  # Consistent environment variable fetching and CORS http gets across web&mobile platforms.

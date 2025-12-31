@@ -2,7 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/database_helpers.dart';
 
-void main() async {
+void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
 // if running on a fresh linux machine requires sqllite to be installed
@@ -18,7 +18,7 @@ void main() async {
       final dbInstance = await db.database;
       expect(dbInstance, isNotNull);
     });
-    test('add', () async {
+    test('add', () {
       final model = MovieModel(uniqueId: 'tt123', dtoJson: 'myjson');
       final result = db.insert(model);
 

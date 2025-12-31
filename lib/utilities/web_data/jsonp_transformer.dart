@@ -108,7 +108,7 @@ class JsonPDecoder extends Converter<String, String> {
       final firstRound = input.indexOf('(');
       final firstCurly = input.indexOf('{');
       final firstSquare = input.indexOf('[');
-      String output = '';
+      var output = '';
 
       if (_state.buffer.isNotEmpty) {
         if (firstRound > -1 ||

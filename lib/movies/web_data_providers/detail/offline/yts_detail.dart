@@ -1,3 +1,5 @@
+// Raw data in code is generated from an external source.
+// ignore_for_file: unnecessary_ignore
 // ignore_for_file: unnecessary_raw_strings
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -44,6 +46,7 @@ const intermediateMapList = [
         'https://img.yts.mx/assets/images/movies/2001_A_Space_Odyssey_1968/medium-cover.jpg',
     'size': '853.57 MB',
     'magnet':
+        // Generated code.
         // ignore: lines_longer_than_80_chars
         'magnet:?xt=urn:btih:E3529DBC0CE47429A8A9B411AB381C893BFEF575&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B720p%5D+%5BYTS.MX%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2970%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=https%3A%2F%2Fopentracker.i2p.rocks%3A443%2Fannounce',
     'description': '853.57 MB 1280*720 English 2.0 NR',
@@ -57,6 +60,7 @@ const intermediateMapList = [
         'https://img.yts.mx/assets/images/movies/2001_A_Space_Odyssey_1968/medium-cover.jpg',
     'size': '2.38 GB',
     'magnet':
+        // Generated code.
         // ignore: lines_longer_than_80_chars
         'magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B1080p%5D+%5BYTS.MX%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2970%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=https%3A%2F%2Fopentracker.i2p.rocks%3A443%2Fannounce',
     'description': '2.38 GB 1920*864 English 2.0 NR',
@@ -70,6 +74,7 @@ const intermediateMapList = [
         'https://img.yts.mx/assets/images/movies/2001_A_Space_Odyssey_1968/medium-cover.jpg',
     'size': '7.02 GB',
     'magnet':
+        // Generated code.
         // ignore: lines_longer_than_80_chars
         'magnet:?xt=urn:btih:35EB8826EA87E7D655949F8A715CD36FEB0730F3&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B2160p%5D+%5BYTS.MX%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2F9.rarbg.me%3A2970%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=https%3A%2F%2Fopentracker.i2p.rocks%3A443%2Fannounce',
     'description': '7.02 GB 3840*1746 English 5.1 NR',

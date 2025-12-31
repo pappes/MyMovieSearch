@@ -53,8 +53,7 @@ class SearchCriteriaDTO {
   /// Convert a [MovieResultDTO] to a json [String].
   ///
   String toJson({bool includeRelated = true}) =>
-  // ignore: unnecessary_this
-  jsonEncode(this.toMap());
+      jsonEncode(toMap());
 }
 
 // member variable names
@@ -128,6 +127,7 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
 
   @override
   @factory
+  // Linter does not undersand that fromPrimitives is a factory method.
   // ignore: invalid_factory_method_impl
   SearchCriteriaDTO fromPrimitives(Object? data) => dtoFromPrimitives(data);
   @factory
@@ -257,6 +257,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   }
 
   @factory
+  // Linter does not undersand that fromJson is a factory method.
   // ignore: invalid_factory_method_impl
   SearchCriteriaDTO clone({bool condensed = false, bool inflate = false}) =>
       toMap(condensed: condensed).toSearchCriteriaDTO(inflate: inflate);
@@ -266,6 +267,7 @@ extension MapCriteriaDTOConversion on Map<dynamic, dynamic> {
   /// Convert a [Map] into a [SearchCriteriaDTO] object.
   ///
   @factory
+  // Linter does not undersand that toSearchCriteriaDTO is a factory method.
   // ignore: invalid_factory_method_impl
   SearchCriteriaDTO toSearchCriteriaDTO({bool inflate = false}) {
     final dto =

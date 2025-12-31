@@ -84,9 +84,9 @@ extension ListHelper<T> on List<T> {
   ///
   String trimJoin([String separator = '', String whitespace = ' ']) {
     final joined = join(separator);
-    int start = 0;
-    int end = 0;
-    int current = 0;
+    var start = 0;
+    var end = 0;
+    var current = 0;
     final trimable = whitespace.characters;
     if (joined.isEmpty) return joined;
     for (final char in joined.characters) {

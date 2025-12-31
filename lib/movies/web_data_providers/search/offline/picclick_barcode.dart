@@ -1,3 +1,5 @@
+// Raw data in code is generated from an external source.
+// ignore_for_file: unnecessary_ignore
 // ignore_for_file: unnecessary_raw_strings
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';

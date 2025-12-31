@@ -116,12 +116,15 @@ class ThreadRunner {
 
     // Execute requests as they are received.
     await for (final request in inboundPort) {
+      // Decode from IPC.
       // ignore: avoid_dynamic_calls
       final incomingMessage = request[0] as Map;
+      // Decode from IPC.
       // ignore: avoid_dynamic_calls
       final msgOutboundPort = request[1] as SendPort;
       final fn = incomingMessage['fn'] as Function;
       final parameter = incomingMessage['param'];
+      // Decode from IPC.
       // ignore: avoid_dynamic_calls
       final result = await fn(parameter);
       msgOutboundPort.send(result);

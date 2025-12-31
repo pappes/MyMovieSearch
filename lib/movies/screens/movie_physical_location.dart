@@ -31,12 +31,12 @@ class MoviePhysicalLocationPage extends StatefulWidget {
 
   /// Instruct goroute how to navigate to this page.
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
-        restorationId: RestorableMovie.getRestorationId(state),
-        child: MoviePhysicalLocationPage(
-          movieDto: RestorableMovie.getDto(state),
-          restorationId: RestorableMovie.getRestorationId(state),
-        ),
-      );
+    restorationId: RestorableMovie.getRestorationId(state),
+    child: MoviePhysicalLocationPage(
+      movieDto: RestorableMovie.getDto(state),
+      restorationId: RestorableMovie.getRestorationId(state),
+    ),
+  );
 }
 
 class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
@@ -120,145 +120,116 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
     _restorableMovie.value = widget.movieDto;
     return SelectionArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(_restorableMovie.value.title),
-        ),
+        appBar: AppBar(title: Text(_restorableMovie.value.title)),
         endDrawer: getDrawer(context),
-        body: Padding(
-          padding: const EdgeInsets.all(8),
-          child: _bodySection(),
-        ),
+        body: Padding(padding: const EdgeInsets.all(8), child: _bodySection()),
       ),
     );
   }
 
   Widget _bodySection() => Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _stackerSectionLayout(),
-                _locationSectionLayout(),
-              ],
-            ),
-          ),
-          _existingContentsSectionLayout(),
-        ],
-      );
-  Widget _stackerSectionLayout() => SizedBox(
-        width: 100,
-        child: _stackerSectionContents(),
-      );
-  Widget _locationSectionLayout() => Expanded(
-        child: _locationSectionContents(),
-      );
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      Expanded(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [_stackerSectionLayout(), _locationSectionLayout()],
+        ),
+      ),
+      _existingContentsSectionLayout(),
+    ],
+  );
+  Widget _stackerSectionLayout() =>
+      SizedBox(width: 100, child: _stackerSectionContents());
+  Widget _locationSectionLayout() =>
+      Expanded(child: _locationSectionContents());
   Widget _existingContentsSectionLayout() => Align(
-        alignment: Alignment.bottomCenter,
-        child: _existingContentsSectionContents(),
-      );
+    alignment: Alignment.bottomCenter,
+    child: _existingContentsSectionContents(),
+  );
   Widget _stackerSectionContents() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          BoldLabel('Stacker'),
-          _availableStackersLayout(),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: _stackerInputField(),
-          ),
-        ],
-      );
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      BoldLabel('Stacker'),
+      _availableStackersLayout(),
+      Align(alignment: Alignment.bottomLeft, child: _stackerInputField()),
+    ],
+  );
   Widget _locationSectionContents() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      BoldLabel('Location'),
+      LeftAligendColumn(
         children: [
-          BoldLabel('Location'),
-          LeftAligendColumn(
-            children: [
-              const Text('empty locations:'),
-              _emptyLocationsLayout(),
-              const Text('used locations:'),
-              _usedLocationsLayout(),
-            ],
-          ),
-          Align(
-            alignment: Alignment.bottomLeft,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const VerticalDivider(),
-                Flexible(
-                  flex: 2, // 2/5ths is required to see location on Tash's phone
-                  child: Column(
-                    children: [
-                      _locationInputField(),
-                    ],
-                  ),
-                ),
-                const VerticalDivider(),
-                Flexible(
-                  flex: 3,
-                  child: Column(
-                    children: [
-                      _titleInputField(),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
+          const Text('empty locations:'),
+          _emptyLocationsLayout(),
+          const Text('used locations:'),
+          _usedLocationsLayout(),
         ],
-      );
+      ),
+      Align(
+        alignment: Alignment.bottomLeft,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const VerticalDivider(),
+            Flexible(
+              flex: 2, // 2/5ths is required to see location on Tash's phone
+              child: Column(children: [_locationInputField()]),
+            ),
+            const VerticalDivider(),
+            Flexible(flex: 3, child: Column(children: [_titleInputField()])),
+          ],
+        ),
+      ),
+    ],
+  );
 
-  Widget _availableStackersLayout() => _scrollableColumn(
-        _createStackerWidgets(_getStackerLabels()),
-      );
-  Widget _usedLocationsLayout() => _scrollableColumn(
-        flex: 4,
-        _usedLocationsContent(),
-      );
+  Widget _availableStackersLayout() =>
+      _scrollableColumn(_createStackerWidgets(_getStackerLabels()));
+  Widget _usedLocationsLayout() =>
+      _scrollableColumn(flex: 4, _usedLocationsContent());
   Widget _emptyLocationsLayout() => _scrollableColumn(
-        flex: 1, // Only need 1/5th the screen for available slots
-        _emptyLocationsContent(),
-        primary: true,
-      );
+    flex: 1, // Only need 1/5th the screen for available slots
+    _emptyLocationsContent(),
+    primary: true,
+  );
 
   Widget _scrollableColumn(
     Iterable<Widget> contents, {
     bool primary = false,
     int flex = 1,
-  }) =>
-      Expanded(
-        flex: flex,
-        child: Row(
+  }) => Expanded(
+    flex: flex,
+    child: Row(
+      children: [
+        const VerticalDivider(),
+        LeftAligendColumn(
           children: [
-            const VerticalDivider(),
-            LeftAligendColumn(
-              children: [
-                Expanded(
-                  child: Scrollbar(
-                    thumbVisibility: true,
-                    child: ListView(
-                      primary: primary, // There can be only one.
-                      children: contents.toList(),
-                    ),
-                  ),
+            Expanded(
+              child: Scrollbar(
+                thumbVisibility: true,
+                child: ListView(
+                  primary: primary, // There can be only one.
+                  children: contents.toList(),
                 ),
-              ],
+              ),
             ),
           ],
         ),
-      );
+      ],
+    ),
+  );
 
   Iterable<Widget> _emptyLocationsContent() => _createLocationsWidgets(
-        MovieLocation().emptyLocations(_stackerController.value.text),
-      );
+    MovieLocation().emptyLocations(_stackerController.value.text),
+  );
 
   Iterable<Widget> _usedLocationsContent() => _createLocationsWidgets(
-        MovieLocation().usedLocations(_stackerController.value.text).entries,
-      );
+    MovieLocation().usedLocations(_stackerController.value.text).entries,
+  );
 
   Iterable<Widget> _createLocationsWidgets(Iterable<dynamic> locations) sync* {
     for (final location in locations) {
@@ -269,9 +240,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
   List<Widget> _createStackerWidgets(Iterable<String> indexes) {
     final widgets = <Widget>[];
     for (final index in indexes) {
-      widgets.add(
-        selectableText(index, _stackerController.value),
-      );
+      widgets.add(selectableText(index, _stackerController.value));
     }
     return widgets;
   }
@@ -296,66 +265,63 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
   }
 
   Widget _existingContentsSectionContents() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ...[BoldLabel('Existing Contents')],
-          SizedBox(
-            height: 150, // Ensure copious locations do not fill up the screen.
-            child: SingleChildScrollView(
-              primary: false,
-              child: Row(
-                children: movieLocations(
-                  _restorableMovie.value,
-                  proposedLocation: currentLocation(),
-                ),
-              ),
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      ...[BoldLabel('Existing Contents')],
+      SizedBox(
+        height: 150, // Ensure copious locations do not fill up the screen.
+        child: SingleChildScrollView(
+          primary: false,
+          child: Row(
+            children: movieLocations(
+              _restorableMovie.value,
+              proposedLocation: currentLocation(),
             ),
           ),
-          ...[
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                ElevatedButton(
-                  onPressed: () async => _deleteAllConfirmation(),
-                  child: const Text('Delete All'),
-                ),
-                ElevatedButton(
-                  onPressed: () {
-                    MovieLocation().storeMovieAtLocation(
-                      currentMovie(),
-                      currentLocation(),
-                    );
-                    context.pop();
-                  },
-                  child: const Text('Add'),
-                ),
-              ],
+        ),
+      ),
+      ...[
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            ElevatedButton(
+              onPressed: _deleteAllConfirmation,
+              child: const Text('Delete All'),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                MovieLocation().storeMovieAtLocation(
+                  currentMovie(),
+                  currentLocation(),
+                );
+                context.pop();
+              },
+              child: const Text('Add'),
             ),
           ],
-        ],
-      );
+        ),
+      ],
+    ],
+  );
 
   StackerAddress currentLocation() => StackerAddress(
-        libNum: _stackerController.value.text,
-        location: _locationController.value.text,
-        dvdId: _getDvdId(),
-      );
+    libNum: _stackerController.value.text,
+    location: _locationController.value.text,
+    dvdId: _getDvdId(),
+  );
   StackerContents currentMovie() => StackerContents(
-        uniqueId: _restorableMovie.value.uniqueId,
-        titleName: _titleController.value.text,
-      );
+    uniqueId: _restorableMovie.value.uniqueId,
+    titleName: _titleController.value.text,
+  );
 
   List<Widget> movieLocations(
     MovieResultDTO movie, {
     StackerAddress? proposedLocation,
-  }) =>
-      movieLocationTable(
-        [
-          // ...moviesAtLocation(proposedLocation),
-          // It was too confusing seeing BSG at 009:009 all the time.
-          ...locationsWithCustomTitle(movie),
-        ],
-      );
+  }) => movieLocationTable([
+    // ...moviesAtLocation(proposedLocation),
+    // It was too confusing seeing BSG at 009:009 all the time.
+    ...locationsWithCustomTitle(movie),
+  ]);
 
   Iterable<DataRow> moviesAtLocation(StackerAddress? location) sync* {
     if (location != null) {
@@ -363,78 +329,77 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
       for (final movie in movies) {
         yield movieLocationRow(
           DenomalizedLocation.combine(movie, location),
-          onLongPress: () async => _deleteLocation(location, movie.titleName),
+          onLongPress: () => _deleteLocation(location, movie.titleName),
         );
       }
     }
   }
 
   Widget _stackerInputField() => TextField(
-        controller: _stackerController.value,
-        focusNode: _stackerFocusNode,
-        //onSubmitted: _newSearch,
-        showCursor: true,
-        decoration: InputDecoration(
-          hintText: 'Which device is the disc in?',
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.clear),
-            onPressed: () {
-              _stackerController.value.clear();
-              _stackerFocusNode.requestFocus();
-            },
-          ),
-        ),
-      );
+    controller: _stackerController.value,
+    focusNode: _stackerFocusNode,
+    //onSubmitted: _newSearch,
+    showCursor: true,
+    decoration: InputDecoration(
+      hintText: 'Which device is the disc in?',
+      suffixIcon: IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          _stackerController.value.clear();
+          _stackerFocusNode.requestFocus();
+        },
+      ),
+    ),
+  );
 
   Widget _locationInputField() => TextField(
-        controller: _locationController.value,
-        focusNode: _locationFocusNode,
-        //onSubmitted: _newSearch,
-        showCursor: true,
-        decoration: InputDecoration(
-          hintText: 'Which position is the disc in?',
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.clear),
-            onPressed: () {
-              _locationController.value.clear();
-              _locationFocusNode.requestFocus();
-            },
-          ),
-        ),
-      );
+    controller: _locationController.value,
+    focusNode: _locationFocusNode,
+    //onSubmitted: _newSearch,
+    showCursor: true,
+    decoration: InputDecoration(
+      hintText: 'Which position is the disc in?',
+      suffixIcon: IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          _locationController.value.clear();
+          _locationFocusNode.requestFocus();
+        },
+      ),
+    ),
+  );
 
   Widget _titleInputField() => TextField(
-        controller: _titleController.value,
-        focusNode: _titleFocusNode,
-        //onSubmitted: _newSearch,
-        showCursor: true,
-        decoration: InputDecoration(
-          hintText: 'What is the name of the disc?',
-          suffixIcon: IconButton(
-            icon: const Icon(Icons.clear),
-            onPressed: () {
-              _titleController.value.clear();
-              _titleFocusNode.requestFocus();
-            },
-          ),
-        ),
-      );
+    controller: _titleController.value,
+    focusNode: _titleFocusNode,
+    //onSubmitted: _newSearch,
+    showCursor: true,
+    decoration: InputDecoration(
+      hintText: 'What is the name of the disc?',
+      suffixIcon: IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () {
+          _titleController.value.clear();
+          _titleFocusNode.requestFocus();
+        },
+      ),
+    ),
+  );
 
   Iterable<String> _getStackerLabels() => [
-        ...MovieLocation().usedLibNums(),
-        ...MovieLocation().emptyLibNums(),
-      ];
+    ...MovieLocation().usedLibNums(),
+    ...MovieLocation().emptyLibNums(),
+  ];
 
-  Future<void> _deleteLocation(
-    StackerAddress location,
-    String titleName,
-  ) async =>
+  Future<void> _deleteLocation(StackerAddress location, String titleName) =>
       showDialog<String>(
         context: context,
         builder: (_) => AlertDialog(
           title: const Text('Are you sure?'),
-          content: Text('You have requested delete of $titleName '
-              'from stacker ${location.libNum} position ${location.location}.'),
+          content: Text(
+            'You have requested delete of $titleName '
+            'from stacker ${location.libNum} position ${location.location}.',
+          ),
           actions: <Widget>[
             ElevatedButton(
               onPressed: () => Navigator.pop(context), // Closes the dialog
@@ -442,12 +407,14 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
             ),
             ElevatedButton(
               onPressed: () async {
-                if (await MovieLocation()
-                    .deleteLocationForMovie(location, titleName)) {}
-                // ignore: use_build_context_synchronously
-                Navigator.pop(context); // Closes the dialog
-                // ignore: use_build_context_synchronously
-                context.pop();
+                final routerContext = context;
+                if (await MovieLocation().deleteLocationForMovie(
+                  location,
+                  titleName,
+                )) {}
+                if (!routerContext.mounted) return;
+                Navigator.pop(routerContext); // Closes the dialog
+                routerContext.pop();
               },
               child: const Text('Kill it...'),
             ),
@@ -455,30 +422,32 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
         ),
       );
 
-  Future<void> _deleteAllConfirmation() async => showDialog<String>(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: const Text('Are you sure?'),
-          content: Text('You have requested delete all locations '
-              'for ${_restorableMovie.value.title} '),
-          actions: <Widget>[
-            ElevatedButton(
-              onPressed: () => Navigator.pop(context), // Closes the dialog
-              child: const Text('Stop!'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                await MovieLocation().deleteAllLocationsForMovie(
-                  _restorableMovie.value.uniqueId,
-                );
-                // ignore: use_build_context_synchronously
-                Navigator.pop(context); // Closes the dialog
-                // ignore: use_build_context_synchronously
-                context.pop();
-              },
-              child: const Text('Kill it...'),
-            ),
-          ],
+  Future<void> _deleteAllConfirmation() => showDialog<String>(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: const Text('Are you sure?'),
+      content: Text(
+        'You have requested delete all locations '
+        'for ${_restorableMovie.value.title} ',
+      ),
+      actions: <Widget>[
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context), // Closes the dialog
+          child: const Text('Stop!'),
         ),
-      );
+        ElevatedButton(
+          onPressed: () async {
+            final routerContext = context;
+            await MovieLocation().deleteAllLocationsForMovie(
+              _restorableMovie.value.uniqueId,
+            );
+            if (!routerContext.mounted) return;
+            Navigator.pop(routerContext); // Closes the dialog
+            routerContext.pop();
+          },
+          child: const Text('Kill it...'),
+        ),
+      ],
+    ),
+  );
 }

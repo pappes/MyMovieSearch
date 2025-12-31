@@ -10,7 +10,6 @@ import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements a web scraper for retrieving person details from IMDB.
-// ignore: missing_override_of_must_be_overridden
 mixin ScrapeIMDBNameDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Reduce computation effort for html extraction.
   @override

@@ -150,6 +150,7 @@ class ImdbJsonConverter extends ImdbConverterBase
 
     try {
       movie.runTime = Duration.zero.fromIso8601(map[outerElementDuration]);
+      // Make deserialisation robust against invalid data.
       // ignore: avoid_catching_errors
     } on ArgumentError catch (_) {}
 

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
+import 'package:quiver/iterables.dart';
 import 'package:universal_io/io.dart';
 
 /// Cache of movies and locations to allow location data to be easily displayed.
@@ -39,9 +40,9 @@ class MovieLocation {
 
   /// Removes all entries from the cache.
   Map<String, num> statistics() => {
-        'movies': _movies.length,
-        'locations': _locations.length,
-      };
+    'movies': _movies.length,
+    'locations': _locations.length,
+  };
 
   /// [List] of movies known to be stored at [location]
   List<StackerContents> getMoviesAtLocation(StackerAddress location) =>
@@ -74,16 +75,17 @@ class MovieLocation {
   Future<dynamic> deleteAllLocationsForMovie(String uniqueId) async {
     if (_movies.containsKey(uniqueId) && _movies[uniqueId]!.isNotEmpty) {
       for (final location in getLocationsForMovie(uniqueId)) {
+
+        void deleteMovie(StackerContents contents) =>
+            _locations[location]?.remove;
+
         // build up list of deletions while iterating,
         // then delete when not iterating.
         final deletions = <StackerContents>[];
         for (final movie in getMoviesAtLocation(location)) {
           if (movie.uniqueId == uniqueId) deletions.add(movie);
         }
-        // ignore: prefer_foreach
-        for (final deleteme in deletions) {
-          _locations[location]?.remove(deleteme);
-        }
+        deletions.forEach(deleteMovie);
       }
 
       _movies[uniqueId]!.clear();
@@ -94,10 +96,7 @@ class MovieLocation {
   }
 
   /// Store location of movie.
-  void storeMovieAtLocation(
-    StackerContents movie,
-    StackerAddress location,
-  ) {
+  void storeMovieAtLocation(StackerContents movie, StackerAddress location) {
     if (_writeToCache(movie, location)) unawaited(_writeToCloud(movie));
   }
 
@@ -119,12 +118,9 @@ class MovieLocation {
   /// [StackerAddress] location values
   /// not used to store any movies in [libNum].
   Iterable<StackerAddress> emptyLocations(String libNum) sync* {
-    for (int i = 1; i <= 150; i++) {
+    for (final i in range(1, 151)) {
       final str = i.toString().padLeft(3, '0');
-      final location = StackerAddress(
-        libNum: libNum,
-        location: str,
-      );
+      final location = StackerAddress(libNum: libNum, location: str);
       if (!_locations.containsKey(location)) yield location;
     }
   }
@@ -149,7 +145,7 @@ class MovieLocation {
   /// [StackerAddress] LibNum values not used to store any movies.
   Iterable<String> emptyLibNums() sync* {
     final used = usedLibNums();
-    for (int i = 1; i < 100; i++) {
+    for (final i in range(1, 101)) {
       final str = i.toString().padLeft(3, '0');
       if (!used.contains(str)) yield str;
     }
@@ -252,13 +248,14 @@ class MovieLocation {
     completer.complete(true);
   }
 
-// To update backup data run createBackupData() in
-// test/persistance/firebase_backup_is_not_a_test.dart
-// then copy data from /tmp/firebaseBackupXXXX.txt to
-// assets/newDVDLibrary.json
-// and update lastFirebaseBackupDate with the new timestamp printed by the test.
+  // To update backup data run createBackupData() in
+  // test/persistance/firebase_backup_is_not_a_test.dart
+  // then copy data from /tmp/firebaseBackupXXXX.txt to
+  // assets/newDVDLibrary.json
+  // and update lastFirebaseBackupDate with 
+  // the new timestamp that is printed to console during execution of the test.
   static const lastFirebaseBackupDate = 1719017443517;
-// DateTime().millisecondsSinceEpoch
+  // DateTime().millisecondsSinceEpoch
 
   Future<void> _loadBackupLocationData() async {
     // Manually initalise flutter to ensure setting can be loaded before RunApp
@@ -379,13 +376,7 @@ enum DvdColumns {
   comments,
 }
 
-enum Fields {
-  libnum,
-  location,
-  dvdId,
-  id,
-  title,
-}
+enum Fields { libnum, location, dvdId, id, title }
 
 /// Combination of all movie and location data.
 class DenomalizedLocation {
@@ -416,12 +407,12 @@ class DenomalizedLocation {
   /// Convert a [StackerAddress] to a json encodeable primitive.
   ///
   Map<String, String?> toJson() => {
-        Fields.id.name: uniqueId,
-        Fields.title.name: title,
-        Fields.libnum.name: libNum,
-        Fields.location.name: location,
-        Fields.dvdId.name: dvdId,
-      };
+    Fields.id.name: uniqueId,
+    Fields.title.name: title,
+    Fields.libnum.name: libNum,
+    Fields.location.name: location,
+    Fields.dvdId.name: dvdId,
+  };
 }
 
 /// Position of the movie

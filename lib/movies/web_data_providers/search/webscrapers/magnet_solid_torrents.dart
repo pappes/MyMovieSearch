@@ -17,7 +17,6 @@ const detailSelector = '.stats';
 /// ```dart
 /// ScrapeSolidTorrentsSearch().readList(criteria, limit: 10)
 /// ```
-// ignore: missing_override_of_must_be_overridden
 mixin ScrapeSolidTorrentsSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   final movieData = <Map<String, dynamic>>[];
@@ -29,7 +28,7 @@ mixin ScrapeSolidTorrentsSearch
   Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    final RegExp regex = RegExp('Found.*>0<.* results');
+    final regex = RegExp('Found.*>0<.* results');
     if (regex.hasMatch(webText)) {
       return [];
     }

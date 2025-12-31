@@ -15,7 +15,6 @@ const resultTableSelector = '.torrentcontent';
 /// ```dart
 /// ScrapeTorrentDownloadDetail().readList(criteria, limit: 10)
 /// ```
-// ignore: missing_override_of_must_be_overridden
 mixin ScrapeTorrentDownloadDetail
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   final movieData = <Map<String, dynamic>>[];

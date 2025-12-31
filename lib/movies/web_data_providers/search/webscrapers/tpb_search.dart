@@ -17,7 +17,6 @@ const detailSelector = '.detDesc';
 /// ```dart
 /// ScrapeTpbSearch().readList(criteria, limit: 10)
 /// ```
-// ignore: missing_override_of_must_be_overridden
 mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   final movieData = <Map<String, dynamic>>[];
   bool validPage = false;

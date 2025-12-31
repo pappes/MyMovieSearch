@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -46,10 +47,8 @@ abstract class QueryTMDBCommon
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-        '[${source.name}] $message',
-        source,
-      );
+  MovieResultDTO myYieldError(String message) =>
+      MovieResultDTO().error('[${source.name}] $message', source);
 
   /// API call to TMDB returning the movie details for [searchCriteria].
   @override
@@ -92,28 +91,29 @@ abstract class QueryTMDBCommon
         return [tree];
       }
       if (tree.containsKey('status_message')) {
-        throw WebConvertException('tmdb call for criteria $getCriteriaText '
-            'returned error:${tree['status_message']}');
+        throw WebConvertException(
+          'tmdb call for criteria $getCriteriaText '
+          'returned error:${tree['status_message']}',
+        );
       }
     }
 
-    throw WebConvertException('tmdb results data not detected '
-        'for criteria $getCriteriaText in json:$webText');
+    throw WebConvertException(
+      'tmdb results data not detected '
+      'for criteria $getCriteriaText in json:$webText',
+    );
   }
 
   /// Allow response parsing for http 404
   @override
+  @visibleForTesting // and for override!
   Stream<String>? myHttpError(
     Uri address,
     int statusCode,
     HttpClientResponse response,
-  ) =>
-      (404 == statusCode)
-          ? null
-          // ignore: invalid_use_of_visible_for_testing_member
-          : super.myHttpError(
-              address,
-              statusCode,
-              response,
-            );
+  ) => (404 == statusCode)
+      ? null
+      // Cascade clear to parent class.
+      // ignore: invalid_use_of_visible_for_testing_member
+      : super.myHttpError(address, statusCode, response);
 }

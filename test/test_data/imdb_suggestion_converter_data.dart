@@ -36,6 +36,7 @@ final intermediateEmptyMapList = [
   {
     'd': <void>[],
     'q':
+        // Generated code.
         // ignore: lines_longer_than_80_chars
         'Dexter%2B%3A%2BSeason%2B1%2B(Box%2BSet%2C%2BDVD%2C%2B2006)%2BRegion%2B4%2BMichael%2BC.%2BHall',
     'v': 1,
@@ -49,6 +50,7 @@ const String imdbCustomKeyVal = 'jsonPTest';
 const String jsonSampleFull =
     '{"d":[ $imdbJsonSampleInner ],"v":1,"q":"imdb_offline_suggestions"}';
 const String jsonSampleEmpty =
+    // Generated code.
     // ignore: lines_longer_than_80_chars
     '{"d":[],"q":"Dexter%2B%3A%2BSeason%2B1%2B(Box%2BSet%2C%2BDVD%2C%2B2006)%2BRegion%2B4%2BMichael%2BC.%2BHall","v":1}';
 

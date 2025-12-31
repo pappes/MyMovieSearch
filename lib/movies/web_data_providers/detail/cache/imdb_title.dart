@@ -7,14 +7,13 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [TieredCache] for retrieving movie details from IMDB.
 
-// ignore: missing_override_of_must_be_overridden
 mixin ThreadedCacheIMDBTitleDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final _cache = TieredCache<List<MovieResultDTO>>();
 
   /// Check cache to see if data has already been fetched.
   @override
-  Future<bool> myIsResultCached() async => _cache.isCached(_makeKey(criteria));
+  Future<bool> myIsResultCached() => _cache.isCached(_makeKey(criteria));
 
   /// Check cache to see if data in cache should be refreshed.
   @override
@@ -35,7 +34,7 @@ mixin ThreadedCacheIMDBTitleDetails
 
   /// Flush all data from the cache.
   @override
-  Future<void> myClearCache() async => _cache.clear();
+  Future<void> myClearCache() => _cache.clear();
 
   /// Retrieve cached result.
   String _makeKey(SearchCriteriaDTO criteria) =>

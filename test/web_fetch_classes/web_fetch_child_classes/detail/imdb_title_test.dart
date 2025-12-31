@@ -19,8 +19,8 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() async => lockWebFetchTreadedCache);
-  tearDownAll(() async => lockWebFetchTreadedCache);
+  setUpAll(() => lockWebFetchTreadedCache);
+  tearDownAll(() => unlockWebFetchTreadedCache);
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -68,7 +68,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       final input = SearchCriteriaDTO();
       const expectedOutput = intermediateMapList;
       final testClass = QueryIMDBTitleDetails(input);
@@ -189,6 +189,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBTitleDetails(criteria);
       await testClass.myClearCache();
+      // Load data into the cache.
       // ignore: unused_result
       await testClass.readList(
         source: streamImdbHtmlOfflineData,
@@ -326,6 +327,7 @@ void main() {
           .readList(source: streamImdbHtmlOfflineData)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors encountered during processing.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );

@@ -1,4 +1,6 @@
 //query string https://www.imdb.com/title/tt0106977/fullcredits?ref_=tt_ov_st_sm
+// Raw data in code is generated from an external source.
+// ignore_for_file: unnecessary_ignore
 // ignore_for_file: unnecessary_raw_strings
 
 import 'dart:convert';

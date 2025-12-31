@@ -33,12 +33,12 @@ class MovieDetailsPage extends StatefulWidget {
 
   /// Instruct goroute how to navigate to this page.
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
-        restorationId: RestorableMovie.getRestorationId(state),
-        child: MovieDetailsPage(
-          movie: RestorableMovie.getDto(state),
-          restorationId: RestorableMovie.getRestorationId(state),
-        ),
-      );
+    restorationId: RestorableMovie.getRestorationId(state),
+    child: MovieDetailsPage(
+      movie: RestorableMovie.getDto(state),
+      restorationId: RestorableMovie.getRestorationId(state),
+    ),
+  );
 }
 
 class _MovieDetailsPageState extends State<MovieDetailsPage>
@@ -83,9 +83,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       /// Fetch full actor/director/writer/producer data
       /// from cache using a separate thread.
       unawaited(
-        QueryIMDBJsonCastDetails(criteria)
-            .readList()
-            .then(_requestShowDetails),
+        QueryIMDBJsonCastDetails(criteria).readList().then(_requestShowDetails),
       );
     }
   }
@@ -146,187 +144,172 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     _mobileLayout = useMobileLayout(context);
     return SelectionArea(
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(_restorableMovie.value.title),
-        ),
+        appBar: AppBar(title: Text(_restorableMovie.value.title)),
         endDrawer: getDrawer(context),
-        body: Scrollbar(
-          thumbVisibility: true,
-          child: _bodySection(),
-        ),
+        body: Scrollbar(thumbVisibility: true, child: _bodySection()),
       ),
     );
   }
 
   ScrollView _bodySection() => ListView(
-        primary: true, // Attach scrollbar controller to primary view.
+    primary: true, // Attach scrollbar controller to primary view.
+    children: <Widget>[
+      Text(_restorableMovie.value.title, style: hugeFont),
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
-          Text(_restorableMovie.value.title, style: hugeFont),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              if (_restorableMovie.value.yearRange.isEmpty)
-                Text('Year: ${_restorableMovie.value.year}')
-              else
-                Text('Year Range: ${_restorableMovie.value.yearRange}'),
-              Align(
-                alignment: Alignment.centerRight,
-                child: Text(
-                  'Run Time: '
-                  '${_restorableMovie.value.runTime.toFormattedTime()}',
-                ),
-              ),
-            ],
-          ),
-          Flex(
-            direction: Axis.horizontal,
-            children: [
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    LeftAligendColumn(children: <Widget>[_leftColumn()]),
-
-                    // Only show right column on tablet.
-                    if (!_mobileLayout)
-                      LeftAligendColumn(children: [_posterSection()]),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ],
-      );
-
-  Widget _leftColumn() => Wrap(
-        children: [
-          ..._leftHeader(),
-          ..._locations(),
-          ..._description(),
-          // Only show poster in left column on mobile.
-          if (_mobileLayout) _posterSection(),
-
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ..._related(_caseInsensativeSuggestion),
-              ..._cast(),
-            ],
-          ),
-        ],
-      );
-
-  Widget _posterSection() => Row(
-        children: [
-          Poster(
-            context,
-            url: _restorableMovie.value.imageUrl,
-            showImages: () async => MMSNav(context).viewWebPage(
-              makeImdbUrl(
-                _restorableMovie.value.uniqueId,
-                photos: true,
-              ),
+          if (_restorableMovie.value.yearRange.isEmpty)
+            Text('Year: ${_restorableMovie.value.year}')
+          else
+            Text('Year Range: ${_restorableMovie.value.yearRange}'),
+          Align(
+            alignment: Alignment.centerRight,
+            child: Text(
+              'Run Time: '
+              '${_restorableMovie.value.runTime.toFormattedTime()}',
             ),
           ),
         ],
-      );
-
-  Widget _movieFacts() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text('Type: ${_restorableMovie.value.type.name}'),
-          Text(
-            'User Rating: ${_restorableMovie.value.userRating} '
-            '(${formatter.format(_restorableMovie.value.userRatingCount)})',
-          ),
-          Wrap(
-            children: <Widget>[
-              Text('Censor Rating: '
-                  '${_restorableMovie.value.censorRating.name}     '),
-              Text('Language: ${_restorableMovie.value.language.name}'),
-            ],
-          ),
-        ],
-      );
-
-  List<Widget> _leftHeader() => [
-        InkWell(
-          child: _movieFacts(),
-          onTap: () async => MMSNav(context).viewWebPage(
-            makeImdbUrl(_restorableMovie.value.uniqueId, parentalGuide: true),
-          ),
-        ),
-        Wrap(
-          children: <Widget>[
-            Text('Source: ${_restorableMovie.value.bestSource.name}      '),
-            Text('UniqueId: ${_restorableMovie.value.uniqueId}'),
-            Wrap(
+      ),
+      Flex(
+        direction: Axis.horizontal,
+        children: [
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                ElevatedButton(
-                  onPressed: () async => MMSNav(context).viewWebPage(
-                    makeImdbUrl(
-                      _restorableMovie.value.uniqueId,
-                    ),
-                  ),
-                  child: const Text('IMDB'),
-                ),
-                Wrap(children: _externalSearchButtons()),
+                LeftAligendColumn(children: <Widget>[_leftColumn()]),
+
+                // Only show right column on tablet.
+                if (!_mobileLayout)
+                  LeftAligendColumn(children: [_posterSection()]),
               ],
             ),
-          ],
-        ),
-      ];
-
-  List<Widget> _description() => [
-        Row(
-          children: <Widget>[
-            BoldLabel('Description:'),
-          ],
-        ),
-        InkWell(
-          onTap: _toggleDescription,
-          child: Text(
-            _restorableMovie.value.description,
-            style: biggerFont,
-            overflow: _descriptionExpanded.value ? null : TextOverflow.ellipsis,
-            maxLines: _descriptionExpanded.value ? null : 8,
-          ),
-        ),
-        Text('Languages: ${_restorableMovie.value.languages}'),
-        Text('Genres: ${_restorableMovie.value.genres}'),
-        _keywords(),
-      ];
-
-  void _toggleDescription() => setState(() {
-        _descriptionExpanded.value = !_descriptionExpanded.value;
-      });
-
-  final _caseInsensativeSuggestion =
-      RegExp('[sS][uU][gG][gG][eE][sS][tT][iI][oO][nN]');
-
-  List<Widget> _locations() => movieLocationTable(
-        locationsWithCustomTitle(_restorableMovie.value),
-        onTap: _addLocations,
-        ifEmpty: [
-          ElevatedButton(
-            onPressed: _addLocations,
-            child: const Text('Tap to add location'),
           ),
         ],
-      );
-  Future<Object?> _addLocations() async => MMSNav(context).addLocation(
-        _restorableMovie.value,
-      );
+      ),
+    ],
+  );
+
+  Widget _leftColumn() => Wrap(
+    children: [
+      ..._leftHeader(),
+      ..._locations(),
+      ..._description(),
+      // Only show poster in left column on mobile.
+      if (_mobileLayout) _posterSection(),
+
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [..._related(_caseInsensativeSuggestion), ..._cast()],
+      ),
+    ],
+  );
+
+  Widget _posterSection() => Row(
+    children: [
+      Poster(
+        context,
+        url: _restorableMovie.value.imageUrl,
+        showImages: () => MMSNav(context).viewWebPage(
+          makeImdbUrl(_restorableMovie.value.uniqueId, photos: true),
+        ),
+      ),
+    ],
+  );
+
+  Widget _movieFacts() => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      Text('Type: ${_restorableMovie.value.type.name}'),
+      Text(
+        'User Rating: ${_restorableMovie.value.userRating} '
+        '(${formatter.format(_restorableMovie.value.userRatingCount)})',
+      ),
+      Wrap(
+        children: <Widget>[
+          Text(
+            'Censor Rating: '
+            '${_restorableMovie.value.censorRating.name}     ',
+          ),
+          Text('Language: ${_restorableMovie.value.language.name}'),
+        ],
+      ),
+    ],
+  );
+
+  List<Widget> _leftHeader() => [
+    InkWell(
+      child: _movieFacts(),
+      onTap: () => MMSNav(context).viewWebPage(
+        makeImdbUrl(_restorableMovie.value.uniqueId, parentalGuide: true),
+      ),
+    ),
+    Wrap(
+      children: <Widget>[
+        Text('Source: ${_restorableMovie.value.bestSource.name}      '),
+        Text('UniqueId: ${_restorableMovie.value.uniqueId}'),
+        Wrap(
+          children: <Widget>[
+            ElevatedButton(
+              onPressed: () => MMSNav(
+                context,
+              ).viewWebPage(makeImdbUrl(_restorableMovie.value.uniqueId)),
+              child: const Text('IMDB'),
+            ),
+            Wrap(children: _externalSearchButtons()),
+          ],
+        ),
+      ],
+    ),
+  ];
+
+  List<Widget> _description() => [
+    Row(children: <Widget>[BoldLabel('Description:')]),
+    InkWell(
+      onTap: _toggleDescription,
+      child: Text(
+        _restorableMovie.value.description,
+        style: biggerFont,
+        overflow: _descriptionExpanded.value ? null : TextOverflow.ellipsis,
+        maxLines: _descriptionExpanded.value ? null : 8,
+      ),
+    ),
+    Text('Languages: ${_restorableMovie.value.languages}'),
+    Text('Genres: ${_restorableMovie.value.genres}'),
+    _keywords(),
+  ];
+
+  void _toggleDescription() => setState(() {
+    _descriptionExpanded.value = !_descriptionExpanded.value;
+  });
+
+  final _caseInsensativeSuggestion = RegExp(
+    '[sS][uU][gG][gG][eE][sS][tT][iI][oO][nN]',
+  );
+
+  List<Widget> _locations() => movieLocationTable(
+    locationsWithCustomTitle(_restorableMovie.value),
+    onTap: _addLocations,
+    ifEmpty: [
+      ElevatedButton(
+        onPressed: _addLocations,
+        child: const Text('Tap to add location'),
+      ),
+    ],
+  );
+  Future<Object?> _addLocations() =>
+      MMSNav(context).addLocation(_restorableMovie.value);
 
   List<Widget> _cast() =>
       _related(_caseInsensativeSuggestion, invertFilter: true);
 
   Widget _keywords() {
     Widget makeHyperlink(String keyword) => InkWell(
-          child: Text('  $keyword  '),
-          onTap: () async => MMSNav(context).showMoviesForKeyword(keyword),
-        );
+      child: Text('  $keyword  '),
+      onTap: () => MMSNav(context).showMoviesForKeyword(keyword),
+    );
 
     final hyperlinks = <Widget>[];
     for (final keyword in _restorableMovie.value.keywords) {
@@ -335,16 +318,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
     final label = InkWell(
       child: const Text('Keywords: '),
-      onTap: () async =>
+      onTap: () =>
           MMSNav(context).getMoreKeywords(_restorableMovie.value),
     );
 
-    return Wrap(
-      children: <Widget>[
-        label,
-        ...hyperlinks,
-      ],
-    );
+    return Wrap(children: <Widget>[label, ...hyperlinks]);
   }
 
   List<Widget> _related(RegExp filter, {bool invertFilter = false}) {
@@ -367,14 +345,11 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
           ..add(
             Center(
               child: InkWell(
-                onTap: () async => MMSNav(context).searchForRelated(
+                onTap: () => MMSNav(context).searchForRelated(
                   '$rolesLabel ${_restorableMovie.value.title}',
                   rolesMap.values.toList(),
                 ),
-                child: Text(
-                  description,
-                  textAlign: TextAlign.center,
-                ),
+                child: Text(description, textAlign: TextAlign.center),
               ),
             ),
           );
@@ -384,16 +359,16 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   }
 
   List<Widget> _externalSearchButtons() => <Widget>[
-        _externalSearchButton(_restorableMovie.value.title),
-        if (_restorableMovie.value.alternateTitle.isNotEmpty)
-          _externalSearchButton(_restorableMovie.value.alternateTitle),
-      ];
+    _externalSearchButton(_restorableMovie.value.title),
+    if (_restorableMovie.value.alternateTitle.isNotEmpty)
+      _externalSearchButton(_restorableMovie.value.alternateTitle),
+  ];
 
   Widget _externalSearchButton(String title) => ElevatedButton(
-        onPressed: () async => MMSNav(context).showDownloads(
-          '$title ${_restorableMovie.value.year}',
-          _restorableMovie.value,
-        ),
-        child: Text(title),
-      );
+    onPressed: () => MMSNav(context).showDownloads(
+      '$title ${_restorableMovie.value.year}',
+      _restorableMovie.value,
+    ),
+    child: Text(title),
+  );
 }

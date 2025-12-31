@@ -25,7 +25,7 @@ class ThreadTest {
 int localCounter = 0;
 int globalFnAccumulateSync(int value) => localCounter += value;
 Future<int> globalFnAccumulateAsync(int value) async => localCounter += value;
-Future<int> globalFnAccumulateSlow(int value) async =>
+Future<int> globalFnAccumulateSlow(int value) =>
     Future.delayed(const Duration(seconds: 2), () => localCounter += value);
 
 Future<String?> globalFnThreadName(int value) async =>

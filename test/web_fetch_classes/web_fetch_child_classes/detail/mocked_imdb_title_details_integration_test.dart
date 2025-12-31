@@ -10,6 +10,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
+import 'package:quiver/iterables.dart';
 
 import 'package:universal_io/io.dart'
     show HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders;
@@ -65,14 +66,11 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
         .thenAnswer((_) => _getOfflineHTML('$expectedCriteria'));
 
     //when(clientRequest.close()).thenAnswer((_) async => clientResponse);
-    // ignore: discarded_futures
     when(clientRequest.close()).thenAnswer(getClientResponse);
 
 
-    // ignore: discarded_futures
     when(client.openUrl('GET', expectedUri)).thenAnswer((_) => 
       Future.value(clientRequest));
-    // ignore: discarded_futures
     when(client.getUrl(expectedUri))
         .thenAnswer((_) => Future.value(clientRequest));
     when(clientRequest.headers).thenAnswer((_) => headers);
@@ -86,8 +84,8 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
 /// Make dummy dto results for offline queries.
 List<MovieResultDTO> _makeDTOs(int startid, int qty) {
   final results = <MovieResultDTO>[];
-  var uniqueId = startid;
-  for (int i = 0; i < qty; i++) {
+  final endId = startid + qty;
+  for (final uniqueId in range(startid, endId + 1)) {
     results.add(
       {
         'bestSource': DataSourceType.imdb.toString(),
@@ -96,7 +94,6 @@ List<MovieResultDTO> _makeDTOs(int startid, int qty) {
         'title': 'tt$uniqueId.',
       }.toMovieResultDTO(),
     );
-    uniqueId++;
   }
   return results;
 }
@@ -104,10 +101,9 @@ List<MovieResultDTO> _makeDTOs(int startid, int qty) {
 /// Create a string list with [qty] unique criteria values.
 List<String> _makeQueries(int startId, int qty) {
   final results = <String>[];
-  var uniqueId = startId;
-  for (int i = 0; i < qty; i++) {
+  final endId = startId + qty;
+  for (final uniqueId in range(startId, endId + 1)) {
     results.add('tt$uniqueId');
-    uniqueId++;
   }
   return results;
 }
@@ -160,10 +156,8 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(
 
     Future<List<MovieResultDTO>> future;
     if (online) {
-      // ignore: discarded_futures
       future = imdbDetails.readList();
     } else {
-      // ignore: discarded_futures
       future = imdbDetails.readList(
         source: _offlineSearch,
       );

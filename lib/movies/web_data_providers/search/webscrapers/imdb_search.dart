@@ -15,14 +15,13 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// ```dart
 /// QueryIMDBSearch().readList(criteria, limit: 10)
 /// ```
-// ignore: missing_override_of_must_be_overridden
 mixin ScrapeIMDBSearchDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Reduce computation effort for html extraction.
   @override
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
-  ) async {
+  ) {
     try {
       final json = fastParse(webText);
       final result = _scrapeSearchResult(webText, json);
@@ -35,7 +34,7 @@ mixin ScrapeIMDBSearchDetails
   /// Scrape movie data from html json <script> tag.
   Future<List<dynamic>> _slowConvertWebTextToTraversableTree(
     String webText,
-  ) async {
+  ) {
     final document = parse(webText);
     final resultScriptElement = document.querySelector(jsonScript);
     if (resultScriptElement?.innerHtml.isNotEmpty ?? false) {
@@ -118,7 +117,7 @@ mixin ScrapeIMDBSearchDetails
     rowData[outerElementOfficialTitle] = person[deepPersonNameHeader];
 
     rowData[outerElementImage] = person.searchForString(key: deepImageField);
-    String knownFor = person[deepPersonDescriptionHeader].toString();
+    var knownFor = person[deepPersonDescriptionHeader].toString();
     if (null != person[outerSearchResultsKnownForYear]) {
       ///???
       knownFor += '(${person[outerSearchResultsKnownForYear]})';

@@ -15,7 +15,6 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 ///   priority: ThreadRunner.verySlow,
 /// );
 /// ```
-// ignore: missing_override_of_must_be_overridden
 abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     extends WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   WebFetchThreadedCache(super.criteria);
@@ -126,11 +125,11 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
 
   @visibleForTesting
   @mustCallSuper
-  Future<void> clearThreadedCache() async => _cache.clear();
+  Future<void> clearThreadedCache() => _cache.clear();
 
   /// Check cache to see if data has already been fetched.
   @useResult
-  Future<bool> isThreadedResultCached() async =>
+  Future<bool> isThreadedResultCached() =>
       _cache.isCached(_getCacheKey());
 
   /// Check cache to see if data in cache should be refreshed.

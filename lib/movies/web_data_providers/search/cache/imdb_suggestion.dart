@@ -7,7 +7,6 @@ import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [WebFetchBase] for caching movie suggestions from IMDB.
-// ignore: missing_override_of_must_be_overridden
 mixin ThreadedCacheIMDBSuggestions
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   static final _cache = TieredCache<MovieResultDTO>();
@@ -78,7 +77,7 @@ mixin ThreadedCacheIMDBSuggestions
       );
 
   /// Check cache to see if data has already been fetched.
-  Future<bool> _isResultCached() async {
+  Future<bool> _isResultCached() {
     final key = '${myDataSourceName()}${criteria.criteriaTitle}';
     return _cache.isCached(key);
   }

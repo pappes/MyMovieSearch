@@ -85,7 +85,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree() paginated', () async {
+    test('Run myConvertWebTextToTraversableTree() paginated', () {
       final expectedOutput = [imdbJsonInnerPaginatedSample];
       final criteria = SearchCriteriaDTO().fromString('nm1913125');
       final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
@@ -95,7 +95,7 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree() filtered', () async {
+    test('Run myConvertWebTextToTraversableTree() filtered', () {
       final expectedOutput = [imdbJsonInnerFilteredSample];
       final criteria = SearchCriteriaDTO().fromString('nm1913125');
       final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);

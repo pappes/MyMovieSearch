@@ -1,3 +1,4 @@
+// settings are supported from multiple locations
 // ignore_for_file: do_not_use_environment
 
 import 'dart:async';
@@ -73,7 +74,7 @@ import 'package:universal_io/io.dart';
 /// foo@bar:~$ export MEILISEARCH_URL="https://cloud.meilisearch.com/"
 /// foo@bar:~$ export SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// foo@bar:~$ export OFFLINE="true"
-///
+/// ```
 ///
 /// or from the command line at compile time
 /// ```shell

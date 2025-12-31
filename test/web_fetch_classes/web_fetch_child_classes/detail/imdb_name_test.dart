@@ -19,6 +19,7 @@ Future<Stream<String>> _emitUnexpectedHtmlSample(_) =>
 Future<Stream<String>> _emitInvalidHtmlSample(_) =>
     Future.value(Stream.value('not valid html'));
 
+// Helpers for test data generation.
 // ignore: avoid_classes_with_only_static_members
 class StaticJsonGenerator {
   static Future<Stream<String>> stuff(_) =>
@@ -32,8 +33,8 @@ class StaticJsonGenerator {
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() async => lockWebFetchTreadedCache);
-  tearDownAll(() async => lockWebFetchTreadedCache);
+  setUpAll(() => lockWebFetchTreadedCache);
+  tearDownAll(() => unlockWebFetchTreadedCache);
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -90,7 +91,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
       final criteria = SearchCriteriaDTO();
       final testClass = QueryIMDBNameDetails(criteria);
@@ -183,6 +184,7 @@ void main() {
       await QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
       final testClass = QueryIMDBNameDetails(criteria);
+      // Load data into the cache.
       // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
@@ -208,6 +210,7 @@ void main() {
       await QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
       final testClass = QueryIMDBNameDetails(criteria);
+      // Load data into the cache.
       // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
@@ -225,6 +228,7 @@ void main() {
       await QueryIMDBNameDetails(SearchCriteriaDTO()).clearThreadedCache();
       final criteria = SearchCriteriaDTO().fromString('nm0123456');
       final testClass = QueryIMDBNameDetails(criteria);
+      // Load data into the cache.
       // ignore: unused_result
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
@@ -241,7 +245,6 @@ void main() {
       for (var iteration = 0; iteration < 100; iteration++) {
         final criteria = SearchCriteriaDTO().fromString('nm$iteration');
         // Enqueue requests but do not wait for result.
-        // ignore: unused_result
         unawaited(
           QueryIMDBNameDetails(criteria).readPrioritisedCachedList(
             source: StaticJsonGenerator.stuffDelayed,
@@ -349,6 +352,7 @@ void main() {
           .readList(source: streamImdbHtmlOfflineData)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors encountered during processing.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );

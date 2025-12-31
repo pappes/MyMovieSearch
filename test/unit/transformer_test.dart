@@ -176,7 +176,7 @@ void main() {
   });
   group('stream test', () {
     // Test the internal workings of the transformer.
-    test('transformer', () async {
+    test('transformer', () {
       // Set up the test data.
       const testInput = 'functionName($jsonSampleFull)';
       const expectedString = jsonSampleFull;

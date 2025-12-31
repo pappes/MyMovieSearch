@@ -54,8 +54,7 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
   }) : _httpClientFactory = httpClientFactory,
        _webViewRunner = webViewRunner,
        super.internal() {
-    // ignore: discarded_futures
-    _observeWebView(imdbUrl);
+    unawaited(_observeWebView(imdbUrl));
   }
 
   final HttpClientFactory _httpClientFactory; // Injected dependency
@@ -90,7 +89,7 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
 
   @override
   /// Waits for the data loading to complete.
-  Future<void> waitForCompletion() async =>
+  Future<void> waitForCompletion() =>
       _dataLoadedCompleter.future.then((_) => super.waitForCompletion());
 
   /// Disposes the web view after an optional [delay].
@@ -175,7 +174,7 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
   Future<WebResourceResponse?> executeProxySelectorForTest(
     InAppWebViewController controller,
     WebResourceRequest request,
-  ) async => _webViewProxySelector(controller, request);
+  ) => _webViewProxySelector(controller, request);
 
   /// Handles the interception of specific URL requests (e.g., /api/)
   /// and proxies them through a Dart HttpClient to allow for manipulation

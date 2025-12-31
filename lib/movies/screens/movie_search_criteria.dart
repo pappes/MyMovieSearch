@@ -90,7 +90,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
         title: const Text(MovieSearchCriteriaPage.title),
       ),
       endDrawer: getDrawer(context),
-      body: Container(
+      body: DecoratedBox(
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(

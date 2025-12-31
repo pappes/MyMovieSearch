@@ -1,3 +1,4 @@
+// Helper to convert Google movie search results.
 // ignore_for_file: avoid_classes_with_only_static_members
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
@@ -73,9 +74,10 @@ class GoogleMovieSearchConverter {
 
   static List<MovieResultDTO> _searchError(Map<dynamic, dynamic> map) {
     // construct an error message
-    String error = '';
+    var error = '';
     final resultsError = map[outerElementErrorFailure];
     if (resultsError != null) {
+      // Dynamic call to toString is safe here.
       // ignore: avoid_dynamic_calls
       error = resultsError[innerElementErrorFailureReason]?.toString() ??
           'No failure reason provided in results';

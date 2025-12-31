@@ -182,7 +182,7 @@ class BaseMovieRepository {
   }
 
   /// Initiates a details retrival for a specified list of movies.
-  Future<void> _searchList(int searchUID) async {
+  Future<void> _searchList(int searchUID) {
     initProvider(this);
     return addResults(
       searchUID,

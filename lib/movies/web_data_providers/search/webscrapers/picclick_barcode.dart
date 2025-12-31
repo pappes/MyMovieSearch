@@ -18,7 +18,6 @@ const jpgDescriptionSelector = 'h3';
 /// ```dart
 /// ScrapePicclickBarcodeSearch().readList(criteria, limit: 10)
 /// ```
-// ignore: missing_override_of_must_be_overridden
 mixin ScrapePicclickBarcodeSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   final movieData = <Map<String, dynamic>>[];

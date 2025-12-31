@@ -17,7 +17,7 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() async => Settings().init());
+  setUpAll(() => Settings().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       final criteria = SearchCriteriaDTO().fromString('batman');
       const expectedOutput = intermediateMapList;
       final testClass = QueryYtsDetails(criteria);
@@ -80,7 +80,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final criteria = SearchCriteriaDTO().fromString('batman');
       final expectedOutput = <void>[];
       final actualOutput =
@@ -90,7 +90,7 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () async {
+        () {
       final criteria = SearchCriteriaDTO().fromString('batman');
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
@@ -227,6 +227,7 @@ void main() {
           .readList(source: streamhtmlOfflineData)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors encountered during processing.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );

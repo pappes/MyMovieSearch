@@ -53,7 +53,7 @@ class FlutterCustomTabsLauncher implements CustomTabsLauncher {
   @override
   Future<void> launch(String url, {
     tabs.CustomTabsOptions? customTabsOptions}
-  ) async => tabs.launchUrl(
+  ) => tabs.launchUrl(
       Uri.parse(url),
       customTabsOptions: customTabsOptions
       );

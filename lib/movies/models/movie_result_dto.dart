@@ -49,8 +49,7 @@ class MovieResultDTO {
   /// Convert a [MovieResultDTO] to a map tha can be consumed by jsonEncode.
   ///
   Map<String, dynamic> toJson({bool includeRelated = true}) =>
-  // ignore: unnecessary_this
-  this.toMap(includeRelated: includeRelated);
+      toMap(includeRelated: includeRelated);
 }
 
 enum MovieContentType {
@@ -177,6 +176,7 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
 
   @override
   @factory
+  // Linter does not undersand that fromPrimitives is a factory method.
   // ignore: invalid_factory_method_impl
   MovieResultDTO fromPrimitives(Object? data) => dtoFromPrimitives(data);
   @factory
@@ -220,6 +220,7 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
 
   @override
   @factory
+  // Linter does not undersand that fromPrimitives is a factory method.
   // ignore: invalid_factory_method_impl
   List<MovieResultDTO> fromPrimitives(Object? data) {
     if (data is String) {
@@ -243,6 +244,7 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   /// into a [List] of [MovieResultDTO] objects
   ///
   @factory
+  // Linter does not undersand that decodeList is a factory method.
   // ignore: invalid_factory_method_impl
   static List<MovieResultDTO> decodeList(Iterable<dynamic> encoded) {
     final result = <MovieResultDTO>[];
@@ -285,6 +287,7 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
   /// Convert a [Map] into a [MovieResultDTO] object
   ///
   @factory
+  // Linter does not undersand that toMovieResultDTO is a factory method.
   // ignore: invalid_factory_method_impl
   MovieResultDTO toMovieResultDTO() {
     final dto =
@@ -416,7 +419,7 @@ class DtoCache {
 
   /// Retrieve data from the cache.
   ///
-  Future<MovieResultDTO> fetch(MovieResultDTO newValue) async =>
+  Future<MovieResultDTO> fetch(MovieResultDTO newValue) =>
       merge(newValue);
 
   /// remove [newValue] from the cache.
@@ -601,7 +604,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Convert a json [String] to a [MovieResultDTO].
   ///
   @factory
-  // ignore: invalid_factory_method_impl
   MovieResultDTO fromJson(dynamic json) {
     final decoded = jsonDecode(json.toString());
     if (decoded is Map) return decoded.toMovieResultDTO();
@@ -970,6 +972,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// as a [MovieResultDTO].
   ///
   @factory
+  // Linter does not undersand that toUnknown is a factory method.
   // ignore: invalid_factory_method_impl
   MovieResultDTO toUnknown() =>
       MovieResultDTO()
@@ -1304,6 +1307,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       DtoCache.singleton().fetchSynchronously(uniqueId) ?? this;
 
   @factory
+  // Linter does not undersand that clone is a factory method.
   // ignore: invalid_factory_method_impl
   MovieResultDTO clone({bool condensed = false}) =>
       toMap(condensed: condensed).toMovieResultDTO();
@@ -1314,7 +1318,7 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
   ///
   String toPrintableString() {
     final listContents = StringBuffer();
-    String separator = '';
+    var separator = '';
     for (final entry in this) {
       listContents.write('$separator${entry.toPrintableString()}');
       separator = ',\n';
@@ -1325,7 +1329,7 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
   /// return a string containing valid json
   String toJsonString() {
     final listContents = StringBuffer();
-    String separator = '';
+    var separator = '';
     for (final entry in this) {
       listContents.write('$separator${entry.toJsonText()}');
       separator = ',\n';
@@ -1415,7 +1419,7 @@ extension MapMovieResultDTOHelpers on Map<dynamic, MovieResultDTO> {
   ///
   String toPrintableString() {
     final listContents = StringBuffer();
-    String separator = '';
+    var separator = '';
     for (final key in keys) {
       listContents.write('$separator${this[key]!.toPrintableString()}');
       separator = ',\n';
@@ -1429,7 +1433,7 @@ extension MapMovieResultDTOHelpers on Map<dynamic, MovieResultDTO> {
   /// Output will be less than 1000 chars long, truncating if required.
   String toShortString() {
     final listContents = StringBuffer();
-    String separator = '';
+    var separator = '';
     for (final key in keys) {
       listContents.write('$separator${this[key]!.title}');
       separator = ',\n';
@@ -1449,7 +1453,7 @@ extension MapMapMovieResultDTOHelpers
   ///
   String toPrintableString() {
     final listContents = StringBuffer();
-    String separator = '';
+    var separator = '';
     for (final key in keys) {
       listContents.write('$separator$key:${this[key]!.toPrintableString()}');
       separator = ',\n';
@@ -1462,7 +1466,7 @@ extension MapMapMovieResultDTOHelpers
   ///
   String toShortString() {
     final listContents = StringBuffer();
-    String separator = '';
+    var separator = '';
     for (final key in keys) {
       listContents.write('$separator$key:${this[key]!.toShortString()}');
       separator = ',\n';
@@ -1611,6 +1615,7 @@ extension DTOCompare on MovieResultDTO {
               case ReadHistory.none:
               case ReadHistory.custom:
             }
+            // Allow derialisation to be moe robust.
             // ignore: avoid_catching_errors
           } on ArgumentError catch (_) {}
         }

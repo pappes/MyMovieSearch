@@ -15,7 +15,6 @@ const resultTableSelector = 'tbody tr';
 /// ```dart
 /// ScrapeUhttBarcodeSearch().readList(criteria, limit: 10)
 /// ```
-// ignore: missing_override_of_must_be_overridden
 mixin ScrapeUhttBarcodeSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   final movieData = <Map<String, dynamic>>[];

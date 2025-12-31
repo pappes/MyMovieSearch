@@ -76,21 +76,21 @@ class MMSNav {
   ///
   /// For platforms that don't support CustomTabs
   /// the URL is displayed to the user.
-  Future<void> viewWebPage(String url) async => canvas.viewWebPage(url);
+  Future<void> viewWebPage(String url) => canvas.viewWebPage(url);
 
   /// Navigates to a search results page populated with a movie list.
   ///
-  Future<Object?> showResultsPage(SearchCriteriaDTO criteria) async =>
+  Future<Object?> showResultsPage(SearchCriteriaDTO criteria) =>
       canvas.viewFlutterPage(criteria.getSearchResultsPage());
 
   /// Navigates to a search criteria page with no criteria populated.
   ///
-  Future<Object?> showCriteriaPage(SearchCriteriaDTO criteria) async =>
+  Future<Object?> showCriteriaPage(SearchCriteriaDTO criteria) =>
       canvas.viewFlutterRootPage(criteria.getSearchCriteriaPage());
 
   /// Navigates to the list of old DVD locations.
   ///
-  Future<Object?> showDVDsPage() async => showResultsPage(
+  Future<Object?> showDVDsPage() => showResultsPage(
     SearchCriteriaDTO().init(SearchCriteriaType.dvdLocations),
   );
 
@@ -100,7 +100,7 @@ class MMSNav {
   Future<Object?> searchForRelated(
     String description,
     List<MovieResultDTO> movies,
-  ) async {
+  ) {
     if (movies.length == 1) {
       // Only one result so open details screen.
       return resultDrillDown(movies[0]);
@@ -118,7 +118,7 @@ class MMSNav {
 
   /// Navigates to a search results page populated with movie for the keyword.
   ///
-  Future<Object?> showMoviesForKeyword(String keyword) async =>
+  Future<Object?> showMoviesForKeyword(String keyword) =>
   // Fetch first batch of movies that match the keyword.
   showResultsPage(
     SearchCriteriaDTO().init(
@@ -129,7 +129,7 @@ class MMSNav {
 
   /// Navigates to a search results page populated with keywords for the movie.
   ///
-  Future<Object?> getMoreKeywords(MovieResultDTO movie) async =>
+  Future<Object?> getMoreKeywords(MovieResultDTO movie) =>
   // Next first batch of movies that match the keyword.
   showResultsPage(
     SearchCriteriaDTO().init(
@@ -141,7 +141,7 @@ class MMSNav {
 
   /// Navigates to a search results page populated with downloads for the movie.
   ///
-  Future<Object?> showDownloads(String text, MovieResultDTO dto) async {
+  Future<Object?> showDownloads(String text, MovieResultDTO dto) {
     // replace space with . for more matches
     final criteria = text.replaceAll(' ', '.');
     // Fetch first batch of movies that match the keyword.
@@ -156,7 +156,7 @@ class MMSNav {
 
   /// Adds a physical location to a movie.
   ///
-  Future<Object?> addLocation(MovieResultDTO movie) async =>
+  Future<Object?> addLocation(MovieResultDTO movie) =>
       canvas.viewFlutterPage(
         RouteInfo(
           ScreenRoute.addlocation,
@@ -167,7 +167,7 @@ class MMSNav {
 
   /// Display more details for the selected card.
   ///
-  Future<Object?> resultDrillDown(MovieResultDTO movie) async {
+  Future<Object?> resultDrillDown(MovieResultDTO movie) {
     switch (movie.type) {
       case MovieContentType.keyword:
         // Search for movies that match the keyword.

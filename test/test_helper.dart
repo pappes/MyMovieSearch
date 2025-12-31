@@ -34,6 +34,7 @@ void printTestData(
 }) {
   final sorted = actualResult.toList();
   sortDtoList(sorted, includeRelated: includeRelated);
+  // Print new test data to console.
   // ignore: avoid_print
   print(sorted.toListOfDartJsonStrings(includeRelated: includeRelated));
   expect(
@@ -68,7 +69,6 @@ void writeTestData(
   final sorted = actualResult.toList();
   sortDtoList(sorted, includeRelated: includeRelated);
   final jsonData = json.encode(sorted);
-  // ignore: avoid_print
   File(location).writeAsStringSync(jsonData);
   expect('debug code has been left uncommented!', 'Test data has been updated');
 }
@@ -98,12 +98,12 @@ Future<void> releaseExcusiveAccess(String mutexName) async {
   File('/tmp/testMutex_$mutexName.txt').deleteSync();
 }
 
-Future<bool> lockWebFetchTreadedCache() async {
+Future<bool> lockWebFetchTreadedCache() {
   Settings().init();
   return waitForExcusiveAccess('WebFetchTreadedCache');
 }
 
-Future<void> unlockWebFetchTreadedCache() async =>
+Future<void> unlockWebFetchTreadedCache() =>
     releaseExcusiveAccess('WebFetchTreadedCache');
 
 /// Expectation matcher for test framework to compare DTOs
@@ -273,7 +273,7 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
     }
 
     for (final actualDto in _actual) {
-      bool resultMatched = false;
+      var resultMatched = false;
       for (final expectedDto in expected) {
         final differences = <dynamic, dynamic>{};
         if (actualDto.uniqueId == expectedDto.uniqueId) {

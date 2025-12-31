@@ -216,6 +216,7 @@ class MovieTile extends ListTile {
           widgets.add(const Icon(Icons.question_mark));
         case null:
       }
+      // Make deserialisation robust.
       // ignore: avoid_catching_errors
     } on ArgumentError {
       logger.t('old inidcator = ${movie.uniqueId} $read');

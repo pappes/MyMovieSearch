@@ -46,9 +46,9 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   String? deviceType;
 
   /// Initialise firebase ready for use.
-  Future<void> init() async => loggedIn = loginMutexLock.protect(_loginOnce);
+  Future<void> init() => loggedIn = loginMutexLock.protect(_loginOnce);
 
-  Future<bool> _loginOnce() async => login();
+  Future<bool> _loginOnce() => login();
 
   Future<bool> login() async {
     try {

@@ -434,7 +434,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Fetch text from the web source with exception handling.
   ///
   /// Calls child class [myConvertCriteriaToWebText]
-  /// ```
+  /// ```dart 
   /// Converts Future<Stream<String>> to Stream<String>
   /// ```
   @visibleForTesting
@@ -476,12 +476,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Convert web text to a traversable tree of [List] or [Map] data
   /// with exception handling.
   ///
-  /// ```
   /// Calls child class [myConvertWebTextToTraversableTree]
-  /// Unpacks Stream<String> to a single String
+  /// Unpacks Stream\<String\> to a single String
   /// to make child class logic simpler
-  /// Converts Future<List<Map>> to Stream<Map>
-  /// ```
+  /// Converts Future\<List\<Map\>\> to Stream\<Map\>
   @visibleForTesting
   Stream<dynamic> baseConvertWebTextToTraversableTree(
     Stream<String> webStream,
@@ -527,10 +525,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Convert dart [Map] to [OUTPUT_TYPE] object data with exception handling.
   ///
   /// Calls child class [myConvertTreeToOutputType]
-  /// ```
-  /// Unpacks Stream<Map> to Map to make child class logic simpler
-  /// Converts Future<List<OUTPUT_TYPE>> to Stream<OUTPUT_TYPE>
-  /// ```
+  /// Unpacks Stream\<Map\> to Map to make child class logic simpler
+  /// Converts Future\<List\<OUTPUT_TYPE\>\> to Stream\<OUTPUT_TYPE\>
   ///
   /// Limits the number of returned results to
   /// the limit requested by read() or populate().

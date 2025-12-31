@@ -5,7 +5,6 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart'
     show getApplicationDocumentsDirectory;
-// ignore: depend_on_referenced_packages
 import 'package:path_provider_linux/path_provider_linux.dart';
 //import 'package:sqflite/sqflite.dart' show Database, openDatabase;
 

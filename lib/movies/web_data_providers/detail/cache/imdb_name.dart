@@ -10,7 +10,6 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 ///
 /// Caches results in default thread but moves data retrieval to
 /// a different thread.  Runs lower priority requests on a slower thread.
-// ignore: missing_override_of_must_be_overridden
 mixin ThreadedCacheIMDBNameDetails
     on WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> {
   static final normalQueue = <String>{};
@@ -54,8 +53,6 @@ mixin ThreadedCacheIMDBNameDetails
     } else {
       normalQueue.add(text);
     }
-    // ignore: parameter_assignments
-    limit ??= QueryIMDBNameDetails.defaultSearchResultsLimit;
   }
 
   /// Perform any class specific request tracking.
@@ -86,6 +83,7 @@ mixin ThreadedCacheIMDBNameDetails
   @override
   @visibleForTesting
   Future<void> clearThreadedCache() async {
+    // Cascade clear to parent class.
     // ignore: invalid_use_of_visible_for_testing_member
     await super.clearThreadedCache();
     normalQueue.clear();

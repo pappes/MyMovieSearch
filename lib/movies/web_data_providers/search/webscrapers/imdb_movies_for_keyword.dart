@@ -15,7 +15,6 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// ```dart
 /// ScrapeIMDBMoviesForKeyword().readList(criteria, limit: 10)
 /// ```
-// ignore: missing_override_of_must_be_overridden
 mixin ScrapeIMDBMoviesForKeyword
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Reduce computation effort for html extraction.
