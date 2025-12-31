@@ -1,4 +1,3 @@
-// ignore_for_file: invalid_use_of_visible_for_overriding_member
 
 import 'package:flutter_test/flutter_test.dart';
 
@@ -21,7 +20,7 @@ final criteria = SearchCriteriaDTO().fromString('123');
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() async => Settings().init());
+  setUpAll(() => Settings().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,7 +74,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed  as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           QueryOMDBMovies(criteria).myConvertWebTextToTraversableTree(
@@ -83,7 +82,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = <void>[];
       final actualOutput =
           QueryOMDBMovies(criteria).myConvertWebTextToTraversableTree(
@@ -92,7 +91,7 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () async {
+        () {
       final expectedOutput = intermediateErrorMapList;
       final actualOutput =
           QueryOMDBMovies(criteria).myConvertWebTextToTraversableTree(
@@ -175,7 +174,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () async {
+    test('myConvertTreeToOutputType() errors', () {
       final expectedOutput = throwsA(
         isA<TreeConvertException>().having(
           (e) => e.cause,
@@ -215,6 +214,7 @@ void main() {
           .readList(source: streamOmdbJsonOfflineData)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors encountered during processing.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );

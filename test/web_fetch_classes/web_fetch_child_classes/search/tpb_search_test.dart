@@ -77,7 +77,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
 
-    test('Run myConvertWebTextToTraversableTree() for 4 columns', () async {
+    test('Run myConvertWebTextToTraversableTree() for 4 columns', () {
       const expectedOutput = intermediateMapList;
       final testClass = QueryTpbSearch(criteria)..criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
@@ -85,7 +85,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 8 columns', () async {
+    test('Run myConvertWebTextToTraversableTree() for 8 columns', () {
       const expectedOutput = intermediateMapList;
       final testClass = QueryTpbSearch(criteria)..criteria = criteria;
       final actualOutput = testClass.myConvertWebTextToTraversableTree(
@@ -93,7 +93,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = <void>[];
       final actualOutput = QueryTpbSearch(
         criteria,
@@ -102,7 +102,7 @@ void main() {
     });
     test(
       'Run myConvertWebTextToTraversableTree() for invalid results',
-      () async {
+      () {
         final expectedOutput = throwsA(
           isA<WebConvertException>().having(
             (e) => e.cause,
@@ -174,7 +174,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () async {
+    test('myConvertTreeToOutputType() errors', () {
       final expectedOutput = throwsA(
         isA<TreeConvertException>().having(
           (e) => e.cause,
@@ -215,6 +215,8 @@ void main() {
           .readList(source: streamTpbHtmlOfflineData)
           .then(queryResult.addAll)
           .onError(
+            
+            // Print any errors encountered during processing.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );

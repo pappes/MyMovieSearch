@@ -61,7 +61,7 @@ void main() {
     });
 
     // Confirm map can be converted to DTO.
-    test('Run myConvertTreeToOutputType()', () async {
+    test('Run myConvertTreeToOutputType()', () {
       final expectedValue = expectedDTOList;
       final webfetch = QueryYtsSearch(ignoreCriteria);
 
@@ -75,7 +75,7 @@ void main() {
         completion(MovieResultDTOListMatcher(expectedValue)),
       );
     });
-    test('Run myConvertTreeToOutputType() with empty search results', () async {
+    test('Run myConvertTreeToOutputType() with empty search results', () {
       final expectedValue = <MovieResultDTO>[];
       final webfetch = QueryYtsSearch(ignoreCriteria);
 
@@ -90,7 +90,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () async {
+    test('myConvertTreeToOutputType() errors', () {
       final expectedOutput = throwsA(
         isA<TreeConvertException>().having(
           (e) => e.cause,
@@ -143,7 +143,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
     // Confirm web text is parsed as expected.
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
       final actualOutput =
           QueryYtsSearch(ignoreCriteria).myConvertWebTextToTraversableTree(
@@ -151,7 +151,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = intermediateEmptyMapList;
       final actualOutput =
           QueryYtsSearch(ignoreCriteria).myConvertWebTextToTraversableTree(
@@ -160,7 +160,7 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () async {
+        () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
@@ -193,6 +193,7 @@ void main() {
           .readList(source: streamJsonOfflineData)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors that occur.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );

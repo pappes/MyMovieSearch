@@ -87,7 +87,7 @@ void main() {
       expect(actualResult, expectedResult);
     });
 
-    test('Run myConvertWebTextToTraversableTree()', () async {
+    test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
       final testClass = QueryPicclickBarcodeSearch(criteria)
         ..criteria = criteria;
@@ -96,7 +96,7 @@ void main() {
       );
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for 0 results', () async {
+    test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = <void>[];
       final actualOutput = QueryPicclickBarcodeSearch(criteria)
           .myConvertWebTextToTraversableTree(
@@ -105,7 +105,7 @@ void main() {
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () async {
+        () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
@@ -179,7 +179,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () async {
+    test('myConvertTreeToOutputType() errors', () {
       final expectedOutput = throwsA(
         isA<TreeConvertException>().having(
           (e) => e.cause,
@@ -221,6 +221,7 @@ void main() {
           .readList(source: streamHtmlOfflineData)
           .then(queryResult.addAll)
           .onError(
+            // Print any errors encountered during processing.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
