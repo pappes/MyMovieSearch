@@ -21,7 +21,9 @@ mixin ScrapeIMDBSearchDetails
   @override
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
-  ) {
+    // Use async to defer expensive processing until needed.
+    // ignore: unnecessary_async
+  ) async {
     try {
       final json = fastParse(webText);
       final result = _scrapeSearchResult(webText, json);
@@ -32,9 +34,7 @@ mixin ScrapeIMDBSearchDetails
   }
 
   /// Scrape movie data from html json <script> tag.
-  Future<List<dynamic>> _slowConvertWebTextToTraversableTree(
-    String webText,
-  ) {
+  Future<List<dynamic>> _slowConvertWebTextToTraversableTree(String webText) {
     final document = parse(webText);
     final resultScriptElement = document.querySelector(jsonScript);
     if (resultScriptElement?.innerHtml.isNotEmpty ?? false) {
@@ -50,7 +50,7 @@ mixin ScrapeIMDBSearchDetails
     String webText,
     dynamic jsonTree, [
     String? jsonText,
-  ]) async {
+  ]) {
     final contents = TreeHelper(jsonTree).deepSearch(
       deepJsonResultsSuffix, // nameResults or titleResults
       multipleMatch: true,
@@ -59,7 +59,7 @@ mixin ScrapeIMDBSearchDetails
     if (null != contents) {
       try {
         final list = _extractSearchResults(contents);
-        return list;
+        return Future.value(list);
       } catch (_) {}
     } else if (null != TreeHelper(jsonTree).deepSearch(deepRelatedHeader)) {
       return _scrapeMovieDetails(webText);
