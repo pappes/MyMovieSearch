@@ -18,6 +18,7 @@ Future<Stream<String>> streamHtmlOfflineData(_) =>
 const intermediateMapList = [
   {
     'description': 'Love And Other Catastrophes 1996',
+    'cleanDescription': 'A day in the life of two film-school students...',
     'url': 'https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg',
   }
 ];
@@ -73,8 +74,9 @@ const htmlSampleMid = r'''
     "category": "Movies & TV > Movies > Comedy > Other",
     "sku": "1514099",
     "image": "https:\/\/d3fa68hw0m2vcc.cloudfront.net\/099\/25035.jpeg",
-    "productID": "upc:9398710559194",
+    "mainItemBarcode": "9398710559194",
     "description": "A day in the life of two film-school students...",
+                "datePublished": "1996-06-26"
 }
     </script>
 ''';

@@ -68,9 +68,18 @@ void writeTestData(
 }) {
   final sorted = actualResult.toList();
   sortDtoList(sorted, includeRelated: includeRelated);
-  final jsonData = json.encode(sorted);
+  final jsonData = const JsonEncoder.withIndent('  ').convert(sorted);
   File(location).writeAsStringSync(jsonData);
   expect('debug code has been left uncommented!', 'Test data has been updated');
+}
+
+List<MovieResultDTO> readTestData(String location) {
+  final text = File(location).readAsStringSync();
+  final jsonData = json.decode(text);
+  if (jsonData is List) {
+    return ListDTOConversion.decodeList(jsonData);
+  }
+  return [];
 }
 
 Matcher containsSubstring(String substring, {String startsWith = ''}) {
