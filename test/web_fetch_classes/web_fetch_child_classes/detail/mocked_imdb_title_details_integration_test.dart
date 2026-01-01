@@ -85,7 +85,7 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
 List<MovieResultDTO> _makeDTOs(int startid, int qty) {
   final results = <MovieResultDTO>[];
   final endId = startid + qty;
-  for (final uniqueId in range(startid, endId + 1)) {
+  for (final uniqueId in range(startid, endId)) {
     results.add(
       {
         'bestSource': DataSourceType.imdb.toString(),
@@ -102,7 +102,7 @@ List<MovieResultDTO> _makeDTOs(int startid, int qty) {
 List<String> _makeQueries(int startId, int qty) {
   final results = <String>[];
   final endId = startId + qty;
-  for (final uniqueId in range(startId, endId + 1)) {
+  for (final uniqueId in range(startId, endId)) {
     results.add('tt$uniqueId');
   }
   return results;
