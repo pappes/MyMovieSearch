@@ -1,5 +1,6 @@
 import 'dart:async' show StreamController, unawaited;
 
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -31,6 +32,9 @@ class BaseMovieRepository {
   final _awaitingProviders = <dynamic>[];
   final providers = <WebFetchBase<MovieResultDTO, SearchCriteriaDTO>>[];
   static int _searchUID = 1;
+  final searchIndicator = MovieResultDTO()
+    ..title = 'Searching ...'
+    ..type = MovieContentType.information;
 
   /// Return a stream of data matching [criteria].
   ///
@@ -41,13 +45,10 @@ class BaseMovieRepository {
   Stream<MovieResultDTO> search(SearchCriteriaDTO newCriteria) async* {
     criteria = newCriteria;
     ++_searchUID;
-    yield MovieResultDTO()
-      ..title = 'Searching ...'
-      ..type = MovieContentType.information;
+    yield searchIndicator;
 
     _movieStreamController = StreamController<MovieResultDTO>(sync: true);
-    // TODO(pappes): error handling
-    unawaited(initSearch(_searchUID, criteria));
+    unawaited(initSearch(_searchUID, criteria).catchError(handleError));
     // TODO(pappes): make fetch duration configurable.
     unawaited(
       Future<void>.delayed(const Duration(seconds: 30)).then((_) => close()),
@@ -56,19 +57,26 @@ class BaseMovieRepository {
     yield* _movieStreamController!.stream;
   }
 
+  /// Handle errors during search processing.
+  void handleError(Object error, StackTrace stackTrace) {
+    final errorMessage = 'Error in BaseMovieRepository: $error\n$stackTrace';
+    logger.e(errorMessage);
+    if (_movieStreamController?.isClosed == false) {
+      searchIndicator.title = errorMessage.characters.take(200).toString();
+      yieldResult(searchIndicator);
+    }
+  }
+
   /// Cancels or completes an in progress search.
-  Future<void> close() async {
-    yieldResult(
-      MovieResultDTO()
-        ..title = 'Search completed ...'
-        ..type = MovieContentType.information,
-    );
+  Future<void> close({String message = 'Search completed ...'}) async {
+    searchIndicator.title = message;
+    yieldResult(searchIndicator);
 
     if (_movieStreamController != null) {
-      logger.t('closing stream');
-      final tempController = _movieStreamController!;
+      logger.t('closing repository stream');
+      final tempController = _movieStreamController;
       _movieStreamController = null;
-      return tempController.close();
+      return tempController?.close();
     }
   }
 

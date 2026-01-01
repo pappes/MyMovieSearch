@@ -46,7 +46,8 @@ class MovieResultDTO {
   // Related DTOs are in a category, then keyed by uniqueId
   RelatedMovieCategories related = {};
 
-  toString() => "Instance of 'MovieResultDTO': $uniqueId";
+  @override
+  String toString() => "Instance of 'MovieResultDTO': $uniqueId - $title";
 
   /// Convert a [MovieResultDTO] to a map tha can be consumed by jsonEncode.
   ///

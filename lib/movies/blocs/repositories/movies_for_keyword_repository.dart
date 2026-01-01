@@ -10,11 +10,14 @@ class MoviesForKeywordRepository extends MovieListRepository {
   ///
   /// [searchUID] is a unique correlation ID identifying this search request
   @override
-  Future<void> initSearch(int searchUID, SearchCriteriaDTO criteria) {
-    initProvider(criteria);
-    return QueryIMDBMoviesForKeyword(criteria)
-        .readList(limit: 10)
-        .then((values) => addResults(searchUID, values))
-        .whenComplete(() => finishProvider(criteria));
-  }
+  Future<void> initSearch(int searchUID, SearchCriteriaDTO criteria) =>
+      // Use Future.sync to allow code to run synchronously and ensure
+      // that exceptions are propagated as Future errors.
+      Future.sync(() {
+        initProvider(criteria);
+        return QueryIMDBMoviesForKeyword(criteria)
+            .readList(limit: 10)
+            .then((values) => addResults(searchUID, values))
+            .whenComplete(() => finishProvider(criteria));
+      });
 }
