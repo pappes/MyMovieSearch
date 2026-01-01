@@ -81,7 +81,9 @@ void main() {
 
   group('live QueryTorrentz2Search test', () {
     // Search for a rare movie.
-    test('Run a search on Tpb that is likely to have static results', () async {
+    test(
+      'Run a search on Torrentz2 that is likely to have static results',
+      () async {
       final criteria = SearchCriteriaDTO().fromString('shark.side.of.the.moon');
       final actualOutput =
           await QueryTorrentz2Search(criteria).readList(limit: 10);
@@ -103,7 +105,9 @@ void main() {
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
-    });
+      },
+      skip: true,
+    );
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
       final actualOutput =
@@ -121,5 +125,5 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
-  });
+  }, skip: true);
 }

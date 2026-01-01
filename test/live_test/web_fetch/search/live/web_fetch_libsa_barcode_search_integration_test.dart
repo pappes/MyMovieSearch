@@ -13,7 +13,7 @@ import '../../../../test_helper.dart';
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"https://secure.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=&issn=/MC.GIF","bestSource":"DataSourceType.libsaBarcode","title":"Summer in February 2013","alternateTitle":"Summer in February [DVD]. 2014 2013","type":"MovieContentType.barcode","sources":{"DataSourceType.libsaBarcode":"https://secure.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=&issn=/MC.GIF"}}
+{"uniqueId":"https://www.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=&issn=/MC.GIF","bestSource":"DataSourceType.libsaBarcode","title":"Summer in February 2013","alternateTitle":"Summer in February [DVD]. 2014 2013","type":"MovieContentType.barcode","sources":{"DataSourceType.libsaBarcode":"https://www.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=&issn=/MC.GIF"}}
 ''',
 ];
 

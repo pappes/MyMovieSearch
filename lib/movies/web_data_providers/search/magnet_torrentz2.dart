@@ -26,7 +26,7 @@ class QueryTorrentz2Search
     with ScrapeTorrentz2Search {
   QueryTorrentz2Search(super.criteria);
 
-  static const _baseURL = 'https://torrentz2.nz/search?q=';
+  static const _baseURL = 'https://torrentz2.io/search?q=';
   static const _pageURL = '&page=';
 
   /// Describe where the data is coming from.
