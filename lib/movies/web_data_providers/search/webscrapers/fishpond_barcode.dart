@@ -71,8 +71,8 @@ mixin ScrapeFishpondBarcodeSearch
       final yearParts = yearText?.split('-');
       final year = yearParts?.isNotEmpty ?? false ? yearParts?.first : '';
 
-      result[jsonRawDescriptionKey] = '$title $year';
-      result[jsonCleanDescriptionKey] = rawDescription;
+      result[jsonCleanDescriptionKey] = '$title $year';
+      result[jsonRawDescriptionKey] = rawDescription;
       result[jsonUrlKey] = rawUrl;
       movieData.add(result);
       return movieData;

@@ -17,9 +17,9 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 final criteria = SearchCriteriaDTO().fromString('dream');
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('FishpondBarcode search unit tests', () {
     // Confirm class description is constructed as expected.
@@ -62,9 +62,9 @@ void main() {
           'https://www.fishpond.com.au/advanced_search_result.php?keywords=new%20query&cName=Movies';
 
       // Invoke the functionality.
-      final actualResult = QueryFishpondBarcodeSearch(criteria)
-          .myConstructURI('new query')
-          .toString();
+      final actualResult = QueryFishpondBarcodeSearch(
+        criteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -79,10 +79,9 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryFishpondBarcodeSearch(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryFishpondBarcodeSearch(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -93,27 +92,29 @@ void main() {
       const expectedOutput = intermediateMapList;
       final testClass = QueryFishpondBarcodeSearch(criteria)
         ..criteria = criteria;
-      final actualOutput =
-          testClass.myConvertWebTextToTraversableTree(htmlSampleFull);
+      final actualOutput = testClass.myConvertWebTextToTraversableTree(
+        htmlSampleFull,
+      );
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = <void>[];
-      final actualOutput = QueryFishpondBarcodeSearch(criteria)
-          .myConvertWebTextToTraversableTree(htmlSampleEmpty);
+      final actualOutput = QueryFishpondBarcodeSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
           'cause',
-          contains('results data not detected log'),
+          contains('No search results found in html'),
         ),
       );
-      final actualOutput = QueryFishpondBarcodeSearch(criteria)
-          .myConvertWebTextToTraversableTree(htmlSampleError);
+      final actualOutput = QueryFishpondBarcodeSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleError);
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
       expect(actualOutput, expectedOutput);
@@ -139,15 +140,16 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using FishpondBarcodeSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('FishpondBarcodeSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
@@ -158,16 +160,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await webfetch.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await webfetch.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -195,11 +196,11 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase
   ///  and ScrapeFishpondBarcodeSearchDetails
   ///  and FishpondBarcodeSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('FishpondBarcode search query', () {
     // Read search results from a simulated byte stream
@@ -225,7 +226,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue, related: false),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -236,13 +238,10 @@ void main() {
     test('invalid html', () async {
       // Set up the test data.
       final expectedException =
-          '[QueryFishpondBarcodeSearch] Error in fishpondBarcode '
-          'with criteria '
+          '[QueryFishpondBarcodeSearch] Error in fishpondBarcode with criteria '
           '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
-          'interpreting web text as a map :FishpondBarcode results data '
-          'not detected log: resultSelector found 0 result\n '
-          'for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
-          'html:not valid html';
+          'interpreting web text as a map '
+          ':No search results found in html:not valid html';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryFishpondBarcodeSearch(criteria);
 
@@ -261,10 +260,8 @@ void main() {
           '[QueryFishpondBarcodeSearch] Error in fishpondBarcode '
           'with criteria '
           '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
-          'interpreting web text as a map :FishpondBarcode results data '
-          'not detected log: resultSelector found 0 result\n '
-          'for criteria ${criteria.toPrintableIdOrText().toLowerCase()} in '
-          'html:<html><body>stuff</body></html>';
+          'interpreting web text as a map '
+          ':No search results found in html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryFishpondBarcodeSearch(criteria);
 

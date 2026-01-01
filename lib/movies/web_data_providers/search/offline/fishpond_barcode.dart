@@ -7,7 +7,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 in test('Run dtoFromCompleteJsonMap()'*/
 const expectedDtoJsonStringList = [
   r'''
-{"uniqueId":"DataSourceType.fishpondBarcode dream","bestSource":"DataSourceType.fishpondBarcode","title":"Love And Other Catastrophes 1996","alternateTitle":"Love And Other Catastrophes 1996","type":"MovieContentType.barcode","imageUrl":"https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg","sources":{"DataSourceType.fishpondBarcode":"DataSourceType.fishpondBarcode dream"}}
+{"uniqueId":"DataSourceType.fishpondBarcode dream","bestSource":"DataSourceType.fishpondBarcode","title":"Love And Other Catastrophes 1996","alternateTitle":"A day in the life of two film-school students...","type":"MovieContentType.barcode","imageUrl":"https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg","sources":{"DataSourceType.fishpondBarcode":"DataSourceType.fishpondBarcode dream"}}
 ''',
 ];
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
@@ -17,8 +17,8 @@ Future<Stream<String>> streamHtmlOfflineData(_) =>
 
 const intermediateMapList = [
   {
-    'description': 'Love And Other Catastrophes 1996',
-    'cleanDescription': 'A day in the life of two film-school students...',
+    'cleanDescription': 'Love And Other Catastrophes 1996',
+    'description': 'A day in the life of two film-school students...',
     'url': 'https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg',
   }
 ];
