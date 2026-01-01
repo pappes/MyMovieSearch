@@ -179,7 +179,7 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
 
   @override
   @factory
-  // Linter does not undersand that fromPrimitives is a factory method.
+  // Linter does not understand that fromPrimitives is a factory method.
   // ignore: invalid_factory_method_impl
   MovieResultDTO fromPrimitives(Object? data) => dtoFromPrimitives(data);
   @factory
@@ -223,7 +223,7 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
 
   @override
   @factory
-  // Linter does not undersand that fromPrimitives is a factory method.
+  // Linter does not understand that fromPrimitives is a factory method.
   // ignore: invalid_factory_method_impl
   List<MovieResultDTO> fromPrimitives(Object? data) {
     if (data is String) {
@@ -247,7 +247,7 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   /// into a [List] of [MovieResultDTO] objects
   ///
   @factory
-  // Linter does not undersand that decodeList is a factory method.
+  // Linter does not understand that decodeList is a factory method.
   // ignore: invalid_factory_method_impl
   static List<MovieResultDTO> decodeList(Iterable<dynamic> encoded) {
     final result = <MovieResultDTO>[];
@@ -290,7 +290,7 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
   /// Convert a [Map] into a [MovieResultDTO] object
   ///
   @factory
-  // Linter does not undersand that toMovieResultDTO is a factory method.
+  // Linter does not understand that toMovieResultDTO is a factory method.
   // ignore: invalid_factory_method_impl
   MovieResultDTO toMovieResultDTO() {
     final dto =
@@ -423,7 +423,9 @@ class DtoCache {
   /// Retrieve data from the cache.
   ///
   Future<MovieResultDTO> fetch(MovieResultDTO newValue) =>
-      merge(newValue);
+      // Use Future.sync to allow code to run synchronously and ensure 
+      // that exceptions are propagated as Future errors.
+      Future.sync(() => merge(newValue));
 
   /// remove [newValue] from the cache.
   ///
@@ -975,7 +977,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// as a [MovieResultDTO].
   ///
   @factory
-  // Linter does not undersand that toUnknown is a factory method.
+  // Linter does not understand that toUnknown is a factory method.
   // ignore: invalid_factory_method_impl
   MovieResultDTO toUnknown() =>
       MovieResultDTO()
@@ -1310,7 +1312,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       DtoCache.singleton().fetchSynchronously(uniqueId) ?? this;
 
   @factory
-  // Linter does not undersand that clone is a factory method.
+  // Linter does not understand that clone is a factory method.
   // ignore: invalid_factory_method_impl
   MovieResultDTO clone({bool condensed = false}) =>
       toMap(condensed: condensed).toMovieResultDTO();
@@ -1618,7 +1620,7 @@ extension DTOCompare on MovieResultDTO {
               case ReadHistory.none:
               case ReadHistory.custom:
             }
-            // Allow derialisation to be moe robust.
+            // Allow deserialisation to be more robust.
             // ignore: avoid_catching_errors
           } on ArgumentError catch (_) {}
         }
