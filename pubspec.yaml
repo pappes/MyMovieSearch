@@ -122,6 +122,7 @@ flutter:
    - assets/OldCDLibrary.json
    - assets/newDVDLibrary.json
    - assets/images/
+   - integration_test/web_fetch_imdb_json_filtered_integration_test.json
 
 
   fonts:

@@ -75,7 +75,11 @@ void writeTestData(
 
 List<MovieResultDTO> readTestData(String location) {
   final text = File(location).readAsStringSync();
-  final jsonData = json.decode(text);
+  return loadTestData(text);
+}
+
+List<MovieResultDTO> loadTestData(String jsonText) {
+  final jsonData = json.decode(jsonText);
   if (jsonData is List) {
     return ListDTOConversion.decodeList(jsonData);
   }

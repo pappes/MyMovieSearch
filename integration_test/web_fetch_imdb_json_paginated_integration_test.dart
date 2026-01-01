@@ -57,7 +57,7 @@ void main() {
           sampleOutput,
           MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
           reason:
-              'Emitted DTO list ${actualOutput.toPrintableString()} '
+              'Emitted DTO list ${sampleOutput.toPrintableString()} '
               'needs to match expected DTO list '
               '${expectedOutput.toPrintableString()}',
         );
