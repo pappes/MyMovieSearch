@@ -34,7 +34,7 @@ r'''
 /// Create a string list with [qty] unique criteria values.
 List<String> _makeQueries(int qty) {
   final results = <String>[];
-  for (final i in range(0, qty + 1)) {
+  for (final i in range(0, qty)) {
     results.add('tt010${1000 + i}');
   }
   results.add('2001-a-space-odyssey-1968');

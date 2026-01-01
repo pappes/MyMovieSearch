@@ -102,16 +102,19 @@ class QueryMsSearchMovies
 
   /// Convert MsSearch map to MovieResultDTO records.
   @override
-  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic tree,
-  ) {
-    if (tree is List<dynamic>) {
-      return MsSearchMovieSearchConverter.dtoFromCompleteJsonMap(tree).toList();
-    }
-    throw TreeConvertException(
-      'expected List got ${tree.runtimeType} unable to interpret data $tree',
-    );
-  }
+  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(dynamic tree) =>
+      // Use Future.sync to allow code to run synchronously and ensure
+      // that exceptions are propagated as Future errors.
+      Future.sync(() {
+        if (tree is List<dynamic>) {
+          return MsSearchMovieSearchConverter.dtoFromCompleteJsonMap(
+            tree,
+          ).toList();
+        }
+        throw TreeConvertException(
+          'expected List got ${tree.runtimeType} unable to interpret data $tree',
+        );
+      });
 
   /// converts SearchCriteriaDTO to a string representation.
   @override

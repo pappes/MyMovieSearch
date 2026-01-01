@@ -288,7 +288,7 @@ void main() {
           .readList(source: streamImdbHtmlOfflineData)
           .then(queryResult.addAll)
           .onError(
-            // If ther is an error, print it to help debugging.
+            // If there is an error, print it to help debugging.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
