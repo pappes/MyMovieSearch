@@ -101,9 +101,10 @@ class QueryUnknownSourceMocked
   @override
   Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
     dynamic tree,
-    // This really does need to be async so it handles future exceptions properly.
-    // ignore: unnecessary_async
-  ) async => overriddenConvertTreeToOutputType(tree);
+  ) =>
+      // Use Future.sync to allow code to run synchronously and ensure
+      // that exceptions are propagated as Future errors.
+      Future.sync(() => overriddenConvertTreeToOutputType(tree));
   ConvertTreeToOutputType overriddenConvertTreeToOutputType = treeToDto;
 
   // Default myConvertWebTextToTraversableTree
@@ -113,7 +114,7 @@ class QueryUnknownSourceMocked
   @override
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
-    // This really does need to be async so it handles future exceptions properly.
+    // Needs to be async so it handles future exceptions properly.
     // ignore: unnecessary_async
   ) async =>
       overriddenConvertWebTextToTraversableTree(webText);

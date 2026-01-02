@@ -48,7 +48,8 @@ void main() {
       // Setup default behavior for mockCriteria to avoid null errors.
       when(mockCriteria.criteriaList).thenReturn([]);
       // We assume SearchCriteriaType is an enum. If the mock returns null,
-      // it won't match specific enum values (like barcode), which is fine for defaults.
+      // it won't match specific enum values (like barcode), 
+      // which is fine for defaults.
     });
 
     test('search emits "Searching ..." indicator immediately', () async {

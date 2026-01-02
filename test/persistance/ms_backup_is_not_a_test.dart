@@ -124,7 +124,7 @@ Future<String> getMovieDetails() async {
   WidgetsFlutterBinding.ensureInitialized();
   // Dont rely upon firebase backup for data.
   final movies = await getFirebaseData(clearCache: true);
-  int recordNumber = 1;
+  var recordNumber = 1;
   Settings().init();
   await Settings().cloudSettingsInitialised;
 
@@ -164,7 +164,7 @@ Future<List<MovieResultDTO>> getMeilisearchDvdDetails() async {
   final futures = <Future<dynamic>>[];
   // Assume up to date firebase backup data.
   final movies = await getFirebaseData(clearCache: false);
-  int recordNumber = 1;
+  var recordNumber = 1;
   Settings().init();
   await Settings().cloudSettingsInitialised;
 

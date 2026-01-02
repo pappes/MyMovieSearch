@@ -5,26 +5,9 @@ import 'package:my_movie_search/movies/web_data_providers/search/yts_search.dart
 
 import '../../../../test_helper.dart';
 
-// ignore_for_file: unnecessary_raw_strings
-
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real IMDB endpoint!
 ////////////////////////////////////////////////////////////////////////////////
-
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-const expectedDtoJsonStringList = [
-r'''
-{"uniqueId":"https://yts.lt/movies/sharon-1-2-3-2018","title":"Sharon 1.2.3.","bestSource":"DataSourceType.ytsSearch","type":"MovieContentType.information","year":"2018","sources":{"DataSourceType.ytsSearch":"https://yts.lt/movies/sharon-1-2-3-2018"}}
-''',
-];
-
-final expectedTitleList =
-    ListDTOConversion.decodeList(expectedTitleJsonStringList);
-const expectedTitleJsonStringList = [
-  r'''
-{"uniqueId":"https://yts.lt/movies/rize-2005","bestSource":"DataSourceType.ytsSearch","title":"Rize","type":"MovieContentType.information","year":"2005","sources":{"DataSourceType.ytsSearch":"https://yts.lt/movies/rize-2005"}}
-''',
-];
 
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
