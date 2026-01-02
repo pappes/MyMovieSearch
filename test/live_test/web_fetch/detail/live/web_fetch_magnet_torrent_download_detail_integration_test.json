@@ -1,0 +1,10 @@
+[
+  {
+    "uniqueId": "https://www.torrentdownload.info/B9F89CFDF8E74E9ACE0E58528932FCC437AD0D0E/Space-Jam-A-New-Legacy-+2021+-+1080p+-+WEBRip+-+5-1+-+YTS-MX+",
+    "bestSource": "DataSourceType.torrentDownloadDetail",
+    "type": "MovieContentType.download",
+    "sources": {
+      "DataSourceType.torrentDownloadDetail": "https://www.torrentdownload.info/B9F89CFDF8E74E9ACE0E58528932FCC437AD0D0E/Space-Jam-A-New-Legacy-+2021+-+1080p+-+WEBRip+-+5-1+-+YTS-MX+"
+    }
+  }
+]

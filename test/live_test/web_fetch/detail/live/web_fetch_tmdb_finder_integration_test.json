@@ -1,0 +1,63 @@
+[
+  {
+    "uniqueId": "tt0101000",
+    "title": "Začátek dlouhého podzimu",
+    "bestSource": "DataSourceType.tmdbFinder",
+    "type": "MovieContentType.title",
+    "year": "1990",
+    "language": "LanguageType.foreign",
+    "languages": "[\"cs\"]",
+    "description": "The film about curious children who discover a sunken statue of Masaryk in a disused well was interfered with by the events of November and the filmmakers tried to incorporate their echoes into the flow of the narrative. However, the result is at times confusing, as the originally childish adventure has thus grown into a naive social poster child.",
+    "userRating": "6.0",
+    "userRatingCount": "1",
+    "sources": {
+      "DataSourceType.tmdbFinder": "913986"
+    }
+  },
+  {
+    "uniqueId": "tt0101001",
+    "title": "A Haunted Romance",
+    "bestSource": "DataSourceType.tmdbFinder",
+    "alternateTitle": "再世風流劫",
+    "type": "MovieContentType.title",
+    "year": "1985",
+    "language": "LanguageType.foreign",
+    "languages": "[\"cn\"]",
+    "description": "Hong Kong horror movie from 1985.",
+    "sources": {
+      "DataSourceType.tmdbFinder": "1341041"
+    }
+  },
+  {
+    "uniqueId": "tt0101002",
+    "title": "Return Engagement",
+    "bestSource": "DataSourceType.tmdbFinder",
+    "alternateTitle": "再戰江湖",
+    "type": "MovieContentType.title",
+    "year": "1990",
+    "language": "LanguageType.foreign",
+    "languages": "[\"cn\"]",
+    "description": "A well-known gangster is released from prison, and decides look for his daughter with the help of a troubled young woman.",
+    "userRating": "6.6",
+    "userRatingCount": "7",
+    "sources": {
+      "DataSourceType.tmdbFinder": "230839"
+    }
+  },
+  {
+    "uniqueId": "tt0101003",
+    "title": "Freeze, Die, Come to Life",
+    "bestSource": "DataSourceType.tmdbFinder",
+    "alternateTitle": "Замри-умри-воскресни!",
+    "type": "MovieContentType.title",
+    "year": "1990",
+    "language": "LanguageType.foreign",
+    "languages": "[\"ru\"]",
+    "description": "Stuck in a mining town near Vladivostok in 1947 amongst Soviet exiles and Japanese POWs (Japanese prisoners remained in Siberia for years after the war had ended), the kids have to come up with something to keep them busy. Two friends, Valerka and Galia, play some peculiar, very dangerous games of their own amid the man-made wasteland of Suchan.",
+    "userRating": "6.3",
+    "userRatingCount": "26",
+    "sources": {
+      "DataSourceType.tmdbFinder": "41948"
+    }
+  }
+]

@@ -1,0 +1,215 @@
+[
+  {
+    "uniqueId": "tt0101000",
+    "title": "Zacátek dlouhého podzimu",
+    "bestSource": "DataSourceType.imdb",
+    "type": "MovieContentType.movie",
+    "year": "1990",
+    "yearRange": "1990",
+    "runTime": "4860",
+    "language": "LanguageType.foreign",
+    "sources": {
+      "DataSourceType.imdb": "tt0101000"
+    }
+  },
+  {
+    "uniqueId": "tt0101001",
+    "title": "A Haunted Romance",
+    "bestSource": "DataSourceType.imdb",
+    "alternateTitle": "Zai shi feng liu jie",
+    "type": "MovieContentType.movie",
+    "year": "1985",
+    "yearRange": "1985",
+    "runTime": "5340",
+    "language": "LanguageType.foreign",
+    "sources": {
+      "DataSourceType.imdb": "tt0101001"
+    }
+  },
+  {
+    "uniqueId": "tt0101002",
+    "title": "Joi jin gong woo",
+    "bestSource": "DataSourceType.imdb",
+    "alternateTitle": "Return Engagement",
+    "type": "MovieContentType.movie",
+    "year": "1990",
+    "yearRange": "1990",
+    "runTime": "6480",
+    "language": "LanguageType.someEnglish",
+    "censorRating": "CensorRatingType.restricted",
+    "sources": {
+      "DataSourceType.imdb": "tt0101002"
+    },
+    "related": {
+      "Suggestions:": {
+        "tt0094357": {
+          "uniqueId": "tt0094357",
+          "title": "A Better Tomorrow II",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "alternateTitle": "Ying hung boon sik II",
+          "type": "MovieContentType.movie",
+          "year": "1987",
+          "yearRange": "1987",
+          "runTime": "6300",
+          "censorRating": "CensorRatingType.restricted",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0094357"
+          }
+        },
+        "tt0099888": {
+          "uniqueId": "tt0099888",
+          "title": "The Last Blood",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "alternateTitle": "Ging tin 12 siu see",
+          "type": "MovieContentType.movie",
+          "year": "1990",
+          "yearRange": "1990",
+          "runTime": "5640",
+          "censorRating": "CensorRatingType.restricted",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0099888"
+          }
+        },
+        "tt0100777": {
+          "uniqueId": "tt0100777",
+          "title": "A Moment of Romance",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "alternateTitle": "Tin joek yau ching",
+          "type": "MovieContentType.movie",
+          "year": "1990",
+          "yearRange": "1990",
+          "runTime": "5520",
+          "censorRating": "CensorRatingType.restricted",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0100777"
+          }
+        },
+        "tt0097244": {
+          "uniqueId": "tt0097244",
+          "title": "God of Gamblers",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "alternateTitle": "Do san",
+          "type": "MovieContentType.movie",
+          "year": "1989",
+          "yearRange": "1989",
+          "runTime": "7560",
+          "censorRating": "CensorRatingType.restricted",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0097244"
+          }
+        },
+        "tt0369060": {
+          "uniqueId": "tt0369060",
+          "title": "Infernal Affairs II",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "alternateTitle": "Mou gaan dou II",
+          "type": "MovieContentType.movie",
+          "year": "2003",
+          "yearRange": "2003",
+          "runTime": "7140",
+          "censorRating": "CensorRatingType.mature",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0369060"
+          }
+        },
+        "tt0093435": {
+          "uniqueId": "tt0093435",
+          "title": "City on Fire",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "alternateTitle": "Lung foo fung wan",
+          "type": "MovieContentType.movie",
+          "year": "1987",
+          "yearRange": "1987",
+          "runTime": "6060",
+          "censorRating": "CensorRatingType.restricted",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0093435"
+          }
+        },
+        "tt0096885": {
+          "uniqueId": "tt0096885",
+          "title": "Wild Search",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "alternateTitle": "Ban wo chuang tian ya",
+          "type": "MovieContentType.movie",
+          "year": "1989",
+          "yearRange": "1989",
+          "runTime": "5880",
+          "censorRating": "CensorRatingType.mature",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0096885"
+          }
+        },
+        "tt0093306": {
+          "uniqueId": "tt0093306",
+          "title": "Rich and Famous",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "alternateTitle": "Gong woo ching",
+          "type": "MovieContentType.movie",
+          "year": "1987",
+          "yearRange": "1987",
+          "runTime": "6240",
+          "censorRating": "CensorRatingType.restricted",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0093306"
+          }
+        },
+        "tt0094356": {
+          "uniqueId": "tt0094356",
+          "title": "Tragic Hero",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "alternateTitle": "Ying hung ho hon",
+          "type": "MovieContentType.movie",
+          "year": "1987",
+          "yearRange": "1987",
+          "runTime": "5820",
+          "censorRating": "CensorRatingType.restricted",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0094356"
+          }
+        },
+        "tt0219887": {
+          "uniqueId": "tt0219887",
+          "title": "Century of the Dragon",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "alternateTitle": "Lung joi bin yuen",
+          "type": "MovieContentType.movie",
+          "year": "1999",
+          "yearRange": "1999",
+          "runTime": "5400",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0219887"
+          }
+        },
+        "tt0374339": {
+          "uniqueId": "tt0374339",
+          "title": "Infernal Affairs III",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "alternateTitle": "Mou gaan dou III: Jung gik mou gaan",
+          "type": "MovieContentType.movie",
+          "year": "2003",
+          "yearRange": "2003",
+          "runTime": "7080",
+          "censorRating": "CensorRatingType.mature",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0374339"
+          }
+        },
+        "tt0103045": {
+          "uniqueId": "tt0103045",
+          "title": "Fight Back to School",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "alternateTitle": "To hok wai lung",
+          "type": "MovieContentType.movie",
+          "year": "1991",
+          "yearRange": "1991",
+          "runTime": "6000",
+          "censorRating": "CensorRatingType.mature",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0103045"
+          }
+        }
+      }
+    }
+  }
+]

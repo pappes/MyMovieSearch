@@ -8,7 +8,9 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/settings.dart';
+import 'package:quiver/iterables.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Helper functions
@@ -62,19 +64,19 @@ Iterable<MovieResultDTO> sampleTestData(
 }
 
 void writeTestData(
-  String location,
   Iterable<MovieResultDTO> actualResult, {
+  String? location,
   bool includeRelated = true,
 }) {
   final sorted = actualResult.toList();
   sortDtoList(sorted, includeRelated: includeRelated);
   final jsonData = const JsonEncoder.withIndent('  ').convert(sorted);
-  File(location).writeAsStringSync(jsonData);
+  File(location ?? getDataFileLocation()).writeAsStringSync(jsonData);
   expect('debug code has been left uncommented!', 'Test data has been updated');
 }
 
-List<MovieResultDTO> readTestData(String location) {
-  final text = File(location).readAsStringSync();
+List<MovieResultDTO> readTestData({String? location}) {
+  final text = File(location ?? getDataFileLocation()).readAsStringSync();
   return loadTestData(text);
 }
 
@@ -84,6 +86,72 @@ List<MovieResultDTO> loadTestData(String jsonText) {
     return ListDTOConversion.decodeList(jsonData);
   }
   return [];
+}
+
+/// Returns the absolute path of the JSON file associated with this test file.
+String getDataFileLocation({String suffix = '.json'}) {
+  final stackFrames = StackTrace.current.toString().split('\n');
+
+  // The path of the file where this function is defined.
+  String? thisFilePath;
+
+  for (final frame in stackFrames) {
+    // Extract the file URI from the stack frame (e.g., file://.../test.dart:10:5).
+    final uriMatch = RegExp(r'(file://.+?):\d+:\d+').firstMatch(frame);
+
+    if (uriMatch != null) {
+      final frameFilePath = Uri.parse(uriMatch.group(1)!).toFilePath();
+
+      // The first valid file path encountered is where this function resides.
+      if (thisFilePath == null) {
+        thisFilePath = frameFilePath;
+      }
+      // If we encounter a path different from this function's file,
+      // it is the caller (the test file).
+      else if (frameFilePath != thisFilePath) {
+        return frameFilePath.replaceAll('.dart', suffix);
+      }
+    }
+  }
+
+  // If we traversed the whole stack without finding a different file,
+  // it means the function was called from within the same file.
+  if (thisFilePath != null) {
+    return thisFilePath.replaceAll('.dart', suffix);
+  }
+  throw StateError('Cannot determine current file path from stack trace');
+}
+
+/// Create a string list with [qty] unique criteria values.
+List<SearchCriteriaDTO> makeFetchCriteriaDtos(
+  int qty, {
+  String prefix = imdbTitlePrefix,
+}) {
+  final results = <SearchCriteriaDTO>[];
+  for (final i in range(0, qty)) {
+    results.add(SearchCriteriaDTO().fromString('${prefix}010${1000 + i}'));
+  }
+  return results;
+}
+
+typedef WebFetchCall = Future<List<MovieResultDTO>> Function(SearchCriteriaDTO);
+
+Future<List<MovieResultDTO>> executeMultipleFetches(
+  WebFetchCall fetchFunction, {
+  int qty = 3,
+  String prefix = imdbTitlePrefix,
+}) async {
+  final queries = makeFetchCriteriaDtos(qty, prefix: prefix);
+  final futures = <Future<List<MovieResultDTO>>>[];
+  for (final queryKey in queries) {
+    final future = fetchFunction(queryKey);
+    futures.add(future);
+  }
+  final queryResult = <MovieResultDTO>[];
+  for (final future in futures) {
+    queryResult.addAll(await future);
+  }
+  return queryResult;
 }
 
 Matcher containsSubstring(String substring, {String startsWith = ''}) {
@@ -365,31 +433,30 @@ MovieResultDTO makeResultDTOWithRelatedDTO(String sample) {
 
 /// Helper function to make a unique dto containing unique values.
 MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
-  final dto =
-      MovieResultDTO()
-        ..bestSource = DataSourceType.wiki
-        ..uniqueId = '${sample}_uniqueId'
-        ..title = '${sample}_title'
-        ..alternateTitle = '${sample}_alternateTitle'
-        ..characterName = '${sample}_characterName'
-        ..description = '${sample}_description'
-        ..type = MovieContentType.custom
-        ..year = 123
-        ..yearRange = '${sample}_yearRange'
-        ..creditsOrder = 42
-        ..userRating = 456
-        ..userRatingCount = 789
-        ..censorRating = CensorRatingType.family
-        ..runTime = const Duration(hours: 1, minutes: 2, seconds: 3)
-        ..imageUrl = '${sample}_imageUrl'
-        ..language = LanguageType.mostlyEnglish
-        ..languages = {'English', '${sample}_language1', '${sample}_language2'}
-        ..genres = {'${sample}_genre1', '${sample}_genre2'}
-        ..keywords = {'${sample}_keyword1', '${sample}_keyword2'}
-        ..sources = {
-          DataSourceType.tmdbMovie: '${sample}_alternateTitle',
-          DataSourceType.wiki: '${sample}_uniqueId',
-        };
+  final dto = MovieResultDTO()
+    ..bestSource = DataSourceType.wiki
+    ..uniqueId = '${sample}_uniqueId'
+    ..title = '${sample}_title'
+    ..alternateTitle = '${sample}_alternateTitle'
+    ..characterName = '${sample}_characterName'
+    ..description = '${sample}_description'
+    ..type = MovieContentType.custom
+    ..year = 123
+    ..yearRange = '${sample}_yearRange'
+    ..creditsOrder = 42
+    ..userRating = 456
+    ..userRatingCount = 789
+    ..censorRating = CensorRatingType.family
+    ..runTime = const Duration(hours: 1, minutes: 2, seconds: 3)
+    ..imageUrl = '${sample}_imageUrl'
+    ..language = LanguageType.mostlyEnglish
+    ..languages = {'English', '${sample}_language1', '${sample}_language2'}
+    ..genres = {'${sample}_genre1', '${sample}_genre2'}
+    ..keywords = {'${sample}_keyword1', '${sample}_keyword2'}
+    ..sources = {
+      DataSourceType.tmdbMovie: '${sample}_alternateTitle',
+      DataSourceType.wiki: '${sample}_uniqueId',
+    };
   if (makeRelated) {
     final ref = 'rel$sample';
     dto.related = {
@@ -409,15 +476,14 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
 }
 
 /// Helper function to make a unique dto containing unique values.
-SearchCriteriaDTO makeCriteriaDTO(String sample) =>
-    SearchCriteriaDTO()
-      ..criteriaType = SearchCriteriaType.movieDTOList
-      ..criteriaTitle = '${sample}_criteriaTitle'
-      ..searchId = '${sample}_searchId'
-      ..criteriaList = [
-        MovieResultDTO().init(uniqueId: 'first'),
-        MovieResultDTO().init(uniqueId: 'second'),
-      ];
+SearchCriteriaDTO makeCriteriaDTO(String sample) => SearchCriteriaDTO()
+  ..criteriaType = SearchCriteriaType.movieDTOList
+  ..criteriaTitle = '${sample}_criteriaTitle'
+  ..searchId = '${sample}_searchId'
+  ..criteriaList = [
+    MovieResultDTO().init(uniqueId: 'first'),
+    MovieResultDTO().init(uniqueId: 'second'),
+  ];
 
 class TestApp extends StatelessWidget {
   const TestApp({required this.children, super.key});
@@ -429,7 +495,9 @@ class TestApp extends StatelessWidget {
   Widget build(BuildContext context) => MaterialApp(
     title: 'Flutter Testing',
     home: Scaffold(
-      body: Center(child: Flex(direction: Axis.vertical, children: children)),
+      body: Center(
+        child: Flex(direction: Axis.vertical, children: children),
+      ),
     ),
   );
 }

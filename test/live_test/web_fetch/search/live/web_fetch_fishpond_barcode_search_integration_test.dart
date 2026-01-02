@@ -26,9 +26,6 @@ void main() {
     test(
       'Run a search on fishpond/mightyape that will hopefully have static results',
       () async {
-        final expectedOutput = readTestData(
-          'test/live_test/web_fetch/search/live/web_fetch_fishpond_barcode_search_integration_test.json',
-        );
 
         final criteria = SearchCriteriaDTO().fromString('9789461879530');
         final actualOutput = await QueryFishpondBarcodeSearch(
@@ -37,12 +34,10 @@ void main() {
         actualOutput.clearCopyrightedData();
 
         // Uncomment this line to update expectedOutput if sample data changes
-        // writeTestData(
-        //   'test/live_test/web_fetch/search/live/web_fetch_fishpond_barcode_search_integration_test.json',
-        //   actualOutput,
-        // );
+        // writeTestData(actualOutput);
 
         // Check the results.
+        final expectedOutput = readTestData();
         expect(
           actualOutput,
           MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),

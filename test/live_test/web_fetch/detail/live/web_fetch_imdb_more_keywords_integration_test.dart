@@ -2,104 +2,52 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_more_keywords.dart';
-import 'package:quiver/iterables.dart';
 
 import '../../../../test_helper.dart';
-
-// ignore_for_file: unnecessary_raw_strings
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real IMDB endpoint!
 ////////////////////////////////////////////////////////////////////////////////
 
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"-2","title":"[QueryIMDBMoreKeywordsDetails] Error in imdb_more_keywords with criteria tt0101000 convert error interpreting web text as a map :imdb more keywords data not detected for criteria tt0101000","bestSource":"DataSourceType.imdb","type":"MovieContentType.error"}
-''',
-  r'''
-{"uniqueId":"daughter","title":"daughter","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"daughter"}}
-''',
-  r'''
-{"uniqueId":"gangster","title":"gangster","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"gangster"}}
-''',
-  r'''
-{"uniqueId":"ghost","title":"ghost","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"ghost"}}
-''',
-  r'''
-{"uniqueId":"young","title":"young","bestSource":"DataSourceType.imdbKeywords","type":"MovieContentType.keyword","sources":{"DataSourceType.imdbKeywords":"young"}}
-''',
-];
-
-/// Create a string list with [qty] unique criteria values.
-List<String> _makeQueries(int qty) {
-  final results = <String>[];
-  for (final i in range(0, qty + 1)) {
-    results.add('tt010${1000 + i}');
-  }
-  return results;
-}
-
-/// Call IMDB for each criteria in the list.
-List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
-  final List<Future<List<MovieResultDTO>>> futures = [];
-  for (final queryKey in queries) {
-    final criteria = SearchCriteriaDTO().fromString(queryKey);
-    final future = QueryIMDBMoreKeywordsDetails(criteria).readList();
-    futures.add(future);
-  }
-  return futures;
-}
-
-Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
-  // Call IMDB for each criteria in the list.
-  final futures = _queueDetailSearch(criteria);
-
-  // Collect the result of all the IMDB queries.
-  final queryResult = <MovieResultDTO>[];
-  for (final future in futures) {
-    queryResult.addAll(await future);
-  }
-  return queryResult;
-}
-
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryIMDBMoreKeywordsDetails test', () {
     // Convert 3 IMDB pages into dtos.
     test('Run read 3 pages from IMDB', () async {
-      final queries = _makeQueries(3);
-      final actualOutput = await _testRead(queries);
+      final actualOutput = await executeMultipleFetches(
+        (criteria) => QueryIMDBMoreKeywordsDetails(criteria).readList(),
+      );
 
       // To update expected data, uncomment the following lines
-      // printTestData(actualOutput);
+      // writeTestData(actualOutput);
 
-      final expectedOutput = expectedDTOList;
       // Check the results.
+      final expectedOutput = readTestData();
       expect(
         actualOutput,
         MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
     });
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
-      final actualOutput =
-          await QueryIMDBMoreKeywordsDetails(criteria).readList(limit: 10);
+      final actualOutput = await QueryIMDBMoreKeywordsDetails(
+        criteria,
+      ).readList(limit: 10);
       final expectedOutput = <MovieResultDTO>[];
 
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(
-          expectedOutput,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );

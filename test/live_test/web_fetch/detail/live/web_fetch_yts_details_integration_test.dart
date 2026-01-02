@@ -9,27 +9,88 @@ import 'package:quiver/iterables.dart';
 
 import '../../../../test_helper.dart';
 
-// ignore_for_file: unnecessary_raw_strings
-
 ////////////////////////////////////////////////////////////////////////////////
-/// Read from real IMDB endpoint!
+/// Read from real YTS endpoint!
 ////////////////////////////////////////////////////////////////////////////////
 
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-const expectedDtoJsonStringList = [
-r'''
-{"uniqueId":"magnet:?xt=urn:btih:35EB8826EA87E7D655949F8A715CD36FEB0730F3&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B2160p%5D+%5BYTS.LT%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=https%3A%2F%2Fopentracker.i2p.rocks%3A443%2Fannounce","title":"2001: A Space Odyssey","bestSource":"DataSourceType.ytsDetails","type":"MovieContentType.download","year":"1968",
-      "description":"7.02 GB 3840*1746 English 5.1 NR","imageUrl":"magnet:?xt=urn:btih:35EB8826EA87E7D655949F8A715CD36FEB0730F3&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B2160p%5D+%5BYTS.LT%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=https%3A%2F%2Fopentracker.i2p.rocks%3A443%2Fannounce","sources":{"DataSourceType.ytsDetails":"magnet:?xt=urn:btih:35EB8826EA87E7D655949F8A715CD36FEB0730F3&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B2160p%5D+%5BYTS.LT%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=https%3A%2F%2Fopentracker.i2p.rocks%3A443%2Fannounce"}}
-''',
-r'''
-{"uniqueId":"magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B1080p%5D+%5BYTS.LT%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=https%3A%2F%2Fopentracker.i2p.rocks%3A443%2Fannounce","title":"2001: A Space Odyssey","bestSource":"DataSourceType.ytsDetails","type":"MovieContentType.download","year":"1968",
-      "description":"2.38 GB 1920*864 English 2.0 NR","imageUrl":"magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B1080p%5D+%5BYTS.LT%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=https%3A%2F%2Fopentracker.i2p.rocks%3A443%2Fannounce","sources":{"DataSourceType.ytsDetails":"magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B1080p%5D+%5BYTS.LT%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=https%3A%2F%2Fopentracker.i2p.rocks%3A443%2Fannounce"}}
-''',
-r'''
-{"uniqueId":"magnet:?xt=urn:btih:E3529DBC0CE47429A8A9B411AB381C893BFEF575&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B720p%5D+%5BYTS.LT%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=https%3A%2F%2Fopentracker.i2p.rocks%3A443%2Fannounce","title":"2001: A Space Odyssey","bestSource":"DataSourceType.ytsDetails","type":"MovieContentType.download","year":"1968","creditsOrder":"46",
-      "description":"853.57 MB 1280*720 English 2.0 NR","imageUrl":"magnet:?xt=urn:btih:E3529DBC0CE47429A8A9B411AB381C893BFEF575&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B720p%5D+%5BYTS.LT%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=https%3A%2F%2Fopentracker.i2p.rocks%3A443%2Fannounce","sources":{"DataSourceType.ytsDetails":"magnet:?xt=urn:btih:E3529DBC0CE47429A8A9B411AB381C893BFEF575&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B720p%5D+%5BYTS.LT%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.tracker.cl%3A1337%2Fannounce&tr=udp%3A%2F%2Fp4p.arenabg.com%3A1337%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Fipv4.tracker.harry.lu%3A80%2Fannounce&tr=https%3A%2F%2Fopentracker.i2p.rocks%3A443%2Fannounce"}}
-''',
-];
+void main() {
+  ////////////////////////////////////////////////////////////////////////////////
+  /// Integration tests
+  ////////////////////////////////////////////////////////////////////////////////
+
+  group('live QueryYtsDetails test', () {
+    // Convert 3 YTS pages into dtos.
+    test('Simple yifystatus test', () async {
+      const url = 'https://yifystatus.com';
+
+      final client = HttpClient()
+        // Allow HttpClient to handle compressed data from web servers.
+        ..autoUncompress = true;
+      final request = await client.getUrl(Uri.parse(url));
+      final response = await request.close();
+      final webPage = await response.transform(utf8.decoder).join();
+
+      // Check the results.
+      expect(
+        webPage,
+        contains('Current official domain:'),
+        reason: 'unable to decode web page',
+      );
+    });
+    // Convert 3 YTS pages into dtos.
+    test('Simple 404 test', () async {
+      const url = 'https://yts.lt/movies/unknown-movie-2000';
+
+      final client = HttpClient()
+        // Allow HttpClient to handle compressed data from web servers.
+        ..autoUncompress = true;
+      final request = await client.getUrl(Uri.parse(url));
+      final response = await request.close();
+      final webPage = await response.transform(utf8.decoder).join();
+
+      // Check the results.
+      expect(
+        webPage.substring(0, 100),
+        contains('Page not found (Error 404)'),
+        reason: 'unable to decode web page',
+      );
+    });
+    // Convert 3 YTS pages into dtos.
+    test('Run read 3 pages from YTS', () async {
+      final queries = _makeQueries(3);
+      final actualOutput = await _testRead(queries);
+
+      // To update expected data, uncomment the following lines
+      // writeTestData(actualOutput);
+
+      // Check the results.
+      final expectedOutput = readTestData();
+      expect(
+        actualOutput,
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
+    test('Run an empty search', () async {
+      final criteria = SearchCriteriaDTO().fromString('unknown-movie-2000');
+      final actualOutput = await QueryYtsDetails(criteria).readList(limit: 10);
+      final expectedOutput = <MovieResultDTO>[];
+
+      // Check the results.
+      expect(
+        actualOutput,
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
+  });
+}
 
 /// Create a string list with [qty] unique criteria values.
 List<String> _makeQueries(int qty) {
@@ -41,7 +102,7 @@ List<String> _makeQueries(int qty) {
   return results;
 }
 
-/// Call IMDB for each criteria in the list.
+/// Call YTS for each criteria in the list.
 List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
   final List<Future<List<MovieResultDTO>>> futures = [];
   for (final queryKey in queries) {
@@ -62,89 +123,4 @@ Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
     queryResult.addAll(await future);
   }
   return queryResult;
-}
-
-void main() {
-////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
-
-  group('live QueryYtsDetails test', () {
-    // Convert 3 YTS pages into dtos.
-    test('Simple yifystatus test', () async {
-    const url = 'https://yifystatus.com';
-
-
-    final client = HttpClient()
-    // Allow HttpClient to handle compressed data from web servers.
-    ..autoUncompress = true;
-    final request = await client.getUrl(
-        Uri.parse(url));
-        final response = await request.close();
-      final webPage = await response.transform(utf8.decoder).join();
-
-
-      // Check the results.
-      expect(
-        webPage,
-        contains('Current official domain:'),
-        reason: 'unable to decode web page',
-      );
-    });
-    // Convert 3 YTS pages into dtos.
-    test('Simple 404 test', () async {
-    const url = 'https://yts.lt/movies/unknown-movie-2000';
-
-
-    final client = HttpClient()
-    // Allow HttpClient to handle compressed data from web servers.
-    ..autoUncompress = true;
-    final request = await client.getUrl(
-        Uri.parse(url));
-        final response = await request.close();
-      final webPage = await response.transform(utf8.decoder).join();
-
-
-      // Check the results.
-      expect(
-        webPage.substring(0,100),
-        contains('Page not found (Error 404)'),
-        reason: 'unable to decode web page',
-      );
-    });
-    // Convert 3 YTS pages into dtos.
-    test('Run read 3 pages from YTS', () async {
-      final queries = _makeQueries(3);
-      final actualOutput = await _testRead(queries);
-
-      // To update expected data, uncomment the following lines
-      // printTestData(actualOutput);
-
-      final expectedOutput = expectedDTOList;
-      // Check the results.
-      expect(
-        actualOutput,
-        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
-            'needs to match expected DTO list '
-            '${expectedOutput.toPrintableString()}',
-      );
-    });
-    test('Run an empty search', () async {
-      final criteria = SearchCriteriaDTO().fromString('unknown-movie-2000');
-      final actualOutput = await QueryYtsDetails(criteria).readList(limit: 10);
-      final expectedOutput = <MovieResultDTO>[];
-
-      // Check the results.
-      expect(
-        actualOutput,
-        MovieResultDTOListMatcher(
-          expectedOutput,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
-            'needs to match expected DTO list '
-            '${expectedOutput.toPrintableString()}',
-      );
-    });
-  });
 }
