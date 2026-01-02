@@ -5,7 +5,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
-// import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
+import 'package:simple_barcode_scanner/simple_barcode_scanner.dart';
 import 'package:universal_io/io.dart';
 
 typedef BarcodeAction = void Function(String barcode);
@@ -31,13 +31,20 @@ class DVDBarcodeScanner {
     return false;
   }
 
-  Future<dynamic> _showScanner() async => null;
-  /*Future<dynamic> _showScanner() => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SimpleBarcodeScannerPage(),
-        ),
-      );*/
+  Future<dynamic> _showScanner() 
+  => SimpleBarcodeScanner.scanBarcode(
+    context,
+    barcodeAppBar: const BarcodeAppBar(
+      appBarTitle: 'Test',
+      centerTitle: false,
+      enableBackButton: true,
+      backButtonIcon: Icon(Icons.arrow_back_ios),
+    ),
+    isShowFlashIcon: true,
+    delayMillis: 500,
+    cameraFace: CameraFace.back,
+    scanFormat: ScanFormat.ONLY_BARCODE,
+  );
 
   void _retryScanIfFailed(bool success) {
     if (!success) {
@@ -45,9 +52,8 @@ class DVDBarcodeScanner {
     }
   }
 
-  void _scan() => unawaited(
-        _showScanner().then(_useBarcode).then(_retryScanIfFailed),
-      );
+  void _scan() =>
+      unawaited(_showScanner().then(_useBarcode).then(_retryScanIfFailed));
 
   /// Uses camera to read 2D Barcodes.
   ///
