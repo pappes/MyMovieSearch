@@ -10,7 +10,7 @@ import 'package:my_movie_search/persistence/meilisearch.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
-void main() async {
+void main() {
   group('meilisearch backup', () {
     // Backup data stored in meilisearch to /tmp/meiliseachBackup<date>.txt
     //
