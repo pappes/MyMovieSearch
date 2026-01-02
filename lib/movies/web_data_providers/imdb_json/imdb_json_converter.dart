@@ -54,14 +54,14 @@ class ImdbJsonConverter extends ImdbConverterBase
       movie.imageUrl = url?.toString() ?? movie.imageUrl;
     }
 
-    final List<dynamic> credits =
+    final credits =
         map.deepSearch(
           deepPersonRelatedSuffix, // '*Credits' e.g. releasedCredits
           suffixMatch: true,
           multipleMatch: true,
         ) ??
         [];
-    final List<dynamic> creditsV2 =
+    final creditsV2 =
         map
             .deepSearch(
               deepPersonRelatedChunk,

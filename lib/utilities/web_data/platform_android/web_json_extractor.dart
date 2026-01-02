@@ -206,7 +206,7 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
         return null;
 
       case InterceptionAction.executeRequest:
-        final HttpClientResponse response = await _executeProxyRequest(request);
+        final response = await _executeProxyRequest(request);
         return transferResponseData(request, response);
     }
   }

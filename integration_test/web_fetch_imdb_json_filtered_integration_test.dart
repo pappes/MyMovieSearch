@@ -38,7 +38,7 @@ class _MyWebViewWidgetState extends State<MyWebViewWidget> {
 
 /// Call IMDB for each criteria in the list.
 List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
-  final List<Future<List<MovieResultDTO>>> futures = [];
+  final futures = <Future<List<MovieResultDTO>>>[];
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
     futures.add(QueryIMDBJsonPaginatedFilmographyDetails(criteria).readList());

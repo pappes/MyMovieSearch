@@ -149,7 +149,7 @@ class QueryUnknownSourceMocked
       );
 
   static List<MovieResultDTO> _listToDto(List<dynamic> list) {
-    final List<MovieResultDTO> results = [];
+    final results = <MovieResultDTO>[];
     for (final value in list) {
       results.add(_mapToDto(value as Map));
     }

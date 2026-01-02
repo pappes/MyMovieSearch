@@ -104,31 +104,31 @@ class DatabaseHelper {
   // Database helper methods:
   /// Insert a movie record into the database.
   Future<int> insert(MovieModel movie) async {
-    final Database db = await database;
+    final db = await database;
     return mutexLock.protect(() => _insert(db, movie));
   }
 
   /// Update a movie record in the database.
   Future<int> update(MovieModel movie) async {
-    final Database db = await database;
+    final db = await database;
     return mutexLock.protect(() => _update(db, movie));
   }
 
   /// Delete a movie record from the database.
   Future<int> delete(MovieModel movie) async {
-    final Database db = await database;
+    final db = await database;
     return mutexLock.protect(() => _delete(db, movie));
   }
 
   /// Query the database for all stored movie records.
   Future<List<Map<dynamic, dynamic>>> queryAllMovies() async {
-    final Database db = await database;
+    final db = await database;
     return mutexLock.protect(() => _queryAllMovies(db));
   }
 
   /// Query the database for a specific movie record based on its unique ID.
   Future<MovieModel?> queryMovieUniqueId(String uniqueId) async {
-    final Database db = await database;
+    final db = await database;
     return mutexLock.protect(() => _queryMovieUniqueId(db, uniqueId));
   }
 

@@ -1008,7 +1008,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
     if (id == movieDTOUninitialized) return MovieContentType.none;
     if (id.startsWith(movieDTOMessagePrefix)) return MovieContentType.error;
-    final String title = info.toLowerCase().replaceAll('sci-fi', '');
+    final title = info.toLowerCase().replaceAll('sci-fi', '');
     if (title.lastIndexOf('game') > -1) return MovieContentType.custom;
     if (title.lastIndexOf('creativework') > -1) return MovieContentType.custom;
     if (title.lastIndexOf('music') > -1) return MovieContentType.custom;

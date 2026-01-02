@@ -112,7 +112,7 @@ mixin ScrapeIMDBSearchDetails
   }
 
   Map<String, dynamic> _getPerson(Map<dynamic, dynamic> person) {
-    final Map<String, dynamic> rowData = {};
+    final rowData = <String, dynamic>{};
     rowData[outerElementIdentity] = person[outerSearchPersonId];
     rowData[outerElementOfficialTitle] = person[deepPersonNameHeader];
 
@@ -128,7 +128,7 @@ mixin ScrapeIMDBSearchDetails
   }
 
   Map<String, dynamic> _getMovie(Map<dynamic, dynamic> movie) {
-    final Map<String, dynamic> rowData = {};
+    final rowData = <String, dynamic>{};
     rowData[outerElementIdentity] = movie[deepTitleId1];
     rowData[outerElementOfficialTitle] = movie[outerSearchResultsMovieTitle];
     final startYear = movie[outerSearchResultsMovieStartYear];

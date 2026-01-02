@@ -144,7 +144,7 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(
   bool online,
   bool simulateHTTP404,
 ) {
-  final List<Future<List<MovieResultDTO>>> futures = [];
+  final futures = <Future<List<MovieResultDTO>>>[];
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
     final imdbDetails = simulateHTTP404

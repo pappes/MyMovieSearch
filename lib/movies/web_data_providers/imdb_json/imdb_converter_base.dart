@@ -100,7 +100,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
         map.searchForString(key: deepRelatedMovieTitle);
     // ...{'originalTitleText':...{...'text':<value>...}}or
     // ...{'originalTitleText':<value>...}
-    String? originalTitle =
+    var originalTitle =
         map.deepSearch(deepRelatedMovieOriginalTitle)?.searchForString() ??
         map.searchForString(key: deepRelatedMovieOriginalTitle);
     if (title == originalTitle) {

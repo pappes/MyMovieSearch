@@ -227,7 +227,7 @@ void main() {
       final matcher = MovieResultDTOMatcher(dtoExpected);
 
       final Description mismatchDescription = StringDescription();
-      final Map<dynamic, dynamic> matchState = {};
+      final matchState = <dynamic, dynamic>{};
       const verbose = false;
       expect(matcher.matches(dtoActual, matchState), false);
       matcher.describeMismatch(
@@ -258,7 +258,7 @@ void main() {
       final matcher = MovieResultDTOMatcher(dto1);
 
       final Description mismatchDescription = StringDescription();
-      final Map<dynamic, dynamic> matchState = {};
+      final matchState = <dynamic, dynamic>{};
       const verbose = true;
       matcher
         ..matches(dto2, matchState)
