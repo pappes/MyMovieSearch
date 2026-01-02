@@ -131,7 +131,7 @@ void main() {
     test('manually add to cache', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final testClass = QueryIMDBTitleDetails(criteria);
-      final dto = MovieResultDTO().testDto('Polo');
+      final dto = MovieResultDTO()..title = 'Polo';
       await testClass.myAddResultToCache(dto);
       final listResult = await testClass.readCachedList(
         source: (_) async => Stream.value('Polo'),
@@ -146,7 +146,7 @@ void main() {
     test('clear cache', () async {
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final testClass = QueryIMDBTitleDetails(criteria);
-      final dto = MovieResultDTO().testDto('Polo');
+      final dto = MovieResultDTO()..title = 'Polo';
       await testClass.myAddResultToCache(dto);
       await testClass.myClearCache();
       final resultIsCached = await testClass.myIsResultCached();
@@ -173,7 +173,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final testClass = QueryIMDBTitleDetails(criteria);
       await testClass.myClearCache();
-      final dto = MovieResultDTO().testDto('Polo');
+      final dto = MovieResultDTO()..title = 'Polo';
       await testClass.myAddResultToCache(dto);
       final listResult = await testClass.readCachedList(
         source: (_) async => Stream.value('Who Is Marco?'),
@@ -208,7 +208,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final testClass = QueryIMDBTitleDetails(criteria);
       await testClass.myClearCache();
-      final dto = MovieResultDTO().testDto('Polo');
+      final dto = MovieResultDTO()..title = 'Polo';
       await testClass.myAddResultToCache(dto);
       final listResult = testClass.myFetchResultFromCache();
       expect(listResult, MovieResultDTOListMatcher([dto]));
@@ -222,8 +222,8 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('Marco');
       final testClass = QueryIMDBTitleDetails(criteria);
       await testClass.myClearCache();
-      final dto1 = MovieResultDTO().testDto('Polo1');
-      final dto2 = MovieResultDTO().testDto('Polo2');
+      final dto1 = MovieResultDTO()..title = 'Polo1';
+      final dto2 = MovieResultDTO()..title = 'Polo2';
       await testClass.myAddResultToCache(dto1);
       await testClass.myAddResultToCache(dto2);
       final listResult = testClass.myFetchResultFromCache();

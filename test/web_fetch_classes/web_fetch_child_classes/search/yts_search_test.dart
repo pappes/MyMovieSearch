@@ -15,17 +15,20 @@ Future<Stream<String>> _emitUnexpectedJsonPSample(_) =>
 Future<Stream<String>> _emitInvalidJsonPSample(_) =>
     Future.value(Stream.value('imdbJsonPFunction({not valid json})'));
 
-final fullCriteria = SearchCriteriaDTO().init(
+final fullCriteria = SearchCriteriaDTO()
+  ..init(
   SearchCriteriaType.downloadSimple,
   list: [MovieResultDTO().init(uniqueId: 'tt123')],
 );
 
-final partialCriteria = SearchCriteriaDTO().init(
+final partialCriteria = SearchCriteriaDTO()
+  ..init(
   SearchCriteriaType.downloadSimple,
   title: '123',
 );
 
-final ignoreCriteria = SearchCriteriaDTO().init(
+final ignoreCriteria = SearchCriteriaDTO()
+  ..init(
   SearchCriteriaType.downloadSimple,
   title: 'ignore this',
 );

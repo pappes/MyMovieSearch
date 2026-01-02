@@ -78,7 +78,8 @@ mixin ScrapeFishpondBarcodeSearch
       return movieData;
     }
     throw WebConvertException(
-      'Possible FishpondBarcode site update, no search result found for search query, '
+      'Possible FishpondBarcode site update, '
+      'no search result found for search query, '
       'json contents:${jsonText.characters.take(100)}...',
     );
   }

@@ -80,14 +80,14 @@ void main() {
 
     test('showResultsPage()', () async {
       await testClass.showResultsPage(
-        SearchCriteriaDTO().init(SearchCriteriaType.none),
+        SearchCriteriaDTO()..init(SearchCriteriaType.none),
       );
       expect(navigationResult, 'searchresults');
     });
 
     test('showCriteriaPage()', () async {
       await testClass.showCriteriaPage(
-        SearchCriteriaDTO().init(SearchCriteriaType.none),
+        SearchCriteriaDTO()..init(SearchCriteriaType.none),
       );
       // This uses viewFlutterRootPage, which we haven't mocked yet.
       // For now, let's verify viewFlutterPage wasn't called.

@@ -31,9 +31,9 @@ final criteria = SearchCriteriaDTO().fromString('123');
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => Settings().init());
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('MsSearch search unit tests', () {
     // Confirm class description is constructed as expected.
@@ -75,10 +75,9 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryMsSearchMovies(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryMsSearchMovies(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -87,27 +86,23 @@ void main() {
     // Confirm web text is parsed as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
-      final actualOutput =
-          QueryMsSearchMovies(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleFull,
-      );
+      final actualOutput = QueryMsSearchMovies(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleFull);
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = intermediateEmptyMapList;
-      final actualOutput =
-          QueryMsSearchMovies(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleEmpty,
-      );
+      final actualOutput = QueryMsSearchMovies(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = intermediateErrorMapList;
-      final actualOutput =
-          QueryMsSearchMovies(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleError,
-      );
+      final actualOutput = QueryMsSearchMovies(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleError);
       expect(actualOutput, completion(expectedOutput));
     });
   });
@@ -134,7 +129,8 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -153,26 +149,25 @@ void main() {
       mockMeiliSearchClient = MockMeiliSearchClient();
       mockIndex = MockMeiliSearchIndex();
       mockSearcheable = MockSearcheable();
-      criteria = SearchCriteriaDTO().init(
-        SearchCriteriaType.movieTitle,
-        title: 'test',
-      );
+      criteria = SearchCriteriaDTO()
+        ..init(SearchCriteriaType.movieTitle, title: 'test');
       queryMsSearchMovies = QueryMsSearchMovies(criteria);
     });
 
     test('fetchFromApi - success', () async {
       when(mockMeiliSearchClient.index(any)).thenReturn(mockIndex);
-      when(mockIndex.search(any)).thenAnswer(
-        (_) => Future.value(mockSearcheable),
-      );
+      when(
+        mockIndex.search(any),
+      ).thenAnswer((_) => Future.value(mockSearcheable));
       when(mockSearcheable.hits).thenReturn([
         {'title': 'Test Movie 1'},
         {'title': 'Test Movie 2'},
       ]);
       when(mockSearcheable.processingTimeMs).thenReturn(100);
 
-      final result =
-          await queryMsSearchMovies.fetchFromApi(mockMeiliSearchClient);
+      final result = await queryMsSearchMovies.fetchFromApi(
+        mockMeiliSearchClient,
+      );
 
       expect(result, isA<List<dynamic>>());
       expect(result.length, 2);
@@ -180,8 +175,9 @@ void main() {
 
     test('fetchFromApi - bad API key', () {
       when(mockMeiliSearchClient.index(any)).thenReturn(mockIndex);
-      when(mockIndex.search(any))
-          .thenThrow(const SocketException(msErrorBadApiKey));
+      when(
+        mockIndex.search(any),
+      ).thenThrow(const SocketException(msErrorBadApiKey));
 
       expect(
         () => queryMsSearchMovies.fetchFromApi(mockMeiliSearchClient),
@@ -197,8 +193,9 @@ void main() {
 
     test('fetchFromApi - generic exception', () {
       when(mockMeiliSearchClient.index(any)).thenReturn(mockIndex);
-      when(mockIndex.search(any))
-          .thenThrow(const SocketException(msErrorServerDown));
+      when(
+        mockIndex.search(any),
+      ).thenThrow(const SocketException(msErrorServerDown));
 
       expect(
         () => queryMsSearchMovies.fetchFromApi(mockMeiliSearchClient),
@@ -214,8 +211,9 @@ void main() {
 
     test('fetchFromApi - server down', () {
       when(mockMeiliSearchClient.index(any)).thenReturn(mockIndex);
-      when(mockIndex.search(any))
-          .thenThrow(CommunicationException(msErrorServerDown));
+      when(
+        mockIndex.search(any),
+      ).thenThrow(CommunicationException(msErrorServerDown));
 
       expect(
         () => queryMsSearchMovies.fetchFromApi(mockMeiliSearchClient),
@@ -231,8 +229,9 @@ void main() {
 
     test('fetchFromApi - cloud refused', () {
       when(mockMeiliSearchClient.index(any)).thenReturn(mockIndex);
-      when(mockIndex.search(any))
-          .thenThrow(MeiliSearchApiException(msErrorCloudRefused));
+      when(
+        mockIndex.search(any),
+      ).thenThrow(MeiliSearchApiException(msErrorCloudRefused));
 
       expect(
         () => queryMsSearchMovies.fetchFromApi(mockMeiliSearchClient),
@@ -248,8 +247,9 @@ void main() {
 
     test('fetchFromApi - invalid api key', () {
       when(mockMeiliSearchClient.index(any)).thenReturn(mockIndex);
-      when(mockIndex.search(any))
-          .thenThrow(MeiliSearchApiException(msErrorBadApiKey));
+      when(
+        mockIndex.search(any),
+      ).thenThrow(MeiliSearchApiException(msErrorBadApiKey));
 
       expect(
         () => queryMsSearchMovies.fetchFromApi(mockMeiliSearchClient),
@@ -264,9 +264,9 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using QueryMsSearchMovies
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryMsSearchMovies integration tests', () {
     // Confirm map can be converted to DTO.
@@ -277,16 +277,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -298,16 +297,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateEmptyMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -335,9 +333,9 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase and env and QueryMsSearchMovies
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('MsSearch search query', () {
     // Read MsSearch search results from a simulated byte stream
@@ -362,7 +360,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -391,7 +390,8 @@ not valid json
     // and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException = '[QueryMsSearchMovies] Error in mssearch '
+      const expectedException =
+          '[QueryMsSearchMovies] Error in mssearch '
           'with criteria 123 convert error translating page map to objects '
           ':expected List got _Map<String, dynamic> unable to interpret data '
           '{hello: world}';

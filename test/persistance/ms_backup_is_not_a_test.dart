@@ -140,7 +140,8 @@ Future<String> getMovieDetails() async {
     await Future<void>.delayed(const Duration(seconds: 1));
 
     // Fetch movie details from IMDB.
-    final criteria = SearchCriteriaDTO().init(
+    final criteria = SearchCriteriaDTO()
+      ..init(
       SearchCriteriaType.movieTitle,
       title: uniqueId,
     );

@@ -15,6 +15,7 @@ import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 typedef MovieCollection = Map<String, MovieResultDTO>;
 typedef RelatedMovieCategories = Map<String, MovieCollection>;
@@ -206,7 +207,7 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   // Need 2 functions because access to [value] is not initialised for testing!
   Object toPrimitives() => RestorableMovie.dtoToPrimitives(value);
   static Object dtoToPrimitives(MovieResultDTO dto) =>
-      jsonEncode({'dto': dto.uniqueId, 'nextId': '${nextId + 1}'}).observe();
+      jsonEncode({'dto': dto.uniqueId, 'nextId': '${nextId + 1}'})..observe();
 }
 
 class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
@@ -239,7 +240,7 @@ class RestorableMovieList extends RestorableValue<List<MovieResultDTO>> {
   // Need 2 functions because access to [value] is not initialised for testing!
   Object toPrimitives() => listToPrimitives(value);
   Object listToPrimitives(List<MovieResultDTO> list) =>
-      jsonEncode(list.encodeList()).observe();
+      jsonEncode(list.encodeList())..observe();
 }
 
 extension ListDTOConversion on Iterable<MovieResultDTO> {
@@ -293,24 +294,23 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
   // Linter does not understand that toMovieResultDTO is a factory method.
   // ignore: invalid_factory_method_impl
   MovieResultDTO toMovieResultDTO() {
-    final dto =
-        MovieResultDTO()
-          ..uniqueId = dynamicToString(this[movieDTOUniqueId])
-          ..title = dynamicToString(this[movieDTOTitle])
-          ..alternateTitle = dynamicToString(this[movieDTOAlternateTitle])
-          ..characterName = dynamicToString(this[movieDTOCharacterName])
-          ..description = dynamicToString(this[movieDTODescription])
-          ..year = dynamicToInt(this[movieDTOYear])
-          ..yearRange = dynamicToString(this[movieDTOYearRange])
-          ..creditsOrder = dynamicToInt(this[movieDTOcreditsOrder])
-          ..userRating = dynamicToDouble(this[movieDTOUserRating])
-          ..userRatingCount = dynamicToInt(this[movieDTOUserRatingCount])
-          ..runTime = Duration(seconds: dynamicToInt(this[movieDTORunTime]))
-          ..imageUrl = dynamicToString(this[movieDTOImageUrl])
-          ..languages = dynamicToStringSet(this[movieDTOLanguages])
-          ..genres = dynamicToStringSet(this[movieDTOGenres])
-          ..keywords = dynamicToStringSet(this[movieDTOKeywords])
-          ..related = stringToRelated(this[movieDTORelated]);
+    final dto = MovieResultDTO()
+      ..uniqueId = dynamicToString(this[movieDTOUniqueId])
+      ..title = dynamicToString(this[movieDTOTitle])
+      ..alternateTitle = dynamicToString(this[movieDTOAlternateTitle])
+      ..characterName = dynamicToString(this[movieDTOCharacterName])
+      ..description = dynamicToString(this[movieDTODescription])
+      ..year = dynamicToInt(this[movieDTOYear])
+      ..yearRange = dynamicToString(this[movieDTOYearRange])
+      ..creditsOrder = dynamicToInt(this[movieDTOcreditsOrder])
+      ..userRating = dynamicToDouble(this[movieDTOUserRating])
+      ..userRatingCount = dynamicToInt(this[movieDTOUserRatingCount])
+      ..runTime = Duration(seconds: dynamicToInt(this[movieDTORunTime]))
+      ..imageUrl = dynamicToString(this[movieDTOImageUrl])
+      ..languages = dynamicToStringSet(this[movieDTOLanguages])
+      ..genres = dynamicToStringSet(this[movieDTOGenres])
+      ..keywords = dynamicToStringSet(this[movieDTOKeywords])
+      ..related = stringToRelated(this[movieDTORelated]);
 
     dto
       ..bestSource =
@@ -405,7 +405,7 @@ class DtoCache {
   static Map<dynamic, dynamic> dumpCache() {
     final cache = _singleton._globalDtoCache.memoryCache;
     for (final record in cache.entries) {
-      print('${record.key} - ${record.value.title}');
+      logger.i('${record.key} - ${record.value.title}');
     }
     return cache;
   }
@@ -423,7 +423,7 @@ class DtoCache {
   /// Retrieve data from the cache.
   ///
   Future<MovieResultDTO> fetch(MovieResultDTO newValue) =>
-      // Use Future.sync to allow code to run synchronously and ensure 
+      // Use Future.sync to allow code to run synchronously and ensure
       // that exceptions are propagated as Future errors.
       Future.sync(() => merge(newValue));
 
@@ -505,14 +505,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     }
   }
 
-  MovieResultDTO testDto(String testText) {
-    title = testText;
-    return this;
-  }
-
   /// Reinitialise the source for a movie.
   ///
-  MovieResultDTO setSource({Object? newSource, String? newUniqueId}) {
+  void setSource({Object? newSource, String? newUniqueId}) {
     uniqueId = newUniqueId ?? uniqueId;
 
     if (newSource is DataSourceType) {
@@ -524,7 +519,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     sources[bestSource] = uniqueId;
 
     if (readIndicator != null) setReadIndicator(readIndicator);
-    return this;
   }
 
   void setReadIndicator(String value) {
@@ -979,29 +973,28 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   @factory
   // Linter does not understand that toUnknown is a factory method.
   // ignore: invalid_factory_method_impl
-  MovieResultDTO toUnknown() =>
-      MovieResultDTO()
-        ..bestSource = bestSource
-        ..uniqueId = uniqueId
-        ..title = 'unknown'
-        ..alternateTitle = alternateTitle
-        ..characterName = characterName
-        ..description = description
-        ..type = type
-        ..year = year
-        ..yearRange = yearRange
-        ..creditsOrder = creditsOrder
-        ..userRating = userRating
-        ..userRatingCount = userRatingCount
-        ..censorRating = censorRating
-        ..runTime = runTime
-        ..imageUrl = imageUrl
-        ..language = language
-        ..languages = languages
-        ..genres = genres
-        ..keywords = keywords
-        ..sources = sources
-        ..related = related;
+  MovieResultDTO toUnknown() => MovieResultDTO()
+    ..bestSource = bestSource
+    ..uniqueId = uniqueId
+    ..title = 'unknown'
+    ..alternateTitle = alternateTitle
+    ..characterName = characterName
+    ..description = description
+    ..type = type
+    ..year = year
+    ..yearRange = yearRange
+    ..creditsOrder = creditsOrder
+    ..userRating = userRating
+    ..userRatingCount = userRatingCount
+    ..censorRating = censorRating
+    ..runTime = runTime
+    ..imageUrl = imageUrl
+    ..language = language
+    ..languages = languages
+    ..genres = genres
+    ..keywords = keywords
+    ..sources = sources
+    ..related = related;
 
   /// Look at information provided
   /// to see if [MovieContentType] can be determined.
@@ -1041,9 +1034,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   }
 
   /// update title type based on information in the dto.
-  MovieContentType getContentType() =>
-      type =
-          getMovieContentType(yearRange, runTime.inSeconds, uniqueId) ?? type;
+  MovieContentType getContentType() => type =
+      getMovieContentType(yearRange, runTime.inSeconds, uniqueId) ?? type;
 
   /// Use movie type string to lookup [MovieContentType] movie type.
   static MovieContentType? getMovieContentType(

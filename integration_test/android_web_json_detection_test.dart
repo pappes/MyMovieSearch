@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
 
@@ -41,7 +42,7 @@ class _MyWebViewWidgetState extends State<MyWebViewWidget> {
 int jsonChunkCount = 0;
 
 void callback(String jsonString) {
-  print(
+  logger.i(
     'JSON Callback($jsonChunkCount): '
     '${jsonString.characters.take(100)}'
     '...${jsonString.length}',

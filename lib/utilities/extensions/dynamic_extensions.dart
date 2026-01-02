@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 /// Extend datatype "dynamic" to provide convenience functions.
 ///
 extension DynamicHelper<T> on T {
-  T observe() {
+  void observe() {
     final str = this?.toString() ?? '';
     final len = str.length;
-    print(
+    logger.i(
       'Restorable size = $len, content = ${str.characters.take(50)}',
     );
-    return this;
   }
 
   /// Filter out non string values

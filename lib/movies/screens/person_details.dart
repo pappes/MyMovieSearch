@@ -59,7 +59,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   void _gotPerson(MovieResultDTO person) {
     _restorablePerson.value = person;
     _getDetails(
-      SearchCriteriaDTO().init(
+      SearchCriteriaDTO()..init(
         SearchCriteriaType.movieTitle,
         title: _restorablePerson.value.uniqueId,
       ),

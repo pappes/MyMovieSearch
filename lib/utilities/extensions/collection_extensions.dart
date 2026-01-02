@@ -65,7 +65,7 @@ extension StringIterableHelper on Iterable<String> {
 ///
 extension ListHelper<T> on List<T> {
   /// Ensure value is a list.  Make it a list if it is not.
-  List<T> valueAsList(dynamic value) {
+  void valueAsList(dynamic value) {
     if (value is T) {
       clear();
       add(value);
@@ -76,7 +76,6 @@ extension ListHelper<T> on List<T> {
         add(element as T);
       }
     }
-    return this;
   }
 
   /// Extend [List] to concatenate strings with a seperator

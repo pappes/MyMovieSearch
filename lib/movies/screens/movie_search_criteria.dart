@@ -42,7 +42,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
       unawaited(MMSNav(context).showResultsPage(criteria));
 
   void searchForBarcode(String barcode) => performSearch(
-    SearchCriteriaDTO().init(SearchCriteriaType.barcode, title: barcode),
+    SearchCriteriaDTO()..init(SearchCriteriaType.barcode, title: barcode),
   );
 
   void searchForMovie() {
@@ -82,10 +82,9 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     // This method is rerun every time setState is called.
     final page = Scaffold(
       appBar: AppBar(
-        leading:
-            (ModalRoute.of(context)?.canPop ?? false)
-                ? const BackButton()
-                : null,
+        leading: (ModalRoute.of(context)?.canPop ?? false)
+            ? const BackButton()
+            : null,
         // Get title from the StatefulWidget MovieSearchCriteriaPage.
         title: const Text(MovieSearchCriteriaPage.title),
       ),

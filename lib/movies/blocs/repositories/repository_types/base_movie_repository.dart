@@ -1,7 +1,6 @@
 import 'dart:async' show StreamController, unawaited;
 
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -137,7 +136,6 @@ class BaseMovieRepository {
   Future<void> finishProvider(dynamic provider) async {
     _awaitingProviders.remove(provider);
     if (_awaitingProviders.isEmpty) {
-      DtoCache.dumpCache();
       return close();
     }
   }

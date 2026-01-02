@@ -52,8 +52,7 @@ class SearchCriteriaDTO {
 
   /// Convert a [MovieResultDTO] to a json [String].
   ///
-  String toJson({bool includeRelated = true}) =>
-      jsonEncode(toMap());
+  String toJson({bool includeRelated = true}) => jsonEncode(toMap());
 }
 
 // member variable names
@@ -93,8 +92,8 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
   }
 
   static Map<String, dynamic> routeState(SearchCriteriaDTO criteriaDto) =>
-  // Condense movieDTO contentes to prevent crashing on restoration.
-  {'id': nextId++, 'dto': criteriaDto.clone(condensed: true)};
+      // Condense movieDTO contentes to prevent crashing on restoration.
+      {'id': nextId++, 'dto': criteriaDto.clone(condensed: true)};
 
   static SearchCriteriaDTO getDto(GoRouterState state) {
     final input = _getMap(state);
@@ -150,10 +149,9 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
 
   @override
   Object toPrimitives() => dtoToPrimitives(value);
-  Object dtoToPrimitives(SearchCriteriaDTO value) =>
-      jsonEncode(
-        value.toMap(condensed: true)..addAll({'nextId': '${nextId + 1}'}),
-      ).observe();
+  Object dtoToPrimitives(SearchCriteriaDTO value) => jsonEncode(
+    value.toMap(condensed: true)..addAll({'nextId': '${nextId + 1}'}),
+  )..observe();
 }
 
 extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
@@ -196,10 +194,9 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     return converter.fromPrimitives(stringList);
   }
 
-  SearchCriteriaDTO fromString(String criteria) =>
-      SearchCriteriaDTO()
-        ..criteriaTitle = criteria
-        ..criteriaType = SearchCriteriaType.movieTitle;
+  SearchCriteriaDTO fromString(String criteria) => SearchCriteriaDTO()
+    ..criteriaTitle = criteria
+    ..criteriaType = SearchCriteriaType.movieTitle;
 
   /// Construct route to the search results page MovieSearchResultsNewPage
   /// as appropriate for the dto.
@@ -243,7 +240,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     }
   }
 
-  SearchCriteriaDTO init(
+  void init(
     SearchCriteriaType source, {
     String title = '',
     MovieResultDTO? context,
@@ -253,7 +250,6 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     criteriaType = source;
     criteriaContext = context;
     criteriaList = list;
-    return this;
   }
 
   @factory
@@ -270,13 +266,12 @@ extension MapCriteriaDTOConversion on Map<dynamic, dynamic> {
   // Linter does not understand that toSearchCriteriaDTO is a factory method.
   // ignore: invalid_factory_method_impl
   SearchCriteriaDTO toSearchCriteriaDTO({bool inflate = false}) {
-    final dto =
-        SearchCriteriaDTO()
-          ..searchId = dynamicToString(this[movieCriteriaDTOSearchId])
-          ..criteriaTitle = dynamicToString(this[movieCriteriaDTOCriteriaTitle])
-          ..criteriaList = SearchCriteriaDTOHelpers.getMovieList(
-            this[movieCriteriaDTOCriteriaList],
-          );
+    final dto = SearchCriteriaDTO()
+      ..searchId = dynamicToString(this[movieCriteriaDTOSearchId])
+      ..criteriaTitle = dynamicToString(this[movieCriteriaDTOCriteriaTitle])
+      ..criteriaList = SearchCriteriaDTOHelpers.getMovieList(
+        this[movieCriteriaDTOCriteriaList],
+      );
 
     if (this[movieCriteriaDTOCriteriaContext] != 'null') {
       dto.criteriaContext = MovieResultDTO().fromJson(

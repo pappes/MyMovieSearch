@@ -58,7 +58,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   void _gotMovie(MovieResultDTO movie) {
     _restorableMovie.value = movie;
     _getDetails(
-      SearchCriteriaDTO().init(
+      SearchCriteriaDTO()..init(
         SearchCriteriaType.movieTitle,
         title: _restorableMovie.value.uniqueId,
       ),

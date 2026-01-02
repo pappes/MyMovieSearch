@@ -40,7 +40,8 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input = SearchCriteriaDTO().init(SearchCriteriaType.movieDTOList)
+      final input = SearchCriteriaDTO()
+        ..init(SearchCriteriaType.movieDTOList)
         ..criteriaTitle = 'List of errors'
         ..criteriaList = [
           MovieResultDTO().init(uniqueId: 'test1'),

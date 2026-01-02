@@ -1,3 +1,4 @@
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
 
 class WebJsonExtractorLinux extends WebJsonExtractor {
@@ -6,7 +7,7 @@ class WebJsonExtractorLinux extends WebJsonExtractor {
     super.jsonCallback,
     super.imdbApi,
   ) : super.internal() {
-    print('unsupported platform Linux');
+    logger.e('unsupported platform Linux');
   }
 
   @override

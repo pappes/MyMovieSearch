@@ -72,7 +72,8 @@ class TmdbMovieDetailConverter {
   }
 
   static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
-    final movie = MovieResultDTO().setSource(
+    final movie = MovieResultDTO()
+      ..setSource(
       newSource: DataSourceType.tmdbMovie,
       newUniqueId: '${map[innerElementIdentity]}',
     );

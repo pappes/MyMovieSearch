@@ -112,7 +112,8 @@ class QueryMsSearchMovies
           ).toList();
         }
         throw TreeConvertException(
-          'expected List got ${tree.runtimeType} unable to interpret data $tree',
+          'expected List got ${tree.runtimeType} '
+          'unable to interpret data $tree',
         );
       });
 
