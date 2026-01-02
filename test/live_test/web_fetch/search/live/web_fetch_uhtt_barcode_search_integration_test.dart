@@ -5,17 +5,9 @@ import 'package:my_movie_search/movies/web_data_providers/search/uhtt_barcode.da
 
 import '../../../../test_helper.dart';
 
-// ignore_for_file: unnecessary_raw_strings
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real MagnetDb endpoint!
 ////////////////////////////////////////////////////////////////////////////////
-
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"9324915073425","bestSource":"DataSourceType.uhttBarcode","title":"dexter the","alternateTitle":"Dexter DVD the first season","type":"MovieContentType.barcode","sources":{"DataSourceType.uhttBarcode":"9324915073425"}}
-''',
-];
 
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
@@ -27,15 +19,16 @@ void main() {
     test('Run a search on Tpb that is likely to have static results', () async {
       final criteria = SearchCriteriaDTO().fromString('9324915073425');
       final actualOutput =
-          await QueryUhttBarcodeSearch(criteria).readList(limit: 10);
-      final expectedOutput = expectedDTOList;
-      expectedDTOList.clearCopyrightedData();
+          await QueryUhttBarcodeSearch(
+        criteria,
+      ).readList(limit: 10);
       actualOutput.clearCopyrightedData();
 
       // Uncomment this line to update expectedOutput if sample data changes
-      // printTestData(actualOutput);
+      // writeTestData(actualOutput);
 
       // Check the results.
+      final expectedOutput = readTestData();
       expect(
         actualOutput,
         MovieResultDTOListFuzzyMatcher(

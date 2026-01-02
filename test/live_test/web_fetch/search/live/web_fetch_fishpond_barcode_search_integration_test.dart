@@ -5,16 +5,9 @@ import 'package:my_movie_search/movies/web_data_providers/search/fishpond_barcod
 
 import '../../../../test_helper.dart';
 
-// ignore_for_file: unnecessary_raw_strings
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real MagnetDb endpoint!
 ////////////////////////////////////////////////////////////////////////////////
-
-const expectedDtoJsonStringListOld = [
-  r'''
-{"uniqueId":"DataSourceType.fishpondBarcode 9789461879530","bestSource":"DataSourceType.fishpondBarcode","alternateTitle":"Everything Everywhere All ­at Once (Nederland) ","type":"MovieContentType.barcode","sources":{"DataSourceType.fishpondBarcode":"DataSourceType.fishpondBarcode 9789461879530"}}
-''',
-];
 
 void main() {
   ////////////////////////////////////////////////////////////////////////////////

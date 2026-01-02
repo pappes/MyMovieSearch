@@ -1,0 +1,14 @@
+[
+  {
+    "uniqueId": "tt13211062",
+    "title": "Osamake: Romcom Where the Childhood Friend Won't Lose ",
+    "bestSource": "DataSourceType.google",
+    "type": "MovieContentType.series",
+    "year": "2021",
+    "yearRange": "2021-",
+    "imageUrl": "https://m.media-amazon.com/images/M/MV5BZjU1Mjc0YzQtMjUwNC00YTAwLWEzMjgtNTQ0NWI1ZTFlYzhhXkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
+    "sources": {
+      "DataSourceType.google": "tt13211062"
+    }
+  }
+]

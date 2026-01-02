@@ -5,62 +5,54 @@ import 'package:my_movie_search/movies/web_data_providers/search/libsa_barcode.d
 
 import '../../../../test_helper.dart';
 
-// ignore_for_file: unnecessary_raw_strings
 ////////////////////////////////////////////////////////////////////////////////
-/// Read from real MagnetDb endpoint!
+/// Read from real QueryLibsaBarcodeSearch endpoint!
 ////////////////////////////////////////////////////////////////////////////////
-
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"https://www.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=&issn=/MC.GIF","bestSource":"DataSourceType.libsaBarcode","title":"Summer in February 2013","alternateTitle":"Summer in February [DVD]. 2014 2013","type":"MovieContentType.barcode","sources":{"DataSourceType.libsaBarcode":"https://www.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=&issn=/MC.GIF"}}
-''',
-];
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryLibsaBarcodeSearch test', () {
     // Search for a known movie.
-    test('Run a search on libsa that will hopefully have static results',
-        () async {
-      final criteria = SearchCriteriaDTO().fromString('9317731106354');
-      final actualOutput =
-          await QueryLibsaBarcodeSearch(criteria).readList(limit: 10);
-      final expectedOutput = expectedDTOList;
-      expectedDTOList.clearCopyrightedData();
-      actualOutput.clearCopyrightedData();
+    test(
+      'Run a search on libsa that will hopefully have static results',
+      () async {
+        final criteria = SearchCriteriaDTO().fromString('9317731106354');
+        final actualOutput = await QueryLibsaBarcodeSearch(
+          criteria,
+        ).readList(limit: 10);
+        actualOutput.clearCopyrightedData();
 
-      // Uncomment this line to update expectedOutput if sample data changes
-      // printTestData(actualOutput);
+        // Uncomment this line to update expectedOutput if sample data changes
+        // writeTestData(actualOutput);
 
-      // Check the results.
-      expect(
-        actualOutput,
-        MovieResultDTOListFuzzyMatcher(
-          expectedOutput,
-          percentMatch: 60,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
-            'needs to match expected DTO list '
-            '${expectedOutput.toPrintableString()}',
-      );
-    });
+        // Check the results.
+        final expectedOutput = readTestData();
+        expect(
+          actualOutput,
+          MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),
+          reason:
+              'Emitted DTO list ${actualOutput.toPrintableString()} '
+              'needs to match expected DTO list '
+              '${expectedOutput.toPrintableString()}',
+        );
+      },
+    );
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
-      final actualOutput =
-          await QueryLibsaBarcodeSearch(criteria).readList(limit: 10);
+      final actualOutput = await QueryLibsaBarcodeSearch(
+        criteria,
+      ).readList(limit: 10);
       final expectedOutput = <MovieResultDTO>[];
 
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(
-          expectedOutput,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );

@@ -1,0 +1,102 @@
+[
+  {
+    "uniqueId": "item-115989529756",
+    "title": "dexter the very good",
+    "bestSource": "DataSourceType.picclickBarcode",
+    "alternateTitle": "Dexter: The First Season DVD, (VERY GOOD) REGION 4",
+    "type": "MovieContentType.barcode",
+    "sources": {
+      "DataSourceType.picclickBarcode": "item-115989529756"
+    }
+  },
+  {
+    "uniqueId": "item-127597904230",
+    "title": "dexter 2006 4 fast tracked postage",
+    "bestSource": "DataSourceType.picclickBarcode",
+    "alternateTitle": "Dexter : Season 1 (DVD, 2006, 4-Disc) 🍿 Fast Tracked Postage",
+    "type": "MovieContentType.barcode",
+    "sources": {
+      "DataSourceType.picclickBarcode": "item-127597904230"
+    }
+  },
+  {
+    "uniqueId": "item-136135809532",
+    "title": "dexter 2006",
+    "bestSource": "DataSourceType.picclickBarcode",
+    "alternateTitle": "Dexter : Season 1 (Box Set, DVD, 2006)",
+    "type": "MovieContentType.barcode",
+    "sources": {
+      "DataSourceType.picclickBarcode": "item-136135809532"
+    }
+  },
+  {
+    "uniqueId": "item-145421090418",
+    "title": "dexter 2 2006 tv crime 2 michael c hall r4",
+    "bestSource": "DataSourceType.picclickBarcode",
+    "alternateTitle": "Dexter : Season 1 - 2 (Box Set, DVD 2006) TV Crime Series 1 2 Michael C. Hall R4",
+    "type": "MovieContentType.barcode",
+    "sources": {
+      "DataSourceType.picclickBarcode": "item-145421090418"
+    }
+  },
+  {
+    "uniqueId": "item-167907926979",
+    "title": "dexter tv show 6 set 1 2 3 4 5 6 reg 4",
+    "bestSource": "DataSourceType.picclickBarcode",
+    "alternateTitle": "Dexter TV Show Season 1-6 Complete DVD Set 1 2 3 4 5 6 Reg 4",
+    "type": "MovieContentType.barcode",
+    "sources": {
+      "DataSourceType.picclickBarcode": "item-167907926979"
+    }
+  },
+  {
+    "uniqueId": "item-177538145520",
+    "title": "dexter 2006",
+    "bestSource": "DataSourceType.picclickBarcode",
+    "alternateTitle": "Dexter : Season 1 (Box Set, DVD, 2006)",
+    "type": "MovieContentType.barcode",
+    "sources": {
+      "DataSourceType.picclickBarcode": "item-177538145520"
+    }
+  },
+  {
+    "uniqueId": "item-197902379782",
+    "title": "dexter one 2006 fast postage bd",
+    "bestSource": "DataSourceType.picclickBarcode",
+    "alternateTitle": "Dexter : Season 1 One (Box Set, DVD, 2006) Region 4 Fast Postage BD",
+    "type": "MovieContentType.barcode",
+    "sources": {
+      "DataSourceType.picclickBarcode": "item-197902379782"
+    }
+  },
+  {
+    "uniqueId": "item-326850399475",
+    "title": "dexter 4 discin sleeve 2006",
+    "bestSource": "DataSourceType.picclickBarcode",
+    "alternateTitle": "Dexter: Season 1 (4 Disc Box Set in Sleeve, DVD, 2006), Region 4",
+    "type": "MovieContentType.barcode",
+    "sources": {
+      "DataSourceType.picclickBarcode": "item-326850399475"
+    }
+  },
+  {
+    "uniqueId": "item-376588977927",
+    "title": "dexter the 4",
+    "bestSource": "DataSourceType.picclickBarcode",
+    "alternateTitle": "Dexter The First Season DVD Pal 4",
+    "type": "MovieContentType.barcode",
+    "sources": {
+      "DataSourceType.picclickBarcode": "item-376588977927"
+    }
+  },
+  {
+    "uniqueId": "item-389280933735",
+    "title": "dexter 2006 4",
+    "bestSource": "DataSourceType.picclickBarcode",
+    "alternateTitle": "Dexter : Season 1 (DVD, 2006, 4-Disc) Region 4",
+    "type": "MovieContentType.barcode",
+    "sources": {
+      "DataSourceType.picclickBarcode": "item-389280933735"
+    }
+  }
+]

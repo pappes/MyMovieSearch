@@ -5,39 +5,9 @@ import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestion
 
 import '../../../../test_helper.dart';
 
-// ignore_for_file: unnecessary_raw_strings
-
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real IMDB endpoint!
 ////////////////////////////////////////////////////////////////////////////////
-
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"tt0406158","bestSource":"DataSourceType.imdbSuggestions","title":"The Prize Winner of Defiance, Ohio","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0406158"}}
-''',
-  r'''
-{"uniqueId":"tt0427038","bestSource":"DataSourceType.imdbSuggestions","title":"Carlito's Way: Rise to Power","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0427038"}}
-''',
-  r'''
-{"uniqueId":"tt0436724","bestSource":"DataSourceType.imdbSuggestions","title":"Rize","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0436724"}}
-''',
-  r'''
-{"uniqueId":"tt0453540","bestSource":"DataSourceType.imdbSuggestions","title":"Rise of the Undead","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0453540"}}
-''',
-  r'''
-{"uniqueId":"tt0468538","bestSource":"DataSourceType.imdbSuggestions","title":"Ride or Die","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0468538"}}
-''',
-  r'''
-{"uniqueId":"tt0470883","bestSource":"DataSourceType.imdbSuggestions","title":"Magic Carpet Ride","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0470883"}}
-''',
-  r'''
-{"uniqueId":"tt0473080","bestSource":"DataSourceType.imdbSuggestions","title":"Riot at the Rite","type":"MovieContentType.movie","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0473080"}}
-''',
-  r'''
-{"uniqueId":"tt0479726","bestSource":"DataSourceType.imdbSuggestions","title":"Nationwide Mercury Prize 2005","type":"MovieContentType.series","year":"2005","sources":{"DataSourceType.imdbSuggestions":"tt0479726"}}
-''',
-];
 
 void main() {
 ////////////////////////////////////////////////////////////////////////////////
@@ -49,15 +19,14 @@ void main() {
     test('Run read 3 pages from IMDB', () async {
       final criteria = SearchCriteriaDTO().fromString('rize 2005');
       final actualOutput =
-          await QueryIMDBSuggestions(criteria).readList(limit: 10);
-      final expectedOutput = expectedDTOList;
-      expectedDTOList.clearCopyrightedData();
+          await QueryIMDBSuggestions(criteria).readList();
       actualOutput.clearCopyrightedData();
 
       // To update expected data, uncomment the following line
-      // printTestData(actualOutput);
+      // writeTestData(actualOutput);
 
       // Check the results.
+      final expectedOutput = readTestData();
       expect(
         actualOutput,
         MovieResultDTOListFuzzyMatcher(

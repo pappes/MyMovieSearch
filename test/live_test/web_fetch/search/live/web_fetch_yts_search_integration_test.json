@@ -1,0 +1,12 @@
+[
+  {
+    "uniqueId": "https://yts.lt/movies/sharon-1-2-3-2018",
+    "title": "Sharon 1.2.3.",
+    "bestSource": "DataSourceType.ytsSearch",
+    "type": "MovieContentType.information",
+    "year": "2018",
+    "sources": {
+      "DataSourceType.ytsSearch": "https://yts.lt/movies/sharon-1-2-3-2018"
+    }
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "uniqueId": "tt0406158",
+    "title": "The Prize Winner of Defiance, Ohio",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2005",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt0406158"
+    }
+  },
+  {
+    "uniqueId": "tt0427038",
+    "title": "Carlito's Way: Rise to Power",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2005",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt0427038"
+    }
+  },
+  {
+    "uniqueId": "tt0436724",
+    "title": "Rize",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2005",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt0436724"
+    }
+  },
+  {
+    "uniqueId": "tt0468538",
+    "title": "Ride or Die",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2005",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt0468538"
+    }
+  },
+  {
+    "uniqueId": "tt0470883",
+    "title": "Magic Carpet Ride",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2005",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt0470883"
+    }
+  },
+  {
+    "uniqueId": "tt0473080",
+    "title": "Riot at the Rite",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2005",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt0473080"
+    }
+  },
+  {
+    "uniqueId": "tt0479726",
+    "title": "Nationwide Mercury Prize 2005",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.series",
+    "year": "2005",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt0479726"
+    }
+  },
+  {
+    "uniqueId": "tt1498170",
+    "title": "Mercury Prize 2009",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.series",
+    "year": "2009",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt1498170"
+    }
+  }
+]

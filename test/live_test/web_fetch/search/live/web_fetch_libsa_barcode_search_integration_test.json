@@ -1,0 +1,12 @@
+[
+  {
+    "uniqueId": "https://www.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=&issn=/MC.GIF",
+    "title": "Summer in February 2013",
+    "bestSource": "DataSourceType.libsaBarcode",
+    "alternateTitle": "Summer in February [DVD]. 2014 2013",
+    "type": "MovieContentType.barcode",
+    "sources": {
+      "DataSourceType.libsaBarcode": "https://www.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=&issn=/MC.GIF"
+    }
+  }
+]

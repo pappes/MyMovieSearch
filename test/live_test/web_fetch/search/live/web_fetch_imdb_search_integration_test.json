@@ -1,0 +1,102 @@
+[
+  {
+    "uniqueId": "nm0000702",
+    "title": "Reese Witherspoon",
+    "bestSource": "DataSourceType.imdbSearch",
+    "type": "MovieContentType.person",
+    "sources": {
+      "DataSourceType.imdbSearch": "nm0000702"
+    }
+  },
+  {
+    "uniqueId": "nm1103780",
+    "title": "Rizelle Mendoza",
+    "bestSource": "DataSourceType.imdbSearch",
+    "type": "MovieContentType.person",
+    "sources": {
+      "DataSourceType.imdbSearch": "nm1103780"
+    }
+  },
+  {
+    "uniqueId": "nm16146196",
+    "title": "RIZE",
+    "bestSource": "DataSourceType.imdbSearch",
+    "type": "MovieContentType.person",
+    "sources": {
+      "DataSourceType.imdbSearch": "nm16146196"
+    }
+  },
+  {
+    "uniqueId": "nm1981893",
+    "title": "Riz Ahmed",
+    "bestSource": "DataSourceType.imdbSearch",
+    "type": "MovieContentType.person",
+    "sources": {
+      "DataSourceType.imdbSearch": "nm1981893"
+    }
+  },
+  {
+    "uniqueId": "nm7507707",
+    "title": "Rizelle Januk",
+    "bestSource": "DataSourceType.imdbSearch",
+    "type": "MovieContentType.person",
+    "sources": {
+      "DataSourceType.imdbSearch": "nm7507707"
+    }
+  },
+  {
+    "uniqueId": "tt0376554",
+    "title": "Danehaye rize barf",
+    "bestSource": "DataSourceType.imdbSearch",
+    "type": "MovieContentType.movie",
+    "year": "2003",
+    "yearRange": "2003",
+    "sources": {
+      "DataSourceType.imdbSearch": "tt0376554"
+    }
+  },
+  {
+    "uniqueId": "tt0436724",
+    "title": "Rize",
+    "bestSource": "DataSourceType.imdbSearch",
+    "type": "MovieContentType.movie",
+    "year": "2005",
+    "yearRange": "2005",
+    "sources": {
+      "DataSourceType.imdbSearch": "tt0436724"
+    }
+  },
+  {
+    "uniqueId": "tt24637506",
+    "title": "RiZe Church",
+    "bestSource": "DataSourceType.imdbSearch",
+    "type": "MovieContentType.series",
+    "year": "2022",
+    "yearRange": "2022",
+    "sources": {
+      "DataSourceType.imdbSearch": "tt24637506"
+    }
+  },
+  {
+    "uniqueId": "tt24637510",
+    "title": "Rize",
+    "bestSource": "DataSourceType.imdbSearch",
+    "type": "MovieContentType.series",
+    "year": "2022",
+    "yearRange": "2022",
+    "sources": {
+      "DataSourceType.imdbSearch": "tt24637510"
+    }
+  },
+  {
+    "uniqueId": "tt7529532",
+    "title": "Tenacious D: Rize of the Fenix",
+    "bestSource": "DataSourceType.imdbSearch",
+    "type": "MovieContentType.custom",
+    "year": "2012",
+    "yearRange": "2012",
+    "sources": {
+      "DataSourceType.imdbSearch": "tt7529532"
+    }
+  }
+]

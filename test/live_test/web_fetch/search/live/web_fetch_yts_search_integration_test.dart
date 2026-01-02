@@ -36,12 +36,12 @@ void main() {
     test('Run read from YTS using imbd id', () async {
       final criteria = SearchCriteriaDTO().fromString('tt3127016');
       final actualOutput = await QueryYtsSearch(criteria).readList(limit: 10);
-      final expectedOutput = expectedDTOList;
 
       // To update expected data, uncomment the following line
-      // printTestData(actualOutput);
+      // writeTestData(actualOutput);
 
       // Check the results.
+      final expectedOutput = readTestData();
       expect(
         actualOutput,
         MovieResultDTOListFuzzyMatcher(
@@ -54,14 +54,15 @@ void main() {
       );
     });
     test('Run read from YTS using title', () async {
+      final dataSoureLocation = getDataFileLocation(suffix: '_title.json');
       final criteria = SearchCriteriaDTO().fromString('rize 2005');
       final actualOutput = await QueryYtsSearch(criteria).readList(limit: 10);
-      final expectedOutput = expectedTitleList;
 
       // To update expected data, uncomment the following line
-      // printTestData(actualOutput);
+      // writeTestData(actualOutput, location: dataSoureLocation);
 
       // Check the results.
+      final expectedOutput = readTestData(location: dataSoureLocation);
       expect(
         actualOutput,
         MovieResultDTOListFuzzyMatcher(
