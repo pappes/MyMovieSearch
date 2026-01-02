@@ -254,7 +254,7 @@ class MovieLocation {
   // assets/newDVDLibrary.json
   // and update lastFirebaseBackupDate with 
   // the new timestamp that is printed to console during execution of the test.
-  static const lastFirebaseBackupDate = 1719017443517;
+  static const lastFirebaseBackupDate = 1767323141965;
   // DateTime().millisecondsSinceEpoch
 
   Future<void> _loadBackupLocationData() async {

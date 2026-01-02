@@ -6,7 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
-void main() async {
+void main() {
   group('firebase backup', () {
     // Backup data stored in firebase to /tmp/firebaseBackup<date>.txt
     //
@@ -16,7 +16,7 @@ void main() async {
     // that the data is up to date.
     test(
       timeout: const Timeout(Duration(minutes: 60)),
-      skip: true,
+      skip: false,
       'backupFirebaseData',
       () async {
         await backupFirebaseData();
@@ -30,11 +30,15 @@ Future<void> backupFirebaseData() async {
     'Constant lastFirebaseBackupDate needs to be updated in '
     'lib/movies/models/movie_location.dart',
   );
-  final filename = '/tmp/firebaseBackup${DateTime.now().toIso8601String()}.txt';
-  await writeDataFile(
-    filename,
-    () async => jsonEncode(await getFirebaseData()),
-  );
+  const filename = 'assets/newDVDLibrary.json';
+
+  await writeDataFile(filename, _getJsonText);
+}
+
+Future<String> _getJsonText() async {
+  final fbData = await getFirebaseData();
+  final jsonData = const JsonEncoder.withIndent('  ').convert(fbData);
+  return jsonData;
 }
 
 typedef JsonCallback = Future<String> Function();

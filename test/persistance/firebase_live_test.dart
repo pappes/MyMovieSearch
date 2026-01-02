@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 
-void main() async {
+void main() {
   // Wait for api key to be initialised
-  setUpAll(() async => Settings().init());
+  setUpAll(() => Settings().init());
 ////////////////////////////////////////////////////////////////////////////////
   /// integration tests
 ////////////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@ void main() async {
 
       expect(result, completion(true));
     });
-    test('add', () async {
+    test('add', () {
       final fb = FirebaseApplicationState();
       final result = fb.addRecord('testing', id: '123456', message: 'addme');
 
