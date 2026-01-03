@@ -10,6 +10,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
+import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
@@ -583,7 +584,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         CensorRatingType.none;
     this.language =
         LanguageType.values.byFullName(language) ??
-        getLanguageType(this.languages);
+        getLanguageType();
 
     if (this.type != MovieContentType.searchprompt &&
         this.type != MovieContentType.episode) {
@@ -1247,38 +1248,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   }
 
   /// Loop through all languages in order to see how dominant English is.
-  LanguageType getLanguageType([Iterable<dynamic>? languageList]) {
-    for (final languageVal in languageList ?? languages) {
-      final languageText = languageVal.toString();
-      if (languageText.isNotEmpty) {
-        if (!languages.contains(languageText)) {
-          languages.add(languageText);
-        }
-        if (languageText.toUpperCase().startsWith('EN')) {
-          if (LanguageType.none == language ||
-              LanguageType.allEnglish == language) {
-            // First item(s) found are English,
-            // assume all English until other languages found.
-            language = LanguageType.allEnglish;
-            continue;
-          } else {
-            // English is not the first language listed.
-            return language = LanguageType.someEnglish;
-          }
-        }
-        if (LanguageType.allEnglish == language) {
-          // English was the first language listed but found another language.
-          return language = LanguageType.mostlyEnglish;
-        } else {
-          // First item found is foreign,
-          // assume all foreign until other languages found.
-          language = LanguageType.foreign;
-          continue;
-        }
-      }
-    }
-    return language;
-  }
+  LanguageType getLanguageType() => language = languages.getLanguageType();
 
   /// Remove data that should only be held transiently.
   ///

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 /// Extend [List]<[String]> or [Set]<[String]> to provide convenience functions.
 ///
@@ -61,6 +62,59 @@ extension StringIterableHelper on Iterable<String> {
   }
 }
 
+/// Extend [Iterable]<[String]> to provide convenience functions for
+/// determining language type.
+///
+extension LanguageTypeHelper on Iterable<String> {
+  /// Determine the LanguageType of the current list of languages.
+  /// Considers both ISO language codes and IMDB language names.
+  /// ```dart
+  /// ['English', 'French'].getLanguageType(); // returns LanguageType.mostlyEnglish
+  /// ['EN', 'FR'].getLanguageType(); // returns LanguageType.mostlyEnglish
+  /// ['French', 'German'].getLanguageType(); // returns LanguageType.foreign
+  /// ```
+  LanguageType getLanguageType() {
+    bool isIsoLanguage(String languageText) => languageText.length == 2;
+    bool isImdbLanguage(String languageText) => !isIsoLanguage(languageText);
+
+    final imdbLaguageType = _getSubsetLanguageType(where(isImdbLanguage));
+    if (imdbLaguageType != null) {
+      return imdbLaguageType;
+    }
+
+    final isoLanguageType = _getSubsetLanguageType(where(isIsoLanguage));
+    if (isoLanguageType != null) {
+      return isoLanguageType;
+    }
+
+    return LanguageType.none;
+  }
+
+  LanguageType? _getSubsetLanguageType(Iterable<String> languages) {
+    bool isEnglish(String languageText) =>
+        languageText.toUpperCase().startsWith('EN');
+    if (languages.isNotEmpty) {
+      final firstLanguage = languages.isNotEmpty ? languages.first : '';
+      final firstLanguageIsEnglish = isEnglish(firstLanguage);
+      final someEnglish = languages.any(isEnglish);
+      final allEnglish = languages.every(isEnglish);
+      if (allEnglish) {
+        return LanguageType.allEnglish;
+      }
+      if (firstLanguageIsEnglish) {
+        return LanguageType.mostlyEnglish;
+      }
+      if (someEnglish) {
+        return LanguageType.someEnglish;
+      }
+      if (!someEnglish) {
+        return LanguageType.foreign;
+      }
+    }
+    return null;
+  }
+}
+
 /// Extend [List] to provide convenience functions.
 ///
 extension ListHelper<T> on List<T> {
@@ -100,9 +154,9 @@ extension ListHelper<T> on List<T> {
 }
 
 /// Perform [action] on each element of [input] that is a [T].
-/// 
-/// A fallback option is available to still call [action] if the data passed in 
-/// is not iterable. If fallback is true and [input] is not iterable, 
+///
+/// A fallback option is available to still call [action] if the data passed in
+/// is not iterable. If fallback is true and [input] is not iterable,
 /// calls [action] directly on the entire [input].
 ///
 ///

@@ -20,6 +20,8 @@ import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
 /// ```dart
 /// QueryIMDBJsonDetails().readList(criteria);
 /// ```
+
+// Linter does not understand overriden methods are already in parent class
 // ignore: missing_override_of_must_be_overridden
 class QueryIMDBJsonCastDetails extends QueryIMDBJsonDetailsBase {
   QueryIMDBJsonCastDetails(SearchCriteriaDTO criteria)
@@ -50,6 +52,8 @@ class QueryIMDBJsonCastDetails extends QueryIMDBJsonDetailsBase {
 /// ```dart
 /// QueryIMDBJsonDetails().readList(criteria);
 /// ```
+
+// Linter does not understand overriden methods are already in parent classe
 // ignore: missing_override_of_must_be_overridden
 class QueryIMDBJsonPaginatedFilmographyDetails
     extends QueryIMDBJsonDetailsBase {

@@ -372,11 +372,6 @@ void main() {
       final dto = MovieResultDTO();
       expect(dto.getLanguageType(), LanguageType.none);
     });
-    test('supply list to helper, get language from helper', () {
-      final dto = MovieResultDTO();
-      expect(dto.getLanguageType({'English'}), LanguageType.allEnglish);
-      expect(dto.languages, {'English'});
-    });
     test('supply list to dto, get language from helper', () {
       final dto = MovieResultDTO()..languages = {'English'};
       expect(dto.getLanguageType(), LanguageType.allEnglish);
@@ -388,36 +383,38 @@ void main() {
             ..getLanguageType();
       expect(dto.language, LanguageType.allEnglish);
     });
-    test('supply list to helper, get language from dto', () {
-      final dto = MovieResultDTO()..getLanguageType({'English'});
-      expect(dto.language, LanguageType.allEnglish);
-      expect(dto.languages, {'English'});
-    });
     test('All English', () {
-      final dto = MovieResultDTO();
+      final dto = MovieResultDTO()..languages = {'English', 'en', 'Englasias'};
       expect(
-        dto.getLanguageType(['English', 'en', 'Englasias']),
+        dto.getLanguageType(),
         LanguageType.allEnglish,
       );
     });
     test('Foreign', () {
-      final dto = MovieResultDTO();
+      final dto = MovieResultDTO()
+        ..languages = {'Not English', 'French', 'el-Englasias'};
       expect(
-        dto.getLanguageType(['Not English', 'French', 'el-Englasias']),
+        dto.getLanguageType(), LanguageType.foreign);
+    });
+    test('Foreign - iso subset', () {
+      final dto = MovieResultDTO()
+        ..languages = {'en', 'French', 'el-Englasias'};
+      expect(dto.getLanguageType(),
         LanguageType.foreign,
       );
     });
     test('mostlyEnglish', () {
-      final dto = MovieResultDTO();
+      final dto = MovieResultDTO()
+        ..languages = {'English', 'French', 'el-Englasias'};
       expect(
-        dto.getLanguageType(['English', 'French', 'el-Englasias']),
+        dto.getLanguageType(),
         LanguageType.mostlyEnglish,
       );
     });
     test('someEnglish', () {
-      final dto = MovieResultDTO();
+      final dto = MovieResultDTO()..languages = {'French', 'Englasias'};
       expect(
-        dto.getLanguageType(['French', 'Englasias']),
+        dto.getLanguageType(),
         LanguageType.someEnglish,
       );
     });
