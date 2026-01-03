@@ -28,6 +28,7 @@ enum DataSourceType {
   tmdbMovie,
   tmdbSearch,
   tmdbFinder,
+  tvdbDetails,
   google,
   mssearch,
   fbmmsnavlog,

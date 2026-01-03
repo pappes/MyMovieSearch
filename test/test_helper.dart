@@ -66,17 +66,22 @@ Iterable<MovieResultDTO> sampleTestData(
 void writeTestData(
   Iterable<MovieResultDTO> actualResult, {
   String? location,
+  String suffix = '.json',
   bool includeRelated = true,
 }) {
   final sorted = actualResult.toList();
   sortDtoList(sorted, includeRelated: includeRelated);
   final jsonData = const JsonEncoder.withIndent('  ').convert(sorted);
-  File(location ?? getDataFileLocation()).writeAsStringSync(jsonData);
+  File(
+    location ?? getDataFileLocation(suffix: suffix),
+  ).writeAsStringSync(jsonData);
   expect('debug code has been left uncommented!', 'Test data has been updated');
 }
 
-List<MovieResultDTO> readTestData({String? location}) {
-  final text = File(location ?? getDataFileLocation()).readAsStringSync();
+List<MovieResultDTO> readTestData({String? location, String suffix = '.json'}) {
+  final text = File(
+    location ?? getDataFileLocation(suffix: suffix),
+  ).readAsStringSync();
   return loadTestData(text);
 }
 

@@ -1,0 +1,13 @@
+[
+  {
+    "uniqueId": "tt1231",
+    "title": "Run Lola Run",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.title",
+    "runTime": "4860",
+    "imageUrl": "https://artworks.thetvdb.com/banners/movies/2658/posters/2658.jpg",
+    "sources": {
+      "DataSourceType.tvdbDetails": "2658"
+    }
+  }
+]

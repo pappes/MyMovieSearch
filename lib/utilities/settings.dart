@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:google_secret_manager/google_secret_manager.dart';
 import 'package:logger/logger.dart';
 import 'package:mutex/mutex.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_common.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:universal_io/io.dart';
@@ -28,6 +29,7 @@ import 'package:universal_io/io.dart';
 /// 'GOOGLE_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'OMDB_KEY': 'xxxxxxxx',
 /// 'TMDB_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
+/// 'TVDB_KEY': 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
 /// 'MEILIADMIN_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'MEILISEARCH_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'MEILISEARCH_URL': 'https://cloud.meilisearch.com/',
@@ -55,6 +57,7 @@ import 'package:universal_io/io.dart';
 /// export GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// export OMDB_KEY="xxxxxxxx"
 /// export TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// export TVDB_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 /// export MEILIADMIN_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// export MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// export MEILISEARCH_URL="https://cloud.meilisearch.com/"
@@ -69,6 +72,7 @@ import 'package:universal_io/io.dart';
 /// foo@bar:~$ export GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// foo@bar:~$ export OMDB_KEY="xxxxxxxx"
 /// foo@bar:~$ export TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// foo@bar:~$ export TVDB_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
 /// foo@bar:~$ export MEILIADMIN_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// foo@bar:~$ export MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// foo@bar:~$ export MEILISEARCH_URL="https://cloud.meilisearch.com/"
@@ -83,9 +87,10 @@ import 'package:universal_io/io.dart';
 ///   --dart-define GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
 ///   --dart-define OMDB_KEY="xxxxxxxx" \
 ///   --dart-define TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
-///   --dart-define MEILIADMIN_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-///   --dart-define MEILISEARCH_URL="https://cloud.meilisearch.com/",
+///   --dart-define TVDB_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" \
+///   --dart-define MEILIADMIN_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MEILISEARCH_URL="https://cloud.meilisearch.com/" \
 ///   --dart-define SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
 ///   --dart-define OFFLINE="true"
 /// ```
@@ -97,10 +102,11 @@ import 'package:universal_io/io.dart';
 ///   --dart-define GOOGLE_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
 ///   --dart-define OMDB_KEY="xxxxxxxx" \
 ///   --dart-define TMDB_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
-///   --dart-define MEILIADMIN_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
-///   --dart-define MEILISEARCH_URL="https://cloud.meilisearch.com/",
-///   --dart-define SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+///   --dart-define TVDB_KEY="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" \
+///   --dart-define MEILIADMIN_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MEILISEARCH_URL="https://cloud.meilisearch.com/" \
+///   --dart-define SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
 ///   --dart-define OFFLINE="true"
 /// ```
 ///
@@ -122,6 +128,8 @@ import 'package:universal_io/io.dart';
 ///                 "OMDB_KEY=xxxxxxxx",
 ///                 "--dart-define",
 ///                 "TMDB_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///                 "--dart-define",
+///                 "TVDB_KEY=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
 ///                 "--dart-define",
 ///                 "MEILIADMIN_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///                 "--dart-define",
@@ -147,6 +155,7 @@ class Settings {
   String? googlekey;
   String? omdbkey;
   String? tmdbkey;
+  String? tvdbkey;
   String? meiliadminkey;
   String? meilisearchkey;
   String meiliurl = 'https://cloud.meilisearch.com/';
@@ -195,7 +204,8 @@ class Settings {
       _firebaseInitialised = true;
       await _firebaseData.init();
     }
-    return _updateFromCloud();
+    await _updateFromCloud();
+    unawaited(QueryTVDBCommon.init());
   }
 
   // Update secrets from runtime environment or compiled environment.
@@ -217,6 +227,10 @@ class Settings {
     tmdbkey = getSecretFromEnv(
       'TMDB_KEY',
       const String.fromEnvironment('TMDB_KEY'),
+    );
+    tvdbkey = getSecretFromEnv(
+      'TVDB_KEY',
+      const String.fromEnvironment('TVDB_KEY'),
     );
     meiliadminkey = getSecretFromEnv(
       'MEILIADMIN_KEY',
@@ -252,6 +266,7 @@ class Settings {
         await getSecretFromCloud(secrets, 'mms_gk', googlekey, 'GOOGLE_KEY');
     omdbkey = await getSecretFromCloud(secrets, 'mms_o', omdbkey, 'OMDB_KEY');
     tmdbkey = await getSecretFromCloud(secrets, 'mms_t', tmdbkey, 'TMDB_KEY');
+    tvdbkey = await getSecretFromCloud(secrets, 'mms_tv', tvdbkey, 'TVDB_KEY');
     meiliadminkey = await getSecretFromCloud(
       secrets,
       'mms_s',
@@ -275,6 +290,7 @@ class Settings {
     logValue('GOOGLE_KEY', googlekey);
     logValue('OMDB_KEY', omdbkey);
     logValue('TMDB_KEY', tmdbkey);
+    logValue('TVDB_KEY', tvdbkey);
     logValue('MEILIADMIN_KEY', meiliadminkey);
     logValue('MEILISEARCH_KEY', meilisearchkey);
     logValue('MEILISEARCH_URL', meiliurl);

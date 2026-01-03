@@ -7,6 +7,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_finder.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_person_detail.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_details.dart';
 
 /// Search for movie data from multiple online search sources.
 ///
@@ -18,9 +19,40 @@ class MovieListRepository extends BaseMovieRepository {
   @override
   Future<int> getExtraDetails(int originalSearchUID, MovieResultDTO dto) async {
     if (!dto.isMessage()) {
+      await _getExtraTvdbDetails(originalSearchUID, dto);
       return _callDetailFetchFunction(originalSearchUID, dto);
     }
     return 0;
+  }
+
+  static final priorTvdbCalls = <String>[];
+
+  /// To be overridden by specific implementations, calling:
+  ///   initProvider() before requesting data for a source.
+  ///   yieldResult() for any returned data.
+  ///   await finishProvider() as each source completes.
+  /// Returns number of extra fetches requested.
+  ///
+  Future<int> _getExtraTvdbDetails(
+    int originalSearchUID,
+    MovieResultDTO dto,
+  ) async {
+    final searchKey = '$originalSearchUID${dto.uniqueId}';
+    if (priorTvdbCalls.contains(searchKey)) {
+      return 0;
+    }
+    priorTvdbCalls.add(searchKey);
+
+    print('calling TVDB details for ${dto.uniqueId} from $originalSearchUID');
+    final detailCriteria = SearchCriteriaDTO().fromString(dto.uniqueId);
+    final provider = QueryTVDBDetails(detailCriteria);
+    initProvider(provider);
+    final results = await provider.readList();
+
+    results.forEach(yieldResult);
+    print('got ${results.length} results from tvdb ');
+    await finishProvider(provider);
+    return results.length;
   }
 
   /// Only call TMDB find to get tmdbID if no TMDB request has completed
@@ -48,9 +80,9 @@ class MovieListRepository extends BaseMovieRepository {
     int originalSearchUID,
     MovieResultDTO dto,
   ) async {
+    final detailCriteria = SearchCriteriaDTO().fromString(dto.uniqueId);
     if (_readyForTmdbFinder(dto)) {
       // Fetch tmdb id based on imdb id.
-      final detailCriteria = SearchCriteriaDTO().fromString(dto.uniqueId);
       const constructor = QueryTMDBFinder.new;
       await _fetchDetails(originalSearchUID, detailCriteria, constructor);
     }
@@ -90,10 +122,9 @@ class MovieListRepository extends BaseMovieRepository {
     if (null != tmdbId) {
       final detailCriteria = SearchCriteriaDTO().fromString(tmdbId);
 
-      final constructor =
-          (MovieContentType.person == dto.type)
-              ? QueryTMDBPersonDetails.new
-              : QueryTMDBMovieDetails.new;
+      final constructor = (MovieContentType.person == dto.type)
+          ? QueryTMDBPersonDetails.new
+          : QueryTMDBMovieDetails.new;
       await _fetchDetails(originalSearchUID, detailCriteria, constructor);
     }
   }

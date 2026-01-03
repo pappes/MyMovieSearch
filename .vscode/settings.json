@@ -4,5 +4,6 @@
         "Imdb",
         "Omdb",
         "unawaited"
-    ]
+    ],
+    "editor.formatOnSave": true
 }

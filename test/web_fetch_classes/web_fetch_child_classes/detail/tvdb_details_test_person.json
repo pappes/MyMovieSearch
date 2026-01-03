@@ -1,0 +1,12 @@
+[
+  {
+    "uniqueId": "nm1231",
+    "title": "Jodie Foster",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.person",
+    "imageUrl": "https://artworks.thetvdb.com/banners/person/253451/5f949bf86d19f.jpg",
+    "sources": {
+      "DataSourceType.tvdbDetails": "253451"
+    }
+  }
+]

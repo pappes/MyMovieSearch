@@ -1,0 +1,21 @@
+[
+  {
+    "uniqueId": "nm0101001",
+    "title": "Steve Bower",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.person",
+    "sources": {
+      "DataSourceType.tvdbDetails": "8232002"
+    }
+  },
+  {
+    "uniqueId": "nm0101005",
+    "title": "Tom Bower",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.person",
+    "imageUrl": "https://artworks.thetvdb.com/banners/v4/actor/290963/photo/65152ae4af8b8.jpg",
+    "sources": {
+      "DataSourceType.tvdbDetails": "290963"
+    }
+  }
+]

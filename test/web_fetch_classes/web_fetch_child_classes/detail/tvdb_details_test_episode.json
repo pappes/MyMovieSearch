@@ -1,0 +1,12 @@
+[
+  {
+    "uniqueId": "tt1231",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.title",
+    "year": "2022",
+    "yearRange": "2022-",
+    "sources": {
+      "DataSourceType.tvdbDetails": "8437958"
+    }
+  }
+]

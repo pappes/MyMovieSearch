@@ -33,7 +33,7 @@ class TmdbPersonDetailConverter {
       searchResults.add(
         MovieResultDTO().error(
           '[TmdbPersonDetailConverter] $error',
-          DataSourceType.omdb,
+          DataSourceType.tmdbPerson,
         ),
       );
     }

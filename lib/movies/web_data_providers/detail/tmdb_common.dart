@@ -27,12 +27,12 @@ abstract class QueryTMDBCommon
   late String baseURL;
   String midURL = '?api_key=';
 
-  /// Must be orerridden by child classes.
+  /// Must be overridden by child classes.
   /// Static snapshot of data for offline operation.
   @override
   DataSourceFn myOfflineData();
 
-  /// Must be orerridden by child classes.
+  /// Must be overridden by child classes.
   /// Convert TMDB map to MovieResultDTO records.
   @override
   Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(dynamic map);
@@ -54,16 +54,16 @@ abstract class QueryTMDBCommon
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     // Get key from the file assets/secrets.json (not source controlled)
-    final omdbKey = Settings().tmdbkey;
-    return Uri.parse('$baseURL$searchCriteria$midURL$omdbKey');
+    final tmdbKey = Settings().tmdbkey;
+    return Uri.parse('$baseURL$searchCriteria$midURL$tmdbKey');
   }
 
   // Add authorization token for compatability with the TMDB V4 API.
   @override
   void myConstructHeaders(HttpHeaders headers) {
     // Get key from the file assets/secrets.json (not source controlled)
-    final omdbKey = Settings().tmdbkey;
-    headers.add('Authorization', ' Bearer $omdbKey');
+    final tmdbKey = Settings().tmdbkey;
+    headers.add('Authorization', ' Bearer $tmdbKey');
   }
 
   /// Convert web text to a traversable tree of [List] or [Map] data.

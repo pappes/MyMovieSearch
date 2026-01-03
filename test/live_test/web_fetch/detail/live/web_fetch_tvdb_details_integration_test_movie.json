@@ -1,0 +1,66 @@
+[
+  {
+    "uniqueId": "tt0101002",
+    "title": "Return Engagement",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.title",
+    "runTime": "5400",
+    "imageUrl": "https://artworks.thetvdb.com/banners/movies/38954/posters/38954.jpg",
+    "sources": {
+      "DataSourceType.tvdbDetails": "38954"
+    }
+  },
+  {
+    "uniqueId": "tt0101003",
+    "title": "Freeze Die Come to Life",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.title",
+    "runTime": "6300",
+    "imageUrl": "https://artworks.thetvdb.com/banners/movies/37819/posters/37819.jpg",
+    "sources": {
+      "DataSourceType.tvdbDetails": "37819"
+    }
+  },
+  {
+    "uniqueId": "tt0101004",
+    "title": "Zandalee",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.title",
+    "runTime": "6000",
+    "imageUrl": "https://artworks.thetvdb.com/banners/movies/11021/posters/11021.jpg",
+    "sources": {
+      "DataSourceType.tvdbDetails": "11021"
+    }
+  },
+  {
+    "uniqueId": "tt0101005",
+    "title": "Zapped Again!",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.title",
+    "runTime": "5760",
+    "imageUrl": "https://artworks.thetvdb.com/banners/movies/36398/posters/36398.jpg",
+    "sources": {
+      "DataSourceType.tvdbDetails": "36398"
+    }
+  },
+  {
+    "uniqueId": "tt0101006",
+    "title": "Der zauberkasten",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.tvdbDetails": "234073"
+    }
+  },
+  {
+    "uniqueId": "tt0101009",
+    "title": "Pantyhose Hero",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.title",
+    "runTime": "5940",
+    "imageUrl": "https://artworks.thetvdb.com/banners/movies/104667/posters/104667.jpg",
+    "sources": {
+      "DataSourceType.tvdbDetails": "104667"
+    }
+  }
+]

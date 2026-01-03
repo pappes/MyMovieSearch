@@ -61,7 +61,7 @@ class TmdbMovieSearchConverter {
       searchResults.add(
         MovieResultDTO().error(
           '[TmdbMovieSearchConverter] $error',
-          DataSourceType.omdb,
+          DataSourceType.tmdbMovie,
         ),
       );
     }

@@ -77,7 +77,7 @@ class TmdbFinderConverter {
       searchResults.add(
         MovieResultDTO().error(
           '[TmdbFinderConverter] $error',
-          DataSourceType.omdb,
+          DataSourceType.tmdbFinder,
         ),
       );
     }

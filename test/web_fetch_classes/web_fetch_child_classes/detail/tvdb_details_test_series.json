@@ -1,0 +1,16 @@
+[
+  {
+    "uniqueId": "tt1231",
+    "title": "Wednesday",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.episode",
+    "year": "2022",
+    "yearRange": "2022-2025",
+    "runTime": "3240",
+    "description": "... Wednesday Addams ...",
+    "imageUrl": "https://artworks.thetvdb.com/banners/v4/series/397060/posters/632dbd876738d.jpg",
+    "sources": {
+      "DataSourceType.tvdbDetails": "397060"
+    }
+  }
+]
