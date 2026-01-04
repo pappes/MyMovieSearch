@@ -78,11 +78,11 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
 
       /// Fetch full actor/director/writer/producer data
       /// from cache using a separate thread.
-        unawaited(
+      unawaited(
         QueryIMDBJsonPaginatedFilmographyDetails(criteria)
             //.readPrioritisedCachedList(priority: ThreadRunner.fast)
             .readList()
-              .then(_requestShowDetails),
+            .then(_requestShowDetails),
       );
     }
   }
@@ -110,8 +110,11 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     _redrawRequired = false;
   }
 
-  void _mergeDetails(List<MovieResultDTO> details) =>
-      details.forEach(_restorablePerson.value.merge);
+  void _mergeDetails(List<MovieResultDTO> details) => details
+      .where(
+        (received) => received.uniqueId == _restorablePerson.value.uniqueId,
+      )
+      .forEach(_restorablePerson.value.merge);
 
   @override
   // The restoration bucket id for this page.
@@ -193,10 +196,9 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       Text('UniqueId: ${_restorablePerson.value.uniqueId}      '),
       Text('Popularity: ${_restorablePerson.value.userRatingCount}'),
       ElevatedButton(
-        onPressed:
-            () => MMSNav(
-              context,
-            ).viewWebPage(makeImdbUrl(_restorablePerson.value.uniqueId)),
+        onPressed: () => MMSNav(
+          context,
+        ).viewWebPage(makeImdbUrl(_restorablePerson.value.uniqueId)),
         child: const Text('IMDB'),
       ),
 
@@ -227,10 +229,9 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       Poster(
         context,
         url: _restorablePerson.value.imageUrl,
-        showImages:
-            () => MMSNav(context).viewWebPage(
-              makeImdbUrl(_restorablePerson.value.uniqueId, photos: true),
-            ),
+        showImages: () => MMSNav(context).viewWebPage(
+          makeImdbUrl(_restorablePerson.value.uniqueId, photos: true),
+        ),
       ),
     ],
   );
@@ -248,12 +249,11 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
         ..add(
           Center(
             child: InkWell(
-              onTap:
-                  () => MMSNav(context).searchForRelated(
-                    // Open search details when tapped.
-                    '$rolesLabel: ${_restorablePerson.value.title}',
-                    rolesMap.values.toList(),
-                  ),
+              onTap: () => MMSNav(context).searchForRelated(
+                // Open search details when tapped.
+                '$rolesLabel: ${_restorablePerson.value.title}',
+                rolesMap.values.toList(),
+              ),
               child: Text(description, textAlign: TextAlign.center),
             ),
           ),

@@ -62,7 +62,6 @@ abstract class QueryTVDBCommon
 
     // Receive token.
     final responsetext = await response.transform(utf8.decoder).join();
-    print('TVDB login status: ${response.statusCode} body: $responsetext');
     final jsonMap = jsonDecode(responsetext);
     if (jsonMap is Map &&
         jsonMap.containsKey(tvdbResult) &&

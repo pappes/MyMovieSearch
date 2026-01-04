@@ -43,14 +43,12 @@ class MovieListRepository extends BaseMovieRepository {
     }
     priorTvdbCalls.add(searchKey);
 
-    print('calling TVDB details for ${dto.uniqueId} from $originalSearchUID');
     final detailCriteria = SearchCriteriaDTO().fromString(dto.uniqueId);
     final provider = QueryTVDBDetails(detailCriteria);
     initProvider(provider);
     final results = await provider.readList();
 
     results.forEach(yieldResult);
-    print('got ${results.length} results from tvdb ');
     await finishProvider(provider);
     return results.length;
   }

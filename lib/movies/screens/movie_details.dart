@@ -111,8 +111,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     _redrawRequired = false;
   }
 
-  void _mergeDetails(List<MovieResultDTO> details) =>
-      details.forEach(_restorableMovie.value.merge);
+  void _mergeDetails(List<MovieResultDTO> details) => details
+      .where((received) => received.uniqueId == _restorableMovie.value.uniqueId)
+      .forEach(_restorableMovie.value.merge);
 
   @override
   // The restoration bucket id for this page.
