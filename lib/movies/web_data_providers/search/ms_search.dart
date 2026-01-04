@@ -7,7 +7,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/ms_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/ms_search.dart';
-import 'package:my_movie_search/persistence/meilisearch.dart';
+import 'package:my_movie_search/persistence/google_compute.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';

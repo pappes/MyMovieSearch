@@ -5,7 +5,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:google_secret_manager/google_secret_manager.dart';
+import 'package:googleapis/secretmanager/v1.dart';
+import 'package:googleapis_auth/auth_io.dart';
 import 'package:logger/logger.dart';
 import 'package:mutex/mutex.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_common.dart';
@@ -159,9 +160,10 @@ class Settings {
   String? meiliadminkey;
   String? meilisearchkey;
   String meiliurl = 'https://cloud.meilisearch.com/';
-  String? secretsLocation;
   String? seVmKey;
 
+  String? firebaseSecretsLocation;
+  String? gcpSecretsProject;
   String? _offlineText = '!true';
   bool get offline => 'true' == (_offlineText?.toLowerCase() ?? '');
   set offline(bool val) => _offlineText = val ? 'true' : '!true';
@@ -171,9 +173,6 @@ class Settings {
 
   Future<bool> cloudSettingsInitialised = Future.value(false);
   final _cloudSettingsInit = Completer<bool>();
-  bool secretsManagerInitialised = false;
-
-  static final secretsManagerMutexLock = Mutex();
   static final secretsInitiaisedMutexLock = Mutex();
 
   /// Establish logger for use at runtime and schedules cloud retrieval.
@@ -194,10 +193,13 @@ class Settings {
       logger?.t('Settings initialised');
       logValues();
 
-      // Ensure that only one copy of _asyncInit is running at a time.
-      unawaited(secretsInitiaisedMutexLock.protect(_asyncInit));
+      unawaited(asyncInit());
     }
   }
+
+  Future<void> asyncInit() =>
+      // Ensure that only one copy of _asyncInit is running at a time.
+      secretsInitiaisedMutexLock.protect(_asyncInit);
 
   Future<void> _asyncInit() async {
     if (!_firebaseInitialised) {
@@ -247,7 +249,7 @@ class Settings {
       ),
     );
     // Environment only values.
-    secretsLocation = getSecretFromEnv(
+    firebaseSecretsLocation = getSecretFromEnv(
       'SECRETS_LOCATION',
       const String.fromEnvironment('SECRETS_LOCATION'),
     );
@@ -258,12 +260,16 @@ class Settings {
   }
 
   // Update secrets from the cloud if available.
-  Future<void> updateSecretsFromCloud(GoogleSecretManager secrets) async {
+  Future<void> updateSecretsFromCloud(SecretManagerApi secrets) async {
     googleurl = googleurl.orBetterYet(
       await getSecretFromCloud(secrets, 'mms_gc', googleurl, 'GOOGLE_URL'),
     );
-    googlekey =
-        await getSecretFromCloud(secrets, 'mms_gk', googlekey, 'GOOGLE_KEY');
+    googlekey = await getSecretFromCloud(
+      secrets,
+      'mms_gk',
+      googlekey,
+      'GOOGLE_KEY',
+    );
     omdbkey = await getSecretFromCloud(secrets, 'mms_o', omdbkey, 'OMDB_KEY');
     tmdbkey = await getSecretFromCloud(secrets, 'mms_t', tmdbkey, 'TMDB_KEY');
     tvdbkey = await getSecretFromCloud(secrets, 'mms_tv', tvdbkey, 'TVDB_KEY');
@@ -294,7 +300,7 @@ class Settings {
     logValue('MEILIADMIN_KEY', meiliadminkey);
     logValue('MEILISEARCH_KEY', meilisearchkey);
     logValue('MEILISEARCH_URL', meiliurl);
-    logValue('SECRETS_LOCATION', secretsLocation);
+    logValue('SECRETS_LOCATION', firebaseSecretsLocation);
     logValue('OFFLINE', _offlineText);
   }
 
@@ -310,10 +316,7 @@ class Settings {
   // 2) retrieve from the runtime environment [environmentVar] e.g. 'OMDB_KEY'
   // 3) Allow compiler to supply a default value for [compiledEnv] e.g.
   //    const String.fromEnvironment('OMDB_KEY')
-  String? getSecretFromEnv(
-    String environmentVar,
-    String? compiledEnv,
-  ) {
+  String? getSecretFromEnv(String environmentVar, String? compiledEnv) {
     // Check if the runtime environment variable is set and not empty.
     final dynamicEnv = Platform.environment[environmentVar];
     if (dynamicEnv != null &&
@@ -333,50 +336,80 @@ class Settings {
     return null;
   }
 
-// Retrieves a secret from the cloud.
-//
-// Takes four arguments:
-//
-// * [secrets]: An instance of the [GoogleSecretManager] class,
-//         for interacting with the Google Secret Manager service.
-// * [secretName]: The name of the secret to retrieve.
-// * [originalValue]: The original value of the setting.
-// * [environmentVar]: The name of the environment variable to check
-//                     for a better value.
-//
-// Returns a `Future` that resolves to the secret value if it is found,
-// or `null` if the secret is not found or there is an error.
+  // Retrieves a secret from the cloud.
+  //
+  // Takes four arguments:
+  //
+  // * [secrets]: An instance of the [GoogleSecretManager] class,
+  //         for interacting with the Google Secret Manager service.
+  // * [secretName]: The name of the secret to retrieve.
+  // * [originalValue]: The original value of the setting.
+  // * [environmentVar]: The name of the environment variable to check
+  //                     for a better value.
+  //
+  // Returns a `Future` that resolves to the secret value if it is found,
+  // or `null` if the secret is not found or there is an error.
   Future<String?> getSecretFromCloud(
-    GoogleSecretManager secrets,
+    SecretManagerApi secrets,
     String secretName,
     String? originalValue,
     String? environmentVar,
   ) async {
     if (Platform.environment.containsKey(environmentVar)) return originalValue;
+    final gcpValue = await _getSecretFromGCP(secrets, secretName);
+    return gcpValue ?? originalValue;
+  }
+
+  // Retrieves a secret from the google cloud.
+  //
+  // Takes two arguments:
+  //
+  // * [secrets]: An instance of the [GoogleSecretManager] class,
+  //         for interacting with the Google Secret Manager service.
+  // * [secretName]: The name of the secret to retrieve.
+  //
+  // Returns a `Future` that resolves to the secret value if it is found,
+  // or `null` if the secret is not found or there is an error.
+  Future<String?> _getSecretFromGCP(
+    SecretManagerApi secrets,
+    String secretName,
+  ) async {
     try {
+      final name =
+          'projects/$gcpSecretsProject/secrets/$secretName/versions/latest';
       // Attempt to retrieve the secret from the cloud.
-      final secret = await secrets.get(secretName);
+      final secret = await secrets.projects.secrets.versions.access(name);
 
       // If the secret is found, decode it and return the value.
-      final decoded = utf8.decode(base64.decode(secret?.payload?.data ?? ''));
-      return decoded.isEmpty ? originalValue : decoded;
+      final data = secret.payload?.dataAsBytes;
+      if (data != null) {
+        final decoded = utf8.decode(data);
+        return decoded.isEmpty ? null : decoded;
+      }
     } catch (exception) {
       // Log any errors that occur during retrieval.
       logger?.e(exception.toString());
-      return originalValue;
     }
+    return null;
   }
 
-  // Update secrets from the cloud.
   Future<void> _updateFromCloud() async {
-    if (secretsLocation != null) {
-      final account =
-          await getSecretsServiceAccount(_firebaseData, secretsLocation!);
+    if (firebaseSecretsLocation != null) {
+      final account = await getSecretsServiceAccount(
+        _firebaseData,
+        firebaseSecretsLocation!,
+      );
       if (account != null) {
-        // Ensure that only one copy of initSecretsManager is running at a time.
-        await secretsManagerMutexLock
-            .protect(() => initSecretsManager(account));
-        await updateSecretsFromCloud(GoogleSecretManager.instance);
+        final credentials = ServiceAccountCredentials.fromJson(account);
+        gcpSecretsProject = (jsonDecode(account) as Map)['project_id']
+            .toString();
+        final client = await clientViaServiceAccount(credentials, [
+          SecretManagerApi.cloudPlatformScope,
+        ]);
+        final secretApi = SecretManagerApi(client);
+
+        await updateSecretsFromCloud(secretApi);
+        client.close();
         logger?.t('Settings reinitialised');
         logValues();
       }
@@ -386,34 +419,24 @@ class Settings {
     }
   }
 
-  // Initialise google secrets manager (only once!)
-  Future<void> initSecretsManager(String account) async {
-    if (!secretsManagerInitialised) {
-      secretsManagerInitialised = true;
-      await GoogleSecretManagerInitializer.initViaServiceAccountJson(
-        account,
-      );
-    }
-  }
-
   // Retrieves a service account from a specified location in firebase.
   //
   // Takes two arguments:
   //
   // * [fb]: An instance of the [FirebaseApplicationState] class,
   //         for interacting with the Firebase cloud storage service.
-  // * [secretsLocation]: The path to the secret in Firebase.
+  // * [firebaseSecretsLocation]: The path to the secret in Firebase.
   //
-  // Returns a `Futurethe secret value if it is found,
+  // Returns a `Future` that resolves to e secret value if it is found,
   // or `null` if the secret is not found or there is an error.
   Future<String?> getSecretsServiceAccount(
     FirebaseApplicationState fb,
-    String secretsLocation,
+    String firebaseSecretsLocation,
   ) async {
-    // Extract collection and id from the secretsLocation.
-    final match = RegExp(r'(.*)/([^/]*)$').firstMatch(secretsLocation);
+    // Extract collection and id from the firebaseSecretsLocation.
+    final match = RegExp(r'(.*)/([^/]*)$').firstMatch(firebaseSecretsLocation);
     if (match == null || match.groupCount != 2) {
-      return null; // Invalid secretsLocation format.
+      return null; // Invalid firebaseSecretsLocation format.
     }
     final collection = match.group(1)!;
     final id = match.group(2)!;

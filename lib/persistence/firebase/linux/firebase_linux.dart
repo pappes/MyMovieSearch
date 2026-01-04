@@ -18,10 +18,7 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
     // When native firebase APIs are unavailable due to plaform
     // falling back to https://pub.dev/packages/firedart
     if (!FirebaseAuth.initialized) {
-      FirebaseAuth.initialize(
-        DefaultFirebaseOptions.web.apiKey,
-        _sessionStore,
-      );
+      FirebaseAuth.initialize(DefaultFirebaseOptions.web.apiKey, _sessionStore);
     }
     await FirebaseAuth.instance.signInAnonymously();
     // await firedart.FirebaseAuth.instance.signIn(email, password);
@@ -52,7 +49,8 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
         final msg = await doc.get();
         // Check the currentuser
 
-        final recordedDevices = msg[Fields.devices.name] ??
+        final recordedDevices =
+            msg[Fields.devices.name] ??
             [runtimeDevices.keys.first]; // assume dave
         if (derivedUserMatch(deviceType, recordedDevices)) {
           return msg[Fields.text.name]?.toString() ?? '';
@@ -122,8 +120,9 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
       // Do not know when initial data load is completre
       // so just wait a fixed amount of time then notify the caller.
       unawaited(
-        Future<void>.delayed(const Duration(seconds: 5))
-            .then((_) => initalDataLoadComplete.complete(true)),
+        Future<void>.delayed(
+          const Duration(seconds: 5),
+        ).then((_) => initalDataLoadComplete.complete(true)),
       );
     }
     return;
@@ -166,8 +165,10 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
               final existingDevices = msg[Fields.devices.name];
               if (existingDevices != null && existingDevices is Iterable) {
                 // Define unique list of devices.
-                map[Fields.devices.name] =
-                    {...existingDevices, ...newDevices}.toList();
+                map[Fields.devices.name] = {
+                  ...existingDevices,
+                  ...newDevices,
+                }.toList();
               }
             }
           } catch (_) {
@@ -179,8 +180,10 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
         }
       }
     } catch (exception) {
-      logger.t('Unable to add record to Firebase exception: $exception '
-          'collection: $collectionPath id: $id message: $message');
+      logger.t(
+        'Unable to add record to Firebase exception: $exception '
+        'collection: $collectionPath id: $id message: $message',
+      );
     }
     return false;
   }

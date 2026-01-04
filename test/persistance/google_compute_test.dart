@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_movie_search/persistence/meilisearch.dart';
+import 'package:my_movie_search/persistence/google_compute.dart';
 
 void main() {
   group('GCP', () {
