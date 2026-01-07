@@ -1452,6 +1452,7 @@ extension DTOCompare on MovieResultDTO {
     }
     switch (type) {
       case MovieContentType.person:
+      case MovieContentType.information:
         return personCompare(other);
       case MovieContentType.download:
         return downloadCompare(other);
@@ -1460,7 +1461,6 @@ extension DTOCompare on MovieResultDTO {
         return barcodeCompare(other);
       case MovieContentType.movie:
       case MovieContentType.error:
-      case MovieContentType.information:
       case MovieContentType.keyword:
       case MovieContentType.navigation:
       case MovieContentType.none:

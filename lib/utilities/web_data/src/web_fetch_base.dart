@@ -8,6 +8,7 @@ import 'dart:convert' show jsonDecode, utf8;
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:meta/meta.dart';
+import 'package:my_movie_search/persistence/web_log.dart';
 import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
 
 import 'package:my_movie_search/utilities/thread.dart';
@@ -103,8 +104,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     int? limit,
   }) {
     void errorHandler(dynamic error, StackTrace stackTrace) {
-      logger.e('Error in WebFetch populate: $error\n$stackTrace');
-      sc.add(myYieldError(error.toString()));
+      final message = baseConstructErrorMessage('WebFetch populate', error);
+      logger.e(message);
+      sc.add(myYieldError(message));
     }
 
     searchResultsLimit.limit = limit;
@@ -434,7 +436,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Fetch text from the web source with exception handling.
   ///
   /// Calls child class [myConvertCriteriaToWebText]
-  /// ```dart 
+  /// ```dart
   /// Converts Future<Stream<String>> to Stream<String>
   /// ```
   @visibleForTesting
@@ -502,11 +504,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     List<String> captureConvertError(WebConvertException error, StackTrace _) =>
         captureError(error, 'convert error interpreting web text as a map');
 
-    final list =
-        await webStream
-            .handleError(captureStreamError)
-            .timeout(const Duration(seconds: 25))
-            .toList();
+    final list = await webStream
+        .handleError(captureStreamError)
+        .timeout(const Duration(seconds: 25))
+        .toList();
     for (final webText in list) {
       final rawObjects = await myConvertWebTextToTraversableTree(webText)
           .onError<WebConvertException>(captureConvertError)
@@ -597,15 +598,21 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     DataSourceFn? source,
   }) async {
     final isCached = await myIsResultCached();
+    WebLog(myDataSourceName()).logRequest(criteria);
     // if cached yield from cache
     if (isCached && !myIsCacheStale()) {
       logger.t(
         'base ${ThreadRunner.currentThreadName} '
         'value was cached ${myFormatInputAsText()}',
       );
-      return Stream.fromIterable(myFetchResultFromCache());
+      final cachedResults = myFetchResultFromCache();
+      WebLog(
+        myDataSourceName(),
+      ).logResponses(criteria, cachedResults, cached: true);
+      return Stream.fromIterable(cachedResults);
     }
     if (myFormatInputAsText() == '') {
+      WebLog(myDataSourceName()).logEmptyResponse(criteria);
       return Stream.fromIterable([]);
     }
     // if not cached or cache is stale retrieve fresh data
@@ -623,7 +630,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     );
 
     final outputStream = baseTransform();
-    return outputStream;
+    return WebLog(
+      myDataSourceName(),
+    ).logResponsesAsync(criteria, outputStream, cached: false);
   }
 
   /// Fetches and [utf8] decodes online data matching [criteria].
@@ -661,6 +670,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   String baseConstructErrorMessage(String context, dynamic error) {
     final boilerplate = 'Error in $_getFetchContext';
     final errorText = error.toString().characters.take(1000).toString();
+    WebLog(myDataSourceName()).logError(criteria, errorText);
     if (errorText.startsWith(boilerplate)) return errorText;
     return '$boilerplate $context :$errorText';
   }
@@ -669,10 +679,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Should not be be overridden by child classes.
   @visibleForTesting
-  HttpClient baseGetHttpClient() =>
-      HttpClient()
-        // Allow HttpClient to handle compressed data from web servers.
-        ..autoUncompress = true;
+  HttpClient baseGetHttpClient() => HttpClient()
+    // Allow HttpClient to handle compressed data from web servers.
+    ..autoUncompress = true;
 }
 
 /// Exception used in [WebFetchBase.myConvertCriteriaToWebText].

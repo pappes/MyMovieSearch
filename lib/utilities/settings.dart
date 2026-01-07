@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:googleapis/secretmanager/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:logger/logger.dart';
@@ -13,6 +14,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_common.dar
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:universal_io/io.dart';
+import 'package:yaml/yaml.dart';
 
 /// Load application defined settings.
 ///
@@ -151,6 +153,8 @@ class Settings {
   static final Settings _singleton = Settings._internal();
 
   Logger? logger;
+  String applicationVersion = '';
+  String applicationDescription = '';
   String googleurl =
       'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
   String? googlekey;
@@ -208,6 +212,18 @@ class Settings {
     }
     await _updateFromCloud();
     unawaited(QueryTVDBCommon.init());
+    unawaited(_getApplicationVersion());
+  }
+
+  Future<void> _getApplicationVersion() async {
+    final pubspec = await rootBundle.loadString('pubspec.yaml');
+    final parsed = loadYaml(pubspec);
+    if (parsed is Map &&
+        parsed.containsKey('version') &&
+        parsed.containsKey('description')) {
+      applicationVersion = parsed['version'].toString();
+      applicationDescription = parsed['description'].toString();
+    }
   }
 
   // Update secrets from runtime environment or compiled environment.

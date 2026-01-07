@@ -15,7 +15,7 @@ publish_to: none # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.6
+version: 1.1.0
 
 environment:
   sdk: '>=3.10.4'
@@ -83,6 +83,7 @@ dependencies:
   sqlite3: ^3.0.0                       # Database storage for persisting state across sessions.
   universal_io: ^2.3.1                  # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
   url_launcher: ^6.3.1                  # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
+  yaml: ^3.1.3                          # parse yaml files
 
 dependency_overrides:
   grpc: ^4.2.0                          # linux based firedart has not been updated to latest dependencies
@@ -122,6 +123,7 @@ flutter:
    - assets/images/
    - integration_test/web_fetch_imdb_json_filtered_integration_test.json
    - integration_test/web_fetch_imdb_json_paginated_integration_test.json
+   - pubspec.yaml
 
 
   fonts:

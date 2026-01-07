@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:equatable/equatable.dart' show Equatable;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_movie_search/movies/blocs/repositories/application_statistics_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/barcode_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/more_keywords_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_meilisearch_repository.dart';
@@ -40,6 +41,8 @@ enum SearchCriteriaType {
   barcode,
   dvdLocations,
   meilisearch,
+  statistics,
+  about,
   custom,
 }
 
@@ -217,6 +220,15 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     toUniqueReference(),
   );
 
+  /// Construct route to the about page.
+  ///
+  /// Always chooses getAboutPage.
+  RouteInfo getAboutPage() => RouteInfo(
+    ScreenRoute.about,
+    RestorableSearchCriteria.routeState(this),
+    toUniqueReference(),
+  );
+
   /// Determine which WebFetch to use to gather data
   static BaseMovieRepository getDatasource(SearchCriteriaType criteriaType) {
     switch (criteriaType) {
@@ -225,12 +237,15 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
         return TorRepository();
       case SearchCriteriaType.moviesForKeyword:
         return MoviesForKeywordRepository();
-      case SearchCriteriaType.barcode:
-        return BarcodeRepository();
       case SearchCriteriaType.moreKeywords:
         return MoreKeywordsRepository();
+      case SearchCriteriaType.barcode:
+        return BarcodeRepository();
       case SearchCriteriaType.meilisearch:
         return MovieMeiliSearchRepository();
+      case SearchCriteriaType.statistics:
+      case SearchCriteriaType.about:
+        return ApplicationStatisticsRepository();
       case SearchCriteriaType.dvdLocations:
       case SearchCriteriaType.none:
       case SearchCriteriaType.custom:

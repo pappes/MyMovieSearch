@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/screens/about_apperture.dart';
 import 'package:my_movie_search/movies/screens/error_details.dart';
 import 'package:my_movie_search/movies/screens/movie_details.dart';
 import 'package:my_movie_search/movies/screens/movie_physical_location.dart';
@@ -30,6 +31,7 @@ enum ScreenRoute {
   moviedetails,
   addlocation,
   errordetails,
+  about,
 }
 
 class RouteInfo {
@@ -87,6 +89,11 @@ class MMSNav {
   ///
   Future<Object?> showCriteriaPage(SearchCriteriaDTO criteria) =>
       canvas.viewFlutterRootPage(criteria.getSearchCriteriaPage());
+
+  /// Navigates to a search criteria page with no criteria populated.
+  ///
+  Future<Object?> showAboutPage(SearchCriteriaDTO criteria) =>
+      canvas.viewFlutterPage(criteria.getAboutPage());
 
   /// Navigates to the list of old DVD locations.
   ///
@@ -256,6 +263,11 @@ class MMSNav {
       name: ScreenRoute.errordetails.name,
       path: '/$ScreenRoute.errordetails.name',
       pageBuilder: ErrorDetailsPage.goRoute,
+    ),
+    GoRoute(
+      name: ScreenRoute.about.name,
+      path: '/$ScreenRoute.about.name',
+      pageBuilder: AboutPage.goRoute,
     ),
   ];
 }
