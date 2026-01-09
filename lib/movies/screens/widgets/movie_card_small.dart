@@ -38,10 +38,13 @@ class MovieTile extends ListTile {
       case MovieContentType.download:
         middle.add(movie.bestSource.excludeNone);
       case MovieContentType.person:
+        break;
       case MovieContentType.barcode:
       case MovieContentType.searchprompt:
-        break;
-
+        start.add(movie.description);
+      case MovieContentType.error:
+      case MovieContentType.information:
+        start.add(movie.description);
       case MovieContentType.movie:
       case MovieContentType.none:
       case MovieContentType.title:
@@ -51,8 +54,6 @@ class MovieTile extends ListTile {
       case MovieContentType.short:
       case MovieContentType.custom:
       case MovieContentType.keyword:
-      case MovieContentType.error:
-      case MovieContentType.information:
       case MovieContentType.navigation:
         middle.add(movie.bestSource.excludeNone);
         end.add(movie.language.excludeNone);
@@ -91,7 +92,12 @@ class MovieTile extends ListTile {
             'Stacker:${movie.creditsOrder} Disk:${movie.userRatingCount}';
         end.add(location);
 
+      case MovieContentType.error:
+      case MovieContentType.information:
+        end.add(movie.alternateTitle);
+
       case MovieContentType.movie:
+      case MovieContentType.keyword:
       case MovieContentType.none:
       case MovieContentType.title:
       case MovieContentType.episode:
@@ -99,9 +105,6 @@ class MovieTile extends ListTile {
       case MovieContentType.miniseries:
       case MovieContentType.short:
       case MovieContentType.custom:
-      case MovieContentType.keyword:
-      case MovieContentType.error:
-      case MovieContentType.information:
       case MovieContentType.navigation:
         start.add(movie.runTime.toFormattedTime());
         middle.add(movie.censorRating.excludeNone);

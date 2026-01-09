@@ -17,6 +17,7 @@ import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
+import 'package:my_movie_search/persistence/web_log.dart';
 import 'package:my_movie_search/utilities/navigation/app_context.dart';
 import 'package:my_movie_search/utilities/navigation/flutter_app_context.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -94,6 +95,11 @@ class MMSNav {
   ///
   Future<Object?> showAboutPage(SearchCriteriaDTO criteria) =>
       canvas.viewFlutterPage(criteria.getAboutPage());
+
+  /// Navigates to a search criteria page with no criteria populated.
+  ///
+  Future<Object?> showErrorPage(SearchCriteriaDTO criteria) =>
+      canvas.viewFlutterPage(criteria.getErrorPage());
 
   /// Navigates to the list of old DVD locations.
   ///
@@ -188,6 +194,21 @@ class MMSNav {
             context: movie,
           ),
         );
+      case MovieContentType.error:
+      case MovieContentType.information:
+        // Show the data already fetched.
+        final list = movie.related[errorsCollection]?.values.toList();
+        if (list != null) {
+          return searchForRelated(movie.title, list);
+        }
+
+        return showErrorPage(
+          SearchCriteriaDTO()..init(
+            SearchCriteriaType.error,
+            title: getSearchTitle(movie),
+            context: movie,
+          ),
+        );
 
       case MovieContentType.navigation:
         if (movie.uniqueId.startsWith(webAddressPrefix)) {
@@ -220,8 +241,6 @@ class MMSNav {
       case MovieContentType.miniseries:
       case MovieContentType.short:
       case MovieContentType.custom:
-      case MovieContentType.error:
-      case MovieContentType.information:
         movie.setReadIndicator(ReadHistory.reading.toString());
         // Show details screen (movie details or person details)
         return canvas

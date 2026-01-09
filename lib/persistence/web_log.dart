@@ -1,3 +1,9 @@
+import 'package:flutter/material.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:quiver/collection.dart';
+
+const errorsCollection = 'Recent Errors';
+
 class Stats {
   Stats(this.source);
   int qtyRequests = 0;
@@ -6,7 +12,32 @@ class Stats {
   int qtyEmptyResponses = 0;
   int qtyErrors = 0;
   String lastError = '';
+  final recentErrors = LruMap<String, MovieResultDTO>(maximumSize: 10);
   String source;
+
+  void addError(String error) {
+    final dto = _formatError(error);
+    recentErrors[dto.uniqueId] = dto;
+    lastError = error;
+    qtyErrors++;
+  }
+
+  MovieResultDTO formatStatistic() => MovieResultDTO()
+    ..error(source)
+    ..userRatingCount = qtyRequests
+    ..description =
+        'requests:$qtyRequests  -  '
+        'responses:$qtyResponses  -  '
+        'cachedResponses:$qtyCachedResponses  -  '
+        'emptyResponses:$qtyEmptyResponses  -  '
+        'errors:$qtyErrors\n'
+    ..alternateTitle = '${lastError.characters.take(1000)}'
+    ..related = {errorsCollection: recentErrors};
+
+  MovieResultDTO _formatError(String error) => MovieResultDTO()
+    ..error()
+    ..title = source
+    ..alternateTitle = error;
 }
 
 /// Log statisitics for WebFetchBase.
@@ -60,10 +91,8 @@ class WebLog {
   }
 
   /// Record that an error has occurred.
-  void logError(dynamic criteria, String error) {
-    statistics[source]!.qtyErrors++;
-    statistics[source]!.lastError = error;
-  }
+  void logError(dynamic criteria, String error) =>
+      statistics[source]!.addError(error);
 
   /// Retrieve statistics for all sources.
   static Iterable<Stats> getStats() =>

@@ -28,12 +28,12 @@ class ErrorDetailsPage extends StatefulWidget {
 
   /// Instruct goroute how to navigate to this page.
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
-        restorationId: RestorableMovie.getRestorationId(state),
-        child: ErrorDetailsPage(
-          errorDto: RestorableMovie.getDto(state),
-          restorationId: RestorableMovie.getRestorationId(state),
-        ),
-      );
+    restorationId: RestorableMovie.getRestorationId(state),
+    child: ErrorDetailsPage(
+      errorDto: RestorableMovie.getDto(state),
+      restorationId: RestorableMovie.getRestorationId(state),
+    ),
+  );
 }
 
 class _ErrorDetailsPageState extends State<ErrorDetailsPage>
@@ -73,22 +73,18 @@ class _ErrorDetailsPageState extends State<ErrorDetailsPage>
 
   @override
   Widget build(BuildContext context) => SelectionArea(
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(_restorableMovie.value.title),
-          ),
-          endDrawer: getDrawer(context),
-          body: Scrollbar(
-            thumbVisibility: true,
-            child: bodySection(),
-          ),
-        ),
-      );
+    child: Scaffold(
+      appBar: AppBar(title: Text(_restorableMovie.value.title)),
+      endDrawer: getDrawer(context),
+      body: Scrollbar(thumbVisibility: true, child: bodySection()),
+    ),
+  );
 
   ScrollView bodySection() => ListView(
-        primary: true, //attach scrollbar controller to primary view
-        children: <Widget>[
-          Text(_restorableMovie.value.title),
-        ],
-      );
+    primary: true, //attach scrollbar controller to primary view
+    children: <Widget>[
+      Text(_restorableMovie.value.title),
+      Text(_restorableMovie.value.alternateTitle),
+    ],
+  );
 }

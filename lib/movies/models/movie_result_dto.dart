@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
@@ -160,7 +161,11 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
       }
       return dtoFromPrimitives(criteria);
     }
-    return MovieResultDTO();
+    final criteriaDto = RestorableSearchCriteria.getDto(state);
+    if (criteriaDto.criteriaList.length == 1) {
+      return criteriaDto.criteriaList[0];
+    }
+    return criteriaDto.criteriaContext ?? MovieResultDTO();
   }
 
   /// Get a unique identifier for this data.
@@ -629,12 +634,15 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     final defaultValues = MovieResultDTO();
     result[movieDTOUniqueId] = uniqueId;
     if (title != defaultValues.title) result[movieDTOTitle] = title;
+    if (description != defaultValues.description) {
+      result[movieDTODescription] = description;
+    }
+    if (alternateTitle != defaultValues.alternateTitle) {
+      result[movieDTOAlternateTitle] = alternateTitle;
+    }
     if (!condensed) {
       if (bestSource != defaultValues.bestSource) {
         result[movieDTOBestSource] = bestSource.toString();
-      }
-      if (alternateTitle != defaultValues.alternateTitle) {
-        result[movieDTOAlternateTitle] = alternateTitle;
       }
       if (characterName != defaultValues.characterName) {
         result[movieDTOCharacterName] = characterName;
@@ -667,9 +675,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       }
       if (keywords != defaultValues.keywords && keywords.isNotEmpty) {
         result[movieDTOKeywords] = json.encode(keywords.toList());
-      }
-      if (description != defaultValues.description) {
-        result[movieDTODescription] = description;
       }
       if (userRating != defaultValues.userRating) {
         result[movieDTOUserRating] = userRating.toString();
@@ -1452,6 +1457,7 @@ extension DTOCompare on MovieResultDTO {
     }
     switch (type) {
       case MovieContentType.person:
+      case MovieContentType.error:
       case MovieContentType.information:
         return personCompare(other);
       case MovieContentType.download:
@@ -1460,7 +1466,6 @@ extension DTOCompare on MovieResultDTO {
       case MovieContentType.searchprompt:
         return barcodeCompare(other);
       case MovieContentType.movie:
-      case MovieContentType.error:
       case MovieContentType.keyword:
       case MovieContentType.navigation:
       case MovieContentType.none:

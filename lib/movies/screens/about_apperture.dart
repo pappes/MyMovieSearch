@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
 import 'package:go_router/go_router.dart';
@@ -9,7 +7,6 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/movie_card_small.dart';
 import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 import 'package:my_movie_search/utilities/settings.dart';
-import 'package:yaml/yaml.dart';
 
 class AboutPage extends StatefulWidget {
   const AboutPage({
@@ -63,10 +60,9 @@ class _AboutState extends State<AboutPage> with RestorationMixin {
   }
 
   void _performSearch() {
-    if (_restorableCriteria.value.criteriaType == SearchCriteriaType.about) {
-      // Initiate a search if not restoring data.
-      searchRequested = false;
-    } else if (_restorableList.value.isEmpty) {
+    if (_restorableList.value.isEmpty &&
+        _restorableCriteria.value.criteriaType ==
+            SearchCriteriaType.statistics) {
       // Initiate a search if not restoring data.
       searchRequested = true;
       _searchBloc!.add(SearchRequested(_restorableCriteria.value));

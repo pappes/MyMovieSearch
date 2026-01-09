@@ -89,6 +89,10 @@ bool isEbay(DataSourceType source) =>
 /// //returns 'Dexter 2006 8 '
 /// ```
 String getSearchTitle(MovieResultDTO movie) {
+  if (movie.type == MovieContentType.information ||
+      movie.type == MovieContentType.error) {
+    return '${movie.alternateTitle}\n ${movie.alternateTitle}';
+  }
   if (movie.title.isEmpty) {
     return movie.alternateTitle;
   }
