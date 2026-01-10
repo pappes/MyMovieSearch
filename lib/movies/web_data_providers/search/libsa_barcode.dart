@@ -38,7 +38,9 @@ class QueryLibsaBarcodeSearch
     dynamic map,
   ) async {
     if (map is Map) {
-      return LibsaBarcodeSearchConverter.dtoFromCompleteJsonMap(map);
+      return LibsaBarcodeSearchConverter(
+        myFormatInputAsText(),
+      ).dtoFromCompleteJsonMap(map);
     }
     throw TreeConvertException(
       'expected map got ${map.runtimeType} unable to interpret data $map',
