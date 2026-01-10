@@ -10,6 +10,8 @@ import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const tvdbApiPath = 'https://api4.thetvdb.com/v4/';
+const requestsPerSecond = 10;
+const millisecondsPerSecond = 10;
 
 /// Implements [WebFetchBase] for searching The TV Database (TheTVDB).
 ///
@@ -27,6 +29,7 @@ abstract class QueryTVDBCommon
 
   static String? sessionKey;
   static final logedIn = Completer<bool>();
+  static DateTime lastRequestTime = DateTime.now();
 
   late DataSourceType source;
   String midURL = 'search?query=';
@@ -110,6 +113,20 @@ abstract class QueryTVDBCommon
     headers
       ..add('Authorization', ' Bearer $sessionKey')
       ..add('accept', 'application/json');
+  }
+
+  /// Delay request so that a maximum of 10 requests are sent per second
+  @override
+  Future<void> myDelayRequest() {
+    final nextRequestTime = lastRequestTime.add(
+      const Duration(milliseconds: millisecondsPerSecond ~/ requestsPerSecond),
+    );
+    lastRequestTime = DateTime.now();
+    final delay = nextRequestTime.difference(lastRequestTime);
+    if (!delay.isNegative) {
+      return Future.delayed(delay);
+    }
+    return Future.value();
   }
 
   /// Convert web text to a traversable tree of [List] or [Map] data.

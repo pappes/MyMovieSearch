@@ -61,6 +61,7 @@ typedef DataSourceFn = Future<Stream<String>> Function(dynamic s);
 ///       * myIsResultCached
 ///       * myIsCacheStale
 ///       * myFetchResultFromCache
+///       * myDelayRequest
 ///       * baseTransform
 ///         * baseConvertCriteriaToWebText
 ///           * myConvertCriteriaToWebText
@@ -325,6 +326,24 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Can be overridden by child classes.
   /// If this is blank the query will not run!
   int myGetPageNumber() => 1;
+
+  /// Throttle requests to avoid rate limiting errors.
+  ///
+  /// Can be overridden by child classes.
+  /// To wait a short period of time before executing this request
+  /// keep track of the time of last request.
+  /// ```dart
+  ///   final nextRequestTime = lastRequestTime.add(
+  ///   // Delay request so that a maximum of 10 requests are sent per second
+  ///     const Duration(milliseconds: 100),
+  ///   );
+  ///   lastRequestTime = DateTime.now();
+  ///   final delay = nextRequestTime.difference(lastRequestTime);
+  ///   if (!delay.isNegative) {
+  ///     return Future.delayed(delay);
+  ///   }
+  /// ```
+  Future<void> myDelayRequest() => Future.value();
 
   /// Define the http headers to be passed to the web server.
   /// Returns a [Map] of header -> value.
@@ -624,6 +643,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     searchResultsLimit.reset();
 
     final selector = OnlineOfflineSelector();
+    await myDelayRequest();
     selectedDataSource = selector.select(
       source ?? baseFetchWebText,
       myOfflineData(),

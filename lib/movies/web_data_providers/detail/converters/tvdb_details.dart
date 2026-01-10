@@ -64,21 +64,28 @@ class TvdbDetailConverter {
       if (null != failureMessage) {
         return;
       }
-      if (map[keyResult] == keyResultSucessful && map[keyData] == null) {
+      final returnedData = map[keyData];
+      if (map[keyResult] == keyResultSucessful && returnedData == null) {
         // No data found
         resultType = resultEmpty;
         return;
       }
-      // Invalid data structure will throw and be caught below.
-      // ignore: avoid_dynamic_calls
-      final firstResult = map[keyData].first.entries.first as MapEntry;
-      if (firstResult.key == keyMovie ||
-          firstResult.key == keySeries ||
-          firstResult.key == keyEpisode ||
-          firstResult.key == keyPerson) {
-        resultType = firstResult.key.toString();
-        resultData = firstResult.value as Map<dynamic, dynamic>;
-        return;
+      if (returnedData is List) {
+        for (final row in returnedData) {
+          if (row is Map) {
+            for (final entry in row.entries) {
+              // Dont care about seasons for a tv series.
+              if (entry.key == keyMovie ||
+                  entry.key == keySeries ||
+                  entry.key == keyEpisode ||
+                  entry.key == keyPerson) {
+                resultType = entry.key.toString();
+                resultData = entry.value as Map<dynamic, dynamic>;
+                return;
+              }
+            }
+          }
+        }
       }
     } catch (_) {}
     failureMessage = 'Unable to interpret results $map';
