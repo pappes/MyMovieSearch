@@ -33,7 +33,7 @@ class BaseMovieRepository {
   static int _searchUID = 1;
   final searchIndicator = MovieResultDTO()
     ..title = 'Searching ...'
-    ..type = MovieContentType.information;
+    ..type = MovieContentType.status;
 
   /// Return a stream of data matching [criteria].
   ///
@@ -143,7 +143,7 @@ class BaseMovieRepository {
   /// Yields incomplete or completed results in the stream.
   @protected
   void yieldResult(MovieResultDTO result) =>
-      _movieStreamController?.add(result);
+    _movieStreamController?.add(result);
 
   /// Determines if a new search has been initatatd since originalSearchUID.
   @protected

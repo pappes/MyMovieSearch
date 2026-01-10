@@ -24,6 +24,7 @@ class Stats {
 
   MovieResultDTO formatStatistic() => MovieResultDTO()
     ..error(source)
+    ..type = MovieContentType.information
     ..creditsOrder = qtyErrors
     ..userRating = qtyCachedResponses.toDouble()
     ..userRatingCount = qtyRequests
@@ -97,6 +98,5 @@ class WebLog {
       statistics[source]!.addError(error);
 
   /// Retrieve statistics for all sources.
-  static Iterable<Stats> getStats() =>
-      statistics.values;
+  static Iterable<Stats> getStats() => statistics.values;
 }

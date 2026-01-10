@@ -19,7 +19,6 @@ class MovieListRepository extends BaseMovieRepository {
   @override
   Future<int> getExtraDetails(int originalSearchUID, MovieResultDTO dto) async {
     if (!dto.isMessage()) {
-      await _getExtraTvdbDetails(originalSearchUID, dto);
       return _callDetailFetchFunction(originalSearchUID, dto);
     }
     return 0;
@@ -78,10 +77,11 @@ class MovieListRepository extends BaseMovieRepository {
     int originalSearchUID,
     MovieResultDTO dto,
   ) async {
-    final detailCriteria = SearchCriteriaDTO().fromString(dto.uniqueId);
+    await _getExtraTvdbDetails(originalSearchUID, dto);
     if (_readyForTmdbFinder(dto)) {
       // Fetch tmdb id based on imdb id.
       const constructor = QueryTMDBFinder.new;
+      final detailCriteria = SearchCriteriaDTO().fromString(dto.uniqueId);
       await _fetchDetails(originalSearchUID, detailCriteria, constructor);
     }
     if (_readyForTmdbExtraDetails(dto) && !_hasFullTmdbDetails(dto)) {

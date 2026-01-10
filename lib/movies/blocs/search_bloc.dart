@@ -106,7 +106,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Future<void> _receiveDTO(MovieResultDTO newValue) async {
     final key = newValue.uniqueId;
 
-    if (newValue.isMessage()) {
+    if (newValue.isAControlObject()) {
       _allResults[key] = newValue;
     } else {
       // Merge value with existing information and insert value into list

@@ -44,6 +44,7 @@ class MovieTile extends ListTile {
         start.add(movie.description);
       case MovieContentType.error:
       case MovieContentType.information:
+      case MovieContentType.status:
         start.add(movie.description);
       case MovieContentType.movie:
       case MovieContentType.none:
@@ -94,6 +95,7 @@ class MovieTile extends ListTile {
 
       case MovieContentType.error:
       case MovieContentType.information:
+      case MovieContentType.status:
         end.add(movie.alternateTitle);
 
       case MovieContentType.movie:
@@ -134,6 +136,7 @@ class MovieTile extends ListTile {
       case MovieContentType.error:
         return const Icon(Icons.unfold_more);
       case MovieContentType.information:
+      case MovieContentType.status:
         return const Icon(Icons.info);
       case MovieContentType.navigation:
         return const Icon(Icons.skip_next);
@@ -190,13 +193,14 @@ class MovieTile extends ListTile {
       case MovieContentType.series:
       case MovieContentType.miniseries:
       case MovieContentType.short:
-      case MovieContentType.custom:
-      case MovieContentType.error:
-      case MovieContentType.information:
         {
           getReadIcon(movie, widgets);
           getDVDIcon(movie, widgets);
         }
+      case MovieContentType.custom:
+      case MovieContentType.error:
+      case MovieContentType.information:
+      case MovieContentType.status:
     }
     if (widgets.isEmpty) return null;
     return Row(mainAxisSize: MainAxisSize.min, children: widgets);

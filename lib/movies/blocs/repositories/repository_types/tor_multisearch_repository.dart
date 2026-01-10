@@ -16,7 +16,7 @@ class TorMultiSearchRepository extends BaseMovieRepository {
   /// and request retrieval if the fetch is not already in progress.
   @override
   Future<int> getExtraDetails(int originalSearchUID, MovieResultDTO dto) async {
-    if (!dto.isMessage()) {
+    if (!dto.isAControlObject()) {
       return _callSearchFunction(originalSearchUID, dto);
     }
     return 0;
@@ -85,8 +85,10 @@ class TorMultiSearchRepository extends BaseMovieRepository {
   ) async {
     if (!searchInterrupted(originalSearchUID)) {
       for (final dto in values) {
-        yieldResult(dto);
-        unawaited(getExtraDetails(originalSearchUID, dto));
+        if (!dto.isError()) {
+          yieldResult(dto);
+          unawaited(getExtraDetails(originalSearchUID, dto));
+        }
       }
     }
   }

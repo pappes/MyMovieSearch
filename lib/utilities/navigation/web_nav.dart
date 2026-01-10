@@ -198,7 +198,7 @@ class MMSNav {
       case MovieContentType.information:
         // Show the data already fetched.
         final list = movie.related[errorsCollection]?.values.toList();
-        if (list != null) {
+        if (list != null && list.isNotEmpty) {
           return searchForRelated(movie.title, list);
         }
 
@@ -246,6 +246,8 @@ class MMSNav {
         return canvas
             .viewFlutterPage(movie.getDetailsPage())
             .then((_) => movie.setReadIndicator(ReadHistory.read.toString()));
+      case MovieContentType.status:
+        return Future.value();
     }
   }
 

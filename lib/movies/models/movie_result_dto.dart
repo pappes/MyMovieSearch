@@ -76,6 +76,7 @@ enum MovieContentType {
   miniseries, // anything more that an hour long that does repeat
   episode, //    anything that is part of a series or mini-series
   custom,
+  status,
 }
 
 enum CensorRatingType {
@@ -487,13 +488,43 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     return this;
   }
 
-  /// dto is a message if it is an error, navigation command, of info.
+  /// dto type is an error.
+  bool isError() => type == MovieContentType.error;
+
+  /// dto type is an error, navigation command, or info.
   bool isMessage() {
+    switch (type) {
+      case MovieContentType.error:
+      case MovieContentType.navigation:
+      case MovieContentType.information:
+      case MovieContentType.status:
+        return true;
+
+      case MovieContentType.none:
+      case MovieContentType.keyword:
+      case MovieContentType.barcode:
+      case MovieContentType.searchprompt:
+      case MovieContentType.person:
+      case MovieContentType.download:
+      case MovieContentType.movie:
+      case MovieContentType.short:
+      case MovieContentType.series:
+      case MovieContentType.miniseries:
+      case MovieContentType.episode:
+      case MovieContentType.title:
+      case MovieContentType.custom:
+        return false;
+    }
+  }
+
+  /// dto type is an error or navigation command.
+  bool isAControlObject() {
     switch (type) {
       case MovieContentType.error:
       case MovieContentType.navigation:
         return true;
 
+      case MovieContentType.status:
       case MovieContentType.information:
       case MovieContentType.none:
       case MovieContentType.keyword:
@@ -1460,6 +1491,7 @@ extension DTOCompare on MovieResultDTO {
         return personCompare(other);
       case MovieContentType.error:
       case MovieContentType.information:
+      case MovieContentType.status:
         return messageCompare(other);
       case MovieContentType.download:
         return downloadCompare(other);
@@ -1645,22 +1677,24 @@ extension DTOCompare on MovieResultDTO {
         return 80;
       case MovieContentType.episode:
       case MovieContentType.miniseries:
-        return 7;
+        return 8;
       case MovieContentType.short:
-        return 6;
+        return 7;
       case MovieContentType.custom:
-        return 5;
+        return 6;
       case MovieContentType.keyword:
       case MovieContentType.barcode:
       case MovieContentType.searchprompt:
-        return 4;
+        return 5;
       case MovieContentType.download:
-        return 3;
+        return 4;
       case MovieContentType.error:
-        return 2;
+        return 3;
       case MovieContentType.information:
-        return 1;
+        return 2;
       case MovieContentType.navigation:
+        return 1;
+      case MovieContentType.status:
         return 0;
     }
   }
