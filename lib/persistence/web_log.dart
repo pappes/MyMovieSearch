@@ -24,6 +24,8 @@ class Stats {
 
   MovieResultDTO formatStatistic() => MovieResultDTO()
     ..error(source)
+    ..creditsOrder = qtyErrors
+    ..userRating = qtyCachedResponses.toDouble()
     ..userRatingCount = qtyRequests
     ..description =
         'requests:$qtyRequests  -  '
@@ -96,6 +98,5 @@ class WebLog {
 
   /// Retrieve statistics for all sources.
   static Iterable<Stats> getStats() =>
-      statistics.values.toList()
-        ..sort((a, b) => b.qtyRequests.compareTo(a.qtyRequests));
+      statistics.values;
 }

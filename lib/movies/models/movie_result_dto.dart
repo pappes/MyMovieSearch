@@ -34,10 +34,11 @@ class MovieResultDTO {
   int year = 0;
   String yearRange = '';
   int creditsOrder = 0; // 100 = star, 0 = extra
-  // creditsOrder also stores Stacker and number ofSeeders
+  // creditsOrder also stores Stacker and NumberOfSeeders and qtyErrors
   double userRating = 0;
+  // userRating also stores qtyCachedResponses
   int userRatingCount = 0;
-  // userRatingCount also stores Stacker Disk and number of Leechers
+  // userRatingCount also stores StackerDisk, NumberOfLeechers and qtyRequests
   CensorRatingType censorRating = CensorRatingType.none;
   Duration runTime = Duration.zero;
   String imageUrl = '';
@@ -588,8 +589,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         CensorRatingType.values.byFullName(censorRating) ??
         CensorRatingType.none;
     this.language =
-        LanguageType.values.byFullName(language) ??
-        getLanguageType();
+        LanguageType.values.byFullName(language) ?? getLanguageType();
 
     if (this.type != MovieContentType.searchprompt &&
         this.type != MovieContentType.episode) {
@@ -1457,9 +1457,10 @@ extension DTOCompare on MovieResultDTO {
     }
     switch (type) {
       case MovieContentType.person:
+        return personCompare(other);
       case MovieContentType.error:
       case MovieContentType.information:
-        return personCompare(other);
+        return messageCompare(other);
       case MovieContentType.download:
         return downloadCompare(other);
       case MovieContentType.barcode:
@@ -1484,6 +1485,23 @@ extension DTOCompare on MovieResultDTO {
     if (creditsOrder != other.creditsOrder ||
         userRatingCount != other.userRatingCount) {
       return personPopularityCompare(other);
+    }
+    return title.compareTo(other.title) * -1;
+  }
+
+  /// Compare people based returned order and populatrity.
+  int messageCompare(MovieResultDTO other) {
+    // Boost sources with highest qtyErrors.
+    if (creditsOrder != other.creditsOrder) {
+      return creditsOrder.compareTo(other.creditsOrder);
+    }
+    // Boost sources with highest qtyCachedResponses.
+    if (userRating != other.userRating) {
+      return userRating.compareTo(other.userRating);
+    }
+    // Boost sources with highest qtyRequests.
+    if (userRatingCount != other.userRatingCount) {
+      return userRatingCount.compareTo(other.titleContentCategory());
     }
     return title.compareTo(other.title) * -1;
   }
