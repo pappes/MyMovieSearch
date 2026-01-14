@@ -1,0 +1,11 @@
+[
+  {
+    "uniqueId": "tt13443470",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.title",
+    "links": "{\"EIDR\":\"https://ui.eidr.org/content/10.5240/6AAB-2C51-277B-F331-1F19-1\",\"Instagram\":\"https://www.instagram.com/wednesdaynetflix\",\"Official Website\":\"https://www.netflix.com/title/https://www.netflix.com/title/81231974\",\"Reddit\":\"https://www.reddit.com/r/WednesdayTVSeries\",\"TV Maze\":\"https://www.tvmaze.com/shows/53647\",\"Wikidata\":\"https://www.wikidata.org/wiki/Q105553568\",\"Wikipedia\":\"https://en.wikipedia.org/wiki/Wednesday_(TV_series)\"}",
+    "sources": {
+      "DataSourceType.tvdbDetails": "null"
+    }
+  }
+]

@@ -1,0 +1,8 @@
+[
+  {
+    "uniqueId": "-2",
+    "title": "[TvdbMovieDetailConverter] Unable to interpret results {status: success, data: {id: 397060, name: Wednesday, image: https://artworks.thetvdb.com/banners/v4/series/397060/posters/632dbd876738d.jpg, firstAired: 2022-11-23, lastAired: 2025-09-03, status: {id: 1, name: Continuing, recordType: series, keepUpdated: true}, originalLanguage: eng, averageRuntime: 54, overview: ... Wednesday Addams ..., year: 2022, genres: [{id: 6, name: Horror}, {id: 10, name: Fantasy}, {id: 12, name: Drama}, {id: 15, name: Comedy}, {id: 31, name: Mystery}], remoteIds: [{id: 10.5240/6AAB-2C51-277B-F331-1F19-1, type: 13, sourceName: EIDR}, {id: tt13443470, type: 2, sourceName: IMDB}, {id: wednesdaynetflix, type: 9, sourceName: Instagram}, {id: https://www.netflix.com/title/81231974, type: 4, sourceName: Official Website}, {id: WednesdayTVSeries, type: 7, sourceName: Reddit}, {id: 119051, type: 12, sourceName: TheMovieDB.com}, {id: 53647, type: 19, sourceName: TV Maze}, {id: Q105553568, type: 18, sourceName: Wiki",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.error"
+  }
+]

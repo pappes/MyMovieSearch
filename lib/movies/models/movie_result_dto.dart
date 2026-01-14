@@ -46,6 +46,7 @@ class MovieResultDTO {
   Set<String> languages = {};
   Set<String> genres = {};
   Set<String> keywords = {};
+  Map<String, String> links = {};
   MovieSources sources = {};
   // Related DTOs are in a category, then keyed by uniqueId
   RelatedMovieCategories related = {};
@@ -119,6 +120,7 @@ const String movieDTOLanguage = 'language';
 const String movieDTOLanguages = 'languages';
 const String movieDTOGenres = 'genres';
 const String movieDTOKeywords = 'keywords';
+const String movieDTOLinks = 'links';
 const String movieDTOSources = 'sources';
 const String movieDTORelated = 'related';
 const String movieDTOUninitialized = '-1';
@@ -318,6 +320,7 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
       ..languages = dynamicToStringSet(this[movieDTOLanguages])
       ..genres = dynamicToStringSet(this[movieDTOGenres])
       ..keywords = dynamicToStringSet(this[movieDTOKeywords])
+      ..links = dynamicToStringMap(this[movieDTOLinks])
       ..related = stringToRelated(this[movieDTORelated]);
 
     dto
@@ -587,6 +590,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String? languages = '[]',
     String? genres = '[]',
     String? keywords = '[]',
+    String? links = '[]',
     String? sources = '{}',
     // Related DTOs are in a category, then keyed by uniqueId
     RelatedMovieCategories? related,
@@ -613,6 +617,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     this.languages = dynamicToStringSet(languages);
     this.genres = dynamicToStringSet(genres);
     this.keywords = dynamicToStringSet(keywords);
+    this.links = dynamicToStringMap(links);
+
     // Enumerations, work with what we get
     this.type =
         MovieContentType.values.byFullName(type) ?? MovieContentType.none;
@@ -706,6 +712,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       }
       if (keywords != defaultValues.keywords && keywords.isNotEmpty) {
         result[movieDTOKeywords] = json.encode(keywords.toList());
+      }
+      if (links != defaultValues.links && links.isNotEmpty) {
+        result[movieDTOLinks] = json.encode(links);
       }
       if (userRating != defaultValues.userRating) {
         result[movieDTOUserRating] = userRating.toString();
@@ -835,6 +844,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       genres.addAll(newValue.genres);
       keywords.addAll(newValue.keywords);
       languages.addAll(newValue.languages);
+      links.addAll(newValue.links);
       sources.addAll(newValue.sources);
       creditsOrder = bestValue(newValue.creditsOrder, creditsOrder);
       userRating = bestUserRating(
@@ -1030,6 +1040,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     ..languages = languages
     ..genres = genres
     ..keywords = keywords
+    ..links = links
     ..sources = sources
     ..related = related;
 
@@ -1269,6 +1280,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       actualDTO.keywords.toString(),
       keywords.toString(),
     );
+    matchCompare('links', actualDTO.links.toString(), links.toString());
 
     if (related) {
       final expected = this.related.toPrintableString();
@@ -1299,6 +1311,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     languages.clear();
     genres.clear();
     keywords.clear();
+    links.clear();
+
     for (final category in related.keys) {
       for (final dto in related[category]!.values) {
         dto.clearCopyrightedData();
@@ -1369,6 +1383,7 @@ extension IterableMovieResultDTOHelpers on Iterable<MovieResultDTO> {
       r'"keywords":"[\"',
       '\n      "keywords":"[\\"',
     );
+    formatted = formatted.replaceAll(r'"links":"[\"', '\n      "links":"[\\"');
     formatted = formatted.replaceAll(
       '"description":"',
       '\n      "description":"',

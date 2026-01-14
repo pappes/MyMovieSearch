@@ -118,8 +118,7 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-   - assets/OldCDLibrary.json
-   - assets/newDVDLibrary.json
+   - assets/
    - assets/images/
    - integration_test/web_fetch_imdb_json_filtered_integration_test.json
    - integration_test/web_fetch_imdb_json_paginated_integration_test.json

@@ -132,7 +132,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          LibsaBarcodeSearchConverter.dtoFromCompleteJsonMap(map),
+          LibsaBarcodeSearchConverter('').dtoFromCompleteJsonMap(map),
         );
       }
 

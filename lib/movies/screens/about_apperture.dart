@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
 import 'package:go_router/go_router.dart';
@@ -6,7 +8,17 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/movie_card_small.dart';
 import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/settings.dart';
+
+const tmdbIconPath = 'assets/images/tmdb_logo.png';
+const tvdbIconPath = 'assets/images/tvdb_logo.png';
+const tmdbPrimaryColor = Color(0xFF0D253F);
+const tmdbSecondaryColor = Color(0xFF01B4E4);
+const tmdbTertiaryColor = Color(0xFF90CEA1);
+
+const tvdbPrimaryColor = Color(0xFF365658);
+const tvdbSecondaryColor = Color(0xFF6cd591);
 
 class AboutPage extends StatefulWidget {
   const AboutPage({
@@ -56,6 +68,7 @@ class _AboutState extends State<AboutPage> with RestorationMixin {
         _restorableCriteria.value.criteriaType,
       ),
     );
+    unawaited(_updateVersion());
     _performSearch();
   }
 
@@ -67,6 +80,14 @@ class _AboutState extends State<AboutPage> with RestorationMixin {
       searchRequested = true;
       _searchBloc!.add(SearchRequested(_restorableCriteria.value));
     }
+  }
+
+  Future<void> _updateVersion() async {
+    await Settings().asyncInit();
+    setState(() {
+      applicationVersion = Settings().applicationVersion;
+      applicationDescription = Settings().applicationDescription;
+    });
   }
 
   @override
@@ -89,11 +110,11 @@ class _AboutState extends State<AboutPage> with RestorationMixin {
           children: [
             const Text('About Apperture'),
             Text(
-              'Version: ${Settings().applicationVersion}',
+              'Version: $applicationVersion',
               style: Theme.of(context).textTheme.bodySmall,
             ),
             Text(
-              Settings().applicationDescription,
+              applicationDescription ?? '',
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
@@ -101,10 +122,50 @@ class _AboutState extends State<AboutPage> with RestorationMixin {
       ),
     ),
     endDrawer: getDrawer(context),
-    body: Center(
-      child: searchRequested ? _buildMovieResults() : _movieListSection(),
+    body: Column(
+      children: [
+        const Divider(),
+        ..._attribution(),
+        const Divider(),
+        Expanded(
+          child: searchRequested ? _buildMovieResults() : _movieListSection(),
+        ),
+      ],
     ),
   );
+
+  List<Widget> _attribution() => [
+    ColoredBox(
+      color: tmdbPrimaryColor,
+      child: ListTile(
+        leading: const Image(image: AssetImage(tmdbIconPath)),
+        title: Text(
+          'This product uses the TMDB API '
+          'but is not endorsed or certified by TMDB.',
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: tmdbTertiaryColor),
+        ),
+        onTap: () => MMSNav(context).viewWebPage('https://www.themoviedb.org/'),
+      ),
+    ),
+
+    ColoredBox(
+      color: tvdbPrimaryColor,
+      child: ListTile(
+        leading: const Image(image: AssetImage(tvdbIconPath)),
+        title: Text(
+          'Metadata provided by TheTVDB. Please consider adding '
+          'missing information or subscribing.',
+          style: Theme.of(
+            context,
+          ).textTheme.bodySmall?.copyWith(color: tvdbSecondaryColor),
+        ),
+        onTap: () =>
+            MMSNav(context).viewWebPage('https://thetvdb.com/subscribe'),
+      ),
+    ),
+  ];
 
   Widget _buildMovieResults() => BlocBuilder<SearchBloc, SearchState>(
     bloc: _searchBloc,

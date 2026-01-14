@@ -98,6 +98,36 @@ extension DynamicHelper<T> on T {
     return result;
   }
 
+  /// Filter out values that are not [Map]<[String], [String]>
+  ///
+  /// Sets the value to empty Map if it is not currently
+  /// *   a [Map]<[String], [String]>
+  /// *   a json encoded [Map]<[String],[String]>
+  ///
+  /// Static version of the function
+  /// supplied for calling from other static functions
+  /// ```dart
+  /// x = DynamicHelper.dynamicToStringMap_(y);
+  /// ```
+  ///
+  /// Non-static version of the function supplied for simpler call syntax
+  /// ```dart
+  /// x = dynamicToStringMap(y);
+  /// ```
+  ///
+  Map<String, String> dynamicToStringMap(dynamic val) => toStringMap_(val);
+  static Map<String, String> toStringMap_(dynamic val) {
+    if (val is String) return StringMapHelper.fromJson(val);
+    if (val is Map<String, String>) return val;
+    final result = <String, String>{};
+    if (val is Map) {
+      for (final item in val.entries) {
+        result[item.key.toString()] = item.value.toString();
+      }
+    }
+    return result;
+  }
+
   /// filter out values that are not [int]
   ///
   /// Sets the value to 0 if it is not currently

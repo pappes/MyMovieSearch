@@ -71,6 +71,8 @@
 
 import 'dart:convert';
 
+final intermediateEmptyList = [jsonDecode(jsonSampleEmpty)];
+
 final intermediateMovieList = [jsonDecode(tvdbJsonSearchMovie)];
 final intermediateSeriesList = [jsonDecode(tvdbJsonSearchSeries)];
 final intermediateEpisodeList = [jsonDecode(tvdbJsonSearchEpisode)];

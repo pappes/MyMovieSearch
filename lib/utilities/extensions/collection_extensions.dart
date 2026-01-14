@@ -3,6 +3,30 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
+/// Extend [Map]<[String],[String]> to provide convenience functions.
+///
+extension StringMapHelper on Map<String, String> {
+  /// Pull a list out of a json value - even if it is not represented as a list
+  ///
+  /// Convert scalar value to a List with a single value
+  /// Convert map to a List (return values, discard keys)
+  ///
+  /// ```dart
+  /// StringMapHelper.fromJson('{"first":1, "second":2 }'); // returns  {"first":"1", "second":"2" }
+  /// ```
+  static Map<String, String> fromJson(String? jsonText) {
+    final unique = <String, String>{};
+    if (null == jsonText || jsonText.isEmpty) return unique;
+    final contents = json.decode(jsonText);
+    if (contents is Map) {
+      for (final entry in contents.entries) {
+        unique[entry.key.toString()] = entry.value.toString();
+      }
+    }
+    return unique;
+  }
+}
+
 /// Extend [List]<[String]> or [Set]<[String]> to provide convenience functions.
 ///
 extension StringIterableHelper on Iterable<String> {

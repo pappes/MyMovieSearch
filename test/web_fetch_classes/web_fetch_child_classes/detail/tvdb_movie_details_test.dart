@@ -2,9 +2,9 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/tvdb_details.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/offline/tvdb_details.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_details.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/converters/tvdb_movie_details.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/offline/tvdb_movie_details.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_movie_details.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
@@ -28,15 +28,15 @@ void main() {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
       expect(
-        QueryTVDBDetails(criteria).myDataSourceName(),
-        'QueryTVDBDetails',
+        QueryTVDBMovieDetails(criteria).myDataSourceName(),
+        'QueryTVDBMovieDetails',
       );
     });
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       expect(
-        QueryTVDBDetails(criteria).myFormatInputAsText(),
+        QueryTVDBMovieDetails(criteria).myFormatInputAsText(),
         criteria.criteriaTitle,
       );
     });
@@ -49,11 +49,11 @@ void main() {
           MovieResultDTO().error('test2'),
         ];
       expect(
-        QueryTVDBDetails(input).myFormatInputAsText(),
+        QueryTVDBMovieDetails(input).myFormatInputAsText(),
         contains('test1'),
       );
       expect(
-        QueryTVDBDetails(input).myFormatInputAsText(),
+        QueryTVDBMovieDetails(input).myFormatInputAsText(),
         contains('test2'),
       );
     });
@@ -69,7 +69,7 @@ void main() {
       MovieResultDTOHelpers.resetError();
 
       // Invoke the functionality.
-      final actualResult = QueryTVDBDetails(
+      final actualResult = QueryTVDBMovieDetails(
         criteria,
       ).myYieldError('new query').toMap();
 
@@ -79,14 +79,14 @@ void main() {
     // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMovieList;
-      final actualOutput = QueryTVDBDetails(
+      final actualOutput = QueryTVDBMovieDetails(
         criteria,
       ).myConvertWebTextToTraversableTree(jsonSampleFull);
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
-      final expectedOutput = intermediateEmptyList;
-      final actualOutput = QueryTVDBDetails(
+      final expectedOutput = intermediateErrorList;
+      final actualOutput = QueryTVDBMovieDetails(
         criteria,
       ).myConvertWebTextToTraversableTree(jsonSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
@@ -101,7 +101,7 @@ void main() {
               'You must be granted a valid key.","success":false}',
         ),
       );
-      final actualOutput = QueryTVDBDetails(
+      final actualOutput = QueryTVDBMovieDetails(
         criteria,
       ).myConvertWebTextToTraversableTree(jsonSampleError);
       expect(actualOutput, expectedOutput);
@@ -110,13 +110,38 @@ void main() {
 
   group('TvdbDetailsConverter unit tests', () {
     // Confirm map can be converted to DTO.
+    test('Run dtoFromCompleteJsonMap() for Empty', () {
+      final actualResult = <MovieResultDTO>[];
+
+      // Invoke the functionality and collect results.
+      for (final map in intermediateErrorList) {
+        actualResult.addAll(
+          TvdbMovieDetailConverter(MovieContentType.movie).dtoFromCompleteJsonMap(map as Map),
+        );
+      }
+
+      // Uncomment this line to update expectedDTOList if sample data changes
+      // writeTestData(actualResult, suffix: '_empty.json');
+
+      final expectedValue = readTestData(suffix: '_empty.json');
+      // Check the results.
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
+      );
+    });
+    // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap() for Movie', () {
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMovieList) {
         actualResult.addAll(
-          TvdbDetailConverter('tt1231').dtoFromCompleteJsonMap(map as Map),
+          TvdbMovieDetailConverter(MovieContentType.movie).dtoFromCompleteJsonMap(map as Map),
         );
       }
 
@@ -142,7 +167,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateSeriesList) {
         actualResult.addAll(
-          TvdbDetailConverter('tt1231').dtoFromCompleteJsonMap(map as Map),
+          TvdbMovieDetailConverter(MovieContentType.movie).dtoFromCompleteJsonMap(map as Map),
         );
       }
 
@@ -160,70 +185,18 @@ void main() {
             '${expectedValue.toPrintableString()}',
       );
     });
-
-    // Confirm map can be converted to DTO.
-    test('Run dtoFromCompleteJsonMap() for Episode', () {
-      final actualResult = <MovieResultDTO>[];
-
-      // Invoke the functionality and collect results.
-      for (final map in intermediateEpisodeList) {
-        actualResult.addAll(
-          TvdbDetailConverter('tt1231').dtoFromCompleteJsonMap(map as Map),
-        );
-      }
-
-      // Uncomment this line to update expectedDTOList if sample data changes
-      // writeTestData(actualResult, suffix: '_episode.json');
-
-      final expectedValue = readTestData(suffix: '_episode.json');
-      // Check the results.
-      expect(
-        actualResult,
-        MovieResultDTOListMatcher(expectedValue),
-        reason:
-            'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list '
-            '${expectedValue.toPrintableString()}',
-      );
-    });
-
     
-    // Confirm map can be converted to DTO.
-    test('Run dtoFromCompleteJsonMap() for Person', () {
-      final actualResult = <MovieResultDTO>[];
-
-      // Invoke the functionality and collect results.
-      for (final map in intermediatePersonList) {
-        actualResult.addAll(
-          TvdbDetailConverter('nm1231').dtoFromCompleteJsonMap(map as Map),
-        );
-      }
-
-      // Uncomment this line to update expectedDTOList if sample data changes
-      // writeTestData(actualResult, suffix: '_person.json');
-
-      final expectedValue = readTestData(suffix: '_person.json');
-      // Check the results.
-      expect(
-        actualResult,
-        MovieResultDTOListMatcher(expectedValue),
-        reason:
-            'Emitted DTO list ${actualResult.toPrintableString()} '
-            'needs to match expected DTO list '
-            '${expectedValue.toPrintableString()}',
-      );
-    });
   });
   ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
   ////////////////////////////////////////////////////////////////////////////////
 
-  group('QueryTVDBDetails uri tests', () {
+  group('QueryTVDBMovieDetails uri tests', () {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () async {
-      final testClass = QueryTVDBDetails(criteria);
+      final testClass = QueryTVDBMovieDetails(criteria);
       await testClass.myClearCache();
-      const expected = 'https://api4.thetvdb.com/v4/search/remoteid/1234';
+      const expected = 'https://api4.thetvdb.com/v4/movies/1234/extended?short=true';
 
       // Invoke the functionality.
       final actualResult = testClass.myConstructURI('1234').toString();
@@ -233,13 +206,13 @@ void main() {
     });
   });
   ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using QueryTVDBDetails
+  /// Integration tests using QueryTVDBMovieDetails
   ////////////////////////////////////////////////////////////////////////////////
 
-  group('QueryTVDBDetails integration tests', () {
+  group('QueryTVDBMovieDetails integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final testClass = QueryTVDBDetails(criteria);
+      final testClass = QueryTVDBMovieDetails(criteria);
       await testClass.myClearCache();
       final actualResult = <MovieResultDTO>[];
 
@@ -270,7 +243,7 @@ void main() {
           ),
         ),
       );
-      final testClass = QueryTVDBDetails(criteria);
+      final testClass = QueryTVDBMovieDetails(criteria);
       await testClass.myClearCache();
 
       // Invoke the functionality and collect results.
@@ -284,7 +257,7 @@ void main() {
   });
 
   ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchBase and env and QueryTVDBDetails
+  /// Integration tests using WebFetchBase and env and QueryTVDBMovieDetails
   ////////////////////////////////////////////////////////////////////////////////
 
   group('tvdb search query', () {
@@ -293,7 +266,7 @@ void main() {
     test('Run readList()', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTVDBDetails(criteria);
+      final testClass = QueryTVDBMovieDetails(criteria);
       await testClass.myClearCache();
 
       // Invoke the functionality.
@@ -323,9 +296,9 @@ void main() {
     test('invalid json', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTVDBDetails(criteria);
+      final testClass = QueryTVDBMovieDetails(criteria);
       const expectedException =
-          '[tvdbDetails] Error in QueryTVDBDetails with criteria tt1231 '
+          '[tvdbDetails] Error in QueryTVDBMovieDetails with criteria tt1231 '
           'convert error interpreting web text as a map '
           ':Invalid json returned from web call not valid json';
 
@@ -341,12 +314,12 @@ void main() {
     test('unexpected json contents', () async {
       // Set up the test data.
       const expectedException =
-          '[tvdbDetails] Error in QueryTVDBDetails with criteria tt1231 '
+          '[tvdbDetails] Error in QueryTVDBMovieDetails with criteria tt1231 '
           'convert error interpreting web text as a map '
           ':TVDB results data not detected for criteria '
           'tt1231 in json:[{"hello":"world"}]';
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTVDBDetails(criteria);
+      final testClass = QueryTVDBMovieDetails(criteria);
 
       // Invoke the functionality.
       await testClass

@@ -146,6 +146,9 @@ import 'package:yaml/yaml.dart';
 ///             ]
 ///         },
 /// ```
+
+const millisecondsPerSecond = 10;
+
 class Settings {
   factory Settings() => _singleton;
 

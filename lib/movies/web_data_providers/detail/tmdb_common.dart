@@ -11,6 +11,7 @@ import 'package:universal_io/io.dart'
     show HttpClientResponse, HttpHeaders; // limit inclusions to reduce size
 
 const tmdbPosterPathPrefix = 'https://image.tmdb.org/t/p/w500';
+const requestsPerSecond = 30;
 
 /// Implements [WebFetchBase] for searching The Movie Database (TMDB).
 ///
@@ -26,6 +27,7 @@ abstract class QueryTMDBCommon
   late DataSourceType source;
   late String baseURL;
   String midURL = '?api_key=';
+  static DateTime lastRequestTime = DateTime.now();
 
   /// Must be overridden by child classes.
   /// Static snapshot of data for offline operation.
@@ -64,6 +66,20 @@ abstract class QueryTMDBCommon
     // Get key from the file assets/secrets.json (not source controlled)
     final tmdbKey = Settings().tmdbkey;
     headers.add('Authorization', ' Bearer $tmdbKey');
+  }
+
+  /// Delay request so that a maximum of 10 requests are sent per second
+  @override
+  Future<void> myDelayRequest() {
+    final nextRequestTime = lastRequestTime.add(
+      const Duration(milliseconds: millisecondsPerSecond ~/ requestsPerSecond),
+    );
+    lastRequestTime = DateTime.now();
+    final delay = nextRequestTime.difference(lastRequestTime);
+    if (!delay.isNegative) {
+      return Future.delayed(delay);
+    }
+    return Future.value();
   }
 
   /// Convert web text to a traversable tree of [List] or [Map] data.

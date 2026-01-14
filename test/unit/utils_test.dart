@@ -881,6 +881,16 @@ Future<void> main() async {
           ],
         );
       });
+      // Find a parent of matching values in a tree.
+      test('complex tree parent search', () {
+        expect(TreeHelper(complexMap).deepSearch('horse', returnParent: true), [
+          {
+            'horse': 'stall',
+            'needle': {'haystack4'},
+            'dog': 'house',
+          },
+        ]);
+      });
       // Find a matching value in a tree with partial search on keys.
       test('complex tree suffix search', () {
         expect(TreeHelper(complexMap).deepSearch('needle', suffixMatch: true), [

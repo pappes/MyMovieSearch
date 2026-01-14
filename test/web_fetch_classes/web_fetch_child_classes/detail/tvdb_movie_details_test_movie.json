@@ -1,0 +1,8 @@
+[
+  {
+    "uniqueId": "-2",
+    "title": "[TvdbMovieDetailConverter] Unable to interpret results {status: success, data: {id: 2658, name: Run Lola Run, image: https://artworks.thetvdb.com/banners/movies/2658/posters/2658.jpg, runtime: 81, status: {id: 5, name: Released, recordType: movie, keepUpdated: true}, year: 1998, genres: [{id: 19, name: Action}, {id: 12, name: Drama}, {id: 24, name: Thriller}], remoteIds: [{id: tt0130827, type: 2, sourceName: IMDB}, {id: 104, type: 10, sourceName: TheMovieDB.com}], contentRatings: null, originalLanguage: eng, spoken_languages: [deu, eng, jpn]}}",
+    "bestSource": "DataSourceType.tvdbDetails",
+    "type": "MovieContentType.error"
+  }
+]

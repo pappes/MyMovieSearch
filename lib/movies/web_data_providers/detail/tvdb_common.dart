@@ -10,8 +10,7 @@ import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const tvdbApiPath = 'https://api4.thetvdb.com/v4/';
-const requestsPerSecond = 10;
-const millisecondsPerSecond = 10;
+const requestsPerSecond = 30;
 
 /// Implements [WebFetchBase] for searching The TV Database (TheTVDB).
 ///
@@ -33,6 +32,7 @@ abstract class QueryTVDBCommon
 
   late DataSourceType source;
   String midURL = 'search?query=';
+  String suffixURL = '';
 
   /// Initialise the class for future calls;
   static Future<bool> init() {
@@ -104,7 +104,7 @@ abstract class QueryTVDBCommon
   /// API call to TVDB returning the movie details for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) =>
-      Uri.parse('$tvdbApiPath$midURL$searchCriteria');
+      Uri.parse('$tvdbApiPath$midURL$searchCriteria$suffixURL');
 
   // Add authorization token for compatibility with the TVDB V4 API.
   @override
@@ -135,9 +135,9 @@ abstract class QueryTVDBCommon
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    if (webText.contains('data": []') || webText.contains('data": null')) {
+    /*if (webText.contains('data": []') || webText.contains('data": null')) {
       return [];
-    }
+    }*/
     dynamic tree;
     try {
       // Assume text is json encoded.

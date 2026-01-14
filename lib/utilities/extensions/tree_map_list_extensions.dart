@@ -8,11 +8,13 @@ extension TreeListHelper on Iterable<dynamic> {
     bool suffixMatch = false,
     bool multipleMatch = false,
     bool stopAtTopLevel = true,
+    bool returnParent = false,
   }) => TreeHelper(this).deepSearch(
     tag,
     suffixMatch: suffixMatch,
     multipleMatch: multipleMatch,
     stopAtTopLevel: stopAtTopLevel,
+    returnParent: returnParent,
   );
 
   /// {@macro getGrandChildren}
@@ -28,9 +30,15 @@ extension TreeMapHelper on Map<dynamic, dynamic> {
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
+    bool returnParent = false,
   }) => TreeHelper(
     this,
-  ).deepSearch(tag, suffixMatch: suffixMatch, multipleMatch: multipleMatch);
+  ).deepSearch(
+    tag,
+    suffixMatch: suffixMatch,
+    multipleMatch: multipleMatch,
+    returnParent: returnParent,
+  );
 
   /// {@macro getGrandChildren}
   List<dynamic> getGrandChildren() => values.getGrandChildren();
@@ -46,9 +54,15 @@ extension TreeSetHelper on Set<dynamic> {
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
+    bool returnParent = false,
   }) => TreeHelper(
     this,
-  ).deepSearch(tag, suffixMatch: suffixMatch, multipleMatch: multipleMatch);
+  ).deepSearch(
+    tag,
+    suffixMatch: suffixMatch,
+    multipleMatch: multipleMatch,
+    returnParent: returnParent,
+  );
 
   /// {@macro getGrandChildren}
   List<dynamic> getGrandChildren() => toList().getGrandChildren();
@@ -85,12 +99,15 @@ class TreeHelper {
   /// * [suffixMatch] match on the end of the key.
   /// * [multipleMatch] return all matches.
   /// * [stopAtTopLevel] do not search inside result for more matches.
+  /// * [returnParent] identify the tree level above the matched node.
   /// {@endtemplate}
   List<dynamic>? deepSearch(
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
     bool stopAtTopLevel = true,
+    bool returnParent = false,
+    dynamic parent,
   }) {
     if (null == tree) return null;
     final matches = <dynamic>[]; // Allow mutiple results on suffix search.
@@ -100,12 +117,12 @@ class TreeHelper {
 
       if (key == tag) {
         // Simple match.
-        matches.add(value);
+        matches.add(returnParent ? parent : value);
         if (!multipleMatch) return matches;
         if (stopAtTopLevel) continue;
       } else if (suffixMatch && key.toString().endsWith(tag.toString())) {
         // Suffix match.
-        matches.add(value);
+        matches.add(returnParent ? parent : value);
         if (!multipleMatch) return matches;
         if (stopAtTopLevel) continue;
       }
@@ -116,6 +133,8 @@ class TreeHelper {
           suffixMatch: suffixMatch,
           multipleMatch: multipleMatch,
           stopAtTopLevel: stopAtTopLevel,
+          returnParent: returnParent,
+          parent: value,
         );
         if (result is List) {
           matches.addAll(result);
