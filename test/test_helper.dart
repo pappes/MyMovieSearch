@@ -364,8 +364,8 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
         final differences = <dynamic, dynamic>{};
         if (actualDto.uniqueId == expectedDto.uniqueId) {
           resultMatched = true;
-          if (actualDto.matches(
-            expectedDto,
+          if (expectedDto.matches(
+            actualDto,
             matchState: differences,
             related: false,
             fuzzy: true,

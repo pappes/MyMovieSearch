@@ -7,6 +7,7 @@ const nodeSources = 'remoteIds';
 
 const sourceEntry = 'sourceName';
 const sourceImdb = 'IMDB';
+const sourceTvdb = 'TheMovieDB.com';
 const sourceEidr = 'EIDR';
 const sourceInstagam = 'Instagram';
 const sourceOfficialWebsite = 'Official Website';
@@ -58,9 +59,13 @@ class TvdbMovieDetailConverter extends TvdbCommonConverter {
       }
 
       final sources = inputData.deepSearch(nodeSources, multipleMatch: true);
+      final id = getId(sources, sourceTvdb);
+      if (id == null) {
+        return MovieContentType.none;
+      }
+      outputData[elementIdentity] = id;
       imdbId = getId(sources, sourceImdb) ?? imdbId;
       final sourceUrls = <String, String>{};
-      getKnownUrl(sourceUrls, sources, sourceEidr, eidrUrlPrefix);
       getKnownUrl(sourceUrls, sources, sourceEidr, eidrUrlPrefix);
       getKnownUrl(sourceUrls, sources, sourceInstagam, instagramUrlPrefix);
       getKnownUrl(sourceUrls, sources, sourceOfficialWebsite, netflixUrlPrefix);

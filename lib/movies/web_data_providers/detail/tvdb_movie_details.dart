@@ -1,9 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tvdb_movie_details.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tvdb_details.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_common.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_details.dart'
+    as base_query;
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [WebFetchBase] for movie data from The Movie Database (TVDB).
@@ -16,20 +22,43 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 // ignore: missing_override_of_must_be_overridden
 class QueryTVDBMovieDetails extends QueryTVDBCommon {
   QueryTVDBMovieDetails(super.criteria) {
-    final contentType = criteria.criteriaContext?.type;
-    movieContentType = contentType ?? movieContentType;
-    if (movieContentType == MovieContentType.series) {
-      midURL = 'series/';
-    } else if (movieContentType == MovieContentType.episode) {
-      midURL = 'episodes/';
-    } else {
-      midURL = 'movies/';
-    }
     suffixURL = '/extended?short=true';
     source = DataSourceType.tvdbDetails;
+    _setCriteria(criteria);
   }
 
-  late MovieContentType movieContentType =  MovieContentType.title;
+  void _setCriteria(SearchCriteriaDTO criteria) {
+    final contentType = criteria.criteriaContext?.type;
+    if (contentType != null) {
+      midURL = QueryTVDBCommon.typeToEndpoint(contentType);
+    }
+    movieContentType = contentType ?? movieContentType;
+  }
+
+  /// Check to see if IMDB ID needs to be converted to TVDB ID
+  @override
+  FutureOr<Uri> myConstructURIAsync(
+    String searchCriteria, {
+    int pageNumber = 1,
+  }) async {
+    await QueryTVDBCommon.init();
+    var tvdbId = searchCriteria;
+    if (searchCriteria.startsWith(imdbTitlePrefix)) {
+      final header = await base_query.QueryTVDBDetails(
+        SearchCriteriaDTO().fromString(searchCriteria),
+      ).readList();
+      if (header.isNotEmpty) {
+        criteria.criteriaContext = header.first;
+        criteria.criteriaTitle =
+            header.first.sources[DataSourceType.tvdbDetails]!;
+        tvdbId = criteria.criteriaTitle;
+        _setCriteria(criteria);
+      }
+    }
+    return myConstructURI(tvdbId, pageNumber: pageNumber);
+  }
+
+  MovieContentType movieContentType = MovieContentType.title;
 
   @override
   String myDataSourceName() => 'QueryTVDBMovieDetails';

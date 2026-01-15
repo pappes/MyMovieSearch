@@ -1051,7 +1051,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   static MovieContentType? _lookupMovieContentType(
     String info,
     int? seconds,
-    String id,
+    String id, {
+    MovieContentType? existing,
+  }
   ) {
     if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
     if (id == movieDTOUninitialized) return MovieContentType.none;
@@ -1072,6 +1074,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (title.lastIndexOf('special') > -1) return MovieContentType.series;
     if (title.lastIndexOf('short') > -1) return MovieContentType.short;
     if (seconds != null && seconds < (60 * 60) && seconds > 0) {
+      if (existing == MovieContentType.series) {
+        return MovieContentType.series;
+      }
       return MovieContentType.episode;
     }
     if (title.lastIndexOf('movie') > -1) return MovieContentType.movie;
@@ -1083,16 +1088,29 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// update title type based on information in the dto.
   MovieContentType getContentType() => type =
-      getMovieContentType(yearRange, runTime.inSeconds, uniqueId) ?? type;
+      getMovieContentType(
+        yearRange,
+        runTime.inSeconds,
+        uniqueId,
+        existing: type,
+      ) ??
+      type;
 
   /// Use movie type string to lookup [MovieContentType] movie type.
   static MovieContentType? getMovieContentType(
     Object? info,
     int? seconds,
-    String id,
+    String id, {
+    MovieContentType? existing,
+  }
   ) {
     final string = info?.toString() ?? '';
-    final type = _lookupMovieContentType(string, seconds, id);
+    final type = _lookupMovieContentType(
+      string,
+      seconds,
+      id,
+      existing: existing,
+    );
     if (null != type || null == info) return type;
     return null;
   }

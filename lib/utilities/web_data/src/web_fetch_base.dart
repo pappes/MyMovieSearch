@@ -2,7 +2,7 @@
 /// in a consistent manner.
 library;
 
-import 'dart:async' show StreamController, unawaited;
+import 'dart:async' show FutureOr, StreamController, unawaited;
 import 'dart:convert' show jsonDecode, utf8;
 
 import 'package:flutter/material.dart';
@@ -241,7 +241,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   @visibleForOverriding
   Future<Stream<String>> myFetchWebText(INPUT_TYPE criteria) async {
     final encoded = Uri.encodeQueryComponent(myFormatInputAsText());
-    final address = myConstructURI(encoded, pageNumber: myGetPageNumber());
+    final address = await myConstructURIAsync(
+      encoded,
+      pageNumber: myGetPageNumber(),
+    );
     logger.t('requesting: $address');
     final client = await baseGetHttpClient().openUrl('GET', address);
     myConstructHeaders(client.headers);
@@ -308,18 +311,27 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   @mustBeOverridden
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1});
 
+  /// Define the [Uri] called to fetch online data
+  /// for criteria [searchCriteria].
+  ///
+  /// When pagination is not supported and [pageNumber] is not 1
+  /// an empty Uri() must be returned.
+  ///
+  /// Use this for sources that require expensive preparation
+  /// e.g. web service login or remote id prefetch.
+  ///
+  /// Can be overridden by child classes.
+  FutureOr<Uri> myConstructURIAsync(
+    String searchCriteria, {
+    int pageNumber = 1,
+  }) => myConstructURI(searchCriteria, pageNumber: pageNumber);
+
   /// converts [criteria] as a string representation.
   ///
   /// Can be overridden by child classes.
   /// If this is blank the query will not run!
   @mustBeOverridden
   String myFormatInputAsText() => criteria?.toString() ?? '';
-
-  /// converts [criteria] as a unique path.
-  ///
-  /// Can be overridden by child classes.
-  String myFormatInputAsAddress() =>
-      myConstructURI(myFormatInputAsText()).toString();
 
   /// Extracts page number from [criteria]
   ///

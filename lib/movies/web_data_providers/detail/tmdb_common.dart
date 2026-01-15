@@ -72,6 +72,8 @@ abstract class QueryTMDBCommon
   @override
   Future<void> myDelayRequest() {
     final nextRequestTime = lastRequestTime.add(
+      // flutter lints thinks this = 0
+      // ignore: use_named_constants
       const Duration(milliseconds: millisecondsPerSecond ~/ requestsPerSecond),
     );
     lastRequestTime = DateTime.now();

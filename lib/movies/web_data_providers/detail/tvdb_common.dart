@@ -11,6 +11,19 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const tvdbApiPath = 'https://api4.thetvdb.com/v4/';
 const requestsPerSecond = 30;
+const tvdbTypeMapping = {
+  'movie': MovieContentType.title,
+  'series': MovieContentType.series,
+  'people': MovieContentType.person,
+  'episode': MovieContentType.episode,
+};
+
+const tvdbEndpointMapping = {
+  MovieContentType.title: 'movies/',
+  MovieContentType.series: 'series/',
+  MovieContentType.person: 'person/',
+  MovieContentType.episode: 'episodes/',
+};
 
 /// Implements [WebFetchBase] for searching The TV Database (TheTVDB).
 ///
@@ -176,4 +189,12 @@ abstract class QueryTVDBCommon
       // Cascade call to parent class.
       // ignore: invalid_use_of_visible_for_testing_member
       : super.myHttpError(address, statusCode, response);
+
+  /// Convert TVDB map types to MovieResultDTO types.
+  static MovieContentType typeToMovieContentType(String type) =>
+      tvdbTypeMapping[type] ?? tvdbTypeMapping.values.first;
+
+  /// Convert MovieResultDTO types to TVDB map types.
+  static String typeToEndpoint(MovieContentType type) =>
+      tvdbEndpointMapping[type] ?? tvdbEndpointMapping.values.first;
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -27,6 +29,17 @@ class QueryTVDBDetails extends QueryTVDBCommon {
   /// Does not filter data based on criteria.
   @override
   DataSourceFn myOfflineData() => streamTvdbJsonOfflineData;
+
+  /// Check to see if IMDB ID needs to be converted to TVDB ID
+  @override
+  FutureOr<Uri> myConstructURIAsync(
+    String searchCriteria, {
+    int pageNumber = 1,
+  }) async {
+    await QueryTVDBCommon.init();
+    return myConstructURI(searchCriteria, pageNumber: pageNumber);
+  }
+
 
   /// Convert TVDB map to MovieResultDTO records.
   @override

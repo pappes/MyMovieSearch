@@ -13,6 +13,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_movie_details.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
@@ -84,6 +85,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       /// from cache using a separate thread.
       unawaited(
         QueryIMDBJsonCastDetails(criteria).readList().then(_requestShowDetails),
+      );
+
+      /// Fetch full actor/director/writer/producer data
+      /// from cache using a separate thread.
+      unawaited(
+        QueryTVDBMovieDetails(criteria).readList().then(_requestShowDetails),
       );
     }
   }
@@ -319,8 +326,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
     final label = InkWell(
       child: const Text('Keywords: '),
-      onTap: () =>
-          MMSNav(context).getMoreKeywords(_restorableMovie.value),
+      onTap: () => MMSNav(context).getMoreKeywords(_restorableMovie.value),
     );
 
     return Wrap(children: <Widget>[label, ...hyperlinks]);
@@ -359,17 +365,48 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     return categories;
   }
 
-  List<Widget> _externalSearchButtons() => <Widget>[
-    _externalSearchButton(_restorableMovie.value.title),
-    if (_restorableMovie.value.alternateTitle.isNotEmpty)
-      _externalSearchButton(_restorableMovie.value.alternateTitle),
-  ];
+  List<Widget> _externalSearchButtons() {
+    final buttons = <Widget>[
+      _externalSearchButton(
+          _restorableMovie.value.title,
+          icon: const Icon(Icons.route),
+      ),
+    ];
 
-  Widget _externalSearchButton(String title) => ElevatedButton(
-    onPressed: () => MMSNav(context).showDownloads(
-      '$title ${_restorableMovie.value.year}',
-      _restorableMovie.value,
-    ),
-    child: Text(title),
-  );
+    if (_restorableMovie.value.alternateTitle.isNotEmpty) {
+      buttons.add(
+        _externalSearchButton(
+          _restorableMovie.value.alternateTitle,
+          icon: const Icon(Icons.alt_route),
+        ),
+      );
+    }
+    for (final link in _restorableMovie.value.links.entries) {
+      buttons.add(
+        _externalDetailsButton(
+          link.key,
+          link.value,
+          icon: const Icon(Icons.link),
+        ),
+      );
+    }
+    return buttons;
+  } 
+
+  Widget _externalSearchButton(String title, {Icon? icon}) =>
+      ElevatedButton.icon(
+        onPressed: () => MMSNav(context).showDownloads(
+          '$title ${_restorableMovie.value.year}',
+          _restorableMovie.value,
+        ),
+        label: Text(title),
+        icon: icon,
+      );
+
+  Widget _externalDetailsButton(String title, String url, {Icon? icon}) =>
+      ElevatedButton.icon(
+        onPressed: () => MMSNav(context).viewWebPage(url),
+        label: Text(title),
+        icon: icon,
+      );
 }

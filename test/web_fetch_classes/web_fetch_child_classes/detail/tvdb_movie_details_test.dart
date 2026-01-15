@@ -116,7 +116,9 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateErrorList) {
         actualResult.addAll(
-          TvdbMovieDetailConverter(MovieContentType.movie).dtoFromCompleteJsonMap(map as Map),
+          TvdbMovieDetailConverter(
+            MovieContentType.movie,
+          ).dtoFromCompleteJsonMap(map as Map),
         );
       }
 
@@ -141,7 +143,9 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMovieList) {
         actualResult.addAll(
-          TvdbMovieDetailConverter(MovieContentType.movie).dtoFromCompleteJsonMap(map as Map),
+          TvdbMovieDetailConverter(
+            MovieContentType.movie,
+          ).dtoFromCompleteJsonMap(map as Map),
         );
       }
 
@@ -167,7 +171,9 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateSeriesList) {
         actualResult.addAll(
-          TvdbMovieDetailConverter(MovieContentType.movie).dtoFromCompleteJsonMap(map as Map),
+          TvdbMovieDetailConverter(
+            MovieContentType.movie,
+          ).dtoFromCompleteJsonMap(map as Map),
         );
       }
 
@@ -185,7 +191,6 @@ void main() {
             '${expectedValue.toPrintableString()}',
       );
     });
-    
   });
   ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
@@ -196,7 +201,8 @@ void main() {
     test('Run myConstructURI()', () async {
       final testClass = QueryTVDBMovieDetails(criteria);
       await testClass.myClearCache();
-      const expected = 'https://api4.thetvdb.com/v4/movies/1234/extended?short=true';
+      const expected =
+          'https://api4.thetvdb.com/v4/movies/1234/extended?short=true';
 
       // Invoke the functionality.
       final actualResult = testClass.myConstructURI('1234').toString();
