@@ -69,6 +69,7 @@ class TvdbMovieDetailConverter extends TvdbCommonConverter {
       getKnownUrl(sourceUrls, sources, sourceEidr, eidrUrlPrefix);
       getKnownUrl(sourceUrls, sources, sourceInstagam, instagramUrlPrefix);
       getKnownUrl(sourceUrls, sources, sourceOfficialWebsite, netflixUrlPrefix);
+      getKnownUrl(sourceUrls, sources, sourceOfficialWebsite, netflixUrlPrefix);
       getKnownUrl(sourceUrls, sources, sourceReddit, redditUrlPrefix);
       getKnownUrl(sourceUrls, sources, sourceTvMaze, tvMazeUrlPrefix);
       getKnownUrl(sourceUrls, sources, sourceWikidata, wikidataUrlPrefix);
@@ -110,7 +111,11 @@ class TvdbMovieDetailConverter extends TvdbCommonConverter {
   ) {
     final id = getId(sources, source);
     if (id != null) {
-      sourceUrls[source] = '$prefix$id';
+      if (id.startsWith('http')) {
+        sourceUrls[source] = id;
+      } else {
+        sourceUrls[source] = '$prefix$id';
+      }
     }
   }
 

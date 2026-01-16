@@ -841,11 +841,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       type = bestValue(newValue.type, type);
       censorRating = bestValue(newValue.censorRating, censorRating);
       imageUrl = bestValue(newValue.imageUrl, imageUrl);
-      genres.addAll(newValue.genres);
-      keywords.addAll(newValue.keywords);
-      languages.addAll(newValue.languages);
-      links.addAll(newValue.links);
-      sources.addAll(newValue.sources);
+
       creditsOrder = bestValue(newValue.creditsOrder, creditsOrder);
       userRating = bestUserRating(
         newValue.userRating,
@@ -865,6 +861,11 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         type,
       );
     }
+    genres.addAll(newValue.genres);
+    keywords.addAll(newValue.keywords);
+    languages.addAll(newValue.languages);
+    links.addAll(newValue.links);
+    sources.addAll(newValue.sources);
     if (!excludeRelated) {
       mergeRelatedDtos(related, newValue.related);
     }
