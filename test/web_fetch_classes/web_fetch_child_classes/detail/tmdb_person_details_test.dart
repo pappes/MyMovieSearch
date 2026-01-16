@@ -153,7 +153,8 @@ void main() {
     test('Run myConstructURI()', () async {
       final testClass = QueryTMDBPersonDetails(criteria);
       await testClass.myClearCache();
-      const expected = 'https://api.themoviedb.org/3/person/1234?api_key=';
+      const expected =
+          'https://api.themoviedb.org/3/person/1234?append_to_response=external_ids&api_key=';
 
       // Invoke the functionality.
       final actualResult = testClass.myConstructURI('1234').toString();

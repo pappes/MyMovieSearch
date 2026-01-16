@@ -16,6 +16,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryTMDBMovieDetails extends QueryTMDBCommon {
   QueryTMDBMovieDetails(super.criteria) {
     baseURL = 'https://api.themoviedb.org/3/movie/';
+    midURL = '?append_to_response=external_ids,keywords&api_key=';
     source = DataSourceType.tmdbMovie;
   }
 

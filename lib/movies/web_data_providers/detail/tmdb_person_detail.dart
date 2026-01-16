@@ -17,6 +17,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryTMDBPersonDetails extends QueryTMDBCommon {
   QueryTMDBPersonDetails(super.criteria) {
     baseURL = 'https://api.themoviedb.org/3/person/';
+    midURL = '?append_to_response=external_ids&api_key=';
     source = DataSourceType.tmdbPerson;
   }
 
