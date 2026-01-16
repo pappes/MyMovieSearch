@@ -850,7 +850,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         userRatingCount,
       );
       userRatingCount = bestValue(newValue.userRatingCount, userRatingCount);
-      getLanguageType();
       type = bestValue(
         getMovieContentType(
               '$genres $yearRange',
@@ -863,9 +862,10 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     }
     genres.addAll(newValue.genres);
     keywords.addAll(newValue.keywords);
-    languages.addAll(newValue.languages);
     links.addAll(newValue.links);
     sources.addAll(newValue.sources);
+    languages.addAll(newValue.languages);
+    getLanguageType();
     if (!excludeRelated) {
       mergeRelatedDtos(related, newValue.related);
     }

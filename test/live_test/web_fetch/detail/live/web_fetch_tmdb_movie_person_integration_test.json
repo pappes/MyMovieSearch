@@ -2,11 +2,11 @@
   {
     "uniqueId": "nm0052307",
     "title": "Jill Banner",
+    "description": "Jill Banner, born Mary Kathryn Molumby, was an American film actress, possibly best known for her role as Virginia, the \"spider baby\" in the 1964 cult horror-comedy film \"Spider Baby\". She had a longhand complicated relationship with Marlon Brando.",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
     "year": "1946",
-    "description": "Jill Banner, born Mary Kathryn Molumby, was an American film actress, possibly best known for her role as Virginia, the \"spider baby\" in the 1964 cult horror-comedy film \"Spider Baby\". She had a longhand complicated relationship with Marlon Brando.",
-    "userRating": "0.3522",
+    "userRating": "0.3208",
     "userRatingCount": "1",
     "imageUrl": "https://image.tmdb.org/t/p/w500/nWgCaR1vFk2zSZ31GZZp2abny6V.jpg",
     "sources": {
@@ -18,7 +18,7 @@
     "title": "Barbara Dowling",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.0261",
+    "userRating": "0.0602",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101002"
@@ -29,7 +29,7 @@
     "title": "Gil Lasky",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.8816",
+    "userRating": "0.2444",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101003"
@@ -40,7 +40,7 @@
     "title": "Paul Monka",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.0338",
+    "userRating": "0.0747",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101004"
@@ -51,7 +51,7 @@
     "title": "Derry O'Donavan",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.1464",
+    "userRating": "0.0479",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101001"
@@ -62,7 +62,7 @@
     "title": "Ron Perry",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "2.319",
+    "userRating": "0.2503",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101000"
@@ -74,7 +74,7 @@
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
     "year": "1971",
-    "userRating": "0.1559",
+    "userRating": "0.3322",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101008"
@@ -85,7 +85,7 @@
     "title": "Alfred Taylor",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.1021",
+    "userRating": "0.1231",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101005"
@@ -97,7 +97,7 @@
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
     "year": "1976",
-    "userRating": "0.922",
+    "userRating": "0.4861",
     "userRatingCount": "1",
     "imageUrl": "https://image.tmdb.org/t/p/w500/1kDtoUPjALgdhiKNjW0Ok06RsAr.jpg",
     "sources": {
@@ -109,7 +109,7 @@
     "title": "Jamie Wagner",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.1402",
+    "userRating": "0.0862",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101007"

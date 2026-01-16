@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/yts_detail.dart';
@@ -59,6 +61,18 @@ void main() {
     test('Run read 3 pages from YTS', () async {
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
+
+      for (final dto in actualOutput) {
+        // Trim excessive strings
+        dto
+          ..uniqueId = dto.uniqueId.characters.take(100).toString()
+          ..imageUrl = dto.imageUrl.characters.take(100).toString()
+          ..sources[DataSourceType.ytsDetails] = dto
+              .sources[DataSourceType.ytsDetails]!
+              .characters
+              .take(100)
+              .toString();
+      }
 
       // To update expected data, uncomment the following lines
       // writeTestData(actualOutput);

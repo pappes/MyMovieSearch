@@ -1,16 +1,6 @@
 // Raw data in code is generated from an external source.
 // ignore_for_file: unnecessary_ignore
 // ignore_for_file: unnecessary_raw_strings
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-
-/* To update this data, uncomment printTestData(actualResult);
-in test('Run dtoFromCompleteJsonMap()'*/
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"https://secure.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=/LC.JPG","bestSource":"DataSourceType.libsaBarcode","title":"Summer in February 2013","alternateTitle":"Summer in February [DVD]. 2014 2013","type":"MovieContentType.barcode","imageUrl":"https://secure.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=/LC.JPG","sources":{"DataSourceType.libsaBarcode":"https://secure.syndetics.com/index.aspx?type=xw12&client=saplnsd&upc=9317731106354&oclc=&isbn=/LC.JPG"}}
-''',
-];
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
 Future<Stream<String>> streamHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));

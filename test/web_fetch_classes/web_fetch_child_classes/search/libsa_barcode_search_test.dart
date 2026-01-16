@@ -137,9 +137,11 @@ void main() {
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // printTestData(actualResult);
+      // writeTestData(actualResult, suffix: '_dtoFromCompleteJsonMap.json');
 
-      final expectedValue = expectedDTOList;
+      final expectedValue = readTestData(
+        suffix: '_dtoFromCompleteJsonMap.json',
+      );
       // Check the results.
       expect(
         actualResult,
@@ -157,7 +159,6 @@ void main() {
   group('LibsaBarcodeSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final expectedValue = expectedDTOList;
       final webfetch = QueryLibsaBarcodeSearch(criteria);
       final actualResult = <MovieResultDTO>[];
 
@@ -168,7 +169,13 @@ void main() {
         );
       }
 
+      // Uncomment this line to update expectedDTOList if sample data changes
+      // writeTestData(actualResult, suffix: '_myConvertTreeToOutputType.json');
+
       // Check the results.
+      final expectedValue = readTestData(
+        suffix: '_myConvertTreeToOutputType.json',
+      );
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -210,7 +217,6 @@ void main() {
     // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
-      final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final webfetch = QueryLibsaBarcodeSearch(criteria);
 
@@ -223,9 +229,10 @@ void main() {
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
-      // printTestData(queryResult);
+      // writeTestData(queryResult, suffix: '_readList.json');
 
       // Check the results.
+      final expectedValue = readTestData(suffix: '_readList.json');
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue, related: false),

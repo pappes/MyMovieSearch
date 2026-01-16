@@ -22,10 +22,6 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('397060')
         ..criteriaContext = movieDto;
       final actualOutput = await QueryTVDBMovieDetails(criteria).readList();
-      // final actualOutput = await executeMultipleFetches(
-      //   (criteria) => QueryTVDBMovieDetails(criteria).readList(),
-      //   qty: 10,
-      // );
 
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
@@ -48,10 +44,6 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('5391')
         ..criteriaContext = movieDto;
       final actualOutput = await QueryTVDBMovieDetails(criteria).readList();
-      // final actualOutput = await executeMultipleFetches(
-      //   (criteria) => QueryTVDBMovieDetails(criteria).readList(),
-      //   qty: 10,
-      // );
 
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
@@ -74,10 +66,6 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt13443470')
         ..criteriaContext = movieDto;
       final actualOutput = await QueryTVDBMovieDetails(criteria).readList();
-      // final actualOutput = await executeMultipleFetches(
-      //   (criteria) => QueryTVDBMovieDetails(criteria).readList(),
-      //   qty: 10,
-      // );
 
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
@@ -100,10 +88,6 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt2724064')
         ..criteriaContext = movieDto;
       final actualOutput = await QueryTVDBMovieDetails(criteria).readList();
-      // final actualOutput = await executeMultipleFetches(
-      //   (criteria) => QueryTVDBMovieDetails(criteria).readList(),
-      //   qty: 10,
-      // );
 
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 

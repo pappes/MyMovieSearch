@@ -15,7 +15,10 @@ Future<Stream<String>> _emitUnexpectedJsonSample(_) =>
 Future<Stream<String>> _emitInvalidJsonSample(_) =>
     Future.value(Stream.value('not valid json'));
 
-final criteria = SearchCriteriaDTO().fromString('tt1231');
+final imdbCriteria = SearchCriteriaDTO().fromString('tt1231');
+final dto = MovieResultDTO()..init(type: MovieContentType.movie.toString());
+
+final tvdbCriteria = SearchCriteriaDTO().fromString('987654');
 
 void main() {
   // Wait for api key to be initialised
@@ -28,7 +31,7 @@ void main() {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
       expect(
-        QueryTVDBMovieDetails(criteria).myDataSourceName(),
+        QueryTVDBMovieDetails(imdbCriteria).myDataSourceName(),
         'QueryTVDBMovieDetails',
       );
     });
@@ -36,8 +39,8 @@ void main() {
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       expect(
-        QueryTVDBMovieDetails(criteria).myFormatInputAsText(),
-        criteria.criteriaTitle,
+        QueryTVDBMovieDetails(imdbCriteria).myFormatInputAsText(),
+        imdbCriteria.criteriaTitle,
       );
     });
 
@@ -70,7 +73,7 @@ void main() {
 
       // Invoke the functionality.
       final actualResult = QueryTVDBMovieDetails(
-        criteria,
+        imdbCriteria,
       ).myYieldError('new query').toMap();
 
       // Check the results.
@@ -80,14 +83,14 @@ void main() {
     test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMovieList;
       final actualOutput = QueryTVDBMovieDetails(
-        criteria,
+        imdbCriteria,
       ).myConvertWebTextToTraversableTree(jsonSampleFull);
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = intermediateErrorList;
       final actualOutput = QueryTVDBMovieDetails(
-        criteria,
+        imdbCriteria,
       ).myConvertWebTextToTraversableTree(jsonSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
@@ -102,7 +105,7 @@ void main() {
         ),
       );
       final actualOutput = QueryTVDBMovieDetails(
-        criteria,
+        imdbCriteria,
       ).myConvertWebTextToTraversableTree(jsonSampleError);
       expect(actualOutput, expectedOutput);
     });
@@ -198,14 +201,82 @@ void main() {
 
   group('QueryTVDBMovieDetails uri tests', () {
     // Confirm URL is constructed as expected.
-    test('Run myConstructURI()', () async {
-      final testClass = QueryTVDBMovieDetails(criteria);
-      await testClass.myClearCache();
+    test('Run myConstructURI() for imdbid', () {
+      final testClass = QueryTVDBMovieDetails(imdbCriteria);
       const expected =
-          'https://api4.thetvdb.com/v4/movies/1234/extended?short=true';
+          'https://api4.thetvdb.com/v4/search?query=tt1234/extended?short=true';
 
       // Invoke the functionality.
-      final actualResult = testClass.myConstructURI('1234').toString();
+      final actualResult = testClass.myConstructURI('tt1234').toString();
+
+      // Check the results.
+      expect(actualResult, startsWith(expected));
+    });
+    // Confirm URL is constructed as expected.
+    test('Run myConstructURIAsync() for imdbid', () async {
+      // clone criteria to avoid impacting other test
+      final testClass = QueryTVDBMovieDetails(imdbCriteria.clone());
+      const expected =
+          'https://api4.thetvdb.com/v4/movies/409676/extended?short=true';
+
+      // Invoke the functionality.
+      final actualResult = await testClass.myConstructURIAsync('tt1234');
+
+      // Check the results.
+      expect(actualResult.toString(), startsWith(expected));
+    });
+    // Confirm URL is constructed as expected.
+    test('Run myConstructURI() for movie tvdbid', () {
+      dto.type = MovieContentType.movie;
+      final criteria = tvdbCriteria.clone()..criteriaContext = dto;
+      final testClass = QueryTVDBMovieDetails(criteria);
+      const expected =
+          'https://api4.thetvdb.com/v4/movies/987654/extended?short=true';
+
+      // Invoke the functionality.
+      final actualResult = testClass.myConstructURI('987654').toString();
+
+      // Check the results.
+      expect(actualResult, startsWith(expected));
+    });
+    // Confirm URL is constructed as expected.
+    test('Run myConstructURI() for series tvdbid', () {
+      dto.type = MovieContentType.series;
+      final criteria = tvdbCriteria.clone()..criteriaContext = dto;
+      final testClass = QueryTVDBMovieDetails(criteria);
+      const expected =
+          'https://api4.thetvdb.com/v4/series/987654/extended?short=true';
+
+      // Invoke the functionality.
+      final actualResult = testClass.myConstructURI('987654').toString();
+
+      // Check the results.
+      expect(actualResult, startsWith(expected));
+    });
+    // Confirm URL is constructed as expected.
+    test('Run myConstructURI() for person tvdbid', () {
+      dto.type = MovieContentType.person;
+      final criteria = tvdbCriteria.clone()..criteriaContext = dto;
+      final testClass = QueryTVDBMovieDetails(criteria);
+      const expected =
+          'https://api4.thetvdb.com/v4/people/987654/extended?short=true';
+
+      // Invoke the functionality.
+      final actualResult = testClass.myConstructURI('987654').toString();
+
+      // Check the results.
+      expect(actualResult, startsWith(expected));
+    });
+    // Confirm URL is constructed as expected.
+    test('Run myConstructURI() for episode tvdbid', () {
+      dto.type = MovieContentType.episode;
+      final criteria = tvdbCriteria.clone()..criteriaContext = dto;
+      final testClass = QueryTVDBMovieDetails(criteria);
+      const expected =
+          'https://api4.thetvdb.com/v4/episodes/987654/extended?short=true';
+
+      // Invoke the functionality.
+      final actualResult = testClass.myConstructURI('987654').toString();
 
       // Check the results.
       expect(actualResult, startsWith(expected));
@@ -218,8 +289,7 @@ void main() {
   group('QueryTVDBMovieDetails integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final testClass = QueryTVDBMovieDetails(criteria);
-      await testClass.myClearCache();
+      final testClass = QueryTVDBMovieDetails(imdbCriteria);
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -239,7 +309,7 @@ void main() {
       );
     });
     // Test error detection.
-    test('myConvertTreeToOutputType() errors', () async {
+    test('myConvertTreeToOutputType() errors', () {
       final expectedOutput = throwsA(
         isA<TreeConvertException>().having(
           (e) => e.cause,
@@ -249,8 +319,7 @@ void main() {
           ),
         ),
       );
-      final testClass = QueryTVDBMovieDetails(criteria);
-      await testClass.myClearCache();
+      final testClass = QueryTVDBMovieDetails(imdbCriteria);
 
       // Invoke the functionality and collect results.
       final actualResult = testClass.myConvertTreeToOutputType('wrongData');
@@ -272,8 +341,7 @@ void main() {
     test('Run readList()', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTVDBMovieDetails(criteria);
-      await testClass.myClearCache();
+      final testClass = QueryTVDBMovieDetails(imdbCriteria);
 
       // Invoke the functionality.
       await testClass
@@ -302,7 +370,7 @@ void main() {
     test('invalid json', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTVDBMovieDetails(criteria);
+      final testClass = QueryTVDBMovieDetails(imdbCriteria);
       const expectedException =
           '[tvdbDetails] Error in QueryTVDBMovieDetails with criteria tt1231 '
           'convert error interpreting web text as a map '
@@ -325,7 +393,7 @@ void main() {
           ':TVDB results data not detected for criteria '
           'tt1231 in json:[{"hello":"world"}]';
       final queryResult = <MovieResultDTO>[];
-      final testClass = QueryTVDBMovieDetails(criteria);
+      final testClass = QueryTVDBMovieDetails(imdbCriteria);
 
       // Invoke the functionality.
       await testClass

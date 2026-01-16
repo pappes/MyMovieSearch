@@ -21,7 +21,7 @@ const tvdbTypeMapping = {
 const tvdbEndpointMapping = {
   MovieContentType.title: 'movies/',
   MovieContentType.series: 'series/',
-  MovieContentType.person: 'person/',
+  MovieContentType.person: 'people/',
   MovieContentType.episode: 'episodes/',
 };
 
@@ -132,6 +132,8 @@ abstract class QueryTVDBCommon
   @override
   Future<void> myDelayRequest() {
     final nextRequestTime = lastRequestTime.add(
+      // linter thinks this is zero
+      // ignore: use_named_constants
       const Duration(milliseconds: millisecondsPerSecond ~/ requestsPerSecond),
     );
     lastRequestTime = DateTime.now();
