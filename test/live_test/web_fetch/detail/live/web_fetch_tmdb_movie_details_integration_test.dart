@@ -39,8 +39,27 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
+    test('Run an IMDBid search', () async {
+      final criteria = SearchCriteriaDTO().fromString('tt2724064');
+      final actualOutput = await QueryTMDBMovieDetails(
+        criteria,
+      ).readList(limit: 10);
+
+      // To update expected data, uncomment the following line
+      // writeTestData(actualOutput, testName: 'imdb');
+
+      // Check the results.
+      final expectedOutput = readTestData(testName: 'imdb');
+      expect(
+        actualOutput,
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
     test('Run an empty search', () async {
-      final datafile = getDataFileLocation(suffix: '_empty.json');
       final criteria = SearchCriteriaDTO().fromString('0');
       final actualOutput = await QueryTMDBMovieDetails(
         criteria,
@@ -48,10 +67,10 @@ void main() {
       actualOutput.first.uniqueId = '-1';
 
       // To update expected data, uncomment the following line
-      //writeTestData(actualOutput, location: datafile);
+      // writeTestData(actualOutput, testName: 'empty');
 
       // Check the results.
-      final expectedOutput = readTestData(location: datafile);
+      final expectedOutput = readTestData(testName: 'empty');
       expect(
         actualOutput,
         MovieResultDTOListMatcher(expectedOutput),

@@ -44,20 +44,42 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
-    test('Run an empty search', () async {
+    test('Run an IMDBid search', () async {
       MovieResultDTOHelpers.resetError();
 
-      final datafile = getDataFileLocation(suffix: '_empty.json');
-      final criteria = SearchCriteriaDTO().fromString('0');
+      final criteria = SearchCriteriaDTO().fromString('nm0005346');
       final actualOutput = await QueryTMDBPersonDetails(
         criteria,
       ).readList(limit: 10);
 
       // To update expected data, uncomment the following line
-      // writeTestData(actualOutput, location: datafile);
+      // writeTestData(actualOutput, testName: 'imdb');
 
       // Check the results.
-      final expectedOutput = readTestData(location: datafile);
+      final expectedOutput = readTestData(testName: 'imdb');
+      expect(
+        actualOutput,
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
+    test('Run an empty search', () async {
+      MovieResultDTOHelpers.resetError();
+
+      final criteria = SearchCriteriaDTO().fromString('0');
+      final actualOutput = await QueryTMDBPersonDetails(
+        criteria,
+      ).readList(limit: 10);
+      actualOutput.first.uniqueId = '-1';
+
+      // To update expected data, uncomment the following line
+      // writeTestData(actualOutput, testName: 'empty');
+
+      // Check the results.
+      final expectedOutput = readTestData(testName: 'empty');
       expect(
         actualOutput,
         MovieResultDTOListMatcher(expectedOutput),

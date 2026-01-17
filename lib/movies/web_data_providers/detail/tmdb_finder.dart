@@ -27,7 +27,7 @@ class QueryTMDBFinder extends QueryTMDBCommon {
   String imdbId = '';
 
   @override
-  String myDataSourceName() => 'QueryTMDBFinder';
+  String myDataSourceName() => DataSourceType.tmdbFinder.name;
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.

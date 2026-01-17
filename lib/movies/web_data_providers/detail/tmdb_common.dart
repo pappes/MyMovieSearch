@@ -1,9 +1,13 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_finder.dart'
+    as base_query;
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -58,6 +62,34 @@ abstract class QueryTMDBCommon
     // Get key from the file assets/secrets.json (not source controlled)
     final tmdbKey = Settings().tmdbkey;
     return Uri.parse('$baseURL$searchCriteria$midURL$tmdbKey');
+  }
+
+  /// API call to TMDBFinder to convert IMDBid to TMDBid.
+  @override
+  FutureOr<Uri> myConstructURIAsync(
+    String searchCriteria, {
+    int pageNumber = 1,
+  }) async {
+    var tmdbId = searchCriteria;
+    // Ensure imdb lookup is valid.
+    if ((searchCriteria.startsWith(imdbTitlePrefix) ||
+            searchCriteria.startsWith(imdbPersonPrefix)) &&
+        myDataSourceName() != DataSourceType.tmdbFinder.name &&
+        myDataSourceName() != DataSourceType.tmdbSearch.name) {
+      // Run the imdb lookup.
+      final header = await base_query.QueryTMDBFinder(
+        SearchCriteriaDTO().fromString(searchCriteria),
+      ).readList();
+      if (header.isNotEmpty) {
+        // Switch from the IMDBid to the TMDBid
+        criteria.criteriaContext = header.first;
+        criteria.criteriaTitle =
+            header.first.sources[DataSourceType.tmdbFinder]!;
+        tmdbId = criteria.criteriaTitle;
+      }
+    }
+    // perform the normal search
+    return myConstructURI(tmdbId, pageNumber: pageNumber);
   }
 
   // Add authorization token for compatability with the TMDB V4 API.

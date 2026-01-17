@@ -13,6 +13,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_movie_details.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
@@ -91,6 +92,12 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       /// from cache using a separate thread.
       unawaited(
         QueryTVDBMovieDetails(criteria).readList().then(_requestShowDetails),
+      );
+
+      /// Fetch full actor/director/writer/producer data
+      /// from cache using a separate thread.
+      unawaited(
+        QueryTMDBMovieDetails(criteria).readList().then(_requestShowDetails),
       );
     }
   }

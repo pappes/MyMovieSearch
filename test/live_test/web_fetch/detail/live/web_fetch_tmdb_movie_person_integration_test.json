@@ -6,7 +6,8 @@
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
     "year": "1946",
-    "userRating": "0.3208",
+    "links": "{\"Wikidata\":\"https://www.wikidata.org/wiki/Q516365\"}",
+    "userRating": "0.3711",
     "userRatingCount": "1",
     "imageUrl": "https://image.tmdb.org/t/p/w500/nWgCaR1vFk2zSZ31GZZp2abny6V.jpg",
     "sources": {
@@ -18,7 +19,7 @@
     "title": "Barbara Dowling",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.0602",
+    "userRating": "0.058",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101002"
@@ -29,7 +30,7 @@
     "title": "Gil Lasky",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.2444",
+    "userRating": "0.1599",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101003"
@@ -51,7 +52,7 @@
     "title": "Derry O'Donavan",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.0479",
+    "userRating": "0.0314",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101001"
@@ -62,7 +63,7 @@
     "title": "Ron Perry",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.2503",
+    "userRating": "0.2044",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101000"
@@ -74,7 +75,8 @@
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
     "year": "1971",
-    "userRating": "0.3322",
+    "links": "{\"Wikidata\":\"https://www.wikidata.org/wiki/Q7561754\"}",
+    "userRating": "0.2527",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101008"
@@ -85,7 +87,7 @@
     "title": "Alfred Taylor",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.1231",
+    "userRating": "0.0929",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101005"
@@ -97,7 +99,8 @@
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
     "year": "1976",
-    "userRating": "0.4861",
+    "links": "{\"Wikidata\":\"https://www.wikidata.org/wiki/Q4684823\"}",
+    "userRating": "0.4008",
     "userRatingCount": "1",
     "imageUrl": "https://image.tmdb.org/t/p/w500/1kDtoUPjALgdhiKNjW0Ok06RsAr.jpg",
     "sources": {
@@ -109,7 +112,7 @@
     "title": "Jamie Wagner",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.0862",
+    "userRating": "0.0414",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101007"
