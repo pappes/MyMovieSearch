@@ -18,23 +18,18 @@
 
 import 'dart:convert';
 
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-
-/* To update this data, uncomment printTestData(actualResult);
-in test('Run dtoFromCompleteJsonMap()'*/
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"tt0130827","bestSource":"DataSourceType.tmdbMovie","title":"Run Lola Run","alternateTitle":"Lola rennt","type":"MovieContentType.title","year":"1998","runTime":"4860","language":"LanguageType.someEnglish",
-      "languages":"[\"German\",\"English\",\"Japanese\"]",
-      "genres":"[\"Action\",\"Drama\",\"Thriller\"]","keywords":"[]",
-      "description":"Lola receives a phone call from her boyfriend Manni. He lost 100,000 DM in a subway train that belongs to a very bad guy. She has 20 minutes to raise this amount and meet Manni. Otherwise, he will rob a store to get the money. Three different alternatives may happen depending on some minor event along Lola's run.",
-      "userRating":"7.3","userRatingCount":"1537","imageUrl":"https://image.tmdb.org/t/p/w500/yBt6rkxRTP15nyOZOJt9pOgXDW0.jpg","sources":{"DataSourceType.tmdbMovie":"104"},"related":{}}
-''',
-];
-
 final intermediateMapList = [jsonDecode(jsonSampleFull)];
+
+const jsonSampleFull = tmdbJsonSearchInner;
+const jsonSampleEmpty =
+    '{"success":false,"status_code":34,'
+    '"status_message":"The resource you requested could not be found."}';
+const jsonSampleError =
+    '{"status_code":7,"status_message":'
+    '"Invalid API key: You must be granted a valid key.","success":false}';
+
+Future<Stream<String>> streamTmdbJsonOfflineData(_) =>
+    Future.value(Stream.value(jsonSampleFull));
 
 const tmdbJsonSearchInner = '''
 {"adult":false,
@@ -64,14 +59,76 @@ const tmdbJsonSearchInner = '''
   "title":"Run Lola Run",
   "video":false,
   "vote_average":7.3,
-  "vote_count":1537}
+  "vote_count":1537,
+  "external_ids": {
+    "id": 104,
+    "imdb_id": "tt0137523",
+    "wikidata_id": "Q105553568",
+    "facebook_id": "FightClub",
+    "instagram_id": "wednesdaynetflix",
+    "twitter_id": "wednesdayaddams"
+  },
+  "keywords": [
+    {
+      "id": 818,
+      "name": "based on novel or book"
+    },
+    {
+      "id": 825,
+      "name": "support group"
+    },
+    {
+      "id": 851,
+      "name": "dual identity"
+    },
+    {
+      "id": 1541,
+      "name": "nihilism"
+    },
+    {
+      "id": 1721,
+      "name": "fight"
+    },
+    {
+      "id": 3927,
+      "name": "rage and hate"
+    },
+    {
+      "id": 4142,
+      "name": "insomnia"
+    },
+    {
+      "id": 4565,
+      "name": "dystopia"
+    },
+    {
+      "id": 9181,
+      "name": "alter ego"
+    },
+    {
+      "id": 11687,
+      "name": "breaking the fourth wall"
+    },
+    {
+      "id": 34117,
+      "name": "cult film"
+    },
+    {
+      "id": 156761,
+      "name": "split personality"
+    },
+    {
+      "id": 179173,
+      "name": "quitting a job"
+    },
+    {
+      "id": 212803,
+      "name": "dissociative identity disorder"
+    },
+    {
+      "id": 260426,
+      "name": "self destructiveness"
+    }
+  ]
+}
 ''';
-
-const jsonSampleFull = tmdbJsonSearchInner;
-const jsonSampleEmpty = '{"success":false,"status_code":34,'
-    '"status_message":"The resource you requested could not be found."}';
-const jsonSampleError = '{"status_code":7,"status_message":'
-    '"Invalid API key: You must be granted a valid key.","success":false}';
-
-Future<Stream<String>> streamTmdbJsonOfflineData(_) =>
-    Future.value(Stream.value(jsonSampleFull));

@@ -92,13 +92,37 @@ const jsonSampleFull = tvdbJsonSearchMovie;
 Future<Stream<String>> streamTvdbJsonOfflineData(_) =>
     Future.value(Stream.value(jsonSampleFull));
 
-const tvdbJsonSearchMovieOld = '''
+
+const tvdbJsonSearchEpisode = '''
 {
   "status": "success",
   "data": [
     {
-      "movie": {
-        ...
+      "episode": {
+        "id": 8437958,
+        "seriesId": 397060,
+        "name": null,
+        "aired": "2022-11-23",
+        "runtime": null,
+        "image": null,
+        "isMovie": 0,
+        "seasons": null
+      }
+    }
+  ]
+}
+''';
+
+const tvdbJsonSearchPerson = '''
+{
+  "status": "success",
+  "data": [
+    {
+      "people": {
+        "id": 253451,
+        "name": "Jodie Foster",
+        "image": "/banners/person/253451/5f949bf86d19f.jpg",
+        "score": 0
       }
     }
   ]
@@ -157,17 +181,6 @@ const tvdbJsonSearchMovie = '''
 }
 ''';
 
-
-const tvdbJsonSearchSeriesOld = '''
-{
-  "status": "success",
-  "data": [
-    {
-      "series": ...
-    }
-  ]
-}
-''';
 const tvdbJsonSearchSeries = '''
 {
   "status": "success",
@@ -224,6 +237,11 @@ const tvdbJsonSearchSeries = '''
         "id": "wednesdaynetflix",
         "type": 9,
         "sourceName": "Instagram"
+      },
+      {
+        "id": "81231974",
+        "type": 4,
+        "sourceName": "Netflix"
       },
       {
         "id": "https://www.netflix.com/title/81231974",
@@ -300,40 +318,5 @@ const tvdbJsonSearchSeries = '''
       }
     ]
   }
-}
-''';
-const tvdbJsonSearchEpisode = '''
-{
-  "status": "success",
-  "data": [
-    {
-      "episode": {
-        "id": 8437958,
-        "seriesId": 397060,
-        "name": null,
-        "aired": "2022-11-23",
-        "runtime": null,
-        "image": null,
-        "isMovie": 0,
-        "seasons": null
-      }
-    }
-  ]
-}
-''';
-
-const tvdbJsonSearchPerson = '''
-{
-  "status": "success",
-  "data": [
-    {
-      "people": {
-        "id": 253451,
-        "name": "Jodie Foster",
-        "image": "/banners/person/253451/5f949bf86d19f.jpg",
-        "score": 0
-      }
-    }
-  ]
 }
 ''';

@@ -108,21 +108,22 @@ class TreeHelper {
     bool stopAtTopLevel = true,
     bool returnParent = false,
     dynamic parent,
+    dynamic grandparent,
   }) {
     if (null == tree) return null;
     final matches = <dynamic>[]; // Allow mutiple results on suffix search.
     for (final entry in asIterable ?? []) {
-      final key = entry is MapEntry ? entry.key : '';
+      final key = entry is MapEntry ? entry.key : entry;
       final value = entry is MapEntry ? entry.value : entry;
 
       if (key == tag) {
         // Simple match.
-        matches.add(returnParent ? parent : value);
+        matches.add(_valueToReturn(value, parent, grandparent, returnParent));
         if (!multipleMatch) return matches;
         if (stopAtTopLevel) continue;
       } else if (suffixMatch && key.toString().endsWith(tag.toString())) {
         // Suffix match.
-        matches.add(returnParent ? parent : value);
+        matches.add(_valueToReturn(value, parent, grandparent, returnParent));
         if (!multipleMatch) return matches;
         if (stopAtTopLevel) continue;
       }
@@ -135,6 +136,7 @@ class TreeHelper {
           stopAtTopLevel: stopAtTopLevel,
           returnParent: returnParent,
           parent: value,
+          grandparent: parent,
         );
         if (result is List) {
           matches.addAll(result);
@@ -149,6 +151,28 @@ class TreeHelper {
     }
     return null;
   }
+
+  /// determine which value to return
+  /// * child if returnParent is false
+  /// * grandparent if parent is part of a Map
+  /// * parent if not part of a Map
+  /// fall back to child if parent is null
+  dynamic _valueToReturn(
+    dynamic child,
+    dynamic parent,
+    dynamic grandparent,
+    bool returnParent,
+  ) {
+    if (!returnParent) {
+      return child;
+    } else if (parent is MapEntry) {
+      // need to return the full map, not just the current enry of the map
+      return grandparent ?? parent ?? child;
+    } else {
+      return parent ?? child;
+    }
+  }
+
 
   /// {@template getGrandChildren}
   /// Collapse one level of the tree.

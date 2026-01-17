@@ -67,21 +67,27 @@ void writeTestData(
   Iterable<MovieResultDTO> actualResult, {
   String? location,
   String suffix = '.json',
+  String testName = '',
   bool includeRelated = true,
 }) {
   final sorted = actualResult.toList();
   sortDtoList(sorted, includeRelated: includeRelated);
   final jsonData = const JsonEncoder.withIndent('  ').convert(sorted);
-  File(
-    location ?? getDataFileLocation(suffix: suffix),
-  ).writeAsStringSync(jsonData);
+  final testSeperator = (testName == '') ? testName : '_$testName';
+  final testLocation = getDataFileLocation(suffix: '$testSeperator$suffix');
+  final filePath = location ?? testLocation;
+  File(filePath).writeAsStringSync(jsonData);
   expect('debug code has been left uncommented!', 'Test data has been updated');
 }
 
-List<MovieResultDTO> readTestData({String? location, String suffix = '.json'}) {
-  final text = File(
-    location ?? getDataFileLocation(suffix: suffix),
-  ).readAsStringSync();
+List<MovieResultDTO> readTestData({
+  String? location,
+  String suffix = '.json',
+  String testName = '',
+}) {
+  final testSeperator = (testName == '') ? testName : '_$testName';
+  final testLocation = getDataFileLocation(suffix: '$testSeperator$suffix');
+  final text = File(location ?? testLocation).readAsStringSync();
   return loadTestData(text);
 }
 

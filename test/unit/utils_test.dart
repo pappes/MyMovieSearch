@@ -805,7 +805,7 @@ Future<void> main() async {
       {
         'text': {'exposition': 'blahblahblah', 'summary': 'concise'},
         'needlesstosay': 'thisisnotahaystack',
-        'thisisaneedle': ['thisisahaystack'],
+        'thisisaneedle': ['this', 'is', 'a', 'haystack'],
         'needle': 'haystack1',
         'marco': [
           {'marco': 'polo'},
@@ -883,6 +883,12 @@ Future<void> main() async {
       });
       // Find a parent of matching values in a tree.
       test('complex tree parent search', () {
+        expect(TreeHelper(complexMap).deepSearch('this', returnParent: true), [
+          ['this', 'is', 'a', 'haystack'],
+        ]);
+      });
+      // Find a parent of matching values in a tree.
+      test('complex tree parent map search', () {
         expect(TreeHelper(complexMap).deepSearch('horse', returnParent: true), [
           {
             'horse': 'stall',

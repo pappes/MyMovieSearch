@@ -3,6 +3,7 @@
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/converters/xxdb_common.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
@@ -43,11 +44,23 @@ const innerElementOverview = 'overview';
 const innerElementPosterPath = 'poster_path';
 const innerElementReleaseDate = 'release_date';
 const innerElementRuntime = 'runtime';
+const innerElementKeywords = 'keywords';
+const innerElementExteranlIds = 'external_ids';
 const innerElementOriginalLanguage = 'original_language';
 const innerElementSpokenLanguages = 'spoken_languages';
 const innerElementVoteCount = 'vote_count';
 const innerElementVoteAverage = 'vote_average';
+const innerElementKeyword = 'name';
 
+const tvdbSourceToEnumMapping = {
+  'imdb_id': XxdbSource.imdb,
+  'wikidata_id': XxdbSource.wikidata,
+  'facebook_id': XxdbSource.facebook,
+  'instagram_id': XxdbSource.instagram,
+  'twitter_id': XxdbSource.twitter,
+};
+
+/// Work out how to get a dto from the json data.
 class TmdbMovieDetailConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
@@ -59,7 +72,8 @@ class TmdbMovieDetailConverter {
     if (null == failureIndicator) {
       searchResults.add(dtoFromMap(map));
     } else {
-      final error = map[outerElementFailureReason]?.toString() ??
+      final error =
+          map[outerElementFailureReason]?.toString() ??
           'No failure reason provided in results $map';
       searchResults.add(
         MovieResultDTO().error(
@@ -71,12 +85,13 @@ class TmdbMovieDetailConverter {
     return searchResults;
   }
 
+  /// Capture all the useful info from the [Map] and create a [MovieResultDTO]
   static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
     final movie = MovieResultDTO()
       ..setSource(
-      newSource: DataSourceType.tmdbMovie,
-      newUniqueId: '${map[innerElementIdentity]}',
-    );
+        newSource: DataSourceType.tmdbMovie,
+        newUniqueId: '${map[innerElementIdentity]}',
+      );
     // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
     // no longer need to have alternateId field
     movie.uniqueId = map[innerElementImdbId]?.toString() ?? movie.uniqueId;
@@ -88,8 +103,9 @@ class TmdbMovieDetailConverter {
       movie.alternateTitle = originalTitle ?? '';
     }
 
-    final year =
-        DateTime.tryParse(map[innerElementYear]?.toString() ?? '')?.year;
+    final year = DateTime.tryParse(
+      map[innerElementYear]?.toString() ?? '',
+    )?.year;
     if (null != year) {
       movie.year = year;
     } else {
@@ -98,6 +114,8 @@ class TmdbMovieDetailConverter {
     final mins = IntHelper.fromText(map[innerElementRuntime]);
     movie
       ..runTime = _getDuration(mins) ?? movie.runTime
+      ..keywords.addAll(_getKeywords(map[innerElementKeywords]))
+      ..links.addAll(_getUrls(map[innerElementExteranlIds]))
       ..description = map[innerElementOverview]?.toString() ?? movie.description
       ..userRating = DoubleHelper.fromText(
         map[innerElementVoteAverage],
@@ -108,10 +126,7 @@ class TmdbMovieDetailConverter {
         nullValueSubstitute: movie.userRatingCount,
       )!
       ..languages.combineUnique(
-        map.deepSearch(
-          'english_name',
-          multipleMatch: true,
-        ),
+        map.deepSearch('english_name', multipleMatch: true),
       )
       ..getContentType()
       ..getLanguageType();
@@ -126,19 +141,50 @@ class TmdbMovieDetailConverter {
       movie.imageUrl = '$tmdbPosterPathPrefix$poster';
     }
 
-    if ('true' == map[innerElementTypeVideo]) {
+    if (map[innerElementTypeVideo] == 'true') {
       movie.type = MovieContentType.short;
     }
-    if ('true' == map[innerElementAdult]) {
+    if (map[innerElementAdult] == 'true') {
       movie.censorRating = CensorRatingType.adult;
     }
     return movie;
   }
 
+  /// Covert minutes to a [Duration]
+  ///
   static Duration? _getDuration(int? mins) {
     if (null == mins) {
       return null;
     }
     return Duration(minutes: mins);
+  }
+
+  /// Get each keyword from the deeply embedded map and create a [Set]<[String]>
+  static Set<String> _getKeywords(dynamic keywords) {
+    final list = TreeHelper(
+      keywords,
+    ).deepSearch(innerElementKeyword, multipleMatch: true);
+    final set = <String>{};
+    for (final value in list ?? []) {
+      set.add(value.toString());
+    }
+    return set;
+  }
+
+  /// use the tmdb type and id to create a description and FQDN for each URL
+  static Map<String, String> _getUrls(dynamic sources) {
+    final destinationUrls = <String, String>{};
+    if (sources is Map) {
+      for (final entry in sources.entries) {
+        // Convert the raw data {"facebook_id": "FightClub"}
+        // to dto data {"Facebook": "http://www.facebook.com/FightClub"}
+        final value = entry.value?.toString();
+        final sourceType = tvdbSourceToEnumMapping[entry.key];
+
+        getExternalUrl(destinationUrls, sourceType, value);
+      }
+    }
+
+    return destinationUrls;
   }
 }
