@@ -18,23 +18,6 @@
 
 import 'dart:convert';
 
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-// Raw data in code is generated from an external source.
-// ignore_for_file: unnecessary_ignore
-// ignore_for_file: unnecessary_raw_strings
-
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-
-/* To update this data, uncomment printTestData(actualResult);
-in test('Run dtoFromCompleteJsonMap()'*/
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"nm0109036","bestSource":"DataSourceType.tmdbPerson","title":"Fred Abraham","type":"MovieContentType.person","year":"1963","languages":"[]","genres":"[]","keywords":"[]",
-      "description":"I came, I saw, I went",
-      "userRating":"0.6","userRatingCount":"1","imageUrl":"https://image.tmdb.org/t/p/w500/kU3B75TyRiCfivoq.jpg","sources":{"DataSourceType.tmdbPerson":"11234"},"related":{}}
-''',
-];
-
 final intermediateMapList = [jsonDecode(jsonSampleFull)];
 
 const tmdbTree = {
@@ -52,6 +35,14 @@ const tmdbTree = {
   'place_of_birth': null,
   'popularity': 0.6,
   'profile_path': '/kU3B75TyRiCfivoq.jpg',
+  'external_ids': {
+    'id': 104,
+    'imdb_id': 'tt0137523',
+    'wikidata_id': 'Q105553568',
+    'facebook_id': 'FightClub',
+    'instagram_id': 'wednesdaynetflix',
+    'twitter_id': 'wednesdayaddams',
+  },
 };
 
 final jsonSampleInner = jsonEncode(tmdbTree);

@@ -131,10 +131,10 @@ void main() {
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // printTestData(actualResult);
+      // writeTestData(actualResult);
 
-      final expectedValue = expectedDTOList;
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -172,7 +172,6 @@ void main() {
     test('Run myConvertTreeToOutputType()', () async {
       final testClass = QueryTMDBPersonDetails(criteria);
       await testClass.myClearCache();
-      final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -183,6 +182,7 @@ void main() {
       }
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -224,7 +224,6 @@ void main() {
     // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
-      final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBPersonDetails(criteria);
       await testClass.myClearCache();
@@ -240,6 +239,7 @@ void main() {
           );
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),

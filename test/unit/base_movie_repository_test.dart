@@ -48,7 +48,7 @@ void main() {
       // Setup default behavior for mockCriteria to avoid null errors.
       when(mockCriteria.criteriaList).thenReturn([]);
       // We assume SearchCriteriaType is an enum. If the mock returns null,
-      // it won't match specific enum values (like barcode), 
+      // it won't match specific enum values (like barcode),
       // which is fine for defaults.
     });
 
@@ -94,8 +94,7 @@ void main() {
     });
 
     test('search calls providers when configured', () async {
-      final mockProvider =
-          MockWebFetchBase<MovieResultDTO, SearchCriteriaDTO>();
+      final mockProvider = MockWebFetchBase();
       repository = TestMovieRepository(providers: {mockProvider: 10});
 
       // Setup mock provider to return a future.

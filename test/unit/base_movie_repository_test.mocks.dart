@@ -6,14 +6,14 @@
 import 'dart:async' as _i8;
 
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i5;
-import 'package:my_movie_search/movies/models/movie_result_dto.dart' as _i6;
-import 'package:my_movie_search/movies/models/search_criteria_dto.dart' as _i4;
+import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:my_movie_search/movies/models/movie_result_dto.dart' as _i4;
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart' as _i2;
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart'
     as _i7;
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart'
-    as _i2;
-import 'package:universal_io/io.dart' as _i3;
+    as _i3;
+import 'package:universal_io/io.dart' as _i5;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -30,35 +30,47 @@ import 'package:universal_io/io.dart' as _i3;
 // ignore_for_file: subtype_of_sealed_class
 // ignore_for_file: invalid_use_of_internal_member
 
-class _FakeWebFetchLimiter_0 extends _i1.SmartFake
-    implements _i2.WebFetchLimiter {
-  _FakeWebFetchLimiter_0(Object parent, Invocation parentInvocation)
+class _FakeSearchCriteriaDTO_0 extends _i1.SmartFake
+    implements _i2.SearchCriteriaDTO {
+  _FakeSearchCriteriaDTO_0(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeUri_1 extends _i1.SmartFake implements Uri {
-  _FakeUri_1(Object parent, Invocation parentInvocation)
+class _FakeWebFetchLimiter_1 extends _i1.SmartFake
+    implements _i3.WebFetchLimiter {
+  _FakeWebFetchLimiter_1(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeHttpClient_2 extends _i1.SmartFake implements _i3.HttpClient {
-  _FakeHttpClient_2(Object parent, Invocation parentInvocation)
+class _FakeMovieResultDTO_2 extends _i1.SmartFake
+    implements _i4.MovieResultDTO {
+  _FakeMovieResultDTO_2(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeUri_3 extends _i1.SmartFake implements Uri {
+  _FakeUri_3(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeHttpClient_4 extends _i1.SmartFake implements _i5.HttpClient {
+  _FakeHttpClient_4(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
 /// A class which mocks [SearchCriteriaDTO].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockSearchCriteriaDTO extends _i1.Mock implements _i4.SearchCriteriaDTO {
+class MockSearchCriteriaDTO extends _i1.Mock implements _i2.SearchCriteriaDTO {
   @override
   String get searchId =>
       (super.noSuchMethod(
             Invocation.getter(#searchId),
-            returnValue: _i5.dummyValue<String>(
+            returnValue: _i6.dummyValue<String>(
               this,
               Invocation.getter(#searchId),
             ),
-            returnValueForMissingStub: _i5.dummyValue<String>(
+            returnValueForMissingStub: _i6.dummyValue<String>(
               this,
               Invocation.getter(#searchId),
             ),
@@ -69,11 +81,11 @@ class MockSearchCriteriaDTO extends _i1.Mock implements _i4.SearchCriteriaDTO {
   String get criteriaTitle =>
       (super.noSuchMethod(
             Invocation.getter(#criteriaTitle),
-            returnValue: _i5.dummyValue<String>(
+            returnValue: _i6.dummyValue<String>(
               this,
               Invocation.getter(#criteriaTitle),
             ),
-            returnValueForMissingStub: _i5.dummyValue<String>(
+            returnValueForMissingStub: _i6.dummyValue<String>(
               this,
               Invocation.getter(#criteriaTitle),
             ),
@@ -81,22 +93,22 @@ class MockSearchCriteriaDTO extends _i1.Mock implements _i4.SearchCriteriaDTO {
           as String);
 
   @override
-  _i4.SearchCriteriaType get criteriaType =>
+  _i2.SearchCriteriaType get criteriaType =>
       (super.noSuchMethod(
             Invocation.getter(#criteriaType),
-            returnValue: _i4.SearchCriteriaType.none,
-            returnValueForMissingStub: _i4.SearchCriteriaType.none,
+            returnValue: _i2.SearchCriteriaType.none,
+            returnValueForMissingStub: _i2.SearchCriteriaType.none,
           )
-          as _i4.SearchCriteriaType);
+          as _i2.SearchCriteriaType);
 
   @override
-  List<_i6.MovieResultDTO> get criteriaList =>
+  List<_i4.MovieResultDTO> get criteriaList =>
       (super.noSuchMethod(
             Invocation.getter(#criteriaList),
-            returnValue: <_i6.MovieResultDTO>[],
-            returnValueForMissingStub: <_i6.MovieResultDTO>[],
+            returnValue: <_i4.MovieResultDTO>[],
+            returnValueForMissingStub: <_i4.MovieResultDTO>[],
           )
-          as List<_i6.MovieResultDTO>);
+          as List<_i4.MovieResultDTO>);
 
   @override
   set searchId(String? value) => super.noSuchMethod(
@@ -111,19 +123,19 @@ class MockSearchCriteriaDTO extends _i1.Mock implements _i4.SearchCriteriaDTO {
   );
 
   @override
-  set criteriaType(_i4.SearchCriteriaType? value) => super.noSuchMethod(
+  set criteriaType(_i2.SearchCriteriaType? value) => super.noSuchMethod(
     Invocation.setter(#criteriaType, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set criteriaContext(_i6.MovieResultDTO? value) => super.noSuchMethod(
+  set criteriaContext(_i4.MovieResultDTO? value) => super.noSuchMethod(
     Invocation.setter(#criteriaContext, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set criteriaList(List<_i6.MovieResultDTO>? value) => super.noSuchMethod(
+  set criteriaList(List<_i4.MovieResultDTO>? value) => super.noSuchMethod(
     Invocation.setter(#criteriaList, value),
     returnValueForMissingStub: null,
   );
@@ -132,11 +144,11 @@ class MockSearchCriteriaDTO extends _i1.Mock implements _i4.SearchCriteriaDTO {
   String toJson({bool? includeRelated = true}) =>
       (super.noSuchMethod(
             Invocation.method(#toJson, [], {#includeRelated: includeRelated}),
-            returnValue: _i5.dummyValue<String>(
+            returnValue: _i6.dummyValue<String>(
               this,
               Invocation.method(#toJson, [], {#includeRelated: includeRelated}),
             ),
-            returnValueForMissingStub: _i5.dummyValue<String>(
+            returnValueForMissingStub: _i6.dummyValue<String>(
               this,
               Invocation.method(#toJson, [], {#includeRelated: includeRelated}),
             ),
@@ -147,37 +159,37 @@ class MockSearchCriteriaDTO extends _i1.Mock implements _i4.SearchCriteriaDTO {
 /// A class which mocks [WebFetchBase].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
-    implements _i7.WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
+class MockWebFetchBase extends _i1.Mock
+    implements _i7.WebFetchBase<_i4.MovieResultDTO, _i2.SearchCriteriaDTO> {
   @override
-  INPUT_TYPE get criteria =>
+  _i2.SearchCriteriaDTO get criteria =>
       (super.noSuchMethod(
             Invocation.getter(#criteria),
-            returnValue: _i5.dummyValue<INPUT_TYPE>(
+            returnValue: _FakeSearchCriteriaDTO_0(
               this,
               Invocation.getter(#criteria),
             ),
-            returnValueForMissingStub: _i5.dummyValue<INPUT_TYPE>(
+            returnValueForMissingStub: _FakeSearchCriteriaDTO_0(
               this,
               Invocation.getter(#criteria),
             ),
           )
-          as INPUT_TYPE);
+          as _i2.SearchCriteriaDTO);
 
   @override
-  _i2.WebFetchLimiter get searchResultsLimit =>
+  _i3.WebFetchLimiter get searchResultsLimit =>
       (super.noSuchMethod(
             Invocation.getter(#searchResultsLimit),
-            returnValue: _FakeWebFetchLimiter_0(
+            returnValue: _FakeWebFetchLimiter_1(
               this,
               Invocation.getter(#searchResultsLimit),
             ),
-            returnValueForMissingStub: _FakeWebFetchLimiter_0(
+            returnValueForMissingStub: _FakeWebFetchLimiter_1(
               this,
               Invocation.getter(#searchResultsLimit),
             ),
           )
-          as _i2.WebFetchLimiter);
+          as _i3.WebFetchLimiter);
 
   @override
   bool get transformJsonP =>
@@ -224,11 +236,11 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
   String get getCriteriaText =>
       (super.noSuchMethod(
             Invocation.getter(#getCriteriaText),
-            returnValue: _i5.dummyValue<String>(
+            returnValue: _i6.dummyValue<String>(
               this,
               Invocation.getter(#getCriteriaText),
             ),
-            returnValueForMissingStub: _i5.dummyValue<String>(
+            returnValueForMissingStub: _i6.dummyValue<String>(
               this,
               Invocation.getter(#getCriteriaText),
             ),
@@ -236,13 +248,13 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
           as String);
 
   @override
-  set criteria(INPUT_TYPE? value) => super.noSuchMethod(
+  set criteria(_i2.SearchCriteriaDTO? value) => super.noSuchMethod(
     Invocation.setter(#criteria, value),
     returnValueForMissingStub: null,
   );
 
   @override
-  set searchResultsLimit(_i2.WebFetchLimiter? value) => super.noSuchMethod(
+  set searchResultsLimit(_i3.WebFetchLimiter? value) => super.noSuchMethod(
     Invocation.setter(#searchResultsLimit, value),
     returnValueForMissingStub: null,
   );
@@ -273,7 +285,7 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
 
   @override
   void populateStream(
-    _i8.StreamController<OUTPUT_TYPE>? sc, {
+    _i8.StreamController<_i4.MovieResultDTO>? sc, {
     _i7.DataSourceFn? source,
     int? limit,
   }) => super.noSuchMethod(
@@ -282,21 +294,24 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
   );
 
   @override
-  _i8.Future<List<OUTPUT_TYPE>> readList({
+  _i8.Future<List<_i4.MovieResultDTO>> readList({
     _i7.DataSourceFn? source,
     int? limit,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#readList, [], {#source: source, #limit: limit}),
-            returnValue: _i8.Future<List<OUTPUT_TYPE>>.value(<OUTPUT_TYPE>[]),
-            returnValueForMissingStub: _i8.Future<List<OUTPUT_TYPE>>.value(
-              <OUTPUT_TYPE>[],
+            returnValue: _i8.Future<List<_i4.MovieResultDTO>>.value(
+              <_i4.MovieResultDTO>[],
             ),
+            returnValueForMissingStub:
+                _i8.Future<List<_i4.MovieResultDTO>>.value(
+                  <_i4.MovieResultDTO>[],
+                ),
           )
-          as _i8.Future<List<OUTPUT_TYPE>>);
+          as _i8.Future<List<_i4.MovieResultDTO>>);
 
   @override
-  _i8.Future<List<OUTPUT_TYPE>> readCachedList({
+  _i8.Future<List<_i4.MovieResultDTO>> readCachedList({
     _i7.DataSourceFn? source,
     int? limit,
   }) =>
@@ -305,29 +320,33 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
               #source: source,
               #limit: limit,
             }),
-            returnValue: _i8.Future<List<OUTPUT_TYPE>>.value(<OUTPUT_TYPE>[]),
-            returnValueForMissingStub: _i8.Future<List<OUTPUT_TYPE>>.value(
-              <OUTPUT_TYPE>[],
+            returnValue: _i8.Future<List<_i4.MovieResultDTO>>.value(
+              <_i4.MovieResultDTO>[],
             ),
+            returnValueForMissingStub:
+                _i8.Future<List<_i4.MovieResultDTO>>.value(
+                  <_i4.MovieResultDTO>[],
+                ),
           )
-          as _i8.Future<List<OUTPUT_TYPE>>);
+          as _i8.Future<List<_i4.MovieResultDTO>>);
 
   @override
-  _i8.Future<Iterable<OUTPUT_TYPE>> myConvertTreeToOutputType(
+  _i8.Future<Iterable<_i4.MovieResultDTO>> myConvertTreeToOutputType(
     dynamic listOrMapOrDocument,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#myConvertTreeToOutputType, [
               listOrMapOrDocument,
             ]),
-            returnValue: _i8.Future<Iterable<OUTPUT_TYPE>>.value(
-              <OUTPUT_TYPE>[],
+            returnValue: _i8.Future<Iterable<_i4.MovieResultDTO>>.value(
+              <_i4.MovieResultDTO>[],
             ),
-            returnValueForMissingStub: _i8.Future<Iterable<OUTPUT_TYPE>>.value(
-              <OUTPUT_TYPE>[],
-            ),
+            returnValueForMissingStub:
+                _i8.Future<Iterable<_i4.MovieResultDTO>>.value(
+                  <_i4.MovieResultDTO>[],
+                ),
           )
-          as _i8.Future<Iterable<OUTPUT_TYPE>>);
+          as _i8.Future<Iterable<_i4.MovieResultDTO>>);
 
   @override
   _i8.Future<List<dynamic>> myConvertWebTextToTraversableTree(
@@ -356,7 +375,9 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
           as _i8.Future<_i8.Stream<String>>);
 
   @override
-  _i8.Future<_i8.Stream<String>> myFetchWebText(INPUT_TYPE? criteria) =>
+  _i8.Future<_i8.Stream<String>> myFetchWebText(
+    _i2.SearchCriteriaDTO? criteria,
+  ) =>
       (super.noSuchMethod(
             Invocation.method(#myFetchWebText, [criteria]),
             returnValue: _i8.Future<_i8.Stream<String>>.value(
@@ -372,11 +393,11 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
   String myDataSourceName() =>
       (super.noSuchMethod(
             Invocation.method(#myDataSourceName, []),
-            returnValue: _i5.dummyValue<String>(
+            returnValue: _i6.dummyValue<String>(
               this,
               Invocation.method(#myDataSourceName, []),
             ),
-            returnValueForMissingStub: _i5.dummyValue<String>(
+            returnValueForMissingStub: _i6.dummyValue<String>(
               this,
               Invocation.method(#myDataSourceName, []),
             ),
@@ -398,19 +419,19 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
           as _i7.DataSourceFn);
 
   @override
-  OUTPUT_TYPE myYieldError(String? contents) =>
+  _i4.MovieResultDTO myYieldError(String? contents) =>
       (super.noSuchMethod(
             Invocation.method(#myYieldError, [contents]),
-            returnValue: _i5.dummyValue<OUTPUT_TYPE>(
+            returnValue: _FakeMovieResultDTO_2(
               this,
               Invocation.method(#myYieldError, [contents]),
             ),
-            returnValueForMissingStub: _i5.dummyValue<OUTPUT_TYPE>(
+            returnValueForMissingStub: _FakeMovieResultDTO_2(
               this,
               Invocation.method(#myYieldError, [contents]),
             ),
           )
-          as OUTPUT_TYPE);
+          as _i4.MovieResultDTO);
 
   @override
   Uri myConstructURI(String? searchCriteria, {int? pageNumber = 1}) =>
@@ -420,7 +441,7 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
               [searchCriteria],
               {#pageNumber: pageNumber},
             ),
-            returnValue: _FakeUri_1(
+            returnValue: _FakeUri_3(
               this,
               Invocation.method(
                 #myConstructURI,
@@ -428,7 +449,7 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
                 {#pageNumber: pageNumber},
               ),
             ),
-            returnValueForMissingStub: _FakeUri_1(
+            returnValueForMissingStub: _FakeUri_3(
               this,
               Invocation.method(
                 #myConstructURI,
@@ -440,31 +461,50 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
           as Uri);
 
   @override
+  _i8.FutureOr<Uri> myConstructURIAsync(
+    String? searchCriteria, {
+    int? pageNumber = 1,
+  }) =>
+      (super.noSuchMethod(
+            Invocation.method(
+              #myConstructURIAsync,
+              [searchCriteria],
+              {#pageNumber: pageNumber},
+            ),
+            returnValue: _i8.Future<Uri>.value(
+              _FakeUri_3(
+                this,
+                Invocation.method(
+                  #myConstructURIAsync,
+                  [searchCriteria],
+                  {#pageNumber: pageNumber},
+                ),
+              ),
+            ),
+            returnValueForMissingStub: _i8.Future<Uri>.value(
+              _FakeUri_3(
+                this,
+                Invocation.method(
+                  #myConstructURIAsync,
+                  [searchCriteria],
+                  {#pageNumber: pageNumber},
+                ),
+              ),
+            ),
+          )
+          as _i8.FutureOr<Uri>);
+
+  @override
   String myFormatInputAsText() =>
       (super.noSuchMethod(
             Invocation.method(#myFormatInputAsText, []),
-            returnValue: _i5.dummyValue<String>(
+            returnValue: _i6.dummyValue<String>(
               this,
               Invocation.method(#myFormatInputAsText, []),
             ),
-            returnValueForMissingStub: _i5.dummyValue<String>(
+            returnValueForMissingStub: _i6.dummyValue<String>(
               this,
               Invocation.method(#myFormatInputAsText, []),
-            ),
-          )
-          as String);
-
-  @override
-  String myFormatInputAsAddress() =>
-      (super.noSuchMethod(
-            Invocation.method(#myFormatInputAsAddress, []),
-            returnValue: _i5.dummyValue<String>(
-              this,
-              Invocation.method(#myFormatInputAsAddress, []),
-            ),
-            returnValueForMissingStub: _i5.dummyValue<String>(
-              this,
-              Invocation.method(#myFormatInputAsAddress, []),
             ),
           )
           as String);
@@ -479,7 +519,16 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
           as int);
 
   @override
-  void myConstructHeaders(_i3.HttpHeaders? headers) => super.noSuchMethod(
+  _i8.Future<void> myDelayRequest() =>
+      (super.noSuchMethod(
+            Invocation.method(#myDelayRequest, []),
+            returnValue: _i8.Future<void>.value(),
+            returnValueForMissingStub: _i8.Future<void>.value(),
+          )
+          as _i8.Future<void>);
+
+  @override
+  void myConstructHeaders(_i5.HttpHeaders? headers) => super.noSuchMethod(
     Invocation.method(#myConstructHeaders, [headers]),
     returnValueForMissingStub: null,
   );
@@ -503,7 +552,7 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
           as bool);
 
   @override
-  _i8.Future<void> myAddResultToCache(OUTPUT_TYPE? fetchedResult) =>
+  _i8.Future<void> myAddResultToCache(_i4.MovieResultDTO? fetchedResult) =>
       (super.noSuchMethod(
             Invocation.method(#myAddResultToCache, [fetchedResult]),
             returnValue: _i8.Future<void>.value(),
@@ -524,7 +573,7 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
   _i8.Stream<String>? myHttpError(
     Uri? address,
     int? statusCode,
-    _i3.HttpClientResponse? response,
+    _i5.HttpClientResponse? response,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#myHttpError, [address, statusCode, response]),
@@ -533,22 +582,22 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
           as _i8.Stream<String>?);
 
   @override
-  List<OUTPUT_TYPE> myFetchResultFromCache() =>
+  List<_i4.MovieResultDTO> myFetchResultFromCache() =>
       (super.noSuchMethod(
             Invocation.method(#myFetchResultFromCache, []),
-            returnValue: <OUTPUT_TYPE>[],
-            returnValueForMissingStub: <OUTPUT_TYPE>[],
+            returnValue: <_i4.MovieResultDTO>[],
+            returnValueForMissingStub: <_i4.MovieResultDTO>[],
           )
-          as List<OUTPUT_TYPE>);
+          as List<_i4.MovieResultDTO>);
 
   @override
-  _i8.Stream<OUTPUT_TYPE> baseTransform() =>
+  _i8.Stream<_i4.MovieResultDTO> baseTransform() =>
       (super.noSuchMethod(
             Invocation.method(#baseTransform, []),
-            returnValue: _i8.Stream<OUTPUT_TYPE>.empty(),
-            returnValueForMissingStub: _i8.Stream<OUTPUT_TYPE>.empty(),
+            returnValue: _i8.Stream<_i4.MovieResultDTO>.empty(),
+            returnValueForMissingStub: _i8.Stream<_i4.MovieResultDTO>.empty(),
           )
-          as _i8.Stream<OUTPUT_TYPE>);
+          as _i8.Stream<_i4.MovieResultDTO>);
 
   @override
   _i8.Stream<String> baseConvertCriteriaToWebText() =>
@@ -573,40 +622,42 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
           as _i8.Stream<dynamic>);
 
   @override
-  _i8.Stream<OUTPUT_TYPE> baseConvertTreeToOutputType(
+  _i8.Stream<_i4.MovieResultDTO> baseConvertTreeToOutputType(
     _i8.Stream<dynamic>? pageMap,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#baseConvertTreeToOutputType, [pageMap]),
-            returnValue: _i8.Stream<OUTPUT_TYPE>.empty(),
-            returnValueForMissingStub: _i8.Stream<OUTPUT_TYPE>.empty(),
+            returnValue: _i8.Stream<_i4.MovieResultDTO>.empty(),
+            returnValueForMissingStub: _i8.Stream<_i4.MovieResultDTO>.empty(),
           )
-          as _i8.Stream<OUTPUT_TYPE>);
+          as _i8.Stream<_i4.MovieResultDTO>);
 
   @override
-  Iterable<OUTPUT_TYPE> myMergeOutputType(Iterable<OUTPUT_TYPE>? output) =>
+  Iterable<_i4.MovieResultDTO> myMergeOutputType(
+    Iterable<_i4.MovieResultDTO>? output,
+  ) =>
       (super.noSuchMethod(
             Invocation.method(#myMergeOutputType, [output]),
-            returnValue: <OUTPUT_TYPE>[],
-            returnValueForMissingStub: <OUTPUT_TYPE>[],
+            returnValue: <_i4.MovieResultDTO>[],
+            returnValueForMissingStub: <_i4.MovieResultDTO>[],
           )
-          as Iterable<OUTPUT_TYPE>);
+          as Iterable<_i4.MovieResultDTO>);
 
   @override
-  _i8.Future<_i8.Stream<OUTPUT_TYPE>> baseYieldFetchedObjects({
+  _i8.Future<_i8.Stream<_i4.MovieResultDTO>> baseYieldFetchedObjects({
     _i7.DataSourceFn? source,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#baseYieldFetchedObjects, [], {#source: source}),
-            returnValue: _i8.Future<_i8.Stream<OUTPUT_TYPE>>.value(
-              _i8.Stream<OUTPUT_TYPE>.empty(),
+            returnValue: _i8.Future<_i8.Stream<_i4.MovieResultDTO>>.value(
+              _i8.Stream<_i4.MovieResultDTO>.empty(),
             ),
             returnValueForMissingStub:
-                _i8.Future<_i8.Stream<OUTPUT_TYPE>>.value(
-                  _i8.Stream<OUTPUT_TYPE>.empty(),
+                _i8.Future<_i8.Stream<_i4.MovieResultDTO>>.value(
+                  _i8.Stream<_i4.MovieResultDTO>.empty(),
                 ),
           )
-          as _i8.Future<_i8.Stream<OUTPUT_TYPE>>);
+          as _i8.Future<_i8.Stream<_i4.MovieResultDTO>>);
 
   @override
   _i8.Future<_i8.Stream<String>> baseFetchWebText(dynamic criteria) =>
@@ -625,11 +676,11 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
   String baseConstructErrorMessage(String? context, dynamic error) =>
       (super.noSuchMethod(
             Invocation.method(#baseConstructErrorMessage, [context, error]),
-            returnValue: _i5.dummyValue<String>(
+            returnValue: _i6.dummyValue<String>(
               this,
               Invocation.method(#baseConstructErrorMessage, [context, error]),
             ),
-            returnValueForMissingStub: _i5.dummyValue<String>(
+            returnValueForMissingStub: _i6.dummyValue<String>(
               this,
               Invocation.method(#baseConstructErrorMessage, [context, error]),
             ),
@@ -637,17 +688,17 @@ class MockWebFetchBase<OUTPUT_TYPE, INPUT_TYPE> extends _i1.Mock
           as String);
 
   @override
-  _i3.HttpClient baseGetHttpClient() =>
+  _i5.HttpClient baseGetHttpClient() =>
       (super.noSuchMethod(
             Invocation.method(#baseGetHttpClient, []),
-            returnValue: _FakeHttpClient_2(
+            returnValue: _FakeHttpClient_4(
               this,
               Invocation.method(#baseGetHttpClient, []),
             ),
-            returnValueForMissingStub: _FakeHttpClient_2(
+            returnValueForMissingStub: _FakeHttpClient_4(
               this,
               Invocation.method(#baseGetHttpClient, []),
             ),
           )
-          as _i3.HttpClient);
+          as _i5.HttpClient);
 }

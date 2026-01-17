@@ -3,13 +3,10 @@
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_common.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
-const outerElementFailureIndicator = 'success';
-const outerElementFailureReason = 'status_message';
-const innerElementIdentity = 'id';
-const innerElementImdbId = 'imdb_id';
 const innerElementImage = 'profile_path';
 const innerElementYear = 'birthday';
 const innerElementAdult = 'adult';
@@ -28,7 +25,8 @@ class TmdbPersonDetailConverter {
     if (null == failureIndicator) {
       searchResults.add(dtoFromMap(map));
     } else {
-      final error = map[outerElementFailureReason]?.toString() ??
+      final error =
+          map[outerElementFailureReason]?.toString() ??
           'No failure reason provided in results $map';
       searchResults.add(
         MovieResultDTO().error(
@@ -45,7 +43,8 @@ class TmdbPersonDetailConverter {
       map[innerElementYear]?.toString() ?? '',
     )?.year.toString();
 
-    final person = MovieResultDTO().init(
+    final person = MovieResultDTO()
+      ..init(
       bestSource: DataSourceType.tmdbPerson,
       uniqueId: map[innerElementIdentity]?.toString(),
       title: map[innerElementCommonTitle]?.toString(),
@@ -56,7 +55,8 @@ class TmdbPersonDetailConverter {
       userRating: DoubleHelper.fromText(
         map[innerElementVoteAverage],
       )?.toString(),
-    );
+      )
+      ..links.addAll(getTmdbUrls(map[innerElementExternalIds]));
 
     final poster = map[innerElementImage];
     if (null != poster) {

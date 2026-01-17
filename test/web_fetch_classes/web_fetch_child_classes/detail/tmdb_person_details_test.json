@@ -1,0 +1,17 @@
+[
+  {
+    "uniqueId": "nm0109036",
+    "title": "Fred Abraham",
+    "description": "I came, I saw, I went",
+    "bestSource": "DataSourceType.tmdbPerson",
+    "type": "MovieContentType.person",
+    "year": "1963",
+    "links": "{\"Wikidata\":\"https://www.wikidata.org/wiki/Q105553568\",\"Facebook\":\"https://www.facebook.com/FightClub\",\"Instagram\":\"https://www.instagram.com/wednesdaynetflix\",\"X (Twitter)\":\"https://twitter.com/wednesdayaddams\"}",
+    "userRating": "0.6",
+    "userRatingCount": "1",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/kU3B75TyRiCfivoq.jpg",
+    "sources": {
+      "DataSourceType.tmdbPerson": "11234"
+    }
+  }
+]

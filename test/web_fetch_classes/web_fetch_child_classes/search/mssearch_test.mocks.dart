@@ -1222,6 +1222,37 @@ class MockMeiliSearchIndex extends _i1.Mock implements _i3.MeiliSearchIndex {
           as _i5.Future<_i3.Task>);
 
   @override
+  _i5.Future<Map<String, _i3.Embedder>?> getEmbedders() =>
+      (super.noSuchMethod(
+            Invocation.method(#getEmbedders, []),
+            returnValue: _i5.Future<Map<String, _i3.Embedder>?>.value(),
+          )
+          as _i5.Future<Map<String, _i3.Embedder>?>);
+
+  @override
+  _i5.Future<_i3.Task> updateEmbedders(Map<String, _i3.Embedder>? embedders) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateEmbedders, [embedders]),
+            returnValue: _i5.Future<_i3.Task>.value(
+              _FakeTask_2(
+                this,
+                Invocation.method(#updateEmbedders, [embedders]),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Task>);
+
+  @override
+  _i5.Future<_i3.Task> resetEmbedders() =>
+      (super.noSuchMethod(
+            Invocation.method(#resetEmbedders, []),
+            returnValue: _i5.Future<_i3.Task>.value(
+              _FakeTask_2(this, Invocation.method(#resetEmbedders, [])),
+            ),
+          )
+          as _i5.Future<_i3.Task>);
+
+  @override
   _i5.Future<List<String>> getStopWords() =>
       (super.noSuchMethod(
             Invocation.method(#getStopWords, []),
