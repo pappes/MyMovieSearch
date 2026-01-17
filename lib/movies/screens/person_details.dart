@@ -195,11 +195,18 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       Text('Source: ${_restorablePerson.value.bestSource.name}      '),
       Text('UniqueId: ${_restorablePerson.value.uniqueId}      '),
       Text('Popularity: ${_restorablePerson.value.userRatingCount}'),
-      ElevatedButton(
-        onPressed: () => MMSNav(
-          context,
-        ).viewWebPage(makeImdbUrl(_restorablePerson.value.uniqueId)),
-        child: const Text('IMDB'),
+      Wrap(
+        children: <Widget>[
+          ElevatedButton(
+            onPressed: () => MMSNav(
+              context,
+            ).viewWebPage(makeImdbUrl(_restorablePerson.value.uniqueId)),
+            child: const Text('IMDB'),
+          ),
+          Wrap(
+            children: externalSearchButtons(context, _restorablePerson.value),
+          ),
+        ],
       ),
 
       if (isMobileLayout) posterSection(),

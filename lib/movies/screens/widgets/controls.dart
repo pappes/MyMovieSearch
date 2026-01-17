@@ -85,27 +85,26 @@ List<Widget> movieLocationTable(
   Iterable<DataRow> rows, {
   GestureTapCallback? onTap,
   List<Widget> ifEmpty = const [],
-}) =>
-    (rows.isEmpty)
-        ? ifEmpty
-        : [
-            InkWell(
-              onTap: onTap,
-              child: DataTable(
-                headingRowHeight: 20,
-                headingTextStyle: const TextStyle(fontWeight: FontWeight.bold),
-                dataRowMinHeight: 20,
-                dataRowMaxHeight: 20,
-                columnSpacing: 5,
-                rows: rows.toList(),
-                columns: const [
-                  DataColumn(label: Text('Stacker')),
-                  DataColumn(label: Text('Slot')),
-                  DataColumn(label: Text('Title')),
-                ],
-              ),
-            ),
-          ];
+}) => (rows.isEmpty)
+    ? ifEmpty
+    : [
+        InkWell(
+          onTap: onTap,
+          child: DataTable(
+            headingRowHeight: 20,
+            headingTextStyle: const TextStyle(fontWeight: FontWeight.bold),
+            dataRowMinHeight: 20,
+            dataRowMaxHeight: 20,
+            columnSpacing: 5,
+            rows: rows.toList(),
+            columns: const [
+              DataColumn(label: Text('Stacker')),
+              DataColumn(label: Text('Slot')),
+              DataColumn(label: Text('Title')),
+            ],
+          ),
+        ),
+      ];
 
 Iterable<DataRow> locationsWithCustomTitle(MovieResultDTO movie) sync* {
   final customTitles = MovieLocation().getTitlesForMovie(movie.uniqueId);
@@ -120,16 +119,15 @@ DataRow movieLocationRow(
   // DataRow requires nullable bool for onSelectChanged
   // ignore: avoid_positional_boolean_parameters
   void Function(bool?)? onSelectChanged,
-}) =>
-    DataRow(
-      onLongPress: onLongPress,
-      onSelectChanged: onSelectChanged,
-      cells: [
-        DataCell(Text(title.libNum)),
-        DataCell(Text(title.location)),
-        DataCell(Text(title.title)),
-      ],
-    );
+}) => DataRow(
+  onLongPress: onLongPress,
+  onSelectChanged: onSelectChanged,
+  cells: [
+    DataCell(Text(title.libNum)),
+    DataCell(Text(title.location)),
+    DataCell(Text(title.title)),
+  ],
+);
 
 /// A [Widget] that includes a [Column] that expands so that it
 /// virtically fills the available space.
@@ -147,17 +145,17 @@ class LeftAligendColumn extends Expanded {
     TextBaseline? textBaseline,
     List<Widget> children = const <Widget>[],
   }) : super(
-          child: Column(
-            key: key,
-            mainAxisAlignment: mainAxisAlignment,
-            mainAxisSize: mainAxisSize,
-            crossAxisAlignment: crossAxisAlignment,
-            textDirection: textDirection,
-            verticalDirection: verticalDirection,
-            textBaseline: textBaseline,
-            children: children,
-          ),
-        );
+         child: Column(
+           key: key,
+           mainAxisAlignment: mainAxisAlignment,
+           mainAxisSize: mainAxisSize,
+           crossAxisAlignment: crossAxisAlignment,
+           textDirection: textDirection,
+           verticalDirection: verticalDirection,
+           textBaseline: textBaseline,
+           children: children,
+         ),
+       );
 }
 
 /// A [Text] widget that displays information with more emphasis.
@@ -167,11 +165,11 @@ class LeftAligendColumn extends Expanded {
 ///
 class BoldLabel extends Text {
   BoldLabel(String string, {super.key})
-      : super(
-          _formatString(string),
-          textAlign: TextAlign.left,
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        );
+    : super(
+        _formatString(string),
+        textAlign: TextAlign.left,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      );
 
   static String _formatString(String string) {
     final newString = StringBuffer();
@@ -187,3 +185,63 @@ class BoldLabel extends Text {
   static String _initCap(String string) =>
       '${string[0].toUpperCase()}${string.substring(1)}';
 }
+
+List<Widget> externalSearchButtons(BuildContext context, MovieResultDTO dto) {
+  final buttons = <Widget>[];
+  if (dto.type != MovieContentType.person) {
+    buttons.add(
+      _externalSearchButton(
+        context,
+        dto,
+        dto.title,
+        icon: const Icon(Icons.route),
+      ),
+    );
+
+    if (dto.alternateTitle.isNotEmpty) {
+      buttons.add(
+        _externalSearchButton(
+          context,
+          dto,
+          dto.alternateTitle,
+          icon: const Icon(Icons.alt_route),
+        ),
+      );
+    }
+  }
+  for (final link in dto.links.entries) {
+    buttons.add(
+      _externalDetailsButton(
+        context,
+        dto,
+        link.key,
+        link.value,
+        icon: const Icon(Icons.link),
+      ),
+    );
+  }
+  return buttons;
+}
+
+Widget _externalSearchButton(
+  BuildContext context,
+  MovieResultDTO dto,
+  String title, {
+  Icon? icon,
+}) => ElevatedButton.icon(
+  onPressed: () => MMSNav(context).showDownloads('$title ${dto.year}', dto),
+  label: Text(title),
+  icon: icon,
+);
+
+Widget _externalDetailsButton(
+  BuildContext context,
+  MovieResultDTO dto,
+  String title,
+  String url, {
+  Icon? icon,
+}) => ElevatedButton.icon(
+  onPressed: () => MMSNav(context).viewWebPage(url),
+  label: Text(title),
+  icon: icon,
+);

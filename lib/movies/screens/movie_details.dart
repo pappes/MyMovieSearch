@@ -273,7 +273,9 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
               ).viewWebPage(makeImdbUrl(_restorableMovie.value.uniqueId)),
               child: const Text('IMDB'),
             ),
-            Wrap(children: _externalSearchButtons()),
+            Wrap(
+              children: externalSearchButtons(context, _restorableMovie.value),
+            ),
           ],
         ),
       ],
@@ -371,49 +373,4 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
     }
     return categories;
   }
-
-  List<Widget> _externalSearchButtons() {
-    final buttons = <Widget>[
-      _externalSearchButton(
-          _restorableMovie.value.title,
-          icon: const Icon(Icons.route),
-      ),
-    ];
-
-    if (_restorableMovie.value.alternateTitle.isNotEmpty) {
-      buttons.add(
-        _externalSearchButton(
-          _restorableMovie.value.alternateTitle,
-          icon: const Icon(Icons.alt_route),
-        ),
-      );
-    }
-    for (final link in _restorableMovie.value.links.entries) {
-      buttons.add(
-        _externalDetailsButton(
-          link.key,
-          link.value,
-          icon: const Icon(Icons.link),
-        ),
-      );
-    }
-    return buttons;
-  } 
-
-  Widget _externalSearchButton(String title, {Icon? icon}) =>
-      ElevatedButton.icon(
-        onPressed: () => MMSNav(context).showDownloads(
-          '$title ${_restorableMovie.value.year}',
-          _restorableMovie.value,
-        ),
-        label: Text(title),
-        icon: icon,
-      );
-
-  Widget _externalDetailsButton(String title, String url, {Icon? icon}) =>
-      ElevatedButton.icon(
-        onPressed: () => MMSNav(context).viewWebPage(url),
-        label: Text(title),
-        icon: icon,
-      );
 }
