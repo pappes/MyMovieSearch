@@ -1,0 +1,13 @@
+[
+  {
+    "uniqueId": "nm0005346",
+    "title": "Tara Reid",
+    "description": "American actress (born 1975)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.person",
+    "links": "{\"Wikipedia\":\"https://en.wikipedia.org/wiki/Tara_Reid\",\"IMDB\":\"https://www.imdb.com/name/nm0005346/?ref_=nv_sr_srsg_0\",\"Facebook\":\"https://www.facebook.com/TaraReidOfficial\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/celebrity/tara_reid\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "nm0005346"
+    }
+  }
+]

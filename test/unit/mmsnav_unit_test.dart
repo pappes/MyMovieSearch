@@ -351,7 +351,7 @@ void main() {
         await testClass.resultDrillDown(movie);
 
         // Assert
-        if (expected.startsWith('http')) {
+        if (expected.startsWith(webAddressPrefix)) {
           mockito.verify(mockCanvas.viewWebPage(expected)).called(1);
         } else {
           mockito.verify(mockCanvas.viewFlutterPage(mockito.any)).called(1);

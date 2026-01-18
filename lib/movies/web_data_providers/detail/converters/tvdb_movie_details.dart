@@ -3,6 +3,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/converters/tvdb
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/xxdb_common.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_base.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 const nodeExternalLinks = 'remoteIds';
 
@@ -126,7 +127,7 @@ class TvdbMovieDetailConverter extends TvdbCommonConverter {
       if (map is Map) {
         for (final entry in map.entries) {
           final source = entry.value;
-          if (source is String && source.startsWith('http')) {
+          if (source is String && source.startsWith(webAddressPrefix)) {
             sourceUrls[entry.key!.toString()] = source;
           }
         }

@@ -165,6 +165,7 @@ class _AboutState extends State<AboutPage> with RestorationMixin {
             MMSNav(context).viewWebPage('https://thetvdb.com/subscribe'),
       ),
     ),
+    const Text('Powered by Wikidata.'),
   ];
 
   Widget _buildMovieResults() => BlocBuilder<SearchBloc, SearchState>(

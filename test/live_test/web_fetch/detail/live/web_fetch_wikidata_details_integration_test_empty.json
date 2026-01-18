@@ -1,0 +1,8 @@
+[
+  {
+    "uniqueId": "-4",
+    "title": "[QueryWikidataDetails] Error in wikidataDetail with criteria https://www.wikidata.org/wiki/Q13794921123123 stream error interpreting web text as a map :Error in http read, HTTP status code : 400 for https://www.wikidata.org/wiki/Special:EntityData/Q13794921123123.json",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.error"
+  }
+]

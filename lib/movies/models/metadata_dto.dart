@@ -33,6 +33,8 @@ enum DataSourceType {
   mssearch,
   fbmmsnavlog,
   wiki,
+  wikidataDetail,
+  wikidataSearch,
   tpb,
   magnetDl,
   solidTorrents,

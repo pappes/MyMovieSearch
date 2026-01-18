@@ -1,0 +1,86 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/wikidata_detail.dart';
+import 'package:my_movie_search/utilities/settings.dart';
+
+import '../../../../test_helper.dart';
+////////////////////////////////////////////////////////////////////////////////
+/// Read from real TVDB endpoint!
+////////////////////////////////////////////////////////////////////////////////
+
+void main() {
+  // Wait for api key to be initialised
+  setUpAll(() => Settings().init());
+  ////////////////////////////////////////////////////////////////////////////////
+  /// Integration tests
+  ////////////////////////////////////////////////////////////////////////////////
+
+  group('live QueryWikidataDetails test', () {
+    test('Run read 1 detailed person page from TVDB', () async {
+      final criteria = SearchCriteriaDTO().fromString(
+        'https://www.wikidata.org/wiki/Q211082',
+      );
+      final actualOutput = await QueryWikidataDetails(criteria).readList();
+
+      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+
+      // To update expected data, uncomment the following line
+      // writeTestData(actualOutput, testName: 'person');
+
+      // Check the results.
+      final expectedOutput = readTestData(testName: 'person');
+      expect(
+        actualOutput,
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
+    test('Run read 1 detailed movie page from TVDB', () async {
+      final criteria = SearchCriteriaDTO().fromString(
+        'https://www.wikidata.org/wiki/Q13794921',
+      );
+      final actualOutput = await QueryWikidataDetails(criteria).readList();
+
+      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+
+      // To update expected data, uncomment the following line
+      //  writeTestData(actualOutput, suffix: '_movie.json');
+
+      // Check the results.
+      final expectedOutput = readTestData(suffix: '_movie.json');
+      expect(
+        actualOutput,
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
+
+    test('Run an empty search', () async {
+      final criteria = SearchCriteriaDTO().fromString('https://www.wikidata.org/wiki/Q13794921123123');
+      final actualOutput = await QueryWikidataDetails(
+        criteria,
+      ).readList(limit: 10);
+
+      // To update expected data, uncomment the following line
+      // writeTestData(actualOutput, testName: 'empty');
+
+      // Check the results.
+      final expectedOutput = readTestData(testName: 'empty');
+      expect(
+        actualOutput,
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
+  });
+}

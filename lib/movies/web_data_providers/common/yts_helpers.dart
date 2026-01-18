@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:html/parser.dart' as html;
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 const String ytsDefaultUrl = 'https://yts.lt';
 const String emptySearchResult =
@@ -66,7 +67,9 @@ class YtsHelper {
     final links = dom.querySelectorAll('a[href]');
     for (final link in links) {
       final href = link.attributes['href'];
-      if (href != null && href.startsWith('http') && !href.contains('.onion')) {
+      if (href != null &&
+          href.startsWith(webAddressPrefix) &&
+          !href.contains('.onion')) {
         unawaited(testYtsUrl(href));
       }
     }

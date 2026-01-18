@@ -315,7 +315,8 @@ class MMSFlutterCanvas {
   /// For platforms that don't support CustomTabs
   /// the URL is displayed to the user.
   Future<Object?> viewWebPage(String url) async {
-    final useAndroidCustomTabs = Platform.isAndroid && url.startsWith('http');
+    final useAndroidCustomTabs =
+        Platform.isAndroid && url.startsWith(webAddressPrefix);
     if (theme != null && dialogs != null) {
       if (useAndroidCustomTabs) {
         return _invokeChromeCustomTabs(theme, dialogs, url);

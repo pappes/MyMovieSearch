@@ -1,0 +1,13 @@
+[
+  {
+    "uniqueId": "tt2724064",
+    "title": "Sharknado",
+    "description": "2013 film directed by Anthony C. Ferrante",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Wikipedia\":\"https://en.wikipedia.org/wiki/Sharknado\",\"IMDB\":\"https://www.imdb.com/title/tt2724064/?ref_=nv_sr_srsg_0\",\"Official Website\":\"http://www.theasylum.cc/product.php?id=230\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/sharknado\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt2724064"
+    }
+  }
+]
