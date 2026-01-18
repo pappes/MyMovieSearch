@@ -10,8 +10,10 @@ import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
 import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/converters/xxdb_common.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/wikidata_detail.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/thread.dart';
@@ -93,12 +95,28 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       _mergeDetails(personDetails);
     }
     _redrawRequired = true;
+    // Control screen redraws.
     EasyThrottle.throttle(
       'PersonDetails${_restorablePerson.value.uniqueId}',
       const Duration(milliseconds: 500), // limit refresh to 2 per second
       _showDetails, // Initial screen draw
       onAfter: _showDetails, // Process throttled updates
     );
+
+    // Fetch more data from Wikidata.
+    final source = xxdbSouceDescriptions[XxdbSource.wikidata]!;
+    final destination = xxdbSouceDescriptions[XxdbSource.wikipedia]!;
+
+    final links = _restorablePerson.value.links;
+    if (links.containsKey(source) && !links.containsKey(destination)) {
+      final wikidataUrl = links[source]!;
+      links[destination] = 'TBD';
+      unawaited(
+        QueryWikidataDetails(
+          SearchCriteriaDTO().fromString(wikidataUrl),
+        ).readList().then(_requestShowDetails),
+      );
+    }
   }
 
   /// Fetch full person details from imdb.

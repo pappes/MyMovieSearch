@@ -12,17 +12,8 @@ import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedJsonSample(_) =>
-    Future.value(Stream.value('[{"hello":"world"}]'));
-
-Future<Stream<String>> _emitInvalidJsonSample(_) =>
-    Future.value(Stream.value('not valid json'));
 
 final imdbCriteria = SearchCriteriaDTO().fromString('tt1231');
-final dto = MovieResultDTO()..init(type: MovieContentType.movie.toString());
-
-final WikidataCriteria = SearchCriteriaDTO().fromString('987654');
-
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => Settings().init());
@@ -70,6 +61,8 @@ void main() {
       final expectedOutput = [jsonMovie];
       final actualOutput = QueryWikidataDetails(
         imdbCriteria,
+        // valid to use for testing.
+        // ignore: invalid_use_of_visible_for_overriding_member
       ).myConvertWebTextToTraversableTree(jsonEncode(jsonMovie));
       expect(actualOutput, completion(expectedOutput));
     });
