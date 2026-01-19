@@ -90,16 +90,19 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
         QueryIMDBJsonCastDetails(criteria).readList().then(_requestShowDetails),
       );
 
-      /// Fetch full actor/director/writer/producer data
-      /// from cache using a separate thread.
+      /// Fetch details from TheTVDB.
       unawaited(
         QueryTVDBMovieDetails(criteria).readList().then(_requestShowDetails),
       );
 
-      /// Fetch full actor/director/writer/producer data
-      /// from cache using a separate thread.
+      /// Fetch details from TMDB.
       unawaited(
         QueryTMDBMovieDetails(criteria).readList().then(_requestShowDetails),
+      );
+
+      /// Fetch details from Wikidata.
+      unawaited(
+        QueryWikidataDetails(criteria).readList().then(_requestShowDetails),
       );
     }
   }
@@ -117,21 +120,6 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
       _showDetails, // Initial screen draw
       onAfter: _showDetails, // Process throttled updates
     );
-
-    // Fetch more data from Wikidata.
-    final source = xxdbSouceDescriptions[XxdbSource.wikidata]!;
-    final destination = xxdbSouceDescriptions[XxdbSource.wikipedia]!;
-
-    final links = _restorableMovie.value.links;
-    if (links.containsKey(source) && !links.containsKey(destination)) {
-      final wikidataUrl = links[source]!;
-      links[destination] = 'TBD';
-      unawaited(
-        QueryWikidataDetails(
-          SearchCriteriaDTO().fromString(wikidataUrl),
-        ).readList().then(_requestShowDetails),
-      );
-    }
   }
 
   /// Fetch full person details from imdb.

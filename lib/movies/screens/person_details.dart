@@ -86,6 +86,11 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
             .readList()
             .then(_requestShowDetails),
       );
+
+      /// Fetch details from Wikidata.
+      unawaited(
+        QueryWikidataDetails(criteria).readList().then(_requestShowDetails),
+      );
     }
   }
 
@@ -102,21 +107,6 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       _showDetails, // Initial screen draw
       onAfter: _showDetails, // Process throttled updates
     );
-
-    // Fetch more data from Wikidata.
-    final source = xxdbSouceDescriptions[XxdbSource.wikidata]!;
-    final destination = xxdbSouceDescriptions[XxdbSource.wikipedia]!;
-
-    final links = _restorablePerson.value.links;
-    if (links.containsKey(source) && !links.containsKey(destination)) {
-      final wikidataUrl = links[source]!;
-      links[destination] = 'TBD';
-      unawaited(
-        QueryWikidataDetails(
-          SearchCriteriaDTO().fromString(wikidataUrl),
-        ).readList().then(_requestShowDetails),
-      );
-    }
   }
 
   /// Fetch full person details from imdb.
