@@ -192,12 +192,12 @@ class MovieTile extends ListTile {
       case MovieContentType.episode:
       case MovieContentType.series:
       case MovieContentType.miniseries:
+      case MovieContentType.custom:
       case MovieContentType.short:
         {
           getReadIcon(movie, widgets);
           getDVDIcon(movie, widgets);
         }
-      case MovieContentType.custom:
       case MovieContentType.error:
       case MovieContentType.information:
       case MovieContentType.status:
