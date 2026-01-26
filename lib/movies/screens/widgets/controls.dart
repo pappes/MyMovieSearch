@@ -209,14 +209,24 @@ List<Widget> externalSearchButtons(BuildContext context, MovieResultDTO dto) {
       );
     }
   }
+  final linkButtons = <Widget>[];
   for (final link in dto.links.entries) {
-    buttons.add(
+    linkButtons.add(
       _externalDetailsButton(
         context,
         dto,
         link.key,
         link.value,
         icon: const Icon(Icons.link),
+      ),
+    );
+  }
+
+  if (linkButtons.isNotEmpty) {
+    buttons.add(
+      ExpansionTile(
+        title: Text('External Links (${linkButtons.length})'),
+        children: [Wrap(spacing: 8, runSpacing: 4, children: linkButtons)],
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -30,6 +31,8 @@ const wikidataWebAddressPrefix = 'https://www.wikidata.org/wiki/';
 class QueryWikidataDetails
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   QueryWikidataDetails(super.criteria);
+
+  static String? wikiQuery;
 
   /// Describe where the data is coming from.
   @override
@@ -99,11 +102,32 @@ class QueryWikidataDetails
     return Uri.parse('$uriPrefix$searchCriteria$uriSuffix');
   }
 
+  /// API call to convert IMDBid to wikidataid.
+  @override
+  FutureOr<Uri> myConstructURIAsync(
+    String searchCriteria, {
+    int pageNumber = 1,
+  }) async {
+    wikiQuery = await rootBundle.loadString(
+      'lib/movies/web_data_providers/detail/wikidata_detail_movie_query.sql',
+    );
+    // Ensure imdb lookup is valid.
+    if (searchCriteria.startsWith(imdbTitlePrefix) ||
+        searchCriteria.startsWith(imdbPersonPrefix)) {
+      // Run the imdb lookup.
+      final idText = await QueryWikidataImdbSearch().getWikiID(searchCriteria);
+      if (idText.isNotEmpty) {
+        return myConstructURI(idText, pageNumber: pageNumber);
+      }
+    }
+    // perform the normal search
+    return myConstructURI(searchCriteria, pageNumber: pageNumber);
+  }
+
+
   String createQueryUrl(String imdbIds) {
     //read query from wikidata_detail_movie_query.sql
-    final fileContents = File(
-      'lib/movies/web_data_providers/detail/wikidata_detail_movie_query.sql',
-    ).readAsStringSync();
+    final fileContents = wikiQuery ?? '';
     // inject IDs into loaded string replacing "tt000"
     final query = fileContents.replaceAll('"tt000"', imdbIds);
     // use regex to remove all single line comments

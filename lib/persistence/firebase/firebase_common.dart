@@ -19,6 +19,8 @@ const runtimeDevices = {
   'android.samsung.SM-G950F': 'dave', // Samsung S8
   'android.Microsoft Corporation.Subsystem for Android(TM)': 'dave', // Chair
   'TBD': 'tash',
+
+  /// G980F
 };
 
 /// Grants access to firebase persistent data
