@@ -27,6 +27,15 @@ enum XxdbSource {
   wikidata,
   wikipedia,
   twitter,
+  kym,
+  metacritic,
+  filmaffinity,
+  tvtropes,
+  youtube,
+  letterboxd,
+  lezwatchtv,
+  ratingraph,
+
 }
 
 const xxdbSouceDescriptions = {
@@ -43,6 +52,14 @@ const xxdbSouceDescriptions = {
   XxdbSource.wikidata: 'Wikidata',
   XxdbSource.wikipedia: 'Wikipedia',
   XxdbSource.twitter: 'X (Twitter)',
+  XxdbSource.kym: 'Know Your Meme',
+  XxdbSource.metacritic: 'Metacritic',
+  XxdbSource.filmaffinity: 'FilmAffinity',
+  XxdbSource.tvtropes: 'TV Tropes',
+  XxdbSource.youtube: 'YouTube',
+  XxdbSource.letterboxd: 'Letterboxd',
+  XxdbSource.lezwatchtv: 'LezWatchTV',
+  XxdbSource.ratingraph: 'Ratingraph',
 };
 
 const sourceWebsiteMapping = {
@@ -57,6 +74,14 @@ const sourceWebsiteMapping = {
   XxdbSource.wikidata: 'https://www.wikidata.org/wiki/',
   XxdbSource.wikipedia: 'https://en.wikipedia.org/wiki/',
   XxdbSource.twitter: 'https://twitter.com/',
+  XxdbSource.kym: 'https://knowyourmeme.com/memes/',
+  XxdbSource.metacritic: 'https://www.metacritic.com/movie/',
+  XxdbSource.filmaffinity: 'https://www.filmaffinity.com/en/film',
+  XxdbSource.tvtropes: 'https://tvtropes.org/pmwiki/pmwiki.php/Main/',
+  XxdbSource.youtube: 'https://www.youtube.com/watch?v=',
+  XxdbSource.letterboxd: 'https://letterboxd.com/film/',
+  XxdbSource.lezwatchtv: 'https://lezwatchtv.com/show/',
+  XxdbSource.ratingraph: 'https://www.ratingraph.com/tv-shows/',
 };
 
 /// Create FQDN for instagram, wikipedia, etc.
@@ -85,4 +110,13 @@ void getExternalUrl(
       destinationUrls[linkDescription] = makeImdbUrl(identifier);
     }
   }
+}
+
+String? getWebsiteDescription(String website) {
+  for (final entry in sourceWebsiteMapping.entries) {
+    if (website.startsWith(entry.value)) {
+      return xxdbSouceDescriptions[entry.key];
+    }
+  }
+  return null;
 }

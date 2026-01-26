@@ -1,0 +1,13 @@
+[
+  {
+    "uniqueId": "tt13443470",
+    "title": "Wednesday",
+    "description": "American horror comedy television series",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"tmdbLink\":\"https://www.themoviedb.org/movie/119051\",\"theTVDBLink\":\"https://thetvdb.com/series/397060\",\"Know Your Meme\":\"https://knowyourmeme.com/memes/wednesday-2022-series\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film995233.html\",\"Metacritic\":\"https://www.metacritic.com/movie/tv/wednesday\",\"Netflix\":\"https://www.netflix.com/title/81231974\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/tv/wednesday\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Series/Wednesday\",\"X (Twitter)\":\"https://twitter.com/wednesdayaddams\",\"YouTube\":\"https://www.youtube.com/watch?v=Di310WS8zLk\",\"Facebook\":\"https://www.facebook.com/wednesdaynetflix\",\"Letterboxd\":\"https://letterboxd.com/film/tv-and-radio/wednesday\",\"LezWatchTV\":\"https://lezwatchtv.com/show/wednesday\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/60300ded22d896002c2d4897\",\"Ratingraph\":\"https://www.ratingraph.com/tv-shows/wednesday-ratings-101930\",\"tvMazeLink\":\"https://tvmaze.com/shows/53647\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt13443470"
+    }
+  }
+]

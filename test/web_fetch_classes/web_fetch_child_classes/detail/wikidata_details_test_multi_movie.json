@@ -1,0 +1,123 @@
+[
+  {
+    "uniqueId": "tt0068646",
+    "title": "The Godfather",
+    "description": "1972 US film by Francis Ford Coppola",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"FilmAffinity\":\"https://www.filmaffinity.com/en/film809297.html\",\"Metacritic\":\"https://www.metacritic.com/movie/movie/the-godfather\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/the_godfather\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Film/TheGodfather\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768248a7581001f12bc72\",\"YouTube\":\"https://www.youtube.com/watch?v=mJLWydHPkMw\",\"Netflix\":\"https://www.netflix.com/title/60011152\",\"Facebook\":\"https://www.facebook.com/thegodfathermovie\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt0068646"
+    }
+  },
+  {
+    "uniqueId": "tt0080684",
+    "title": "Star Wars: Episode V – The Empire Strikes Back",
+    "description": "1980 American epic space opera film directed by Irvin Kershner",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"FilmAffinity\":\"https://www.filmaffinity.com/en/film605090.html\",\"Metacritic\":\"https://www.metacritic.com/movie/movie/star-wars-episode-v---the-empire-strikes-back\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/star_wars_episode_v_the_empire_strikes_back\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Film/TheEmpireStrikesBack\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d77682a880197001ec91562\",\"Netflix\":\"https://www.netflix.com/title/60011114\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt0080684"
+    }
+  },
+  {
+    "uniqueId": "tt0108052",
+    "title": "Schindler's List",
+    "description": "1993 film by Steven Spielberg",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"FilmAffinity\":\"https://www.filmaffinity.com/en/film656153.html\",\"Metacritic\":\"https://www.metacritic.com/movie/movie/schindlers-list\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/schindlers_list\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Film/SchindlersList\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768255af944001f1f65a1\",\"YouTube\":\"https://www.youtube.com/watch?v=KUlZ-iZjDsc\",\"Netflix\":\"https://www.netflix.com/title/60036359\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt0108052"
+    }
+  },
+  {
+    "uniqueId": "tt0110912",
+    "title": "Pulp Fiction",
+    "description": "1994 film by Quentin Tarantino",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"FilmAffinity\":\"https://www.filmaffinity.com/en/film160882.html\",\"Metacritic\":\"https://www.metacritic.com/movie/movie/pulp-fiction\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/pulp_fiction\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Film/PulpFiction\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d776827103a2d001f564488\",\"Letterboxd\":\"https://letterboxd.com/film/film/pulp-fiction\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt0110912"
+    }
+  },
+  {
+    "uniqueId": "tt0111161",
+    "title": "The Shawshank Redemption",
+    "description": "1994 American drama film directed by Frank Darabont",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"FilmAffinity\":\"https://www.filmaffinity.com/en/film161026.html\",\"Metacritic\":\"https://www.metacritic.com/movie/movie/the-shawshank-redemption\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/shawshank_redemption\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Film/TheShawshankRedemption\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768248a7581001f12bc77\",\"YouTube\":\"https://www.youtube.com/watch?v=ZWXKyDK8eZE\",\"Netflix\":\"https://www.netflix.com/title/70005379\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt0111161"
+    }
+  },
+  {
+    "uniqueId": "tt0114709",
+    "title": "Toy Story",
+    "description": "1995 American animated film",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"FilmAffinity\":\"https://www.filmaffinity.com/en/film459936.html\",\"Metacritic\":\"https://www.metacritic.com/movie/movie/toy-story\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/toy_story\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/WesternAnimation/ToyStory1\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d776828880197001ec90d44\",\"YouTube\":\"https://www.youtube.com/watch?v=vGe1JFJ8Ylc\",\"Netflix\":\"https://www.netflix.com/title/60036637\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt0114709"
+    }
+  },
+  {
+    "uniqueId": "tt0133093",
+    "title": "The Matrix",
+    "description": "1999 American science fiction action thriller film",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"FilmAffinity\":\"https://www.filmaffinity.com/en/film932476.html\",\"Metacritic\":\"https://www.metacritic.com/movie/movie/the-matrix\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/matrix\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Film/TheMatrix\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d776827880197001ec90904\",\"YouTube\":\"https://www.youtube.com/watch?v=_XrKhqC5rQQ\",\"Netflix\":\"https://www.netflix.com/title/20557937\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt0133093"
+    }
+  },
+  {
+    "uniqueId": "tt0137523",
+    "title": "Fight Club",
+    "description": "1999 film directed by David Fincher",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"FilmAffinity\":\"https://www.filmaffinity.com/en/film536945.html\",\"Metacritic\":\"https://www.metacritic.com/movie/movie/fight-club\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/fight_club\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Film/FightClub\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768265af944001f1f6976\",\"YouTube\":\"https://www.youtube.com/watch?v=oHlZeNj0Edw\",\"Netflix\":\"https://www.netflix.com/title/26004747\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt0137523"
+    }
+  },
+  {
+    "uniqueId": "tt0167260",
+    "title": "The Lord of the Rings: The Return of the King",
+    "description": "2003 film by Peter Jackson",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"FilmAffinity\":\"https://www.filmaffinity.com/en/film226427.html\",\"Metacritic\":\"https://www.metacritic.com/movie/movie/the-lord-of-the-rings-the-return-of-the-king\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/the_lord_of_the_rings_the_return_of_the_king\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Film/TheLordOfTheRingsTheReturnOfTheKing\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768248a7581001f12bc73\",\"YouTube\":\"https://www.youtube.com/watch?v=_PO7ohKKgWE\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt0167260"
+    }
+  },
+  {
+    "uniqueId": "tt0468569",
+    "title": "The Dark Knight",
+    "description": "2008 film directed by Christopher Nolan",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"FilmAffinity\":\"https://www.filmaffinity.com/en/film867354.html\",\"Metacritic\":\"https://www.metacritic.com/movie/movie/the-dark-knight\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/the_dark_knight\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Film/TheDarkKnight\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768247e9a3c0020c6a8f3\",\"YouTube\":\"https://www.youtube.com/watch?v=kmJLuwP3MbY\",\"Netflix\":\"https://www.netflix.com/title/70079583\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt0468569"
+    }
+  },
+  {
+    "uniqueId": "tt13443470",
+    "title": "Wednesday",
+    "description": "American horror comedy television series",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"tmdbLink\":\"https://www.themoviedb.org/movie/119051\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film995233.html\",\"Metacritic\":\"https://www.metacritic.com/movie/tv/wednesday\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/tv/wednesday\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Series/Wednesday\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/60300ded22d896002c2d4897\",\"YouTube\":\"https://www.youtube.com/watch?v=Di310WS8zLk\",\"Netflix\":\"https://www.netflix.com/title/81231974\",\"Facebook\":\"https://www.facebook.com/wednesdaynetflix\",\"Letterboxd\":\"https://letterboxd.com/film/tv-and-radio/wednesday\",\"theTVDBLink\":\"https://thetvdb.com/series/397060\",\"Know Your Meme\":\"https://knowyourmeme.com/memes/wednesday-2022-series\",\"X (Twitter)\":\"https://twitter.com/wednesdayaddams\",\"LezWatchTV\":\"https://lezwatchtv.com/show/wednesday\",\"Ratingraph\":\"https://www.ratingraph.com/tv-shows/wednesday-ratings-101930\",\"tvMazeLink\":\"https://tvmaze.com/shows/53647\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt13443470"
+    }
+  }
+]

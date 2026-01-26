@@ -196,7 +196,9 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     final stringList = DynamicHelper.toString_(inputString);
     return converter.fromPrimitives(stringList);
   }
-
+  @factory
+  // Linter does not understand that fromString is a factory method.
+  // ignore: invalid_factory_method_impl
   SearchCriteriaDTO fromString(String criteria) => SearchCriteriaDTO()
     ..criteriaTitle = criteria
     ..criteriaType = SearchCriteriaType.movieTitle;

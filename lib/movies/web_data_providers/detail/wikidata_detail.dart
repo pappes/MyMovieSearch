@@ -14,17 +14,9 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-const jsonKeywordKey = 'keyword';
-const jsonPageKey = 'page';
-const jsonCategoryKey = 'category';
-const jsonMagnetKey = 'magnet';
-const jsonNameKey = 'name';
-const jsonImageKey = 'image';
-const jsonYearKey = 'year';
-const jsonDescriptionKey = 'description';
-const jsonSeedersKey = 'seeders';
-const jsonLeechersKey = 'leechers';
 
+const wikiIdPrefix = 'Q';
+const queryContext = 'http://query.wikidata.org/sparql?query=';
 const uriPrefix = 'https://www.wikidata.org/wiki/Special:EntityData/';
 const uriSuffix = '.json';
 const wikidataWebAddressPrefix = 'https://www.wikidata.org/wiki/';
@@ -48,33 +40,56 @@ class QueryWikidataDetails
   @override
   DataSourceFn myOfflineData() => streamImdbHtmlOfflineData;
 
-  /// converts SearchCriteriaDTO to a string representation.
+  /// converts SearchCriteriaDTO to a string representation
+  /// in the format "tt123" "tt456"
   @override
   String myFormatInputAsText() {
     final text = criteria.toPrintableString();
-    if (text.startsWith(imdbPersonPrefix) ||
-        text.startsWith(imdbTitlePrefix) ||
-        text.startsWith(webAddressPrefix)) {
-      return text;
+    if (criteria.criteriaContext != null) {
+      return '"${criteria.criteriaContext?.uniqueId}"';
+    }
+    if (criteria.criteriaList.isNotEmpty) {
+      final builder = StringBuffer();
+      for (final dto in criteria.criteriaList) {
+        // format IDs to "id1" "id2" ... "idx"
+        builder.write('"${dto.uniqueId}" ');
+      }
+      if (builder.isNotEmpty) {
+        return builder.toString();
+      }
+    } else {
+      if (text.startsWith(imdbPersonPrefix) ||
+          text.startsWith(imdbTitlePrefix)) {
+        return '"$text"';
+      }
+      if (text.startsWith(wikiIdPrefix) || text.startsWith(webAddressPrefix)) {
+        return text;
+      }
     }
     logger.t('surpressed ${myDataSourceName()} search for non IMDB id $text');
     return ''; // do not allow searches for non-imdb IDs
   }
 
-  /// API call to IMDB returning all keywords for [searchCriteria].
+  /// API call to wikidata returning all details for [searchCriteria].
+  ///
+  /// criteria can be:
+  ///   * "IMDBID1" "IMDBID2" ... "IMDBIDx"
+  ///   * wikidata ID
+  ///   * wikidata url
+  ///   * wikidata json url
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    if (searchCriteria.startsWith(imdbPersonPrefix) ||
-        searchCriteria.startsWith(imdbTitlePrefix)) {
-      return Uri.parse(searchCriteria);
+    // remove url encoding from criteria text
+    final decoded = Uri.decodeQueryComponent(searchCriteria);
+
+    if (decoded.startsWith('"$imdbPersonPrefix') ||
+        decoded.startsWith('"$imdbTitlePrefix')) {
+      return Uri.parse(createQueryUrl(decoded));
     }
-    if (searchCriteria.startsWith(
-      Uri.encodeQueryComponent(wikidataWebAddressPrefix),
-    )) {
+    if (decoded.startsWith(wikidataWebAddressPrefix)) {
       // convert https://www.wikidata.org/wiki/Q13794921
       //to https://www.wikidata.org/wiki/Special:EntityData/Q13794921.json
       // decode wikdataWebAddressPrefix
-      final decoded = Uri.decodeFull(searchCriteria);
       final rawUri = Uri.parse(decoded);
       return Uri.parse('$uriPrefix${rawUri.pathSegments.last}$uriSuffix');
     }
@@ -84,23 +99,30 @@ class QueryWikidataDetails
     return Uri.parse('$uriPrefix$searchCriteria$uriSuffix');
   }
 
-  /// API call to convert IMDBid to wikidataid.
-  @override
-  FutureOr<Uri> myConstructURIAsync(
-    String searchCriteria, {
-    int pageNumber = 1,
-  }) async {
-    // Ensure imdb lookup is valid.
-    if (searchCriteria.startsWith(imdbTitlePrefix) ||
-        searchCriteria.startsWith(imdbPersonPrefix)) {
-      // Run the imdb lookup.
-      final idText = await QueryWikidataImdbSearch().getWikiID(searchCriteria);
-      if (idText.isNotEmpty) {
-        return myConstructURI(idText, pageNumber: pageNumber);
-      }
-    }
-    // perform the normal search
-    return myConstructURI(searchCriteria, pageNumber: pageNumber);
+  String createQueryUrl(String imdbIds) {
+    //read query from wikidata_detail_movie_query.sql
+    final fileContents = File(
+      'lib/movies/web_data_providers/detail/wikidata_detail_movie_query.sql',
+    ).readAsStringSync();
+    // inject IDs into loaded string replacing "tt000"
+    final query = fileContents.replaceAll('"tt000"', imdbIds);
+    // use regex to remove all single line comments
+    // any text starting with # the is not in a string or in <>
+    const quotedString = '"[^"]*"';
+    const angledBrackets = '<[^>]*>';
+    const singleLineComment = '#.*';
+    final sparce = query.replaceAllMapped(
+      RegExp('$quotedString|$angledBrackets|$singleLineComment'),
+      (match) => match[0]!.startsWith('#') ? '' : match[0]!,
+    );
+
+    // remove all blank lines
+    final compact = sparce.replaceAll(RegExp(r'^\s*\n', multiLine: true), '');
+    // urlencode the query
+    final encoded = Uri.encodeQueryComponent(compact);
+    // prefix the query with http://query.wikidata.org/sparql?query=
+    final fullUrl = '$queryContext$encoded';
+    return fullUrl;
   }
 
   /// Convert IMDB map to MovieResultDTO records.
@@ -162,15 +184,9 @@ SELECT DISTINCT ?item ?itemLabel WHERE {
 
     // Construct http url for query.
     // e.g. https://query.wikidata.org/sparql?<query>>
-    final uri = Uri.parse('https://query.wikidata.org/sparql?query=$encoded');
-    print(uri.toString());
-    final fullQuery = uri.toString();
+    final uri = Uri.parse('$queryContext$encoded');
     //https://query.wikidata.org/sparql?query=SELECT%20DISTINCT%20?item%20?itemLabel%20WHERE%20%7B%0A%20%20SERVICE%20wikibase:label%20%7B%20bd:serviceParam%20wikibase:language%20%22%5BAUTO_LANGUAGE%5D,mul,en%22.%20%7D%0A%20%20%7B%0A%20%20%20%20SELECT%20DISTINCT%20?item%20WHERE%20%7B%0A%20%20%20%20%20%20?item%20p:P345%20?statement0.%0A%20%20%20%20%20%20?statement0%20(ps:P345)%20%22%0Anm0598241%22.%0A%20%20%20%20%7D%0A%20%20%20%20LIMIT%201%0A%20%20%7D%0A%7D
     final response = await _runQuery(uri);
-    final len = response?.length;
-    print(response?.length);
-    print(response);
-    print(response);
 
     if (response != null) {
       final jsonData = jsonDecode(response);

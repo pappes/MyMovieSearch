@@ -123,6 +123,7 @@ flutter:
    - integration_test/web_fetch_imdb_json_filtered_integration_test.json
    - integration_test/web_fetch_imdb_json_paginated_integration_test.json
    - pubspec.yaml
+   - lib/movies/web_data_providers/detail/wikidata_detail_movie_query.sql
 
 
   fonts:

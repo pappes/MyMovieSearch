@@ -12,7 +12,6 @@ import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 
-
 final imdbCriteria = SearchCriteriaDTO().fromString('tt1231');
 void main() {
   // Wait for api key to be initialised
@@ -31,10 +30,47 @@ void main() {
     });
 
     // Confirm criteria is displayed as expected.
-    test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
+    test('Run myFormatInputAsText() for SearchCriteriaDTO wikiid title', () {
+      final criteria = SearchCriteriaDTO().fromString('Q123456');
       expect(
-        QueryWikidataDetails(imdbCriteria).myFormatInputAsText(),
-        imdbCriteria.criteriaTitle,
+        QueryWikidataDetails(criteria).myFormatInputAsText(),
+        criteria.criteriaTitle,
+      );
+    });
+    test('Run myFormatInputAsText() for SearchCriteriaDTO imdbid title', () {
+      final criteria = SearchCriteriaDTO().fromString('tt123456');
+      expect(
+        QueryWikidataDetails(criteria).myFormatInputAsText(),
+        '"${criteria.criteriaTitle}"',
+      );
+    });
+    test('Run myFormatInputAsText() for SearchCriteriaDTO context', () {
+      final criteria = SearchCriteriaDTO()..criteriaContext = MovieResultDTO();
+      criteria.criteriaContext!.uniqueId = 'tt112233';
+      expect(
+        QueryWikidataDetails(criteria).myFormatInputAsText(),
+        '"${criteria.criteriaContext!.uniqueId}"',
+      );
+    });
+    test('Run myFormatInputAsText() for SearchCriteriaDTO list', () {
+      final criteria = SearchCriteriaDTO();
+
+      criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'tt11111111'));
+      criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'tt22222222'));
+      criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'tt33333333'));
+      criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'tt44444444'));
+      expect(
+        QueryWikidataDetails(criteria).myFormatInputAsText(),
+        '"tt11111111" "tt22222222" "tt33333333" "tt44444444" ',
+      );
+    });
+    test('Run myFormatInputAsText() for SearchCriteriaDTO wiki url', () {
+      final criteria = SearchCriteriaDTO().fromString(
+        'https://www.wikidata.org/wiki/Q13794921',
+      );
+      expect(
+        QueryWikidataDetails(criteria).myFormatInputAsText(),
+        criteria.criteriaTitle,
       );
     });
 
@@ -129,10 +165,11 @@ void main() {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI() for movie imdbid', () {
       final testClass = QueryWikidataDetails(imdbCriteria);
-      const expected = 'tt1234';
+      final criteria = Uri.encodeQueryComponent('"tt1234"');
+      const expected = 'http://query.wikidata.org/sparql';
 
       // Invoke the functionality.
-      final actualResult = testClass.myConstructURI('tt1234').toString();
+      final actualResult = testClass.myConstructURI(criteria).toString();
 
       // Check the results.
       expect(actualResult, startsWith(expected));
@@ -140,10 +177,11 @@ void main() {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI() for person imdbid', () {
       final testClass = QueryWikidataDetails(imdbCriteria);
-      const expected = 'nm1234';
+      final criteria = Uri.encodeQueryComponent('"nm1234"');
+      const expected = 'http://query.wikidata.org/sparql';
 
       // Invoke the functionality.
-      final actualResult = testClass.myConstructURI('nm1234').toString();
+      final actualResult = testClass.myConstructURI(criteria).toString();
 
       // Check the results.
       expect(actualResult, startsWith(expected));
@@ -154,27 +192,29 @@ void main() {
       const expected =
           'https://www.wikidata.org/wiki/Special:EntityData/Q13794921.json';
 
+      final criteria = Uri.encodeQueryComponent(
+        'https://www.wikidata.org/wiki/Q13794921',
+      );
       // Invoke the functionality.
-      final actualResult = testClass
-          .myConstructURI(
-            Uri.encodeQueryComponent('https://www.wikidata.org/wiki/Q13794921'),
-          )
-          .toString();
+      final actualResult = testClass.myConstructURI(criteria).toString();
 
       // Check the results.
       expect(actualResult, startsWith(expected));
     });
     // Confirm URL is constructed as expected.
-    test('Run myConstructURIAsync() for imdbid', () async {
-      // clone criteria to avoid impacting other test
-      final testClass = QueryWikidataDetails(imdbCriteria.clone());
-      const expected = 'tt1234';
+    test('Run myConstructURI() for wikidata json page', () {
+      final testClass = QueryWikidataDetails(imdbCriteria);
+      const expected =
+          'https://www.wikidata.org/wiki/Special:EntityData/Q13794921.json';
+      final criteria = Uri.encodeQueryComponent(
+        'https://www.wikidata.org/wiki/Special:EntityData/Q13794921.json',
+      );
 
       // Invoke the functionality.
-      final actualResult = await testClass.myConstructURIAsync('tt1234');
+      final actualResult = testClass.myConstructURI(criteria).toString();
 
       // Check the results.
-      expect(actualResult.toString(), startsWith(expected));
+      expect(actualResult, startsWith(expected));
     });
   });
   ////////////////////////////////////////////////////////////////////////////////
@@ -182,8 +222,8 @@ void main() {
   ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryWikidataDetails integration tests', () {
-    // Confirm map can be converted to DTO.
-    test('Run myConvertTreeToOutputType()', () async {
+    // Confirm singleresult map can be converted to DTO.
+    test('Run myConvertTreeToOutputType() single', () async {
       final testClass = QueryWikidataDetails(imdbCriteria);
       final actualResult = <MovieResultDTO>[];
 
@@ -191,9 +231,32 @@ void main() {
       for (final map in [jsonMovie]) {
         actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
+      //writeTestData(actualResult, testName: 'movie');
 
       // Check the results.
-      final expectedValue = readTestData(suffix: '_movie.json');
+      final expectedValue = readTestData(testName: 'movie');
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
+      );
+    });
+    // Confirm multipleresult map can be converted to DTO.
+    test('Run myConvertTreeToOutputType() multi', () async {
+      final testClass = QueryWikidataDetails(imdbCriteria);
+      final actualResult = <MovieResultDTO>[];
+
+      // Invoke the functionality and collect results.
+      for (final map in [jsonMultipleMovie]) {
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
+      }
+      // writeTestData(actualResult, testName: 'multi_movie');
+
+      // Check the results.
+      final expectedValue = readTestData(testName: 'multi_movie');
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),

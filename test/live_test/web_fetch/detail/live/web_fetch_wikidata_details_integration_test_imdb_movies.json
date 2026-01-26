@@ -1,0 +1,35 @@
+[
+  {
+    "uniqueId": "nm0005346",
+    "title": "Tara Reid",
+    "description": "American actress (born 1975)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.person",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/movie/person/tara-reid\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/celebrity/tara_reid\",\"X (Twitter)\":\"https://twitter.com/tarareid\",\"Facebook\":\"https://www.facebook.com/tarareid\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "nm0005346"
+    }
+  },
+  {
+    "uniqueId": "tt13443470",
+    "title": "Wednesday",
+    "description": "American horror comedy television series",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"tmdbLink\":\"https://www.themoviedb.org/movie/119051\",\"Metacritic\":\"https://www.metacritic.com/movie/tv/wednesday\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/tv/wednesday\",\"X (Twitter)\":\"https://twitter.com/wednesdayaddams\",\"Facebook\":\"https://www.facebook.com/wednesdaynetflix\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film995233.html\",\"Netflix\":\"https://www.netflix.com/title/81231974\",\"YouTube\":\"https://www.youtube.com/watch?v=Di310WS8zLk\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/60300ded22d896002c2d4897\",\"theTVDBLink\":\"https://thetvdb.com/series/397060\",\"Know Your Meme\":\"https://knowyourmeme.com/memes/wednesday-2022-series\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Series/Wednesday\",\"Letterboxd\":\"https://letterboxd.com/film/tv-and-radio/wednesday\",\"LezWatchTV\":\"https://lezwatchtv.com/show/wednesday\",\"Ratingraph\":\"https://www.ratingraph.com/tv-shows/wednesday-ratings-101930\",\"tvMazeLink\":\"https://tvmaze.com/shows/53647\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt13443470"
+    }
+  },
+  {
+    "uniqueId": "tt2724064",
+    "title": "Sharknado",
+    "description": "2013 film directed by Anthony C. Ferrante",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/movie/tv/sharknado\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/sharknado\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film399886.html\",\"Netflix\":\"https://www.netflix.com/title/70285977\",\"YouTube\":\"https://www.youtube.com/watch?v=TWu0zZljle4\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d776a3496b655001fde6841\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt2724064"
+    }
+  }
+]
