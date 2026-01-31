@@ -1,12 +1,12 @@
 [
   {
-    "uniqueId": "https://yts.lt/movies/rize-2005",
+    "uniqueId": "https://yts.bz/movies/rize-2005",
     "title": "Rize",
     "bestSource": "DataSourceType.ytsSearch",
     "type": "MovieContentType.information",
     "year": "2005",
     "sources": {
-      "DataSourceType.ytsSearch": "https://yts.lt/movies/rize-2005"
+      "DataSourceType.ytsSearch": "https://yts.bz/movies/rize-2005"
     }
   }
 ]

@@ -7,7 +7,7 @@
     "type": "MovieContentType.person",
     "year": "1946",
     "links": "{\"Wikidata\":\"https://www.wikidata.org/wiki/Q516365\"}",
-    "userRating": "0.3711",
+    "userRating": "0.4276",
     "userRatingCount": "1",
     "imageUrl": "https://image.tmdb.org/t/p/w500/nWgCaR1vFk2zSZ31GZZp2abny6V.jpg",
     "sources": {
@@ -19,7 +19,7 @@
     "title": "Barbara Dowling",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.058",
+    "userRating": "0.0071",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101002"
@@ -30,7 +30,7 @@
     "title": "Gil Lasky",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.1599",
+    "userRating": "0.2982",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101003"
@@ -41,7 +41,7 @@
     "title": "Paul Monka",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.0747",
+    "userRating": "0.0071",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101004"
@@ -52,7 +52,7 @@
     "title": "Derry O'Donavan",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.0314",
+    "userRating": "0.0143",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101001"
@@ -63,7 +63,7 @@
     "title": "Ron Perry",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.2044",
+    "userRating": "0.8325",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101000"
@@ -76,7 +76,7 @@
     "type": "MovieContentType.person",
     "year": "1971",
     "links": "{\"Wikidata\":\"https://www.wikidata.org/wiki/Q7561754\"}",
-    "userRating": "0.2527",
+    "userRating": "0.243",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101008"
@@ -87,7 +87,7 @@
     "title": "Alfred Taylor",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.0929",
+    "userRating": "0.1017",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101005"
@@ -100,7 +100,7 @@
     "type": "MovieContentType.person",
     "year": "1976",
     "links": "{\"Wikidata\":\"https://www.wikidata.org/wiki/Q4684823\"}",
-    "userRating": "0.4008",
+    "userRating": "0.427",
     "userRatingCount": "1",
     "imageUrl": "https://image.tmdb.org/t/p/w500/1kDtoUPjALgdhiKNjW0Ok06RsAr.jpg",
     "sources": {
@@ -112,7 +112,7 @@
     "title": "Jamie Wagner",
     "bestSource": "DataSourceType.tmdbPerson",
     "type": "MovieContentType.person",
-    "userRating": "0.0414",
+    "userRating": "0.0143",
     "userRatingCount": "1",
     "sources": {
       "DataSourceType.tmdbPerson": "101007"

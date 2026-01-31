@@ -7,9 +7,9 @@
     "type": "MovieContentType.person",
     "year": "1975",
     "links": "{\"Wikidata\":\"https://www.wikidata.org/wiki/Q211082\",\"Instagram\":\"https://www.instagram.com/tarareid\",\"X (Twitter)\":\"https://twitter.com/TaraReid\"}",
-    "userRating": "2.8565",
+    "userRating": "2.2516",
     "userRatingCount": "1",
-    "imageUrl": "https://image.tmdb.org/t/p/w500/94484Iheg04yA1UbiXoBAOB6330.jpg",
+    "imageUrl": "https://image.tmdb.org/t/p/w500/3m75fMnLhgmRRKM9bLb9T5s75h.jpg",
     "sources": {
       "DataSourceType.tmdbPerson": "1234"
     }
