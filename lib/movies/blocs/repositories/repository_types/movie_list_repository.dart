@@ -8,12 +8,28 @@ import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_finder.dar
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_person_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_details.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/wikidata_detail.dart';
 
 /// Search for movie data from multiple online search sources.
 ///
 /// Suppliament content from detail providers
 /// with content from additonal detail providers.
 class MovieListRepository extends BaseMovieRepository {
+  @override
+  Future<void> initSearch(int searchUID, SearchCriteriaDTO criteria) async {
+    await super.initSearch(searchUID, criteria);
+    if (criteria.criteriaList.isNotEmpty) {
+      // Wikidata can search multiple IDs at once
+
+      final provider = QueryWikidataDetails(criteria);
+      initProvider(provider);
+      await provider
+          .readList()
+          .then((values) => addResults(searchUID, values))
+          .whenComplete(() => finishProvider(provider));
+    }
+  }
+
   /// Maintain a map of unique movie detail requests
   /// and request retrieval if the fetch is not already in progress.
   @override

@@ -18,7 +18,7 @@ void main() {
 
   group('live QueryWikidataDetails test', () {
     test('Run read 1 detailed imdb movie page from wikidata', () async {
-      final criteria = SearchCriteriaDTO().fromString('tt13443470');
+      final criteria = SearchCriteriaDTO().fromString('tt2724064');
       final actualOutput = await QueryWikidataDetails(criteria).readList();
 
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
@@ -37,12 +37,33 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
+    test('Run read 1 detailed imdb series page from wikidata', () async {
+      final criteria = SearchCriteriaDTO().fromString('tt13443470');
+      final actualOutput = await QueryWikidataDetails(criteria).readList();
+
+      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+
+      // To update expected data, uncomment the following line
+      // writeTestData(actualOutput, testName: 'imdb_series');
+
+      // Check the results.
+      final expectedOutput = readTestData(testName: 'imdb_series');
+      expect(
+        actualOutput,
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
     test('Run read multiple detailed imdb movie pages from wikidata', () async {
       final criteria = SearchCriteriaDTO();
 
       criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'tt13443470'));
       criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'nm0005346'));
       criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'tt2724064'));
+      criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'tt28996126'));
       final actualOutput = await QueryWikidataDetails(criteria).readList();
 
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
@@ -96,6 +117,28 @@ void main() {
 
       // Check the results.
       final expectedOutput = readTestData(testName: 'movie');
+      expect(
+        actualOutput,
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
+    test('Run read 1 detailed series page from wikidata', () async {
+      final criteria = SearchCriteriaDTO().fromString(
+        'https://www.wikidata.org/wiki/Q253205',
+      );
+      final actualOutput = await QueryWikidataDetails(criteria).readList();
+
+      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+
+      // To update expected data, uncomment the following line
+      // writeTestData(actualOutput, testName: 'series');
+
+      // Check the results.
+      final expectedOutput = readTestData(testName: 'series');
       expect(
         actualOutput,
         MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),

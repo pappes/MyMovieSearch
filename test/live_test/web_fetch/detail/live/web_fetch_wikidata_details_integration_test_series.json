@@ -1,0 +1,16 @@
+[
+  {
+    "uniqueId": "tt0387199",
+    "title": "Entourage",
+    "description": "American comedy-drama television series",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.series",
+    "year": "2004",
+    "yearRange": "2004-2011",
+    "runTime": "1680",
+    "links": "{\"Wikipedia\":\"https://en.wikipedia.org/wiki/Entourage_(American_TV_series)\",\"IMDB\":\"https://www.imdb.com/title/tt0387199/?ref_=nv_sr_srsg_0\",\"Instagram\":\"https://www.instagram.com/entourage\",\"Official Website\":\"http://www.hbo.com/entourage/\",\"Facebook\":\"https://www.facebook.com/Entourage\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/tv/entourage\",\"TV Maze\":\"https://www.tvmaze.com/shows/559\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt0387199"
+    }
+  }
+]

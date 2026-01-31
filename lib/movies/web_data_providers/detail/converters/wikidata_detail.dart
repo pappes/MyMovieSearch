@@ -17,6 +17,14 @@ const nodeName = 'labels';
 const nodeDescription = 'descriptions';
 const nodeWikiLinks = 'sitelinks';
 const nodeExternalLinks = 'claims';
+const nodeMovieType = 'P31';
+const nodeRuntime = 'P2047';
+const leafRuntime = 'amount';
+const nodeStartDate = 'P580';
+const nodeEndDate = 'P582';
+const factVersion = 'mainsnak';
+const leafDate = 'time';
+const leafQid = 'id';
 const nodeRottentomatoes = 'P1258';
 const nodeImdb = 'P345';
 const nodeFacebook = 'P2013';
@@ -24,9 +32,10 @@ const nodeOfficialWebsite = 'P856';
 
 const multipleTypeId = 'typeQIDs';
 const multipleName = 'movieName';
-const multipleDescription = 'description';
-const multipleRuntime = 'runtime';
 const multipleIMDB = 'movieIMDB';
+const multipleRuntime = 'averageRuntime';
+const multipleStartDate = 'firstAired';
+const multipleEndDate = 'lastAired';
 
 const typeMovie = 'Q11424'; // Film
 const typeTV = 'Q506240'; // TV Movie
@@ -151,6 +160,11 @@ class WikidataDetailConverter {
       ..uniqueId = id
       ..type = resultData[nodeType] as MovieContentType? ?? movie.type
       ..title = resultData[nodeName]?.toString() ?? movie.title
+      ..runTime = getDurationValue(resultData, multipleRuntime) ?? movie.runTime
+      ..year = getDateValue(resultData, multipleStartDate) ?? movie.year
+      ..yearRange =
+          getDateRangeValue(resultData, multipleEndDate, movie.year) ??
+          movie.yearRange
       ..description =
           resultData[nodeDescription]?.toString() ?? movie.description
       ..links.addAll(dynamicToStringMap(resultData[nodeExternalLinks]))
@@ -177,12 +191,14 @@ class WikidataDetailConverter {
             outputRow[nodeName] = getStringValue(row, branchText: multipleName);
             outputRow[nodeDescription] = getStringValue(
               row,
-              branchText: multipleDescription,
+              branchText: nodeDescription,
             );
             final imdbId = getStringValue(row, branchText: multipleIMDB);
             outputRow[idField] = imdbId;
             outputRow[nodeExternalLinks] = getMultipleLinks(row);
-            final movieType = getMovieType(row, imdbId ?? '');
+
+            final qid = getStringValue(row, branchText: multipleTypeId);
+            final movieType = getMovieType(qid, imdbId ?? '');
             outputRow[nodeType] = movieType;
             if (movieType != MovieContentType.none) {
               result = MovieContentType.title;
@@ -222,6 +238,8 @@ class WikidataDetailConverter {
       var movieType = MovieContentType.none;
       final nameData = inputData.deepSearch(nodeName);
       final descriptionData = inputData.deepSearch(nodeDescription);
+      final startDateData = inputData.deepSearch(nodeStartDate);
+      final endDateData = inputData.deepSearch(nodeEndDate);
       final wikiLinksData = inputData
           .deepSearch(nodeWikiLinks)
           ?.deepSearch(linkEnglish);
@@ -229,6 +247,21 @@ class WikidataDetailConverter {
       // ...'en':...'value':'xxx'
       outputData[nodeName] = getStringValue(nameData);
       outputData[nodeDescription] = getStringValue(descriptionData);
+      outputData[multipleRuntime] = getStringValue(
+        inputData,
+        branchText: nodeRuntime,
+        leafText: leafRuntime,
+      );
+      outputData[multipleStartDate] = getStringValue(
+        startDateData,
+        branchText: factVersion,
+        leafText: leafDate,
+      );
+      outputData[multipleEndDate] = getStringValue(
+        endDateData,
+        branchText: factVersion,
+        leafText: leafDate,
+      );
 
       final destinationUrls = <String, String>{};
       final wikiUrl = wikiLinksData?.searchForString(key: nodeUrl);
@@ -242,7 +275,12 @@ class WikidataDetailConverter {
       if (bestID.startsWith(imdbPersonPrefix)) {
         movieType = MovieContentType.person;
       } else if (bestID.startsWith(imdbTitlePrefix)) {
-        movieType = MovieContentType.title;
+        final qid = getStringValue(
+          inputData,
+          branchText: factVersion,
+          leafText: leafQid,
+        );
+        movieType = getMovieType(qid, bestID);
       } else if (bestID.startsWith(wikiNotFound)) {
         movieType = MovieContentType.error;
       }
@@ -260,26 +298,31 @@ class WikidataDetailConverter {
   ) {
     for (final linkCode in tvdbSourceToEnumMapping.keys) {
       final linkType = tvdbSourceToEnumMapping[linkCode];
-      final externalSiteData = rawData
-          ?.deepSearch(linkCode)
-          ?.deepSearch(linkStatus, returnParent: true, multipleMatch: true);
-      for (final link in externalSiteData ?? []) {
-        // Discard deprecated links.
-        if (link is Map && link[linkStatus] == linkActive) {
-          final identifier = link.searchForString(key: nodeText);
-          getExternalUrl(
-            destinationUrls,
-            linkType,
-            identifier,
-            skipImdb: false,
-          );
+      final externalSiteData = rawData?.deepSearch(linkCode);
+      final claims = ignoreDeprecatedClaims(externalSiteData);
+      for (final link in claims) {
+        final identifier = link.searchForString(key: nodeText);
+        getExternalUrl(destinationUrls, linkType, identifier, skipImdb: false);
 
-          if (linkCode == nodeImdb) {
-            imdbId = identifier;
-          }
+        if (linkCode == nodeImdb) {
+          imdbId = identifier;
         }
       }
     }
+  }
+
+  Iterable<Map<dynamic, dynamic>> ignoreDeprecatedClaims(dynamic rawData) {
+    final claims = TreeHelper(
+      rawData,
+    ).deepSearch(linkStatus, returnParent: true, multipleMatch: true);
+    final currentClaims = <Map<dynamic, dynamic>>[];
+    for (final link in claims ?? []) {
+      // Discard deprecated links.
+      if (link is Map && link[linkStatus] == linkActive) {
+        currentClaims.add(link);
+      }
+    }
+    return currentClaims;
   }
 
   /// Search the returned data for a specific id (wikiData or IMDB)
@@ -288,53 +331,52 @@ class WikidataDetailConverter {
     return imdbId ?? wikidataId ?? wikiNotFound;
   }
 
-  MovieContentType getMovieType(Map<dynamic, dynamic> rawData, String imdbId) {
+  MovieContentType getMovieType(String? qid, String imdbId) {
     if (imdbId.startsWith(imdbPersonPrefix)) {
       return MovieContentType.person;
     }
-    final type = getStringValue(rawData, branchText: multipleTypeId);
-    if (type != null) {
+    if (qid != null) {
       // Type string may contain multiple values so look for
       // most specific values first e.g. Animated series before series
-      if (type.contains(typeShort)) {
+      if (qid.contains(typeShort)) {
         return MovieContentType.short;
-      } else if (type.contains(typeSilent)) {
+      } else if (qid.contains(typeSilent)) {
         return MovieContentType.custom;
-      } else if (type.contains(typeDoc)) {
+      } else if (qid.contains(typeDoc)) {
         return MovieContentType.custom;
-      } else if (type.contains(typeAnimatedSeries)) {
+      } else if (qid.contains(typeAnimatedSeries)) {
         return MovieContentType.custom;
-      } else if (type.contains(typeAnimated)) {
+      } else if (qid.contains(typeAnimated)) {
         return MovieContentType.custom;
-      } else if (type.contains(typeWebSeries)) {
+      } else if (qid.contains(typeWebSeries)) {
         return MovieContentType.series;
-      } else if (type.contains(typeEpisode)) {
+      } else if (qid.contains(typeEpisode)) {
         return MovieContentType.episode;
-      } else if (type.contains(typeSoapOpera)) {
+      } else if (qid.contains(typeSoapOpera)) {
         return MovieContentType.series;
-      } else if (type.contains(typeSeries)) {
+      } else if (qid.contains(typeSeries)) {
         return MovieContentType.series;
-      } else if (type.contains(typePlay)) {
+      } else if (qid.contains(typePlay)) {
         return MovieContentType.custom;
-      } else if (type.contains(typeConcert)) {
+      } else if (qid.contains(typeConcert)) {
         return MovieContentType.custom;
-      } else if (type.contains(typeMusical)) {
+      } else if (qid.contains(typeMusical)) {
         return MovieContentType.custom;
-      } else if (type.contains(typeOpera)) {
+      } else if (qid.contains(typeOpera)) {
         return MovieContentType.custom;
-      } else if (type.contains(typeVideoGame)) {
+      } else if (qid.contains(typeVideoGame)) {
         return MovieContentType.custom;
-      } else if (type.contains(typeMusicVideo)) {
+      } else if (qid.contains(typeMusicVideo)) {
         return MovieContentType.short;
-      } else if (type.contains(typeMiniseries)) {
+      } else if (qid.contains(typeMiniseries)) {
         return MovieContentType.miniseries;
-      } else if (type.contains(typeTV)) {
+      } else if (qid.contains(typeTV)) {
         return MovieContentType.movie;
-      } else if (type.contains(typeSpecial)) {
+      } else if (qid.contains(typeSpecial)) {
         return MovieContentType.movie;
-      } else if (type.contains(typeDirect)) {
+      } else if (qid.contains(typeDirect)) {
         return MovieContentType.movie;
-      } else if (type.contains(typeMovie)) {
+      } else if (qid.contains(typeMovie)) {
         return MovieContentType.movie;
       }
     }
@@ -346,28 +388,57 @@ class WikidataDetailConverter {
     String branchText = languageEnglish,
     String leafText = nodeText,
   }) {
-    final type = TreeHelper(
-      rawData,
-    ).deepSearch(branchText)?.searchForString(key: leafText);
-    if (type == null || type.isEmpty) {
-      return null;
+    final ignoreDeprecated = (branchText == factVersion);
+    final Iterable<dynamic> claims = ignoreDeprecated
+        ? ignoreDeprecatedClaims(rawData)
+        : TreeHelper(rawData).deepSearch(branchText) ?? [];
+    String? returnValue;
+    for (final claim in claims) {
+      final value = TreeHelper(claim).searchForString(key: leafText);
+      if (value != null && value.isNotEmpty) {
+        returnValue = value;
+      }
     }
-    return type;
+    return returnValue;
   }
 
   int? getNumberValue(Map<dynamic, dynamic> rawData, String branchText) {
-    final type = rawData.deepSearch(branchText)?.searchForString(key: nodeText);
+    final type = rawData.searchForString(key: branchText);
     if (type == null || type.isEmpty) {
       return null;
     }
     return int.tryParse(type);
   }
 
-  DateTime? getDateValue(Map<dynamic, dynamic> rawData, String branchText) {
-    final type = rawData.deepSearch(branchText)?.searchForString(key: nodeText);
+  Duration? getDurationValue(Map<dynamic, dynamic> rawData, String branchText) {
+    final minutes = getNumberValue(rawData, branchText);
+    if (minutes == null) {
+      return null;
+    }
+    return Duration(minutes: minutes);
+  }
+
+  int? getDateValue(Map<dynamic, dynamic> rawData, String branchText) {
+    final type = rawData.searchForString(key: branchText);
     if (type == null || type.isEmpty) {
       return null;
     }
-    return DateTime.tryParse(type);
+    return DateTime.tryParse(type)?.year;
+  }
+
+  String? getDateRangeValue(
+    Map<dynamic, dynamic> rawData,
+    String branchText,
+    int? startYear,
+  ) {
+    final type = rawData.searchForString(key: branchText);
+    if (type == null || type.isEmpty || startYear == null || startYear == 0) {
+      return null;
+    }
+    final endYear = DateTime.tryParse(type)?.year;
+    if (endYear == null) {
+      return null;
+    }
+    return '$startYear-$endYear';
   }
 }

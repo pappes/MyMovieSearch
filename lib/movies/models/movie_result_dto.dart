@@ -810,7 +810,8 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (newValue.userRatingCount >= userRatingCount ||
         0 == userRatingCount ||
         newValue.sources.containsKey(DataSourceType.imdb) ||
-        newValue.sources.containsKey(DataSourceType.torrentDownloadDetail)) {
+        newValue.sources.containsKey(DataSourceType.torrentDownloadDetail) ||
+        newValue.sources.containsKey(DataSourceType.wikidataDetail)) {
       bestSource = bestValue(bestSource, newValue.bestSource);
 
       final oldTitle = title;
@@ -832,16 +833,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       }
 
       alternateTitle = newAlternateTitle;
-      characterName = bestValue(newValue.characterName, characterName);
       description = bestValue(newValue.description, description);
-      type = bestValue(newValue.type, type);
-      year = bestValue(newValue.year, year);
-      yearRange = bestValue(newValue.yearRange, yearRange);
-      runTime = bestValue(newValue.runTime, runTime);
-      type = bestValue(newValue.type, type);
-      censorRating = bestValue(newValue.censorRating, censorRating);
-      imageUrl = bestValue(newValue.imageUrl, imageUrl);
-
       creditsOrder = bestValue(newValue.creditsOrder, creditsOrder);
       userRating = bestUserRating(
         newValue.userRating,
@@ -850,6 +842,16 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         userRatingCount,
       );
       userRatingCount = bestValue(newValue.userRatingCount, userRatingCount);
+    }
+    characterName = bestValue(newValue.characterName, characterName);
+      type = bestValue(newValue.type, type);
+      year = bestValue(newValue.year, year);
+      yearRange = bestValue(newValue.yearRange, yearRange);
+      runTime = bestValue(newValue.runTime, runTime);
+      type = bestValue(newValue.type, type);
+      censorRating = bestValue(newValue.censorRating, censorRating);
+      imageUrl = bestValue(newValue.imageUrl, imageUrl);
+
       type = bestValue(
         getMovieContentType(
               '$genres $yearRange',
@@ -858,8 +860,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
             ) ??
             type,
         type,
-      );
-    }
+    );
     genres.addAll(newValue.genres);
     keywords.addAll(newValue.keywords);
     links.addAll(newValue.links);
@@ -906,7 +907,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Compare [a] with [b] and return the most relevant value.
   ///
   /// [a] and [b] can be numbers, strings, durations, enums
-  T bestValue<T>(T a, T b) {
+  static T bestValue<T>(T a, T b) {
     if (a is MovieContentType && b is MovieContentType) {
       return bestType(a, b) as T;
     }
@@ -931,8 +932,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (a.toString().length < b.toString().length) {
       return b;
     }
-    if (lastNumberFromString(a.toString()) <
-        lastNumberFromString(b.toString())) {
+    if (a.toString().lastNumber() < b.toString().lastNumber()) {
       return b;
     }
     return a;
@@ -942,7 +942,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   ///
   /// The string with the longest length is the best string
   /// unless it ends in ...
-  String bestString(String a, String b) {
+  static String bestString(String a, String b) {
     final aStr = _htmlDecode.convert(a);
     final bStr = _htmlDecode.convert(b);
 
@@ -964,7 +964,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Compare [rating1] with [rating2] and return the most relevant value.
   ///
   /// The rating with the highest count is the best rating.
-  double bestUserRating(
+  static double bestUserRating(
     double rating1,
     num count1,
     double rating2,
@@ -976,7 +976,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Compare [existing] with [candidate] and return the most relevant value.
   ///
-  MovieContentType bestType(
+  static MovieContentType bestType(
     MovieContentType existing,
     MovieContentType candidate,
   ) {
@@ -986,7 +986,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Compare [existing] with [candidate] and return the most relevant value.
   ///
-  CensorRatingType bestCensorRating(
+  static CensorRatingType bestCensorRating(
     CensorRatingType existing,
     CensorRatingType candidate,
   ) {
@@ -996,7 +996,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Compare [existing] with [candidate] and return the most relevant value.
   ///
-  DataSourceType bestBestSource(
+  static DataSourceType bestBestSource(
     DataSourceType existing,
     DataSourceType candidate,
   ) {
@@ -1006,7 +1006,10 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   /// Compare [existing] with [candidate] and return the most relevant value.
   ///
-  LanguageType bestLanguage(LanguageType existing, LanguageType candidate) {
+  static LanguageType bestLanguage(
+    LanguageType existing,
+    LanguageType candidate,
+  ) {
     if (candidate.index > existing.index) return candidate;
     return existing;
   }
@@ -1063,9 +1066,6 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (title.lastIndexOf('game') > -1) return MovieContentType.custom;
     if (title.lastIndexOf('creativework') > -1) return MovieContentType.custom;
     if (title.lastIndexOf('music') > -1) return MovieContentType.custom;
-    if (seconds != null && seconds < (30 * 60) && seconds > 0) {
-      return MovieContentType.short;
-    }
     // mini includes TV Mini-series
     if (title.lastIndexOf('mini') > -1) return MovieContentType.miniseries;
     if (title.lastIndexOf('episode') > -1) return MovieContentType.episode;
@@ -1074,6 +1074,12 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (title.lastIndexOf('–') > -1) return MovieContentType.series;
     if (title.lastIndexOf('special') > -1) return MovieContentType.series;
     if (title.lastIndexOf('short') > -1) return MovieContentType.short;
+    if (seconds != null && seconds < (30 * 60) && seconds > 0) {
+      if (existing == MovieContentType.series) {
+        return MovieContentType.series;
+      }
+      return MovieContentType.short;
+    }
     if (seconds != null && seconds < (60 * 60) && seconds > 0) {
       if (existing == MovieContentType.series) {
         return MovieContentType.series;
@@ -1083,8 +1089,13 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (title.lastIndexOf('movie') > -1) return MovieContentType.movie;
     if (title.lastIndexOf('video') > -1) return MovieContentType.movie;
     if (title.lastIndexOf('feature') > -1) return MovieContentType.movie;
-    if (id.startsWith(imdbTitlePrefix)) return MovieContentType.title;
-    return null;
+    if (id.startsWith(imdbTitlePrefix)) {
+      return bestType(
+        existing ?? MovieContentType.title,
+        MovieContentType.title,
+      );
+    }
+    return existing;
   }
 
   /// update title type based on information in the dto.
@@ -1774,20 +1785,6 @@ extension DTOCompare on MovieResultDTO {
 
   /// Extract year of most recent episode.
   ///
-  int yearRangeAsNumber() => lastNumberFromString(yearRange);
+  int yearRangeAsNumber() => yearRange.lastNumber();
 
-  /// Extract numeric digits from end of string.
-  ///
-  /// String can optionally end with a dash.
-  int lastNumberFromString(String str) {
-    // one or more numeric digits ([0-9]+)
-    // followed by 0 or more dashes ([\-]*)
-    final match = RegExp(r'([0-9]+)([\-]*)$').firstMatch(str);
-    if (null != match) {
-      if (null != match.group(1)) {
-        return int.tryParse(match.group(1)!) ?? 0;
-      }
-    }
-    return 0;
-  }
 }

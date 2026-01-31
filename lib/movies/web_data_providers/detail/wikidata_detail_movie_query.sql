@@ -88,12 +88,13 @@ SELECT
   (SAMPLE(?movieLabel) AS ?movieName)
 # --- NEW: TYPE IDENTIFICATION ---
   (GROUP_CONCAT(DISTINCT ?typeLabel; separator=", ") AS ?contentTypes)
-  (GROUP_CONCAT(DISTINCT ?parentQID; separator=" ") AS ?typeQIDs)
+  (GROUP_CONCAT(DISTINCT ?typeQID; separator=" ") AS ?typeQIDs)
   
-  (SAMPLE(?synopsis) AS ?description)
+  (SAMPLE(?synopsis) AS ?descriptions)
   (SAMPLE(?certLabel) AS ?rating)
-  (MIN(?date) AS ?firstReleaseDate)
-  (MIN(?runtime) AS ?maxRuntime)
+  (MIN(?startDate) AS ?firstAired)
+  (MAX(?endDate) AS ?lastAired)
+  (MIN(?runtime) AS ?averageRuntime)
   
 # --- DYNAMIC FQDN URL GENERATION ---
   (SAMPLE(?tmdbURL) AS ?tmdbLink)
@@ -129,18 +130,8 @@ WHERE {
 # --- TYPE LOGIC ---
   ?movie wdt:P31 ?type.
   
-
-# This block binds the parent QIDs to the ?parentID variable
-OPTIONAL {
-?type wdt:P279* ?parent.
-VALUES ?parent {
-wd:Q11424 wd:Q5398426 wd:Q19830628 wd:Q788941 wd:Q24862 wd:Q193916
-wd:Q506240 wd:Q125922 wd:Q101352 wd:Q1846540 wd:Q4414442 wd:Q120243801
-wd:Q2031124 wd:Q11073 wd:Q191468 wd:Q7062138 wd:Q474441 wd:Q40446
-wd:Q625316 wd:Q120245 wd:Q226730 wd:Q2743 wd:Q1344 wd:Q581714
-}
-BIND(REPLACE(STR(?parent), ".QL", "") AS ?parentID)
-}
+# strip URL from movie type ID
+BIND(REPLACE(STR(?type), "^.*/", "") AS ?typeQID)
 
 # Flags for URL logic
   BIND(EXISTS { ?movie wdt:P31/wdt:P279* wd:Q11424 } AS ?isMovie)    # Film
@@ -181,7 +172,8 @@ BIND(REPLACE(STR(?parent), ".QL", "") AS ?parentID)
   OPTIONAL { ?movie wdt:P449 ?network. }
   OPTIONAL { ?movie p:P1657 [ ps:P1657 ?cert; pq:P17 wd:Q30 ]. }
   OPTIONAL { ?movie schema:description ?synopsis. FILTER(LANG(?synopsis) = "en") }
-  OPTIONAL { ?movie wdt:P577 ?date. }
+  OPTIONAL { ?movie wdt:P577 ?startDate. }
+  OPTIONAL { ?movie wdt:P582 ?endDate. }
   OPTIONAL { ?movie wdt:P2047 ?runtime. }
   
   SERVICE wikibase:label { 

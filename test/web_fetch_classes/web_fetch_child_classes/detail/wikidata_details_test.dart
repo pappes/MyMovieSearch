@@ -223,7 +223,7 @@ void main() {
 
   group('QueryWikidataDetails integration tests', () {
     // Confirm singleresult map can be converted to DTO.
-    test('Run myConvertTreeToOutputType() single', () async {
+    test('Run myConvertTreeToOutputType() single movie', () async {
       final testClass = QueryWikidataDetails(imdbCriteria);
       final actualResult = <MovieResultDTO>[];
 
@@ -235,6 +235,27 @@ void main() {
 
       // Check the results.
       final expectedValue = readTestData(testName: 'movie');
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
+      );
+    });
+    test('Run myConvertTreeToOutputType() single series', () async {
+      final testClass = QueryWikidataDetails(imdbCriteria);
+      final actualResult = <MovieResultDTO>[];
+
+      // Invoke the functionality and collect results.
+      for (final map in [jsonSeries]) {
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
+      }
+      // writeTestData(actualResult, testName: 'series');
+
+      // Check the results.
+      final expectedValue = readTestData(testName: 'series');
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),

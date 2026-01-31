@@ -50,6 +50,25 @@ extension StringHelper on String {
     return temp.trim();
   }
 
+  /// Extract numeric digits from end of string.
+  ///
+  /// String can optionally end with a dash
+  /// 2020- returns 2020
+  /// 2020-- returns 2020
+  /// 2020 returns 2020
+  /// 2020-2021 returns 2021
+  int lastNumber() {
+    // one or more numeric digits ([0-9]+)
+    // followed by 0 or more dashes ([\-]*)
+    final match = RegExp(r'([0-9]+)([\-]*)$').firstMatch(this);
+    if (null != match) {
+      if (null != match.group(1)) {
+        return int.tryParse(match.group(1)!) ?? 0;
+      }
+    }
+    return 0;
+  }
+
   /// Add a colon to the end of the string if it does not already end with one.
   ///
   /// ```dart

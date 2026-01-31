@@ -182,9 +182,7 @@ class BaseMovieRepository {
             .whenComplete(() => finishProvider(provider)),
       );
     }
-    for (final future in futures) {
-      await future;
-    }
+    await Future.wait(futures);
   }
 
   /// Initiates a details retrival for a specified list of movies.

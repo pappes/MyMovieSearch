@@ -15,8 +15,8 @@
     "title": "Wednesday",
     "description": "American horror comedy television series",
     "bestSource": "DataSourceType.wikidataDetail",
-    "type": "MovieContentType.title",
-    "links": "{\"tmdbLink\":\"https://www.themoviedb.org/movie/119051\",\"Metacritic\":\"https://www.metacritic.com/movie/tv/wednesday\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/tv/wednesday\",\"X (Twitter)\":\"https://twitter.com/wednesdayaddams\",\"Facebook\":\"https://www.facebook.com/wednesdaynetflix\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film995233.html\",\"Netflix\":\"https://www.netflix.com/title/81231974\",\"YouTube\":\"https://www.youtube.com/watch?v=Di310WS8zLk\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/60300ded22d896002c2d4897\",\"theTVDBLink\":\"https://thetvdb.com/series/397060\",\"Know Your Meme\":\"https://knowyourmeme.com/memes/wednesday-2022-series\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Series/Wednesday\",\"Letterboxd\":\"https://letterboxd.com/film/tv-and-radio/wednesday\",\"LezWatchTV\":\"https://lezwatchtv.com/show/wednesday\",\"Ratingraph\":\"https://www.ratingraph.com/tv-shows/wednesday-ratings-101930\",\"tvMazeLink\":\"https://tvmaze.com/shows/53647\"}",
+    "type": "MovieContentType.series",
+    "links": "{\"tmdbLink\":\"https://www.themoviedb.org/movie/119051\",\"Metacritic\":\"https://www.metacritic.com/movie/tv/wednesday\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/tv/wednesday\",\"X (Twitter)\":\"https://twitter.com/wednesdayaddams\",\"Facebook\":\"https://www.facebook.com/wednesdaynetflix\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film995233.html\",\"YouTube\":\"https://www.youtube.com/watch?v=Di310WS8zLk\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/60300ded22d896002c2d4897\",\"Netflix\":\"https://www.netflix.com/title/81231974\",\"theTVDBLink\":\"https://thetvdb.com/series/397060\",\"Know Your Meme\":\"https://knowyourmeme.com/memes/wednesday-2022-series\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Main/Series/Wednesday\",\"Letterboxd\":\"https://letterboxd.com/film/tv-and-radio/wednesday\",\"LezWatchTV\":\"https://lezwatchtv.com/show/wednesday\",\"Ratingraph\":\"https://www.ratingraph.com/tv-shows/wednesday-ratings-101930\",\"tvMazeLink\":\"https://tvmaze.com/shows/53647\"}",
     "sources": {
       "DataSourceType.wikidataDetail": "tt13443470"
     }
@@ -26,10 +26,21 @@
     "title": "Sharknado",
     "description": "2013 film directed by Anthony C. Ferrante",
     "bestSource": "DataSourceType.wikidataDetail",
-    "type": "MovieContentType.title",
-    "links": "{\"Metacritic\":\"https://www.metacritic.com/movie/tv/sharknado\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/sharknado\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film399886.html\",\"Netflix\":\"https://www.netflix.com/title/70285977\",\"YouTube\":\"https://www.youtube.com/watch?v=TWu0zZljle4\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d776a3496b655001fde6841\"}",
+    "type": "MovieContentType.movie",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/movie/tv/sharknado\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/sharknado\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film399886.html\",\"YouTube\":\"https://www.youtube.com/watch?v=TWu0zZljle4\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d776a3496b655001fde6841\",\"Netflix\":\"https://www.netflix.com/title/70285977\"}",
     "sources": {
       "DataSourceType.wikidataDetail": "tt2724064"
+    }
+  },
+  {
+    "uniqueId": "tt28996126",
+    "title": "Nobody 2",
+    "description": "2025 film directed by Timo Tjahjanto",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/movie/movie/nobody-2\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/nobody_2\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film323354.html\",\"YouTube\":\"https://www.youtube.com/watch?v=5X2pt95cIo\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/64fdc3a5732dc8989ba96acb\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt28996126"
     }
   }
 ]

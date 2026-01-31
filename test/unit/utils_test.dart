@@ -625,6 +625,26 @@ Future<void> main() async {
       testAddColonIfNeeded('', ':');
     });
 
+    test('lastNumber()', () {
+      void testLastNumber(String input, int? expectedOutput) =>
+          expect(input.lastNumber(), expectedOutput, reason: 'input = $input');
+
+      testLastNumber('Version 2', 2);
+      testLastNumber('Version 2001', 2001);
+      testLastNumber('Version', 0);
+      testLastNumber('', 0);
+      testLastNumber('Version 2.5', 5);
+      testLastNumber('Version 2a', 0);
+      testLastNumber('Version v3', 3);
+      testLastNumber('Version #4', 4);
+      testLastNumber('Version 2020-', 2020);
+      testLastNumber('Version 2020-2025', 2025);
+      testLastNumber('Version (2020)', 0);
+      testLastNumber('Version (2020-2025)', 0);
+      testLastNumber('Version (2020-)', 0);
+      testLastNumber('Version (2020- )', 0);
+    });
+
     test('reduceWhitespace()', () {
       void testReduceWhitespace(
         String input,

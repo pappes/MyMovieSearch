@@ -1,5 +1,5 @@
 // query string https://www.wikidata.org/wiki/Special:EntityData/Q211082.json
-// or https://www.wikidata.org/wiki/Special:EntityData/Q13794921.json
+// or           https://www.wikidata.org/wiki/Special:EntityData/Q13794921.json
 
 
 import 'dart:convert';
@@ -43,6 +43,25 @@ final jsonMovie = {
         },
       },
       'claims': {
+        'run time': '128',
+        'P2047': [
+          {
+            'mainsnak': {
+              'snaktype': 'value',
+              'property': 'P2047',
+              'hash': '87b93e5da7b23eb564255937bd5c7d90a23ea400',
+              'datavalue': {
+                'value': {
+                  'amount': '+28',
+                  'unit': 'http://www.wikidata.org/entity/Q7727',
+                },
+                'type': 'quantity',
+              },
+              'datatype': 'external-id',
+            },
+            'rank': 'normal',
+          },
+        ],
         'rottentomatoes': 'https://www.rottentomatoes.com/',
         'P1258': [
           {
@@ -96,6 +115,92 @@ final jsonMovie = {
             },
             'type': 'statement',
             'id': r'Q13794921$E8B9D8EE-3180-45E8-A8BC-FD0D2841F3E3',
+            'rank': 'normal',
+          },
+        ],
+      },
+    },
+  },
+};
+
+final jsonSeries = {
+  'entities': {
+    'Q253205': {
+      'id': 'Q253205',
+      'labels': {
+        'en': {'language': 'en', 'value': 'Entourage'},
+      },
+      'descriptions': {
+        'en': {
+          'language': 'en',
+          'value': 'American comedy-drama television series',
+        },
+      },
+      'claims': {
+        'movie type': 'tv series',
+        'P31': [
+          {
+            'mainsnak': {
+              'snaktype': 'value',
+              'property': 'P31',
+              'hash': '40a93c25a36e6a07478de6eca4ba68f5b9aaa85f',
+              'datavalue': {
+                'value': {
+                  'entity-type': 'item',
+                  'numeric-id': 5398426,
+                  'id': 'Q5398426',
+                },
+                'type': 'wikibase-entityid',
+              },
+              'datatype': 'wikibase-item',
+            },
+            'type': 'statement',
+            'rank': 'normal',
+          },
+        ],
+        'start date': '18/7/2004',
+        'P580': [
+          {
+            'mainsnak': {
+              'snaktype': 'value',
+              'property': 'P580',
+              'hash': '87b93e5da7b23eb564255937bd5c7d90a23ea400',
+              'datavalue': {
+                'value': {'time': '+2004-07-18T00:00:00Z'},
+                'type': 'time',
+              },
+              'datatype': 'time',
+            },
+            'rank': 'normal',
+          },
+        ],
+        'end date': '11/9/2011',
+        'P582': [
+          {
+            'mainsnak': {
+              'snaktype': 'value',
+              'property': 'P582',
+              'hash': '5d1ae0a9be90a4cf4b7775d140fdaeb4e928cfb7',
+              'datavalue': {
+                'value': {'time': '+2011-09-11T00:00:00Z'},
+                'type': 'time',
+              },
+              'datatype': 'time',
+            },
+            'rank': 'normal',
+          },
+        ],
+        'imdb': 'https://www.imdb.com/title/',
+        'P345': [
+          {
+            'mainsnak': {
+              'snaktype': 'value',
+              'property': 'P345',
+              'hash': 'c31a47d7d4300f80ec921ad2dee9ffff85517f6b',
+              'datavalue': {'value': 'tt0387199', 'type': 'string'},
+              'datatype': 'external-id',
+            },
+            'type': 'statement',
             'rank': 'normal',
           },
         ],
@@ -186,7 +291,7 @@ final jsonMultipleMovie = {
       'movieName',
       'contentTypes',
       'typeQIDs',
-      'description',
+      'descriptions',
       'rating',
       'firstReleaseDate',
       'maxRuntime',
@@ -220,7 +325,7 @@ final jsonMultipleMovie = {
         },
         'contentTypes': {'type': 'literal', 'value': 'film'},
         'typeQIDs': {'type': 'literal', 'value': ''},
-        'description': {
+        'descriptions': {
           'xml:lang': 'en',
           'type': 'literal',
           'value': '1972 US film by Francis Ford Coppola',
@@ -280,7 +385,7 @@ final jsonMultipleMovie = {
         },
         'contentTypes': {'type': 'literal', 'value': 'film'},
         'typeQIDs': {'type': 'literal', 'value': ''},
-        'description': {
+        'descriptions': {
           'xml:lang': 'en',
           'type': 'literal',
           'value':
@@ -335,7 +440,7 @@ final jsonMultipleMovie = {
         },
         'contentTypes': {'type': 'literal', 'value': 'film'},
         'typeQIDs': {'type': 'literal', 'value': ''},
-        'description': {
+        'descriptions': {
           'xml:lang': 'en',
           'type': 'literal',
           'value': '1993 film by Steven Spielberg',
@@ -391,7 +496,7 @@ final jsonMultipleMovie = {
         },
         'contentTypes': {'type': 'literal', 'value': 'film'},
         'typeQIDs': {'type': 'literal', 'value': ''},
-        'description': {
+        'descriptions': {
           'xml:lang': 'en',
           'type': 'literal',
           'value': '1994 film by Quentin Tarantino',
@@ -443,7 +548,7 @@ final jsonMultipleMovie = {
         },
         'contentTypes': {'type': 'literal', 'value': 'film'},
         'typeQIDs': {'type': 'literal', 'value': ''},
-        'description': {
+        'descriptions': {
           'xml:lang': 'en',
           'type': 'literal',
           'value': '1994 American drama film directed by Frank Darabont',
@@ -500,7 +605,7 @@ final jsonMultipleMovie = {
         },
         'contentTypes': {'type': 'literal', 'value': 'animated film'},
         'typeQIDs': {'type': 'literal', 'value': ''},
-        'description': {
+        'descriptions': {
           'xml:lang': 'en',
           'type': 'literal',
           'value': '1995 American animated film',
@@ -556,7 +661,7 @@ final jsonMultipleMovie = {
         },
         'contentTypes': {'type': 'literal', 'value': 'film'},
         'typeQIDs': {'type': 'literal', 'value': ''},
-        'description': {
+        'descriptions': {
           'xml:lang': 'en',
           'type': 'literal',
           'value': '1999 American science fiction action thriller film',
@@ -611,7 +716,7 @@ final jsonMultipleMovie = {
         },
         'contentTypes': {'type': 'literal', 'value': 'film'},
         'typeQIDs': {'type': 'literal', 'value': ''},
-        'description': {
+        'descriptions': {
           'xml:lang': 'en',
           'type': 'literal',
           'value': '1999 film directed by David Fincher',
@@ -666,7 +771,7 @@ final jsonMultipleMovie = {
         },
         'contentTypes': {'type': 'literal', 'value': 'film'},
         'typeQIDs': {'type': 'literal', 'value': ''},
-        'description': {
+        'descriptions': {
           'xml:lang': 'en',
           'type': 'literal',
           'value': '2003 film by Peter Jackson',
@@ -720,7 +825,7 @@ final jsonMultipleMovie = {
         },
         'contentTypes': {'type': 'literal', 'value': 'film'},
         'typeQIDs': {'type': 'literal', 'value': ''},
-        'description': {
+        'descriptions': {
           'xml:lang': 'en',
           'type': 'literal',
           'value': '2008 film directed by Christopher Nolan',
@@ -776,7 +881,7 @@ final jsonMultipleMovie = {
         },
         'contentTypes': {'type': 'literal', 'value': 'television series'},
         'typeQIDs': {'type': 'literal', 'value': ''},
-        'description': {
+        'descriptions': {
           'xml:lang': 'en',
           'type': 'literal',
           'value': 'American horror comedy television series',
@@ -785,6 +890,16 @@ final jsonMultipleMovie = {
           'datatype': 'http://www.w3.org/2001/XMLSchema#decimal',
           'type': 'literal',
           'value': '360',
+        },
+        'firstReleaseDate': {
+          'datatype': 'http://www.w3.org/2001/XMLSchema#dateTime',
+          'type': 'literal',
+          'value': '1972-03-15T00:00:00Z',
+        },
+        'lastReleaseDate': {
+          'datatype': 'http://www.w3.org/2001/XMLSchema#dateTime',
+          'type': 'literal',
+          'value': '1974-03-15T00:00:00Z',
         },
         'tmdbLink': {
           'type': 'literal',
