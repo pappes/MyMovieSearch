@@ -39,6 +39,29 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
+    // Convert 500 TMDB pages into dtos.
+    test('Run read 500 pages from TMDB', () async {
+      final actualOutput = await executeMultipleFetches(
+        (criteria) => QueryTMDBMovieDetails(criteria).readList(),
+        qty: 500,
+      );
+
+      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+
+      // To update expected data, uncomment the following line
+      // writeTestData(actualOutput, testName: '500_fetches');
+
+      // Check the results.
+      final expectedOutput = readTestData(testName: '500_fetches');
+      expect(
+        actualOutput,
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
     test('Run an IMDBid search', () async {
       final criteria = SearchCriteriaDTO().fromString('tt2724064');
       final actualOutput = await QueryTMDBMovieDetails(

@@ -128,20 +128,25 @@ abstract class QueryTVDBCommon
       ..add('accept', 'application/json');
   }
 
-  /// Delay request so that a maximum of 10 requests are sent per second
+  /// Delay request so that a maximum of [requestsPerSecond] requests
+  /// are sent per second
   @override
   Future<void> myDelayRequest() {
-    final nextRequestTime = lastRequestTime.add(
-      // linter thinks this is zero
-      // ignore: use_named_constants
-      const Duration(milliseconds: millisecondsPerSecond ~/ requestsPerSecond),
+    const delay = Duration(
+      milliseconds: millisecondsPerSecond ~/ requestsPerSecond,
     );
-    lastRequestTime = DateTime.now();
-    final delay = nextRequestTime.difference(lastRequestTime);
-    if (!delay.isNegative) {
+    final nextRequestTime = lastRequestTime.add(delay);
+    final currentRequestTime = DateTime.now();
+    if (currentRequestTime.isAfter(nextRequestTime)) {
+      // No delay needed, update last request time.
+      lastRequestTime = currentRequestTime;
+      return Future.value();
+    } else {
+      final delay = nextRequestTime.difference(currentRequestTime);
+      // Update last request time to the scheduled time.
+      lastRequestTime = nextRequestTime;
       return Future.delayed(delay);
     }
-    return Future.value();
   }
 
   /// Convert web text to a traversable tree of [List] or [Map] data.

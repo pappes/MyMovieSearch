@@ -15,7 +15,7 @@ import 'package:universal_io/io.dart'
     show HttpClientResponse, HttpHeaders; // limit inclusions to reduce size
 
 const tmdbPosterPathPrefix = 'https://image.tmdb.org/t/p/w500';
-const requestsPerSecond = 30;
+const requestsPerSecond = 50;
 
 /// Implements [WebFetchBase] for searching The Movie Database (TMDB).
 ///
@@ -100,20 +100,25 @@ abstract class QueryTMDBCommon
     headers.add('Authorization', ' Bearer $tmdbKey');
   }
 
-  /// Delay request so that a maximum of 10 requests are sent per second
+  /// Delay request so that a maximum of [requestsPerSecond] requests
+  /// are sent per second
   @override
   Future<void> myDelayRequest() {
-    final nextRequestTime = lastRequestTime.add(
-      // flutter lints thinks this = 0
-      // ignore: use_named_constants
-      const Duration(milliseconds: millisecondsPerSecond ~/ requestsPerSecond),
+    const delay = Duration(
+      milliseconds: millisecondsPerSecond ~/ requestsPerSecond,
     );
-    lastRequestTime = DateTime.now();
-    final delay = nextRequestTime.difference(lastRequestTime);
-    if (!delay.isNegative) {
+    final nextRequestTime = lastRequestTime.add(delay);
+    final currentRequestTime = DateTime.now();
+    if (currentRequestTime.isAfter(nextRequestTime)) {
+      // No delay needed, update last request time.
+      lastRequestTime = currentRequestTime;
+      return Future.value();
+    } else {
+      final delay = nextRequestTime.difference(currentRequestTime);
+      // Update last request time to the scheduled time.
+      lastRequestTime = nextRequestTime;
       return Future.delayed(delay);
     }
-    return Future.value();
   }
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
