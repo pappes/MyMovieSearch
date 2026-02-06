@@ -46,6 +46,8 @@ const innerElementSpokenLanguages = 'spoken_languages';
 const innerElementVoteCount = 'vote_count';
 const innerElementVoteAverage = 'vote_average';
 const innerElementKeyword = 'name';
+const elementLanguageDescription = 'english_name';
+const elementLanguageCode = 'iso_639_1';
 
 /// Work out how to get a dto from the json data.
 class TmdbMovieDetailConverter {
@@ -112,9 +114,7 @@ class TmdbMovieDetailConverter {
         map[innerElementVoteCount],
         nullValueSubstitute: movie.userRatingCount,
       )!
-      ..languages.combineUnique(
-        map.deepSearch('english_name', multipleMatch: true),
-      )
+      ..languages.combineUnique(_getLanguages(map).toList())
       ..getContentType()
       ..getLanguageType();
     for (final genre in map[innerElementGenres] as Iterable) {
@@ -137,6 +137,40 @@ class TmdbMovieDetailConverter {
     return movie;
   }
 
+  static Set<String> _getLanguages(Map<dynamic, dynamic> map) {
+    final languages = <String>{};
+    // get the original language code
+    final originalLanguage = map[innerElementOriginalLanguage]?.toString();
+    // get the original language Description then all others
+    languages
+      ..addAll(_getMatchingLanguages(map, languageFilter: originalLanguage))
+      ..addAll(_getMatchingLanguages(map));
+    return languages;
+  }
+
+  static Set<String> _getMatchingLanguages(
+    Map<dynamic, dynamic> map, {
+    String? languageFilter,
+  }) {
+    final languages = <String>{};
+    // get all spoken languages
+    final spokenLanguages = map[innerElementSpokenLanguages];
+    if (spokenLanguages is Iterable) {
+      for (final language in spokenLanguages) {
+        if (language is Map) {
+          if (languageFilter == null ||
+              language[elementLanguageCode] == languageFilter) {
+            final englishName = language[elementLanguageDescription];
+            if (englishName is String) {
+              languages.add(englishName);
+            }
+          }
+        }
+      }
+    }
+    return languages;
+  }
+
   /// Covert minutes to a [Duration]
   ///
   static Duration? _getDuration(int? mins) {
@@ -157,5 +191,4 @@ class TmdbMovieDetailConverter {
     }
     return set;
   }
-
 }
