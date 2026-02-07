@@ -1,3 +1,4 @@
+// https://thetvdb.github.io/v4-api/#/Series/getSeriesBase
 import 'dart:async';
 
 import 'package:flutter/cupertino.dart';

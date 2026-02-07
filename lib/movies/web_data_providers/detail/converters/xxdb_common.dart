@@ -88,8 +88,8 @@ const sourceWebsiteMapping = {
   XxdbSource.lezwatchtv: 'https://lezwatchtv.com',
   XxdbSource.ratingraph: 'https://www.ratingraph.com',
   XxdbSource.tmdb: 'https://www.themoviedb.org',
-  XxdbSource.plex: 'https://app.plex.tv',
   XxdbSource.tvdb: 'https://thetvdb.com',
+  XxdbSource.plex: 'https://app.plex.tv',
 };
 const sourceWebsitePath = {
   // do not need to add imbd explicitly 'imdb_id': sourceImdb,
@@ -111,10 +111,10 @@ const sourceWebsitePath = {
   XxdbSource.letterboxd: '/film/',
   XxdbSource.lezwatchtv: '/show/',
   XxdbSource.ratingraph: '/tv-shows/',
-  XxdbSource.tmdb: '/dereferrer/',
+  XxdbSource.tmdb: '/',
+  XxdbSource.tvdb: '/dereferrer/',
   XxdbSource.plex:
       '/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/',
-  XxdbSource.tvdb: '/',
 };
 
 /// Create FQDN for instagram, wikipedia, etc.

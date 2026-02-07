@@ -28,7 +28,7 @@ class QueryGloTorrentsSearch
     with ScrapeGloTorrentsSearch {
   QueryGloTorrentsSearch(super.criteria);
 
-// https://glodls.online/search_results.php?search=batman&incldead=Search
+  // https://www.thetechbasket.com/glotorrents-proxy-list/
   static const _baseURL = 'https://glodls.online/search_results.php?search=';
   static const _pageURL = '&sort=seeders&order=desc&page=';
 

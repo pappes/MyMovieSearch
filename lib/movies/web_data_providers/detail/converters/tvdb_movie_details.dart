@@ -17,9 +17,9 @@ const idField = 'id';
 const sourceImdb = 'IMDB';
 const sourceTvdb = 'TheMovieDB.com';
 
+// surpress tvdb from TMDB links
 const tvdbSourceToEnumMapping = {
   'IMDB': XxdbSource.imdb,
-  'TheMovieDB.com': XxdbSource.tmdb,
   'TVDB': XxdbSource.tvdb,
   'EIDR': XxdbSource.eidr,
   'Instagram': XxdbSource.instagram,
