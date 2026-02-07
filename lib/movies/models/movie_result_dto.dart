@@ -844,22 +844,22 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       userRatingCount = bestValue(newValue.userRatingCount, userRatingCount);
     }
     characterName = bestValue(newValue.characterName, characterName);
-      type = bestValue(newValue.type, type);
-      year = bestValue(newValue.year, year);
-      yearRange = bestValue(newValue.yearRange, yearRange);
-      runTime = bestValue(newValue.runTime, runTime);
-      type = bestValue(newValue.type, type);
-      censorRating = bestValue(newValue.censorRating, censorRating);
-      imageUrl = bestValue(newValue.imageUrl, imageUrl);
+    type = bestValue(newValue.type, type);
+    year = bestValue(newValue.year, year);
+    yearRange = bestValue(newValue.yearRange, yearRange);
+    runTime = bestValue(newValue.runTime, runTime);
+    type = bestValue(newValue.type, type);
+    censorRating = bestValue(newValue.censorRating, censorRating);
+    imageUrl = bestValue(newValue.imageUrl, imageUrl);
 
-      type = bestValue(
-        getMovieContentType(
-              '$genres $yearRange',
-              IntHelper.fromText(runTime),
-              uniqueId,
-            ) ??
-            type,
-        type,
+    type = bestValue(
+      getMovieContentType(
+            '$genres $yearRange',
+            IntHelper.fromText(runTime),
+            uniqueId,
+          ) ??
+          type,
+      type,
     );
     genres.addAll(newValue.genres);
     keywords.addAll(newValue.keywords);
@@ -1057,8 +1057,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     int? seconds,
     String id, {
     MovieContentType? existing,
-  }
-  ) {
+  }) {
     if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
     if (id == movieDTOUninitialized) return MovieContentType.none;
     if (id.startsWith(movieDTOMessagePrefix)) return MovieContentType.error;
@@ -1114,8 +1113,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     int? seconds,
     String id, {
     MovieContentType? existing,
-  }
-  ) {
+  }) {
     final string = info?.toString() ?? '';
     final type = _lookupMovieContentType(
       string,
@@ -1294,11 +1292,13 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     matchCompare('year', actualDTO.year, year);
     matchCompare('creditsOrder', actualDTO.creditsOrder, creditsOrder);
     matchCompare('yearRange', actualDTO.yearRange, yearRange);
-    matchCompare('userRating', actualDTO.userRating, userRating);
     matchCompare('censorRating', actualDTO.censorRating, censorRating);
     matchCompare('runTime', actualDTO.runTime, runTime);
     matchCompare('imageUrl', actualDTO.imageUrl, imageUrl);
     matchCompare('language', actualDTO.language, language);
+    if (!fuzzy) {
+      matchCompare('userRating', actualDTO.userRating, userRating);
+    }
     matchCompare(
       'languages',
       languages.toString(),
@@ -1786,5 +1786,4 @@ extension DTOCompare on MovieResultDTO {
   /// Extract year of most recent episode.
   ///
   int yearRangeAsNumber() => yearRange.lastNumber();
-
 }
