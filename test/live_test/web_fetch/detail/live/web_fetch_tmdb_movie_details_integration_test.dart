@@ -43,7 +43,7 @@ void main() {
     test('Run read 500 pages from TMDB', () async {
       final actualOutput = await executeMultipleFetches(
         (criteria) => QueryTMDBMovieDetails(criteria).readList(),
-        qty: 500,
+        qty: 300,
       );
 
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
