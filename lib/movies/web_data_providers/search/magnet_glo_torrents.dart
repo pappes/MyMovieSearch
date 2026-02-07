@@ -28,7 +28,8 @@ class QueryGloTorrentsSearch
     with ScrapeGloTorrentsSearch {
   QueryGloTorrentsSearch(super.criteria);
 
-  static const _baseURL = 'https://gtorrents.com/search_results.php?search=';
+// https://glodls.online/search_results.php?search=batman&incldead=Search
+  static const _baseURL = 'https://glodls.online/search_results.php?search=';
   static const _pageURL = '&sort=seeders&order=desc&page=';
 
   /// Describe where the data is coming from.
