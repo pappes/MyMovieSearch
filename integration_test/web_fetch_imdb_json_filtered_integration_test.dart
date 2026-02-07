@@ -61,9 +61,8 @@ Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
       }
     }
   }
-  final unsorted = queryResult.values.toList()
-    ..sort((l, r) => l.uniqueId.compareTo(r.uniqueId));
-  return unsorted;
+  final sorted = queryResult.values.toList()..sort(dtoSortCompareTo);
+  return sorted;
 }
 
 Future<void> main() async {

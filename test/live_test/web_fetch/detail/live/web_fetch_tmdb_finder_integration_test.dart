@@ -24,8 +24,6 @@ void main() {
         (criteria) => QueryTMDBFinder(criteria).readList(),
       );
 
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput);
 

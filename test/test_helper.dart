@@ -17,7 +17,7 @@ import 'package:quiver/iterables.dart';
 ////////////////////////////////////////////////////////////////////////////////
 
 void sortDtoList(List<MovieResultDTO> dtos, {bool includeRelated = true}) {
-  dtos.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+  dtos.sort(dtoSortCompareTo);
   if (includeRelated) {
     for (final entry in dtos) {
       // sort categories by converting map to a SplayTreeMap
@@ -368,7 +368,8 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
       var resultMatched = false;
       for (final expectedDto in expected) {
         final differences = <dynamic, dynamic>{};
-        if (actualDto.uniqueId == expectedDto.uniqueId) {
+        // Check if IDs or titles match.
+        if (dtoSortCompareTo(actualDto, expectedDto) == 0) {
           resultMatched = true;
           if (expectedDto.matches(
             actualDto,
@@ -392,6 +393,26 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
     }
     return false;
   }
+}
+
+// Check if IDs or titles match
+//
+// id values are only compared it they are not negative numbers (error)
+// title values are only compared if both IDs are negative numbers
+// negative IDs are sorted below non-negative IDs
+// so that error records are at the end of the list
+// and can be compared by title instead of ID.
+int dtoSortCompareTo(MovieResultDTO a, MovieResultDTO b) {
+  if (a.uniqueId.startsWith('-') && b.uniqueId.startsWith('-')) {
+    return a.title.compareTo(b.title);
+  }
+  if (!a.uniqueId.startsWith('-') && !b.uniqueId.startsWith('-')) {
+    return a.uniqueId.compareTo(b.uniqueId);
+  }
+  if (a.uniqueId.startsWith('-') && !b.uniqueId.startsWith('-')) {
+    return 1;
+  }
+  return -1;
 }
 
 /// Converts a [text] to a stream.

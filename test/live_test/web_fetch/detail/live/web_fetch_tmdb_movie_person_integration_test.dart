@@ -27,9 +27,6 @@ void main() {
         prefix: '',
       );
 
-      // Massage actual results to match expected results
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput);
 

@@ -22,7 +22,6 @@ void main() {
     test('Run read 3 pages from OMDB', () async {
       final criteria = SearchCriteriaDTO().fromString('rize');
       final actualOutput = await QueryOMDBMovies(criteria).readList(limit: 10);
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput);

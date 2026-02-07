@@ -23,8 +23,6 @@ void main() {
         ..criteriaContext = movieDto;
       final actualOutput = await QueryTVDBMovieDetails(criteria).readList();
 
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput, suffix: '_series.json');
 
@@ -44,8 +42,6 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('5391')
         ..criteriaContext = movieDto;
       final actualOutput = await QueryTVDBMovieDetails(criteria).readList();
-
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput, suffix: '_movie.json');
@@ -67,8 +63,6 @@ void main() {
         ..criteriaContext = movieDto;
       final actualOutput = await QueryTVDBMovieDetails(criteria).readList();
 
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput, suffix: '_series_imdb.json');
 
@@ -88,8 +82,6 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt2724064')
         ..criteriaContext = movieDto;
       final actualOutput = await QueryTVDBMovieDetails(criteria).readList();
-
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput, suffix: '_movie_imdb.json');

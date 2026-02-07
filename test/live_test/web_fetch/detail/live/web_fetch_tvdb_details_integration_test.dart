@@ -25,8 +25,6 @@ void main() {
         qty: 10,
       );
 
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput, suffix: '_movie.json');
 
@@ -47,8 +45,6 @@ void main() {
         qty: 10,
         prefix: imdbPersonPrefix,
       );
-
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput, suffix: '_person.json');

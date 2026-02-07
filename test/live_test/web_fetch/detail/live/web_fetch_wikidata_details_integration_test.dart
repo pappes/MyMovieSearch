@@ -21,8 +21,6 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt2724064');
       final actualOutput = await QueryWikidataDetails(criteria).readList();
 
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput, testName: 'imdb_movie');
 
@@ -40,8 +38,6 @@ void main() {
     test('Run read 1 detailed imdb series page from wikidata', () async {
       final criteria = SearchCriteriaDTO().fromString('tt13443470');
       final actualOutput = await QueryWikidataDetails(criteria).readList();
-
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput, testName: 'imdb_series');
@@ -67,8 +63,6 @@ void main() {
       criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'tt15253488'));
       final actualOutput = await QueryWikidataDetails(criteria).readList();
 
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput, testName: 'imdb_movies');
 
@@ -88,8 +82,6 @@ void main() {
         'https://www.wikidata.org/wiki/Q211082',
       );
       final actualOutput = await QueryWikidataDetails(criteria).readList();
-
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput, testName: 'person');
@@ -111,8 +103,6 @@ void main() {
       );
       final actualOutput = await QueryWikidataDetails(criteria).readList();
 
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
-
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput, testName: 'movie');
 
@@ -132,8 +122,6 @@ void main() {
         'https://www.wikidata.org/wiki/Q253205',
       );
       final actualOutput = await QueryWikidataDetails(criteria).readList();
-
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
 
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput, testName: 'series');

@@ -22,8 +22,9 @@ void main() {
     test('Run read 2 pages from MsSearch', () async {
       final criteria = SearchCriteriaDTO().fromString('humdrum');
       final actualOutput =
-          await QueryMsSearchMovies(criteria).readList(limit: 1000);
-      actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
+          await QueryMsSearchMovies(
+        criteria,
+      ).readList(limit: 1000);
 
       // To update expected data, uncomment the following line
       // writeTestData(actualOutput);

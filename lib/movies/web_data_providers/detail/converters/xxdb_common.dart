@@ -37,8 +37,6 @@ enum XxdbSource {
   ratingraph,
   tmdb,
   plex,
-
-
 }
 
 const xxdbSouceDescriptions = {
@@ -128,8 +126,7 @@ void getExternalUrl(
   XxdbSource? source,
   String? identifier, {
   bool skipImdb = true,
-}
-) {
+}) {
   final linkDescription = xxdbSouceDescriptions[source];
   if (identifier != null && linkDescription != null) {
     // Assemble the fully qualified URL from the parts and store it in the map.
@@ -138,7 +135,10 @@ void getExternalUrl(
     } else if (sourceWebsiteMapping.containsKey(source)) {
       final website = sourceWebsiteMapping[source];
       final path = sourceWebsitePath[source];
-      destinationUrls[linkDescription] = '$website$path$identifier';
+      if (source != XxdbSource.tmdb && source != XxdbSource.tvdb) {
+        // tvdb and tmdb need more info to construct the url.
+        destinationUrls[linkDescription] = '$website$path$identifier';
+      }
     }
     if (source == XxdbSource.imdb && !skipImdb) {
       destinationUrls[linkDescription] = makeImdbUrl(identifier);
