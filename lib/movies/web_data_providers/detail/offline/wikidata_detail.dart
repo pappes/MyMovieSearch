@@ -52,7 +52,7 @@ final jsonMovie = {
               'hash': '87b93e5da7b23eb564255937bd5c7d90a23ea400',
               'datavalue': {
                 'value': {
-                  'amount': '+28',
+                  'amount': '+128',
                   'unit': 'http://www.wikidata.org/entity/Q7727',
                 },
                 'type': 'quantity',

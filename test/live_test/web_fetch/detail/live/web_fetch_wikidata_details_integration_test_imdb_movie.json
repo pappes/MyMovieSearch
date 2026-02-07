@@ -5,7 +5,7 @@
     "description": "2013 film directed by Anthony C. Ferrante",
     "bestSource": "DataSourceType.wikidataDetail",
     "type": "MovieContentType.movie",
-    "links": "{\"FilmAffinity\":\"https://www.filmaffinity.com/en/film399886.html\",\"Metacritic\":\"https://www.metacritic.com/movie/tv/sharknado\",\"Netflix\":\"https://www.netflix.com/title/70285977\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/m/sharknado\",\"YouTube\":\"https://www.youtube.com/watch?v=TWu0zZljle4\",\"plexLink\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d776a3496b655001fde6841\"}",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/205321\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/5391\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film399886.html\",\"Metacritic\":\"https://www.metacritic.com/tv/sharknado\",\"Netflix\":\"https://www.netflix.com/title/70285977\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/sharknado\",\"YouTube\":\"https://www.youtube.com/watch?v=TWu0zZljle4\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d776a3496b655001fde6841\"}",
     "sources": {
       "DataSourceType.wikidataDetail": "tt2724064"
     }

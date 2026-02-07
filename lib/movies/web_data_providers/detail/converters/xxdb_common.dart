@@ -35,12 +35,15 @@ enum XxdbSource {
   letterboxd,
   lezwatchtv,
   ratingraph,
+  tmdb,
+  plex,
+
 
 }
 
 const xxdbSouceDescriptions = {
   XxdbSource.imdb: 'IMDB',
-  XxdbSource.tvdb: 'TheMovieDB.com',
+  XxdbSource.tmdb: 'TMDB',
   XxdbSource.eidr: 'EIDR',
   XxdbSource.instagram: 'Instagram',
   XxdbSource.netflix: 'Netflix',
@@ -60,28 +63,58 @@ const xxdbSouceDescriptions = {
   XxdbSource.letterboxd: 'Letterboxd',
   XxdbSource.lezwatchtv: 'LezWatchTV',
   XxdbSource.ratingraph: 'Ratingraph',
+  XxdbSource.tvdb: 'TVDB',
+  XxdbSource.plex: 'Plex',
 };
 
 const sourceWebsiteMapping = {
   // do not need to add imbd explicitly 'imdb_id': sourceImdb,
-  XxdbSource.eidr: 'https://ui.eidr.org/content/',
-  XxdbSource.instagram: 'https://www.instagram.com/',
-  XxdbSource.netflix: 'https://www.netflix.com/title/',
-  XxdbSource.reddit: 'https://www.reddit.com/r/',
-  XxdbSource.rottenTomatoes: 'https://www.rottentomatoes.com/',
-  XxdbSource.facebook: 'https://www.facebook.com/',
-  XxdbSource.tvMaze: 'https://www.tvmaze.com/shows/',
-  XxdbSource.wikidata: 'https://www.wikidata.org/wiki/',
-  XxdbSource.wikipedia: 'https://en.wikipedia.org/wiki/',
-  XxdbSource.twitter: 'https://twitter.com/',
-  XxdbSource.kym: 'https://knowyourmeme.com/memes/',
-  XxdbSource.metacritic: 'https://www.metacritic.com/movie/',
-  XxdbSource.filmaffinity: 'https://www.filmaffinity.com/en/film',
-  XxdbSource.tvtropes: 'https://tvtropes.org/pmwiki/pmwiki.php/Main/',
-  XxdbSource.youtube: 'https://www.youtube.com/watch?v=',
-  XxdbSource.letterboxd: 'https://letterboxd.com/film/',
-  XxdbSource.lezwatchtv: 'https://lezwatchtv.com/show/',
-  XxdbSource.ratingraph: 'https://www.ratingraph.com/tv-shows/',
+  XxdbSource.eidr: 'https://ui.eidr.org',
+  XxdbSource.instagram: 'https://www.instagram.com',
+  XxdbSource.netflix: 'https://www.netflix.com',
+  XxdbSource.reddit: 'https://www.reddit.com',
+  XxdbSource.rottenTomatoes: 'https://www.rottentomatoes.com',
+  XxdbSource.facebook: 'https://www.facebook.com',
+  XxdbSource.tvMaze: 'https://www.tvmaze.com',
+  XxdbSource.wikidata: 'https://www.wikidata.org',
+  XxdbSource.wikipedia: 'https://en.wikipedia.org',
+  XxdbSource.twitter: 'https://twitter.com',
+  XxdbSource.kym: 'https://knowyourmeme.com',
+  XxdbSource.metacritic: 'https://www.metacritic.com',
+  XxdbSource.filmaffinity: 'https://www.filmaffinity.com',
+  XxdbSource.tvtropes: 'https://tvtropes.org',
+  XxdbSource.youtube: 'https://www.youtube.com',
+  XxdbSource.letterboxd: 'https://letterboxd.com',
+  XxdbSource.lezwatchtv: 'https://lezwatchtv.com',
+  XxdbSource.ratingraph: 'https://www.ratingraph.com',
+  XxdbSource.tmdb: 'https://www.themoviedb.org',
+  XxdbSource.plex: 'https://app.plex.tv',
+  XxdbSource.tvdb: 'https://thetvdb.com',
+};
+const sourceWebsitePath = {
+  // do not need to add imbd explicitly 'imdb_id': sourceImdb,
+  XxdbSource.eidr: '/content/',
+  XxdbSource.instagram: '/',
+  XxdbSource.netflix: '/title/',
+  XxdbSource.reddit: '/r/',
+  XxdbSource.rottenTomatoes: '/',
+  XxdbSource.facebook: '/',
+  XxdbSource.tvMaze: '/shows/',
+  XxdbSource.wikidata: '/wiki/',
+  XxdbSource.wikipedia: '/wiki/',
+  XxdbSource.twitter: '/',
+  XxdbSource.kym: '/memes/',
+  XxdbSource.metacritic: '/',
+  XxdbSource.filmaffinity: '/en/film',
+  XxdbSource.tvtropes: '/pmwiki/pmwiki.php/Main/',
+  XxdbSource.youtube: '/watch?v=',
+  XxdbSource.letterboxd: '/film/',
+  XxdbSource.lezwatchtv: '/show/',
+  XxdbSource.ratingraph: '/tv-shows/',
+  XxdbSource.tmdb: '/dereferrer/',
+  XxdbSource.plex:
+      '/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/',
+  XxdbSource.tvdb: '/',
 };
 
 /// Create FQDN for instagram, wikipedia, etc.
@@ -104,7 +137,8 @@ void getExternalUrl(
       destinationUrls[linkDescription] = identifier;
     } else if (sourceWebsiteMapping.containsKey(source)) {
       final website = sourceWebsiteMapping[source];
-      destinationUrls[linkDescription] = '$website$identifier';
+      final path = sourceWebsitePath[source];
+      destinationUrls[linkDescription] = '$website$path$identifier';
     }
     if (source == XxdbSource.imdb && !skipImdb) {
       destinationUrls[linkDescription] = makeImdbUrl(identifier);
@@ -114,7 +148,10 @@ void getExternalUrl(
 
 String? getWebsiteDescription(String website) {
   for (final entry in sourceWebsiteMapping.entries) {
-    if (website.startsWith(entry.value)) {
+    final firstWww = RegExp(r'^https?://(www\.)?');
+    final websiteSansWww = website.replaceFirst(firstWww, '');
+    final entryWebsiteSansWww = entry.value.replaceFirst(firstWww, '');
+    if (websiteSansWww.startsWith(entryWebsiteSansWww)) {
       return xxdbSouceDescriptions[entry.key];
     }
   }

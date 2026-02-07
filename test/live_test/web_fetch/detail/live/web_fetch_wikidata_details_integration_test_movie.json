@@ -6,7 +6,7 @@
     "bestSource": "DataSourceType.wikidataDetail",
     "type": "MovieContentType.title",
     "runTime": "5160",
-    "links": "{\"Wikipedia\":\"https://en.wikipedia.org/wiki/Sharknado\",\"IMDB\":\"https://www.imdb.com/title/tt2724064/?ref_=nv_sr_srsg_0\",\"Netflix\":\"https://www.netflix.com/title/70285977\",\"Official Website\":\"http://www.theasylum.cc/product.php?id=230\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/sharknado\"}",
+    "links": "{\"Wikipedia\":\"https://en.wikipedia.org/wiki/Sharknado\",\"IMDB\":\"https://www.imdb.com/title/tt2724064/?ref_=nv_sr_srsg_0\",\"TVDB\":\"https://thetvdb.com/205321\",\"Netflix\":\"https://www.netflix.com/title/70285977\",\"Official Website\":\"http://www.theasylum.cc/product.php?id=230\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/sharknado\"}",
     "sources": {
       "DataSourceType.wikidataDetail": "tt2724064"
     }

@@ -85,12 +85,13 @@
 
 SELECT 
   ?movieIMDB
-  (SAMPLE(?movieLabel) AS ?movieName)
+  (?movieLabel AS ?movieName)
+  (?movieDescription AS ?descriptions)
 # --- NEW: TYPE IDENTIFICATION ---
   (GROUP_CONCAT(DISTINCT ?typeLabel; separator=", ") AS ?contentTypes)
   (GROUP_CONCAT(DISTINCT ?typeQID; separator=" ") AS ?typeQIDs)
+  (GROUP_CONCAT(DISTINCT ?networkLabel; separator=", ") AS ?networkLabels)
   
-  (SAMPLE(?synopsis) AS ?descriptions)
   (SAMPLE(?certLabel) AS ?rating)
   (MIN(?startDate) AS ?firstAired)
   (MAX(?endDate) AS ?lastAired)
@@ -98,7 +99,8 @@ SELECT
   
 # --- DYNAMIC FQDN URL GENERATION ---
   (SAMPLE(?tmdbURL) AS ?tmdbLink)
-  (SAMPLE(?tvdbURL) AS ?theTVDBLink)
+  (SAMPLE(?tvdbSeriesURL) AS ?theTVDBLink)
+  (SAMPLE(?tvdbMovieURL) AS ?theTVDBMovieLink)
   (SAMPLE(?networkLabel) AS ?originalNetwork)
   (SAMPLE(?kymURL) AS ?knowYourMemeLink)
   (SAMPLE(?filmAffinityURL) AS ?filmAffinityLink)
@@ -118,15 +120,21 @@ SELECT
 
 
 WHERE {
-# 1. INPUT: Your list of IMDb IDs
+# INPUT: Your list of IMDb IDs
   VALUES ?movieIMDB { 
     "tt000" 
   }
   
-# 2. MATCH: Find the Wikidata item
+# MATCH: Find the Wikidata item
   ?movie wdt:P345 ?movieIMDB.
+
+# Fetch english label for the movie
+OPTIONAL {
+?movie rdfs:label ?movieLabel.
+FILTER(LANG(?movieLabel) = "en")
+}
   
-# 3. IDENTIFY TYPE: Check if its a Movie or TV Series for path logic
+# IDENTIFY TYPE: Check if its a Movie or TV Series for path logic
 # --- TYPE LOGIC ---
   ?movie wdt:P31 ?type.
   
@@ -137,28 +145,32 @@ BIND(REPLACE(STR(?type), "^.*/", "") AS ?typeQID)
   BIND(EXISTS { ?movie wdt:P31/wdt:P279* wd:Q11424 } AS ?isMovie)    # Film
   BIND(EXISTS { ?movie wdt:P31/wdt:P279* wd:Q5398426 } AS ?isSeries)  # TV Series
   BIND(EXISTS { ?movie wdt:P31/wdt:P279* wd:Q19830628 } AS ?isEpisode) # TV Episode
-# 4. DATA EXTRACTION & FQDN CONSTRUCTION
+# DATA EXTRACTION & FQDN CONSTRUCTION
   
-# TMDb: Uses separate properties for Movie (P4983) and TV (P4977)
-  OPTIONAL { ?movie wdt:P4983 ?tmdbID_M. }
-  OPTIONAL { ?movie wdt:P4977 ?tmdbID_S. }
+# TMDb: Uses separate properties for Movie (P4947) and TV (P4983)
+  OPTIONAL { ?movie wdt:P4947 ?tmdbID_M. }
+  OPTIONAL { ?movie wdt:P4983 ?tmdbID_S. }
   BIND(IF(BOUND(?tmdbID_M), CONCAT("https://www.themoviedb.org/movie/", ?tmdbID_M),
        IF(BOUND(?tmdbID_S), CONCAT("https://www.themoviedb.org/tv/", ?tmdbID_S), "")) AS ?tmdbURL)
 
 # TheTVDB Logic
 # TheTVDB (P4835): One property, but path changes based on P31 type
-  OPTIONAL { ?movie wdt:P4835 ?tvdbID. }
-  BIND(IF(?isSeries || ?isEpisode , CONCAT("https://thetvdb.com/series/", ?tvdbID),
-       IF(?isMovie , CONCAT("https://thetvdb.com/movies/", ?tvdbID), 
-       CONCAT("https://thetvdb.com/dereferrer/series/", ?tvdbID))) AS ?tvdbURL)
+  OPTIONAL { ?movie wdt:P4835 ?tvdbSeriesID. }
+  BIND(IF(?isSeries || ?isEpisode , CONCAT("https://thetvdb.com/dereferrer/series/", ?tvdbSeriesID),
+       IF(?isMovie , CONCAT("https://thetvdb.com/dereferrer/movie/", ?tvdbSeriesID), 
+       CONCAT("https://thetvdb.com/dereferrer/series/", ?tvdbSeriesID))) AS ?tvdbSeriesURL)
+  OPTIONAL { ?movie wdt:P12196 ?tvdbMovieID. }
+  BIND(IF(?isSeries || ?isEpisode , CONCAT("https://thetvdb.com/dereferrer/series/", ?tvdbMovieID),
+       IF(?isMovie , CONCAT("https://thetvdb.com/dereferrer/movie/", ?tvdbMovieID), 
+       CONCAT("https://thetvdb.com/dereferrer/movies/", ?tvdbMovieID))) AS ?tvdbMovieURL)
 
 # Static URL structures (Simple concatenation)
   OPTIONAL { ?movie wdt:P13484 ?kym. BIND(CONCAT("https://knowyourmeme.com/memes/", ?kym) AS ?kymURL) }
-  OPTIONAL { ?movie wdt:P1712 ?metacritic. BIND(CONCAT("https://www.metacritic.com/movie/", ?metacritic) AS ?metacriticURL) }
+  OPTIONAL { ?movie wdt:P1712 ?metacritic. BIND(CONCAT("https://www.metacritic.com/", ?metacritic) AS ?metacriticURL) }
   OPTIONAL { ?movie wdt:P480 ?filmAffinity. BIND(CONCAT("https://www.filmaffinity.com/en/film", ?filmAffinity, ".html") AS ?filmAffinityURL) }
   OPTIONAL { ?movie wdt:P1874 ?nflx. BIND(CONCAT("https://www.netflix.com/title/", ?nflx) AS ?netflixURL) }
-  OPTIONAL { ?movie wdt:P1258 ?rt. BIND(CONCAT("https://www.rottentomatoes.com/m/", ?rt) AS ?rtURL) }
-  OPTIONAL { ?movie wdt:P6839 ?tvt. BIND(CONCAT("https://tvtropes.org/pmwiki/pmwiki.php/Main/", ?tvt) AS ?tvTropesURL) }
+  OPTIONAL { ?movie wdt:P1258 ?rt. BIND(CONCAT("https://www.rottentomatoes.com/", ?rt) AS ?rtURL) }
+  OPTIONAL { ?movie wdt:P6839 ?tvt. BIND(CONCAT("https://tvtropes.org/pmwiki/pmwiki.php/", ?tvt) AS ?tvTropesURL) }
   OPTIONAL { ?movie wdt:P2002 ?twt. BIND(CONCAT("https://twitter.com/", ?twt) AS ?twitterURL) }
   OPTIONAL { ?movie wdt:P1651 ?yt. BIND(CONCAT("https://www.youtube.com/watch?v=", ?yt) AS ?youtubeURL) }
   OPTIONAL { ?movie wdt:P2003 ?fb. BIND(CONCAT("https://www.facebook.com/", ?fb) AS ?facebookURL) }
@@ -171,18 +183,21 @@ BIND(REPLACE(STR(?type), "^.*/", "") AS ?typeQID)
 # Metadata
   OPTIONAL { ?movie wdt:P449 ?network. }
   OPTIONAL { ?movie p:P1657 [ ps:P1657 ?cert; pq:P17 wd:Q30 ]. }
-  OPTIONAL { ?movie schema:description ?synopsis. FILTER(LANG(?synopsis) = "en") }
   OPTIONAL { ?movie wdt:P577 ?startDate. }
   OPTIONAL { ?movie wdt:P582 ?endDate. }
   OPTIONAL { ?movie wdt:P2047 ?runtime. }
-  
-  SERVICE wikibase:label { 
-    bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". 
+
+# 3. Label Service with Fallback Chain
+# "en" is primary, mul = multiple, "[AUTO_LANGUAGE]" or others follow as fallbacks.
+
+SERVICE wikibase:label {
+  bd:serviceParam wikibase:language "en, mul, [AUTO_LANGUAGE], *".
     ?type rdfs:label ?typeLabel.
     ?cert rdfs:label ?certLabel.
     ?network rdfs:label ?networkLabel.
     ?movie rdfs:label ?movieLabel.
+    ?movie schema:description ?movieDescription.
   }
 }
-GROUP BY ?movieIMDB 
+GROUP BY ?movieIMDB ?movieLabel ?movieDescription
 ORDER BY ?movieIMDB

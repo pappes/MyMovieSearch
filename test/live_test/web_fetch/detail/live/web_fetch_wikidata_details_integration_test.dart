@@ -64,6 +64,7 @@ void main() {
       criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'nm0005346'));
       criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'tt2724064'));
       criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'tt28996126'));
+      criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'tt15253488'));
       final actualOutput = await QueryWikidataDetails(criteria).readList();
 
       actualOutput.sort((a, b) => a.uniqueId.compareTo(b.uniqueId));
@@ -75,7 +76,7 @@ void main() {
       final expectedOutput = readTestData(testName: 'imdb_movies');
       expect(
         actualOutput,
-        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
+        MovieResultDTOListMatcher(expectedOutput),
         reason:
             'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '

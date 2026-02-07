@@ -4,9 +4,9 @@
     "title": "Entourage",
     "description": "American comedy-drama television series",
     "bestSource": "DataSourceType.wikidataDetail",
-    "startDate": "2004",
-    "endDate": "2004-2011",
     "type": "MovieContentType.series",
+    "year": "2004",
+    "yearRange": "2004-2011",
     "links": "{\"IMDB\":\"https://www.imdb.com/title/tt0387199/?ref_=nv_sr_srsg_0\"}",
     "sources": {
       "DataSourceType.wikidataDetail": "tt0387199"

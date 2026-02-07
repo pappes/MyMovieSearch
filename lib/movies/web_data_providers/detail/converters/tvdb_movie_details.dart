@@ -19,7 +19,8 @@ const sourceTvdb = 'TheMovieDB.com';
 
 const tvdbSourceToEnumMapping = {
   'IMDB': XxdbSource.imdb,
-  'TheMovieDB.com': XxdbSource.tvdb,
+  'TheMovieDB.com': XxdbSource.tmdb,
+  'TVDB': XxdbSource.tvdb,
   'EIDR': XxdbSource.eidr,
   'Instagram': XxdbSource.instagram,
   'Netflix': XxdbSource.netflix,

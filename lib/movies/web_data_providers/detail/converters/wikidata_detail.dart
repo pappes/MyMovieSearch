@@ -73,9 +73,6 @@ const nameField = 'sourceName';
 const idField = 'id';
 const imdbIdField = 'movieIMDB';
 
-const sourceImdb = 'IMDB';
-const sourceTvdb = 'TheMovieDB.com';
-
 const tvdbSourceToEnumMapping = {
   'P345': XxdbSource.imdb,
   'P4947': XxdbSource.tvdb,
