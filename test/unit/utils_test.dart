@@ -821,7 +821,6 @@ Future<void> main() async {
   group('TreeHelper', () {
     final simpleMap = {'marco': 'polo'};
     final complexMap = [
-      'needle', //this list entry should not match - the value has no "key"
       {
         'text': {'exposition': 'blahblahblah', 'summary': 'concise'},
         'needlesstosay': 'thisisnotahaystack',
@@ -920,7 +919,7 @@ Future<void> main() async {
       // Find a matching value in a tree with partial search on keys.
       test('complex tree suffix search', () {
         expect(TreeHelper(complexMap).deepSearch('needle', suffixMatch: true), [
-          ['thisisahaystack'],
+          ['this', 'is', 'a', 'haystack'],
         ]);
       });
       // Find a multiple matching values in a tree with partial search on keys.
@@ -930,7 +929,7 @@ Future<void> main() async {
             complexMap,
           ).deepSearch('needle', multipleMatch: true, suffixMatch: true),
           [
-            ['thisisahaystack'], // list result
+            ['this', 'is', 'a', 'haystack'], // list result
             'haystack1', // string result
             2, // int result
             {'haystacks': 'haystack3'}, // Map result

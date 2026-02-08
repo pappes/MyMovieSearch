@@ -116,11 +116,10 @@ void main() {
       );
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // printTestData(actualResult);
+      // writeTestData(actualResult, testName: 'paginated');
 
-      final expectedValue = expectedDTOList;
-      expectedValue.first.uniqueId = 'nm1913125';
       // Check the results.
+      final expectedValue = readTestData(testName: 'paginated');
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -139,11 +138,10 @@ void main() {
       );
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // printTestData(actualResult);
+      // writeTestData(actualResult, testName: 'filtered');
 
-      final expectedValue = expectedDTOList;
-      expectedValue.first.uniqueId = 'nm1913125';
       // Check the results.
+      final expectedValue = readTestData(testName: 'filtered');
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -185,20 +183,22 @@ void main() {
     test('Run myConvertTreeToOutputType()', () async {
       final criteria = SearchCriteriaDTO();
       final testClass = QueryIMDBJsonPaginatedFilmographyDetails(criteria);
-      final expectedValue = expectedDTOList;
       await testClass.myClearCache();
 
       // Invoke the functionality and collect results.
-      final actualResult = testClass.myConvertTreeToOutputType(
+      final actualResult = await testClass.myConvertTreeToOutputType(
         imdbJsonInnerPaginatedSample,
       );
+      // Uncomment this line to update expectedDTOList if sample data changes
+      // writeTestData(actualResult, testName: 'integration');
 
       // Check the results.
+      final expectedValue = readTestData(testName: 'integration');
       expect(
         actualResult,
-        completion(MovieResultDTOListMatcher(expectedValue)),
+        MovieResultDTOListMatcher(expectedValue),
         reason:
-            'Emitted DTO list ${(await actualResult).toPrintableString()} '
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );

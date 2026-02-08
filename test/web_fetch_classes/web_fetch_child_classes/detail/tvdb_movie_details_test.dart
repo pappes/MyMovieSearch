@@ -126,9 +126,9 @@ void main() {
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // writeTestData(actualResult, suffix: '_empty.json');
+      // writeTestData(actualResult, testName: 'empty');
 
-      final expectedValue = readTestData(suffix: '_empty.json');
+      final expectedValue = readTestData(testName: 'empty');
       // Check the results.
       expect(
         actualResult,
@@ -153,9 +153,9 @@ void main() {
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // writeTestData(actualResult, suffix: '_movie.json');
+      // writeTestData(actualResult, testName: 'movie');
 
-      final expectedValue = readTestData(suffix: '_movie.json');
+      final expectedValue = readTestData(testName: 'movie');
       // Check the results.
       expect(
         actualResult,
@@ -175,15 +175,15 @@ void main() {
       for (final map in intermediateSeriesList) {
         actualResult.addAll(
           TvdbMovieDetailConverter(
-            MovieContentType.movie,
+            MovieContentType.series,
           ).dtoFromCompleteJsonMap(map as Map),
         );
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // writeTestData(actualResult, suffix: '_series.json');
+      // writeTestData(actualResult, testName: 'series');
 
-      final expectedValue = readTestData(suffix: '_series.json');
+      final expectedValue = readTestData(testName: 'series');
       // Check the results.
       expect(
         actualResult,
@@ -217,10 +217,10 @@ void main() {
       // clone criteria to avoid impacting other test
       final testClass = QueryTVDBMovieDetails(imdbCriteria.clone());
       const expected =
-          'https://api4.thetvdb.com/v4/movies/409676/extended?short=true';
+          'https://api4.thetvdb.com/v4/movies/449/extended?short=true';
 
       // Invoke the functionality.
-      final actualResult = await testClass.myConstructURIAsync('tt1234');
+      final actualResult = await testClass.myConstructURIAsync('tt0892318');
 
       // Check the results.
       expect(actualResult.toString(), startsWith(expected));
@@ -297,8 +297,11 @@ void main() {
         actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
+      // Uncomment this line to update expectedDTOList if sample data changes
+      // writeTestData(actualResult, testName: 'int_convert');
+
       // Check the results.
-      final expectedValue = readTestData(suffix: '_movie.json');
+      final expectedValue = readTestData(testName: 'int_convert');
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -353,8 +356,11 @@ void main() {
             (error, stackTrace) => print('$error, $stackTrace'),
           );
 
+      // Uncomment this line to update expectedDTOList if sample data changes
+      // writeTestData(queryResult, testName: 'int_readList');
+
       // Check the results.
-      final expectedValue = readTestData(suffix: '_movie.json');
+      final expectedValue = readTestData(testName: 'int_readList');
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),

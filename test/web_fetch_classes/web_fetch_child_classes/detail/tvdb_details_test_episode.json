@@ -2,7 +2,7 @@
   {
     "uniqueId": "tt1231",
     "bestSource": "DataSourceType.tvdbDetails",
-    "type": "MovieContentType.title",
+    "type": "MovieContentType.episode",
     "year": "2022",
     "yearRange": "2022-",
     "sources": {

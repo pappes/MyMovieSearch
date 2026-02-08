@@ -374,13 +374,8 @@ void main() {
     // instead of the search results page.
     test('Run readList() for a specific movie', () async {
       // Set up the test data.
-      final expectedValue = title_data.expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final imdbSearch = QueryIMDBSearch(criteria);
-
-      // steal expectedValue from imdb_name test data
-      // but source is really imdbSearch
-      expectedValue[0].setSource(newSource: DataSourceType.imdbSearch);
 
       // Invoke the functionality.
       await imdbSearch
@@ -392,7 +387,11 @@ void main() {
             (error, stackTrace) => print('$error, $stackTrace'),
           );
 
+      // uncomment to update test data
+      // writeTestData(queryResult, testName: 'search_json_movie'); 
+
       // Check the results.
+      final expectedValue = readTestData(testName: 'search_json_movie');
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -417,13 +416,8 @@ void main() {
     // instead of the search results page.
     test('Run readList()for a specific person', () async {
       // Set up the test data.
-      final expectedValue = person_data.expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final imdbSearch = QueryIMDBSearch(criteria);
-
-      // steal expectedValue from imdb_name test data
-      // but source is really imdbSearch
-      expectedValue[0].setSource(newSource: DataSourceType.imdbSearch);
 
       // Invoke the functionality.
       await imdbSearch
@@ -435,7 +429,11 @@ void main() {
             (error, stackTrace) => print('$error, $stackTrace'),
           );
 
+      // uncomment to update test data
+      // writeTestData(queryResult, testName: 'search_json_person');
+
       // Check the results.
+      final expectedValue = readTestData(testName: 'search_json_person');
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),

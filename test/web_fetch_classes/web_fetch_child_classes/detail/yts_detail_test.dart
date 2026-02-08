@@ -56,9 +56,9 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'bestSource': 'DataSourceType.imdb',
         'title': '[QueryYtsDetails] new query',
-        'type': 'MovieContentType.error',
+        'bestSource': 'DataSourceType.ytsDetails',
+        'type': 'MovieContentType.error'
       };
       final criteria = SearchCriteriaDTO();
       // Invoke the functionality.

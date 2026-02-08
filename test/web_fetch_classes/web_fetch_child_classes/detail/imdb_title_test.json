@@ -1,0 +1,116 @@
+[
+  {
+    "uniqueId": "tt6123456",
+    "title": "Scott And Sharlene <3",
+    "description": "Then Kramer said, \"Everybody is Mescalon Smoochington\".",
+    "alternateTitle": "Aussieland",
+    "bestSource": "DataSourceType.imdb",
+    "type": "MovieContentType.series",
+    "year": "1985",
+    "yearRange": "1985-2023",
+    "runTime": "1234",
+    "language": "LanguageType.allEnglish",
+    "languages": "[\"English\"]",
+    "genres": "[\"Horror\",\"Romance\"]",
+    "keywords": "[\"exorcism\",\"boxer\",\"chihuahua\"]",
+    "userRating": "7.5",
+    "userRatingCount": "5123",
+    "censorRating": "CensorRatingType.family",
+    "imageUrl": "https://www.microsoft.com/images/M/MV5BYjAxMz.jpg",
+    "sources": {
+      "DataSourceType.imdb": "tt6123456"
+    },
+    "related": {
+      "Cast:": {
+        "nm0012370": {
+          "uniqueId": "nm0012370",
+          "title": "Bill Jole",
+          "alternateTitle": " ",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "characterName": " [Willy Rutter, Jimmy Banter]",
+          "type": "MovieContentType.person",
+          "creditsOrder": "100",
+          "imageUrl": "https://www.microsoft.com/images/M/MV5BM.jpg",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "nm0012370"
+          }
+        },
+        "nm0012372": {
+          "uniqueId": "nm0012372",
+          "title": "Jenny Jole",
+          "alternateTitle": " ",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "characterName": " [Jilly Rutter, Jenny Banter]",
+          "type": "MovieContentType.person",
+          "creditsOrder": "99",
+          "imageUrl": "https://www.microsoft.com/images/M/MV5BY.jpg",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "nm0012372"
+          }
+        }
+      },
+      "Directed by:": {
+        "nm0214370": {
+          "uniqueId": "nm0214370",
+          "title": "Andy Jole",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "type": "MovieContentType.person",
+          "creditsOrder": "100",
+          "imageUrl": "https://www.microsoft.com/images/M/M2V5BM.jpg",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "nm0214370"
+          }
+        },
+        "nm0214372": {
+          "uniqueId": "nm0214372",
+          "title": "Shazza Jole",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "type": "MovieContentType.person",
+          "creditsOrder": "99",
+          "imageUrl": "https://www.microsoft.com/images/M/M2V5BY.jpg",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "nm0214372"
+          }
+        }
+      },
+      "Suggestions:": {
+        "tt0012370": {
+          "uniqueId": "tt0012370",
+          "title": "Walk Skip Run",
+          "alternateTitle": "Run Forrest Run",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "type": "MovieContentType.series",
+          "year": "1973",
+          "yearRange": "1973-1974",
+          "runTime": "7140",
+          "genres": "[\"Western\",\"Romance\"]",
+          "userRating": "8.6",
+          "userRatingCount": "4837",
+          "censorRating": "CensorRatingType.family",
+          "imageUrl": "https://www.microsoft.com/images/M/MV5BM.jpg",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0012370"
+          }
+        },
+        "tt0123580": {
+          "uniqueId": "tt0123580",
+          "title": "Scott And Sharlene",
+          "alternateTitle": "Aussieland",
+          "bestSource": "DataSourceType.imdbSuggestions",
+          "type": "MovieContentType.series",
+          "year": "1985",
+          "yearRange": "1985-2023",
+          "runTime": "1234",
+          "genres": "[\"Horror\",\"Romance\"]",
+          "userRating": "7.5",
+          "userRatingCount": "5123",
+          "censorRating": "CensorRatingType.family",
+          "imageUrl": "https://www.microsoft.com/images/M/MV5BYjAxMz.jpg",
+          "sources": {
+            "DataSourceType.imdbSuggestions": "tt0123580"
+          }
+        }
+      }
+    }
+  }
+]

@@ -5,27 +5,6 @@
 
 import 'dart:convert';
 
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-
-/* To update this data, uncomment printTestData(actualResult);
-in test('Run dtoFromCompleteJsonMap()'*/
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"nm1913125","title":"Raman Rodger","bestSource":"DataSourceType.imdbJson","type":"MovieContentType.person","imageUrl":"https://m.media-amazon.com/images/M/MV5BNWMyMGQxZVyNTAyNTY1NA@@._V1_CR243,0,986,1479_.jpg","sources":{"DataSourceType.imdbJson":"nm1913125"},
-  "related":{"Actor:":{"tt11123818":{"uniqueId":"tt11123818","title":"Our Tupple","bestSource":"DataSourceType.imdbSuggestions","type":"MovieContentType.movie","year":"2002","yearRange":"2002",
-      "genres":"[\"Drama\"]",
-      "userRating":"6.7","userRatingCount":"8","imageUrl":"https://m.media-amazon.com/images/M/MV5BNTE0NWNhZGdeQXVyMTY1ODE1NTk@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt11123818"}},
-      "tt11812323":{"uniqueId":"tt11812323","title":"lilly","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","characterName":" [Jacob]","type":"MovieContentType.movie","year":"2002","yearRange":"2002","runTime":"5123",
-      "genres":"[\"Horror\"]",
-      "userRating":"7.5","userRatingCount":"2123","imageUrl":"https://m.media-amazon.com/images/M/MV5BNWFhNcGdeQXVyMTcyODY0OTE@._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt11812323"}},
-      "tt17512392":{"uniqueId":"tt17512392","title":"Willman Tryer","bestSource":"DataSourceType.imdbSuggestions","alternateTitle":" ","characterName":" [Willman Tryer]","type":"MovieContentType.episode","year":"2003","yearRange":"2003","runTime":"2123",
-      "genres":"[\"Crime\",\"Drama\"]",
-      "userRating":"3.3","userRatingCount":"11235","censorRating":"CensorRatingType.mature","imageUrl":"https://m.media-amazon.com/images/M/MV5BNjZhZWMwNTMmVmXkEyXkFqcGdeQXVyMTY0Njc2MTUx._V1_.jpg","sources":{"DataSourceType.imdbSuggestions":"tt17512392"}}}}}
-''',
-];
-
 Future<Stream<String>> streamImdbHtmlOfflineFilteredData(_) =>
     Future.value(Stream.value(jsonEncode(imdbJsonWrappedPaginatedSample)));
 

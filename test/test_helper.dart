@@ -73,23 +73,46 @@ void writeTestData(
   final sorted = actualResult.toList();
   sortDtoList(sorted, includeRelated: includeRelated);
   final jsonData = const JsonEncoder.withIndent('  ').convert(sorted);
+  writeRawTestData(
+    jsonData,
+    location: location,
+    suffix: suffix,
+    testName: testName,
+    includeRelated: includeRelated,
+  );
+}
+
+void writeRawTestData(
+  String actualResult, {
+  String? location,
+  String suffix = '.json',
+  String testName = '',
+  bool includeRelated = true,
+}) {
   final testSeperator = (testName == '') ? testName : '_$testName';
   final testLocation = getDataFileLocation(suffix: '$testSeperator$suffix');
   final filePath = location ?? testLocation;
-  File(filePath).writeAsStringSync(jsonData);
+  File(filePath).writeAsStringSync(actualResult);
   expect('debug code has been left uncommented!', 'Test data has been updated');
 }
 
-List<MovieResultDTO> readTestData({
+String rawTestData({
   String? location,
   String suffix = '.json',
   String testName = '',
 }) {
   final testSeperator = (testName == '') ? testName : '_$testName';
   final testLocation = getDataFileLocation(suffix: '$testSeperator$suffix');
-  final text = File(location ?? testLocation).readAsStringSync();
-  return loadTestData(text);
+  return File(location ?? testLocation).readAsStringSync();
 }
+
+List<MovieResultDTO> readTestData({
+  String? location,
+  String suffix = '.json',
+  String testName = '',
+}) => loadTestData(
+  rawTestData(location: location, suffix: suffix, testName: testName),
+);
 
 List<MovieResultDTO> loadTestData(String jsonText) {
   final jsonData = json.decode(jsonText);
@@ -289,11 +312,13 @@ class MovieResultDTOListMatcher extends Matcher {
   bool matches(dynamic actual, Map<dynamic, dynamic> matchState) {
     if (actual is List<MovieResultDTO>) {
       _actual = actual;
-      sortDtoList(_actual);
-      sortDtoList(expected);
+    } else if (actual is Iterable<MovieResultDTO>) {
+      _actual = actual.toList();
     } else {
       _actual = [MovieResultDTO().toUnknown()];
     }
+    sortDtoList(_actual);
+    sortDtoList(expected);
     matchState['actual'] = _actual;
 
     if (_actual.length != expected.length) return false;
@@ -354,11 +379,13 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
     matchQuantity = (expected.length * percentMatch / 100).ceil();
     if (actual is List<MovieResultDTO>) {
       _actual = actual;
+    } else if (actual is Iterable<MovieResultDTO>) {
+      _actual = actual.toList();
     } else {
       _actual = [MovieResultDTO().toUnknown()];
-      sortDtoList(_actual);
-      sortDtoList(expected);
     }
+    sortDtoList(_actual);
+    sortDtoList(expected);
     matchState['actual'] = _actual;
     if (_actual.isEmpty && expected.isEmpty) {
       return true;

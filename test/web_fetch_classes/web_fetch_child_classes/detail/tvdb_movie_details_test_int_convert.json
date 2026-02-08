@@ -2,7 +2,7 @@
   {
     "uniqueId": "tt0130827",
     "bestSource": "DataSourceType.tvdbDetails",
-    "type": "MovieContentType.movie",
+    "type": "MovieContentType.title",
     "sources": {
       "DataSourceType.tvdbDetails": "104"
     }

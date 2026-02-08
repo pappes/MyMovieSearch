@@ -25,7 +25,6 @@ import '../../web_fetch_unit_test.mocks.dart';
 // To regenerate mocks run the following command
 // flutter pub run build_runner build --delete-conflicting-outputs
 @GenerateMocks([HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders])
-
 //HttpClient.getUrl(Uri) = Future<HttpClientRequest>
 //HttpClientRequest.close() = HttpClientResponse
 //HttpClientResponse.statusCode = 200
@@ -62,17 +61,19 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
     // provided HttpClient.
     when(clientResponse.statusCode).thenAnswer(getHttpStatus);
     //when(clientResponse.statusCode).thenAnswer((_) => httpStatus);
-    when(clientResponse.transform(utf8.decoder))
-        .thenAnswer((_) => _getOfflineHTML('$expectedCriteria'));
+    when(
+      clientResponse.transform(utf8.decoder),
+    ).thenAnswer((_) => _getOfflineHTML('$expectedCriteria'));
 
     //when(clientRequest.close()).thenAnswer((_) async => clientResponse);
     when(clientRequest.close()).thenAnswer(getClientResponse);
 
-
-    when(client.openUrl('GET', expectedUri)).thenAnswer((_) => 
-      Future.value(clientRequest));
-    when(client.getUrl(expectedUri))
-        .thenAnswer((_) => Future.value(clientRequest));
+    when(
+      client.openUrl('GET', expectedUri),
+    ).thenAnswer((_) => Future.value(clientRequest));
+    when(
+      client.getUrl(expectedUri),
+    ).thenAnswer((_) => Future.value(clientRequest));
     when(clientRequest.headers).thenAnswer((_) => headers);
 
     return client;
@@ -109,15 +110,15 @@ List<String> _makeQueries(int startId, int qty) {
 }
 
 Map<String, dynamic> offlineMapList(String id) => {
-      'props': {
-        'pageProps': {
-          'tconst': id,
-          'aboveTheFold': {
-            'titleText': {'text': '$id.'},
-          },
-        },
+  'props': {
+    'pageProps': {
+      'tconst': id,
+      'aboveTheFold': {
+        'titleText': {'text': '$id.'},
       },
-    };
+    },
+  },
+};
 
 /// Make dummy html results for offline queries.
 Stream<String> _getOfflineHTML(String id) => Stream.value('''
@@ -158,9 +159,7 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(
     if (online) {
       future = imdbDetails.readList();
     } else {
-      future = imdbDetails.readList(
-        source: _offlineSearch,
-      );
+      future = imdbDetails.readList(source: _offlineSearch);
     }
     futures.add(future);
   }
@@ -168,13 +167,14 @@ List<Future<List<MovieResultDTO>>> _queueDetailSearch(
 }
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Mocked Unit(integration) tests
   /// test readList including data transformation
   /// but mocks out http calls by replacing myGetHttpClient with _onlineSearch
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('WebFetchBase ReadList', () {
+
     Future<void> testRead(
       List<String> criteria,
       List<MovieResultDTO> expectedValue, {
@@ -189,35 +189,41 @@ void main() {
 
       // Collect the result of all the IMDB queries.
       final queryResult = <MovieResultDTO>[];
-      for (final future in futures) {
-        unawaited(future.then(queryResult.addAll));
-      }
-      for (final future in futures) {
-        await future;
-      }
+      // Wait for all futures to complete and add results to the list.
+      // Using Future.wait ensures we wait for the .then() callbacks too.
+      await Future.wait(futures.map((f) => f.then(queryResult.addAll)));
 
       // Compare IMDB results to expectations.
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     }
+    // Order tests by execution speed to stop slow tests blocking fast ones.
+
+    // Test HTTP exception handling
+    test('Test HTTP 404', () async {
+      const startId = 5000;
+      final queries = _makeQueries(startId, 1);
+      final errorMessage = MovieResultDTO().error(
+        '[QueryIMDBTitleDetails] Error in QueryIMDBTitleDetailsMocked '
+        'with criteria '
+        'tt$startId stream error interpreting web text as a map '
+        ':Error in http read, HTTP status code : 404 for '
+        'https://www.imdb.com/title/tt$startId',
+        DataSourceType.imdb,
+      );
+      await testRead(queries, [errorMessage], forceError: true);
+    });
 
     // Convert 1 sample offline page into a dto.
     test('Run read 1 offline page', () async {
       const startId = 1000;
       final queries = _makeQueries(startId, 1);
-      final queryResult = _makeDTOs(startId, queries.length);
-      await testRead(queries, queryResult, online: false);
-    });
-
-    // Convert 300 sample offline pages into dtos.
-    test('Run read 300 offline pages', () async {
-      const startId = 2000;
-      final queries = _makeQueries(startId, 300);
       final queryResult = _makeDTOs(startId, queries.length);
       await testRead(queries, queryResult, online: false);
     });
@@ -238,6 +244,14 @@ void main() {
       await testRead(queries, queryResult);
     });
 
+    // Convert 300 sample offline pages into dtos.
+    test('Run read 300 offline pages', () async {
+      const startId = 2000;
+      final queries = _makeQueries(startId, 300);
+      final queryResult = _makeDTOs(startId, queries.length);
+      await testRead(queries, queryResult, online: false);
+    });
+
     // Convert 300 IMDB pages into dtos!!!
     test(
       'Run read 300 pages from mocked IMDB',
@@ -248,25 +262,6 @@ void main() {
         await testRead(queries, queryResult);
       },
       timeout: const Timeout(Duration(seconds: 40)),
-    );
-
-    // Test HTTP exception handling
-    test(
-      'Test HTTP 404',
-      () async {
-        const startId = 5000;
-        final queries = _makeQueries(startId, 1);
-        final errorMessage = MovieResultDTO().error(
-          '[QueryIMDBTitleDetails] Error in QueryIMDBTitleDetailsMocked '
-          'with criteria '
-          'tt$startId stream error interpreting web text as a map '
-          ':Error in http read, HTTP status code : 404 for '
-          'https://www.imdb.com/title/tt$startId',
-          DataSourceType.imdb,
-        );
-        await testRead(queries, [errorMessage], forceError: true);
-      },
-      timeout: const Timeout(Duration(seconds: 30)),
     );
   });
 }
