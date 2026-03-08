@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -63,6 +64,7 @@ Iterable<MovieResultDTO> sampleTestData(
   return results;
 }
 
+@doNotSubmit
 void writeTestData(
   Iterable<MovieResultDTO> actualResult, {
   String? location,

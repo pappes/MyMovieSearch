@@ -20,6 +20,7 @@ import 'package:universal_io/io.dart'
         HttpClient,
         HttpClientResponse,
         HttpHeaders,
+        HttpStatus,
         SocketException; // limit inclusions to reduce size
 
 typedef DataSourceFn = Future<Stream<String>> Function(dynamic s);
@@ -250,7 +251,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     myConstructHeaders(client.headers);
     final response = await client.close();
 
-    if (response.statusCode == 202) {
+    if (response.statusCode == HttpStatus.accepted) {
       // The body of a 202 response is often a JavaScript challenge.
       // Logging it can be useful for debugging WAF issues.
       final body = await response.transform(utf8.decoder).join();
@@ -260,7 +261,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
 
     // Retry with exponential backoff for server errors
-    if (response.statusCode >= 500 && retryDelay <= maxDelay) {
+    if (response.statusCode >= HttpStatus.internalServerError &&
+        retryDelay <= maxDelay) {
       final oldDelay = retryDelay;
       retryDelay = retryDelay * 2;
       return Future<void>.delayed(
@@ -428,7 +430,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     int statusCode,
     HttpClientResponse response,
   ) {
-    if (200 != statusCode) {
+    if (HttpStatus.ok != statusCode) {
       final errorMsg =
           'Error in http read, HTTP status code : $statusCode for $address';
       logger.e(errorMsg);

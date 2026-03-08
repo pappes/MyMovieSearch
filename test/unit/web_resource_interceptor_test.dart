@@ -23,14 +23,16 @@ import 'web_resource_interceptor_test.mocks.dart';
 // Mocks for standard Dart I/O and flutter_inappwebview classes.
 class ConfigurableMockHttpClientResponse extends mockito.Mock
     implements HttpClientResponse {
-
   ConfigurableMockHttpClientResponse(this.bodyBytes);
 
   final Uint8List bodyBytes;
-  
+
   @override
   int get statusCode =>
-      super.noSuchMethod(Invocation.getter(#statusCode), returnValue: 200)
+      super.noSuchMethod(
+            Invocation.getter(#statusCode),
+            returnValue: HttpStatus.ok,
+          )
           as int;
 
   @override
@@ -61,7 +63,6 @@ class MockHttpClientRequest extends mockito.Mock implements HttpClientRequest {
           )
           as HttpHeaders;
 }
-
 
 // Default implementation of the WebView using HeadlessInAppWebView.
 HeadlessInAppWebView mockWebView({
@@ -105,7 +106,7 @@ void main() {
       final decision = extractor.getInterceptionDecision(url, request.method);
 
       expect(decision.action, InterceptionAction.syntheticResponse);
-      expect(decision.statusCode, 204);
+      expect(decision.statusCode, HttpStatus.noContent);
       expect(decision.contentType, 'text/plain');
       expect(decision.body, Uint8List(0));
     });
@@ -138,7 +139,8 @@ void main() {
     );
 
     test('should return ProxyNetwork for valid API GET requests', () {
-      const url = 'https://example.com/api/data/FilmographyV2Pagination?param=1';
+      const url =
+          'https://example.com/api/data/FilmographyV2Pagination?param=1';
       final request = createMockRequest(url: url, method: 'GET');
       final decision = extractor.getInterceptionDecision(url, request.method);
 
@@ -170,7 +172,7 @@ void main() {
         });
 
         // Mock the response behavior
-        mockito.when(mockResponse.statusCode).thenReturn(200);
+        mockito.when(mockResponse.statusCode).thenReturn(HttpStatus.ok);
         mockito.when(mockResponse.headers).thenReturn(mockHeaders);
 
         // Act
@@ -180,7 +182,7 @@ void main() {
         );
 
         // Assert
-        expect(webResponse.statusCode, 200);
+        expect(webResponse.statusCode, HttpStatus.ok);
         expect(webResponse.contentType, 'application/json');
         expect(webResponse.data, bodyBytes);
         expect(webResponse.headers, {

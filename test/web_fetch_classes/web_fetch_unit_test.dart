@@ -23,6 +23,7 @@ import 'package:universal_io/io.dart'
         HttpClientRequest,
         HttpClientResponse,
         HttpHeaders,
+        HttpStatus,
         SocketException;
 
 import '../test_helper.dart';
@@ -41,7 +42,7 @@ typedef ConvertTreeToOutputType =
 
 //HttpClient.getUrl(Uri) = Future<HttpClientRequest>
 //HttpClientRequest.close() = HttpClientResponse
-//HttpClientResponse.statusCode = 200
+//HttpClientResponse.statusCode = HttpStatus.ok
 //HttpClientResponse.transform(utf8.decoder) = stream<String>
 //myConstructHeaders(client.headers);
 class QueryUnknownSourceMocked
@@ -51,7 +52,7 @@ class QueryUnknownSourceMocked
   @override
   String myDataSourceName() => 'QueryUnknownSourceMocked';
 
-  int httpReturnCode = 200;
+  int httpReturnCode = HttpStatus.ok;
   SearchCriteriaDTO mockedCriteria;
 
   /// Returns a new [HttpClient] instance to allow mocking in tests.
@@ -91,7 +92,9 @@ class QueryUnknownSourceMocked
   // Remember mockedCriteria for later
   @override
   String myFormatInputAsText() {
-    if (mockedCriteria.criteriaTitle == 'HTTP404') httpReturnCode = 404;
+    if (mockedCriteria.criteriaTitle == 'HTTP404') {
+      httpReturnCode = HttpStatus.notFound;
+    }
     return mockedCriteria.criteriaTitle;
   }
 
@@ -99,9 +102,7 @@ class QueryUnknownSourceMocked
   // convert dart [List] or [Map] to [OUTPUT_TYPE] object data
   // but allow it to be overridden
   @override
-  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic tree,
-  ) =>
+  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(dynamic tree) =>
       // Use Future.sync to allow code to run synchronously and ensure
       // that exceptions are propagated as Future errors.
       Future.sync(() => overriddenConvertTreeToOutputType(tree));
@@ -116,8 +117,7 @@ class QueryUnknownSourceMocked
     String webText,
     // Needs to be async so it handles future exceptions properly.
     // ignore: unnecessary_async
-  ) async =>
-      overriddenConvertWebTextToTraversableTree(webText);
+  ) async => overriddenConvertWebTextToTraversableTree(webText);
 
   /// Include entire error in the movie title when an error occurs.
   @override
@@ -177,7 +177,7 @@ class WebFetchBasic extends WebFetchBase<String, String> {
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) => Uri();
   @override
-  Future<List<String>> myConvertTreeToOutputType(dynamic map) => 
+  Future<List<String>> myConvertTreeToOutputType(dynamic map) =>
       overriddenMyConvertTreeToOutputType(map);
   @override
   String myYieldError(String contents) => contents;

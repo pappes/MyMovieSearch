@@ -59,7 +59,7 @@ void main() {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
       const expectedResult =
-          'https://gtorrents.com/search_results.php?search=new%20query&sort=seeders&order=desc&page=0';
+          'https://glodls.online/search_results.php?search=new%20query&sort=seeders&order=desc&page=0';
 
       // Invoke the functionality.
       final actualResult = QueryGloTorrentsSearch(criteria)
