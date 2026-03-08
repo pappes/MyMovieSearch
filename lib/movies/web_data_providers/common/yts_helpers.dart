@@ -6,8 +6,8 @@ import 'package:html/parser.dart' as html;
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
-const String ytsDefaultUrl = 'https://yts.lt';
-const String emptySearchResult =
+const ytsDefaultUrl = 'https://yts.lt';
+const emptySearchResult =
     '{"status":"false","message":"No results found."}';
 
 class YtsHelper {

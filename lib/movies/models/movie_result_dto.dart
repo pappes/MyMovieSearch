@@ -102,30 +102,30 @@ enum LanguageType {
 }
 
 // member variable names
-const String movieDTOBestSource = 'bestSource';
-const String movieDTOUniqueId = 'uniqueId';
-const String movieDTOTitle = 'title';
-const String movieDTOAlternateTitle = 'alternateTitle';
-const String movieDTOCharacterName = 'characterName';
-const String movieDTODescription = 'description';
-const String movieDTOType = 'type';
-const String movieDTOYear = 'year';
-const String movieDTOYearRange = 'yearRange';
-const String movieDTOcreditsOrder = 'creditsOrder';
-const String movieDTOUserRating = 'userRating';
-const String movieDTOUserRatingCount = 'userRatingCount';
-const String movieDTOCensorRating = 'censorRating';
-const String movieDTORunTime = 'runTime';
-const String movieDTOImageUrl = 'imageUrl';
-const String movieDTOLanguage = 'language';
-const String movieDTOLanguages = 'languages';
-const String movieDTOGenres = 'genres';
-const String movieDTOKeywords = 'keywords';
-const String movieDTOLinks = 'links';
-const String movieDTOSources = 'sources';
-const String movieDTORelated = 'related';
-const String movieDTOUninitialized = '-1';
-const String movieDTOMessagePrefix = '-';
+const movieDTOBestSource = 'bestSource';
+const movieDTOUniqueId = 'uniqueId';
+const movieDTOTitle = 'title';
+const movieDTOAlternateTitle = 'alternateTitle';
+const movieDTOCharacterName = 'characterName';
+const movieDTODescription = 'description';
+const movieDTOType = 'type';
+const movieDTOYear = 'year';
+const movieDTOYearRange = 'yearRange';
+const movieDTOcreditsOrder = 'creditsOrder';
+const movieDTOUserRating = 'userRating';
+const movieDTOUserRatingCount = 'userRatingCount';
+const movieDTOCensorRating = 'censorRating';
+const movieDTORunTime = 'runTime';
+const movieDTOImageUrl = 'imageUrl';
+const movieDTOLanguage = 'language';
+const movieDTOLanguages = 'languages';
+const movieDTOGenres = 'genres';
+const movieDTOKeywords = 'keywords';
+const movieDTOLinks = 'links';
+const movieDTOSources = 'sources';
+const movieDTORelated = 'related';
+const movieDTOUninitialized = '-1';
+const movieDTOMessagePrefix = '-';
 
 class RestorableMovie extends RestorableValue<MovieResultDTO> {
   RestorableMovie([MovieResultDTO? def]) {
@@ -1191,7 +1191,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     T expected,
   ) {
     if (expected != actual) {
-      if (!DoubleHelper.fuzzyMatch(actual, expected, tolerance: 80)) {
+      if (!DoubleHelper.fuzzyMatch(actual, expected)) {
         mismatches[fieldName] =
             'is different\n'
             '  Expected approx: "$expected"\n'

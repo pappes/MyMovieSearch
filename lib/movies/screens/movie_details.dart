@@ -49,7 +49,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   _MovieDetailsPageState();
 
   bool _redrawRequired = true;
-  final RestorableBool _descriptionExpanded = RestorableBool(false);
+  final _descriptionExpanded = RestorableBool(false);
   final _restorableMovie = RestorableMovie();
   var _mobileLayout = true;
 

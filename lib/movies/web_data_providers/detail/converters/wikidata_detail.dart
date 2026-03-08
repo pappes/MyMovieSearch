@@ -93,7 +93,7 @@ class WikidataDetailConverter {
   String? imdbId;
   String? failureMessage;
   final dataSource = DataSourceType.wikidataDetail;
-  late String dataSourceName = 'WikidataDetailConverter';
+  String dataSourceName = 'WikidataDetailConverter';
 
   List<MovieResultDTO> dtoFromCompleteJsonMap(Map<dynamic, dynamic> map) {
     // deserialise outer json from map then iterate inner json
