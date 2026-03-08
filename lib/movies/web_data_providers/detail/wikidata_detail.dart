@@ -232,7 +232,7 @@ SELECT DISTINCT ?item ?itemLabel WHERE {
     final response = await client.close();
     // execute fetch
     // check results
-    if (response.statusCode == 200) {
+    if (response.statusCode == HttpStatus.ok) {
       final body = await response.transform(utf8.decoder).join();
       return body.characters.take(1000).toString();
     }

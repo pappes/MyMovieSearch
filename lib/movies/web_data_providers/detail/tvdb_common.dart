@@ -193,7 +193,7 @@ abstract class QueryTVDBCommon
     Uri address,
     int statusCode,
     HttpClientResponse response,
-  ) => (404 == statusCode)
+  ) => (HttpStatus.notFound == statusCode)
       ? null
       // Cascade call to parent class.
       // ignore: invalid_use_of_visible_for_testing_member
