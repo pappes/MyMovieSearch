@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
-import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 
 /// Add information about storage of physical media.
 ///
@@ -119,9 +119,8 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
   Widget build(BuildContext context) {
     _restorableMovie.value = widget.movieDto;
     return SelectionArea(
-      child: Scaffold(
+      child: AppScaffold(
         appBar: AppBar(title: Text(_restorableMovie.value.title)),
-        endDrawer: getDrawer(context),
         body: Padding(padding: const EdgeInsets.all(8), child: _bodySection()),
       ),
     );

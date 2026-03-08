@@ -543,20 +543,3 @@ SearchCriteriaDTO makeCriteriaDTO(String sample) => SearchCriteriaDTO()
     MovieResultDTO().init(uniqueId: 'first'),
     MovieResultDTO().init(uniqueId: 'second'),
   ];
-
-class TestApp extends StatelessWidget {
-  const TestApp({required this.children, super.key});
-  const TestApp.con({required this.children, super.key});
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) => MaterialApp(
-    title: 'Flutter Testing',
-    home: Scaffold(
-      body: Center(
-        child: Flex(direction: Axis.vertical, children: children),
-      ),
-    ),
-  );
-}

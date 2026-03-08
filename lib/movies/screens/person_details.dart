@@ -7,8 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
+import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
-import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
@@ -151,12 +151,11 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   Widget build(BuildContext context) {
     _mobileLayout = useMobileLayout(context);
     return SelectionArea(
-      child: Scaffold(
+      child: AppScaffold(
         appBar: AppBar(
           // Get title from the StatefulWidget PersonDetailsPage.
           title: Text(_restorablePerson.value.title),
         ),
-        endDrawer: getDrawer(context),
         body: Scrollbar(
           thumbVisibility: true,
           child: ListView(

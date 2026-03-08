@@ -7,8 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
+import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
-import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_cast.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
@@ -163,9 +163,8 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
   Widget build(BuildContext context) {
     _mobileLayout = useMobileLayout(context);
     return SelectionArea(
-      child: Scaffold(
+      child: AppScaffold(
         appBar: AppBar(title: Text(_restorableMovie.value.title)),
-        endDrawer: getDrawer(context),
         body: Scrollbar(thumbVisibility: true, child: _bodySection()),
       ),
     );
