@@ -152,7 +152,7 @@ abstract class WebJsonExtractor {
       // Decision: Block the request with a synthetic 404.
       // return InterceptionDecision.delegateRequest();
       return InterceptionDecision.syntheticResponse(
-        statusCode: 204,
+        statusCode: HttpStatus.noContent,
         contentType: 'text/plain',
         body: Uint8List(0),
       );

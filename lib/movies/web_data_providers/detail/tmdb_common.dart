@@ -1,6 +1,7 @@
 // https://developer.themoviedb.org/reference/v3-or-v4-lists
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
@@ -167,7 +168,7 @@ abstract class QueryTMDBCommon
     Uri address,
     int statusCode,
     HttpClientResponse response,
-  ) => (404 == statusCode)
+  ) => (HttpStatus.notFound == statusCode)
       ? null
       // Cascade clear to parent class.
       // ignore: invalid_use_of_visible_for_testing_member

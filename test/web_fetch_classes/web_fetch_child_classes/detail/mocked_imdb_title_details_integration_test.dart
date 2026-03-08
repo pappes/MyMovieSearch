@@ -13,7 +13,12 @@ import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart
 import 'package:quiver/iterables.dart';
 
 import 'package:universal_io/io.dart'
-    show HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders;
+    show
+        HttpClient,
+        HttpClientRequest,
+        HttpClientResponse,
+        HttpHeaders,
+        HttpStatus;
 
 import '../../../test_helper.dart';
 import '../../web_fetch_unit_test.mocks.dart';
@@ -27,14 +32,14 @@ import '../../web_fetch_unit_test.mocks.dart';
 @GenerateMocks([HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders])
 //HttpClient.getUrl(Uri) = Future<HttpClientRequest>
 //HttpClientRequest.close() = HttpClientResponse
-//HttpClientResponse.statusCode = 200
+//HttpClientResponse.statusCode = HttpStatus.ok
 //HttpClientResponse.transform(utf8.decoder) = stream<String>
 // ignore: missing_override_of_must_be_overridden
 class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
   QueryIMDBTitleDetailsMocked(
     super.criteria,
     this.expectedCriteria, {
-    this.httpStatus = 200,
+    this.httpStatus = HttpStatus.ok,
   });
 
   @override
@@ -174,7 +179,6 @@ void main() {
   ////////////////////////////////////////////////////////////////////////////////
 
   group('WebFetchBase ReadList', () {
-
     Future<void> testRead(
       List<String> criteria,
       List<MovieResultDTO> expectedValue, {
