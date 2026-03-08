@@ -11,9 +11,9 @@ import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 class BarcodeRepository extends BaseMovieRepository {
   @override
   Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int> getProviders() => {
-        QueryLibsaBarcodeSearch(criteria): 1000,
-        QueryFishpondBarcodeSearch(criteria): 1000,
-        QueryUhttBarcodeSearch(criteria): 1000,
-        QueryPicclickBarcodeSearch(criteria): 1000,
-      };
+    QueryLibsaBarcodeSearch(criteria): 1000,
+    QueryFishpondBarcodeSearch(criteria): 1000,
+    QueryUhttBarcodeSearch(criteria): 1000,
+    QueryPicclickBarcodeSearch(criteria): 1000,
+  };
 }

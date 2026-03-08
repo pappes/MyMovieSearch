@@ -17,9 +17,9 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 final criteria = SearchCriteriaDTO().fromString('dream');
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('PicclickBarcode search unit tests', () {
     // Confirm class description is constructed as expected.
@@ -61,9 +61,9 @@ void main() {
       const expectedResult = 'https://picclick.com.au/?q=new%20query+';
 
       // Invoke the functionality.
-      final actualResult = QueryPicclickBarcodeSearch(criteria)
-          .myConstructURI('new query')
-          .toString();
+      final actualResult = QueryPicclickBarcodeSearch(
+        criteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -78,10 +78,9 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryPicclickBarcodeSearch(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryPicclickBarcodeSearch(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -98,14 +97,12 @@ void main() {
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = <void>[];
-      final actualOutput = QueryPicclickBarcodeSearch(criteria)
-          .myConvertWebTextToTraversableTree(
-        htmlSampleEmpty,
-      );
+      final actualOutput = QueryPicclickBarcodeSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
@@ -113,16 +110,12 @@ void main() {
           startsWith('PicclickBarcode results data not detected log'),
         ),
       );
-      final actualOutput = QueryPicclickBarcodeSearch(criteria)
-          .myConvertWebTextToTraversableTree(
-        htmlSampleError,
-      );
+      final actualOutput = QueryPicclickBarcodeSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleError);
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(
-        actualOutput,
-        expectedOutput,
-      );
+      expect(actualOutput, expectedOutput);
     });
   });
   group('PicclickBarcodeSearchConverter unit tests', () {
@@ -145,15 +138,16 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using PicclickBarcodeSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('PicclickBarcodeSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
@@ -164,16 +158,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await webfetch.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await webfetch.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -201,11 +194,11 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase
   ///  and ScrapePicclickBarcodeSearchDetails
   ///  and PicclickBarcodeSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('PicclickBarcode search query', () {
     // Read search results from a simulated byte stream
@@ -231,7 +224,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue, related: false),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -241,7 +235,8 @@ void main() {
     // and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
-      final expectedException = '[QueryPicclickBarcodeSearch] '
+      final expectedException =
+          '[QueryPicclickBarcodeSearch] '
           'Error in picclickBarcode with criteria '
           '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :PicclickBarcode '
@@ -263,7 +258,8 @@ void main() {
     // and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      final expectedException = '[QueryPicclickBarcodeSearch] '
+      final expectedException =
+          '[QueryPicclickBarcodeSearch] '
           'Error in picclickBarcode with criteria '
           '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :PicclickBarcode '

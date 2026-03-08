@@ -10,9 +10,9 @@ import '../../../../test_helper.dart';
 ////////////////////////////////////////////////////////////////////////////////
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryYtsSearch test', () {
     // Search for a rare movie.
@@ -27,11 +27,9 @@ void main() {
       final expectedOutput = readTestData();
       expect(
         actualOutput,
-        MovieResultDTOListFuzzyMatcher(
-          expectedOutput,
-          percentMatch: 50,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
@@ -48,11 +46,9 @@ void main() {
       final expectedOutput = readTestData(location: dataSoureLocation);
       expect(
         actualOutput,
-        MovieResultDTOListFuzzyMatcher(
-          expectedOutput,
-          percentMatch: 50,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
@@ -65,10 +61,9 @@ void main() {
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(
-          expectedOutput,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );

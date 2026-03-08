@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -21,9 +20,9 @@ final criteria = SearchCriteriaDTO().fromString('123');
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => Settings().init());
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('tmdb search unit tests', () {
     // Confirm class description is constructed as expected.
@@ -46,14 +45,8 @@ void main() {
           MovieResultDTO().error('test1'),
           MovieResultDTO().error('test2'),
         ];
-      expect(
-        QueryTMDBMovies(input).myFormatInputAsText(),
-        contains('test1'),
-      );
-      expect(
-        QueryTMDBMovies(input).myFormatInputAsText(),
-        contains('test2'),
-      );
+      expect(QueryTMDBMovies(input).myFormatInputAsText(), contains('test1'));
+      expect(QueryTMDBMovies(input).myFormatInputAsText(), contains('test2'));
     });
 
     // Confirm error is constructed as expected.
@@ -65,10 +58,9 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryTMDBMovies(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryTMDBMovies(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -76,27 +68,23 @@ void main() {
     // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
-      final actualOutput =
-          QueryTMDBMovies(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleFull,
-      );
+      final actualOutput = QueryTMDBMovies(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleFull);
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = intermediateEmptyMapList;
-      final actualOutput =
-          QueryTMDBMovies(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleEmpty,
-      );
+      final actualOutput = QueryTMDBMovies(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = intermediateErrorMapList;
-      final actualOutput =
-          QueryTMDBMovies(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleError,
-      );
+      final actualOutput = QueryTMDBMovies(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleError);
       expect(actualOutput, completion(expectedOutput));
     });
   });
@@ -121,15 +109,16 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryTMDBMovies integration tests', () {
     // Confirm URL is constructed as expected.
@@ -139,17 +128,18 @@ void main() {
       const expectedResult2 = '&query=new%20query&page=1';
 
       // Invoke the functionality.
-      final actualResult =
-          QueryTMDBMovies(criteria).myConstructURI('new query').toString();
+      final actualResult = QueryTMDBMovies(
+        criteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, startsWith(expectedResult1));
       expect(actualResult, endsWith(expectedResult2));
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using QueryTMDBMovies
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryTMDBMovies integration tests', () {
     // Confirm map can be converted to DTO.
@@ -160,16 +150,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -181,16 +170,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateEmptyMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -218,9 +206,9 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase and env and QueryTMDBMovies
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('tmdb search query', () {
     // Read tmdb search results from a simulated byte stream
@@ -245,7 +233,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );

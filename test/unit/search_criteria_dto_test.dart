@@ -35,10 +35,7 @@ void compareCriteria(SearchCriteriaDTO actual, SearchCriteriaDTO matcher) {
     actual.criteriaList.first.uniqueId,
     matcher.criteriaList.first.uniqueId,
   );
-  expect(
-    actual.criteriaList.last.uniqueId,
-    matcher.criteriaList.last.uniqueId,
-  );
+  expect(actual.criteriaList.last.uniqueId, matcher.criteriaList.last.uniqueId);
 
   MovieResultDTOMatcher(matcher.criteriaList.first);
 }
@@ -91,11 +88,7 @@ void main() {
       final encoded2 = rtp._criteria.toPrimitives();
 
       compareCriteria(criteria, rtp._criteria.value);
-      expect(
-        encoded,
-        encoded2,
-        reason: 'primitives not restored correctly',
-      );
+      expect(encoded, encoded2, reason: 'primitives not restored correctly');
     });
   });
 }

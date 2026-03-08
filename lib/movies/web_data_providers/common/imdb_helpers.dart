@@ -115,7 +115,6 @@ const outerSearchResultsKnownForYear = 'knownForTitleYear';
 const outerSearchResultsMovieType = 'titleType';
 const outerSearchResultsMovieTypeText = 'id';
 
-
 // Credits is repeated inside the category as "credits"
 // so use case sensative compare
 const deepPersonRelatedSuffix = 'Credits';

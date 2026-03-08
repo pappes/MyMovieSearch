@@ -75,7 +75,6 @@ class MovieLocation {
   Future<dynamic> deleteAllLocationsForMovie(String uniqueId) async {
     if (_movies.containsKey(uniqueId) && _movies[uniqueId]!.isNotEmpty) {
       for (final location in getLocationsForMovie(uniqueId)) {
-
         void deleteMovie(StackerContents contents) =>
             _locations[location]?.remove;
 
@@ -252,7 +251,7 @@ class MovieLocation {
   // test/persistance/firebase_backup_is_not_a_test.dart
   // then copy data from /tmp/firebaseBackupXXXX.txt to
   // assets/newDVDLibrary.json
-  // and update lastFirebaseBackupDate with 
+  // and update lastFirebaseBackupDate with
   // the new timestamp that is printed to console during execution of the test.
   static const lastFirebaseBackupDate = 1767323141965;
   // DateTime().millisecondsSinceEpoch

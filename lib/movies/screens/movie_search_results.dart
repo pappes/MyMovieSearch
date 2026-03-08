@@ -26,12 +26,12 @@ class MovieSearchResultsNewPage extends StatefulWidget {
 
   /// Instruct goroute how to navigate to this page.
   static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
-        restorationId: RestorableSearchCriteria.getRestorationId(state),
-        child: MovieSearchResultsNewPage(
-          criteria: RestorableSearchCriteria.getDto(state),
-          restorationId: RestorableSearchCriteria.getRestorationId(state),
-        ),
-      );
+    restorationId: RestorableSearchCriteria.getRestorationId(state),
+    child: MovieSearchResultsNewPage(
+      criteria: RestorableSearchCriteria.getDto(state),
+      restorationId: RestorableSearchCriteria.getRestorationId(state),
+    ),
+  );
 }
 
 class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
@@ -122,9 +122,9 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   Future<void> _populateFromDvdCache() async {
     // Load data by combining internal caches.
     unawaited(
-      MovieLocation()
-          .getUnmatchedDvds()
-          .then((dtos) => setState(() => _restorableList.value = dtos)),
+      MovieLocation().getUnmatchedDvds().then(
+        (dtos) => setState(() => _restorableList.value = dtos),
+      ),
     );
   }
 
@@ -190,26 +190,27 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   }
 
   Widget _buildMovieResults() => BlocBuilder<SearchBloc, SearchState>(
-        bloc: _searchBloc,
-        builder: (context, state) {
-          if (_searchBloc!.sortedResults.isNotEmpty) {
-            // if a search has been conducted use the new search results
-            _restorableList.value =
-                _searchBloc!.sortedResults.shallowCopy().toList();
-          }
-          return _movieListSection();
-        },
-      );
+    bloc: _searchBloc,
+    builder: (context, state) {
+      if (_searchBloc!.sortedResults.isNotEmpty) {
+        // if a search has been conducted use the new search results
+        _restorableList.value = _searchBloc!.sortedResults
+            .shallowCopy()
+            .toList();
+      }
+      return _movieListSection();
+    },
+  );
 
   Scrollbar _movieListSection() => Scrollbar(
-        thumbVisibility: true,
-        child: ListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: _restorableList.value.length,
-          itemBuilder: _movieListBuilder,
-          primary: true, //attach scrollbar controller to primary view
-        ),
-      );
+    thumbVisibility: true,
+    child: ListView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: _restorableList.value.length,
+      itemBuilder: _movieListBuilder,
+      primary: true, //attach scrollbar controller to primary view
+    ),
+  );
 
   Widget _movieListBuilder(BuildContext context, int listIndex) {
     if (listIndex >= _restorableList.value.length) {

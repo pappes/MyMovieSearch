@@ -12,10 +12,10 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class MovieSearchRepository extends MovieListRepository {
   @override
   Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int> getProviders() => {
-        QueryIMDBSuggestions(criteria): 10,
-        QueryIMDBSearch(criteria): 10,
-        QueryOMDBMovies(criteria): 10,
-        QueryTMDBMovies(criteria): 10,
-        QueryGoogleMovies(criteria): 10,
-      };
+    QueryIMDBSuggestions(criteria): 10,
+    QueryIMDBSearch(criteria): 10,
+    QueryOMDBMovies(criteria): 10,
+    QueryTMDBMovies(criteria): 10,
+    QueryGoogleMovies(criteria): 10,
+  };
 }

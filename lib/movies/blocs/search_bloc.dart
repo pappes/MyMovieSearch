@@ -27,16 +27,14 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     : _movieRepository = movieRepository,
       super(const SearchState.awaitingInput()) {
     on<SearchCompleted>(
-      (event, emit) =>
-          isClosed
-              ? null
-              : emit(SearchState.displayingResults(_searchProgress)),
+      (event, emit) => isClosed
+          ? null
+          : emit(SearchState.displayingResults(_searchProgress)),
     );
     on<SearchDataReceived>(
-      (event, emit) =>
-          isClosed
-              ? null
-              : emit(SearchState.displayingResults(_searchProgress)),
+      (event, emit) => isClosed
+          ? null
+          : emit(SearchState.displayingResults(_searchProgress)),
     );
     on<SearchCancelled>(
       (event, emit) =>
@@ -78,9 +76,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     _allResults.clear();
     sortedResults.clear();
     _throttleName = 'SearchBloc${criteria.toPrintableString()}';
-    _searchStatusSubscription = _movieRepository
-      .search(criteria)
-      .listen(_receiveDTO)..onDone(_completeSearch);
+    _searchStatusSubscription =
+        _movieRepository.search(criteria).listen(_receiveDTO)
+          ..onDone(_completeSearch);
   }
 
   /// Notify subscribers the stream of data is complete.
@@ -118,10 +116,9 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
         if (key.startsWith(imdbPersonPrefix) ||
             key.startsWith(imdbTitlePrefix)) {
           const collectionPrefix = 'MMSNavLog/screen/';
-          final collection =
-              key.startsWith(imdbTitlePrefix)
-                  ? 'moviedetails'
-                  : 'persondetails';
+          final collection = key.startsWith(imdbTitlePrefix)
+              ? 'moviedetails'
+              : 'persondetails';
           unawaited(
             FirebaseApplicationState()
                 .fetchRecord(

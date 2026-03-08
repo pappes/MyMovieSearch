@@ -52,15 +52,14 @@ mixin ThreadedCacheIMDBSuggestions
       'requesting ${myFormatInputAsText()}',
     );
 
-    result = await ThreadRunner.namedThread(newPriority).run(
-      runReadList,
-      {
-        'criteria': criteria,
-        'source': source,
-        'limit': limit,
-      },
-    ) as List<MovieResultDTO>
-      ..forEach(_addResultToCache);
+    result =
+        await ThreadRunner.namedThread(newPriority).run(runReadList, {
+                'criteria': criteria,
+                'source': source,
+                'limit': limit,
+              })
+              as List<MovieResultDTO>
+          ..forEach(_addResultToCache);
 
     _normalQueue.remove(criteria);
     _verySlowQueue.remove(criteria);
@@ -68,9 +67,7 @@ mixin ThreadedCacheIMDBSuggestions
   }
 
   /// static wrapper to readList() for compatability with ThreadRunner.
-  static Future<List<MovieResultDTO>> runReadList(
-    Map<String, dynamic> input,
-  ) =>
+  static Future<List<MovieResultDTO>> runReadList(Map<String, dynamic> input) =>
       QueryIMDBSuggestions(input['criteria'] as SearchCriteriaDTO).readList(
         source: input['source'] as DataSourceFn?,
         limit: input['limit'] as int?,

@@ -11,8 +11,7 @@ import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements a web scraper for retrieving movie details from IMDB.
-mixin ScrapeIMDBJsonDetails
-    on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
+mixin ScrapeIMDBJsonDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Reduce computation effort for html extraction.
   @override
   Future<List<dynamic>> myConvertWebTextToTraversableTree(
@@ -36,8 +35,9 @@ mixin ScrapeIMDBJsonDetails
     if (movieData[outerElementDescription] == null &&
         movieData['props'] == null) {
       throw WebConvertException(
-          'imdb web scraper data not detected for criteria '
-          '$getCriteriaText in $webText');
+        'imdb web scraper data not detected for criteria '
+        '$getCriteriaText in $webText',
+      );
     }
     return [movieData];
   }

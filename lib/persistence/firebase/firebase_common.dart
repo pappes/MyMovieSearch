@@ -27,10 +27,9 @@ const runtimeDevices = {
 abstract class FirebaseApplicationState extends ChangeNotifier {
   /// Singleton for the current platform
   factory FirebaseApplicationState() {
-    instance ??=
-        Platform.isLinux
-            ? FirebaseApplicationStateLinux()
-            : FirebaseApplicationStateAndriod();
+    instance ??= Platform.isLinux
+        ? FirebaseApplicationStateLinux()
+        : FirebaseApplicationStateAndriod();
     return instance!;
   }
 

@@ -13,9 +13,9 @@ import '../../../../test_helper.dart';
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => Settings().init());
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryTMDBMovies search test', () {
     // Search for a rare movie.
@@ -30,11 +30,9 @@ void main() {
       final expectedOutput = readTestData();
       expect(
         actualOutput,
-        MovieResultDTOListFuzzyMatcher(
-          expectedOutput,
-          percentMatch: 60,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
@@ -47,10 +45,9 @@ void main() {
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(
-          expectedOutput,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );

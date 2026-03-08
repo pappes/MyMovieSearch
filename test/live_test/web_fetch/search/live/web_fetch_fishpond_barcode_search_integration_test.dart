@@ -19,7 +19,6 @@ void main() {
     test(
       'Run a search on fishpond/mightyape that will hopefully have static results',
       () async {
-
         final criteria = SearchCriteriaDTO().fromString('9789461879530');
         final actualOutput = await QueryFishpondBarcodeSearch(
           criteria,

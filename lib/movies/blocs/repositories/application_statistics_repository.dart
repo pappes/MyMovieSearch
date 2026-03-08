@@ -17,5 +17,4 @@ class ApplicationStatisticsRepository extends MovieListRepository {
     }
     return finishProvider(SearchCriteriaType.statistics);
   }
-
 }

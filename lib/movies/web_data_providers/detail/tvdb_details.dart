@@ -41,13 +41,10 @@ class QueryTVDBDetails extends QueryTVDBCommon {
     return myConstructURI(searchCriteria, pageNumber: pageNumber);
   }
 
-
   /// Convert TVDB map to MovieResultDTO records.
   @override
-  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic map,
-  ) =>
-      // Use Future.sync to allow code to run synchronously and ensure 
+  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) =>
+      // Use Future.sync to allow code to run synchronously and ensure
       // that exceptions are propagated as Future errors.
       Future.sync(() => convertSync(map));
 
@@ -55,7 +52,7 @@ class QueryTVDBDetails extends QueryTVDBCommon {
   Iterable<MovieResultDTO> convertSync(dynamic map) {
     if (map is Map) {
       final dto = TvdbDetailConverter(
-        criteria.criteriaTitle, 
+        criteria.criteriaTitle,
       ).dtoFromCompleteJsonMap(map);
       return dto;
     }

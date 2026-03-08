@@ -31,9 +31,7 @@ extension TreeMapHelper on Map<dynamic, dynamic> {
     bool suffixMatch = false,
     bool multipleMatch = false,
     bool returnParent = false,
-  }) => TreeHelper(
-    this,
-  ).deepSearch(
+  }) => TreeHelper(this).deepSearch(
     tag,
     suffixMatch: suffixMatch,
     multipleMatch: multipleMatch,
@@ -55,9 +53,7 @@ extension TreeSetHelper on Set<dynamic> {
     bool suffixMatch = false,
     bool multipleMatch = false,
     bool returnParent = false,
-  }) => TreeHelper(
-    this,
-  ).deepSearch(
+  }) => TreeHelper(this).deepSearch(
     tag,
     suffixMatch: suffixMatch,
     multipleMatch: multipleMatch,
@@ -173,7 +169,6 @@ class TreeHelper {
     }
   }
 
-
   /// {@template getGrandChildren}
   /// Collapse one level of the tree.
   /// {@endtemplate}
@@ -192,7 +187,7 @@ class TreeHelper {
   /// Search tree for a map containing [key] and return its value as a String.
   ///
   /// {@template searchForString}
-  /// It finds the first occurrence of the [key] 
+  /// It finds the first occurrence of the [key]
   /// and returns the associated value.
   /// {@endtemplate}
   String? searchForString({Object key = 'text'}) {

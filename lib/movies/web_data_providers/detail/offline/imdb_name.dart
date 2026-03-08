@@ -1,4 +1,3 @@
-
 const imdbHtmlSampleStart = ' <!DOCTYPE html> <html     <head>';
 const imdbHtmlSampleMiddle = ' </head> <body id="styleguide-v2" class="fixed">';
 const imdbHtmlSampleEnd = ' </body> </html>';
@@ -9,8 +8,8 @@ const imdbHtmlSampleFull =
 Future<Stream<String>> streamImdbHtmlOfflineData(_) =>
     Future.value(Stream.value(imdbHtmlSampleFull));
 
-
-const imdbJsonSampleInner = '''
+const imdbJsonSampleInner =
+    '''
 <script type="application/json">$_embeddedJson</script>
 ''';
 const imdbHtmlSampleInner = '';

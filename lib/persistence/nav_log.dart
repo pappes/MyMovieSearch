@@ -11,17 +11,17 @@ class NavLog extends ChangeNotifier {
   final BuildContext? _context;
 
   FirebaseApplicationState? getFirestoreProvider() =>
-      (_context==null || !_context.mounted) ? 
-        null : 
-        Provider.of<FirebaseApplicationState>(_context, listen: false);
+      (_context == null || !_context.mounted)
+      ? null
+      : Provider.of<FirebaseApplicationState>(_context, listen: false);
 
   void logPageOpen(String destination, String request) => unawaited(
-        getFirestoreProvider()?.addRecord(
-          'MMSNavLog/screen/$destination',
-          id: request,
-          message: ReadHistory.reading.toString(),
-        ),
-      );
+    getFirestoreProvider()?.addRecord(
+      'MMSNavLog/screen/$destination',
+      id: request,
+      message: ReadHistory.reading.toString(),
+    ),
+  );
 
   void logPageClose(String destination, String request, Object params) {
     if (params is MovieResultDTO &&

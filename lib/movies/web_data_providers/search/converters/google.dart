@@ -47,8 +47,9 @@ class GoogleMovieSearchConverter {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
     try {
-      final resultCountString = (map[outerElementSearchInformation]
-          as Map)[innerElementSearchInfoCount];
+      final resultCountString =
+          (map[outerElementSearchInformation]
+              as Map)[innerElementSearchInfoCount];
       final resultCount = int.tryParse(resultCountString.toString());
       if (resultCount == 0) {
         return [];
@@ -79,15 +80,15 @@ class GoogleMovieSearchConverter {
     if (resultsError != null) {
       // Dynamic call to toString is safe here.
       // ignore: avoid_dynamic_calls
-      error = resultsError[innerElementErrorFailureReason]?.toString() ??
+      error =
+          resultsError[innerElementErrorFailureReason]?.toString() ??
           'No failure reason provided in results';
     } else {
       error = 'Google found no matching results $map';
     }
     error += ' $map';
     return [
-      MovieResultDTO()
-          .error(
+      MovieResultDTO().error(
         '[GoogleMovieSearchConverter] $error',
         DataSourceType.google,
       ),
@@ -186,15 +187,14 @@ class GoogleMovieSearchConverter {
         nullValueSubstitute: 0,
       )!;
 
-  static int getRatingCount(Map<dynamic, dynamic> map) => IntHelper.fromText(
-        map[innerElementRatingCount],
-        nullValueSubstitute: 0,
-      )!;
+  static int getRatingCount(Map<dynamic, dynamic> map) =>
+      IntHelper.fromText(map[innerElementRatingCount], nullValueSubstitute: 0)!;
 
   // Ignore duplicated child pages. Page sub type is: main
   // or reviews or fullcredits or trivia or locations or plotsummary or ...
   static bool isImdbChildPage(Map<dynamic, dynamic> map) {
-    final subPageType = map.searchForString(key: innerElementSubtype) ??
+    final subPageType =
+        map.searchForString(key: innerElementSubtype) ??
         map.searchForString(key: innerElementPrefixedSubtype) ??
         'unknown';
 

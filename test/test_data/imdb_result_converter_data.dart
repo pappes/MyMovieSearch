@@ -18,14 +18,14 @@ final expectedDTOStream = streamMovieResultDTOFromJsonMap([
     movieDTOLanguages: 'null',
     movieDTOGenres: '"Drama"',
     movieDTOKeywords: '["terror","T&A"]',
-// movieResultDTOYearRange = 'yearRange';
+    // movieResultDTOYearRange = 'yearRange';
     movieDTOType: MovieContentType.movie.toString(),
     movieDTOUserRating: '6.5',
     movieDTOUserRatingCount: '10',
-// movieResultDTOCensorRating = 'censorRating';
+    // movieResultDTOCensorRating = 'censorRating';
     movieDTOImageUrl:
         'https://m.media-amazon.com/images/M/MV5B...c4OTM4NjE@._V1_.jpg',
-  }
+  },
 ]);
 
 const String htmlSampleInner = r'''

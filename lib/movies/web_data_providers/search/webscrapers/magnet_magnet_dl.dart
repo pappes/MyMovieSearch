@@ -32,9 +32,10 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     if (webText.contains('Your search has returned <strong>0</strong>')) {
       return [];
     }
-    if (webText
-        .contains('The download may have been removed or search query blocked '
-            'due to copyright complaint. We apologize for the inconvenience')) {
+    if (webText.contains(
+      'The download may have been removed or search query blocked '
+      'due to copyright complaint. We apologize for the inconvenience',
+    )) {
       return [];
     }
     final document = parse(webText);
@@ -42,8 +43,10 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     if (validPage) {
       return movieData;
     }
-    throw WebConvertException('magnetDl results data not detected for criteria '
-        '$getCriteriaText in html:$webText');
+    throw WebConvertException(
+      'magnetDl results data not detected for criteria '
+      '$getCriteriaText in html:$webText',
+    );
   }
 
   /// extract each row from the table.
@@ -62,8 +65,10 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     result[jsonMagnetKey] =
         row.querySelector(magnetSelector)?.attributes['href'] ?? '';
     result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;
-    result[jsonDescriptionKey] =
-        row.querySelector(seedSelector)?.previousElementSibling?.cleanText;
+    result[jsonDescriptionKey] = row
+        .querySelector(seedSelector)
+        ?.previousElementSibling
+        ?.cleanText;
     result[jsonSeedersKey] = row.querySelector(seedSelector)?.cleanText;
     result[jsonLeechersKey] = row.querySelector(leechSelector)?.cleanText;
 

@@ -18,39 +18,28 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => Settings().init());
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryYtsDetails unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
       final criteria = SearchCriteriaDTO();
-      expect(
-        QueryYtsDetails(criteria).myDataSourceName(),
-        'yts_detail',
-      );
+      expect(QueryYtsDetails(criteria).myDataSourceName(), 'yts_detail');
     });
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO title', () {
       final input = SearchCriteriaDTO()..criteriaTitle = 'testing';
-      expect(
-        QueryYtsDetails(input).myFormatInputAsText(),
-        'testing',
-      );
+      expect(QueryYtsDetails(input).myFormatInputAsText(), 'testing');
     });
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO()
-        ..criteriaList = [
-          makeResultDTO('test1'),
-        ];
-      expect(
-        QueryYtsDetails(input).myFormatInputAsText(),
-        '',
-      );
+        ..criteriaList = [makeResultDTO('test1')];
+      expect(QueryYtsDetails(input).myFormatInputAsText(), '');
     });
 
     // Confirm error is constructed as expected.
@@ -58,14 +47,13 @@ void main() {
       const expectedResult = {
         'title': '[QueryYtsDetails] new query',
         'bestSource': 'DataSourceType.ytsDetails',
-        'type': 'MovieContentType.error'
+        'type': 'MovieContentType.error',
       };
       final criteria = SearchCriteriaDTO();
       // Invoke the functionality.
-      final actualResult = QueryYtsDetails(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryYtsDetails(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -83,27 +71,26 @@ void main() {
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final criteria = SearchCriteriaDTO().fromString('batman');
       final expectedOutput = <void>[];
-      final actualOutput =
-          QueryYtsDetails(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleEmpty,
-      );
+      final actualOutput = QueryYtsDetails(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final criteria = SearchCriteriaDTO().fromString('batman');
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
           'cause',
-          contains('data not detected for criteria '
-              '${criteria.toPrintableIdOrText().toLowerCase()}'),
+          contains(
+            'data not detected for criteria '
+            '${criteria.toPrintableIdOrText().toLowerCase()}',
+          ),
         ),
       );
-      final actualOutput =
-          QueryYtsDetails(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleError,
-      );
+      final actualOutput = QueryYtsDetails(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleError);
       expect(actualOutput, expectedOutput);
     });
   });
@@ -115,9 +102,7 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          YtsDetailConverter.dtoFromCompleteJsonMap(map),
-        );
+        actualResult.addAll(YtsDetailConverter.dtoFromCompleteJsonMap(map));
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
@@ -128,16 +113,17 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryYtsDetails integration tests', () {
     // Confirm URL is constructed as expected.
@@ -146,16 +132,17 @@ void main() {
       final criteria = SearchCriteriaDTO();
 
       // Invoke the functionality.
-      final actualResult =
-          QueryYtsDetails(criteria).myConstructURI('1234').toString();
+      final actualResult = QueryYtsDetails(
+        criteria,
+      ).myConstructURI('1234').toString();
 
       // Check the results.
       expect(actualResult, expected);
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using QueryYtsDetails
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryYtsDetails integration tests', () {
     // Confirm map can be converted to DTO.
@@ -168,16 +155,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -207,9 +193,9 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase and env and QueryYtsDetails
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search query', () {
     // Read imdb search results from a simulated byte stream
@@ -236,7 +222,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -246,7 +233,8 @@ void main() {
     // and report error due to invalid html.
     test('invalid html', () async {
       // Set up the test data.
-      const expectedException = '[QueryYtsDetails] Error in yts_detail '
+      const expectedException =
+          '[QueryYtsDetails] Error in yts_detail '
           'with criteria 123 convert error interpreting web text as a map '
           ':yts data not detected for criteria 123';
       final queryResult = <MovieResultDTO>[];
@@ -265,7 +253,8 @@ void main() {
     // and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException = '[QueryYtsDetails] Error in yts_detail with '
+      const expectedException =
+          '[QueryYtsDetails] Error in yts_detail with '
           'criteria 123 convert error interpreting web text as a map '
           ':yts data not detected for criteria 123';
       final queryResult = <MovieResultDTO>[];

@@ -11,7 +11,7 @@ class ImdbMoviesForKeywordConverter extends ImdbConverterBase
   /// Break [data] up into one Map per movie.
   Iterable<Map<dynamic, dynamic>> getMovieDataList(Map<dynamic, dynamic> data) {
     final movies = <Map<dynamic, dynamic>>[];
-      // Used by QueryIMDBMoviesForKeyword.
+    // Used by QueryIMDBMoviesForKeyword.
     final deepContent = getDeepContent(data, outerElementSearchResults);
     // ...{'titleListItems':...}
     for (final searchResults

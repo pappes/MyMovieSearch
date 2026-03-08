@@ -43,7 +43,8 @@ const imdbJsonSampleInner = '''
 const imdbJsonPFunction = r'imdb$wonder_woman';
 const imdbJsonSampleFull =
     ' {"v":1,"q":"wonder_woman","d":[ $imdbJsonSampleInner ]}';
-const imdbJsonPSampleFull = '''
+const imdbJsonPSampleFull =
+    '''
   $imdbJsonPFunction(
     $imdbJsonSampleFull
   ) ''';

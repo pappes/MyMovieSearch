@@ -139,7 +139,9 @@ void main() {
     });
 
     test('Run an empty search', () async {
-      final criteria = SearchCriteriaDTO().fromString('https://www.wikidata.org/wiki/Q13794921123123');
+      final criteria = SearchCriteriaDTO().fromString(
+        'https://www.wikidata.org/wiki/Q13794921123123',
+      );
       final actualOutput = await QueryWikidataDetails(
         criteria,
       ).readList(limit: 10);

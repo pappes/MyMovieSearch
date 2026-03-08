@@ -96,8 +96,7 @@ class QueryYtsDetails extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) =>
-      MovieResultDTO().error(
+  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
     '[QueryYtsDetails] $message',
     DataSourceType.ytsDetails,
   );

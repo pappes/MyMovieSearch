@@ -60,8 +60,9 @@ mixin ScrapeSolidTorrentsSearch
       final stats = details.first;
       if (5 == stats.children.length) {
         result[jsonDescriptionKey] = stats.cleanText;
-        result[jsonCategoryKey] =
-            row.querySelector(categorySelector)?.cleanText;
+        result[jsonCategoryKey] = row
+            .querySelector(categorySelector)
+            ?.cleanText;
         result[jsonMagnetKey] =
             row.querySelector(magnetSelector)?.attributes['href'] ?? '';
         result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;

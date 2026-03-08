@@ -20,9 +20,7 @@ void main() {
       'Run a search on IMDB that is likely to have static results',
       () async {
         final criteria = SearchCriteriaDTO().fromString('rize');
-        final actualOutput = await QueryIMDBSearch(
-          criteria,
-        ).readList();
+        final actualOutput = await QueryIMDBSearch(criteria).readList();
         actualOutput.clearCopyrightedData();
 
         // To update expected data, uncomment the following line

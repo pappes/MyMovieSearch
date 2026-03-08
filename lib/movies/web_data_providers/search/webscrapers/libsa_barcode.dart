@@ -70,8 +70,9 @@ mixin ScrapeLibsaBarcodeSearch
         .replaceAll(' .', '');
     result[jsonCleanDescriptionKey] = '$cleanDescription $cleanYear';
     result[jsonRawDescriptionKey] = '$rawDescription $rawYear';
-    result[jsonUrlKey] =
-        row.querySelector(jpgPictureSelector)?.attributes['src'];
+    result[jsonUrlKey] = row
+        .querySelector(jpgPictureSelector)
+        ?.attributes['src'];
     movieData.add(result);
   }
 }

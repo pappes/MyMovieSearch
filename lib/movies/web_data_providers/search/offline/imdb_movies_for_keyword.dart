@@ -9,14 +9,16 @@ const imdbHtmlSampleEnd = ' </body> </html>';
 const imdbHtmlSampleFull =
     '$imdbHtmlSampleStart $imdbJsonSampleInner '
     '$imdbHtmlSampleMiddle $imdbHtmlSampleEnd';
-const imdbJsonSampleInner = '''
+const imdbJsonSampleInner =
+    '''
 <script type="application/json">$_embeddedJson</script>
 ''';
 
 const imdbHtmlSampleEmpty =
     '$imdbHtmlSampleStart $imdbJsonEmptySampleInner '
     '$imdbHtmlSampleMiddle $imdbHtmlSampleEnd';
-const imdbJsonEmptySampleInner = '''
+const imdbJsonEmptySampleInner =
+    '''
 <script type="application/json">$_embeddedEmptyJson</script>
 ''';
 

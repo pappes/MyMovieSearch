@@ -8,9 +8,7 @@ class LibsaBarcodeSearchConverter {
 
   String criteria;
 
-  List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
-  ) => [
+  List<MovieResultDTO> dtoFromCompleteJsonMap(Map<dynamic, dynamic> map) => [
     MovieResultDTO().init(
       bestSource: DataSourceType.libsaBarcode,
       type: MovieContentType.barcode.toString(),

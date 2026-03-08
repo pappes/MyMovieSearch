@@ -6,7 +6,7 @@ import 'package:my_movie_search/utilities/navigation/app_context.dart';
 
 /// A concrete implementation of the app context interfaces that uses
 /// the go_router extension method on BuildContext and other Flutter services.
-class FlutterAppContext 
+class FlutterAppContext
     implements AppNavigator, AppTheme, AppDialogs, AppFocus {
   FlutterAppContext(this.context);
   final BuildContext context;
@@ -14,13 +14,11 @@ class FlutterAppContext
   @override
   Future<T?> pushNamed<T extends Object?>(String name, {Object? extra}) =>
       context.mounted
-          ? context.pushNamed(name, extra: extra)
-          : Future.value(null);
+      ? context.pushNamed(name, extra: extra)
+      : Future.value(null);
   @override
   void pushReplacementNamed<T extends Object?>(String name, {Object? extra}) =>
-      context.mounted
-          ? context.pushReplacementNamed(name, extra: extra)
-          : null;
+      context.mounted ? context.pushReplacementNamed(name, extra: extra) : null;
   @override
   bool pop<T extends Object?>([T? result]) {
     if (context.mounted && context.canPop()) {
@@ -35,13 +33,9 @@ class FlutterAppContext
       context.mounted ? Theme.of(context).primaryColor : null;
 
   @override
-  Future<Object?> popup(
-    String dialogText,
-    String title,
-  ) =>
-      context.mounted ? 
-         showPopup(context, dialogText, title) : 
-         Future.value(null);
+  Future<Object?> popup(String dialogText, String title) => context.mounted
+      ? showPopup(context, dialogText, title)
+      : Future.value(null);
 
   @override
   FocusNode? primaryFocus() => FocusManager.instance.primaryFocus;
@@ -51,10 +45,8 @@ class FlutterAppContext
 /// flutter_custom_tabs package.
 class FlutterCustomTabsLauncher implements CustomTabsLauncher {
   @override
-  Future<void> launch(String url, {
-    tabs.CustomTabsOptions? customTabsOptions}
-  ) => tabs.launchUrl(
-      Uri.parse(url),
-      customTabsOptions: customTabsOptions
-      );
+  Future<void> launch(
+    String url, {
+    tabs.CustomTabsOptions? customTabsOptions,
+  }) => tabs.launchUrl(Uri.parse(url), customTabsOptions: customTabsOptions);
 }

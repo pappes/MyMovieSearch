@@ -17,9 +17,9 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 final criteria = SearchCriteriaDTO().fromString('dream');
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('Torrentz2 search unit tests', () {
     // Confirm class description is constructed as expected.
@@ -43,14 +43,8 @@ void main() {
           MovieResultDTO().init(uniqueId: 'test1'),
           MovieResultDTO().init(uniqueId: 'test2'),
         ];
-      expect(
-        QueryTorrentz2Search(input).myFormatInputAsText(),
-        'test1,test2',
-      );
-      expect(
-        QueryTorrentz2Search(input).myFormatInputAsText(),
-        'test1,test2',
-      );
+      expect(QueryTorrentz2Search(input).myFormatInputAsText(), 'test1,test2');
+      expect(QueryTorrentz2Search(input).myFormatInputAsText(), 'test1,test2');
     });
 
     // Confirm URL is constructed as expected.
@@ -58,8 +52,9 @@ void main() {
       const expectedResult = 'https://torrentz2.nz/search?q=new%20query&page=1';
 
       // Invoke the functionality.
-      final actualResult =
-          QueryTorrentz2Search(criteria).myConstructURI('new query').toString();
+      final actualResult = QueryTorrentz2Search(
+        criteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -74,10 +69,9 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryTorrentz2Search(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryTorrentz2Search(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -93,32 +87,28 @@ void main() {
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = <void>[];
-      final actualOutput =
-          QueryTorrentz2Search(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleEmpty,
-      );
+      final actualOutput = QueryTorrentz2Search(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
           'cause',
-          contains('results data not detected for criteria '
-              '${criteria.toPrintableIdOrText().toLowerCase()} in html:'),
+          contains(
+            'results data not detected for criteria '
+            '${criteria.toPrintableIdOrText().toLowerCase()} in html:',
+          ),
         ),
       );
-      final actualOutput =
-          QueryTorrentz2Search(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleError,
-      );
+      final actualOutput = QueryTorrentz2Search(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleError);
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(
-        actualOutput,
-        expectedOutput,
-      );
+      expect(actualOutput, expectedOutput);
     });
   });
   group('Torrentz2SearchConverter unit tests', () {
@@ -141,15 +131,16 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using Torrentz2SearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('Torrentz2SearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
@@ -169,7 +160,8 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -188,8 +180,9 @@ void main() {
       final torrentz2Search = QueryTorrentz2Search(criteria);
 
       // Invoke the functionality and collect results.
-      final actualResult =
-          torrentz2Search.myConvertTreeToOutputType('wrongData');
+      final actualResult = torrentz2Search.myConvertTreeToOutputType(
+        'wrongData',
+      );
 
       // Check the results.
       // NOTE: Using expect on an async result
@@ -198,10 +191,10 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase and ScrapeTorrentz2SearchDetails
   ///  and Torrentz2SearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('Torrentz2 search query', () {
     // Read search results from a simulated byte stream
@@ -227,7 +220,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue, related: false),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );

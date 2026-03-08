@@ -63,15 +63,14 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     );
 
     initialiseThreadCacheRequest(newPriority, limit);
-    result = await ThreadRunner.namedThread(newPriority).run(
-      runReadList,
-      {
-        'newInstance': myClone(criteria),
-        'criteria': criteria,
-        'source': source,
-        'limit': limit,
-      },
-    ) as List<OUTPUT_TYPE>;
+    result =
+        await ThreadRunner.namedThread(newPriority).run(runReadList, {
+              'newInstance': myClone(criteria),
+              'criteria': criteria,
+              'source': source,
+              'limit': limit,
+            })
+            as List<OUTPUT_TYPE>;
 
     _addResultToCache(result);
     completeThreadCacheRequest(priority);
@@ -84,18 +83,11 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   /// Returns new priority for the request.
   /// Returns null if the request should be discarded.
   @visibleForOverriding
-  String? confirmThreadCachePriority(
-    String priority,
-    int? limit,
-  ) =>
-      priority;
+  String? confirmThreadCachePriority(String priority, int? limit) => priority;
 
   /// Perform any class specific request tracking.
   @visibleForOverriding
-  void initialiseThreadCacheRequest(
-    String priority,
-    int? limit,
-  ) {}
+  void initialiseThreadCacheRequest(String priority, int? limit) {}
 
   /// Perform any class specific request tracking.
   @visibleForOverriding
@@ -129,8 +121,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
 
   /// Check cache to see if data has already been fetched.
   @useResult
-  Future<bool> isThreadedResultCached() =>
-      _cache.isCached(_getCacheKey());
+  Future<bool> isThreadedResultCached() => _cache.isCached(_getCacheKey());
 
   /// Check cache to see if data in cache should be refreshed.
   @useResult
@@ -147,9 +138,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   }
 
   /// Insert transformed data into cache.
-  void _addResultToCache(
-    List<OUTPUT_TYPE> fetchedResult,
-  ) =>
+  void _addResultToCache(List<OUTPUT_TYPE> fetchedResult) =>
       _cache.add(_getCacheKey(), fetchedResult);
 
   String _getCacheKey() => '${myDataSourceName()}${myFormatInputAsText()}';

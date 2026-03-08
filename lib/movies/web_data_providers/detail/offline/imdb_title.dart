@@ -8,7 +8,8 @@ const imdbHtmlSampleFull =
 Future<Stream<String>> streamImdbHtmlOfflineData(_) =>
     Future.value(Stream.value(imdbHtmlSampleFull));
 
-const imdbJsonSampleInner = '''
+const imdbJsonSampleInner =
+    '''
 <script type="application/json">$_embeddedJson</script>
 ''';
 const imdbHtmlSampleInner = '';

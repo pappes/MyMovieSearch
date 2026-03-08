@@ -16,9 +16,9 @@ Future<Stream<String>> _emitInvalidJsonSample(_) =>
 final criteria = SearchCriteriaDTO().fromString('123');
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb suggestions unit tests', () {
     // Confirm class description is constructed as expected.
@@ -60,8 +60,9 @@ void main() {
       final imdbSuggestions = QueryIMDBSuggestions(criteria);
 
       // Invoke the functionality and collect results.
-      final actualResult =
-          imdbSuggestions.myConvertTreeToOutputType({'d': expectedDTOMap});
+      final actualResult = imdbSuggestions.myConvertTreeToOutputType({
+        'd': expectedDTOMap,
+      });
 
       // Check the results.
       expect(
@@ -76,16 +77,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateEmptyMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -97,16 +97,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateErrorMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -118,8 +117,9 @@ void main() {
           'https://sg.media-imdb.com/suggestion/x/new%20query.json';
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBSuggestions(criteria).myConstructURI('new query').toString();
+      final actualResult = QueryIMDBSuggestions(
+        criteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -135,11 +135,14 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBSuggestions(criteria).myYieldError('new query').toMap();
+      final actualResult = QueryIMDBSuggestions(
+        criteria,
+      ).myYieldError('new query').toMap();
       // Exact id does not need to match as long as it is negative number
-      actualResult['uniqueId'] =
-          actualResult['uniqueId'].toString().substring(0, 1);
+      actualResult['uniqueId'] = actualResult['uniqueId'].toString().substring(
+        0,
+        1,
+      );
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -147,42 +150,36 @@ void main() {
     // Confirm web text is parsed as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
-      final actualOutput =
-          QueryIMDBSuggestions(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleFull,
-      );
+      final actualOutput = QueryIMDBSuggestions(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleFull);
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = intermediateEmptyMapList;
-      final actualOutput =
-          QueryIMDBSuggestions(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleEmpty,
-      );
+      final actualOutput = QueryIMDBSuggestions(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
           'cause',
-          startsWith(
-            'Invalid json returned from web call',
-          ),
+          startsWith('Invalid json returned from web call'),
         ),
       );
 
-      final actualOutput =
-          QueryIMDBSuggestions(criteria).myConvertWebTextToTraversableTree(
-        imdbErrorSample,
-      );
+      final actualOutput = QueryIMDBSuggestions(
+        criteria,
+      ).myConvertWebTextToTraversableTree(imdbErrorSample);
       expect(actualOutput, expectedOutput);
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb suggestion query', () {
     // Read IMDB suggestions from a simulated byte stream
@@ -207,7 +204,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -235,7 +233,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );

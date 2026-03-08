@@ -29,9 +29,13 @@ class ImdbCastConverter extends ImdbConverterBase {
   void _deepConvertMetadata(MovieResultDTO movie, Map<dynamic, dynamic> map) {
     final contentData = map[deepEntityHeader] as Map<dynamic, dynamic>;
     final metadata = // ...{'entityMetadata':...}
-        contentData.deepSearch(deepEntityMetadata);
+    contentData.deepSearch(
+      deepEntityMetadata,
+    );
     final uniqueId = // ...{'entityMetadata':...{'id':<value>...}}
-        metadata!.searchForString(key: deepEntityMetadataId)!;
+    metadata!.searchForString(
+      key: deepEntityMetadataId,
+    )!;
     movie
       ..uniqueId = uniqueId
       ..merge(getMovieAttributes(contentData, movie.uniqueId))

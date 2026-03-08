@@ -29,8 +29,9 @@ void main() {
       // Arrange
       final mockFb = MockFirebaseApplicationState();
       final settings = Settings();
-      when(mockFb.fetchRecord('collection', id: 'id'))
-          .thenAnswer((_) async => null);
+      when(
+        mockFb.fetchRecord('collection', id: 'id'),
+      ).thenAnswer((_) async => null);
 
       // Act
       final result = await settings.getSecretsServiceAccount(
@@ -46,8 +47,9 @@ void main() {
       // Arrange
       final mockFb = MockFirebaseApplicationState();
       final settings = Settings();
-      when(mockFb.fetchRecord('collection', id: 'id'))
-          .thenAnswer((_) async => 'secret');
+      when(
+        mockFb.fetchRecord('collection', id: 'id'),
+      ).thenAnswer((_) async => 'secret');
 
       // Act
       final result = await settings.getSecretsServiceAccount(
@@ -63,8 +65,9 @@ void main() {
       // Arrange
       final mockFb = MockFirebaseApplicationState();
       final settings = Settings();
-      when(mockFb.fetchRecord('deeply/stored/collection', id: 'id'))
-          .thenAnswer((_) async => 'secret');
+      when(
+        mockFb.fetchRecord('deeply/stored/collection', id: 'id'),
+      ).thenAnswer((_) async => 'secret');
 
       // Act
       final result = await settings.getSecretsServiceAccount(
@@ -84,8 +87,10 @@ void main() {
         final environmentValue = Platform.environment[environmentVar];
 
         // Act
-        final result =
-            Settings().getSecretFromEnv(environmentVar, compiledValue);
+        final result = Settings().getSecretFromEnv(
+          environmentVar,
+          compiledValue,
+        );
 
         // Assert
         expect(result, environmentValue);
@@ -97,23 +102,26 @@ void main() {
         const compiledValue = 'compiled_value';
 
         // Act
-        final result =
-            Settings().getSecretFromEnv(environmentVar, compiledValue);
+        final result = Settings().getSecretFromEnv(
+          environmentVar,
+          compiledValue,
+        );
 
         // Assert
         expect(result, compiledValue);
       });
 
-      test(
-          'returns null if both environment variable '
+      test('returns null if both environment variable '
           'and compiled value are not set', () {
         // Arrange
         const environmentVar = 'MissingTEST_ENV_VAR';
         const compiledValue = '';
 
         // Act
-        final result =
-            Settings().getSecretFromEnv(environmentVar, compiledValue);
+        final result = Settings().getSecretFromEnv(
+          environmentVar,
+          compiledValue,
+        );
 
         // Assert
         expect(result, isNull);
