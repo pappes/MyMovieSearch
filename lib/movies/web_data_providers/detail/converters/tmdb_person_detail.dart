@@ -45,16 +45,16 @@ class TmdbPersonDetailConverter {
 
     final person = MovieResultDTO()
       ..init(
-      bestSource: DataSourceType.tmdbPerson,
-      uniqueId: map[innerElementIdentity]?.toString(),
-      title: map[innerElementCommonTitle]?.toString(),
-      description: map[innerElementOverview]?.toString(),
-      type: MovieContentType.person.toString(),
-      year: year,
-      userRatingCount: '1',
-      userRating: DoubleHelper.fromText(
-        map[innerElementVoteAverage],
-      )?.toString(),
+        bestSource: DataSourceType.tmdbPerson,
+        uniqueId: map[innerElementIdentity]?.toString(),
+        title: map[innerElementCommonTitle]?.toString(),
+        description: map[innerElementOverview]?.toString(),
+        type: MovieContentType.person.toString(),
+        year: year,
+        userRatingCount: '1',
+        userRating: DoubleHelper.fromText(
+          map[innerElementVoteAverage],
+        )?.toString(),
       )
       ..links.addAll(getTmdbUrls(map[innerElementExternalIds]));
 

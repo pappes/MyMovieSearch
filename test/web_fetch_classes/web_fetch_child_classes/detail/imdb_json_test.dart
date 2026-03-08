@@ -48,12 +48,8 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input =
-          SearchCriteriaDTO()
-            ..criteriaList = [
-              makeResultDTO('nmtest1'),
-              makeResultDTO('nmtest2'),
-            ];
+      final input = SearchCriteriaDTO()
+        ..criteriaList = [makeResultDTO('nmtest1'), makeResultDTO('nmtest2')];
       expect(
         QueryIMDBJsonPaginatedFilmographyDetails(input).myFormatInputAsText(),
         '',
@@ -75,11 +71,9 @@ void main() {
       };
       final criteria = SearchCriteriaDTO();
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBJsonPaginatedFilmographyDetails(
-              criteria,
-            ).myYieldError('new query').toMap()
-            ..remove('uniqueId');
+      final actualResult = QueryIMDBJsonPaginatedFilmographyDetails(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -160,15 +154,13 @@ void main() {
   group('QueryIMDBJsonDetails integration tests', () {
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expected =
-          'https://www.imdb.com/name/1234/';
+      const expected = 'https://www.imdb.com/name/1234/';
       final criteria = SearchCriteriaDTO();
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBJsonPaginatedFilmographyDetails(
-            criteria,
-          ).myConstructURI('1234').toString();
+      final actualResult = QueryIMDBJsonPaginatedFilmographyDetails(
+        criteria,
+      ).myConstructURI('1234').toString();
 
       // Check the results.
       expect(actualResult, startsWith(expected));
@@ -231,7 +223,7 @@ void main() {
   ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase, env and QueryIMDBJsonDetails
   ////////////////////////////////////////////////////////////////////////////////
-/* requires native android device
+  /* requires native android device
   group('imdb search query', () {
     // Read imdb search results from a simulated byte stream
     // and convert JSON to dtos.

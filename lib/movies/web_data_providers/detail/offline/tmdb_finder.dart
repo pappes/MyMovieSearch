@@ -65,7 +65,8 @@ const jsonSampleFull =
 const jsonSampleEmpty =
     '{"movie_results":[],"person_results":[],"tv_results":[],'
     '"tv_episode_results":[],"tv_season_results":[]}';
-const jsonSampleError = '{"success":false,"status_code":34,"status_message":'
+const jsonSampleError =
+    '{"success":false,"status_code":34,"status_message":'
     '"The resource you requested could not be found."}';
 
 Future<Stream<String>> streamTmdbJsonOfflineData(_) =>

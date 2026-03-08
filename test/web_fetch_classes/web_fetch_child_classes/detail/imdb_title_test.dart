@@ -21,9 +21,9 @@ void main() {
   // Wait for api key to be initialised
   setUpAll(() => lockWebFetchTreadedCache);
   tearDownAll(() => unlockWebFetchTreadedCache);
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb title details unit tests', () {
     // Confirm class description is constructed as expected.
@@ -59,10 +59,9 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryIMDBTitleDetails(input)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryIMDBTitleDetails(
+        input,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -89,8 +88,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          ImdbTitleConverter()
-              .dtoFromCompleteJsonMap(map, DataSourceType.imdb),
+          ImdbTitleConverter().dtoFromCompleteJsonMap(map, DataSourceType.imdb),
         );
       }
 
@@ -102,16 +100,17 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using ThreadedCacheIMDBTitleDetails
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('ThreadedCacheIMDBTitleDetails unit tests', () {
     test('empty cache', () async {
@@ -190,9 +189,7 @@ void main() {
       await testClass.myClearCache();
       // Load data into the cache.
       // ignore: unused_result
-      await testClass.readList(
-        source: streamImdbHtmlOfflineData,
-      );
+      await testClass.readList(source: streamImdbHtmlOfflineData);
       final listResult = await testClass.readList(
         source: (_) async => Stream.value('"Dummy HTML"'),
       );
@@ -235,9 +232,9 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryIMDBTitleDetails integration tests', () {
     // Confirm URL is constructed as expected.
@@ -246,16 +243,17 @@ void main() {
       const expected = 'https://www.imdb.com/title/1234';
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBTitleDetails(criteria).myConstructURI('1234').toString();
+      final actualResult = QueryIMDBTitleDetails(
+        criteria,
+      ).myConstructURI('1234').toString();
 
       // Check the results.
       expect(actualResult, expected);
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using QueryIMDBTitleDetails
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryIMDBTitleDetails integration tests', () {
     // Confirm map can be converted to DTO.
@@ -267,9 +265,7 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
@@ -277,7 +273,8 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -307,9 +304,9 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase and env and QueryIMDBTitleDetails
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search query', () {
     // Read imdb search results from a simulated byte stream
@@ -317,8 +314,9 @@ void main() {
     test('Run readList()', () async {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
-      final testClass =
-          QueryIMDBTitleDetails(SearchCriteriaDTO().fromString('tt123'));
+      final testClass = QueryIMDBTitleDetails(
+        SearchCriteriaDTO().fromString('tt123'),
+      );
       await testClass.myClearCache();
 
       // Invoke the functionality.
@@ -336,7 +334,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );

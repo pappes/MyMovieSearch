@@ -16,7 +16,7 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 class MMSearchApp extends StatelessWidget {
   /// {@macro mmsearch_app}
   MMSearchApp({BaseMovieRepository? movieBlocRepository, super.key})
-      : _blocRepository = movieBlocRepository ?? MovieSearchRepository();
+    : _blocRepository = movieBlocRepository ?? MovieSearchRepository();
 
   final BaseMovieRepository _blocRepository;
 
@@ -30,9 +30,7 @@ class MMSearchApp extends StatelessWidget {
       RepositoryProvider<BaseMovieRepository>.value(
         value: _blocRepository,
         child: BlocProvider<SearchBloc>(
-          create: (_) => SearchBloc(
-            movieRepository: _blocRepository,
-          ),
+          create: (_) => SearchBloc(movieRepository: _blocRepository),
           child: const _MMSearchAppView(),
         ),
       );
@@ -58,20 +56,20 @@ class _MMSearchAppViewState extends State<_MMSearchAppView>
 
   @override
   Widget build(BuildContext context) => MaterialApp.router(
-        restorationScopeId: 'MyMovieSearch',
-        title: 'My Movie Search',
-        routerConfig: GoRouter(
-          restorationScopeId: 'router',
-          routes: <RouteBase>[
-            ...MMSNav.getRoutes(),
-            //...FirebaseApplicationState().getRoutes(),
-          ],
-        ),
-        theme: ThemeData(
-          useMaterial3: true,
-          colorSchemeSeed: Colors.blue,
-          fontFamily: 'Lato',
-        ),
-        darkTheme: ThemeData(brightness: Brightness.dark),
-      );
+    restorationScopeId: 'MyMovieSearch',
+    title: 'My Movie Search',
+    routerConfig: GoRouter(
+      restorationScopeId: 'router',
+      routes: <RouteBase>[
+        ...MMSNav.getRoutes(),
+        //...FirebaseApplicationState().getRoutes(),
+      ],
+    ),
+    theme: ThemeData(
+      useMaterial3: true,
+      colorSchemeSeed: Colors.blue,
+      fontFamily: 'Lato',
+    ),
+    darkTheme: ThemeData(brightness: Brightness.dark),
+  );
 }

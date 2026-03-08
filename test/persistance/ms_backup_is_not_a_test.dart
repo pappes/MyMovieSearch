@@ -98,8 +98,10 @@ String jsonToHtml(Iterable<MovieResultDTO> movies) {
     final locations = fb.getLocationsForMovie(movie.uniqueId);
     html
       ..write('<div class="image-container">\n')
-      ..write('<img class="image-poster" '
-          'src="${movie.imageUrl}" alt="${movie.title}">\n')
+      ..write(
+        '<img class="image-poster" '
+        'src="${movie.imageUrl}" alt="${movie.title}">\n',
+      )
       ..write('<div class="image-text">${movie.title}</div>\n')
       ..write('<div class="stacker-locations">');
     for (final location in locations) {
@@ -141,10 +143,7 @@ Future<String> getMovieDetails() async {
 
     // Fetch movie details from IMDB.
     final criteria = SearchCriteriaDTO()
-      ..init(
-      SearchCriteriaType.movieTitle,
-      title: uniqueId,
-    );
+      ..init(SearchCriteriaType.movieTitle, title: uniqueId);
     final imdbData = QueryIMDBTitleDetails(criteria).readList();
     for (final movie in await imdbData) {
       if (movie.uniqueId == uniqueId) {

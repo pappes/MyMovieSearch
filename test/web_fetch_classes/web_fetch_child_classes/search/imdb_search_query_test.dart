@@ -20,10 +20,7 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
     Future.value(Stream.value('not valid html'));
 
 Future<Stream<String>> _emitUnexpectedJsonSample(_) {
-  final unexpectedJson = htmlSampleFull.replaceAll(
-    '"results"',
-    '"found"',
-  );
+  final unexpectedJson = htmlSampleFull.replaceAll('"results"', '"found"');
   return Future.value(Stream.value(unexpectedJson));
 }
 
@@ -35,9 +32,9 @@ Future<Stream<String>> _emitEmtpyJsonSample(_) {
 final criteria = SearchCriteriaDTO().fromString('123');
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search unit tests', () {
     // Confirm class description is constructed as expected.
@@ -60,14 +57,8 @@ void main() {
           MovieResultDTO().error('test1'),
           MovieResultDTO().error('test2'),
         ];
-      expect(
-        QueryIMDBSearch(input).myFormatInputAsText(),
-        contains('test1'),
-      );
-      expect(
-        QueryIMDBSearch(input).myFormatInputAsText(),
-        contains('test2'),
-      );
+      expect(QueryIMDBSearch(input).myFormatInputAsText(), contains('test1'));
+      expect(QueryIMDBSearch(input).myFormatInputAsText(), contains('test2'));
     });
 
     // Confirm URL is constructed as expected.
@@ -76,8 +67,9 @@ void main() {
           'https://www.imdb.com/find?q=new%20query&ref_=fn_nv_srb_sm';
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBSearch(criteria).myConstructURI('new query').toString();
+      final actualResult = QueryIMDBSearch(
+        criteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -92,32 +84,28 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryIMDBSearch(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryIMDBSearch(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
     });
     test('Run myConvertWebTextToTraversableTree()', () {
       const expectedOutput = intermediateMapList;
-      final actualOutput =
-          QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleFull,
-      );
+      final actualOutput = QueryIMDBSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleFull);
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       const expectedOutput = <void>[];
-      final actualOutput =
-          QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleEmpty,
-      );
+      final actualOutput = QueryIMDBSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
@@ -125,10 +113,9 @@ void main() {
           contains('No search results found in html:'),
         ),
       );
-      final actualOutput =
-          QueryIMDBSearch(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleError,
-      );
+      final actualOutput = QueryIMDBSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleError);
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
       expect(actualOutput, expectedOutput);
@@ -142,8 +129,10 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          ImdbJsonConverterFactory()
-              .dtoFromCompleteJsonMap(map, DataSourceType.imdbSearch),
+          ImdbJsonConverterFactory().dtoFromCompleteJsonMap(
+            map,
+            DataSourceType.imdbSearch,
+          ),
         );
       }
 
@@ -155,15 +144,16 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using ImdbSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('ImdbSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
@@ -174,16 +164,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await imdbSearch.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await imdbSearch.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -211,10 +200,10 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase and ScrapeIMDBSearchDetails
   ///  and ImdbSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search query', () {
     // Read IMDB search results from a simulated byte stream
@@ -239,7 +228,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -267,7 +257,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -316,7 +307,8 @@ void main() {
   // and report error due to unexpected json.
   test('unexpected json contents', () async {
     // Set up the test data.
-    const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
+    const expectedException =
+        '[QueryIMDBSearch] Error in imdbSearch '
         'with criteria 123 convert error interpreting web text as a map '
         ':Possible IMDB site update, no search result found for search query, '
         'json contents:[{props: {pageProps: {nameResults: '
@@ -337,7 +329,8 @@ void main() {
   // and report error due to unexpected json.
   test('no json results', () async {
     // Set up the test data.
-    const expectedException = '[QueryIMDBSearch] Error in imdbSearch '
+    const expectedException =
+        '[QueryIMDBSearch] Error in imdbSearch '
         'with criteria 123 convert error interpreting web text as a map '
         ':Possible IMDB site update, no search result found for search query, '
         'json contents:{}';
@@ -353,13 +346,12 @@ void main() {
     // Check the results.
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration redirect tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search redirect', () {
-    test('Run QueryIMDBTitleDetails myConvertWebTextToTraversableTree()',
-        () {
+    test('Run QueryIMDBTitleDetails myConvertWebTextToTraversableTree()', () {
       const expectedOutput = title_data.intermediateMapList;
 
       final imdbSearch = QueryIMDBSearch(criteria);
@@ -388,21 +380,21 @@ void main() {
           );
 
       // uncomment to update test data
-      // writeTestData(queryResult, testName: 'search_json_movie'); 
+      // writeTestData(queryResult, testName: 'search_json_movie');
 
       // Check the results.
       final expectedValue = readTestData(testName: 'search_json_movie');
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
 
-    test('Run QueryIMDBNameDetails myConvertWebTextToTraversableTree()',
-        () {
+    test('Run QueryIMDBNameDetails myConvertWebTextToTraversableTree()', () {
       const expectedOutput = person_data.intermediateMapList;
 
       final imdbSearch = QueryIMDBSearch(criteria);
@@ -437,7 +429,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );

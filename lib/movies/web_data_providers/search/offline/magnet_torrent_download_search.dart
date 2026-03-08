@@ -43,7 +43,7 @@ const intermediateMapList = [
     'description': '2.38 GB',
     'seeders': '578',
     'leechers': '248',
-  }
+  },
 ];
 
 const htmlSampleMidEmpty = '<br><h2>No Results Found</h2><br>';

@@ -104,8 +104,9 @@ abstract class ImdbConverterBase extends ConverterHelper {
         map.deepSearch(deepRelatedMovieOriginalTitle)?.searchForString() ??
         map.searchForString(key: deepRelatedMovieOriginalTitle);
     if (title == originalTitle) {
-      originalTitle =
-          map.deepSearch(deepRelatedMovieAlternateTitle)?.searchForString();
+      originalTitle = map
+          .deepSearch(deepRelatedMovieAlternateTitle)
+          ?.searchForString();
     }
 
     // ...{'plotText':...{...'plainText':<value>...}} or
@@ -149,12 +150,11 @@ abstract class ImdbConverterBase extends ConverterHelper {
     final endDate =
         yearHeader?.searchForString(key: deepRelatedMovieYearEnd) ??
         map.searchForString(key: deepRelatedMovieYearEnd);
-    final yearRange =
-        (null != endDate)
-            ? '$startDate-$endDate'
-            : (null != startDate)
-            ? startDate
-            : null;
+    final yearRange = (null != endDate)
+        ? '$startDate-$endDate'
+        : (null != startDate)
+        ? startDate
+        : null;
 
     // ...{'certificate':...{...'rating':<value>...}} or
     // ...{'certificate':<value>...}
@@ -187,8 +187,9 @@ abstract class ImdbConverterBase extends ConverterHelper {
     }
 
     // ...{'titleType':...{...'text':<value>...}}
-    final movieTypeString =
-        map.deepSearch(deepRelatedMovieType)?.searchForString();
+    final movieTypeString = map
+        .deepSearch(deepRelatedMovieType)
+        ?.searchForString();
     final movieType = MovieResultDTOHelpers.getMovieContentType(
       '$movieTypeString $genres $yearRange',
       IntHelper.fromText(duration),
@@ -261,7 +262,9 @@ abstract class ImdbConverterBase extends ConverterHelper {
   /// extract related movie details from [map].
   MovieResultDTO getMovieDetails(Map<dynamic, dynamic> map) {
     final id = // ...{'id':<value>...}
-        map.searchForString(key: deepRelatedMovieId)!;
+    map.searchForString(
+      key: deepRelatedMovieId,
+    )!;
     final dto = getMovieAttributes(map, id);
     return dto;
   }
@@ -286,7 +289,9 @@ abstract class ImdbConverterBase extends ConverterHelper {
     Map<dynamic, dynamic> map,
   ) {
     final characters = // ...{'characters':...} or
-        map.deepSearch(deepRelatedMovieParentCharacterHeader)?.first;
+    map
+        .deepSearch(deepRelatedMovieParentCharacterHeader)
+        ?.first;
 
     if (characters is List || characters is Map) {
       // ...{'characters':...{...'name':<value>...}}
@@ -304,11 +309,17 @@ abstract class ImdbConverterBase extends ConverterHelper {
   /// extract related movie details from [map].
   static MovieResultDTO getRelatedPersonDetails(Map<dynamic, dynamic> map) {
     final id = // ...{'id':<value>...}
-        map.searchForString(key: deepRelatedPersonId)!;
+    map.searchForString(
+      key: deepRelatedPersonId,
+    )!;
     final title = // ...{'nameText':...{...'text':<value>...}}
-        map.deepSearch(deepPersonNameHeader)?.searchForString();
+    map
+        .deepSearch(deepPersonNameHeader)
+        ?.searchForString();
     final url = // ...{'primaryImage':...{...'url':<value>...}}
-        map.deepSearch(deepImageHeader)?.searchForString(key: deepImageField);
+    map
+        .deepSearch(deepImageHeader)
+        ?.searchForString(key: deepImageField);
 
     final newDTO = MovieResultDTO().init(
       bestSource: DataSourceType.imdbSuggestions,

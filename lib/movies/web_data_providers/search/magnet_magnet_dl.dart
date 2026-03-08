@@ -67,8 +67,9 @@ class QueryMagnetDlSearch
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
     searchResultsLimit = WebFetchLimiter(55);
-    final prefix =
-        encodedCriteria.isEmpty ? '' : encodedCriteria.substring(0, 1);
+    final prefix = encodedCriteria.isEmpty
+        ? ''
+        : encodedCriteria.substring(0, 1);
 
     final url = '$_baseURL$prefix/$encodedCriteria/$pageNumber$_pageURL';
     return Uri.parse(url);

@@ -62,8 +62,9 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       result[jsonMagnetKey] =
           columns[1].querySelector(magnetSelector)?.attributes['href'] ?? '';
       result[jsonNameKey] = columns[1].querySelector(nameSelector)?.cleanText;
-      result[jsonDescriptionKey] =
-          columns[1].querySelector(detailSelector)?.cleanText;
+      result[jsonDescriptionKey] = columns[1]
+          .querySelector(detailSelector)
+          ?.cleanText;
       result[jsonSeedersKey] = columns[2].cleanText;
       result[jsonLeechersKey] = columns[3].cleanText;
 

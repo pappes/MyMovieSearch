@@ -32,7 +32,7 @@ const intermediateMapList = [
     'dc comics': 'keyword',
     'masked superhero': 'keyword',
     'superhero': 'keyword',
-  }
+  },
 ];
 
 const imdbHtmlSampleInner = '''
@@ -43,7 +43,8 @@ const imdbHtmlSampleInner = '''
   <a href="/search/keyword?keywords=superhero">superhero</a>
 ''';
 
-const imdbHtmlSampleStart = ' <!DOCTYPE html> <html     <head>'
+const imdbHtmlSampleStart =
+    ' <!DOCTYPE html> <html     <head>'
     ' </head> <body id="styleguide-v2" class="fixed">';
 const imdbHtmlSampleEnd = ' </body> </html>';
 const imdbHtmlSampleFull =

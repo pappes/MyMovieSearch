@@ -66,8 +66,9 @@ mixin ScrapePicclickBarcodeSearch
     result[jsonRawDescriptionKey] = rawDescription;
     result[jsonCleanDescriptionKey] = getCleanDvdTitle(rawDescription);
     result[jsonIdKey] = row.attributes['id'];
-    result[jsonUrlKey] =
-        row.querySelector(jpgPictureSelector)?.attributes['srcset'];
+    result[jsonUrlKey] = row
+        .querySelector(jpgPictureSelector)
+        ?.attributes['srcset'];
     movieData.add(result);
   }
 }

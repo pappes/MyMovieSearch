@@ -41,16 +41,11 @@ mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     Uri address,
     int statusCode,
     HttpClientResponse response,
-  ) =>
-      (HttpStatus.notFound == statusCode)
-          ? null
+  ) => (HttpStatus.notFound == statusCode)
+      ? null
       // Cascade tp parent implementation.
-          // ignore: invalid_use_of_visible_for_testing_member
-          : super.myHttpError(
-              address,
-              statusCode,
-              response,
-            );
+      // ignore: invalid_use_of_visible_for_testing_member
+      : super.myHttpError(address, statusCode, response);
 
   /// Collect webpage text to construct a map of the movie data.
   List<Map<String, dynamic>> _scrapeWebPage(Document document) {
@@ -68,9 +63,9 @@ mixin ScrapeYtsDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
     for (final link in links) {
       for (final map in descriptions) {
-        if (map[jsonDescriptionKey]
-            .toString()
-            .contains(link[jsonSizeKey].toString())) {
+        if (map[jsonDescriptionKey].toString().contains(
+          link[jsonSizeKey].toString(),
+        )) {
           movieData.add({...title, ...image, ...link, ...map});
         }
       }
@@ -116,10 +111,7 @@ List<Map<String, String>> _getLinks(Document document) {
     final url = link?.attributes['href'];
 
     if (url != null) {
-      links.add({
-        jsonSizeKey: size,
-        jsonMagnetKey: url,
-      });
+      links.add({jsonSizeKey: size, jsonMagnetKey: url});
     }
   }
   return links;

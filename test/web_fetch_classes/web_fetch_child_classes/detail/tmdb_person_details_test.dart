@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -21,9 +20,9 @@ final criteria = SearchCriteriaDTO().fromString('123');
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => Settings().init());
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('tmdb details unit tests', () {
     // Confirm class description is constructed as expected.
@@ -70,8 +69,9 @@ void main() {
       MovieResultDTOHelpers.resetError();
 
       // Invoke the functionality.
-      final actualResult =
-          QueryTMDBPersonDetails(criteria).myYieldError('new query').toMap();
+      final actualResult = QueryTMDBPersonDetails(
+        criteria,
+      ).myYieldError('new query').toMap();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -79,10 +79,9 @@ void main() {
     // Confirm web text is parsed  as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
-      final actualOutput =
-          QueryTMDBPersonDetails(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleFull,
-      );
+      final actualOutput = QueryTMDBPersonDetails(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleFull);
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
@@ -94,14 +93,12 @@ void main() {
               'error:The resource you requested could not be found.',
         ),
       );
-      final actualOutput =
-          QueryTMDBPersonDetails(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleEmpty,
-      );
+      final actualOutput = QueryTMDBPersonDetails(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleEmpty);
       expect(actualOutput, expectedOutput);
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
@@ -110,10 +107,9 @@ void main() {
               'error:Invalid API key: You must be granted a valid key.',
         ),
       );
-      final actualOutput =
-          QueryTMDBPersonDetails(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleError,
-      );
+      final actualOutput = QueryTMDBPersonDetails(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleError);
       expect(actualOutput, expectedOutput);
     });
   });
@@ -138,15 +134,16 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryTMDBPersonDetails integration tests', () {
     // Confirm URL is constructed as expected.
@@ -163,9 +160,9 @@ void main() {
       expect(actualResult, startsWith(expected));
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using QueryTMDBPersonDetails
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryTMDBPersonDetails integration tests', () {
     // Confirm map can be converted to DTO.
@@ -176,9 +173,7 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
@@ -186,7 +181,8 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -215,9 +211,9 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase and env and QueryTMDBPersonDetails
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('tmdb search query', () {
     // Read tmdb search results from a simulated byte stream
@@ -243,7 +239,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );

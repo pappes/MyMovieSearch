@@ -8,7 +8,6 @@
 //pagemap.aggregaterating.ratingvalue = userRating
 //pagemap.aggregaterating.ratingcount = userRatingCount
 
-
 import 'dart:convert';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -44,14 +43,15 @@ final expectedErrorDTOList = ListDTOConversion.decodeList([
   "uniqueId": "-1", 
   "title": "Unknown MsSearch error - potential API change! type 'Null' is not a subtype of type 'Map<dynamic, dynamic>' in type cast {error: {code: 400, message: Request contains an invalid argument., errors: [{message: Request contains an invalid argument., domain: global, reason: badRequest}], status: INVALID_ARGUMENT}}"
 }
-'''
+''',
 ]);
 
 final intermediateMapList = [jsonDecode(jsonSampleFull)];
 final intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
 final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
-const jsonSampleFull = ' $jsonSearchPrefix '
+const jsonSampleFull =
+    ' $jsonSearchPrefix '
     '$jsonSearchInner $jsonSearchSuffix';
 
 Future<Stream<String>> streamJsonOfflineData(_) =>

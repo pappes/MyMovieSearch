@@ -18,7 +18,6 @@ void main() {
   group('live QueryIMDBNameDetails test', () {
     // Convert 3 IMDB pages into dtos.
     test('Run read 3 pages from IMDB', () async {
-
       final actualOutput = await executeMultipleFetches(
         (criteria) => QueryIMDBNameDetails(criteria).readList(),
         prefix: imdbPersonPrefix,

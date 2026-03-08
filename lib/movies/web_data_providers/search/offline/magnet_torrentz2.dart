@@ -63,7 +63,7 @@ const intermediateMapList = [
     'description': '880 MB',
     'seeders': '13',
     'leechers': '12',
-  }
+  },
 ];
 
 const htmlSampleEmptyMid = '<h2>0+ Torrents </h2>';

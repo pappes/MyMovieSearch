@@ -17,9 +17,9 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 final criteria = SearchCriteriaDTO().fromString('https://address');
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('TorrentDownload search unit tests', () {
     // Confirm class description is constructed as expected.
@@ -62,9 +62,9 @@ void main() {
       const expectedResult = 'https://www.torrentdownload.info/new%20query';
 
       // Invoke the functionality.
-      final actualResult = QueryTorrentDownloadDetail(criteria)
-          .myConstructURI('new query')
-          .toString();
+      final actualResult = QueryTorrentDownloadDetail(
+        criteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -79,10 +79,9 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryTorrentDownloadDetail(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryTorrentDownloadDetail(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -92,18 +91,19 @@ void main() {
       const expectedOutput = intermediateMapList;
       final testClass = QueryTorrentDownloadDetail(criteria)
         ..criteria = criteria;
-      final actualOutput =
-          testClass.myConvertWebTextToTraversableTree(htmlSampleFull);
+      final actualOutput = testClass.myConvertWebTextToTraversableTree(
+        htmlSampleFull,
+      );
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = <void>[];
-      final actualOutput = QueryTorrentDownloadDetail(criteria)
-          .myConvertWebTextToTraversableTree(htmlSampleEmpty);
+      final actualOutput = QueryTorrentDownloadDetail(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
@@ -111,8 +111,9 @@ void main() {
           startsWith('TorrentDownload results data not detected for criteria'),
         ),
       );
-      final actualOutput = QueryTorrentDownloadDetail(criteria)
-          .myConvertWebTextToTraversableTree(htmlSampleError);
+      final actualOutput = QueryTorrentDownloadDetail(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleError);
       expect(actualOutput, expectedOutput);
     });
   });
@@ -136,16 +137,17 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryTorrentDownloadDetail integration tests', () {
     // Confirm URL is constructed as expected.
@@ -165,9 +167,9 @@ void main() {
       expect(actualResult, expected);
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using TorrentDownloadDetailConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('TorrentDownloadDetailConverter integration tests', () {
     // Confirm map can be converted to DTO.
@@ -187,7 +189,8 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -206,8 +209,9 @@ void main() {
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);
 
       // Invoke the functionality and collect results.
-      final actualResult =
-          torrentDownloadDetail.myConvertTreeToOutputType('wrongData');
+      final actualResult = torrentDownloadDetail.myConvertTreeToOutputType(
+        'wrongData',
+      );
 
       // Check the results.
       // NOTE: Using expect on an async result
@@ -216,11 +220,11 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase
   ///  and ScrapeTorrentDownloadDetailDetails
   ///  and TorrentDownloadDetailConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('TorrentDownload search query', () {
     // Read search results from a simulated byte stream
@@ -246,7 +250,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue, related: false),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -258,7 +263,8 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);
-      final expectedException = '[QueryTorrentDownloadDetail] '
+      final expectedException =
+          '[QueryTorrentDownloadDetail] '
           'Error in torrentDownloadDetail with criteria '
           '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :TorrentDownload results data not '
@@ -277,7 +283,8 @@ void main() {
     // and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      final expectedException = '[QueryTorrentDownloadDetail] '
+      final expectedException =
+          '[QueryTorrentDownloadDetail] '
           'Error in torrentDownloadDetail with criteria '
           '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
           'interpreting web text as a map :TorrentDownload results data not '

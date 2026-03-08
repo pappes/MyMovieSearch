@@ -31,7 +31,8 @@ const htmlSampleEnd = '''
   </body>
 </html>
 ''';
-const tpbSampleEmptyMid = 'Your search - <strong>newzzzzzzzzzzzzzquery</strong>'
+const tpbSampleEmptyMid =
+    'Your search - <strong>newzzzzzzzzzzzzzquery</strong>'
     ' - did not match any items.<br>';
 
 const tpbSampleMid = '''
@@ -57,12 +58,13 @@ const tpbSampleMid = '''
 
 const intermediateMapList = [
   {
-    'description': 'The Pink Panther Film Collection DVD Box Set - '
+    'description':
+        'The Pink Panther Film Collection DVD Box Set - '
         '6 Disc - Peter Sellers RARE Set',
     'barcode': 'item-331233484',
     'cleanDescription':
         'the pink panther film collection 6 peter sellers rare set',
     'url':
         'https://www.picclickimg.com/bv123456789O9j~TH2/The-Pink-Panther-Film-Collection-DVD-Box-Set.jpg',
-  }
+  },
 ];

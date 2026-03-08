@@ -2,7 +2,8 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 //import 'package:device_info_plus/device_info_plus.dart';
-import 'package:firebase_auth/firebase_auth.dart' as android_firebase
+import 'package:firebase_auth/firebase_auth.dart'
+    as android_firebase
     hide EmailAuthProvider, PhoneAuthProvider;
 import 'package:firebase_core/firebase_core.dart';
 //import 'package:firebase_ui_auth/firebase_ui_auth.dart'; //does not compile on linux
@@ -61,8 +62,9 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
   }) async {
     try {
       if (await super.fetchRecord(collectionPath, id: id) as bool) {
-        final fbcollection =
-            FirebaseFirestore.instance.collection(collectionPath);
+        final fbcollection = FirebaseFirestore.instance.collection(
+          collectionPath,
+        );
 
         // Get reference to supplied ID
         final doc = fbcollection.doc(id);
@@ -107,8 +109,9 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
   }) async* {
     try {
       await super.fetchRecords(collectionPath).drain<dynamic>();
-      final fbcollection =
-          FirebaseFirestore.instance.collection(collectionPath);
+      final fbcollection = FirebaseFirestore.instance.collection(
+        collectionPath,
+      );
 
       if (filterFieldPath == null) {
         // For Android, we can access an ongoing stream regardless of filtering.
@@ -190,8 +193,9 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
     try {
       if (await super.addRecord(collectionPath, message: message, id: id)
           as bool) {
-        final fbcollection =
-            FirebaseFirestore.instance.collection(collectionPath);
+        final fbcollection = FirebaseFirestore.instance.collection(
+          collectionPath,
+        );
         final map = newRecord(message ?? 'blank');
 
         if (id == null) {
@@ -201,8 +205,9 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
           return true;
         } else {
           // Get reference to supplied ID
-          final fbcollection =
-              FirebaseFirestore.instance.collection(collectionPath);
+          final fbcollection = FirebaseFirestore.instance.collection(
+            collectionPath,
+          );
           // Get reference to supplied ID
           final doc = fbcollection.doc(id);
           final msg = await doc.get();
@@ -213,8 +218,10 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
             final existingDevices = msg[Fields.devices.name];
             if (existingDevices != null && existingDevices is Iterable) {
               // Define unique list of devices.
-              map[Fields.devices.name] =
-                  {...existingDevices, ...newDevices}.toList();
+              map[Fields.devices.name] = {
+                ...existingDevices,
+                ...newDevices,
+              }.toList();
             }
           } else {
             map[Fields.devices.name] = newDevices;

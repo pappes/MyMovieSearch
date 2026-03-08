@@ -20,7 +20,7 @@ const intermediateMapList = [
     'cleanDescription': 'Love And Other Catastrophes 1996',
     'description': 'A day in the life of two film-school students...',
     'url': 'https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg',
-  }
+  },
 ];
 
 const htmlSampleEmpty = '''

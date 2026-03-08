@@ -17,9 +17,9 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 final criteria = SearchCriteriaDTO().fromString('dream');
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('UhttBarcode search unit tests', () {
     // Confirm class description is constructed as expected.
@@ -62,9 +62,9 @@ void main() {
           'http://uhtt.ru/dispatcher/?query=SELECT%20GOODS%20BY%20CODE(new%20query)%20FORMAT.TDDO(VIEW_GOODS)';
 
       // Invoke the functionality.
-      final actualResult = QueryUhttBarcodeSearch(criteria)
-          .myConstructURI('new query')
-          .toString();
+      final actualResult = QueryUhttBarcodeSearch(
+        criteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -79,10 +79,9 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryUhttBarcodeSearch(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryUhttBarcodeSearch(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -98,32 +97,28 @@ void main() {
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = <void>[];
-      final actualOutput =
-          QueryUhttBarcodeSearch(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleEmpty,
-      );
+      final actualOutput = QueryUhttBarcodeSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
           'cause',
-          contains('results data not detected for criteria '
-              '${criteria.toPrintableIdOrText().toLowerCase()} in html:'),
+          contains(
+            'results data not detected for criteria '
+            '${criteria.toPrintableIdOrText().toLowerCase()} in html:',
+          ),
         ),
       );
-      final actualOutput =
-          QueryUhttBarcodeSearch(criteria).myConvertWebTextToTraversableTree(
-        'htmlSampleError',
-      );
+      final actualOutput = QueryUhttBarcodeSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree('htmlSampleError');
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
-      expect(
-        actualOutput,
-        expectedOutput,
-      );
+      expect(actualOutput, expectedOutput);
     });
   });
   group('UhttBarcodeSearchConverter unit tests', () {
@@ -146,15 +141,16 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using UhttBarcodeSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('UhttBarcodeSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
@@ -165,16 +161,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await webfetch.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await webfetch.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -202,10 +197,10 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase
   ///  and ScrapeUhttBarcodeSearchDetails and UhttBarcodeSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('UhttBarcode search query', () {
     // Read search results from a simulated byte stream
@@ -231,7 +226,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue, related: false),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );

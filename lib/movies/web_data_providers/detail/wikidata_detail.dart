@@ -15,7 +15,6 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
-
 const wikiIdPrefix = 'Q';
 const queryContext = 'http://query.wikidata.org/sparql?query=';
 const uriPrefix = 'https://www.wikidata.org/wiki/Special:EntityData/';
@@ -123,7 +122,6 @@ class QueryWikidataDetails
     // perform the normal search
     return myConstructURI(searchCriteria, pageNumber: pageNumber);
   }
-
 
   String createQueryUrl(String imdbIds) {
     //read query from wikidata_detail_movie_query.sql

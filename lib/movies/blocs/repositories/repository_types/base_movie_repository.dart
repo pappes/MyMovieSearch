@@ -143,7 +143,7 @@ class BaseMovieRepository {
   /// Yields incomplete or completed results in the stream.
   @protected
   void yieldResult(MovieResultDTO result) =>
-    _movieStreamController?.add(result);
+      _movieStreamController?.add(result);
 
   /// Determines if a new search has been initatatd since originalSearchUID.
   @protected

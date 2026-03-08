@@ -53,14 +53,15 @@ final expectedErrorDTOList = ListDTOConversion.decodeList([
   "uniqueId": "-1", 
   "title": "Unknown google error - potential API change! type 'Null' is not a subtype of type 'Map<dynamic, dynamic>' in type cast {error: {code: 400, message: Request contains an invalid argument., errors: [{message: Request contains an invalid argument., domain: global, reason: badRequest}], status: INVALID_ARGUMENT}}"
 }
-'''
+''',
 ]);
 
 final intermediateMapList = [jsonDecode(jsonSampleFull)];
 final intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
 final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
-const jsonSampleFull = ' $googleMoviesJsonSearchPrefix '
+const jsonSampleFull =
+    ' $googleMoviesJsonSearchPrefix '
     '$googleMoviesJsonSearchInner $googleMoviesJsonSearchSuffix';
 
 Future<Stream<String>> streamGoogleMoviesJsonOfflineData(_) =>

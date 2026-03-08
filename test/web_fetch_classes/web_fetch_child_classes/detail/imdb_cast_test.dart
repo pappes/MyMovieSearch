@@ -45,12 +45,11 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input =
-          SearchCriteriaDTO()
-            ..criteriaList = [
-              MovieResultDTO().error('test1'),
-              MovieResultDTO().error('test2'),
-            ];
+      final input = SearchCriteriaDTO()
+        ..criteriaList = [
+          MovieResultDTO().error('test1'),
+          MovieResultDTO().error('test2'),
+        ];
       expect(QueryIMDBCastDetails(input).myFormatInputAsText(), '');
       expect(QueryIMDBCastDetails(input).myFormatInputAsText(), '');
     });
@@ -65,9 +64,9 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBCastDetails(criteria).myYieldError('new query').toMap()
-            ..remove('uniqueId');
+      final actualResult = QueryIMDBCastDetails(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -171,8 +170,9 @@ void main() {
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
-      final listResult =
-          await testClass.fetchResultFromThreadedCache().toList();
+      final listResult = await testClass
+          .fetchResultFromThreadedCache()
+          .toList();
       expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
       final resultIsCached = await testClass.isThreadedResultCached();
       expect(resultIsCached, true);
@@ -208,8 +208,9 @@ void main() {
       const expected = 'https://www.imdb.com/title/1234/fullcredits/';
 
       // Invoke the functionality.
-      final actualResult =
-          QueryIMDBCastDetails(criteria).myConstructURI('1234').toString();
+      final actualResult = QueryIMDBCastDetails(
+        criteria,
+      ).myConstructURI('1234').toString();
 
       // Check the results.
       expect(actualResult, expected);

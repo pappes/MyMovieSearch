@@ -13,16 +13,15 @@ import '../../../../test_helper.dart';
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => Settings().init());
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryMsSearchMovies test', () {
     // Search for a rare movie.
     test('Run read 2 pages from MsSearch', () async {
       final criteria = SearchCriteriaDTO().fromString('humdrum');
-      final actualOutput =
-          await QueryMsSearchMovies(
+      final actualOutput = await QueryMsSearchMovies(
         criteria,
       ).readList(limit: 1000);
 
@@ -33,11 +32,9 @@ void main() {
       final expectedOutput = readTestData();
       expect(
         actualOutput,
-        MovieResultDTOListFuzzyMatcher(
-          expectedOutput,
-          percentMatch: 60,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
@@ -47,17 +44,17 @@ void main() {
       await Settings().cloudSettingsInitialised;
 
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
-      final actualOutput =
-          await QueryMsSearchMovies(criteria).readList(limit: 10);
+      final actualOutput = await QueryMsSearchMovies(
+        criteria,
+      ).readList(limit: 10);
       final expectedOutput = <MovieResultDTO>[];
 
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(
-          expectedOutput,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );

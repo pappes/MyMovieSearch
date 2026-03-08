@@ -6,7 +6,8 @@ Future<Object?> showPopup(
   String title, {
   List<Widget>? buttons,
 }) {
-  final actions = buttons ??
+  final actions =
+      buttons ??
       <Widget>[
         TextButton(
           child: const Text('Back'),
@@ -20,11 +21,7 @@ Future<Object?> showPopup(
     builder: (context) => AlertDialog(
       title: Text(title),
       content: SingleChildScrollView(
-        child: ListBody(
-          children: <Widget>[
-            SelectableText(dialogText),
-          ],
-        ),
+        child: ListBody(children: <Widget>[SelectableText(dialogText)]),
       ),
       actions: actions,
     ),

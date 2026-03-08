@@ -39,8 +39,9 @@ mixin ScrapeTorrentDownloadSearch
       return movieData;
     }
     throw WebConvertException(
-        'TorrentDownload results data not detected for criteria '
-        '$getCriteriaText in html:$webText');
+      'TorrentDownload results data not detected for criteria '
+      '$getCriteriaText in html:$webText',
+    );
   }
 
   /// extract each row from the table.
@@ -65,12 +66,15 @@ mixin ScrapeTorrentDownloadSearch
 
     final path = row.querySelector(detailLinkSelector)?.attributes['href'];
     if (null != path) {
-      result[jsonDetailLink] =
-          myConstructURI('sample').resolve(path).toString();
+      result[jsonDetailLink] = myConstructURI(
+        'sample',
+      ).resolve(path).toString();
     }
 
-    result[jsonDescriptionKey] =
-        row.querySelectorAll(descriptionSelector).last.cleanText;
+    result[jsonDescriptionKey] = row
+        .querySelectorAll(descriptionSelector)
+        .last
+        .cleanText;
     if (result[jsonDetailLink]!.toString().isNotEmpty &&
         result[jsonNameKey]!.toString().isNotEmpty &&
         result[jsonSeedersKey]!.toString().isNotEmpty) {

@@ -8,15 +8,14 @@ import 'package:my_movie_search/movies/web_data_providers/search/uhtt_barcode.da
 class UhttBarcodeSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
-  ) =>
-      [
-        MovieResultDTO().init(
-          bestSource: DataSourceType.uhttBarcode,
-          type: MovieContentType.barcode.toString(),
-          uniqueId: map[jsonIdKey]?.toString(),
-          alternateTitle: map[jsonRawDescriptionKey]?.toString(),
-          title: map[jsonCleanDescriptionKey]?.toString(),
-          description: map[jsonIdKey]?.toString(),
-        ),
-      ];
+  ) => [
+    MovieResultDTO().init(
+      bestSource: DataSourceType.uhttBarcode,
+      type: MovieContentType.barcode.toString(),
+      uniqueId: map[jsonIdKey]?.toString(),
+      alternateTitle: map[jsonRawDescriptionKey]?.toString(),
+      title: map[jsonCleanDescriptionKey]?.toString(),
+      description: map[jsonIdKey]?.toString(),
+    ),
+  ];
 }

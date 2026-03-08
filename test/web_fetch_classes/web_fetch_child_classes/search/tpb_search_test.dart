@@ -37,13 +37,12 @@ void main() {
 
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
-      final input =
-          SearchCriteriaDTO()
-            ..criteriaTitle = 'List of errors'
-            ..criteriaList = [
-              MovieResultDTO().init(uniqueId: 'test1'),
-              MovieResultDTO().init(uniqueId: 'test2'),
-            ];
+      final input = SearchCriteriaDTO()
+        ..criteriaTitle = 'List of errors'
+        ..criteriaList = [
+          MovieResultDTO().init(uniqueId: 'test1'),
+          MovieResultDTO().init(uniqueId: 'test2'),
+        ];
       expect(QueryTpbSearch(input).myFormatInputAsText(), 'test1,test2');
       expect(QueryTpbSearch(input).myFormatInputAsText(), 'test1,test2');
     });
@@ -53,8 +52,9 @@ void main() {
       const expectedResult = 'https://tpb.party/search/new%20query/1/99/0';
 
       // Invoke the functionality.
-      final actualResult =
-          QueryTpbSearch(criteria).myConstructURI('new query').toString();
+      final actualResult = QueryTpbSearch(
+        criteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -69,9 +69,9 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult =
-          QueryTpbSearch(criteria).myYieldError('new query').toMap()
-            ..remove('uniqueId');
+      final actualResult = QueryTpbSearch(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -100,27 +100,24 @@ void main() {
       ).myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test(
-      'Run myConvertWebTextToTraversableTree() for invalid results',
-      () {
-        final expectedOutput = throwsA(
-          isA<WebConvertException>().having(
-            (e) => e.cause,
-            'cause',
-            contains(
-              'results data not detected for criteria '
-              '${criteria.toPrintableIdOrText().toLowerCase()} in html:',
-            ),
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
+      final expectedOutput = throwsA(
+        isA<WebConvertException>().having(
+          (e) => e.cause,
+          'cause',
+          contains(
+            'results data not detected for criteria '
+            '${criteria.toPrintableIdOrText().toLowerCase()} in html:',
           ),
-        );
-        final actualOutput = QueryTpbSearch(
-          criteria,
-        ).myConvertWebTextToTraversableTree(htmlSampleError);
-        // NOTE: Using expect on an async result
-        // only works as the last line of the test!
-        expect(actualOutput, expectedOutput);
-      },
-    );
+        ),
+      );
+      final actualOutput = QueryTpbSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleError);
+      // NOTE: Using expect on an async result
+      // only works as the last line of the test!
+      expect(actualOutput, expectedOutput);
+    });
   });
   group('TpbSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
@@ -215,7 +212,6 @@ void main() {
           .readList(source: streamTpbHtmlOfflineData)
           .then(queryResult.addAll)
           .onError(
-            
             // Print any errors encountered during processing.
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),

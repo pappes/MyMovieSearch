@@ -10,16 +10,15 @@ class TorrentDownloadDetailConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
     SearchCriteriaDTO criteria,
-  ) =>
-      [
-        MovieResultDTO().init(
-          bestSource: DataSourceType.torrentDownloadDetail,
-          type: MovieContentType.download.toString(),
-          uniqueId: criteria.criteriaTitle,
-          description: '${map[jsonDescriptionKey]}',
-          imageUrl: map[jsonDetailLink]?.toString(),
-          creditsOrder: map[jsonSeedersKey]?.toString(),
-          userRatingCount: map[jsonLeechersKey]?.toString(),
-        ),
-      ];
+  ) => [
+    MovieResultDTO().init(
+      bestSource: DataSourceType.torrentDownloadDetail,
+      type: MovieContentType.download.toString(),
+      uniqueId: criteria.criteriaTitle,
+      description: '${map[jsonDescriptionKey]}',
+      imageUrl: map[jsonDetailLink]?.toString(),
+      creditsOrder: map[jsonSeedersKey]?.toString(),
+      userRatingCount: map[jsonLeechersKey]?.toString(),
+    ),
+  ];
 }

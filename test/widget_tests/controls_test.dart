@@ -25,7 +25,7 @@ void main() {
     tst.expect(imageFinder, tst.findsOneWidget);
   });*/
 
-// All URLs are currently throwing HTTP 400 (https and http)
+  // All URLs are currently throwing HTTP 400 (https and http)
   // testWidgets('Poster with a valid url does not show placeholder text',
   //     (WidgetTester tester) async {
   //   // Create the widget by telling the tester to build it.

@@ -21,7 +21,6 @@ import '../test/test_helper.dart';
 /// flutter test integration_test/web_fetch_imdb_json_paginated_integration_test.dart -d 192.168.0.33:41471
 ////////////////////////////////////////////////////////////////////////////////
 
-
 void main() {
   // Ensure the platform bindings are initialized for the integration test.
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -116,8 +115,7 @@ void main() {
 
 /// Call IMDB for each criteria in the list.
 List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
-  final futures =
-      <Future<List<MovieResultDTO>>>[];
+  final futures = <Future<List<MovieResultDTO>>>[];
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
     futures.add(QueryIMDBJsonPaginatedFilmographyDetails(criteria).readList());

@@ -39,8 +39,9 @@ extension FutureStreamHelper<T> on Future<Stream<T>?> {
         final newStream = awaited.printStream(prefix);
         return newStream;
       }
-      final datatype =
-          (awaited == null) ? 'null' : awaited.runtimeType.toString();
+      final datatype = (awaited == null)
+          ? 'null'
+          : awaited.runtimeType.toString();
       logger.w('$prefix Unexpected data type: $datatype');
       return Stream<T>.empty();
     } catch (error) {

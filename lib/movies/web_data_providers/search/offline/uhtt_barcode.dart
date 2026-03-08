@@ -48,5 +48,5 @@ const intermediateMapList = [
     'description': 'Dexter DVD the first season',
     'cleandescription': 'dexter the',
     'barcode': '9324915073425',
-  }
+  },
 ];

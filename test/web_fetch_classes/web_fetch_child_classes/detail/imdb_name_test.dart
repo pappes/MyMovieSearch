@@ -30,8 +30,7 @@ class StaticJsonGenerator {
 
   // Insert artificial delay to allow tests to observe prior processing.
   static Future<Stream<String>> stuffDelayed(dynamic criteria) =>
-      Future<void>.delayed(artificialDelay * 2,
-      ).then((_) => stuff(criteria));
+      Future<void>.delayed(artificialDelay * 2).then((_) => stuff(criteria));
 }
 
 void main() {
