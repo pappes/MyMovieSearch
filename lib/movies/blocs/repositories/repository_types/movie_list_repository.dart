@@ -156,7 +156,7 @@ class MovieListRepository extends BaseMovieRepository {
     if (!searchInterrupted(originalSearchUID)) {
       for (final dto in values) {
         yieldResult(dto);
-        unawaited(getExtraDetails(originalSearchUID, dto));
+        await getExtraDetails(originalSearchUID, dto);
       }
     }
   }

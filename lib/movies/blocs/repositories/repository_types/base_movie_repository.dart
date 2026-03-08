@@ -1,6 +1,7 @@
 import 'dart:async' show StreamController, unawaited;
 
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -160,9 +161,11 @@ class BaseMovieRepository {
     if (!searchInterrupted(originalSearchUID)) {
       // Ensure a new search has not been started.
       results.forEach(yieldResult);
+      final futures = <Future<void>>{};
       for (final dto in results) {
-        unawaited(getExtraDetails(originalSearchUID, dto));
+        futures.add(getExtraDetails(originalSearchUID, dto));
       }
+      await Future.wait(futures);
     }
   }
 

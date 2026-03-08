@@ -25,10 +25,8 @@ class TieredCache<T> {
         memoryCache[key] = item;
       }
       final json = jsonEncode(item);
-      unawaited(
-        DatabaseHelper.instance.insert(
-          MovieModel(uniqueId: key.toString(), dtoJson: json),
-        ),
+      DatabaseHelper.instance.insert(
+        MovieModel(uniqueId: key.toString(), dtoJson: json),
       );
     }
   }
@@ -37,10 +35,8 @@ class TieredCache<T> {
   ///
   void remove(dynamic key) {
     memoryCache.remove(key);
-    unawaited(
-      DatabaseHelper.instance.delete(
-        MovieModel(uniqueId: key.toString(), dtoJson: ''),
-      ),
+    DatabaseHelper.instance.delete(
+      MovieModel(uniqueId: key.toString(), dtoJson: ''),
     );
   }
 
@@ -92,12 +88,14 @@ class TieredCache<T> {
   }
 
   T? _decodeDto(String jsonText) {
-    if (<T>[] is List<MovieResultDTO>) {
+    // The only way to determine the type of T is to instanciate a list of it.
+    final instanciated = <T>[];
+    if (instanciated is List<MovieResultDTO>) {
       final result = MovieResultDTO().fromJson(jsonText);
       if (result != MovieResultDTO()) {
         return result as T;
       }
-    } else if (<T>[] is List<List>) {
+    } else if (instanciated is List<List>) {
       final decoded = jsonDecode(jsonText);
       if (decoded is Iterable) {
         final dtos = ListDTOConversion.decodeList(decoded);
@@ -135,10 +133,8 @@ class TieredCache<T> {
     } else {
       memoryCache[key] = [item] as T;
     }
-    unawaited(
-      DatabaseHelper.instance.insert(
-        MovieModel(uniqueId: key.toString(), dtoJson: jsonEncode(item)),
-      ),
+    DatabaseHelper.instance.insert(
+      MovieModel(uniqueId: key.toString(), dtoJson: jsonEncode(item)),
     );
   }
 }

@@ -3,6 +3,7 @@ import 'dart:io';
 
 //import 'package:firebase_ui_auth/firebase_ui_auth.dart'; //does not compile on linux
 import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
 
 import 'package:my_movie_search/persistence/firebase/android/firebase_android.dart';
@@ -111,6 +112,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   }
 
   /// Insert data into Firebase.
+  @awaitNotRequired
   Future<dynamic>? addRecord(
     String collectionPath, {
     String? message,

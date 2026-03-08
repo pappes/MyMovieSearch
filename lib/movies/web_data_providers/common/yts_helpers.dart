@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:html/parser.dart' as html;
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 const String ytsDefaultUrl = 'https://yts.lt';
@@ -11,7 +12,7 @@ const String emptySearchResult =
 
 class YtsHelper {
   YtsHelper() {
-    unawaited(init());
+    _init();
   }
 
   /// Base URL for YTS.
@@ -20,7 +21,8 @@ class YtsHelper {
   /// Returns the base URL for YTS, fetching it dynamically if needed.
   String get ytsBaseUrl => _ytsBaseUrl ?? ytsDefaultUrl;
 
-  Future<void> init() async {
+  @awaitNotRequired
+  Future<void> _init() async {
     if (_ytsBaseUrl != null) {
       return;
     }
@@ -41,7 +43,7 @@ class YtsHelper {
     final webPage = await response.transform(utf8.decoder).join();
 
     if (webPage.contains('Current official domain:')) {
-      unawaited(_findWorkingYifyURL(webPage));
+      _findWorkingYifyURL(webPage);
 
       final afterDomain = webPage.split('Current official domain:')[1];
       // The regex looks for an HTML anchor tag's href attribute.
@@ -60,7 +62,7 @@ class YtsHelper {
     return '';
   }
 
-  Future<void> _findWorkingYifyURL(String webPage) async {
+  void _findWorkingYifyURL(String webPage) {
     final dom = html.parse(webPage);
     // Select all anchor elements that have an href attribute.
     final links = dom.querySelectorAll('a[href]');
@@ -69,11 +71,12 @@ class YtsHelper {
       if (href != null &&
           href.startsWith(webAddressPrefix) &&
           !href.contains('.onion')) {
-        unawaited(testYtsUrl(href));
+        testYtsUrl(href);
       }
     }
   }
 
+  @awaitNotRequired
   Future<void> testYtsUrl(String href) async {
     //print ('testing: $href    ');
     final client = HttpClient()

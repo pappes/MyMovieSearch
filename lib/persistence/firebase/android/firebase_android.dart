@@ -6,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart'
     as android_firebase
     hide EmailAuthProvider, PhoneAuthProvider;
 import 'package:firebase_core/firebase_core.dart';
+import 'package:meta/meta.dart';
 //import 'package:firebase_ui_auth/firebase_ui_auth.dart'; //does not compile on linux
 
 import 'package:my_movie_search/firebase_options.dart';
@@ -160,10 +161,14 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
       logger.t('Unable to fetch collection Firebase exception: $exception');
       rethrow;
     }
-    unawaited(_notifyIntitialLoadCompleted(initalDataLoadComplete));
+    _notifyIntitialLoadCompleted(initalDataLoadComplete);
     return;
   }
 
+  /// Notify the caller when the initial data load is has finished 
+  /// via a completer.
+  ///
+  @awaitNotRequired
   Future<void> _notifyIntitialLoadCompleted(Completer<bool>? completer) async {
     if (completer != null) {
       if (!completer.isCompleted) {
