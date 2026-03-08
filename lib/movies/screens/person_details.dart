@@ -44,7 +44,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     with RestorationMixin {
   _PersonDetailsPageState();
 
-  final RestorableBool _descriptionExpanded = RestorableBool(false);
+  final _descriptionExpanded = RestorableBool(false);
   bool _redrawRequired = true;
   final _restorablePerson = RestorableMovie();
   var _mobileLayout = true;

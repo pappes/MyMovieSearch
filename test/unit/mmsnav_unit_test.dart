@@ -62,14 +62,14 @@ void main() {
         invocation,
       ) {
         navigationResult = invocation.positionalArguments[0] as String;
-        return Future.value(null);
+        return Future.value();
       });
       mockito.when(mockCanvas.viewFlutterPage(mockito.any)).thenAnswer((
         invocation,
       ) {
         navigationResult =
             (invocation.positionalArguments[0] as RouteInfo).routePath.name;
-        return Future.value(null);
+        return Future.value();
       });
     });
 
@@ -430,11 +430,6 @@ void main() {
     test('should not do anything if context is null', () async {
       // Arrange
       final canvasWithNullContext = MMSFlutterCanvas(
-        navigator: null,
-        theme: null,
-        dialogs: null,
-        focus: null,
-        customTabsLauncher: null,
         navLog: mockNavLog,
       );
 

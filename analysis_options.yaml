@@ -47,7 +47,6 @@ linter:
 
 
 # all rules! from https://dart.dev/tools/linter-rules/all
-
     - always_declare_return_types
     # - always_put_control_body_on_new_line
     - always_put_required_named_parameters_first
@@ -77,7 +76,7 @@ linter:
     - avoid_positional_boolean_parameters
     - avoid_print
     - avoid_private_typedef_functions
-    # - avoid_redundant_argument_values # not available in dart sdk 3.10.4
+    - avoid_redundant_argument_values
     - avoid_relative_lib_imports
     - avoid_renaming_method_parameters
     - avoid_return_types_on_setters
@@ -157,7 +156,7 @@ linter:
     - null_closures
     # - omit_local_variable_types # not suitable for collection literals for named data types
     - omit_obvious_local_variable_types
-    # - omit_obvious_property_types # not available in dart sdk 3.10.4
+    # - omit_obvious_property_types # we disagree on the definition of obvious
     - one_member_abstracts
     - only_throw_errors
     - overridden_fields
@@ -209,7 +208,7 @@ linter:
     - remove_deprecations_in_breaking_versions
     - require_trailing_commas
     - secure_pubspec_urls
-    #  - simplify_variable_pattern   # this is currently not available in dart sdk 3.10.4
+    - simplify_variable_pattern
     - sized_box_for_whitespace
     - sized_box_shrink_expand
     - slash_for_doc_comments
@@ -283,4 +282,5 @@ linter:
     - use_to_and_as_if_applicable
     - use_truncating_division
     - valid_regexps
+    # - var_with_no_type_annotation # will be available in dart 3.12
     - void_checks

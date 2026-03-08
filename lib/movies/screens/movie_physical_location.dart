@@ -47,9 +47,9 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
   late final RestorableTextEditingController _stackerController;
   late final RestorableTextEditingController _locationController;
   late final RestorableTextEditingController _titleController;
-  late final FocusNode _stackerFocusNode = FocusNode();
-  late final FocusNode _locationFocusNode = FocusNode();
-  late final FocusNode _titleFocusNode = FocusNode();
+  late final _stackerFocusNode = FocusNode();
+  late final _locationFocusNode = FocusNode();
+  late final _titleFocusNode = FocusNode();
 
   @override
   // The restoration bucket id for this page.
@@ -191,7 +191,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
   Widget _usedLocationsLayout() =>
       _scrollableColumn(flex: 4, _usedLocationsContent());
   Widget _emptyLocationsLayout() => _scrollableColumn(
-    flex: 1, // Only need 1/5th the screen for available slots
+    // flex: 1, // Only need 1/5th the screen for available slots
     _emptyLocationsContent(),
     primary: true,
   );

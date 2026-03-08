@@ -365,7 +365,7 @@ class MMSFlutterCanvas {
         logger.t(e);
       }
     }
-    return Future.value(null);
+    return Future.value();
   }
 
   /// Stop the keyboard from popping up when navigating pages.

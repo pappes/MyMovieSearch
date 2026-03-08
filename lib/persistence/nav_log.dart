@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
@@ -15,23 +14,21 @@ class NavLog extends ChangeNotifier {
       ? null
       : Provider.of<FirebaseApplicationState>(_context, listen: false);
 
-  void logPageOpen(String destination, String request) => unawaited(
+  void logPageOpen(String destination, String request) => 
     getFirestoreProvider()?.addRecord(
       'MMSNavLog/screen/$destination',
       id: request,
-      message: ReadHistory.reading.toString(),
-    ),
-  );
+        message: ReadHistory.reading.toString(),
+      );
 
   void logPageClose(String destination, String request, Object params) {
     if (params is MovieResultDTO &&
         params.getReadIndicator() == ReadHistory.reading.toString()) {
-      unawaited(
-        getFirestoreProvider()?.addRecord(
-          'MMSNavLog/screen/$destination',
-          id: request,
-          message: ReadHistory.read.toString(),
-        ),
+      
+      getFirestoreProvider()?.addRecord(
+        'MMSNavLog/screen/$destination',
+        id: request,
+        message: ReadHistory.read.toString(),
       );
     }
   }

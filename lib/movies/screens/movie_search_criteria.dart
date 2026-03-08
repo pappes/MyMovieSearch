@@ -13,7 +13,7 @@ class MovieSearchCriteriaPage extends StatefulWidget {
     super.key,
   });
 
-  static const String title = 'Movie Search Criteria';
+  static const title = 'Movie Search Criteria';
   final SearchCriteriaDTO criteria;
   final String restorationId;
 

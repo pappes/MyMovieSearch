@@ -43,11 +43,11 @@ final intermediateEmptyMapList = [
 final intermediateErrorMapList =
     intermediateEmptyMapList; //['[jsonDecode(jsonSampleError)]'];
 
-const String imdbCustomKeyName = 'Cust';
-const String imdbCustomKeyVal = 'jsonPTest';
-const String jsonSampleFull =
+const imdbCustomKeyName = 'Cust';
+const imdbCustomKeyVal = 'jsonPTest';
+const jsonSampleFull =
     '{"d":[ $imdbJsonSampleInner ],"v":1,"q":"imdb_offline_suggestions"}';
-const String jsonSampleEmpty =
+const jsonSampleEmpty =
     // Generated code.
     // ignore: lines_longer_than_80_chars
     '{"d":[],"q":"Dexter%2B%3A%2BSeason%2B1%2B(Box%2BSet%2C%2BDVD%2C%2B2006)%2BRegion%2B4%2BMichael%2BC.%2BHall","v":1}';
@@ -58,7 +58,7 @@ Future<Stream<String>> emitImdbSuggestionJsonSample(_) =>
 Future<Stream<String>> emitEmptyImdbSuggestionJsonSample(_) =>
     Future.value(Stream.value(jsonSampleEmpty));
 
-const String imdbErrorSample = '''
+const imdbErrorSample = '''
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!--   https://sg.media-imdb.com/suggestion/x/sdfsd!fasdf)(*&%5E%asdf.json   -->
 <HTML><HEAD><META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=iso-8859-1">
@@ -81,7 +81,7 @@ Request ID: NvZ3UPKEdJC-EApPDW01HLN9nXpGdF0a-vz_0ufy3pfW03DfnqDa2w==
 </ADDRESS>
 </BODY></HTML>''';
 
-const String imdbJsonSampleInner = '''
+const imdbJsonSampleInner = '''
   {"l":"Imdb Offline Suggestions 1984","id":"tt7324958","s":"Gal Gadot, Chris Pine","y":2020,"q":"feature","vt":35
       ,"i":["https://m.media-amazon.com/images/M/MV5B...Q3MTUy._V1_.jpg",2764,4096]
       ,"v":

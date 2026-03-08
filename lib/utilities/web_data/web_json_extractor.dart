@@ -111,7 +111,7 @@ abstract class WebJsonExtractor {
     jsonCallback(json);
   }
 
-  static const List<String> _blackListedEndPoints = [
+  static const _blackListedEndPoints = [
     'amazon.com/images',
     'm.media-amazon.com/images',
     'googletagservices.com',

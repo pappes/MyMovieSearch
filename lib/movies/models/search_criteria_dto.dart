@@ -59,11 +59,11 @@ class SearchCriteriaDTO {
 }
 
 // member variable names
-const String movieCriteriaDTOSearchId = 'searchId';
-const String movieCriteriaDTOCriteriaTitle = 'criteriaTitle';
-const String movieCriteriaDTOCriteriaType = 'criteriaType';
-const String movieCriteriaDTOCriteriaContext = 'criteriaContext';
-const String movieCriteriaDTOCriteriaList = 'criteriaList';
+const movieCriteriaDTOSearchId = 'searchId';
+const movieCriteriaDTOCriteriaTitle = 'criteriaTitle';
+const movieCriteriaDTOCriteriaType = 'criteriaType';
+const movieCriteriaDTOCriteriaContext = 'criteriaContext';
+const movieCriteriaDTOCriteriaList = 'criteriaList';
 
 class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
   RestorableSearchCriteria([SearchCriteriaDTO? def]) {

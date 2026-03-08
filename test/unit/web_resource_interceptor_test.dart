@@ -102,7 +102,7 @@ void main() {
   group('getInterceptionDecision (Parent Logic Tests)', () {
     test('should return SyntheticResponse (204) for image requests', () {
       const url = 'https://example.com/image.png';
-      final request = createMockRequest(url: url, method: 'GET');
+      final request = createMockRequest(url: url);
       final decision = extractor.getInterceptionDecision(url, request.method);
 
       expect(decision.action, InterceptionAction.syntheticResponse);
@@ -113,7 +113,7 @@ void main() {
 
     test('should return Passthrough for CSS resources', () {
       const url = 'https://example.com/styles.css';
-      final request = createMockRequest(url: url, method: 'GET');
+      final request = createMockRequest(url: url);
       final decision = extractor.getInterceptionDecision(url, request.method);
 
       expect(decision.action, InterceptionAction.delegateRequest);
@@ -121,7 +121,7 @@ void main() {
 
     test('should return Passthrough for non-/api/ URLs', () {
       const url = 'https://example.com/home';
-      final request = createMockRequest(url: url, method: 'GET');
+      final request = createMockRequest(url: url);
       final decision = extractor.getInterceptionDecision(url, request.method);
 
       expect(decision.action, InterceptionAction.delegateRequest);
@@ -141,7 +141,7 @@ void main() {
     test('should return ProxyNetwork for valid API GET requests', () {
       const url =
           'https://example.com/api/data/FilmographyV2Pagination?param=1';
-      final request = createMockRequest(url: url, method: 'GET');
+      final request = createMockRequest(url: url);
       final decision = extractor.getInterceptionDecision(url, request.method);
 
       expect(decision.action, InterceptionAction.executeRequest);
