@@ -666,7 +666,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     final outputStream = baseTransform();
     return WebLog(
       myDataSourceName(),
-    ).logResponsesAsync(criteria, outputStream, cached: false);
+    ).logResponsesAsync(criteria, outputStream);
   }
 
   /// Fetches and [utf8] decodes online data matching [criteria].

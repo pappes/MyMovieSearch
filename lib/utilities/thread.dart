@@ -45,9 +45,9 @@ class ThreadRunner {
   }
 
   late SendPort _mainThreadOutboundPort;
-  static const String fast = 'Fast Thread';
-  static const String slow = 'Slow Thread';
-  static const String verySlow = 'Very Slow Thread';
+  static const fast = 'Fast Thread';
+  static const slow = 'Slow Thread';
+  static const verySlow = 'Very Slow Thread';
   static String? latestThreadName;
   static String? currentThreadName = 'Default Thread';
 

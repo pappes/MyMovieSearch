@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
 import 'package:go_router/go_router.dart';
-import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -43,8 +42,8 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   late final _restorableCriteria = RestorableSearchCriteria();
   late final _restorableList = RestorableMovieList();
   late final RestorableTextEditingController _textController;
-  late final FocusNode _criteriaFocusNode = FocusNode();
-  late final FocusNode _searchFocusNode = FocusNode();
+  late final _criteriaFocusNode = FocusNode();
+  late final _searchFocusNode = FocusNode();
   bool searchRequested = false;
 
   @override

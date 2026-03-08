@@ -43,7 +43,7 @@ class MovieModel {
 class DatabaseHelper {
   // Make this a singleton class.
   DatabaseHelper._privateConstructor();
-  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
+  static final instance = DatabaseHelper._privateConstructor();
 
   // This is the actual database filename that is saved in the docs directory.
   static const _databaseName = 'MyMovieSearch.db';

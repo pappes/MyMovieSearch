@@ -41,7 +41,6 @@ class DVDBarcodeScanner {
     ),
     isShowFlashIcon: true,
     delayMillis: 500,
-    cameraFace: CameraFace.back,
     scanFormat: ScanFormat.ONLY_BARCODE,
   );
 

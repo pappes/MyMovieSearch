@@ -29,7 +29,7 @@ abstract class TvdbCommonConverter {
   String? imdbId;
   String? failureMessage;
   final dataSource = DataSourceType.tvdbDetails;
-  late String dataSourceName = 'TvdbDetailConverter';
+  String dataSourceName = 'TvdbDetailConverter';
 
   List<MovieResultDTO> dtoFromCompleteJsonMap(Map<dynamic, dynamic> map) {
     // deserialise outer json from map then iterate inner json
