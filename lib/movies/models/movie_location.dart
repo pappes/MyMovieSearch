@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:quiver/iterables.dart';
@@ -15,7 +16,7 @@ class MovieLocation {
   factory MovieLocation() => _instance ??= MovieLocation._internal();
 
   MovieLocation._internal() {
-    unawaited(init());
+    init();
   }
   static MovieLocation? _instance;
 
@@ -25,6 +26,7 @@ class MovieLocation {
   final _initCompleter = Completer<bool>();
 
   /// Load data from the cloud only once.
+  @awaitNotRequired
   Future<void> init() async {
     _initialised ??= Platform.isLinux
         ? _loadLinuxLocationData(_initCompleter)
@@ -96,7 +98,9 @@ class MovieLocation {
 
   /// Store location of movie.
   void storeMovieAtLocation(StackerContents movie, StackerAddress location) {
-    if (_writeToCache(movie, location)) unawaited(_writeToCloud(movie));
+    if (_writeToCache(movie, location)) {
+      _writeToCloud(movie);
+    }
   }
 
   Future<List<MovieResultDTO>> getUnmatchedDvds() async {
@@ -225,6 +229,7 @@ class MovieLocation {
   }
 
   /// Insert a record into the cloud datastore.
+  @awaitNotRequired
   Future<dynamic>? _writeToCloud(StackerContents movie) {
     final locations = <String>[];
     for (final location in getLocationsForMovie(movie.uniqueId)) {
@@ -239,7 +244,7 @@ class MovieLocation {
 
   Future<void> _loadAndroidLocationData(Completer<bool> completer) async {
     await _loadBackupLocationData();
-    unawaited(_loadCloudLocationData(completer));
+    _loadCloudLocationData(completer);
   }
 
   Future<void> _loadLinuxLocationData(Completer<bool> completer) async {
@@ -286,6 +291,7 @@ class MovieLocation {
     }
   }
 
+  @awaitNotRequired
   Future<void> _loadCloudLocationData(Completer<bool> completer) async {
     final streamSubscription = FirebaseApplicationState()
         .fetchRecords(

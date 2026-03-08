@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
 
@@ -54,7 +55,7 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
   }) : _httpClientFactory = httpClientFactory,
        _webViewRunner = webViewRunner,
        super.internal() {
-    unawaited(_observeWebView(imdbUrl));
+    _observeWebView(imdbUrl);
   }
 
   final HttpClientFactory _httpClientFactory; // Injected dependency
@@ -64,25 +65,26 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
   final Completer<void> _dataLoadedCompleter = Completer<void>();
 
   /// Initialize the web view with the given [webAddress].
+  @awaitNotRequired
   Future<void>? _observeWebView(String webAddress) {
     _headlessWebView = _webViewRunner(
       initialUrl: webAddress,
       proxySelector: _webViewProxySelector,
       onLoadStop: _loadStopped,
     );
-    unawaited(_timeout());
+    _timeout();
 
     return _headlessWebView!.run();
   }
 
   /// Handles the timeout for the web view operation.
-  Future<void> _timeout() async {
+  void _timeout() {
     Future.delayed(_timeoutDuration, () {
       if (_headlessWebView != null && _headlessWebView!.isRunning()) {
         logger.i(
           'Disposing InAppWebViewController due to timeout for $imdbUrl',
         );
-        unawaited(dispose());
+        dispose();
       }
     });
   }
@@ -93,6 +95,7 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
       _dataLoadedCompleter.future.then((_) => super.waitForCompletion());
 
   /// Disposes the web view after an optional [delay].
+  @awaitNotRequired
   Future<void> dispose({Duration delay = Duration.zero}) async {
     await Future<void>.delayed(delay);
     if (_headlessWebView != null) {
@@ -105,10 +108,11 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
   /// Called when the web view finishes loading a page.
   void _loadStopped(InAppWebViewController controller, WebUri? url) {
     logger.t('Page load complete for $imdbUrl');
-    unawaited(_clickAllFilterOptions(controller));
+    _clickAllFilterOptions(controller);
   }
 
   /// Clicks all filter options on the page to expand data.
+  @awaitNotRequired
   Future<void> _clickAllFilterOptions(InAppWebViewController controller) async {
     if (_filtersCleared) {
       // Delay disposal to allow any final requests to complete.
@@ -131,7 +135,7 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
       //     source: "document.querySelectorAll('.ipc-chip--active')",
       //   ),
       // );
-      unawaited(_getExistingJson(controller));
+      _getExistingJson(controller);
       // Delay disposal to allow any final requests to complete.
 
       return dispose(delay: const Duration(seconds: 15));
@@ -141,6 +145,7 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
     }
   }
 
+  @awaitNotRequired
   Future<void> _getExistingJson(InAppWebViewController controller) async {
     const javascriptToExecute = '''
 (function() {

@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as tabs;
 import 'package:go_router/go_router.dart';
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -79,30 +80,36 @@ class MMSNav {
   ///
   /// For platforms that don't support CustomTabs
   /// the URL is displayed to the user.
+  @awaitNotRequired
   Future<void> viewWebPage(String url) => canvas.viewWebPage(url);
 
   /// Navigates to a search results page populated with a movie list.
   ///
+  @awaitNotRequired
   Future<Object?> showResultsPage(SearchCriteriaDTO criteria) =>
       canvas.viewFlutterPage(criteria.getSearchResultsPage());
 
   /// Navigates to a search criteria page with no criteria populated.
   ///
+  @awaitNotRequired
   Future<Object?> showCriteriaPage(SearchCriteriaDTO criteria) =>
       canvas.viewFlutterRootPage(criteria.getSearchCriteriaPage());
 
   /// Navigates to a search criteria page with no criteria populated.
   ///
+  @awaitNotRequired
   Future<Object?> showAboutPage(SearchCriteriaDTO criteria) =>
       canvas.viewFlutterPage(criteria.getAboutPage());
 
   /// Navigates to a search criteria page with no criteria populated.
   ///
+  @awaitNotRequired
   Future<Object?> showErrorPage(SearchCriteriaDTO criteria) =>
       canvas.viewFlutterPage(criteria.getErrorPage());
 
   /// Navigates to the list of old DVD locations.
   ///
+  @awaitNotRequired
   Future<Object?> showDVDsPage() => showResultsPage(
     SearchCriteriaDTO()..init(SearchCriteriaType.dvdLocations),
   );
@@ -177,6 +184,7 @@ class MMSNav {
 
   /// Display more details for the selected card.
   ///
+  @awaitNotRequired
   Future<Object?> resultDrillDown(MovieResultDTO movie) {
     switch (movie.type) {
       case MovieContentType.keyword:

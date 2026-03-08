@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:meta/meta.dart';
+
 /// Move processing off the main thread into separate long lived threads.
 ///
 /// Implement 'isolate' functionality so that 'compute' requests
@@ -29,7 +31,7 @@ import 'dart:isolate';
 class ThreadRunner {
   ThreadRunner() {
     initialised = _completer.future;
-    unawaited(_init(latestThreadName ?? 'Unnamed Thread'));
+    _init(latestThreadName ?? 'Unnamed Thread');
   }
 
   /// Convenience constructor to keep track of threads.
@@ -90,6 +92,7 @@ class ThreadRunner {
   }
 
   /// Spawn another thread and capture port to send future requests to.
+  @awaitNotRequired
   Future<void> _init(String threadName) async {
     final receivePort = ReceivePort();
 

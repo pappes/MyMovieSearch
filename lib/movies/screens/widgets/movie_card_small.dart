@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
@@ -240,7 +238,7 @@ class MovieTile extends ListTile {
   }
 
   static void _navigate(BuildContext context, MovieResultDTO movie) {
-    unawaited(MMSNav(context).resultDrillDown(movie));
+    MMSNav(context).resultDrillDown(movie);
   }
 
   static ElevatedButton _navigateButton(

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
 import 'package:go_router/go_router.dart';
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -68,7 +69,7 @@ class _AboutState extends State<AboutPage> with RestorationMixin {
         _restorableCriteria.value.criteriaType,
       ),
     );
-    unawaited(_updateVersion());
+    _updateVersion();
     _performSearch();
   }
 
@@ -82,6 +83,7 @@ class _AboutState extends State<AboutPage> with RestorationMixin {
     }
   }
 
+  @awaitNotRequired
   Future<void> _updateVersion() async {
     await Settings().asyncInit();
     setState(() {

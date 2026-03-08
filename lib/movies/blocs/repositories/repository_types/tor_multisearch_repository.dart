@@ -87,7 +87,7 @@ class TorMultiSearchRepository extends BaseMovieRepository {
       for (final dto in values) {
         if (!dto.isError()) {
           yieldResult(dto);
-          unawaited(getExtraDetails(originalSearchUID, dto));
+          await getExtraDetails(originalSearchUID, dto);
         }
       }
     }
