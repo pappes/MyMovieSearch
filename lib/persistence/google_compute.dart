@@ -14,7 +14,6 @@ import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 const host = 'https://search.dvds.mms.pappes.net';
 final apiKey = Settings().meiliadminkey;
 
-
 class GCP {
   String? accountJson;
   Future<void> init() async {
@@ -128,10 +127,11 @@ class GcpSchedule extends Scheduling {
   });
 
   GcpSchedule.fromJson(super.json_)
-      : nanos = json_.containsKey('nanos') ? json_['nanos'] as int : null,
-        seconds =
-            json_.containsKey('seconds') ? json_['seconds'] as String : null,
-        super.fromJson();
+    : nanos = json_.containsKey('nanos') ? json_['nanos'] as int : null,
+      seconds = json_.containsKey('seconds')
+          ? json_['seconds'] as String
+          : null,
+      super.fromJson();
 
   /// A Duration represents a fixed-length span of time
   /// represented as a count of seconds and fractions of seconds

@@ -31,8 +31,7 @@ class DVDBarcodeScanner {
     return false;
   }
 
-  Future<dynamic> _showScanner() 
-  => SimpleBarcodeScanner.scanBarcode(
+  Future<dynamic> _showScanner() => SimpleBarcodeScanner.scanBarcode(
     context,
     barcodeAppBar: const BarcodeAppBar(
       appBarTitle: 'Test',

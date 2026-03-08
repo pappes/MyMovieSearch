@@ -55,7 +55,7 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// API call to IMDB search returning the top matching results
   /// for [searchCriteria].
   @override
-  Uri myConstructURI(String searchCriteria, {int pageNumber = 1})  {
+  Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
     final baseUrl = YtsHelper().ytsBaseUrl;
     final url = '$baseUrl/ajax/search?query=/$searchCriteria';
     return Uri.parse(url);
@@ -67,10 +67,10 @@ class QueryYtsSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     super.myConstructHeaders(headers);
     // prevent invalid UTF encoding.
     headers.set(
-        'accept',
-        'text/html,application/xhtml+xml,application/xml',
-        // do not accept ;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7,
-      );
+      'accept',
+      'text/html,application/xhtml+xml,application/xml',
+      // do not accept ;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7,
+    );
   }
 
   @override

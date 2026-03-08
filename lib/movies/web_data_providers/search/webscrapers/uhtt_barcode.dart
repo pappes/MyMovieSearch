@@ -37,8 +37,9 @@ mixin ScrapeUhttBarcodeSearch
       }
     }
     throw WebConvertException(
-        'UhttBarcode results data not detected for criteria '
-        '$getCriteriaText in html:$webText');
+      'UhttBarcode results data not detected for criteria '
+      '$getCriteriaText in html:$webText',
+    );
   }
 
   /// extract each row from the table.

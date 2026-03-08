@@ -36,8 +36,9 @@ mixin ScrapeTorrentz2Search on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       return movieData;
     }
     throw WebConvertException(
-        'Torrentz2 results data not detected for criteria '
-        '$getCriteriaText in html:$webText');
+      'Torrentz2 results data not detected for criteria '
+      '$getCriteriaText in html:$webText',
+    );
   }
 
   /// extract each row from the table.

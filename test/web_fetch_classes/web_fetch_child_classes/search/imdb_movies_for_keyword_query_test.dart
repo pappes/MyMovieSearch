@@ -18,9 +18,9 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 final criteria = SearchCriteriaDTO().fromString('dream');
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search unit tests', () {
     // Confirm class description is constructed as expected.
@@ -88,9 +88,9 @@ testing and punctuation
           'https://www.imdb.com/search/title/?keywords=new%20query&explore=keywords';
 
       // Invoke the functionality.
-      final actualResult = QueryIMDBMoviesForKeyword(criteria)
-          .myConstructURI('new query')
-          .toString();
+      final actualResult = QueryIMDBMoviesForKeyword(
+        criteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -105,10 +105,9 @@ testing and punctuation
       };
 
       // Invoke the functionality.
-      final actualResult = QueryIMDBMoviesForKeyword(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryIMDBMoviesForKeyword(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -126,26 +125,25 @@ testing and punctuation
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       const expectedOutput = intermediateEmptyMapList;
-      final actualOutput =
-          QueryIMDBMoviesForKeyword(criteria).myConvertWebTextToTraversableTree(
-        imdbHtmlSampleEmpty,
-      );
+      final actualOutput = QueryIMDBMoviesForKeyword(
+        criteria,
+      ).myConvertWebTextToTraversableTree(imdbHtmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
           'cause',
-          contains('data not detected for criteria '
-              '${criteria.toPrintableIdOrText().toLowerCase()}'),
+          contains(
+            'data not detected for criteria '
+            '${criteria.toPrintableIdOrText().toLowerCase()}',
+          ),
         ),
       );
-      final actualOutput =
-          QueryIMDBMoviesForKeyword(criteria).myConvertWebTextToTraversableTree(
-        'htmlSampleError',
-      );
+      final actualOutput = QueryIMDBMoviesForKeyword(
+        criteria,
+      ).myConvertWebTextToTraversableTree('htmlSampleError');
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
       expect(actualOutput, expectedOutput);
@@ -171,7 +169,8 @@ testing and punctuation
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -198,15 +197,16 @@ testing and punctuation
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using ImdbSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('ImdbSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
@@ -217,16 +217,15 @@ testing and punctuation
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await imdbKeywords.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await imdbKeywords.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -254,10 +253,10 @@ testing and punctuation
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase and ScrapeIMDBSearchDetails
   /// and ImdbSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search query', () {
     // Read IMDB search results from a simulated byte stream
@@ -282,7 +281,8 @@ testing and punctuation
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );

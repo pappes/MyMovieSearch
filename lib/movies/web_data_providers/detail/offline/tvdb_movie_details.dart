@@ -92,7 +92,6 @@ const jsonSampleFull = tvdbJsonSearchMovie;
 Future<Stream<String>> streamTvdbJsonOfflineData(_) =>
     Future.value(Stream.value(jsonSampleFull));
 
-
 const tvdbJsonSearchEpisode = '''
 {
   "status": "success",

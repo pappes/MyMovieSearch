@@ -16,7 +16,8 @@ const _imdbHtmlSampleEnd = ' </body> </html>';
 final imdbHtmlSampleFull =
     '$_imdbHtmlSampleStart $_imdbJsonSampleInner '
     '$_imdbHtmlSampleMiddle $_imdbHtmlSampleInner $_imdbHtmlSampleEnd';
-final _imdbJsonSampleInner = '''
+final _imdbJsonSampleInner =
+    '''
 <script type="application/json">$_embeddedJson</script>
 ''';
 const _imdbHtmlSampleInner = '';

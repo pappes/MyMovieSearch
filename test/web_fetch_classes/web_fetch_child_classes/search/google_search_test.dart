@@ -23,9 +23,9 @@ final criteria = SearchCriteriaDTO().fromString('123');
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => Settings().init());
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('google search unit tests', () {
     // Confirm class description is constructed as expected.
@@ -48,14 +48,8 @@ void main() {
           MovieResultDTO().error('test1'),
           MovieResultDTO().error('test2'),
         ];
-      expect(
-        QueryGoogleMovies(input).myFormatInputAsText(),
-        contains('test1'),
-      );
-      expect(
-        QueryGoogleMovies(input).myFormatInputAsText(),
-        contains('test2'),
-      );
+      expect(QueryGoogleMovies(input).myFormatInputAsText(), contains('test1'));
+      expect(QueryGoogleMovies(input).myFormatInputAsText(), contains('test2'));
     });
 
     // Confirm error is constructed as expected.
@@ -67,10 +61,9 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QueryGoogleMovies(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryGoogleMovies(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -79,27 +72,23 @@ void main() {
     // Confirm web text is parsed as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
-      final actualOutput =
-          QueryGoogleMovies(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleFull,
-      );
+      final actualOutput = QueryGoogleMovies(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleFull);
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = intermediateEmptyMapList;
-      final actualOutput =
-          QueryGoogleMovies(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleEmpty,
-      );
+      final actualOutput = QueryGoogleMovies(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = intermediateErrorMapList;
-      final actualOutput =
-          QueryGoogleMovies(criteria).myConvertWebTextToTraversableTree(
-        jsonSampleError,
-      );
+      final actualOutput = QueryGoogleMovies(
+        criteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleError);
       expect(actualOutput, completion(expectedOutput));
     });
   });
@@ -124,7 +113,8 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -156,9 +146,9 @@ void main() {
       expect(actualResult, expectedOutput);
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryGoogleMovies integration tests', () {
     // Confirm URL is constructed as expected.
@@ -168,17 +158,18 @@ void main() {
       const expectedResult2 = '&q=new%20query&start=0&num=10';
 
       // Invoke the functionality.
-      final actualResult =
-          QueryGoogleMovies(criteria).myConstructURI('new query').toString();
+      final actualResult = QueryGoogleMovies(
+        criteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, startsWith(expectedResult1));
       expect(actualResult, endsWith(expectedResult2));
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using QueryGoogleMovies
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryGoogleMovies integration tests', () {
     // Confirm map can be converted to DTO.
@@ -189,16 +180,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -210,16 +200,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateEmptyMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -231,16 +220,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateErrorMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -268,9 +256,9 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase and env and QueryGoogleMovies
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('google search query', () {
     // Read google search results from a simulated byte stream
@@ -295,7 +283,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -324,7 +313,8 @@ not valid json
     // and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      const expectedException = '[QueryGoogleMovies] Error in google '
+      const expectedException =
+          '[QueryGoogleMovies] Error in google '
           'with criteria 123 convert error translating page map to objects '
           ':expected map got List<dynamic> unable to interpret data '
           '[{hello: world}]';

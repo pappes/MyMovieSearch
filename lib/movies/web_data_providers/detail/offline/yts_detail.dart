@@ -6,7 +6,8 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
 
-const htmlSampleStart = ' <!DOCTYPE html> <html     <head>'
+const htmlSampleStart =
+    ' <!DOCTYPE html> <html     <head>'
     ' </head> <body id="styleguide-v2" class="fixed">';
 const htmlSampleEnd = ' </body> </html>';
 const htmlSampleFull = '$htmlSampleStart $htmlSampleInner $htmlSampleEnd';
@@ -80,7 +81,7 @@ const intermediateMapList = [
     'description': '7.02 GB 3840*1746 English 5.1 NR',
     'leechers': 17,
     'seeders': 68,
-  }
+  },
 ];
 
 const htmlSampleInner = '''

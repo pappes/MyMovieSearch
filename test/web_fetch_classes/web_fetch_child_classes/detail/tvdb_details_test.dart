@@ -27,10 +27,7 @@ void main() {
   group('tvdb details unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(
-        QueryTVDBDetails(criteria).myDataSourceName(),
-        'QueryTVDBDetails',
-      );
+      expect(QueryTVDBDetails(criteria).myDataSourceName(), 'QueryTVDBDetails');
     });
 
     // Confirm criteria is displayed as expected.
@@ -48,14 +45,8 @@ void main() {
           MovieResultDTO().error('test1'),
           MovieResultDTO().error('test2'),
         ];
-      expect(
-        QueryTVDBDetails(input).myFormatInputAsText(),
-        contains('test1'),
-      );
-      expect(
-        QueryTVDBDetails(input).myFormatInputAsText(),
-        contains('test2'),
-      );
+      expect(QueryTVDBDetails(input).myFormatInputAsText(), contains('test1'));
+      expect(QueryTVDBDetails(input).myFormatInputAsText(), contains('test2'));
     });
 
     // Confirm error is constructed as expected.
@@ -187,7 +178,6 @@ void main() {
       );
     });
 
-    
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap() for Person', () {
       final actualResult = <MovieResultDTO>[];

@@ -17,9 +17,9 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 final criteria = SearchCriteriaDTO().fromString('dream');
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('SolidTorrents search unit tests', () {
     // Confirm class description is constructed as expected.
@@ -62,9 +62,9 @@ void main() {
           'https://solidtorrents.to/search?q=new%20query&sort=seeders&page=1';
 
       // Invoke the functionality.
-      final actualResult = QuerySolidTorrentsSearch(criteria)
-          .myConstructURI('new query')
-          .toString();
+      final actualResult = QuerySolidTorrentsSearch(
+        criteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -79,10 +79,9 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult = QuerySolidTorrentsSearch(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QuerySolidTorrentsSearch(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -98,26 +97,25 @@ void main() {
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = <void>[];
-      final actualOutput =
-          QuerySolidTorrentsSearch(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleEmpty,
-      );
+      final actualOutput = QuerySolidTorrentsSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
           'cause',
-          contains('results data not detected for criteria '
-              '${criteria.toPrintableIdOrText().toLowerCase()} in html:'),
+          contains(
+            'results data not detected for criteria '
+            '${criteria.toPrintableIdOrText().toLowerCase()} in html:',
+          ),
         ),
       );
-      final actualOutput =
-          QuerySolidTorrentsSearch(criteria).myConvertWebTextToTraversableTree(
-        htmlSampleError,
-      );
+      final actualOutput = QuerySolidTorrentsSearch(
+        criteria,
+      ).myConvertWebTextToTraversableTree(htmlSampleError);
       // NOTE: Using expect on an async result
       // only works as the last line of the test!
       expect(actualOutput, expectedOutput);
@@ -143,15 +141,16 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using SolidTorrentsSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('SolidTorrentsSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
@@ -171,7 +170,8 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -190,8 +190,9 @@ void main() {
       final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);
 
       // Invoke the functionality and collect results.
-      final actualResult =
-          solidTorrentsSearch.myConvertTreeToOutputType('wrongData');
+      final actualResult = solidTorrentsSearch.myConvertTreeToOutputType(
+        'wrongData',
+      );
 
       // Check the results.
       // NOTE: Using expect on an async result
@@ -200,10 +201,10 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase and ScrapeSolidTorrentsSearchDetails
   ///  and SolidTorrentsSearchConverter
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('SolidTorrents search query', () {
     // Read search results from a simulated byte stream
@@ -229,7 +230,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue, related: false),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );

@@ -73,7 +73,7 @@ void main() {
       );
 
       expect(
-        jsonDecode(Settings().seVmKey??''),
+        jsonDecode(Settings().seVmKey ?? ''),
         isMap,
         reason: 'seVmKey does not match',
       );

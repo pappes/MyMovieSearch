@@ -80,8 +80,8 @@ class DatabaseHelper {
     if (Platform.environment.containsKey('FLUTTER_TEST')) {
       // When testing the PathProvider is not set up correctly
       // so need special handling.
-      final linuxLocation =
-          await PathProviderLinux().getApplicationDocumentsPath();
+      final linuxLocation = await PathProviderLinux()
+          .getApplicationDocumentsPath();
       if (linuxLocation != null) location = linuxLocation;
     } else {
       // for runtime environments use the runtim PathProvider

@@ -11,10 +11,10 @@ class SearchState extends Equatable {
   const SearchState.awaitingInput() : this._();
 
   const SearchState.searching(SearchRequest request)
-      : this._(status: SearchStatus.searching, request: request);
+    : this._(status: SearchStatus.searching, request: request);
 
   const SearchState.displayingResults(double uid)
-      : this._(status: SearchStatus.displayingResults, uid: uid);
+    : this._(status: SearchStatus.displayingResults, uid: uid);
 
   final SearchStatus status;
   final SearchRequest request;

@@ -17,34 +17,25 @@ Future<Stream<String>> _emitInvalidJsonPSample(_) =>
 
 final fullCriteria = SearchCriteriaDTO()
   ..init(
-  SearchCriteriaType.downloadSimple,
-  list: [MovieResultDTO().init(uniqueId: 'tt123')],
-);
+    SearchCriteriaType.downloadSimple,
+    list: [MovieResultDTO().init(uniqueId: 'tt123')],
+  );
 
 final partialCriteria = SearchCriteriaDTO()
-  ..init(
-  SearchCriteriaType.downloadSimple,
-  title: '123',
-);
+  ..init(SearchCriteriaType.downloadSimple, title: '123');
 
 final ignoreCriteria = SearchCriteriaDTO()
-  ..init(
-  SearchCriteriaType.downloadSimple,
-  title: 'ignore this',
-);
+  ..init(SearchCriteriaType.downloadSimple, title: 'ignore this');
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb suggestions unit tests', () {
     // Confirm class description is constructed as expected.
     test('Run myDataSourceName()', () {
-      expect(
-        QueryYtsSearch(fullCriteria).myDataSourceName(),
-        'ytsSearch',
-      );
+      expect(QueryYtsSearch(fullCriteria).myDataSourceName(), 'ytsSearch');
     });
 
     // Confirm dto criteria is displayed as expected.
@@ -69,8 +60,9 @@ void main() {
       final webfetch = QueryYtsSearch(ignoreCriteria);
 
       // Invoke the functionality and collect results.
-      final actualResult =
-          webfetch.myConvertTreeToOutputType(jsonDecode(jsonSampleFull));
+      final actualResult = webfetch.myConvertTreeToOutputType(
+        jsonDecode(jsonSampleFull),
+      );
 
       // Check the results.
       expect(
@@ -83,8 +75,9 @@ void main() {
       final webfetch = QueryYtsSearch(ignoreCriteria);
 
       // Invoke the functionality and collect results.
-      final actualResult =
-          webfetch.myConvertTreeToOutputType(jsonDecode(jsonSampleEmpty));
+      final actualResult = webfetch.myConvertTreeToOutputType(
+        jsonDecode(jsonSampleEmpty),
+      );
 
       // Check the results.
       expect(
@@ -119,8 +112,9 @@ void main() {
       const expectedResult = 'https://yts.lt/ajax/search?query=/new%20query';
 
       // Invoke the functionality.
-      final actualResult =
-          QueryYtsSearch(ignoreCriteria).myConstructURI('new query').toString();
+      final actualResult = QueryYtsSearch(
+        ignoreCriteria,
+      ).myConstructURI('new query').toString();
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -136,11 +130,14 @@ void main() {
       };
 
       // Invoke the functionality.
-      final actualResult =
-          QueryYtsSearch(ignoreCriteria).myYieldError('new query').toMap();
+      final actualResult = QueryYtsSearch(
+        ignoreCriteria,
+      ).myYieldError('new query').toMap();
       // Exact id does not need to match as long as it is negative number
-      actualResult['uniqueId'] =
-          actualResult['uniqueId'].toString().substring(0, 1);
+      actualResult['uniqueId'] = actualResult['uniqueId'].toString().substring(
+        0,
+        1,
+      );
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -148,22 +145,19 @@ void main() {
     // Confirm web text is parsed as expected.
     test('Run myConvertWebTextToTraversableTree()', () {
       final expectedOutput = intermediateMapList;
-      final actualOutput =
-          QueryYtsSearch(ignoreCriteria).myConvertWebTextToTraversableTree(
-        jsonSampleFull,
-      );
+      final actualOutput = QueryYtsSearch(
+        ignoreCriteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleFull);
       expect(actualOutput, completion(expectedOutput));
     });
     test('Run myConvertWebTextToTraversableTree() for 0 results', () {
       final expectedOutput = intermediateEmptyMapList;
-      final actualOutput =
-          QueryYtsSearch(ignoreCriteria).myConvertWebTextToTraversableTree(
-        jsonSampleEmpty,
-      );
+      final actualOutput = QueryYtsSearch(
+        ignoreCriteria,
+      ).myConvertWebTextToTraversableTree(jsonSampleEmpty);
       expect(actualOutput, completion(expectedOutput));
     });
-    test('Run myConvertWebTextToTraversableTree() for invalid results',
-        () {
+    test('Run myConvertWebTextToTraversableTree() for invalid results', () {
       final expectedOutput = throwsA(
         isA<WebConvertException>().having(
           (e) => e.cause,
@@ -171,16 +165,15 @@ void main() {
           startsWith('Invalid json returned from web call'),
         ),
       );
-      final actualOutput =
-          QueryYtsSearch(ignoreCriteria).myConvertWebTextToTraversableTree(
-        'imdbErrorSample',
-      );
+      final actualOutput = QueryYtsSearch(
+        ignoreCriteria,
+      ).myConvertWebTextToTraversableTree('imdbErrorSample');
       expect(actualOutput, expectedOutput);
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('yts suggestion query', () {
     // Read search results from a simulated byte stream
@@ -206,7 +199,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );

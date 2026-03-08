@@ -8,9 +8,7 @@ extension DynamicHelper<T> on T {
   void observe() {
     final str = this?.toString() ?? '';
     final len = str.length;
-    logger.i(
-      'Restorable size = $len, content = ${str.characters.take(50)}',
-    );
+    logger.i('Restorable size = $len, content = ${str.characters.take(50)}');
   }
 
   /// Filter out non string values

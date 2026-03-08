@@ -15,9 +15,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb
 //q = title type
 //i = image with dimensions)
 
-List<MovieResultDTO> jsonMapToDto(
-  Iterable<Map<dynamic, dynamic>> records,
-) {
+List<MovieResultDTO> jsonMapToDto(Iterable<Map<dynamic, dynamic>> records) {
   final result = <MovieResultDTO>[];
   for (final record in records) {
     result.add(ImdbSuggestionConverter.dtoFromMap(record));

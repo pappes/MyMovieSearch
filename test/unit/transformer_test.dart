@@ -6,9 +6,9 @@ import '../test_data/imdb_suggestion_converter_data.dart';
 import '../test_helper.dart';
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('transformer', () {
     /// Confirms the JSONP function prefix
@@ -167,11 +167,7 @@ void main() {
       const complexFunction = r'Avengers : $eason 1 (DVD Box Set) Ml C. Hl';
       final encoded = Uri.encodeComponent(complexFunction).replaceAll(' ', '+');
       final jsFunction = 'imdb\$$encoded';
-      testMultiLineConversion(
-        ['$jsFunction({[abc]}'],
-        '{[abc]}',
-        jsFunction,
-      );
+      testMultiLineConversion(['$jsFunction({[abc]}'], '{[abc]}', jsFunction);
     });
   });
   group('stream test', () {

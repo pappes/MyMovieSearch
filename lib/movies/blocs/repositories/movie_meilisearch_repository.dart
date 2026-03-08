@@ -8,6 +8,6 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class MovieMeiliSearchRepository extends MovieListRepository {
   @override
   Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int> getProviders() => {
-        QueryMsSearchMovies(criteria): 100,
-      };
+    QueryMsSearchMovies(criteria): 100,
+  };
 }

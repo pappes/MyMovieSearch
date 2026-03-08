@@ -128,16 +128,14 @@ class ImdbJsonConverter extends ImdbConverterBase
       ..censorRating =
           getImdbCensorRating(map[outerElementCensorRating]?.toString()) ??
           movie.censorRating
-      ..userRating =
-          DoubleHelper.fromText(
-            (map[outerElementRating] as Map?)?[innerElementRatingValue],
-            nullValueSubstitute: movie.userRating,
-          )!
-      ..userRatingCount =
-          IntHelper.fromText(
-            (map[outerElementRating] as Map?)?[innerElementRatingCount],
-            nullValueSubstitute: movie.userRatingCount,
-          )!;
+      ..userRating = DoubleHelper.fromText(
+        (map[outerElementRating] as Map?)?[innerElementRatingValue],
+        nullValueSubstitute: movie.userRating,
+      )!
+      ..userRatingCount = IntHelper.fromText(
+        (map[outerElementRating] as Map?)?[innerElementRatingCount],
+        nullValueSubstitute: movie.userRatingCount,
+      )!;
 
     final language = map[outerElementLanguage];
     if (language is LanguageType) {

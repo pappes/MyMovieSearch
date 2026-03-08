@@ -33,10 +33,9 @@ class YtsHelper {
   Future<String> _findLatestYifyURL() async {
     const url = 'https://yifystatus.com';
 
-    final client =
-        HttpClient()
-          // Allow HttpClient to handle compressed data from web servers.
-          ..autoUncompress = true;
+    final client = HttpClient()
+      // Allow HttpClient to handle compressed data from web servers.
+      ..autoUncompress = true;
     final request = await client.getUrl(Uri.parse(url));
     final response = await request.close();
     final webPage = await response.transform(utf8.decoder).join();
@@ -77,10 +76,9 @@ class YtsHelper {
 
   Future<void> testYtsUrl(String href) async {
     //print ('testing: $href    ');
-    final client =
-        HttpClient()
-          // Allow HttpClient to handle compressed data from web servers.
-          ..autoUncompress = true;
+    final client = HttpClient()
+      // Allow HttpClient to handle compressed data from web servers.
+      ..autoUncompress = true;
     final request = await client.getUrl(
       Uri.parse('$href/ajax/search?query=therearenoresultszzzz/'),
     );

@@ -5,11 +5,11 @@ import 'package:my_movie_search/persistence/database_helpers.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-// if running on a fresh linux machine requires sqllite to be installed
-// sudo apt-get -y install libsqlite3-0 libsqlite3-dev
-////////////////////////////////////////////////////////////////////////////////
+  // if running on a fresh linux machine requires sqllite to be installed
+  // sudo apt-get -y install libsqlite3-0 libsqlite3-dev
+  ////////////////////////////////////////////////////////////////////////////////
   /// integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('sqlflite', () {
     final db = DatabaseHelper.instance;

@@ -40,12 +40,11 @@ class ImdbNameConverter extends ImdbConverterBase
     final endDate = map
         .deepSearch(deepPersonEndDateHeader)
         ?.searchForString(key: deepPersonEndDateField);
-    final yearRange =
-        (null != endDate)
-            ? '$startDate-$endDate'
-            : (null != startDate)
-            ? startDate
-            : null;
+    final yearRange = (null != endDate)
+        ? '$startDate-$endDate'
+        : (null != startDate)
+        ? startDate
+        : null;
     // ...{'meterRanking':...{...'currentRank':<value>...}}
     final popularity = map
         .deepSearch(deepPersonPopularityHeader)

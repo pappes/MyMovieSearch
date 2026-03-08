@@ -48,9 +48,11 @@ const tmdbTree = {
 final jsonSampleInner = jsonEncode(tmdbTree);
 
 final jsonSampleFull = jsonSampleInner;
-const jsonSampleEmpty = '{"success":false,"status_code":34,'
+const jsonSampleEmpty =
+    '{"success":false,"status_code":34,'
     '"status_message":"The resource you requested could not be found."}';
-const jsonSampleError = '{"status_code":7,'
+const jsonSampleError =
+    '{"status_code":7,'
     '"status_message":"Invalid API key: You must be granted a valid key.", '
     '"success":false}';
 

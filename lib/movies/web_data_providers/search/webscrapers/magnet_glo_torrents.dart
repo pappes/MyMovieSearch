@@ -27,8 +27,9 @@ mixin ScrapeGloTorrentsSearch
   Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
-    if (webText
-        .contains('No torrents were found based on your search criteria.')) {
+    if (webText.contains(
+      'No torrents were found based on your search criteria.',
+    )) {
       return [];
     }
     final document = parse(webText);
@@ -37,8 +38,9 @@ mixin ScrapeGloTorrentsSearch
       return movieData;
     }
     throw WebConvertException(
-        'gloTorrents results data not detected for criteria '
-        '$getCriteriaText in html:$webText');
+      'gloTorrents results data not detected for criteria '
+      '$getCriteriaText in html:$webText',
+    );
   }
 
   /// extract each row from the table.

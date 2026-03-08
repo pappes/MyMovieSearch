@@ -72,7 +72,8 @@ class TmdbFinderConverter {
         searchResults.add(dtoFromPersonMap(person as Map, imdbId));
       }
     } else {
-      final error = map[outerElementFailureReason]?.toString() ??
+      final error =
+          map[outerElementFailureReason]?.toString() ??
           'No failure reason provided in results $map';
       searchResults.add(
         MovieResultDTO().error(
@@ -104,8 +105,9 @@ class TmdbFinderConverter {
       movie.alternateTitle = originalTitle ?? '';
     }
 
-    final year =
-        DateTime.tryParse(map[movieElementYear]?.toString() ?? '')?.year;
+    final year = DateTime.tryParse(
+      map[movieElementYear]?.toString() ?? '',
+    )?.year;
     if (null != year) {
       movie.year = year;
     } else {
@@ -141,18 +143,17 @@ class TmdbFinderConverter {
   static MovieResultDTO dtoFromPersonMap(
     Map<dynamic, dynamic> map,
     String imdbId,
-  ) =>
-      MovieResultDTO()
-        ..init(
-          bestSource: DataSourceType.tmdbFinder,
-          uniqueId: map[movieElementTMDBIdentity]?.toString(),
-          title: map[personElementCommonTitle]?.toString(),
-          userRatingCount: map[personElementPopularity]?.toString(),
-          type: MovieContentType.person.toString(),
-        )
-        // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
-        // no longer need to have alternateId field!
-        ..uniqueId = imdbId;
+  ) => MovieResultDTO()
+    ..init(
+      bestSource: DataSourceType.tmdbFinder,
+      uniqueId: map[movieElementTMDBIdentity]?.toString(),
+      title: map[personElementCommonTitle]?.toString(),
+      userRatingCount: map[personElementPopularity]?.toString(),
+      type: MovieContentType.person.toString(),
+    )
+    // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
+    // no longer need to have alternateId field!
+    ..uniqueId = imdbId;
   // TODO expand partial URL to full url
   // e.g. person.imageUrl =
   //      map[personElementPosterPath]?.toString() ?? person.imageUrl;

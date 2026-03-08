@@ -26,9 +26,9 @@ void main() {
   // Wait for api key to be initialised
   setUpAll(() => lockWebFetchTreadedCache);
   tearDownAll(() => unlockWebFetchTreadedCache);
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryIMDBMoreKeywordsDetails unit tests', () {
     // Confirm class description is constructed as expected.
@@ -52,18 +52,9 @@ void main() {
     // Confirm criteria is displayed as expected.
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO()
-        ..criteriaList = [
-          makeResultDTO('tttest1'),
-          makeResultDTO('tttest2'),
-        ];
-      expect(
-        QueryIMDBMoreKeywordsDetails(input).myFormatInputAsText(),
-        '',
-      );
-      expect(
-        QueryIMDBMoreKeywordsDetails(input).myFormatInputAsText(),
-        '',
-      );
+        ..criteriaList = [makeResultDTO('tttest1'), makeResultDTO('tttest2')];
+      expect(QueryIMDBMoreKeywordsDetails(input).myFormatInputAsText(), '');
+      expect(QueryIMDBMoreKeywordsDetails(input).myFormatInputAsText(), '');
     });
 
     // Confirm error is constructed as expected.
@@ -75,10 +66,9 @@ void main() {
       };
       final criteria = SearchCriteriaDTO();
       // Invoke the functionality.
-      final actualResult = QueryIMDBMoreKeywordsDetails(criteria)
-          .myYieldError('new query')
-          .toMap()
-        ..remove('uniqueId');
+      final actualResult = QueryIMDBMoreKeywordsDetails(
+        criteria,
+      ).myYieldError('new query').toMap()..remove('uniqueId');
 
       // Check the results.
       expect(actualResult, expectedResult);
@@ -118,16 +108,17 @@ void main() {
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchThreadedCache
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('WebFetchThreadedCache unit tests', () {
     test('empty cache', () async {
@@ -160,7 +151,8 @@ void main() {
       expect(
         listResult,
         MovieResultDTOListMatcher(expectedDTOList),
-        reason: 'Emitted DTO list ${listResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${listResult.toPrintableString()} '
             'needs to match expected DTO List'
             '${expectedDTOList.toPrintableString()}',
       );
@@ -179,8 +171,9 @@ void main() {
       await testClass.readPrioritisedCachedList(
         source: streamImdbHtmlOfflineData,
       );
-      final listResult =
-          await testClass.fetchResultFromThreadedCache().toList();
+      final listResult = await testClass
+          .fetchResultFromThreadedCache()
+          .toList();
       expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
       final resultIsCached = await testClass.isThreadedResultCached();
       expect(resultIsCached, true);
@@ -205,9 +198,9 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using env
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryIMDBMoreKeywordsDetails integration tests', () {
     // Confirm URL is constructed as expected.
@@ -216,17 +209,17 @@ void main() {
       final criteria = SearchCriteriaDTO();
 
       // Invoke the functionality.
-      final actualResult = QueryIMDBMoreKeywordsDetails(criteria)
-          .myConstructURI('1234')
-          .toString();
+      final actualResult = QueryIMDBMoreKeywordsDetails(
+        criteria,
+      ).myConstructURI('1234').toString();
 
       // Check the results.
       expect(actualResult, expected);
     });
   });
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using QueryIMDBMoreKeywordsDetails
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryIMDBMoreKeywordsDetails integration tests', () {
     // Confirm map can be converted to DTO.
@@ -239,16 +232,15 @@ void main() {
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
-        actualResult.addAll(
-          await testClass.myConvertTreeToOutputType(map),
-        );
+        actualResult.addAll(await testClass.myConvertTreeToOutputType(map));
       }
 
       // Check the results.
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${actualResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -278,9 +270,9 @@ void main() {
     });
   });
 
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests using WebFetchBase, env and QueryIMDBMoreKeywordsDetails
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('imdb search query', () {
     // Read imdb search results from a simulated byte stream
@@ -295,9 +287,7 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: streamImdbHtmlOfflineData,
-          )
+          .readList(source: streamImdbHtmlOfflineData)
           .then(queryResult.addAll)
           .onError(
             // Print any errors encountered during processing.
@@ -309,7 +299,8 @@ void main() {
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),
-        reason: 'Emitted DTO list ${queryResult.toPrintableString()} '
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
@@ -330,9 +321,7 @@ void main() {
 
       // Invoke the functionality.
       await testClass
-          .readList(
-            source: _emitInvalidHtmlSample,
-          )
+          .readList(source: _emitInvalidHtmlSample)
           .then(queryResult.addAll);
       expect(queryResult.first.title, expectedException);
     });

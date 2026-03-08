@@ -8,16 +8,15 @@ import 'package:my_movie_search/movies/web_data_providers/search/picclick_barcod
 class PicclickBarcodeSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
-  ) =>
-      [
-        MovieResultDTO().init(
-          bestSource: DataSourceType.picclickBarcode,
-          type: MovieContentType.barcode.toString(),
-          uniqueId: map[jsonIdKey]?.toString(),
-          alternateTitle: map[jsonRawDescriptionKey]?.toString(),
-          title: map[jsonCleanDescriptionKey]?.toString(),
-          description: map[jsonIdKey]?.toString(),
-          imageUrl: map[jsonUrlKey]?.toString(),
-        ),
-      ];
+  ) => [
+    MovieResultDTO().init(
+      bestSource: DataSourceType.picclickBarcode,
+      type: MovieContentType.barcode.toString(),
+      uniqueId: map[jsonIdKey]?.toString(),
+      alternateTitle: map[jsonRawDescriptionKey]?.toString(),
+      title: map[jsonCleanDescriptionKey]?.toString(),
+      description: map[jsonIdKey]?.toString(),
+      imageUrl: map[jsonUrlKey]?.toString(),
+    ),
+  ];
 }

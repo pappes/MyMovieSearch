@@ -13,10 +13,7 @@ class FirebaseApplicationStateStub extends FirebaseApplicationState {
   }
 
   @override
-  Future<String?> fetchRecord(
-    String collectionPath, {
-    required String id,
-  }) {
+  Future<String?> fetchRecord(String collectionPath, {required String id}) {
     throw MMSFirebaseException('platform not supported');
   }
 
@@ -41,11 +38,7 @@ class FirebaseApplicationStateStub extends FirebaseApplicationState {
   }
 
   @override
-  Future<bool> addRecord(
-    String collectionPath, {
-    String? message,
-    String? id,
-  }) {
+  Future<bool> addRecord(String collectionPath, {String? message, String? id}) {
     throw MMSFirebaseException('platform not supported');
   }
 }

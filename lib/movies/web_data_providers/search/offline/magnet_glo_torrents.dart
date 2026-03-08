@@ -51,7 +51,7 @@ const intermediateMapList = [
     'description': '857.09 MB',
     'seeders': 0.0,
     'leechers': 0.0,
-  }
+  },
 ];
 
 const gtSampleMid = r'''

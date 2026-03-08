@@ -121,7 +121,7 @@ class TvdbMovieDetailConverter extends TvdbCommonConverter {
     return null;
   }
 
-  /// get a list of all external URLs that are already FQDN and dont need 
+  /// get a list of all external URLs that are already FQDN and dont need
   /// extra processing
   void getRawUrls(Map<String, String> sourceUrls, List<dynamic>? sources) {
     for (final map in sources ?? []) {

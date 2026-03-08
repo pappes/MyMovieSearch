@@ -10,16 +10,15 @@ import '../../../../test_helper.dart';
 ////////////////////////////////////////////////////////////////////////////////
 
 void main() {
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
-////////////////////////////////////////////////////////////////////////////////
+  ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryUhttBarcodeSearch test', () {
     // Search for a known movie.
     test('Run a search on Tpb that is likely to have static results', () async {
       final criteria = SearchCriteriaDTO().fromString('9324915073425');
-      final actualOutput =
-          await QueryUhttBarcodeSearch(
+      final actualOutput = await QueryUhttBarcodeSearch(
         criteria,
       ).readList(limit: 10);
       actualOutput.clearCopyrightedData();
@@ -31,28 +30,26 @@ void main() {
       final expectedOutput = readTestData();
       expect(
         actualOutput,
-        MovieResultDTOListFuzzyMatcher(
-          expectedOutput,
-          percentMatch: 60,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
     });
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
-      final actualOutput =
-          await QueryUhttBarcodeSearch(criteria).readList(limit: 10);
+      final actualOutput = await QueryUhttBarcodeSearch(
+        criteria,
+      ).readList(limit: 10);
       final expectedOutput = <MovieResultDTO>[];
 
       // Check the results.
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(
-          expectedOutput,
-        ),
-        reason: 'Emitted DTO list ${actualOutput.toPrintableString()} '
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );

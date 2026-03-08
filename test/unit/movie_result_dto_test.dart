@@ -352,7 +352,6 @@ Expected: List<MovieResultDTO>(2)[
 
     // Test list matcher error string.
     test('MovieResultDTOListFuzzyMatcher different text', () {
-
       final expectedDTOList = <MovieResultDTO>[
         makeResultDTO('abc'),
         makeResultDTO('def'),

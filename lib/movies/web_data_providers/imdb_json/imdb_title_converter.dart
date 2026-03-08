@@ -29,7 +29,6 @@ class ImdbTitleConverter extends ImdbConverterBase
 
     // Find child data containing related records.
     // ...{'mainColumnData':...}
-    return map.deepSearch(deepRelatedHeader, multipleMatch: true
-    );
+    return map.deepSearch(deepRelatedHeader, multipleMatch: true);
   }
 }

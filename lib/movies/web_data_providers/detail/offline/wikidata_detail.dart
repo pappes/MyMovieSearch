@@ -1,7 +1,6 @@
 // query string https://www.wikidata.org/wiki/Special:EntityData/Q211082.json
 // or           https://www.wikidata.org/wiki/Special:EntityData/Q13794921.json
 
-
 import 'dart:convert';
 
 final intermediateErrorList = [jsonDecode(jsonSampleEmpty)];
@@ -11,7 +10,7 @@ const jsonSampleEmpty = '''
 <html><head><title>Bad Request</title><meta name="color-scheme" content="light dark" /></head>
 <body><h1>Bad Request</h1><p>Invalid ID: Q211x082.</p></body></html>
 ''';
-const jsonSampleError =    '''
+const jsonSampleError = '''
 <!DOCTYPE html>
 <html><head><title>Unsupported Media Type</title><meta name="color-scheme" content="light dark" /></head>
 <body><h1>Unsupported Media Type</h1><p>The data format jason is not supported by this interface.</p></body></html>
@@ -282,7 +281,6 @@ final jsonPerson = {
     },
   },
 };
-
 
 final jsonMultipleMovie = {
   'head': {

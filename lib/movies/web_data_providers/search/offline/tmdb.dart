@@ -46,13 +46,16 @@ final intermediateMapList = [jsonDecode(jsonSampleFull)];
 final intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
 final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
-const jsonSampleFull = ' { "page": 1, "results": [ $tmdbJsonSearchInner ], '
+const jsonSampleFull =
+    ' { "page": 1, "results": [ $tmdbJsonSearchInner ], '
     '"total_pages": 12, "total_results": 340 } ';
 const jsonSampleEmpty =
     '{"page": 1, "results": [], "total_pages": 1, "total_results": 0}';
-const jsonSampleEmptyx = '{ "status_message": '
+const jsonSampleEmptyx =
+    '{ "status_message": '
     '"The resource you requested could not be found.", "status_code": 34 }';
-const jsonSampleError = '{ "status_message": '
+const jsonSampleError =
+    '{ "status_message": '
     '"Invalid API key: You must be granted a valid key.", '
     '"success": false, "status_code": 7 }';
 

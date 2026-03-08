@@ -14,9 +14,8 @@ const host = 'https://search.dvds.mms.pappes.net';
 final apiKey = Settings().meiliadminkey;
 
 class MeiliSearch {
-  MeiliSearch({
-    required String indexName,
-  }) : _index = MeiliSearchClient(host, apiKey).index(indexName);
+  MeiliSearch({required String indexName})
+    : _index = MeiliSearchClient(host, apiKey).index(indexName);
 
   final MeiliSearchIndex _index;
 

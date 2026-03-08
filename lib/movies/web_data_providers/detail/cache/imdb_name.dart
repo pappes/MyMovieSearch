@@ -20,10 +20,7 @@ mixin ThreadedCacheIMDBNameDetails
   /// Returns new priority for the request.
   /// Returns null if the request should be discarded.
   @override
-  String? confirmThreadCachePriority(
-    String priority,
-    int? limit,
-  ) {
+  String? confirmThreadCachePriority(String priority, int? limit) {
     // Track and throttle low priority requests
     if (ThreadRunner.slow == priority || ThreadRunner.verySlow == priority) {
       final text = criteria.toPrintableString();
@@ -42,10 +39,7 @@ mixin ThreadedCacheIMDBNameDetails
 
   /// Adds criteria to a collection of currently processing requests.
   @override
-  void initialiseThreadCacheRequest(
-    String priority,
-    int? limit,
-  ) {
+  void initialiseThreadCacheRequest(String priority, int? limit) {
     // Track and throttle low priority requests
     final text = criteria.toPrintableString();
     if (ThreadRunner.verySlow == priority) {
@@ -77,8 +71,7 @@ mixin ThreadedCacheIMDBNameDetails
   @factory
   WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
     SearchCriteriaDTO criteria,
-  ) =>
-      QueryIMDBNameDetails(criteria);
+  ) => QueryIMDBNameDetails(criteria);
 
   @override
   @visibleForTesting
