@@ -3,6 +3,7 @@ import 'dart:async' show StreamSubscription, unawaited;
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -41,7 +42,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           isClosed ? null : emit(const SearchState.awaitingInput()),
     );
     on<SearchRequested>((event, emit) {
-      unawaited(_initiateSearch(event.criteria, emit));
+      _initiateSearch(event.criteria, emit);
     });
   }
 
@@ -65,6 +66,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   /// Clean up the results of any previous search
   /// and submit the new search criteria.
+  @awaitNotRequired
   Future<void> _initiateSearch(
     SearchCriteriaDTO criteria,
     Emitter<SearchState> emit,

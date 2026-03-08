@@ -1,5 +1,6 @@
 import 'dart:convert' show json;
 
+import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:path/path.dart' show join;
@@ -103,18 +104,21 @@ class DatabaseHelper {
 
   // Database helper methods:
   /// Insert a movie record into the database.
+  @awaitNotRequired
   Future<int> insert(MovieModel movie) async {
     final db = await database;
     return mutexLock.protect(() => _insert(db, movie));
   }
 
   /// Update a movie record in the database.
+  @awaitNotRequired
   Future<int> update(MovieModel movie) async {
     final db = await database;
     return mutexLock.protect(() => _update(db, movie));
   }
 
   /// Delete a movie record from the database.
+  @awaitNotRequired
   Future<int> delete(MovieModel movie) async {
     final db = await database;
     return mutexLock.protect(() => _delete(db, movie));

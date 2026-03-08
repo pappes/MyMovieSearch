@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:googleapis/secretmanager/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:logger/logger.dart';
+import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_common.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
@@ -200,24 +201,26 @@ class Settings {
       logger?.t('Settings initialised');
       logValues();
 
-      unawaited(asyncInit());
+      asyncInit();
     }
   }
 
+  @awaitNotRequired
   Future<void> asyncInit() =>
       // Ensure that only one copy of _asyncInit is running at a time.
       secretsInitiaisedMutexLock.protect(_asyncInit);
 
   Future<void> _asyncInit() async {
+    _getApplicationVersion();
     if (!_firebaseInitialised) {
       _firebaseInitialised = true;
       await _firebaseData.init();
     }
     await _updateFromCloud();
     unawaited(QueryTVDBCommon.init());
-    unawaited(_getApplicationVersion());
   }
 
+  @awaitNotRequired
   Future<void> _getApplicationVersion() async {
     final pubspec = await rootBundle.loadString('pubspec.yaml');
     final parsed = loadYaml(pubspec);

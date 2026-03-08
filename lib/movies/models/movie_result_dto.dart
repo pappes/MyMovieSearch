@@ -6,6 +6,7 @@ import 'dart:math' show max;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:html_unescape/html_unescape_small.dart';
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
@@ -151,7 +152,7 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
   }
 
   static Map<String, dynamic> routeState(MovieResultDTO dto) {
-    unawaited(DtoCache.singleton().merge(dto));
+    DtoCache.singleton().merge(dto);
     return {'id': nextId++, 'dtoId': dto.uniqueId};
   }
 
@@ -445,7 +446,9 @@ class DtoCache {
 
   /// Store information from [newValue] into a cache and
   /// merge with any existing record.
+  /// Returned value contains a a combination of existing data and new data.
   ///
+  @awaitNotRequired
   Future<MovieResultDTO> merge(MovieResultDTO newValue) async {
     final key = _key(newValue);
     if (await _globalDtoCache.isCached(key)) {

@@ -78,9 +78,9 @@ class GoogleMovieSearchConverter {
     var error = '';
     final resultsError = map[outerElementErrorFailure];
     if (resultsError != null) {
-      // Dynamic call to toString is safe here.
-      // ignore: avoid_dynamic_calls
       error =
+          // Dynamic call to toString is safe here.
+          // ignore: avoid_dynamic_calls
           resultsError[innerElementErrorFailureReason]?.toString() ??
           'No failure reason provided in results';
     } else {

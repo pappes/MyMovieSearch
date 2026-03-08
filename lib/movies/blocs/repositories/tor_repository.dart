@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/tor_multisearch_repository.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -22,10 +23,11 @@ class TorRepository extends TorMultiSearchRepository {
     await _advancedDownloadCard(searchUID);
 
     for (final provider in _getProviders(criteria)) {
-      unawaited(_search(searchUID, provider));
+      _search(searchUID, provider);
     }
   }
 
+@awaitNotRequired
   Future<void> _search(int searchUID, WebFetchDTO provider) async {
     initProvider(provider);
 
