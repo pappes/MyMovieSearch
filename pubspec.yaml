@@ -71,7 +71,7 @@ dependencies:
   logger: ^2.6.2                        # Log trace messages to console.
   ####logger_flutter: ^0.7.1             # Shake device to see trace messages.
   meilisearch: ^0.17.1
-  meta: ^1.17.0                         # extended annotations
+  meta: ^1.17.0                         # extended annotations  # old version required by flutter test
   mutex: ^3.1.0
   path: ^1.9.1                          # File path manipulation library
   path_provider: ^2.1.5                 # Device filesystem access for accessing database files.

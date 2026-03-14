@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:meta/meta.dart';
+import 'package:my_movie_search/utilities/web_data/http_method.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
 
@@ -224,7 +225,10 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
     // logger.i('Proxying request: ${request.url}');
     final client = _httpClientFactory();
     final uri = request.url.uriValue;
-    final dartRequest = await client.openUrl(request.method ?? 'GET', uri);
+    final dartRequest = await client.openUrl(
+      request.method ?? HttpMethod.get.value,
+      uri,
+    );
 
     transferRequestData(request, dartRequest);
 

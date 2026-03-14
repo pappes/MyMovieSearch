@@ -6,6 +6,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 // FIX: Import mockito with a prefix to prevent ambiguity with 'any'
 import 'package:mockito/mockito.dart' as mockito;
+import 'package:my_movie_search/utilities/web_data/http_method.dart';
 
 import 'package:my_movie_search/utilities/web_data/platform_android/web_json_extractor.dart';
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
@@ -131,7 +132,10 @@ void main() {
       'should return Passthrough for POST requests(if not explicitly targeted)',
       () {
         const url = 'https://example.com/api/submit';
-        final request = createMockRequest(url: url, method: 'POST');
+        final request = createMockRequest(
+          url: url,
+          method: HttpMethod.post.value,
+        );
         final decision = extractor.getInterceptionDecision(url, request.method);
 
         expect(decision.action, InterceptionAction.delegateRequest);

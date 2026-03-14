@@ -12,11 +12,13 @@ import 'package:my_movie_search/movies/web_data_providers/detail/converters/wiki
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
+import 'package:my_movie_search/utilities/web_data/http_method.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const wikiIdPrefix = 'Q';
-const queryContext = 'http://query.wikidata.org/sparql?query=';
+const queryContext = 'https://query.wikidata.org/sparql';
+const querySimple = 'query=';
 const uriPrefix = 'https://www.wikidata.org/wiki/Special:EntityData/';
 const uriSuffix = '.json';
 const wikidataWebAddressPrefix = 'https://www.wikidata.org/wiki/';
@@ -32,6 +34,7 @@ class QueryWikidataDetails
   QueryWikidataDetails(super.criteria);
 
   static String? wikiQuery;
+  String? body;
 
   /// Describe where the data is coming from.
   @override
@@ -81,12 +84,14 @@ class QueryWikidataDetails
   ///   * wikidata json url
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
+    body = null;
     // remove url encoding from criteria text
     final decoded = Uri.decodeQueryComponent(searchCriteria);
 
     if (decoded.startsWith('"$imdbPersonPrefix') ||
         decoded.startsWith('"$imdbTitlePrefix')) {
-      return Uri.parse(createQueryUrl(decoded));
+      // One or more IMDBIDs to be injected into the query.
+      return Uri.parse(createPostQueryBodyUrl(decoded));
     }
     if (decoded.startsWith(wikidataWebAddressPrefix)) {
       // convert https://www.wikidata.org/wiki/Q13794921
@@ -107,7 +112,7 @@ class QueryWikidataDetails
     String searchCriteria, {
     int pageNumber = 1,
   }) async {
-    wikiQuery = await rootBundle.loadString(
+    wikiQuery ??= await rootBundle.loadString(
       'lib/movies/web_data_providers/detail/wikidata_detail_movie_query.sql',
     );
     // Ensure imdb lookup is valid.
@@ -123,7 +128,10 @@ class QueryWikidataDetails
     return myConstructURI(searchCriteria, pageNumber: pageNumber);
   }
 
-  String createQueryUrl(String imdbIds) {
+  @override
+  FutureOr<String?> myConstructBody() => body;
+
+  String createPostQueryBodyUrl(String imdbIds) {
     //read query from wikidata_detail_movie_query.sql
     final fileContents = wikiQuery ?? '';
     // inject IDs into loaded string replacing "tt000"
@@ -140,11 +148,12 @@ class QueryWikidataDetails
 
     // remove all blank lines
     final compact = sparce.replaceAll(RegExp(r'^\s*\n', multiLine: true), '');
+
     // urlencode the query
     final encoded = Uri.encodeQueryComponent(compact);
-    // prefix the query with http://query.wikidata.org/sparql?query=
-    final fullUrl = '$queryContext$encoded';
-    return fullUrl;
+    // prefix the query with http://query.wikidata.org/sparql
+    body = '$querySimple$encoded';
+    return queryContext;
   }
 
   /// Convert IMDB map to MovieResultDTO records.
@@ -172,6 +181,13 @@ class QueryWikidataDetails
       )
       ..set('content-type', 'application/json; charset=utf-8')
       ..set('accept-encoding', 'text/plain');
+
+    if (body != null) {
+      headers
+        ..set('Accept', 'application/sparql-results+json')
+        ..set('Content-Type', 'application/x-www-form-urlencoded');
+      //..set('content-type', 'application/sparql-query')
+    }
   }
 
   /// Include entire map in the movie title when an error occurs.
@@ -206,7 +222,7 @@ SELECT DISTINCT ?item ?itemLabel WHERE {
 
     // Construct http url for query.
     // e.g. https://query.wikidata.org/sparql?<query>>
-    final uri = Uri.parse('$queryContext$encoded');
+    final uri = Uri.parse('$queryContext?$querySimple$encoded');
     //https://query.wikidata.org/sparql?query=SELECT%20DISTINCT%20?item%20?itemLabel%20WHERE%20%7B%0A%20%20SERVICE%20wikibase:label%20%7B%20bd:serviceParam%20wikibase:language%20%22%5BAUTO_LANGUAGE%5D,mul,en%22.%20%7D%0A%20%20%7B%0A%20%20%20%20SELECT%20DISTINCT%20?item%20WHERE%20%7B%0A%20%20%20%20%20%20?item%20p:P345%20?statement0.%0A%20%20%20%20%20%20?statement0%20(ps:P345)%20%22%0Anm0598241%22.%0A%20%20%20%20%7D%0A%20%20%20%20LIMIT%201%0A%20%20%7D%0A%7D
     final response = await _runQuery(uri);
 
@@ -222,7 +238,7 @@ SELECT DISTINCT ?item ?itemLabel WHERE {
   /// with headers: { Accept: 'application/sparql-results+json' },
   Future<String?> _runQuery(Uri uri) async {
     // create http client
-    final client = await HttpClient().openUrl('GET', uri);
+    final client = await HttpClient().openUrl(HttpMethod.get.value, uri);
     // set headers
     client.headers.set('Accept', 'application/sparql-results+json');
     //client.headers.set('Accept', 'application/json');

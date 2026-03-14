@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
+import 'package:my_movie_search/utilities/web_data/http_method.dart';
 import 'package:my_movie_search/utilities/web_data/platform_android/web_json_extractor.dart';
 import 'package:my_movie_search/utilities/web_data/platform_linux/web_json_extractor.dart';
 import 'package:my_movie_search/utilities/web_data/platform_other/web_json_extractor.dart';
@@ -182,7 +183,7 @@ abstract class WebJsonExtractor {
       return true;
     }
     // Pass through non-GET requests
-    if (method != 'GET') {
+    if (method != HttpMethod.get.value) {
       return true;
     }
 

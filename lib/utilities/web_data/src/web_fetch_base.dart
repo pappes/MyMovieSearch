@@ -12,6 +12,7 @@ import 'package:my_movie_search/persistence/web_log.dart';
 import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
 
 import 'package:my_movie_search/utilities/thread.dart';
+import 'package:my_movie_search/utilities/web_data/http_method.dart';
 import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart';
@@ -233,7 +234,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     }
   }
 
-  /// Call URL or API to get raww response.
+  /// Call URL or API to get raw response.
   ///
   /// Can be overridden by child classes.
   /// Default implementation pulls HTML.
@@ -246,9 +247,19 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       encoded,
       pageNumber: myGetPageNumber(),
     );
+    final body = await myConstructBody();
     logger.t('requesting: $address');
-    final client = await baseGetHttpClient().openUrl('GET', address);
+    final client = await baseGetHttpClient().openUrl(
+      body == null ? HttpMethod.get.value : HttpMethod.post.value,
+      address,
+    );
     myConstructHeaders(client.headers);
+    if (body != null) {
+      final List<int> bodyBytes = utf8.encode(body);
+      client
+        ..contentLength = bodyBytes.length
+        ..add(bodyBytes);
+    }
     final response = await client.close();
 
     if (response.statusCode == HttpStatus.accepted) {
@@ -358,6 +369,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///   }
   /// ```
   Future<void> myDelayRequest() => Future.value();
+
+  /// Define the http body to be posted to the web server.
+  ///
+  /// Can be overridden by child classes if required.
+  @visibleForOverriding
+  FutureOr<String?> myConstructBody() => null;
 
   /// Define the http headers to be passed to the web server.
   /// Returns a [Map] of header -> value.
@@ -664,9 +681,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     );
 
     final outputStream = baseTransform();
-    return WebLog(
-      myDataSourceName(),
-    ).logResponsesAsync(criteria, outputStream);
+    return WebLog(myDataSourceName()).logResponsesAsync(criteria, outputStream);
   }
 
   /// Fetches and [utf8] decodes online data matching [criteria].
