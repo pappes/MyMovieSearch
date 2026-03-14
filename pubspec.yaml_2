@@ -70,14 +70,14 @@ dependencies:
   meilisearch: ^0.17.1
   meta: ^1.17.0                         # extended annotations
   mutex: ^3.1.0
-  path: ^1.9.1                          # File path manipulation library
-  path_provider: ^2.1.5                 # Device filesystem access for accessing database files.
+  path: 1.9.1                          # File path manipulation library
+  path_provider: 2.1.5                 # Device filesystem access for accessing database files.
 
-  path_provider_linux: ^2.2.1           # Device filesystem access for accessing filesytstem during testing. 
+  path_provider_linux: 2.2.1           # Device filesystem access for accessing filesytstem during testing. 
   provider: ^6.1.5+1                      # so ChangeNotifierProvider can notify change to firebase login state
   quiver: ^3.2.2                        # mega library incluing ranges, caches, collections, etc.
 
-  simple_barcode_scanner: ^0.4.0        # DOES NOT COMPILE with flutter 3.24
+  simple_barcode_scanner: 0.4.0        # DOES NOT COMPILE with flutter 3.24
   #sqflite: ^2.0.2                       # Database storage for persisting state across sessions.
   sqflite_common_ffi: ^2.4.0+2          # Database storage for persisting state across sessions.
   sqlite3: ^3.1.2                       # Database storage for persisting state across sessions.

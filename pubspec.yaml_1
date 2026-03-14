@@ -46,7 +46,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1                  # Assist with the BLoC design pattern.
-  flutter_custom_tabs: ^2.4.1           # replace webview with android chrome browser
+  flutter_custom_tabs: 2.4.1           # replace webview with android chrome browser
   flutter_dotenv: ^6.0.0                # Read secrets and settings from .env file.
   flutter_inappwebview: ^6.1.5          # A webview that can be controlled programatically
 
@@ -56,33 +56,33 @@ dependencies:
 
 
 
-  go_router: ^17.0.1                    # screen navigation
-  googleapis: ^15.0.0                   # interact with GCP resources  
-  googleapis_auth: ^2.0.0               # log in to google API with service accounts
-  grpc: ^4.2.0                         # extended firedart error handling
+  go_router: 17.0.1                    # screen navigation
+  googleapis: 15.0.0                   # interact with GCP resources  
+  googleapis_auth: 2.0.0               # log in to google API with service accounts
+  grpc: 4.2.0                         # extended firedart error handling
   html: ^0.15.6                         # Dart dom and html utilities.
   html_unescape: ^2.0.0                 # decode &apos;
   # hydrated_bloc: ^9.1.2                # automatic restoration for bloc data
   intl: ^0.20.2                         # internationalisation including number and data formatting.
-  lint: ^2.8.0
+  lint: 2.8.0
   logger: ^2.6.2                        # Log trace messages to console.
   ####logger_flutter: ^0.7.1             # Shake device to see trace messages.
   meilisearch: ^0.17.1
-  meta: ^1.17.0                         # extended annotations
+  meta: 1.17.0                         # extended annotations
   mutex: ^3.1.0
-  path: ^1.9.1                          # File path manipulation library
-  path_provider: ^2.1.5                 # Device filesystem access for accessing database files.
+  path: 1.9.1                          # File path manipulation library
+  path_provider: 2.1.5                 # Device filesystem access for accessing database files.
 
-  path_provider_linux: ^2.2.1           # Device filesystem access for accessing filesytstem during testing. 
+  path_provider_linux: 2.2.1           # Device filesystem access for accessing filesytstem during testing. 
   provider: ^6.1.5+1                      # so ChangeNotifierProvider can notify change to firebase login state
   quiver: ^3.2.2                        # mega library incluing ranges, caches, collections, etc.
 
-  simple_barcode_scanner: ^0.4.0        # DOES NOT COMPILE with flutter 3.24
+  simple_barcode_scanner: 0.4.0        # DOES NOT COMPILE with flutter 3.24
   #sqflite: ^2.0.2                       # Database storage for persisting state across sessions.
   sqflite_common_ffi: ^2.4.0+2          # Database storage for persisting state across sessions.
   sqlite3: ^3.1.2                       # Database storage for persisting state across sessions.
   universal_io: ^2.3.1                  # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
-  url_launcher: ^6.3.2                  # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
+  url_launcher: 6.3.2                  # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
   yaml: ^3.1.3                          # parse yaml files
 
 dependency_overrides:

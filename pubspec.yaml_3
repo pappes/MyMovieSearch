@@ -71,7 +71,7 @@ dependencies:
   meta: ^1.17.0                         # extended annotations
   mutex: ^3.1.0
   path: ^1.9.1                          # File path manipulation library
-  path_provider: ^2.1.5                 # Device filesystem access for accessing database files.
+  path_provider: 2.1.5                 # Device filesystem access for accessing database files.
 
   path_provider_linux: ^2.2.1           # Device filesystem access for accessing filesytstem during testing. 
   provider: ^6.1.5+1                      # so ChangeNotifierProvider can notify change to firebase login state
