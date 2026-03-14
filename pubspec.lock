@@ -601,7 +601,7 @@ packages:
     source: hosted
     version: "2.3.2"
   grpc:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: grpc
       sha256: "86be3a7d39ad865b214a7370021ac80e68939238b507730de6d97fc662cb2723"
