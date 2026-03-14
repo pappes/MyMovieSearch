@@ -18,6 +18,7 @@ class AppScaffold extends StatelessWidget {
     appBar: appBar,
     endDrawer: getDrawer(context),
     drawerEnableOpenDragGesture: false,
+    endDrawerEnableOpenDragGesture: false,
     body: body,
     floatingActionButton: floatingActionButton,
   );
