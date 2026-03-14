@@ -77,6 +77,30 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
+    test('Run read 1000 detailed imdb movie pages from wikidata', () async {
+      final criteria = SearchCriteriaDTO();
+
+      const startid = 1000000;
+      for (var i = 0; i < 1000; i++) {
+        final id = (startid + i).toString().padLeft(7, '0');
+        criteria.criteriaList.add(MovieResultDTO()..init(uniqueId: 'tt$id'));
+      }
+      final actualOutput = await QueryWikidataDetails(criteria).readList();
+
+      // To update expected data, uncomment the following line
+      // writeTestData(actualOutput, testName: 'imdb_1000_movies');
+
+      // Check the results.
+      final expectedOutput = readTestData(testName: 'imdb_1000_movies');
+      expect(
+        actualOutput,
+        MovieResultDTOListFuzzyMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
     test('Run read 1 detailed person page from wikidata', () async {
       final criteria = SearchCriteriaDTO().fromString(
         'https://www.wikidata.org/wiki/Q211082',

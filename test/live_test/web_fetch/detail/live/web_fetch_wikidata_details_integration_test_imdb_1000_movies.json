@@ -1,0 +1,887 @@
+[
+  {
+    "uniqueId": "tt1000017",
+    "title": "Torture Room",
+    "description": "2010 American film",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000017"
+    }
+  },
+  {
+    "uniqueId": "tt1000022",
+    "title": "Australia's Got Talent",
+    "description": "television series",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.series",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/tv/5312\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d9c087be264b7001fc459b3\",\"TVDB\":\"https://thetvdb.com/dereferrer/series/87581\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000022"
+    }
+  },
+  {
+    "uniqueId": "tt1000025",
+    "title": "Fakt",
+    "description": "television program",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000025"
+    }
+  },
+  {
+    "uniqueId": "tt1000032",
+    "title": "Q11451754",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/tv/205299\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000032"
+    }
+  },
+  {
+    "uniqueId": "tt1000035",
+    "title": "Mitten im Leben",
+    "description": "German comedy series broadcast on RTL",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.series",
+    "links": "{\"Ratingraph\":\"https://www.ratingraph.com/tv-shows/mitten-im-leben-ratings-27499\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000035"
+    }
+  },
+  {
+    "uniqueId": "tt1000051",
+    "title": "Surprise Chef",
+    "description": "Australian television program",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000051"
+    }
+  },
+  {
+    "uniqueId": "tt1000070",
+    "title": "Billy & Mandy's Big Boogey Adventure",
+    "description": "2007 television film directed by Robert Alvarez",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/17305\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d776840103a2d001f56a741\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/22799\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film906282.html\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000070"
+    }
+  },
+  {
+    "uniqueId": "tt1000085",
+    "title": "Curtin",
+    "description": "2007 television film",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/160058\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7769d496b655001fddabe3\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/177504\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000085"
+    }
+  },
+  {
+    "uniqueId": "tt1000091",
+    "title": "Didine",
+    "description": "2008 film by Vincent Dietschy",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/17323\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768407228e5001f1e03c8\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/109023\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film203139.html\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000091"
+    }
+  },
+  {
+    "uniqueId": "tt1000095",
+    "title": "Pokémon Ranger and the Temple of the Sea",
+    "description": "2006 anime film directed by Kunihiko Yuyama",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/16808\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d9f3525dfd12800208a03f6\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/9881\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film893184.html\",\"Netflix\":\"https://www.netflix.com/title/70065685\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/pokemon_ranger_and_the_temple_of_the_sea_2007\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000095"
+    }
+  },
+  {
+    "uniqueId": "tt1000111",
+    "title": "Joyjatra",
+    "description": "2004 film by Tauquir Ahmed",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/92542\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768f1ad5437001f753848\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/215349\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000111"
+    }
+  },
+  {
+    "uniqueId": "tt1000112",
+    "title": "Kittonkhola",
+    "description": "2000 film by Abu Sayeed",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/93533\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768f3fb0d55001f51dd48\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/207092\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000112"
+    }
+  },
+  {
+    "uniqueId": "tt1000113",
+    "title": "Kokhono Megh Kokhono Brishti",
+    "description": "2003 film by Moushumi",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000113"
+    }
+  },
+  {
+    "uniqueId": "tt1000123",
+    "title": "LMA Manager 2007",
+    "description": "2006 video game developed by The Codemasters Software Company Limited",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.custom",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000123"
+    }
+  },
+  {
+    "uniqueId": "tt1000129",
+    "title": "Megher Pore Megh",
+    "description": "2004 film by Chashi Nazrul Islam",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/853426\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d776e81fb0d55001f5c3cc2\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000129"
+    }
+  },
+  {
+    "uniqueId": "tt1000133",
+    "title": "Murder Princess",
+    "description": "Japanese OVA",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/tv/95039\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d9c0877ba2e21001f191414\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000133"
+    }
+  },
+  {
+    "uniqueId": "tt1000147",
+    "title": "Puppy Bowl",
+    "description": "parody of the Super Bowl involving domestic dogs instead of humans, hosted by Animal Planet",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/tv/17327\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Series/PuppyBowl\",\"Metacritic\":\"https://www.metacritic.com/tv/puppy-bowl\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000147"
+    }
+  },
+  {
+    "uniqueId": "tt1000150",
+    "title": "Q10483444",
+    "description": "2000 film by Alexander Öberg",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000150"
+    }
+  },
+  {
+    "uniqueId": "tt1000158",
+    "title": "Whispers and Moans",
+    "description": "2007 film directed by Herman Yau",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/75188\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768b81999bc0020dcf0d5\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/183133\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film603679.html\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/sing-kung-chok-tse-sup-yut-tam-whispers-and-moans\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000158"
+    }
+  },
+  {
+    "uniqueId": "tt1000184",
+    "title": "The At-Bat",
+    "description": "episode of According to Jim (S6 E13)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/according-to-jim/season-6/episode-13-the-at-bat\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000184"
+    }
+  },
+  {
+    "uniqueId": "tt1000186",
+    "title": "Top 32: Group 3 Results",
+    "description": "episode of American Idol (S2 E11)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000186"
+    }
+  },
+  {
+    "uniqueId": "tt1000187",
+    "title": "Special: Best of the Worst",
+    "description": "episode of American Idol (S2 E12)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000187"
+    }
+  },
+  {
+    "uniqueId": "tt1000188",
+    "title": "Pasadena & Detroit Auditions",
+    "description": "episode of American Idol (S2 E3)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000188"
+    }
+  },
+  {
+    "uniqueId": "tt1000189",
+    "title": "Atlanta & Nashville Auditions",
+    "description": "episode of American Idol (S2 E4)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000189"
+    }
+  },
+  {
+    "uniqueId": "tt1000190",
+    "title": "Top 32: Group 1",
+    "description": "episode of American Idol (S2 E6)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000190"
+    }
+  },
+  {
+    "uniqueId": "tt1000191",
+    "title": "Top 32: Group 1 Results",
+    "description": "episode of American Idol (S2 E7)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000191"
+    }
+  },
+  {
+    "uniqueId": "tt1000192",
+    "title": "Top 32: Group 2 Results",
+    "description": "episode of American Idol (S2 E9)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000192"
+    }
+  },
+  {
+    "uniqueId": "tt1000193",
+    "title": "Top 32: Group 3",
+    "description": "episode of American Idol (S2 E10)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000193"
+    }
+  },
+  {
+    "uniqueId": "tt1000251",
+    "title": "42",
+    "description": "episode of Doctor Who (S3 E7)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/65de3bcada56e01f3763f4f9\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000251"
+    }
+  },
+  {
+    "uniqueId": "tt1000252",
+    "title": "Blink",
+    "description": "episode of Doctor Who (S3 E10)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/65de3bc9da56e01f3763f4a0\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Recap/DoctorWhoS29E10Blink\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000252"
+    }
+  },
+  {
+    "uniqueId": "tt1000253",
+    "title": "Gridlock",
+    "description": "episode of television series Doctor Who (S3 E3)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/65de3bcbda56e01f3763f578\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Recap/DoctorWhoS29E3Gridlock\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000253"
+    }
+  },
+  {
+    "uniqueId": "tt1000254",
+    "title": "Human Nature",
+    "description": "episode of Doctor Who (S3 E8)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/65de3bcada56e01f3763f4da\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000254"
+    }
+  },
+  {
+    "uniqueId": "tt1000255",
+    "title": "Last of the Time Lords",
+    "description": "episode of Doctor Who (S3 E13)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/65de3bc9da56e01f3763f42b\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000255"
+    }
+  },
+  {
+    "uniqueId": "tt1000256",
+    "title": "The Family of Blood",
+    "description": "episode of Doctor Who (S3 E9)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/65de3bcada56e01f3763f4be\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000256"
+    }
+  },
+  {
+    "uniqueId": "tt1000257",
+    "title": "The Lazarus Experiment",
+    "description": "episode of Doctor Who (S3 E6)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/65de3bcada56e01f3763f519\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000257"
+    }
+  },
+  {
+    "uniqueId": "tt1000258",
+    "title": "The Sound of Drums",
+    "description": "episode of Doctor Who (S3 E12)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/65de3bc9da56e01f3763f452\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000258"
+    }
+  },
+  {
+    "uniqueId": "tt1000259",
+    "title": "Utopia",
+    "description": "episode of Doctor Who (S3 E11)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/65de3bc9da56e01f3763f484\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000259"
+    }
+  },
+  {
+    "uniqueId": "tt1000289",
+    "title": "Q12250765",
+    "description": "1989 film",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000289"
+    }
+  },
+  {
+    "uniqueId": "tt1000400",
+    "title": "The Hard Part",
+    "description": "episode of Heroes (S1 E21)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/tv/heroes/s01/e21\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000400"
+    }
+  },
+  {
+    "uniqueId": "tt1000430",
+    "title": "Clementine",
+    "description": "episode of Lassie (S6 E27)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000430"
+    }
+  },
+  {
+    "uniqueId": "tt1000431",
+    "title": "The Space Traveler",
+    "description": "episode of Lassie (S6 E18)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000431"
+    }
+  },
+  {
+    "uniqueId": "tt1000432",
+    "title": "The Suit",
+    "description": "episode of Lassie (S4 E2)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000432"
+    }
+  },
+  {
+    "uniqueId": "tt1000471",
+    "title": "Q5920378",
+    "description": "episode of Mujeres Asesinas",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000471"
+    }
+  },
+  {
+    "uniqueId": "tt1000529",
+    "title": "Snoddy",
+    "description": "television series",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.series",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000529"
+    }
+  },
+  {
+    "uniqueId": "tt1000536",
+    "title": "Folsom Prison Blues",
+    "description": "episode of Supernatural",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/supernatural/season-2/episode-19-folsom-prison-blues\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000536"
+    }
+  },
+  {
+    "uniqueId": "tt1000548",
+    "title": "Thirty Minutes Worth",
+    "description": "television series",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/tv/25203\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000548"
+    }
+  },
+  {
+    "uniqueId": "tt1000694",
+    "title": "Zombie Hotel",
+    "description": "French animated television series",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/tv/13764\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/61b169c17fc6251fd6dbc699\",\"TVDB\":\"https://thetvdb.com/dereferrer/series/138381\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000694"
+    }
+  },
+  {
+    "uniqueId": "tt1000698",
+    "title": "The Balance of Nature",
+    "description": "1983 film by Paul Annett",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000698"
+    }
+  },
+  {
+    "uniqueId": "tt1000706",
+    "title": "Dust of Life",
+    "description": "2009 film directed by Le-Van Kiet",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/97788\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7769007a53e9001e6decb1\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/161391\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000706"
+    }
+  },
+  {
+    "uniqueId": "tt1000707",
+    "title": "Electrical Skeletal",
+    "description": "2007 short film",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.short",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/862115\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5f408f0fcae2c60042ff969a\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000707"
+    }
+  },
+  {
+    "uniqueId": "tt1000717",
+    "title": "Rózsa Nemes",
+    "description": "1943 Hungarian drama film directed by Emil Martonffi",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000717"
+    }
+  },
+  {
+    "uniqueId": "tt1000730",
+    "title": "Moe and the Big Exit",
+    "description": "film directed by Brian K. Roberts",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/275133\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d776aea96b655001fdfd86d\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/veggietales_princess_and_the_popstar\",\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/Recap/VeggieTalesEpisode29MoeAndTheBigExit\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000730"
+    }
+  },
+  {
+    "uniqueId": "tt1000731",
+    "title": "As Vozes da Verdade",
+    "description": "2002 film by Pedro Neschling",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.short",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/446959\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/289958\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000731"
+    }
+  },
+  {
+    "uniqueId": "tt1000734",
+    "title": "Secret Diary of a Call Girl",
+    "description": "British television drama",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.series",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/tv/14315\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d9c0826705e7a001e6d407e\",\"TVDB\":\"https://thetvdb.com/dereferrer/series/80621\",\"Ratingraph\":\"https://www.ratingraph.com/tv-shows/secret-diary-of-a-call-girl-ratings-27518\",\"Netflix\":\"https://www.netflix.com/title/70136150\",\"Metacritic\":\"https://www.metacritic.com/tv/secret-diary-of-a-call-girl\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000734"
+    }
+  },
+  {
+    "uniqueId": "tt1000742",
+    "title": "Sisterhood",
+    "description": "episode of Robin Hood",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-1-sisterhood\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000742"
+    }
+  },
+  {
+    "uniqueId": "tt1000743",
+    "title": "Walkabout",
+    "description": "tenth episode of series two of the BBC's Robin Hood series",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-10-walkabout\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000743"
+    }
+  },
+  {
+    "uniqueId": "tt1000744",
+    "title": "Treasure of the Nation",
+    "description": "episode of Robin Hood",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-11-treasure-of-the-nation\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000744"
+    }
+  },
+  {
+    "uniqueId": "tt1000745",
+    "title": "A Good Day to Die",
+    "description": "episode of Robin Hood",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-12-a-good-day-to-die\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000745"
+    }
+  },
+  {
+    "uniqueId": "tt1000746",
+    "title": "We Are Robin Hood!",
+    "description": "episode of Robin Hood",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-13-we-are-robin-hood\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000746"
+    }
+  },
+  {
+    "uniqueId": "tt1000747",
+    "title": "The Booby and the Beast",
+    "description": "episode of Robin Hood",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-2-booby-and-the-beast\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000747"
+    }
+  },
+  {
+    "uniqueId": "tt1000748",
+    "title": "Childhood",
+    "description": "episode of Robin Hood",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-3-childhood\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000748"
+    }
+  },
+  {
+    "uniqueId": "tt1000749",
+    "title": "The Angel of Death",
+    "description": "episode of Robin Hood",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-4-the-angel-of-death\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000749"
+    }
+  },
+  {
+    "uniqueId": "tt1000750",
+    "title": "Ducking and Diving",
+    "description": "episode of Robin Hood",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-5-ducking-and-diving\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000750"
+    }
+  },
+  {
+    "uniqueId": "tt1000751",
+    "title": "For England...!",
+    "description": "episode of Robin Hood",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-6-for-england!\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000751"
+    }
+  },
+  {
+    "uniqueId": "tt1000752",
+    "title": "Show Me the Money",
+    "description": "episode of Robin Hood",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-7-show-me-the-money\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000752"
+    }
+  },
+  {
+    "uniqueId": "tt1000753",
+    "title": "Get Carter!",
+    "description": "episode of Robin Hood",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-8-get-carter!\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000753"
+    }
+  },
+  {
+    "uniqueId": "tt1000754",
+    "title": "Lardner's Ring",
+    "description": "episode of Robin Hood",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"Metacritic\":\"https://www.metacritic.com/tv/robin-hood/season-2/episode-9-lardners-ring\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000754"
+    }
+  },
+  {
+    "uniqueId": "tt1000762",
+    "title": "The Great American Bash",
+    "description": "2007 WWE wrestling event",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/217628\",\"TVDB\":\"https://thetvdb.com/dereferrer/movies/222958\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000762"
+    }
+  },
+  {
+    "uniqueId": "tt1000764",
+    "title": "The Most Hated Family in America",
+    "description": "2007 BBC documentary film",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/63581\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768a4ad5437001f74be67\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/31834\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000764"
+    }
+  },
+  {
+    "uniqueId": "tt1000768",
+    "title": "Pilgrim's Progress: Journey to Heaven",
+    "description": "2008 film by Danny Carrales",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/46019\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768816f4521001eaa9d76\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/31102\",\"YouTube\":\"https://www.youtube.com/watch?v=XPB_GDg9qnk\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000768"
+    }
+  },
+  {
+    "uniqueId": "tt1000769",
+    "title": "Prince of Broadway",
+    "description": "2008 film by Sean Baker",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/87081\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d7768e19ab54400214ecaa8\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/79531\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film571734.html\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/prince_of_broadway\",\"Metacritic\":\"https://www.metacritic.com/movie/prince-of-broadway\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000769"
+    }
+  },
+  {
+    "uniqueId": "tt1000771",
+    "title": "Recount",
+    "description": "2008 television film directed by Jay Roach",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/14050\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d77683b999c64001ec3079f\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/12198\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film362665.html\",\"Netflix\":\"https://www.netflix.com/title/70089225\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/1198569-recount\",\"Metacritic\":\"https://www.metacritic.com/tv/recount\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000771"
+    }
+  },
+  {
+    "uniqueId": "tt1000774",
+    "title": "Sex and the City",
+    "description": "2008 film by Michael Patrick King",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.movie",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/4564\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d77682e5af944001f1f854a\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/6229\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film209759.html\",\"Netflix\":\"https://www.netflix.com/title/70084801\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/sex_and_the_city\",\"Metacritic\":\"https://www.metacritic.com/movie/sex-and-the-city\",\"YouTube\":\"https://www.youtube.com/watch?v=g9Mx2OLnoGI\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000774"
+    }
+  },
+  {
+    "uniqueId": "tt1000777",
+    "title": "Uncharted: Drake's Fortune",
+    "description": "2007 video game published by Sony",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.custom",
+    "links": "{\"TV Tropes\":\"https://tvtropes.org/pmwiki/pmwiki.php/VideoGame/UnchartedDrakesFortune\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000777"
+    }
+  },
+  {
+    "uniqueId": "tt1000779",
+    "title": "10i entoli",
+    "description": "Greek drama television series",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.series",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/tv/51270\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/606efbe789b0ad002df80c0b\",\"TVDB\":\"https://thetvdb.com/dereferrer/series/254198\",\"Ratingraph\":\"https://www.ratingraph.com/tv-shows/10th-commandment-ratings-27519\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000779"
+    }
+  },
+  {
+    "uniqueId": "tt1000918",
+    "title": "Dansefeber",
+    "description": "Norwegian TV show",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.series",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/tv/17825\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000918"
+    }
+  },
+  {
+    "uniqueId": "tt1000946",
+    "title": "ÉX-Driver",
+    "description": "original video animation",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/tv/37181\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d9c0849e264b7001fc4034a\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000946"
+    }
+  },
+  {
+    "uniqueId": "tt1000955",
+    "title": "Erky Perky",
+    "description": "Australian animated television series",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/tv/1962\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/5d9c08717b5c2e001e65c175\",\"Metacritic\":\"https://www.metacritic.com/tv/erky-perky\"}",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000955"
+    }
+  },
+  {
+    "uniqueId": "tt1000957",
+    "title": "Radical Agenda",
+    "description": "episode of The FBI Files (S6 E4)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000957"
+    }
+  },
+  {
+    "uniqueId": "tt1000988",
+    "title": "Hercules and the King of Thessaly",
+    "description": "episode of 1998 TV series Hercules",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000988"
+    }
+  },
+  {
+    "uniqueId": "tt1000989",
+    "title": "Hercules and the River Styx",
+    "description": "episode of Hercules (S1 E6)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000989"
+    }
+  },
+  {
+    "uniqueId": "tt1000992",
+    "title": "Is There Something I Should Know?",
+    "description": "episode of Holby City (S9 E25)",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000992"
+    }
+  },
+  {
+    "uniqueId": "tt1000995",
+    "title": "ICAM",
+    "description": "Australian television show",
+    "bestSource": "DataSourceType.wikidataDetail",
+    "type": "MovieContentType.title",
+    "sources": {
+      "DataSourceType.wikidataDetail": "tt1000995"
+    }
+  }
+]
