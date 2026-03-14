@@ -37,6 +37,7 @@ enum DataSourceType {
   wikidataSearch,
   tpb,
   magnetDl,
+  eztv,
   solidTorrents,
   torrentDownloadDetail,
   torrentDownloadSearch,
