@@ -4,7 +4,7 @@ class WebJsonExtractorOther extends WebJsonExtractor {
   WebJsonExtractorOther.internal(
     super.imdbUrl,
     super.jsonCallback,
-    super.imdbApi,
+    super.imdbApiFilter,
   ) : super.internal();
 
   @override

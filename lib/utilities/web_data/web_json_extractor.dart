@@ -7,8 +7,8 @@ import 'package:my_movie_search/utilities/web_data/platform_linux/web_json_extra
 import 'package:my_movie_search/utilities/web_data/platform_other/web_json_extractor.dart';
 
 class WebJsonSychroniser {
-  WebJsonSychroniser(String imdbUrl, String imdbApi) {
-    base = WebJsonExtractor(imdbUrl, jsonCallback, imdbApi);
+  WebJsonSychroniser(String imdbUrl, String imdbApiFilter) {
+    base = WebJsonExtractor(imdbUrl, jsonCallback, imdbApiFilter);
   }
   late WebJsonExtractor base;
   List<String> jsonResults = [];
@@ -63,27 +63,39 @@ abstract class WebJsonExtractor {
   factory WebJsonExtractor(
     String imdbUrl,
     JsonCallback jsonCallback,
-    String imdbApi,
+    String imdbApiFilter,
   ) {
     // TODO: Use environment variable to drive platform specific implementation
     // so that the compiler can tree shake unused code.
     if (Platform.isAndroid) {
-      return WebJsonExtractorAndroid.internal(imdbUrl, jsonCallback, imdbApi);
+      return WebJsonExtractorAndroid.internal(
+        imdbUrl,
+        jsonCallback,
+        imdbApiFilter,
+      );
     }
     if (Platform.isLinux) {
-      return WebJsonExtractorLinux.internal(imdbUrl, jsonCallback, imdbApi);
+      return WebJsonExtractorLinux.internal(
+        imdbUrl,
+        jsonCallback,
+        imdbApiFilter,
+      );
     }
 
-    return WebJsonExtractorOther.internal(imdbUrl, jsonCallback, imdbApi);
+    return WebJsonExtractorOther.internal(imdbUrl, jsonCallback, imdbApiFilter);
   }
 
   /// Internal constructor to setup internal state for the instance.
-  WebJsonExtractor.internal(this.imdbUrl, this.jsonCallback, this.imdbApi);
+  WebJsonExtractor.internal(
+    this.imdbUrl,
+    this.jsonCallback,
+    this.imdbApiFilter,
+  );
 
   String imdbUrl;
   JsonCallback jsonCallback;
   bool jsonAfterInitialLoad = false;
-  String imdbApi;
+  String imdbApiFilter;
 
   Future<void> waitForCompletion() async {
     if (!jsonAfterInitialLoad) {
@@ -179,7 +191,7 @@ abstract class WebJsonExtractor {
       return true;
     }
     // Pass through non-API URLs
-    if (!url.contains(imdbApi)) {
+    if (!url.contains(imdbApiFilter)) {
       return true;
     }
     // Pass through non-GET requests

@@ -61,11 +61,14 @@ Future<void> _getDataFromImdb() async {
 }
 
 //this will only run on android because it uses flutter_inappwebview
-void main() {
+void main() async {
   // Ensure the platform bindings are initialized for the integration test.
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
   runApp(const MyApp());
+
+  // Get app warmed up before launching headless browser.
+  await Future<void>.delayed(const Duration(seconds: 8));
 
   testWidgets(
     'Extract json from imdb for person filmography',
@@ -103,6 +106,7 @@ void main() {
     // This test uses flutter_inappwebview which is configured for Android.
     skip: !Platform.isAndroid,
   );
+
   testWidgets(
     'Extract json using WebJsonSychroniser',
     (tester) async {

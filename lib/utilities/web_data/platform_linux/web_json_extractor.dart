@@ -5,7 +5,7 @@ class WebJsonExtractorLinux extends WebJsonExtractor {
   WebJsonExtractorLinux.internal(
     super.imdbUrl,
     super.jsonCallback,
-    super.imdbApi,
+    super.imdbApiFilter,
   ) : super.internal() {
     logger.e('unsupported platform Linux');
   }

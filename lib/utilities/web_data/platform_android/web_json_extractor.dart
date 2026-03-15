@@ -9,7 +9,9 @@ import 'package:my_movie_search/utilities/web_data/http_method.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
 
-const _timeoutDuration = Duration(seconds: 20);
+const _timeoutDurationFull = Duration(seconds: 20);
+const _timeoutDurationShort = Duration(seconds: 10);
+const _timeoutDurationVeryShort = Duration(seconds: 3);
 
 /// This function type abstracts the creation of the HttpClient,
 /// making it mockable.
@@ -50,7 +52,7 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
   WebJsonExtractorAndroid.internal(
     super.imdbUrl,
     super.jsonCallback,
-    super.imdbApi, {
+    super.imdbApiFilter, {
     HttpClientFactory httpClientFactory = HttpClient.new,
     WebViewFactory webViewRunner = defaultWebView,
   }) : _httpClientFactory = httpClientFactory,
@@ -79,8 +81,8 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
   }
 
   /// Handles the timeout for the web view operation.
-  void _timeout() {
-    Future.delayed(_timeoutDuration, () {
+  void _timeout([Duration timeoutDuration = _timeoutDurationFull]) {
+    Future.delayed(timeoutDuration, () {
       if (_headlessWebView != null && _headlessWebView!.isRunning()) {
         logger.i(
           'Disposing InAppWebViewController due to timeout for $imdbUrl',
@@ -116,8 +118,10 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
   @awaitNotRequired
   Future<void> _clickAllFilterOptions(InAppWebViewController controller) async {
     if (_filtersCleared) {
+      logger.t('Page load fully complete');
+      // Sometimes there is a false positive for page load complete.
       // Delay disposal to allow any final requests to complete.
-      return dispose(delay: const Duration(seconds: 8));
+      _timeout(_timeoutDurationVeryShort);
     }
 
     try {
@@ -130,16 +134,15 @@ class WebJsonExtractorAndroid extends WebJsonExtractor {
       // await Future<void>.delayed(const Duration(seconds: 2));
       await controller.evaluateJavascript(source: getClickOnFilter());
       logger.t('Clicked on all filter options to expand data for $imdbUrl');
-      //await Future<void>.delayed(const Duration(seconds: 2));
       // logger.t(
       //   await controller.evaluateJavascript(
       //     source: "document.querySelectorAll('.ipc-chip--active')",
       //   ),
       // );
       _getExistingJson(controller);
-      // Delay disposal to allow any final requests to complete.
 
-      return dispose(delay: const Duration(seconds: 15));
+      // Timeout if json requests do not complete quickly enough.
+      _timeout(_timeoutDurationShort);
     } catch (e) {
       logger.e('Error clicking filter options: $e for $imdbUrl');
       return dispose();
