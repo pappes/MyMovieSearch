@@ -5,6 +5,7 @@ import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/tor_multisearch_repository.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/magnet_eztv.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_glo_torrents.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_magnet_dl.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_solid_torrents.dart';
@@ -56,7 +57,7 @@ class TorRepository extends TorMultiSearchRepository {
   List<WebFetchDTO> _getProviders(SearchCriteriaDTO criteria) {
     if (criteria.criteriaType == SearchCriteriaType.downloadSimple) {
       // Yts searches based on IMDB ID
-      return [QueryYtsSearch(criteria)];
+      return [QueryYtsSearch(criteria), QueryMagnetEztvSearch(criteria)];
     }
     return [
       // Other providers search based on movie title
