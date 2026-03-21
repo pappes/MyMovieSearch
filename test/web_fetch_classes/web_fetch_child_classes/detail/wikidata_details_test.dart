@@ -166,7 +166,7 @@ void main() {
     test('Run myConstructURI() for movie imdbid', () {
       final testClass = QueryWikidataDetails(imdbCriteria);
       final criteria = Uri.encodeQueryComponent('"tt1234"');
-      const expected = 'http://query.wikidata.org/sparql';
+      const expected = 'https://query.wikidata.org/sparql';
 
       // Invoke the functionality.
       final actualResult = testClass.myConstructURI(criteria).toString();
@@ -178,7 +178,7 @@ void main() {
     test('Run myConstructURI() for person imdbid', () {
       final testClass = QueryWikidataDetails(imdbCriteria);
       final criteria = Uri.encodeQueryComponent('"nm1234"');
-      const expected = 'http://query.wikidata.org/sparql';
+      const expected = 'https://query.wikidata.org/sparql';
 
       // Invoke the functionality.
       final actualResult = testClass.myConstructURI(criteria).toString();

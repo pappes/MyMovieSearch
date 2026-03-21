@@ -38,6 +38,7 @@ enum DataSourceType {
   tpb,
   magnetDl,
   eztv,
+  eztvApi,
   solidTorrents,
   torrentDownloadDetail,
   torrentDownloadSearch,

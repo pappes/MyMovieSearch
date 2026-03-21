@@ -1,0 +1,42 @@
+[
+  {
+    "uniqueId": "magnet:?xt=urn:btih:1fcbe8fef901b7214c311967a1317470f338cfc2&dn=Wednesday+S02E03+Call+of+the+Woe+720p+NF+WEB-DL+DDP5+1+Atmos+H+264-FLUX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce",
+    "title": "Wednesday S02E03 Call of the Woe 720p NF WEB-DL DDP5 1 Atmos H 264-FLUX EZTV",
+    "description": "0.93 GB",
+    "bestSource": "DataSourceType.eztvApi",
+    "type": "MovieContentType.download",
+    "creditsOrder": "13",
+    "imageUrl": "magnet:?xt=urn:btih:1fcbe8fef901b7214c311967a1317470f338cfc2&dn=Wednesday+S02E03+Call+of+the+Woe+720p+NF+WEB-DL+DDP5+1+Atmos+H+264-FLUX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce",
+    "sources": {
+      "DataSourceType.eztvApi": "magnet:?xt=urn:btih:1fcbe8fef901b7214c311967a1317470f338cfc2&dn=Wednesday+S02E03+Call+of+the+Woe+720p+NF+WEB-DL+DDP5+1+Atmos+H+264-FLUX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
+    }
+  },
+  {
+    "uniqueId": "magnet:?xt=urn:btih:482EAC3D9670A10ECC2BDA2FB7A920F1B65958CA&dn=Wednesday.S02.1080p.x265-ELiTE&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.darkness.services:6969/announce&tr=https://tracker.bjut.jp:443/announce&tr=http://tracker.bt4g.com:2095/announce&tr=udp://open.demonii.com:1337/announce&tr=udp://open.tracker.cl:1337/announce&tr=udp://tracker.dler.org:6969/announce&tr=udp://p4p.arenabg.com:1337/announce",
+    "title": "Wednesday S02 1080p x265-ELiTE EZTV",
+    "description": "6.60 GB",
+    "bestSource": "DataSourceType.eztvApi",
+    "type": "MovieContentType.download",
+    "creditsOrder": "54",
+    "keywords": "[\"Season 2\"]",
+    "userRatingCount": "8",
+    "imageUrl": "magnet:?xt=urn:btih:482EAC3D9670A10ECC2BDA2FB7A920F1B65958CA&dn=Wednesday.S02.1080p.x265-ELiTE&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.darkness.services:6969/announce&tr=https://tracker.bjut.jp:443/announce&tr=http://tracker.bt4g.com:2095/announce&tr=udp://open.demonii.com:1337/announce&tr=udp://open.tracker.cl:1337/announce&tr=udp://tracker.dler.org:6969/announce&tr=udp://p4p.arenabg.com:1337/announce",
+    "sources": {
+      "DataSourceType.eztvApi": "magnet:?xt=urn:btih:482EAC3D9670A10ECC2BDA2FB7A920F1B65958CA&dn=Wednesday.S02.1080p.x265-ELiTE&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.darkness.services:6969/announce&tr=https://tracker.bjut.jp:443/announce&tr=http://tracker.bt4g.com:2095/announce&tr=udp://open.demonii.com:1337/announce&tr=udp://open.tracker.cl:1337/announce&tr=udp://tracker.dler.org:6969/announce&tr=udp://p4p.arenabg.com:1337/announce"
+    }
+  },
+  {
+    "uniqueId": "magnet:?xt=urn:btih:F327685EE0AC43C993A19902067F31E2AF86F784&dn=Wednesday.S02.720p.x264-FENiX&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.darkness.services:6969/announce&tr=https://tracker.bjut.jp:443/announce&tr=http://tracker.bt4g.com:2095/announce&tr=udp://open.demonii.com:1337/announce&tr=udp://open.tracker.cl:1337/announce&tr=udp://tracker.dler.org:6969/announce&tr=udp://p4p.arenabg.com:1337/announce",
+    "title": "Wednesday S02 720p x264-FENiX EZTV",
+    "description": "5.10 GB",
+    "bestSource": "DataSourceType.eztvApi",
+    "type": "MovieContentType.download",
+    "creditsOrder": "20",
+    "keywords": "[\"Season 2\"]",
+    "userRatingCount": "4",
+    "imageUrl": "magnet:?xt=urn:btih:F327685EE0AC43C993A19902067F31E2AF86F784&dn=Wednesday.S02.720p.x264-FENiX&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.darkness.services:6969/announce&tr=https://tracker.bjut.jp:443/announce&tr=http://tracker.bt4g.com:2095/announce&tr=udp://open.demonii.com:1337/announce&tr=udp://open.tracker.cl:1337/announce&tr=udp://tracker.dler.org:6969/announce&tr=udp://p4p.arenabg.com:1337/announce",
+    "sources": {
+      "DataSourceType.eztvApi": "magnet:?xt=urn:btih:F327685EE0AC43C993A19902067F31E2AF86F784&dn=Wednesday.S02.720p.x264-FENiX&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.darkness.services:6969/announce&tr=https://tracker.bjut.jp:443/announce&tr=http://tracker.bt4g.com:2095/announce&tr=udp://open.demonii.com:1337/announce&tr=udp://open.tracker.cl:1337/announce&tr=udp://tracker.dler.org:6969/announce&tr=udp://p4p.arenabg.com:1337/announce"
+    }
+  }
+]
