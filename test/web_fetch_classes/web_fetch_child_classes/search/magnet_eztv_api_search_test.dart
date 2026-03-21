@@ -299,6 +299,34 @@ void main() {
       );
     });
 
+    test('Run readList() large results', () async {
+      // Set up the test data.
+      final queryResult = <MovieResultDTO>[];
+      final magnetEztvSearch = QueryMagnetEztvApiSearch(criteria);
+
+      // Invoke the functionality.
+      await magnetEztvSearch
+          .readList(source: streamHtmlOfflineDataLarge)
+          .then(queryResult.addAll)
+          .onError(
+            // Print any errors encountered during processing.
+            // ignore: avoid_print
+            (error, stackTrace) => print('$error, $stackTrace'),
+          );
+      // writeTestData(queryResult, testName: 'large');
+
+      // Check the results.
+      final expectedValue = readTestData(testName: 'large');
+      expect(
+        queryResult,
+        MovieResultDTOListMatcher(expectedValue, related: false),
+        reason:
+            'Emitted DTO list ${queryResult.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
+      );
+    });
+
     // Read search results from a simulated byte stream
     // and report error due to invalid html.
     test('invalid html', () async {

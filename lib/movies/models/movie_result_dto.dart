@@ -1588,6 +1588,11 @@ extension DTOCompare on MovieResultDTO {
 
   /// Compare downloads based availability.
   int downloadCompare(MovieResultDTO other) {
+    if (keywords.length != other.keywords.length) {
+      // Compare number of keywords
+      // (more is better because seasons for extv have keywords)
+      return keywords.length.compareTo(other.keywords.length);
+    }
     if (creditsOrder != other.creditsOrder) {
       // Compare seeders
       return creditsOrder.compareTo(other.creditsOrder);

@@ -23,7 +23,7 @@ class QueryMagnetEztvApiSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   QueryMagnetEztvApiSearch(super.criteria);
 
-  static const _baseURL = 'https://eztv.yt/api/get-torrents?imdb_id=';
+  static const _baseURL = 'https://eztv.yt/api/get-torrents?limit=100&imdb_id=';
 
   /// Describe where the data is coming from.
   @override

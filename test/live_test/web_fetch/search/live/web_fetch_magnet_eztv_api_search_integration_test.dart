@@ -21,7 +21,7 @@ void main() {
       final criteria = SearchCriteriaDTO().fromString('tt13443470');
       final actualOutput = await QueryMagnetEztvApiSearch(
         criteria,
-      ).readList(limit: 10);
+      ).readList(limit: 100);
 
       // Uncomment this line to update expectedOutput if sample data changes
       // writeTestData(actualOutput);
