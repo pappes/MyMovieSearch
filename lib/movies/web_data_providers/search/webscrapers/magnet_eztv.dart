@@ -63,7 +63,7 @@ mixin ScrapeMagnetEztvSearch
     if (result[jsonMagnetKey] != null &&
         result[jsonNameKey] != null &&
         result[jsonSeedersKey] != null &&
-        result[jsonSeedersKey] != "-" &&
+        result[jsonSeedersKey] != '-' &&
         result[jsonMagnetKey]!.toString().isNotEmpty &&
         result[jsonNameKey]!.toString().isNotEmpty &&
         result[jsonSeedersKey]!.toString().isNotEmpty) {

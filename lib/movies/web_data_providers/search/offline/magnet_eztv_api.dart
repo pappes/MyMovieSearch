@@ -1,5 +1,5 @@
 // Raw data in code is generated from an external source.
-// ignore_for_file: unnecessary_raw_strings
+// ignore_for_file: lines_longer_than_80_chars
 
 import 'dart:convert';
 

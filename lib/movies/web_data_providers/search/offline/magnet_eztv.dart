@@ -1,5 +1,5 @@
 // Raw data in code is generated from an external source.
-// ignore_for_file: unnecessary_raw_strings
+// ignore_for_file: lines_longer_than_80_chars, unnecessary_raw_strings
 
 Future<Stream<String>> streamHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));
@@ -22,8 +22,6 @@ const mdlHtmlSampleEnd = '''
 const intermediateMapList = [
   {
     'magnet':
-        // Generated code.
-        // ignore: lines_longer_than_80_chars
         'magnet:?xt=urn:btih:1697fa425af41580da18a07b3dd0bc6b589c51a0&dn=Breaking.Brad.S02E02.Doom.II.Ultra.Violence.Part.02.REPACK.480p.x264-mSD%5Beztv%5D.mkv%5Beztvx.to%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce&tr=udp%3A%2F%2Fopen.dstud.io%3A6969%2Fannounce',
     'name': 'Breaking Brad S02E02 Doom II Ultra Violence Part 02 REPACK 480p x264-mSD [eztv] (881 MB)',
     'seeders': '2',
@@ -52,4 +50,3 @@ const mdlSampleMid = r'''
     </tbody>
 </table>
 ''';
-

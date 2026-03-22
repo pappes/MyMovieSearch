@@ -1,3 +1,6 @@
+// allow test to do things production code should not
+// ignore_for_file: invalid_use_of_visible_for_overriding_member
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -64,8 +67,8 @@ void main() {
       const expectedResult = 'https://eztv.yt/api/get-torrents?imdb_id=1234';
 
       // Invoke the functionality.
-      final testClass = QueryMagnetEztvApiSearch(fullCriteria);
-      testClass.criteria = fullCriteria;
+      final testClass = QueryMagnetEztvApiSearch(fullCriteria)
+        ..criteria = fullCriteria;
       final actualResult = testClass
           .myConstructURI(testClass.myFormatInputAsText())
           .toString();
@@ -103,11 +106,11 @@ void main() {
       final actualOutput = QueryMagnetEztvApiSearch(
         criteria,
       ).myConvertWebTextToTraversableTree(jsonSampleEmpty);
-      // acualOuntput should be a list with a single map which contains 'torrents_count': 0
+      // actualOutput should be a list with a single map 
+      // which contains 'torrents_count': 0
       final list = await actualOutput;
       expect(list.length, 1);
       expect(list[0], containsPair('torrents_count', 0));
-      //
     });
     test(
       'Run myConvertWebTextToTraversableTree() for too many results',
@@ -115,11 +118,11 @@ void main() {
         final actualOutput = QueryMagnetEztvApiSearch(
           criteria,
         ).myConvertWebTextToTraversableTree(jsonSampleTooMany);
-        // acualOuntput should be a list with a single map which contains 'torrents_count': 0
+        // actualOutput should be a list with a single map 
+        // which contains 'torrents_count': 0
         final list = await actualOutput;
         expect(list.length, 1);
         expect(list[0], containsPair('torrents_count', 1027471));
-        //
       },
     );
     test('Run myConvertWebTextToTraversableTree() for invalid results', () {
@@ -141,13 +144,9 @@ void main() {
   group('MagnetEztvSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () {
-      final actualResult = <MovieResultDTO>[]
-        // Invoke the functionality and collect results.
-        ..addAll(
-          MagnetEztvApiSearchConverter.dtoFromCompleteJsonMap(
-            intermediateMapList,
-          ),
-        );
+      final actualResult = MagnetEztvApiSearchConverter.dtoFromCompleteJsonMap(
+        intermediateMapList,
+      );
 
       // Uncomment this line to update expectedDTOList if sample data changes
       // writeTestData(actualResult);
