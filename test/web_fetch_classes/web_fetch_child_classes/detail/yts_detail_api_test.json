@@ -1,0 +1,44 @@
+[
+  {
+    "uniqueId": "https://yts.bz/torrent/download/35EB8826EA87E7D655949F8A715CD36FEB0730F3",
+    "title": "2160p 5.1 bluray",
+    "description": "7.02 GB",
+    "bestSource": "DataSourceType.ytsDetailApi",
+    "type": "MovieContentType.download",
+    "creditsOrder": "100",
+    "keywords": "[\"bluray\"]",
+    "userRatingCount": "45",
+    "imageUrl": "magnet:?xt=urn:btih:35EB8826EA87E7D655949F8A715CD36FEB0730F3&dn=https%3A%2F%2Fyts.bz%2Ftorrent%2Fdownload%2F35EB8826EA87E7D655949F8A715CD36FEB0730F3&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
+    "sources": {
+      "DataSourceType.ytsDetailApi": "https://yts.bz/torrent/download/35EB8826EA87E7D655949F8A715CD36FEB0730F3"
+    }
+  },
+  {
+    "uniqueId": "https://yts.bz/torrent/download/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7",
+    "title": "1080p 2.0 bluray",
+    "description": "2.38 GB",
+    "bestSource": "DataSourceType.ytsDetailApi",
+    "type": "MovieContentType.download",
+    "creditsOrder": "100",
+    "keywords": "[\"bluray\"]",
+    "userRatingCount": "75",
+    "imageUrl": "magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=https%3A%2F%2Fyts.bz%2Ftorrent%2Fdownload%2FA2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
+    "sources": {
+      "DataSourceType.ytsDetailApi": "https://yts.bz/torrent/download/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7"
+    }
+  },
+  {
+    "uniqueId": "https://yts.bz/torrent/download/E3529DBC0CE47429A8A9B411AB381C893BFEF575",
+    "title": "720p 2.0 bluray",
+    "description": "853.57 MB",
+    "bestSource": "DataSourceType.ytsDetailApi",
+    "type": "MovieContentType.download",
+    "creditsOrder": "48",
+    "keywords": "[\"bluray\"]",
+    "userRatingCount": "12",
+    "imageUrl": "magnet:?xt=urn:btih:E3529DBC0CE47429A8A9B411AB381C893BFEF575&dn=https%3A%2F%2Fyts.bz%2Ftorrent%2Fdownload%2FE3529DBC0CE47429A8A9B411AB381C893BFEF575&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
+    "sources": {
+      "DataSourceType.ytsDetailApi": "https://yts.bz/torrent/download/E3529DBC0CE47429A8A9B411AB381C893BFEF575"
+    }
+  }
+]

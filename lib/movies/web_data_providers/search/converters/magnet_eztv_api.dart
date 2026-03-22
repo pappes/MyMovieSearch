@@ -51,18 +51,6 @@ const elementDate = 'date_released_unix';
 const elementSize = 'size_bytes';
 
 class MagnetEztvApiSearchConverter {
-  // static List<MovieResultDTO> dtoFromCompleteJsonMap(
-  //   Map<dynamic, dynamic> map,
-  // ) => [
-  //   MovieResultDTO().init(
-  //     bestSource: DataSourceType.eztvApi,
-  //     type: MovieContentType.download.toString(),
-  //     uniqueId: map[jsonMagnetKey]?.toString(),
-  //     title: map[jsonNameKey]?.toString(),
-  //     imageUrl: map[jsonMagnetKey]?.toString(),
-  //     creditsOrder: map[jsonSeedersKey]?.toString(),
-  //   ),
-  // ];
 
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,

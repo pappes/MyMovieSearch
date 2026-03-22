@@ -46,6 +46,7 @@ enum DataSourceType {
   gloTorrents,
   ytsSearch,
   ytsDetails,
+  ytsDetailApi,
   uhttBarcode,
   picclickBarcode,
   libsaBarcode,
