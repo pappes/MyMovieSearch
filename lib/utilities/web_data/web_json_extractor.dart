@@ -1,211 +1,134 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-import 'package:my_movie_search/utilities/web_data/http_method.dart';
-import 'package:my_movie_search/utilities/web_data/platform_android/web_json_extractor.dart';
-import 'package:my_movie_search/utilities/web_data/platform_linux/web_json_extractor.dart';
-import 'package:my_movie_search/utilities/web_data/platform_other/web_json_extractor.dart';
 
+import 'package:flutter/material.dart';
+import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+import 'package:my_movie_search/utilities/web_data/platform_android/headless_web_engine.dart';
+import 'package:my_movie_search/utilities/web_data/platform_linux/headless_web_engine.dart';
+import 'package:my_movie_search/utilities/web_data/platform_other/headless_web_engine.dart';
+import 'package:my_movie_search/utilities/web_data/web_headless_extractor.dart';
+
+/// Simplified interface for extracting JSON data from a web page.
+///
+/// Hides the underlying callback mechanism.
 class WebJsonSychroniser {
-  WebJsonSychroniser(String imdbUrl, String imdbApiFilter) {
-    base = WebJsonExtractor(imdbUrl, jsonCallback, imdbApiFilter);
+  WebJsonSychroniser(this.webPageUrl, this.apiAcceptFilter) {
+    HeadlessWebEngine engine;
+    if (Platform.isAndroid) {
+      engine = HeadlessWebEngineAndroid();
+    } else if (Platform.isLinux) {
+      engine = HeadlessWebEngineLinux();
+    } else {
+      engine = HeadlessWebEngineOther();
+    }
+    base = WebJsonExtractor(webEngine: engine);
   }
+
+  final String webPageUrl;
+  final String apiAcceptFilter;
   late WebJsonExtractor base;
   List<String> jsonResults = [];
 
-  void jsonCallback(String json) {
+  void _jsonCallback(String json) {
     jsonResults.add(json);
   }
 
+  /// Consolidate all json results into a single list.
+  ///
+  /// If no results are found, add a single entry with the string
+  /// 'no dynamic json results'.
   Future<List<String>> getJson() async {
-    await base.waitForCompletion();
+    await base.execute(webPageUrl, apiAcceptFilter, _jsonCallback);
+    if (jsonResults.isEmpty) {
+      jsonResults.add(jsonEncode('no dynamic json results'));
+    }
     return jsonResults;
   }
 }
 
-/// Defines the three possible outcomes of an interception request,
-enum InterceptionAction { delegateRequest, syntheticResponse, executeRequest }
+/// Extract JSON data from a web page using a headless web engine.
+class WebJsonExtractor extends WebHeadlessExtractor {
+  WebJsonExtractor({required super.webEngine});
 
-/// Represents the interception decision made by the orchestration layer.
-class InterceptionDecision {
-  InterceptionDecision.delegateRequest()
-    : action = InterceptionAction.delegateRequest,
-      statusCode = null,
-      contentType = null,
-      body = null;
-
-  InterceptionDecision.executeRequest()
-    : action = InterceptionAction.executeRequest,
-      statusCode = null,
-      contentType = null,
-      body = null;
-
-  InterceptionDecision.syntheticResponse({
-    required this.statusCode,
-    required this.contentType,
-    required this.body,
-  }) : action = InterceptionAction.syntheticResponse;
-  final InterceptionAction action;
-  final int? statusCode;
-  final String? contentType;
-  final Uint8List? body;
-}
-
-// This function type abstracts the creation of the HttpClient,
-// making it mockable.
-typedef JsonCallback = void Function(String);
-
-/// Extract the json from a web page
-/// using a platform specific implementation to drive a web browser.
-abstract class WebJsonExtractor {
-  /// Constructor to create a new instance
-  /// of the appropriate platform specific implementation.
-  factory WebJsonExtractor(
-    String imdbUrl,
-    JsonCallback jsonCallback,
-    String imdbApiFilter,
-  ) {
-    // TODO: Use environment variable to drive platform specific implementation
-    // so that the compiler can tree shake unused code.
-    if (Platform.isAndroid) {
-      return WebJsonExtractorAndroid.internal(
-        imdbUrl,
-        jsonCallback,
-        imdbApiFilter,
-      );
-    }
-    if (Platform.isLinux) {
-      return WebJsonExtractorLinux.internal(
-        imdbUrl,
-        jsonCallback,
-        imdbApiFilter,
-      );
-    }
-
-    return WebJsonExtractorOther.internal(imdbUrl, jsonCallback, imdbApiFilter);
+  /// Execute the web engine and extract JSON data from a web page.
+  ///
+  /// [url] The URL of the web page to extract JSON data from.
+  /// [apiAcceptFilter] The query to use for filtering JSON data.
+  /// [onData] A callback function to process the extracted JSON data.
+  @override
+  Future<void> execute(
+    String url,
+    String apiAcceptFilter,
+    DataCallback onData,
+  ) async {
+    await webEngine.run(
+      url: url,
+      apiAcceptFilter: apiAcceptFilter,
+      onEngineData: (data) => processRawData(data, onData),
+      onPageLoaded: () => _extractJsonScripts(onData),
+    );
   }
 
-  /// Internal constructor to setup internal state for the instance.
-  WebJsonExtractor.internal(
-    this.imdbUrl,
-    this.jsonCallback,
-    this.imdbApiFilter,
-  );
-
-  String imdbUrl;
-  JsonCallback jsonCallback;
-  bool jsonAfterInitialLoad = false;
-  String imdbApiFilter;
-
-  Future<void> waitForCompletion() async {
-    if (!jsonAfterInitialLoad) {
-      jsonCallback(jsonEncode('no dynamic json results'));
-    }
-  }
-
-  // Get the CSS selector for the page element to click on.
-  String getClickOnFilter() => '''
-      // Click to remove all filter options to ensure full data load
-      // An async function is used to introduce a delay between clicks.
+  /// Extract JSON scripts from the web page.
+  ///
+  /// This method will click all filter buttons to ensure full data load.
+  /// It will then extract all JSON scripts from the web page.
+  Future<void> _extractJsonScripts(DataCallback onData) async {
+    // Click to remove all filter options to ensure full data load
+    // An async function is used to introduce a delay between clicks.
+    const clickScript = '''
       (async () => {
         const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
         const buttons = document.querySelectorAll('.ipc-chip--active');
         for (const button of buttons) {
           button.click();
-          await sleep(10); // Wait for 10 milliseconds
+          await sleep(50);
         }
       })();
 ''';
 
-  void consumeJsonData(String json, {bool afterInitialLoad = true}) {
-    if (afterInitialLoad) {
-      jsonAfterInitialLoad = true;
-    }
-    jsonCallback(json);
-  }
+    await webEngine.evaluateJavascript(clickScript);
+    await Future<void>.delayed(const Duration(seconds: 2));
 
-  static const _blackListedEndPoints = [
-    'amazon.com/images',
-    'm.media-amazon.com/images',
-    'googletagservices.com',
-    'cloudfront.net/jwplayer',
-    'c.amazon-adsystem.com/',
-    'ww.imdb.com/_json/getads',
-    'launchpad-wrapper.privacymanager.io',
-    'secure.cdn.fastclick.net',
-    'tags.crwdcntrl.net',
-    'cdn-ima.33across.com',
-    'cdn.hadronid.net',
-    'lexicon.33across.com',
-    'sb.scorecardresearch.com',
+    const javascriptToExecute = '''
+(function() {
+  const scripts = document.querySelectorAll('script[type="application/json"]');
+  const contents = [];
+  scripts.forEach(script => contents.push(script.innerHTML));
+  return JSON.stringify(contents);
+})();
+''';
 
-    'doubleclick.net',
-    'adsystem',
-    'adtraffic',
-    'yahoo.com',
-  ];
-
-  bool discardAdRequests(String url) {
-    for (final endpoint in _blackListedEndPoints) {
-      if (url.contains(endpoint)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  /// Determines the interception decision for a given request.
-  InterceptionDecision getInterceptionDecision(
-    String url,
-    String? method, {
-    String? acceptHeader,
-  }) {
-    if (discardImageRequests(url, acceptHeader) || discardAdRequests(url)) {
-      //return InterceptionDecision.delegateRequest();
-      // Decision: Block the request with a synthetic 404.
-      // return InterceptionDecision.delegateRequest();
-      return InterceptionDecision.syntheticResponse(
-        statusCode: HttpStatus.noContent,
-        contentType: 'text/plain',
-        body: Uint8List(0),
+    // Execute the script and get the result.
+    final result = await webEngine.evaluateJavascript(javascriptToExecute);
+    if (result != null) {
+      logger.t(
+        'Found on initial page load: '
+        '${result.toString().characters.take(1000)}',
       );
+      try {
+        final jsonScripts = json.decode(result.toString());
+        if (jsonScripts is Iterable) {
+          for (final script in jsonScripts) {
+            processRawData(script.toString(), onData);
+          }
+        }
+      } catch (_) {}
     }
-
-    if (shouldPassthroughRequest(url, method)) {
-      // Decision: Let the WebView handle it.
-      return InterceptionDecision.delegateRequest();
-    }
-
-    // Decision: Proxy the request over Dart network.
-    return InterceptionDecision.executeRequest();
   }
 
-  /// Determines if a request should be executed by the WebView without
-  /// Dart interception.
-  /// Returns `true` to skip interception (return null from _handleIntercept).
-  bool shouldPassthroughRequest(String url, String? method) {
-    // Pass through scripts, styles, and fonts
-    const passedExtensions = ['.js', '.css', '.woff2'];
-
-    if (passedExtensions.any((ext) => url.endsWith(ext))) {
-      return true;
+  /// Callback to process each JSON chunk detected.
+  ///
+  /// [data] The json chunk to process.
+  /// [onData] A callback function to process the extracted JSON data.
+  @override
+  void processRawData(String data, DataCallback onData) {
+    try {
+      json.decode(data); // Validate it's valid JSON
+      onData(data);
+    } catch (_) {
+      // Ignore invalid JSON responses
     }
-    // Pass through non-API URLs
-    if (!url.contains(imdbApiFilter)) {
-      return true;
-    }
-    // Pass through non-GET requests
-    if (method != HttpMethod.get.value) {
-      return true;
-    }
-
-    return false; // Intercept all other requests.
-  }
-
-  /// Determines if a request targets a static image and should be blocked.
-  bool discardImageRequests(String url, String? acceptHeader) {
-    const blockedExtensions = ['.png', '.gif', '.jpg', '.jpeg'];
-    return blockedExtensions.any((ext) => url.endsWith(ext)) ||
-        (acceptHeader != null && acceptHeader.contains('image/'));
   }
 }

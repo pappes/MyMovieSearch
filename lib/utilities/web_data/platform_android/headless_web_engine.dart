@@ -1,0 +1,381 @@
+import 'dart:async';
+import 'dart:io';
+import 'dart:typed_data';
+
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:meta/meta.dart';
+
+import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
+import 'package:my_movie_search/utilities/web_data/http_method.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+
+const _timeoutDurationFull = Duration(seconds: 15);
+const _timeoutDurationShort = Duration(seconds: 10);
+const _timeoutDurationVeryShort = Duration(seconds: 4);
+
+/// This function type abstracts the creation of the HttpClient,
+/// making it mockable.
+typedef HttpClientFactory = HttpClient Function();
+
+/// This function type defines the interceptor for WebView resource requests.
+typedef WebResourceInterceptor =
+    Future<WebResourceResponse?> Function(
+      InAppWebViewController,
+      WebResourceRequest,
+    )?;
+
+/// This function type abstracts the running of the WebView, making it mockable.
+typedef WebViewFactory =
+    HeadlessInAppWebView Function({
+      required String initialUrl,
+      required WebResourceInterceptor proxySelector,
+      required void Function(InAppWebViewController, WebUri?) onLoadStop,
+    });
+
+/// Default implementation of the WebView using HeadlessInAppWebView.
+HeadlessInAppWebView defaultWebView({
+  required String initialUrl,
+  required WebResourceInterceptor proxySelector,
+  required void Function(InAppWebViewController, WebUri?) onLoadStop,
+}) => HeadlessInAppWebView(
+  initialUrlRequest: URLRequest(
+    url: WebUri(initialUrl),
+    cachePolicy:
+        URLRequestCachePolicy.RELOAD_IGNORING_LOCAL_AND_REMOTE_CACHE_DATA,
+  ),
+  shouldInterceptRequest: proxySelector,
+  onLoadStop: onLoadStop,
+);
+
+/// Defines the three possible outcomes of an interception request,
+enum InterceptionAction { delegateRequest, syntheticResponse, executeRequest }
+
+/// Represents the interception decision made by the orchestration layer.
+class InterceptionDecision {
+  InterceptionDecision.delegateRequest()
+    : action = InterceptionAction.delegateRequest,
+      statusCode = null,
+      contentType = null,
+      body = null;
+  InterceptionDecision.executeRequest()
+    : action = InterceptionAction.executeRequest,
+      statusCode = null,
+      contentType = null,
+      body = null;
+  InterceptionDecision.syntheticResponse({
+    required this.statusCode,
+    required this.contentType,
+    required this.body,
+  }) : action = InterceptionAction.syntheticResponse;
+
+  final InterceptionAction action;
+  final int? statusCode;
+  final String? contentType;
+  final Uint8List? body;
+}
+
+/// Implementation of [HeadlessWebEngine] for Android using [InAppWebView].
+class HeadlessWebEngineAndroid implements HeadlessWebEngine {
+  HeadlessWebEngineAndroid({
+    HttpClientFactory httpClientFactory = HttpClient.new,
+    WebViewFactory webViewRunner = defaultWebView,
+  }) : _httpClientFactory = httpClientFactory,
+       _webViewRunner = webViewRunner;
+
+  final HttpClientFactory _httpClientFactory;
+  final WebViewFactory _webViewRunner;
+  HeadlessInAppWebView? _headlessWebView;
+
+  final Completer<void> _dataLoadedCompleter = Completer<void>();
+  int pageLoadCompleteCount = 0;
+
+  late DataCallback _onEngineData;
+  PageLoadCallback? _onPageLoaded;
+  late String _apiFilter;
+  String _imdbUrl = '';
+
+  /// Runs the headless web engine to extract data from a web page.
+  ///
+  /// [url] The URL of the web page to extract data from.
+  /// [apiAcceptFilter] The query to use for filtering JSON data.
+  /// [onEngineData] A callback function to process the extracted JSON data.
+  /// [onPageLoaded] A callback function to process the page complete event.
+  @override
+  @awaitNotRequired
+  Future<void> run({
+    required String url,
+    required String apiAcceptFilter,
+    required DataCallback onEngineData,
+    PageLoadCallback? onPageLoaded,
+  }) async {
+    _imdbUrl = url;
+    _onEngineData = onEngineData;
+    _onPageLoaded = onPageLoaded;
+    _apiFilter = apiAcceptFilter;
+
+    _headlessWebView = _webViewRunner(
+      initialUrl: url,
+      proxySelector: _webViewProxySelector,
+      onLoadStop: _loadStopped,
+    );
+    _timeout();
+
+    await _headlessWebView!.run();
+    await _dataLoadedCompleter.future;
+  }
+
+  /// Executes a JavaScript script in the headless web engine.
+  ///
+  /// [script] The JavaScript script to execute.
+  @override
+  Future<dynamic> evaluateJavascript(String script) async {
+    if (_headlessWebView == null || !_headlessWebView!.isRunning()) return null;
+    return await _headlessWebView!.webViewController?.evaluateJavascript(
+      source: script,
+    );
+  }
+
+  /// Disposes the headless web engine after a timeout period.
+  ///
+  /// [timeoutDuration] The duration to wait before disposing the engine.
+  void _timeout([Duration timeoutDuration = _timeoutDurationFull]) {
+    Future.delayed(timeoutDuration, () {
+      if (_headlessWebView != null && _headlessWebView!.isRunning()) {
+        logger.i(
+          'Disposing InAppWebViewController due to timeout for $_imdbUrl',
+        );
+        dispose();
+      }
+    });
+  }
+
+  /// Disposes the headless web engine and signals that the data is loaded.
+  ///
+  /// [delay] optional delay to wait before disposing the engine.
+  @override
+  @awaitNotRequired
+  Future<void> dispose({Duration delay = Duration.zero}) async {
+    await Future<void>.delayed(delay);
+    if (_headlessWebView != null) {
+      unawaited(_headlessWebView?.dispose());
+      _headlessWebView = null;
+    }
+    if (!_dataLoadedCompleter.isCompleted) {
+      _dataLoadedCompleter.complete();
+    }
+  }
+
+  /// Handles the completion of a page load.
+  ///
+  /// Page load can complete multiple times because code is
+  /// interacting with the page after the initial load complete.
+  // void return signature required
+  // so that it can be used as a callback for the WebView.
+  // ignore: avoid_void_async
+  void _loadStopped(InAppWebViewController controller, WebUri? url) async {
+    logger.t('Page load complete for $_imdbUrl');
+    if (_onPageLoaded == null) {
+      dispose();
+    } else {
+      await _onPageLoaded!();
+      // Timeout if requests do not complete quickly enough.
+      pageLoadCompleteCount++;
+      if (pageLoadCompleteCount == 1) {
+        logger.t('Page load complete');
+        _timeout(_timeoutDurationShort);
+      } else {
+        logger.t('Page load fully complete');
+        // Sometimes there is a false positive for page load complete.
+        // Delay disposal to allow any final requests to complete.
+        _timeout(_timeoutDurationVeryShort);
+      }
+    }
+  }
+
+  /// Exposes the private proxy selector for testing purposes.
+  Future<WebResourceResponse?> executeProxySelectorForTest(
+    InAppWebViewController controller,
+    WebResourceRequest request,
+  ) => _webViewProxySelector(controller, request);
+
+  /// Handles the interception of specific URL requests (e.g., /api/)
+  /// and proxies them through a Dart HttpClient to allow for manipulation
+  /// or inspection, returning the result to the WebView.
+  ///
+  /// This method is private as it is intended only to be called by the WebView.
+  //  @implements WebResourceInterceptor
+  Future<WebResourceResponse?> _webViewProxySelector(
+    InAppWebViewController controller,
+    WebResourceRequest request,
+  ) async {
+    final decision = getInterceptionDecision(
+      request.url.toString(),
+      request.method,
+      acceptHeader: request.headers?['accept'],
+    );
+    //print('Interception decision: ${decision.action} for ${request.url}');
+
+    switch (decision.action) {
+      case InterceptionAction.syntheticResponse:
+        return WebResourceResponse(
+          statusCode: decision.statusCode,
+          contentType: decision.contentType,
+          data: decision.body,
+        );
+      case InterceptionAction.delegateRequest:
+        return null;
+      case InterceptionAction.executeRequest:
+        final response = await _executeProxyRequest(request);
+        return transferResponseData(request, response);
+    }
+  }
+
+  /// Determines the interception decision for a given request.
+  InterceptionDecision getInterceptionDecision(
+    String url,
+    String? method, {
+    String? acceptHeader,
+  }) {
+    if (_discardImageRequests(url, acceptHeader) || _discardAdRequests(url)) {
+      // Decision: Block the request with a synthetic 404.
+      return InterceptionDecision.syntheticResponse(
+        statusCode: HttpStatus.noContent,
+        contentType: 'text/plain',
+        body: Uint8List(0),
+      );
+    }
+    if (_shouldPassthroughRequest(url, method)) {
+      // Decision: Let the WebView handle it.
+      return InterceptionDecision.delegateRequest();
+    }
+    // Decision: Proxy the request over Dart network.
+    return InterceptionDecision.executeRequest();
+  }
+
+  static const _blackListedEndPoints = [
+    'amazon.com/images',
+    'm.media-amazon.com/images',
+    'googletagservices.com',
+    'cloudfront.net/jwplayer',
+    'c.amazon-adsystem.com/',
+    'ww.imdb.com/_json/getads',
+    'launchpad-wrapper.privacymanager.io',
+    'secure.cdn.fastclick.net',
+    'tags.crwdcntrl.net',
+    'cdn-ima.33across.com',
+    'cdn.hadronid.net',
+    'lexicon.33across.com',
+    'sb.scorecardresearch.com',
+    'doubleclick.net',
+    'adsystem',
+    'adtraffic',
+    'yahoo.com',
+  ];
+
+  /// Determines if a request targets an ad server and should be blocked.
+  bool _discardAdRequests(String url) {
+    for (final endpoint in _blackListedEndPoints) {
+      if (url.contains(endpoint)) return true;
+    }
+    return false;
+  }
+
+  /// Determines if a request targets a static image and should be blocked.
+  bool _discardImageRequests(String url, String? acceptHeader) {
+    const blockedExtensions = ['.png', '.gif', '.jpg', '.jpeg'];
+    return blockedExtensions.any((ext) => url.endsWith(ext)) ||
+        (acceptHeader != null && acceptHeader.contains('image/'));
+  }
+
+  /// Determines if a request should be executed by the WebView without
+  /// Dart interception.
+  /// Returns `true` to skip interception (return null from _handleIntercept).
+  bool _shouldPassthroughRequest(String url, String? method) {
+    // Pass through scripts, styles, and fonts
+    const passedExtensions = ['.js', '.css', '.woff2'];
+
+    if (passedExtensions.any((ext) => url.endsWith(ext))) {
+      return true;
+    }
+    // Pass through non-API URLs
+    if (!url.contains(_apiFilter)) {
+      return true;
+    }
+    // Pass through non-GET requests
+    if (method != HttpMethod.get.value) {
+      return true;
+    }
+    return false; // Intercept all other requests.
+  }
+
+  /// Executes the proxy request using the injected HttpClient factory.
+  /// This helper encapsulates the networking aspect of the interception flow.
+  Future<HttpClientResponse> _executeProxyRequest(
+    WebResourceRequest request,
+  ) async {
+    final client = _httpClientFactory();
+    final uri = request.url.uriValue;
+    final dartRequest = await client.openUrl(
+      request.method ?? HttpMethod.get.value,
+      uri,
+    );
+    transferRequestData(request, dartRequest);
+    return dartRequest.close();
+  }
+
+  /// Processes the [HttpClientResponse]
+  /// into a [WebResourceResponse] for the WebView.
+  Future<WebResourceResponse> transferResponseData(
+    WebResourceRequest request,
+    HttpClientResponse response,
+  ) async {
+    // Read the full response body stream and convert it into a Uint8List.
+    final bodyBytes = await response
+        .fold<List<int>>(
+          <int>[],
+          (previous, element) => previous..addAll(element),
+        )
+        .then(Uint8List.fromList);
+
+    // Replicate all response headers, including 'Set-Cookie'
+    final responseHeaders = <String, String>{};
+    response.headers.forEach((name, values) {
+      responseHeaders[name] = values.join(', ');
+    });
+
+    final contentType = response.headers.contentType?.mimeType;
+    if (contentType == 'application/json' || contentType == 'text/html') {
+      _onEngineData(String.fromCharCodes(bodyBytes));
+    }
+
+    return WebResourceResponse(
+      contentType: contentType ?? 'application/json',
+      contentEncoding: response.headers.contentType?.charset ?? 'utf-8',
+      statusCode: response.statusCode,
+      headers: responseHeaders,
+      data: bodyBytes,
+    );
+  }
+
+  /// Transfers request data from a [WebResourceRequest] 
+  /// to a [HttpClientRequest].
+  ///
+  /// [request] The web resource request to transfer data from.
+  /// [dartRequest] The HTTP client request to transfer data to.
+  static void transferRequestData(
+    WebResourceRequest request,
+    HttpClientRequest dartRequest,
+  ) {
+    final skipHeaders = [
+      'content-length',
+      'host',
+      'connection',
+      'accept-encoding',
+    ];
+    request.headers?.forEach((name, value) {
+      if (!skipHeaders.contains(name.toLowerCase())) {
+        dartRequest.headers.set(name, value);
+      }
+    });
+  }
+}

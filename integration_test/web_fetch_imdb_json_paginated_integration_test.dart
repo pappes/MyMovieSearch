@@ -31,7 +31,7 @@ void main() {
   ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryIMDBJsonDetails test', () {
-    // Convert 3 IMDB pages into dtos.
+    // Convert 2 IMDB pages into dtos.
     test(
       'Run read 10 json queries from QueryIMDBJsonPaginatedFilmographyDetails',
       () async {
@@ -40,6 +40,9 @@ void main() {
           actualOutput,
           relatedSampleQuantity: 5,
         );
+        // Note: before trying to debug this test try the simpler
+        // android_web_json_detection_test.dart
+        expect(actualOutput.length, 2, reason: 'data is missing');
 
         // To update expected data, uncomment the following lines
         /*printTestData(sampleOutput);
@@ -68,15 +71,20 @@ void main() {
           greaterThanOrEqualTo(17),
           reason:
               'Quinten should have 17 Actor credits but the data says '
-              '${actualOutput.first.related.keys.first}:'
-              '${actualOutput.first.related.values.first.length}',
+              '${actualOutput.first.title}-'
+              '${actualOutput.first.related.keys.first}'
+              '${actualOutput.first.related.values.first.length}'
+              '${actualOutput.last.title}-'
+              '${actualOutput.last.related.keys.first}'
+              '${actualOutput.last.related.values.first.length}',
         );
         expect(
           relatedLengths.last,
           greaterThanOrEqualTo(69),
           reason:
               'Jodie Foster should have 69 Actress credits but the data says '
-              '${actualOutput.first.related.keys.first}:'
+              '${actualOutput.last.title}-'
+              '${actualOutput.last.related.keys.first}'
               '${actualOutput.last.related.values.first.length}',
         );
       },
@@ -114,18 +122,21 @@ void main() {
 ////////////////////////////////////////////////////////////////////////////////
 
 /// Call IMDB for each criteria in the list.
-List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
+Future<List<Future<List<MovieResultDTO>>>> _queueDetailSearch(
+  List<String> queries,
+) async {
   final futures = <Future<List<MovieResultDTO>>>[];
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
     futures.add(QueryIMDBJsonPaginatedFilmographyDetails(criteria).readList());
+    await Future<void>.delayed(const Duration(seconds: 5));
   }
   return futures;
 }
 
 Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
   // Call IMDB for each criteria in the list.
-  final futures = _queueDetailSearch(criteria);
+  final futures = await _queueDetailSearch(criteria);
 
   // Collect the result of all the IMDB queries.
   final queryResult = <MovieResultDTO>[];

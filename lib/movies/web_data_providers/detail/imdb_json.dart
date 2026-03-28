@@ -114,10 +114,10 @@ abstract class QueryIMDBJsonDetailsBase
     final controller = StreamController<String>();
     final url = myConstructURI(myFormatInputAsText()).toString();
 
-    //TODO inject WebJsonExtractor
-
-    final extractor = WebJsonExtractor(url, controller.add, imdbOperation);
-    await extractor.waitForCompletion();
+    //TODO: inject WebJsonExtractor via proper DI
+    final synchroniser = WebJsonSychroniser(url, imdbOperation);
+    await synchroniser.base.execute(url, imdbOperation, controller.add);
+    
     final listener = controller.close();
     yield* controller.stream;
     await listener;

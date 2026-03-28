@@ -8,8 +8,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart' as mockito;
 import 'package:my_movie_search/utilities/web_data/http_method.dart';
 
-import 'package:my_movie_search/utilities/web_data/platform_android/web_json_extractor.dart';
-import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
+import 'package:my_movie_search/utilities/web_data/platform_android/headless_web_engine.dart';
 
 import 'web_resource_interceptor_test.mocks.dart';
 
@@ -73,16 +72,18 @@ HeadlessInAppWebView mockWebView({
 }) => MockHeadlessInAppWebView();
 
 void main() {
-  late WebJsonExtractorAndroid extractor;
+  late HeadlessWebEngineAndroid extractor;
 
   setUp(() {
-    extractor = WebJsonExtractorAndroid.internal(
-      'https://www.imdb.com/name/nm0000149/',
-      (_) {},
-      'FilmographyV2Pagination',
-      httpClientFactory: MockHttpClient.new,
-      webViewRunner: mockWebView,
-    );
+    extractor =
+        HeadlessWebEngineAndroid(
+          httpClientFactory: MockHttpClient.new,
+          webViewRunner: mockWebView,
+        )..run(
+          url: 'https://www.imdb.com/name/nm0000149/',
+          apiAcceptFilter: 'FilmographyV2Pagination',
+          onEngineData: (_) {},
+        );
   });
   // Helper function to create a mock request
   WebResourceRequest createMockRequest({
@@ -218,7 +219,7 @@ void main() {
       mockito.when(mockHeaders.set(mockito.any, mockito.any)).thenReturn(null);
 
       // Execute the function
-      WebJsonExtractorAndroid.transferRequestData(
+      HeadlessWebEngineAndroid.transferRequestData(
         mockPlatformRequest,
         mockDartRequest,
       );

@@ -52,12 +52,15 @@ void callback(String jsonString) {
 
 Future<void> _getDataFromImdb() async {
   jsonChunkCount = 0;
-  final extractor = WebJsonExtractor(
+  final synchroniser = WebJsonSychroniser(
     'https://www.imdb.com/name/nm0000149/',
-    callback,
     'FilmographyV2Pagination',
   );
-  await extractor.waitForCompletion();
+  await synchroniser.base.execute(
+    'https://www.imdb.com/name/nm0000149/',
+    'FilmographyV2Pagination',
+    callback,
+  );
 }
 
 //this will only run on android because it uses flutter_inappwebview
