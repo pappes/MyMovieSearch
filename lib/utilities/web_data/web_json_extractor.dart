@@ -14,15 +14,7 @@ import 'package:my_movie_search/utilities/web_data/web_headless_extractor.dart';
 /// Hides the underlying callback mechanism.
 class WebJsonSychroniser {
   WebJsonSychroniser(this.webPageUrl, this.apiAcceptFilter) {
-    HeadlessWebEngine engine;
-    if (Platform.isAndroid) {
-      engine = HeadlessWebEngineAndroid();
-    } else if (Platform.isLinux) {
-      engine = HeadlessWebEngineLinux();
-    } else {
-      engine = HeadlessWebEngineOther();
-    }
-    base = WebJsonExtractor(webEngine: engine);
+    base = WebJsonExtractor();
   }
 
   final String webPageUrl;
@@ -49,7 +41,17 @@ class WebJsonSychroniser {
 
 /// Extract JSON data from a web page using a headless web engine.
 class WebJsonExtractor extends WebHeadlessExtractor {
-  WebJsonExtractor({required super.webEngine});
+  WebJsonExtractor({super.webEngine}) {
+    if (webEngine == null) {
+      if (Platform.isAndroid) {
+        webEngine = HeadlessWebEngineAndroid();
+      } else if (Platform.isLinux) {
+        webEngine = HeadlessWebEngineLinux();
+      } else {
+        webEngine = HeadlessWebEngineOther();
+      }
+    }
+  }
 
   /// Execute the web engine and extract JSON data from a web page.
   ///
@@ -62,12 +64,13 @@ class WebJsonExtractor extends WebHeadlessExtractor {
     String apiAcceptFilter,
     DataCallback onData,
   ) async {
-    await webEngine.run(
+    await webEngine?.run(
       url: url,
       apiAcceptFilter: apiAcceptFilter,
       onEngineData: (data) => processRawData(data, onData),
       onPageLoaded: () => _extractJsonScripts(onData),
     );
+    await webEngine?.dispose();
   }
 
   /// Extract JSON scripts from the web page.
@@ -88,7 +91,7 @@ class WebJsonExtractor extends WebHeadlessExtractor {
       })();
 ''';
 
-    await webEngine.evaluateJavascript(clickScript);
+    await webEngine?.evaluateJavascript(clickScript);
     await Future<void>.delayed(const Duration(seconds: 2));
 
     const javascriptToExecute = '''
@@ -96,12 +99,13 @@ class WebJsonExtractor extends WebHeadlessExtractor {
   const scripts = document.querySelectorAll('script[type="application/json"]');
   const contents = [];
   scripts.forEach(script => contents.push(script.innerHTML));
+  // contents.push('{"test":"test"}');
   return JSON.stringify(contents);
 })();
 ''';
 
     // Execute the script and get the result.
-    final result = await webEngine.evaluateJavascript(javascriptToExecute);
+    final result = await webEngine?.evaluateJavascript(javascriptToExecute);
     if (result != null) {
       logger.t(
         'Found on initial page load: '
@@ -125,9 +129,17 @@ class WebJsonExtractor extends WebHeadlessExtractor {
   @override
   void processRawData(String data, DataCallback onData) {
     try {
+      logger.t(
+        'Processing Json  : '
+        '${data.characters.take(1000)}',
+      );
       json.decode(data); // Validate it's valid JSON
       onData(data);
-    } catch (_) {
+    } catch (e) {
+      logger.t(
+        'Failed to process Json  : '
+        '${e.toString().characters.take(1000)}',
+      );
       // Ignore invalid JSON responses
     }
   }

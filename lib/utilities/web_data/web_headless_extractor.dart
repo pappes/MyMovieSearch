@@ -4,9 +4,9 @@ import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 ///
 /// Uses a full headless browser to load a web page and extract data from it.
 abstract class WebHeadlessExtractor {
-  WebHeadlessExtractor({required this.webEngine});
+  WebHeadlessExtractor({this.webEngine});
 
-  final HeadlessWebEngine webEngine;
+  HeadlessWebEngine? webEngine;
 
   /// Executes the web engine to extract data.
   Future<void> execute(String url, String apiAcceptFilter, DataCallback onData);

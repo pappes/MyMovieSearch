@@ -58,9 +58,7 @@ class QueryIMDBJsonCastDetails extends QueryIMDBJsonDetailsBase {
 class QueryIMDBJsonPaginatedFilmographyDetails
     extends QueryIMDBJsonDetailsBase {
   QueryIMDBJsonPaginatedFilmographyDetails(SearchCriteriaDTO criteria)
-    : super(criteria, _imdbOperation) {
-    // TODO: get imdb json data
-  }
+    : super(criteria, _imdbOperation);
 
   static const _imdbOperation = 'FilmographyV2Pagination';
 
@@ -115,9 +113,9 @@ abstract class QueryIMDBJsonDetailsBase
     final url = myConstructURI(myFormatInputAsText()).toString();
 
     //TODO: inject WebJsonExtractor via proper DI
-    final synchroniser = WebJsonSychroniser(url, imdbOperation);
-    await synchroniser.base.execute(url, imdbOperation, controller.add);
-    
+    final extractor = WebJsonExtractor();
+    await extractor.execute(url, imdbOperation, controller.add);
+
     final listener = controller.close();
     yield* controller.stream;
     await listener;

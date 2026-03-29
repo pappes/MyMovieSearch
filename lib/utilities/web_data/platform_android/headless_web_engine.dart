@@ -12,6 +12,7 @@ import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 const _timeoutDurationFull = Duration(seconds: 15);
 const _timeoutDurationShort = Duration(seconds: 10);
 const _timeoutDurationVeryShort = Duration(seconds: 4);
+const _timeoutDurationMicroSleep = Duration(milliseconds: 50);
 
 /// This function type abstracts the creation of the HttpClient,
 /// making it mockable.
@@ -88,6 +89,7 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
 
   final Completer<void> _dataLoadedCompleter = Completer<void>();
   int pageLoadCompleteCount = 0;
+  Timer? _timeoutTimer;
 
   late DataCallback _onEngineData;
   PageLoadCallback? _onPageLoaded;
@@ -139,7 +141,8 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
   ///
   /// [timeoutDuration] The duration to wait before disposing the engine.
   void _timeout([Duration timeoutDuration = _timeoutDurationFull]) {
-    Future.delayed(timeoutDuration, () {
+    _timeoutTimer?.cancel();
+    _timeoutTimer = Timer(timeoutDuration, () {
       if (_headlessWebView != null && _headlessWebView!.isRunning()) {
         logger.i(
           'Disposing InAppWebViewController due to timeout for $_imdbUrl',
@@ -151,18 +154,22 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
 
   /// Disposes the headless web engine and signals that the data is loaded.
   ///
-  /// [delay] optional delay to wait before disposing the engine.
+  /// [optionalDelay] optional delay to wait before disposing the engine.
   @override
   @awaitNotRequired
-  Future<void> dispose({Duration delay = Duration.zero}) async {
-    await Future<void>.delayed(delay);
-    if (_headlessWebView != null) {
-      unawaited(_headlessWebView?.dispose());
+  Future<void> dispose({Duration optionalDelay = Duration.zero}) async {
+    _timeoutTimer?.cancel();
+    await Future<void>.delayed(optionalDelay);
+    final webView = _headlessWebView;
+    if (webView != null) {
       _headlessWebView = null;
+      await webView.dispose();
     }
     if (!_dataLoadedCompleter.isCompleted) {
       _dataLoadedCompleter.complete();
     }
+    // Allow time for any final requests to complete.
+    await Future<void>.delayed(_timeoutDurationMicroSleep);
   }
 
   /// Handles the completion of a page load.

@@ -6,10 +6,22 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 
-import '../test/test_helper.dart';
+import 'test_helper.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real IMDB endpoint!
+///     WebJsonExtractor uses a HeadlessInAppWebView
+/// which requires a real android device or emulator or web to run
+/// hence this is an integration test with a full MyApp widget.
+///
+/// Android device must be connected or launch from the command line with:
+/// flutter test integration_test/web_fetch_imdb_json_filtered_integration_test.dart -d 192.168.0.33:41471
+/// flutter test integration_test/web_fetch_imdb_json_filtered_integration_test.dart -d chrome
+///
+/* flutter drive \
+  --driver=integration_test/driver.dart \
+  --target=integration_test/web_fetch_imdb_json_filtered_integration_test.dart \
+  -d chrome --headless --chrome-binary-flags="--no-sandbox" */
 ////////////////////////////////////////////////////////////////////////////////
 
 class MyApp extends StatelessWidget {
@@ -37,23 +49,14 @@ class _MyWebViewWidgetState extends State<MyWebViewWidget> {
 }
 
 /// Call IMDB for each criteria in the list.
-List<Future<List<MovieResultDTO>>> _queueDetailSearch(List<String> queries) {
-  final futures = <Future<List<MovieResultDTO>>>[];
+Future<List<MovieResultDTO>> _testRead(List<String> queries) async {
+  final queryResult = <String, MovieResultDTO>{};
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
-    futures.add(QueryIMDBJsonPaginatedFilmographyDetails(criteria).readList());
-  }
-  return futures;
-}
-
-Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
-  // Call IMDB for each criteria in the list.
-  final futures = _queueDetailSearch(criteria);
-
-  // Collect the result of all the IMDB queries.
-  final queryResult = <String, MovieResultDTO>{};
-  for (final future in futures) {
-    for (final dto in await future) {
+    final dtos = await QueryIMDBJsonPaginatedFilmographyDetails(
+      criteria,
+    ).readList();
+    for (final dto in dtos) {
       if (queryResult.containsKey(dto.uniqueId)) {
         queryResult[dto.uniqueId]?.merge(dto);
       } else {
@@ -80,9 +83,7 @@ Future<void> main() async {
       );
       final expectedOutput = loadTestData(jsonString);
 
-      final actualOutput =
-          //<MovieResultDTO>[]; //
-          await _testRead(['nm0000233', 'nm0000149']);
+      final actualOutput = await _testRead(['nm0000233', 'nm0000149']);
       final sampleOutput = sampleTestData(
         actualOutput,
         relatedSampleQuantity: 5,
@@ -111,14 +112,19 @@ Future<void> main() async {
         greaterThanOrEqualTo(44),
         reason:
             'Quinten should have 44 Actor credits but the data says '
-            '${actualOutput.first.related.keys.first}:'
-            '${actualOutput.first.related.values.first.length}',
+            '${actualOutput.first.title}-'
+            '${actualOutput.first.related.keys.first}'
+            '${actualOutput.first.related.values.first.length}'
+            '${actualOutput.last.title}-'
+            '${actualOutput.last.related.keys.first}'
+            '${actualOutput.last.related.values.first.length}',
       );
       expect(
         relatedLengths.last,
         greaterThanOrEqualTo(88),
         reason:
             'Jodie Foster should have 88 Actress credits but the data says '
+            '${actualOutput.first.title}-'
             '${actualOutput.first.related.keys.first}:'
             '${actualOutput.last.related.values.first.length}',
       );

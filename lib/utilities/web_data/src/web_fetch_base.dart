@@ -475,6 +475,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       );
       yield* baseConvertTreeToOutputType(map);
     } catch (error) {
+      logger.e(
+        'Error in transform ${myFormatInputAsText()} to resulting object: '
+        '${error.toString().characters.take(1000)}',
+      );
       final errorMessage = baseConstructErrorMessage(
         'transform ${myFormatInputAsText()} to resulting object',
         error,

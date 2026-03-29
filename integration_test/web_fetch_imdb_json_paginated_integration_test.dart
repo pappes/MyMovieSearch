@@ -129,6 +129,7 @@ Future<List<Future<List<MovieResultDTO>>>> _queueDetailSearch(
   for (final queryKey in queries) {
     final criteria = SearchCriteriaDTO().fromString(queryKey);
     futures.add(QueryIMDBJsonPaginatedFilmographyDetails(criteria).readList());
+    // Pause between queries to avoid overwhelming the IMDB server.
     await Future<void>.delayed(const Duration(seconds: 5));
   }
   return futures;

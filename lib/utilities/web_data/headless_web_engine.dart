@@ -23,5 +23,5 @@ abstract class HeadlessWebEngine {
   Future<dynamic> evaluateJavascript(String script);
 
   /// Cleans up engine resources.
-  Future<void> dispose({Duration delay = Duration.zero});
+  Future<void> dispose({Duration optionalDelay = Duration.zero});
 }

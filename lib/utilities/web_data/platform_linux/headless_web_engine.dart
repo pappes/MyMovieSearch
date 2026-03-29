@@ -22,5 +22,5 @@ class HeadlessWebEngineLinux implements HeadlessWebEngine {
   Future<dynamic> evaluateJavascript(String script) async => null;
 
   @override
-  Future<void> dispose({Duration delay = Duration.zero}) async {}
+  Future<void> dispose({Duration optionalDelay = Duration.zero}) async {}
 }
