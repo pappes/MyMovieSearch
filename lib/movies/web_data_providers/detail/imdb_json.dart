@@ -1,12 +1,14 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_factory.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
 
@@ -127,12 +129,27 @@ abstract class QueryIMDBJsonDetailsBase
     dynamic map,
   ) async {
     if (map is Map) {
+      logger.i(
+        'JsonBase converting webText: '
+        '${map.toString().characters.take(100)}',
+      );
+
       // Old IMDB data just required ImdbJsonConverter().
       final converter = ImdbJsonConverterFactory().getConverter(map);
       final dtos = converter.dtoFromCompleteJsonMap(
         map,
         DataSourceType.imdbJson,
       );
+      for (final dto in dtos) {
+        logger.i(
+          'JsonBase id: ${dto.uniqueId} '
+          'related count: ${dto.related.values.first.length} '
+          'related type: ${dto.related.keys.first}'
+          'related types: ${dto.related.keys.length}'
+          'other count: ${dto.related.values.last.length} '
+          'other type: ${dto.related.keys.last}',
+        );
+      }
       return dtos;
     }
     throw TreeConvertException(

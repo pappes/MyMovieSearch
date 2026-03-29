@@ -145,6 +145,31 @@ void main() {
             '${expectedValue.toPrintableString()}',
       );
     });
+    // Confirm map can be converted to DTO.
+    // test('Run dtoFromCompleteJsonMap() filtered adhoc', () {
+    //   // Invoke the functionality and collect results.
+    //   final converter = ImdbJsonConverterFactory().getConverter(
+    //     imdbJsonInnerFilteredSampleAdhoc,
+    //   );
+    //   final actualResult = converter.dtoFromCompleteJsonMap(
+    //     imdbJsonInnerFilteredSampleAdhoc,
+    //     DataSourceType.imdbJson,
+    //   );
+
+    //   // Uncomment this line to update expectedDTOList if sample data changes
+    //   writeTestData(actualResult, testName: 'adhoc');
+
+    //   // Check the results.
+    //   final expectedValue = readTestData(testName: 'filtered');
+    //   expect(
+    //     actualResult,
+    //     MovieResultDTOListMatcher(expectedValue),
+    //     reason:
+    //         'Emitted DTO list ${actualResult.toPrintableString()} '
+    //         'needs to match expected DTO list '
+    //         '${expectedValue.toPrintableString()}',
+    //   );
+    // });
   });
 
   ////////////////////////////////////////////////////////////////////////////////

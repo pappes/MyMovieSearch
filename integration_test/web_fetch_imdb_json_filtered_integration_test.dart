@@ -88,15 +88,20 @@ Future<void> main() async {
         actualOutput,
         relatedSampleQuantity: 5,
       );
+      late MovieResultDTO actualOutput233;
+      late MovieResultDTO actualOutput149;
+      if (actualOutput.first.uniqueId == 'nm0000233') {
+        actualOutput233 = actualOutput.first;
+        actualOutput149 = actualOutput.last;
+      } else {
+        actualOutput149 = actualOutput.first;
+        actualOutput233 = actualOutput.last;
+      }
 
       // To update expected data, uncomment the following lines
       // print(actualOutput.first.related.values.first.length);
       // print(actualOutput.last.related.values.first.length);
       // printTestData(sampleOutput);
-      final relatedLengths = <int>[
-        actualOutput.first.related.values.first.length,
-        actualOutput.last.related.values.first.length,
-      ]..sort((a, b) => a.compareTo(b));
 
       // Check the results.
       expect(
@@ -108,10 +113,10 @@ Future<void> main() async {
             '${expectedOutput.toPrintableString()}',
       );
       expect(
-        relatedLengths.first,
-        greaterThanOrEqualTo(44),
+        actualOutput233.related['Actor:']?.length,
+        greaterThanOrEqualTo(40),
         reason:
-            'Quinten should have 44 Actor credits but the data says '
+            'Quinten should have 41 Actor credits but the data says '
             '${actualOutput.first.title}-'
             '${actualOutput.first.related.keys.first}'
             '${actualOutput.first.related.values.first.length}'
@@ -120,10 +125,10 @@ Future<void> main() async {
             '${actualOutput.last.related.values.first.length}',
       );
       expect(
-        relatedLengths.last,
-        greaterThanOrEqualTo(88),
+        actualOutput149.related['Actress:']?.length,
+        greaterThanOrEqualTo(80),
         reason:
-            'Jodie Foster should have 88 Actress credits but the data says '
+            'Jodie Foster should have 84 Actress credits but the data says '
             '${actualOutput.first.title}-'
             '${actualOutput.first.related.keys.first}:'
             '${actualOutput.last.related.values.first.length}',

@@ -11,7 +11,7 @@ import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 const _timeoutDurationFull = Duration(seconds: 15);
 const _timeoutDurationShort = Duration(seconds: 10);
-const _timeoutDurationVeryShort = Duration(seconds: 4);
+const _timeoutDurationVeryShort = Duration(seconds: 3);
 const _timeoutDurationMicroSleep = Duration(milliseconds: 50);
 
 /// This function type abstracts the creation of the HttpClient,
