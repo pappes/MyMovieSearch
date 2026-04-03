@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:html/dom.dart' show Element, Node;
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
@@ -111,44 +109,5 @@ extension HttpHeadersHelper on HttpHeaders {
       map[name] = values;
     });
     return map;
-  }
-}
-
-/// Extend [HttpHeaders] to provide convenience functions.
-///
-extension HttpHeadersFactoryHelper on Map<String, dynamic> {
-  /// Convert [Map] to [HttpHeaders].
-  ///
-  /// ```dart
-  /// final headers = HttpClient().headers;
-  /// final map = headers.toMap();
-  /// ```
-  Future<HttpHeaders> toHttpHeaders() async {
-    final headers = await createEmptyHttpHeaders();
-    for (final entry in entries) {
-      final value = entry.value;
-      if (value is Object) {
-        headers.add(entry.key, value);
-      }
-    }
-
-    return headers;
-  }
-
-  /// Initialise a real blank [HttpHeaders].
-  ///
-  /// ```dart
-  /// final headers = await HttpHeadersFactoryHelper.createEmptyHttpHeaders();
-  /// ```
-  static Future<HttpHeaders> createEmptyHttpHeaders() async {
-    final request = await HttpClient().headUrl(
-      Uri.parse('http://www.microsoft.com:80'),
-    );
-    final headers = request.headers;
-
-    request.abort();
-    unawaited(request.close());
-    headers.clear();
-    return headers;
   }
 }

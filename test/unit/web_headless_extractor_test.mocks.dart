@@ -29,23 +29,25 @@ import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart'
 /// See the documentation for Mockito's code generation for more information.
 class MockHeadlessWebEngine extends _i1.Mock implements _i2.HeadlessWebEngine {
   @override
-  _i3.Future<void> run({
+  _i3.Future<int> run({
     required String? url,
+    required String? apiAcceptFilter,
     required _i2.DataCallback? onEngineData,
     _i2.PageLoadCallback? onPageLoaded,
-    required String? apiAcceptFilter,
+    Map<String, String>? headers,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#run, [], {
               #url: url,
+              #apiAcceptFilter: apiAcceptFilter,
               #onEngineData: onEngineData,
               #onPageLoaded: onPageLoaded,
-              #apiFilter: apiAcceptFilter,
+              #headers: headers,
             }),
-            returnValue: _i3.Future<void>.value(),
-            returnValueForMissingStub: _i3.Future<void>.value(),
+            returnValue: _i3.Future<int>.value(0),
+            returnValueForMissingStub: _i3.Future<int>.value(0),
           )
-          as _i3.Future<void>);
+          as _i3.Future<int>);
 
   @override
   _i3.Future<dynamic> evaluateJavascript(String? script) =>
@@ -57,9 +59,9 @@ class MockHeadlessWebEngine extends _i1.Mock implements _i2.HeadlessWebEngine {
           as _i3.Future<dynamic>);
 
   @override
-  _i3.Future<void> dispose({Duration? delay = Duration.zero}) =>
+  _i3.Future<void> dispose({Duration? optionalDelay = Duration.zero}) =>
       (super.noSuchMethod(
-            Invocation.method(#dispose, [], {#delay: delay}),
+            Invocation.method(#dispose, [], {#optionalDelay: optionalDelay}),
             returnValue: _i3.Future<void>.value(),
             returnValueForMissingStub: _i3.Future<void>.value(),
           )

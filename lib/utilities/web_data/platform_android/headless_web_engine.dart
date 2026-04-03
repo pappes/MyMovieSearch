@@ -2,8 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:meta/meta.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/http_method.dart';
@@ -31,6 +33,12 @@ typedef WebViewFactory =
       required String initialUrl,
       required WebResourceInterceptor proxySelector,
       required void Function(InAppWebViewController, WebUri?) onLoadStop,
+      required void Function(
+        InAppWebViewController,
+        WebResourceRequest,
+        WebResourceError,
+      )
+      onReceivedError,
     });
 
 /// Default implementation of the WebView using HeadlessInAppWebView.
@@ -38,15 +46,44 @@ HeadlessInAppWebView defaultWebView({
   required String initialUrl,
   required WebResourceInterceptor proxySelector,
   required void Function(InAppWebViewController, WebUri?) onLoadStop,
-}) => HeadlessInAppWebView(
-  initialUrlRequest: URLRequest(
-    url: WebUri(initialUrl),
-    cachePolicy:
-        URLRequestCachePolicy.RELOAD_IGNORING_LOCAL_AND_REMOTE_CACHE_DATA,
-  ),
-  shouldInterceptRequest: proxySelector,
-  onLoadStop: onLoadStop,
-);
+  required void Function(
+    InAppWebViewController,
+    WebResourceRequest,
+    WebResourceError,
+  )
+  onReceivedError,
+}) {
+  final settings = InAppWebViewSettings(
+    // 1. Core JS execution
+    javaScriptEnabled: true,
+
+    // 2. Crucial: AWS WAF stores tokens/state in DOM Storage
+    domStorageEnabled: true,
+
+    // 3. Allows the script to handle its own redirects/reloads
+    javaScriptCanOpenWindowsAutomatically: true,
+
+    // 4. Important for Android to handle the challenge correctly
+    safeBrowsingEnabled: false,
+    mixedContentMode: MixedContentMode.MIXED_CONTENT_ALWAYS_ALLOW,
+
+    // 5. User-Agent: Sometimes AWS blocks default WebView agents
+    // Try setting a standard mobile browser string if it still fails
+    userAgent:
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+  );
+  return HeadlessInAppWebView(
+    initialSettings: settings,
+    initialUrlRequest: URLRequest(
+      url: WebUri(initialUrl),
+      cachePolicy:
+          URLRequestCachePolicy.RELOAD_IGNORING_LOCAL_AND_REMOTE_CACHE_DATA,
+    ),
+    shouldInterceptRequest: proxySelector,
+    onLoadStop: onLoadStop,
+    onReceivedError: onReceivedError,
+  );
+}
 
 /// Defines the three possible outcomes of an interception request,
 enum InterceptionAction { delegateRequest, syntheticResponse, executeRequest }
@@ -89,6 +126,8 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
 
   final Completer<void> _dataLoadedCompleter = Completer<void>();
   int pageLoadCompleteCount = 0;
+  int? httpStatusCode;
+  String? pageContents;
   Timer? _timeoutTimer;
 
   late DataCallback _onEngineData;
@@ -104,7 +143,7 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
   /// [onPageLoaded] A callback function to process the page complete event.
   @override
   @awaitNotRequired
-  Future<void> run({
+  Future<int> run({
     required String url,
     required String apiAcceptFilter,
     required DataCallback onEngineData,
@@ -119,11 +158,13 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
       initialUrl: url,
       proxySelector: _webViewProxySelector,
       onLoadStop: _loadStopped,
+      onReceivedError: _onReceivedError,
     );
-    _timeout();
+    resetTimeout();
 
     await _headlessWebView!.run();
     await _dataLoadedCompleter.future;
+    return httpStatusCode ?? HttpStatus.processing;
   }
 
   /// Executes a JavaScript script in the headless web engine.
@@ -140,7 +181,7 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
   /// Disposes the headless web engine after a timeout period.
   ///
   /// [timeoutDuration] The duration to wait before disposing the engine.
-  void _timeout([Duration timeoutDuration = _timeoutDurationFull]) {
+  void resetTimeout([Duration timeoutDuration = _timeoutDurationFull]) {
     _timeoutTimer?.cancel();
     _timeoutTimer = Timer(timeoutDuration, () {
       if (_headlessWebView != null && _headlessWebView!.isRunning()) {
@@ -166,6 +207,7 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
       await webView.dispose();
     }
     if (!_dataLoadedCompleter.isCompleted) {
+      _onEngineData(pageContents ?? 'Unable to get html from HeadlessWebView');
       _dataLoadedCompleter.complete();
     }
     // Allow time for any final requests to complete.
@@ -181,20 +223,25 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
   // ignore: avoid_void_async
   void _loadStopped(InAppWebViewController controller, WebUri? url) async {
     logger.t('Page load complete for $_imdbUrl');
-    if (_onPageLoaded == null) {
+    httpStatusCode ??= HttpStatus.ok;
+    if (_onPageLoaded == null || _headlessWebView == null) {
       dispose();
     } else {
       await _onPageLoaded!();
+      final html = await controller.getHtml();
+      if (html != null) {
+        pageContents = html;
+      }
       // Timeout if requests do not complete quickly enough.
       pageLoadCompleteCount++;
       if (pageLoadCompleteCount == 1) {
         logger.t('Page load complete');
-        _timeout(_timeoutDurationShort);
+        resetTimeout(_timeoutDurationShort);
       } else {
         logger.t('Page load fully complete');
         // Sometimes there is a false positive for page load complete.
         // Delay disposal to allow any final requests to complete.
-        _timeout(_timeoutDurationVeryShort);
+        resetTimeout(_timeoutDurationVeryShort);
       }
     }
   }
@@ -220,7 +267,7 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
       request.method,
       acceptHeader: request.headers?['accept'],
     );
-    //print('Interception decision: ${decision.action} for ${request.url}');
+    // print('Interception decision: ${decision.action} for ${request.url}');
 
     switch (decision.action) {
       case InterceptionAction.syntheticResponse:
@@ -261,6 +308,12 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
 
   static const _blackListedEndPoints = [
     'amazon.com/images',
+    'unagi-na.amazon.com',
+    'unagi.amazon.com',
+    'https://app.link',
+    'fls-na.amazon.com',
+    'cdn.prod.metrics',
+    'api/_ajax/metrics',
     'm.media-amazon.com/images',
     'googletagservices.com',
     'cloudfront.net/jwplayer',
@@ -345,10 +398,7 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
         .then(Uint8List.fromList);
 
     // Replicate all response headers, including 'Set-Cookie'
-    final responseHeaders = <String, String>{};
-    response.headers.forEach((name, values) {
-      responseHeaders[name] = values.join(', ');
-    });
+    final responseHeaders = response.headers.toMap();
 
     final contentType = response.headers.contentType?.mimeType;
     if (contentType == 'application/json' || contentType == 'text/html') {
@@ -364,7 +414,7 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
     );
   }
 
-  /// Transfers request data from a [WebResourceRequest] 
+  /// Transfers request data from a [WebResourceRequest]
   /// to a [HttpClientRequest].
   ///
   /// [request] The web resource request to transfer data from.
@@ -384,5 +434,21 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
         dartRequest.headers.set(name, value);
       }
     });
+  }
+
+  /// Handles errors received during page loading.
+
+  void _onReceivedError(
+    InAppWebViewController controller,
+    WebResourceRequest request,
+    WebResourceError error,
+  ) {
+    logger.e(
+      'Error loading headless page: ${error.description.characters.take(100)}'
+      'for ${request.url}',
+    );
+    if (httpStatusCode == null || httpStatusCode == HttpStatus.ok) {
+      httpStatusCode = HttpStatus.badRequest;
+    }
   }
 }

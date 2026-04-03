@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 
 /// Headless web engine for other platforms.
@@ -7,7 +8,7 @@ import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 /// that are not supported by the default web engine.
 class HeadlessWebEngineOther implements HeadlessWebEngine {
   @override
-  Future<void> run({
+  Future<int> run({
     required String url,
     required String apiAcceptFilter,
     required DataCallback onEngineData,
@@ -17,6 +18,7 @@ class HeadlessWebEngineOther implements HeadlessWebEngine {
     if (onPageLoaded != null) {
       await onPageLoaded();
     }
+    return HttpStatus.notImplemented;
   }
 
   @override

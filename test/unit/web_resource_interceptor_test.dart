@@ -12,6 +12,10 @@ import 'package:my_movie_search/utilities/web_data/platform_android/headless_web
 
 import 'web_resource_interceptor_test.mocks.dart';
 
+
+// To regenerate mocks run the following command
+// flutter pub run build_runner build --delete-conflicting-outputs
+
 @GenerateNiceMocks([
   MockSpec<HttpClient>(),
   MockSpec<HttpHeaders>(),
@@ -69,6 +73,13 @@ HeadlessInAppWebView mockWebView({
   required String initialUrl,
   required WebResourceInterceptor proxySelector,
   required void Function(InAppWebViewController, WebUri?) onLoadStop,
+  required void Function(
+    InAppWebViewController,
+    WebResourceRequest,
+    WebResourceError,
+  )
+  onReceivedError,
+  Map<String, String>? headers,
 }) => MockHeadlessInAppWebView();
 
 void main() {

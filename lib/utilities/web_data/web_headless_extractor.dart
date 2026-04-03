@@ -9,7 +9,10 @@ abstract class WebHeadlessExtractor {
   HeadlessWebEngine? webEngine;
 
   /// Executes the web engine to extract data.
-  Future<void> execute(String url, String apiAcceptFilter, DataCallback onData);
+  Future<int> execute(
+    String url,
+    String apiAcceptFilter,
+    DataCallback onData);
 
   /// Processes raw data intercepted or received,
   /// executing the [onData] callback.

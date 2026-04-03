@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 
 /// Headless web engine for Linux platforms.
@@ -6,7 +7,7 @@ import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 /// This class implements the [HeadlessWebEngine] interface for Linux platforms.
 class HeadlessWebEngineLinux implements HeadlessWebEngine {
   @override
-  Future<void> run({
+  Future<int> run({
     required String url,
     required String apiAcceptFilter,
     required DataCallback onEngineData,
@@ -16,6 +17,7 @@ class HeadlessWebEngineLinux implements HeadlessWebEngine {
     if (onPageLoaded != null) {
       await onPageLoaded();
     }
+    return HttpStatus.notImplemented;
   }
 
   @override

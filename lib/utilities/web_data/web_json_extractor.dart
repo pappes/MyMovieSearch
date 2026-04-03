@@ -2,12 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/platform_android/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/platform_linux/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/platform_other/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/web_headless_extractor.dart';
+
+const Duration _shortDelay = Duration(seconds: 2);
+const Duration _veryShortDelay = Duration(microseconds: 1);
 
 /// Simplified interface for extracting JSON data from a web page.
 ///
@@ -59,18 +63,19 @@ class WebJsonExtractor extends WebHeadlessExtractor {
   /// [apiAcceptFilter] The query to use for filtering JSON data.
   /// [onData] A callback function to process the extracted JSON data.
   @override
-  Future<void> execute(
+  Future<int> execute(
     String url,
     String apiAcceptFilter,
     DataCallback onData,
   ) async {
-    await webEngine?.run(
+    final httpStatus = await webEngine?.run(
       url: url,
       apiAcceptFilter: apiAcceptFilter,
       onEngineData: (data) => processRawData(data, onData),
       onPageLoaded: () => _extractJsonScripts(onData),
     );
     await webEngine?.dispose();
+    return httpStatus ?? HttpStatus.notExtended;
   }
 
   /// Extract JSON scripts from the web page.
@@ -81,18 +86,30 @@ class WebJsonExtractor extends WebHeadlessExtractor {
     // Click to remove all filter options to ensure full data load
     // An async function is used to introduce a delay between clicks.
     const clickScript = '''
-      (async () => {
-        const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+      (function() {
         const buttons = document.querySelectorAll('.ipc-chip--active');
-        for (const button of buttons) {
-          button.click();
-          await sleep(50);
+        if (buttons.length > 0) {
+          (async () => {
+            const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+            for (const button of buttons) {
+              button.click();
+              await sleep(50);
+            }
+          })();
+          return true;
         }
+        return false;
       })();
 ''';
 
-    await webEngine?.evaluateJavascript(clickScript);
-    await Future<void>.delayed(const Duration(seconds: 2));
+    final buttonsFound = await webEngine?.evaluateJavascript(clickScript);
+
+    // Only wait if buttons were actually found and clicked
+    if (buttonsFound == true || buttonsFound == 'true') {
+      await Future<void>.delayed(_shortDelay);
+    } else {
+      await Future<void>.delayed(_veryShortDelay);
+    }
 
     const javascriptToExecute = '''
 (function() {
@@ -129,12 +146,14 @@ class WebJsonExtractor extends WebHeadlessExtractor {
   @override
   void processRawData(String data, DataCallback onData) {
     try {
-      logger.t(
-        'Processing Json  : '
-        '${data.characters.take(1000)}',
-      );
-      json.decode(data); // Validate it's valid JSON
-      onData(data);
+      if (!data.trim().startsWith(startHtml)) {
+        logger.t(
+          'Processing Json  : '
+          '${data.characters.take(1000)}',
+        );
+        json.decode(data); // Validate it's valid JSON
+        onData(data);
+      }
     } catch (e) {
       logger.t(
         'Failed to process Json  : '
