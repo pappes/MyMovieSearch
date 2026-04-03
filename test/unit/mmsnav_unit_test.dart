@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/app_context.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 

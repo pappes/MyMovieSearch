@@ -4,7 +4,7 @@ import 'dart:io';
 
 import 'package:html/parser.dart' as html;
 import 'package:meta/meta.dart';
-import 'package:my_movie_search/utilities/navigation/web_nav.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 
 const ytsDefaultUrl = 'https://yts.lt';
 const emptySearchResult =

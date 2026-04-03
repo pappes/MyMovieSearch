@@ -5,6 +5,7 @@ import 'package:my_movie_search/movies/models/movie_location.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';

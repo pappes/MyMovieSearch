@@ -1,11 +1,17 @@
+import 'dart:async';
+
 import 'package:html/dom.dart' show Element, Node;
 import 'package:html_unescape/html_unescape_small.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
+import 'package:universal_io/io.dart';
 
 // Extend standard dart library to use enums instead of hard coded strings
 enum ElementType { anchor, image, text, table, row }
 
+const webAddressPrefix = 'http';
 const jsonScript = 'script[type="application/json"]';
+const startHtml = '<';
+const endHtml = '>';
 
 const Map<ElementType, String> _htmlTags = {
   ElementType.anchor: 'a',
@@ -72,5 +78,77 @@ extension ElementHelper on Element {
         .replaceAll('\u{00a0}', ' ')
         .replaceAll(RegExp(r'\s+'), ' ');
     return htmlDecode.convert(cleanStr.reduceWhitespace());
+  }
+}
+
+/// Extend [HttpHeaders] to provide convenience functions.
+///
+extension HttpHeadersHelper on HttpHeaders {
+  /// Convert [HttpHeaders] to a [Map<String, String>].
+  ///
+  /// ```dart
+  /// final headers = HttpClient().headers;
+  /// final map = headers.toMap();
+  /// ```
+  Map<String, String> toMap() {
+    final map = <String, String>{};
+    forEach((name, values) {
+      map[name] = values.join(', ');
+    });
+
+    return map;
+  }
+
+  /// Convert [HttpHeaders] to a [Map<String, List<String>>].
+  ///
+  /// ```dart
+  /// final headers = HttpClient().headers;
+  /// final map = headers.toMultiMap();
+  /// ```
+  Map<String, List<String>> toMultiMap() {
+    final map = <String, List<String>>{};
+    forEach((name, values) {
+      map[name] = values;
+    });
+    return map;
+  }
+}
+
+/// Extend [HttpHeaders] to provide convenience functions.
+///
+extension HttpHeadersFactoryHelper on Map<String, dynamic> {
+  /// Convert [Map] to [HttpHeaders].
+  ///
+  /// ```dart
+  /// final headers = HttpClient().headers;
+  /// final map = headers.toMap();
+  /// ```
+  Future<HttpHeaders> toHttpHeaders() async {
+    final headers = await createEmptyHttpHeaders();
+    for (final entry in entries) {
+      final value = entry.value;
+      if (value is Object) {
+        headers.add(entry.key, value);
+      }
+    }
+
+    return headers;
+  }
+
+  /// Initialise a real blank [HttpHeaders].
+  ///
+  /// ```dart
+  /// final headers = await HttpHeadersFactoryHelper.createEmptyHttpHeaders();
+  /// ```
+  static Future<HttpHeaders> createEmptyHttpHeaders() async {
+    final request = await HttpClient().headUrl(
+      Uri.parse('http://www.microsoft.com:80'),
+    );
+    final headers = request.headers;
+
+    request.abort();
+    unawaited(request.close());
+    headers.clear();
+    return headers;
   }
 }

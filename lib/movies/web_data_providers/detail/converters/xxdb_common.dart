@@ -11,7 +11,7 @@ const sourceWikidata = 'Wikidata';
 const sourceWikipedia = 'Wikipedia';
 const sourceX = 'X (Twitter)';*/
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/utilities/navigation/web_nav.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 
 enum XxdbSource {
   imdb,

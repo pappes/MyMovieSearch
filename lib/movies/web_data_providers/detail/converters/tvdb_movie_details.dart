@@ -2,8 +2,8 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tvdb_common.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/xxdb_common.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_base.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
-import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 const nodeExternalLinks = 'remoteIds';
 

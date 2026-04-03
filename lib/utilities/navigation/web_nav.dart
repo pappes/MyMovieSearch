@@ -19,12 +19,11 @@ import 'package:my_movie_search/movies/screens/person_details.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
 import 'package:my_movie_search/persistence/web_log.dart';
+import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/app_context.dart';
 import 'package:my_movie_search/utilities/navigation/flutter_app_context.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
-
-const webAddressPrefix = 'http';
 
 enum ScreenRoute {
   search,

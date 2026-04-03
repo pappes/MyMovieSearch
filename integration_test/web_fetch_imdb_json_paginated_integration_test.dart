@@ -33,7 +33,7 @@ void main() {
   group('live QueryIMDBJsonDetails test', () {
     // Convert 2 IMDB pages into dtos.
     test(
-      'Run read 10 json queries from QueryIMDBJsonPaginatedFilmographyDetails',
+      'Run read 2 json queries from QueryIMDBJsonPaginatedFilmographyDetails',
       () async {
         final actualOutput = await _testRead(['nm0000233', 'nm0000149']);
         final sampleOutput = sampleTestData(
