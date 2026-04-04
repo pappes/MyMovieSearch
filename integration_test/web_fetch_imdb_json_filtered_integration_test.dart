@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -24,51 +25,8 @@ import 'test_helper.dart';
   -d chrome --headless --chrome-binary-flags="--no-sandbox" */
 ////////////////////////////////////////////////////////////////////////////////
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) => MaterialApp(
-    home: Scaffold(
-      appBar: AppBar(title: const Text('Json Extractor Integration Test')),
-      body: const MyWebViewWidget(),
-    ),
-  );
-}
-
-class MyWebViewWidget extends StatefulWidget {
-  const MyWebViewWidget({super.key});
-
-  @override
-  State<MyWebViewWidget> createState() => _MyWebViewWidgetState();
-}
-
-class _MyWebViewWidgetState extends State<MyWebViewWidget> {
-  @override
-  Widget build(BuildContext context) => const Text('Json extractor');
-}
-
-/// Call IMDB for each criteria in the list.
-Future<List<MovieResultDTO>> _testRead(List<String> queries) async {
-  final queryResult = <String, MovieResultDTO>{};
-  for (final queryKey in queries) {
-    final criteria = SearchCriteriaDTO().fromString(queryKey);
-    final dtos = await QueryIMDBJsonPaginatedFilmographyDetails(
-      criteria,
-    ).readList();
-    for (final dto in dtos) {
-      if (queryResult.containsKey(dto.uniqueId)) {
-        queryResult[dto.uniqueId]?.merge(dto);
-      } else {
-        queryResult[dto.uniqueId] = dto;
-      }
-    }
-  }
-  final sorted = queryResult.values.toList()..sort(dtoSortCompareTo);
-  return sorted;
-}
-
 Future<void> main() async {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
   ////////////////////////////////////////////////////////////////////////////////
@@ -77,9 +35,12 @@ Future<void> main() async {
     // Convert 3 IMDB pages into dtos.
     testWidgets('Run read 2 json queries from IMDB', (tester) async {
       await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
+      await warmUpHeadlessEngine();
+      await tester.pumpAndSettle();
 
       final jsonString = await rootBundle.loadString(
-        'integration_test/web_fetch_imdb_json_filtered_integration_test.json',
+        getDataFileLocation(integrationTest: true),
       );
       final expectedOutput = loadTestData(jsonString);
 
@@ -101,7 +62,7 @@ Future<void> main() async {
       // To update expected data, uncomment the following lines
       // print(actualOutput.first.related.values.first.length);
       // print(actualOutput.last.related.values.first.length);
-      // printTestData(sampleOutput);
+      // printTestDataJson(sampleOutput);
 
       // Check the results.
       expect(
@@ -136,6 +97,10 @@ Future<void> main() async {
     });
     testWidgets('Run an empty search', (tester) async {
       await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
+      await warmUpHeadlessEngine();
+      await tester.pumpAndSettle();
+
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
       final actualOutput = await QueryIMDBJsonCastDetails(
         criteria,
@@ -153,4 +118,58 @@ Future<void> main() async {
       );
     });
   });
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// Read from real IMDB endpoint!
+////////////////////////////////////////////////////////////////////////////////
+
+/// Call IMDB for each criteria in the list.
+Future<List<Future<List<MovieResultDTO>>>> _queueDetailSearch(
+  List<String> queries,
+) async {
+  final futures = <Future<List<MovieResultDTO>>>[];
+  for (final queryKey in queries) {
+    final criteria = SearchCriteriaDTO().fromString(queryKey);
+    futures.add(QueryIMDBJsonPaginatedFilmographyDetails(criteria).readList());
+    // Pause between queries to avoid overwhelming the IMDB server.
+    //await Future<void>.delayed(const Duration(seconds: 5));
+  }
+  return futures;
+}
+
+Future<List<MovieResultDTO>> _testRead(List<String> criteria) async {
+  // Call IMDB for each criteria in the list.
+  final futures = await _queueDetailSearch(criteria);
+
+  // Collect the result of all the IMDB queries.
+  final queryResult = <MovieResultDTO>[];
+  for (final future in futures) {
+    queryResult.addAll(await future);
+  }
+  return queryResult;
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(title: const Text('Json Extractor Integration Test')),
+      body: const MyWebViewWidget(),
+    ),
+  );
+}
+
+class MyWebViewWidget extends StatefulWidget {
+  const MyWebViewWidget({super.key});
+
+  @override
+  State<MyWebViewWidget> createState() => _MyWebViewWidgetState();
+}
+
+class _MyWebViewWidgetState extends State<MyWebViewWidget> {
+  @override
+  Widget build(BuildContext context) => const Text('Json extractor');
 }

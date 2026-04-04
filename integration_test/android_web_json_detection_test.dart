@@ -64,19 +64,15 @@ Future<void> _getDataFromImdb() async {
 }
 
 //this will only run on android because it uses flutter_inappwebview
-void main() async {
+void main() {
   // Ensure the platform bindings are initialized for the integration test.
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-
-  runApp(const MyApp());
-
-  // Get app warmed up before launching headless browser.
-  await Future<void>.delayed(const Duration(seconds: 8));
 
   testWidgets(
     'Extract json from imdb for person filmography',
     (tester) async {
       await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
 
       await _getDataFromImdb();
 
@@ -95,6 +91,7 @@ void main() async {
     'Extract json from imdb for the same person again',
     (tester) async {
       await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
 
       await _getDataFromImdb();
 
@@ -114,6 +111,7 @@ void main() async {
     'Extract json using WebJsonSychroniser',
     (tester) async {
       await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
 
       final extractor = WebJsonSychroniser(
         'https://www.imdb.com/name/nm0000149/',

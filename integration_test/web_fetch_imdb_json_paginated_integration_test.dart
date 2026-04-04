@@ -25,16 +25,20 @@ void main() {
   // Ensure the platform bindings are initialized for the integration test.
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  runApp(const MyApp());
   ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
   ////////////////////////////////////////////////////////////////////////////////
 
   group('live QueryIMDBJsonDetails test', () {
     // Convert 2 IMDB pages into dtos.
-    test(
+    testWidgets(
       'Run read 2 json queries from QueryIMDBJsonPaginatedFilmographyDetails',
-      () async {
+      (tester) async {
+        await tester.pumpWidget(const MyApp());
+        await tester.pumpAndSettle();
+        await warmUpHeadlessEngine();
+        await tester.pumpAndSettle();
+
         final actualOutput = await _testRead(['nm0000233', 'nm0000149']);
         final sampleOutput = sampleTestData(
           actualOutput,
@@ -45,16 +49,16 @@ void main() {
         expect(actualOutput.length, 2, reason: 'data is missing');
 
         // To update expected data, uncomment the following lines
-        /*printTestData(sampleOutput);
-        print(actualOutput.first.related.values.first.length);
-        print(actualOutput.last.related.values.first.length);*/
+        // printTestDataJson(sampleOutput);
+        // print(actualOutput.first.related.values.first.length);
+        // print(actualOutput.last.related.values.first.length);
         final relatedLengths = <int>[
           actualOutput.first.related.values.first.length,
           actualOutput.last.related.values.first.length,
         ]..sort((a, b) => a.compareTo(b));
 
         final jsonString = await rootBundle.loadString(
-          'integration_test/web_fetch_imdb_json_paginated_integration_test.json',
+          getDataFileLocation(integrationTest: true),
         );
         final expectedOutput = loadTestData(jsonString);
         // Check the results.
@@ -92,9 +96,14 @@ void main() {
       // This test uses flutter_inappwebview which is configured for Android.
       skip: !Platform.isAndroid,
     );
-    test(
+    testWidgets(
       'Run an empty QueryIMDBJsonPaginatedFilmographyDetails search',
-      () async {
+      (tester) async {
+        await tester.pumpWidget(const MyApp());
+        await tester.pumpAndSettle();
+        await warmUpHeadlessEngine();
+        await tester.pumpAndSettle();
+
         final criteria = SearchCriteriaDTO().fromString(
           'therearenoresultszzzz',
         );
@@ -130,7 +139,7 @@ Future<List<Future<List<MovieResultDTO>>>> _queueDetailSearch(
     final criteria = SearchCriteriaDTO().fromString(queryKey);
     futures.add(QueryIMDBJsonPaginatedFilmographyDetails(criteria).readList());
     // Pause between queries to avoid overwhelming the IMDB server.
-    await Future<void>.delayed(const Duration(seconds: 5));
+    //await Future<void>.delayed(const Duration(seconds: 5));
   }
   return futures;
 }

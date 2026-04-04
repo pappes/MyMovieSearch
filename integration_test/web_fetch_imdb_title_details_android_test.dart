@@ -29,46 +29,16 @@ flutter drive \
   -d chrome --headless --chrome-binary-flags="--no-sandbox" */
 ////////////////////////////////////////////////////////////////////////////////
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) => MaterialApp(
-    home: Scaffold(
-      appBar: AppBar(title: const Text('Html Extractor Integration Test')),
-      body: const MyWebViewWidget(),
-    ),
-  );
-}
-
-class MyWebViewWidget extends StatefulWidget {
-  const MyWebViewWidget({super.key});
-
-  @override
-  State<MyWebViewWidget> createState() => _MyWebViewWidgetState();
-}
-
-class _MyWebViewWidgetState extends State<MyWebViewWidget> {
-  @override
-  Widget build(BuildContext context) => const Text('Html extractor');
-}
-
-void main() async {
+void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  // On Android, this ensures cookies are persistent
-  if (Platform.isAndroid) {
-    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
-  }
-
-  runApp(const MyApp());
-
-  // Get app warmed up before launching headless browser.
-  await Future<void>.delayed(const Duration(seconds: 8));
 
   testWidgets(
     'Run read 3 pages from IMDB',
     (tester) async {
       await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
+      await warmUpHeadlessEngine();
+      await tester.pumpAndSettle();
 
       // Convert 3 IMDB pages into dtos.
       final actualOutput = await executeMultipleFetches(
@@ -99,6 +69,9 @@ void main() async {
 
   testWidgets('Run an empty search', (tester) async {
     await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
+    await warmUpHeadlessEngine();
+    await tester.pumpAndSettle();
 
     final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
     final actualOutput = await QueryIMDBTitleDetails(
@@ -116,4 +89,28 @@ void main() async {
           '${expectedOutput.toPrintableString()}',
     );
   }, timeout: const Timeout(Duration(seconds: 60)));
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) => MaterialApp(
+    home: Scaffold(
+      appBar: AppBar(title: const Text('Html Extractor Integration Test')),
+      body: const MyWebViewWidget(),
+    ),
+  );
+}
+
+class MyWebViewWidget extends StatefulWidget {
+  const MyWebViewWidget({super.key});
+
+  @override
+  State<MyWebViewWidget> createState() => _MyWebViewWidgetState();
+}
+
+class _MyWebViewWidgetState extends State<MyWebViewWidget> {
+  @override
+  Widget build(BuildContext context) => const Text('Html extractor');
 }

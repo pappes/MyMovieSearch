@@ -39,16 +39,11 @@ void main() async {
     await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 
-  runApp(const MyApp());
-
-  // Get app warmed up before launching headless browser.
-  await Future<void>.delayed(const Duration(seconds: 8));
-
-
   testWidgets(
     'WebHtmlExtractor low level class',
     (tester) async {
       await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
 
       String? htmlData;
       final extractor = WebHtmlExtractor();

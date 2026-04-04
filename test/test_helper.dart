@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
@@ -11,6 +12,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/settings.dart';
+import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
 import 'package:quiver/iterables.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -189,7 +191,10 @@ String getDataFileLocation({
           // '/.../MyMovieSearch/integration_test/data_files/xxx.json',
           // to 'integration_test/data_files/xxx.json',
           final path = fullPath.substring(fullPath.indexOf('integration_test'));
-          return path.replaceFirst('integration_test/', 'integration_test/data_files/');
+          return path.replaceFirst(
+            'integration_test/',
+            'integration_test/data_files/',
+          );
         }
         return fullPath;
       }
@@ -591,3 +596,16 @@ SearchCriteriaDTO makeCriteriaDTO(String sample) => SearchCriteriaDTO()
     MovieResultDTO().init(uniqueId: 'first'),
     MovieResultDTO().init(uniqueId: 'second'),
   ];
+
+/// Warm up the headless browser by fetching the JSON for a known URL.
+Future<List<String>> warmUpHeadlessEngine() async {
+  // On Android, this ensures cookies are persistent
+  if (Platform.isAndroid) {
+    await InAppWebViewController.setWebContentsDebuggingEnabled(true);
+  }
+  final extractor = WebJsonSychroniser(
+    'https://www.imdb.com/name/nm0000111/',
+    'FilmographyV2Pagination',
+  );
+  return extractor.getJson();
+}
