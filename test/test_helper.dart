@@ -31,6 +31,7 @@ void sortDtoList(List<MovieResultDTO> dtos, {bool includeRelated = true}) {
   }
 }
 
+@doNotSubmit
 void printTestData(
   Iterable<MovieResultDTO> actualResult, {
   bool includeRelated = true,
@@ -40,6 +41,26 @@ void printTestData(
   // Print new test data to console.
   // ignore: avoid_print
   print(sorted.toListOfDartJsonStrings(includeRelated: includeRelated));
+  expect(
+    'debug code has been left uncommented!',
+    'all call to printTestData must be commented out '
+        'plus you should probably switch to using writeTestData',
+  );
+}
+
+@doNotSubmit
+void printTestDataJson(
+  Iterable<MovieResultDTO> actualResult, {
+  bool includeRelated = true,
+}) {
+  final jsonData = prepareTestData(
+    actualResult,
+    includeRelated: includeRelated,
+    indent: '  ',
+  );
+  // Print new test data to console.
+  // ignore: avoid_print
+  print(jsonData);
   expect(
     'debug code has been left uncommented!',
     'all call to printTestData must be commented out',
@@ -64,6 +85,18 @@ Iterable<MovieResultDTO> sampleTestData(
   return results;
 }
 
+String prepareTestData(
+  Iterable<MovieResultDTO> actualResult, {
+  bool includeRelated = true,
+  String? indent,
+}) {
+  final sorted = actualResult.toList();
+  sortDtoList(sorted, includeRelated: includeRelated);
+  return indent == null
+      ? const JsonEncoder().convert(sorted)
+      : JsonEncoder.withIndent(indent).convert(sorted);
+}
+
 @doNotSubmit
 void writeTestData(
   Iterable<MovieResultDTO> actualResult, {
@@ -72,9 +105,11 @@ void writeTestData(
   String testName = '',
   bool includeRelated = true,
 }) {
-  final sorted = actualResult.toList();
-  sortDtoList(sorted, includeRelated: includeRelated);
-  final jsonData = const JsonEncoder.withIndent('  ').convert(sorted);
+  final jsonData = prepareTestData(
+    actualResult,
+    includeRelated: includeRelated,
+    indent: '  ',
+  );
   writeRawTestData(
     jsonData,
     location: location,
@@ -125,7 +160,10 @@ List<MovieResultDTO> loadTestData(String jsonText) {
 }
 
 /// Returns the absolute path of the JSON file associated with this test file.
-String getDataFileLocation({String suffix = '.json'}) {
+String getDataFileLocation({
+  String suffix = '.json',
+  bool integrationTest = false,
+}) {
   final stackFrames = StackTrace.current.toString().split('\n');
 
   // The path of the file where this function is defined.
@@ -145,7 +183,15 @@ String getDataFileLocation({String suffix = '.json'}) {
       // If we encounter a path different from this function's file,
       // it is the caller (the test file).
       else if (frameFilePath != thisFilePath) {
-        return frameFilePath.replaceAll('.dart', suffix);
+        final fullPath = frameFilePath.replaceAll('.dart', suffix);
+        if (integrationTest) {
+          // convert
+          // '/.../MyMovieSearch/integration_test/data_files/xxx.json',
+          // to 'integration_test/data_files/xxx.json',
+          final path = fullPath.substring(fullPath.indexOf('integration_test'));
+          return path.replaceFirst('integration_test/', 'integration_test/data_files/');
+        }
+        return fullPath;
       }
     }
   }

@@ -249,18 +249,18 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     );
     final body = await myConstructBody();
     logger.t('requesting: $address');
-    final client = await baseGetHttpClient().openUrl(
+    final request = await myGetHttpClient().openUrl(
       body == null ? HttpMethod.get.value : HttpMethod.post.value,
       address,
     );
-    myConstructHeaders(client.headers);
+    myConstructHeaders(request.headers);
     if (body != null) {
       final List<int> bodyBytes = utf8.encode(body);
-      client
+      request
         ..contentLength = bodyBytes.length
         ..add(bodyBytes);
     }
-    final response = await client.close();
+    final response = await request.close();
 
     if (response.statusCode == HttpStatus.accepted) {
       // The body of a 202 response is often a JavaScript challenge.
@@ -730,9 +730,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
 
   /// Returns a new [HttpClient] instance to allow mocking in tests.
   ///
-  /// Should not be be overridden by child classes.
-  @visibleForTesting
-  HttpClient baseGetHttpClient() => HttpClient()
+  HttpClient myGetHttpClient() => HttpClient()
     // Allow HttpClient to handle compressed data from web servers.
     ..autoUncompress = true;
 }

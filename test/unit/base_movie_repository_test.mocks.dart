@@ -688,7 +688,7 @@ class MockWebFetchBase extends _i1.Mock
           as String);
 
   @override
-  _i5.HttpClient baseGetHttpClient() =>
+  _i5.HttpClient myGetHttpClient() =>
       (super.noSuchMethod(
             Invocation.method(#baseGetHttpClient, []),
             returnValue: _FakeHttpClient_4(

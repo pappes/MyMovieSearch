@@ -57,7 +57,7 @@ class QueryUnknownSourceMocked
 
   /// Returns a new [HttpClient] instance to allow mocking in tests.
   @override
-  HttpClient baseGetHttpClient() {
+  HttpClient myGetHttpClient() {
     final client = MockHttpClient();
     final clientRequest = MockHttpClientRequest();
     final clientResponse = MockHttpClientResponse();

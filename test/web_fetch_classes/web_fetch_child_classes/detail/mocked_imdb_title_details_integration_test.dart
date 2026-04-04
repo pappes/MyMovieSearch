@@ -50,7 +50,7 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
   String? expectedCriteria;
 
   @override
-  HttpClient baseGetHttpClient() {
+  HttpClient myGetHttpClient() {
     final client = MockHttpClient();
     final clientRequest = MockHttpClientRequest();
     final clientResponse = MockHttpClientResponse();

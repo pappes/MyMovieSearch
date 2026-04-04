@@ -59,9 +59,27 @@ class WebHtmlExtractor extends WebHeadlessExtractor {
   }
 }
 
+
+/// A wrapper class around `WebHtmlExtractor` that simulates an `HttpClient`.
+///
+/// This is used to drive a headless browser on android
+/// to load the full website, including running any javascript
+/// to extract HTML from a web page.
+///
+/// Falls back to a standard `HttpClient` on other platforms.
+///
+/// Note: only methods used by `WebFetchBase` are implemented.
 class HeadlessHttpClient implements HttpClient {
+  HeadlessHttpClient() {
+    if (!Platform.isAndroid) {
+      deligate = HttpClient();
+    }
+  }
+
+  HttpClient? deligate;
+
   @override
-  void close({bool force = false}) {}
+  void close({bool force = false}) => deligate?.close(force: force);
 
   @override
   Future<HttpClientRequest> open(
@@ -69,11 +87,14 @@ class HeadlessHttpClient implements HttpClient {
     String host,
     int port,
     String path,
-  ) async => HeadlessHttpClientRequest('http://$host:$port$path');
+  ) =>
+      deligate?.open(method, host, port, path) ??
+      Future.value(HeadlessHttpClientRequest('http://$host:$port$path'));
 
   @override
-  Future<HttpClientRequest> openUrl(String method, Uri url) async =>
-      HeadlessHttpClientRequest(url.toString());
+  Future<HttpClientRequest> openUrl(String method, Uri url) =>
+      deligate?.openUrl(method, url) ??
+      Future.value(HeadlessHttpClientRequest(url.toString()));
 
   /*@override
   bool autoUncompress;
@@ -181,7 +202,7 @@ class HeadlessHttpClient implements HttpClient {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-/// A wrapper class around WebHtmlExtractor that simulates an HttpClient.
+/// A wrapper class around `WebHtmlExtractor` that simulates an `HttpClient`.
 ///
 /// It returns an HTML response as a `Stream<String>`. This is designed
 /// to be a drop-in replacement for `myFetchWebText` implementations
@@ -195,6 +216,8 @@ class HeadlessHttpClientRequest implements HttpClientRequest {
 
   WebHtmlExtractor? base;
   int _statusCode = HttpStatus.ok;
+  @override
+  final headers = HeadlessHttpHeaders();
 
   /// execute webrequest using headless browser.
   @override
@@ -204,7 +227,7 @@ class HeadlessHttpClientRequest implements HttpClientRequest {
     return response;
   }
 
-  /// Fetches the HTML from the given [webPageUrl] and returns it as a Stream.
+  /// Fetches the HTML from the given `webPageUrl` and returns it as a Stream.
   Future<Stream<String>> getHtmlStream() async {
     final streamController = StreamController<String>();
 
@@ -215,6 +238,9 @@ class HeadlessHttpClientRequest implements HttpClientRequest {
     }
 
     try {
+      // According to Gemini using a headless browser to replace a HttpClient
+      // "is like taking a limousine to pick up a single grape".
+      // Brutal!
       _statusCode = await base!.execute(
         webPageUrl,
         // Dummy filter so standard interception avoids matching logic.
@@ -233,9 +259,8 @@ class HeadlessHttpClientRequest implements HttpClientRequest {
 
     return streamController.stream;
   }
-  //Non-nullable instance field 'encoding' must be initialized.
 
-  /// Convert a [Future<Stream<String>>] to a [Stream<List<int>>].
+  /// Convert a `Future<Stream<String>>` to a `Stream<List<int>>`.
   ///
   /// ```dart
   /// final stream = await getHtmlStream();
@@ -322,8 +347,8 @@ class HeadlessHttpClientRequest implements HttpClientRequest {
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
-/// A wrapper class around HttpClientResponse
-/// that simulates an HttpClientResponse.
+/// A wrapper class around `Stream<List<int>>`
+/// that simulates an `HttpClientResponse`.
 class HeadlessHttpClientResponse extends StreamView<List<int>>
     implements HttpClientResponse {
   HeadlessHttpClientResponse.fromBasic(this.htmlStream, this.statusCode)
@@ -368,6 +393,13 @@ class HeadlessHttpClientResponse extends StreamView<List<int>>
   @override
   List<RedirectInfo> get redirects => throw UnimplementedError();*/
 
+  // throw exception for all unimplimented methods.
+  @override
+  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
+
+/// Headless client does not support headers.
+class HeadlessHttpHeaders implements HttpHeaders {
   // throw exception for all unimplimented methods.
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);

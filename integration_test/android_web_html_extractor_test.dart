@@ -45,61 +45,8 @@ void main() async {
   await Future<void>.delayed(const Duration(seconds: 8));
 
 
-
-
   testWidgets(
-    'Use real HttpClient to baseline test results',
-    (tester) async {
-      await tester.pumpWidget(const MyApp());
-
-      final client = HttpClient();
-      final request = await client.openUrl(
-        HttpMethod.get.value,
-        Uri.parse('https://www.imdb.com/name/nm0000149/'),
-      );
-      //request.headers.set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3');
-      final response = await request.close();
-      final htmlData = await response.transform(utf8.decoder).join();
-
-      expect(htmlData, isNotNull);
-      expect(
-        htmlData,
-        contains(
-          '<script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
-        ),
-      );
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-  );
-
-  testWidgets(
-    'Use real Headless HttpClient',
-    (tester) async {
-      await tester.pumpWidget(const MyApp());
-
-      final client = HeadlessHttpClient();
-      final request = await client.openUrl(
-        HttpMethod.get.value,
-        Uri.parse('https://www.imdb.com/name/nm0000149/'),
-      );
-      //request.headers.set('User-Agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3');
-      final response = await request.close();
-      final htmlData = await response.transform(utf8.decoder).join();
-
-      expect(htmlData, isNotNull);
-      expect(
-        htmlData,
-        contains(
-          '<script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
-        ),
-      );
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-    skip: !Platform.isAndroid,
-  );
-
-  testWidgets(
-    'Extract HTML from imdb and check for NEXT_DATA',
+    'WebHtmlExtractor low level class',
     (tester) async {
       await tester.pumpWidget(const MyApp());
 
@@ -110,7 +57,8 @@ void main() async {
         'never_match_this_string_to_avoid_intercepts',
         (data) {
           if (data.contains(
-            '<script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
+            '<script id="__NEXT_DATA__" '
+            'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
           )) {
             htmlData = data;
           }
@@ -130,7 +78,7 @@ void main() async {
   );
 
   testWidgets(
-    'Extract HTML from imdb and check for NEXT_DATA using adapter',
+    'test HeadlessHttpClientRequest as replacement for HttpClientRequest',
     (tester) async {
       await tester.pumpWidget(const MyApp());
 
@@ -145,11 +93,60 @@ void main() async {
       expect(
         htmlData,
         contains(
-          '<script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
+          '<script id="__NEXT_DATA__" '
+          'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
         ),
       );
     },
     timeout: const Timeout(Duration(seconds: 60)),
     skip: !Platform.isAndroid,
+  );
+
+  testWidgets(
+    'test HeadlessHttpClient as replacement for HttpClient',
+    (tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      final client = HeadlessHttpClient();
+      final request = await client.openUrl(
+        HttpMethod.get.value,
+        Uri.parse('https://www.imdb.com/name/nm0000149/'),
+      );
+      final response = await request.close();
+      final htmlData = await response.transform(utf8.decoder).join();
+      final statusCode = response.statusCode;
+
+      expect(htmlData, isNotNull);
+      expect(statusCode, HttpStatus.ok);
+      expect(
+        htmlData,
+        contains(
+          '<script id="__NEXT_DATA__" '
+          'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
+        ),
+      );
+    },
+    timeout: const Timeout(Duration(seconds: 60)),
+    skip: !Platform.isAndroid,
+  );
+
+  testWidgets(
+    'Use real HttpClient to baseline test results',
+    (tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      final client = HttpClient();
+      final request = await client.openUrl(
+        HttpMethod.get.value,
+        Uri.parse('https://www.imdb.com/name/nm0000149/'),
+      );
+      final response = await request.close();
+      final htmlData = await response.transform(utf8.decoder).join();
+      final statusCode = response.statusCode;
+
+      expect(htmlData, isEmpty);
+      expect(statusCode, HttpStatus.accepted);
+    },
+    timeout: const Timeout(Duration(seconds: 60)),
   );
 }

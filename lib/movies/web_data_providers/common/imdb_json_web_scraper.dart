@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert' show json;
+import 'dart:io';
 import 'package:html/dom.dart' show Document;
 import 'package:html/parser.dart' show parse;
 
@@ -9,6 +10,18 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
+import 'package:my_movie_search/utilities/web_data/web_html_extractor.dart';
+
+/// Make webfetch extract data using a headless browser.
+mixin HeadlessWebFetch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
+  /// Use a headless browser to fetch the web page.
+  @override
+  HttpClient myGetHttpClient() => HeadlessHttpClient();
+
+  /// Headers are not supported for headless browser.
+  @override
+  void myConstructHeaders(HttpHeaders headers) {}
+}
 
 /// Implements a web scraper for retrieving movie details from IMDB.
 mixin ScrapeIMDBJsonDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
