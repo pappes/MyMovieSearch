@@ -9,7 +9,7 @@ class HeadlessWebEngineLinux implements HeadlessWebEngine {
   @override
   Future<int> run({
     required String url,
-    required String apiAcceptFilter,
+    required String urlInterceptFilter,
     required DataCallback onEngineData,
     PageLoadCallback? onPageLoaded,
   }) async {

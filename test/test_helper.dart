@@ -12,7 +12,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/utilities/settings.dart';
-import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
+import 'package:my_movie_search/utilities/web_data/web_html_extractor.dart';
 import 'package:quiver/iterables.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -603,9 +603,8 @@ Future<List<String>> warmUpHeadlessEngine() async {
   if (Platform.isAndroid) {
     await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
-  final extractor = WebJsonSychroniser(
+  final htmlData = await WebHtmlSychroniser(
     'https://www.imdb.com/name/nm0000111/',
-    'FilmographyV2Pagination',
-  );
-  return extractor.getJson();
+  ).getHtml();
+  return htmlData;
 }

@@ -37,13 +37,21 @@ void main() {
   });
 
   test('execute delegates to webEngine.run', () async {
-    await extractor.execute('https://example.com', 'apiFilter', (data) {});
-
-    mockito.verify(mockEngine.run(
-      url: 'https://example.com',
+    await extractor.execute(
+      'https://example.com',
+      (data) {},
       apiAcceptFilter: 'apiFilter',
-      onEngineData: mockito.anyNamed('onEngineData'),
-      onPageLoaded: mockito.anyNamed('onPageLoaded'),
-    )).called(1);
+    );
+
+    mockito
+        .verify(
+          mockEngine.run(
+            url: 'https://example.com',
+            urlInterceptFilter: 'apiFilter',
+            onEngineData: mockito.anyNamed('onEngineData'),
+            onPageLoaded: mockito.anyNamed('onPageLoaded'),
+          ),
+        )
+        .called(1);
   });
 }

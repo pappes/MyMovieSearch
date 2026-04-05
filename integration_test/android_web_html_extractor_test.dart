@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/http_method.dart';
 import 'package:my_movie_search/utilities/web_data/web_html_extractor.dart';
+
+import 'test_helper.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -40,6 +43,27 @@ void main() async {
   }
 
   testWidgets(
+    'Use real HttpClient to baseline test results',
+    (tester) async {
+      await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
+
+      final client = HttpClient();
+      final request = await client.openUrl(
+        HttpMethod.get.value,
+        Uri.parse('https://www.imdb.com/name/nm0000149/'),
+      );
+      final response = await request.close();
+      final htmlData = await response.transform(utf8.decoder).join();
+      final statusCode = response.statusCode;
+
+      expect(htmlData, isEmpty);
+      expect(statusCode, HttpStatus.accepted);
+    },
+    timeout: const Timeout(Duration(seconds: 60)),
+  );
+
+  testWidgets(
     'WebHtmlExtractor low level class',
     (tester) async {
       await tester.pumpWidget(const MyApp());
@@ -47,24 +71,21 @@ void main() async {
 
       String? htmlData;
       final extractor = WebHtmlExtractor();
-      await extractor.execute(
-        'https://www.imdb.com/name/nm0000149/',
-        'never_match_this_string_to_avoid_intercepts',
-        (data) {
-          if (data.contains(
-            '<script id="__NEXT_DATA__" '
-            'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
-          )) {
-            htmlData = data;
-          }
-        },
-      );
+      await extractor.execute('https://www.imdb.com/name/nm0000149/', (data) {
+        if (data.contains(
+          '<script id="__NEXT_DATA__" '
+          'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
+        )) {
+          htmlData = data;
+        }
+      });
 
       expect(htmlData, isNotNull);
       expect(
         htmlData,
         contains(
-          '<script id="__NEXT_DATA__" type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
+          '<script id="__NEXT_DATA__" '
+          'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
         ),
       );
     },
@@ -73,9 +94,10 @@ void main() async {
   );
 
   testWidgets(
-    'test HeadlessHttpClientRequest as replacement for HttpClientRequest',
+    'HeadlessHttpClientRequest as replacement for HttpClientRequest',
     (tester) async {
       await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
 
       final adapter = HeadlessHttpClientRequest(
         'https://www.imdb.com/name/nm0000149/',
@@ -98,14 +120,15 @@ void main() async {
   );
 
   testWidgets(
-    'test HeadlessHttpClient as replacement for HttpClient',
+    'HeadlessHttpClient for a movie as replacement for HttpClient',
     (tester) async {
       await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
 
       final client = HeadlessHttpClient();
       final request = await client.openUrl(
         HttpMethod.get.value,
-        Uri.parse('https://www.imdb.com/name/nm0000149/'),
+        Uri.parse('https://www.imdb.com/title/tt0105236/fullcredits/'),
       );
       final response = await request.close();
       final htmlData = await response.transform(utf8.decoder).join();
@@ -115,6 +138,36 @@ void main() async {
       expect(statusCode, HttpStatus.ok);
       expect(
         htmlData,
+        contains(
+          '</script><script id="__NEXT_DATA__" '
+          'type="application/json">{"props":{"pageProps":{"contentData":{"entityMetadata":{"id":"tt0105236',
+        ),
+      );
+    },
+    timeout: const Timeout(Duration(seconds: 60)),
+    skip: !Platform.isAndroid,
+  );
+
+  testWidgets(
+    'WebHtmlSychroniser',
+    (tester) async {
+      await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
+
+      Future<String> getHtml(String url) async {
+        await warmUpHeadlessEngine();
+        final htmlData = await WebHtmlSychroniser(url).getHtml();
+        if (htmlData.isEmpty) {
+          return 'noresults';
+        }
+        return htmlData.first;
+      }
+
+      final htmlOutput = await getHtml('https://www.imdb.com/name/nm0000149/');
+
+      expect(htmlOutput, isNotNull);
+      expect(
+        htmlOutput,
         contains(
           '<script id="__NEXT_DATA__" '
           'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
@@ -126,22 +179,28 @@ void main() async {
   );
 
   testWidgets(
-    'Use real HttpClient to baseline test results',
+    'WebHtmlSychroniser on non-UI thread',
     (tester) async {
       await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
 
-      final client = HttpClient();
-      final request = await client.openUrl(
-        HttpMethod.get.value,
-        Uri.parse('https://www.imdb.com/name/nm0000149/'),
+      Future<String> getHtml(String url) async {
+        final htmlData = await WebHtmlSychroniser(url).getHtml();
+        if (htmlData.isEmpty) {
+          return 'noresults';
+        }
+        return htmlData.first;
+      }
+
+      final otherThread = ThreadRunner.namedThread('a');
+      // Use throwsA for Futures
+      await expectLater(
+        () => otherThread.run(getHtml, 'https://www.imdb.com/name/nm0000149/'),
+        throwsA(isA<AssertionError>()),
       );
-      final response = await request.close();
-      final htmlData = await response.transform(utf8.decoder).join();
-      final statusCode = response.statusCode;
-
-      expect(htmlData, isEmpty);
-      expect(statusCode, HttpStatus.accepted);
     },
     timeout: const Timeout(Duration(seconds: 60)),
+    skip: !Platform.isAndroid,
   );
+
 }

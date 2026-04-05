@@ -1,7 +1,6 @@
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -67,11 +66,11 @@ mixin ThreadedCacheIMDBNameDetails
   /// ```dart
   /// return QueryIMDBNameDetails();
   /// ```
-  @override
-  @factory
-  WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
-    SearchCriteriaDTO criteria,
-  ) => QueryIMDBNameDetails(criteria);
+  // @override
+  // @factory
+  // WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
+  //   SearchCriteriaDTO criteria,
+  // ) => QueryIMDBNameDetails(criteria);
 
   @override
   @visibleForTesting

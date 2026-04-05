@@ -318,7 +318,7 @@ Future<void> main() async {
       expect(res4, completion(10)); // 2+8
     });
     test('run a slow function on multiple named threads', () {
-      expect(ThreadRunner.currentThreadName, 'Default Thread');
+      expect(ThreadRunner.currentThreadName, 'Default Thread (UI)');
       final res1 = ThreadRunner.namedThread('a').run(globalFnAccumulateSlow, 0);
       final res2 = ThreadRunner.namedThread('b').run(globalFnAccumulateSlow, 1);
       final res3 = ThreadRunner.namedThread('c').run(globalFnAccumulateSlow, 1);
@@ -342,7 +342,7 @@ Future<void> main() async {
       expect(res4, completion(10)); // 2+8
     });
     test('run a function on a named thread', () {
-      expect(ThreadRunner.currentThreadName, 'Default Thread');
+      expect(ThreadRunner.currentThreadName, 'Default Thread (UI)');
       final res1 = ThreadRunner.namedThread('a').run(globalFnThreadName, 0);
       final res2 = ThreadRunner.namedThread('b').run(globalFnThreadName, 0);
       final res3 = ThreadRunner.namedThread('c').run(globalFnThreadName, 0);
@@ -351,6 +351,18 @@ Future<void> main() async {
       expect(res2, completion('b'));
       expect(res3, completion('c'));
       expect(res4, completion('Unnamed Thread'));
+    });
+
+    // test to ensure that an exception generated on another thread
+    // is propogated back to the calling thread.
+    test('run function that throws exception', () {
+      String globalFnThrow(dynamic x) {
+        throw Exception('throw from another thread');
+      }
+
+      final threader = ThreadRunner();
+      final res = threader.run(globalFnThrow, 0);
+      expect(res, throwsException);
     });
   });
 

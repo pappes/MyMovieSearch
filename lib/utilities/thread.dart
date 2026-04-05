@@ -49,7 +49,7 @@ class ThreadRunner {
   static const slow = 'Slow Thread';
   static const verySlow = 'Very Slow Thread';
   static String? latestThreadName;
-  static String? currentThreadName = 'Default Thread';
+  static String? currentThreadName = 'Default Thread (UI)';
 
   bool ready = false;
   late Future<bool> initialised;
@@ -83,12 +83,19 @@ class ThreadRunner {
   ///     console appears to be thread safe.
   Future<dynamic> run<T>(dynamic Function(T) function, T parameter) async {
     final receivePort = ReceivePort();
-    final message = {'fn': function, 'param': parameter};
+    final message = ThreadRequest(function, parameter);
     if (!ready) await initialised;
 
     _mainThreadOutboundPort.send([message, receivePort.sendPort]);
 
-    return receivePort.first;
+    final result = await receivePort.first;
+    if (result is Exception) {
+      throw result;
+    }
+    if (result is Error) {
+      throw result;
+    }
+    return result;
   }
 
   /// Spawn another thread and capture port to send future requests to.
@@ -98,20 +105,20 @@ class ThreadRunner {
 
     // Spawn another thread and wait to receive a port
     // for the main thread to talk on.
-    await Isolate.spawn(_runOnOtherThread, {
-      'port': receivePort.sendPort,
-      'threadName': threadName,
-    });
+    await Isolate.spawn(
+      _runOnOtherThread,
+      ThreadSource(receivePort.sendPort, threadName),
+    );
     _mainThreadOutboundPort = await receivePort.first as SendPort;
     ready = true;
     _completer.complete(ready);
   }
 
   /// Function to process any incoming requests.
-  static Future<void> _runOnOtherThread(Map<String, dynamic> params) async {
-    final initialOutboundPort = params['port'] as SendPort;
+  static Future<void> _runOnOtherThread(ThreadSource params) async {
+    final initialOutboundPort = params.port;
 
-    currentThreadName = params['threadName'] as String;
+    currentThreadName = params.threadName;
     final inboundPort = ReceivePort();
 
     // Notify caller which port they can use to send compute requests on.
@@ -121,16 +128,36 @@ class ThreadRunner {
     await for (final request in inboundPort) {
       // Decode from IPC.
       // ignore: avoid_dynamic_calls
-      final incomingMessage = request[0] as Map;
+      final incomingMessage = request[0] as ThreadRequest;
       // Decode from IPC.
       // ignore: avoid_dynamic_calls
       final msgOutboundPort = request[1] as SendPort;
-      final fn = incomingMessage['fn'] as Function;
-      final parameter = incomingMessage['param'];
-      // Decode from IPC.
-      // ignore: avoid_dynamic_calls
-      final result = await fn(parameter);
-      msgOutboundPort.send(result);
+      final fn = incomingMessage.function;
+      final parameter = incomingMessage.parameter;
+      try {
+        // Execute any function that takes one parameter.
+        // ignore: avoid_dynamic_calls
+        final result = await fn(parameter);
+        msgOutboundPort.send(result);
+      } catch (e) {
+        msgOutboundPort.send(e);
+      }
     }
   }
+}
+
+/// Thread information to be passed to Isolate.spawn
+class ThreadSource {
+  ThreadSource(this.port, this.threadName);
+
+  final SendPort port;
+  final String threadName;
+}
+
+/// Helper class to pass function and parameter to other threads.
+class ThreadRequest {
+  ThreadRequest(this.function, this.parameter);
+
+  final Function function;
+  final dynamic parameter;
 }

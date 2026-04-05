@@ -35,7 +35,11 @@ class WebJsonSychroniser {
   /// If no results are found, add a single entry with the string
   /// 'no dynamic json results'.
   Future<List<String>> getJson() async {
-    await base.execute(webPageUrl, apiAcceptFilter, _jsonCallback);
+    await base.execute(
+      webPageUrl,
+      _jsonCallback,
+      apiAcceptFilter: apiAcceptFilter,
+    );
     if (jsonResults.isEmpty) {
       jsonResults.add(jsonEncode('no dynamic json results'));
     }
@@ -65,12 +69,12 @@ class WebJsonExtractor extends WebHeadlessExtractor {
   @override
   Future<int> execute(
     String url,
-    String apiAcceptFilter,
-    DataCallback onData,
-  ) async {
+    DataCallback onData, {
+    String apiAcceptFilter = '',
+  }) async {
     final httpStatus = await webEngine?.run(
       url: url,
-      apiAcceptFilter: apiAcceptFilter,
+      urlInterceptFilter: apiAcceptFilter,
       onEngineData: (data) => processRawData(data, onData),
       onPageLoaded: () => _extractJsonScripts(onData),
     );

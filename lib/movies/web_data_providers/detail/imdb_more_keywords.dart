@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -15,7 +14,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// QueryIMDBMoreKeywordsDetails().readList(criteria);
 /// ```
 class QueryIMDBMoreKeywordsDetails
-    extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO>
+    extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
     with ScrapeIMDBMoreKeywordsDetails {
   QueryIMDBMoreKeywordsDetails(super.criteria);
 
@@ -25,12 +24,6 @@ class QueryIMDBMoreKeywordsDetails
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() => 'imdb_more_keywords';
-
-  @override
-  @factory
-  WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
-    SearchCriteriaDTO criteria,
-  ) => QueryIMDBMoreKeywordsDetails(criteria);
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.

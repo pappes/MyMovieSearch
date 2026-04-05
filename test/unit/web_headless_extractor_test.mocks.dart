@@ -31,7 +31,7 @@ class MockHeadlessWebEngine extends _i1.Mock implements _i2.HeadlessWebEngine {
   @override
   _i3.Future<int> run({
     required String? url,
-    required String? apiAcceptFilter,
+    required String? urlInterceptFilter,
     required _i2.DataCallback? onEngineData,
     _i2.PageLoadCallback? onPageLoaded,
     Map<String, String>? headers,
@@ -39,7 +39,7 @@ class MockHeadlessWebEngine extends _i1.Mock implements _i2.HeadlessWebEngine {
       (super.noSuchMethod(
             Invocation.method(#run, [], {
               #url: url,
-              #apiAcceptFilter: apiAcceptFilter,
+              #apiAcceptFilter: urlInterceptFilter,
               #onEngineData: onEngineData,
               #onPageLoaded: onPageLoaded,
               #headers: headers,

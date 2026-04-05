@@ -15,13 +15,6 @@ Future<Stream<String>> _emitUnexpectedHtmlSample(_) =>
 Future<Stream<String>> _emitInvalidHtmlSample(_) =>
     Future.value(Stream.value('not valid html'));
 
-// Helper class to provide static data for testing.
-// ignore: avoid_classes_with_only_static_members
-class StaticJsonGenerator {
-  static Future<Stream<String>> stuff(_) =>
-      Future.value(Stream.value('"stuff"'));
-}
-
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => lockWebFetchTreadedCache);
@@ -113,88 +106,6 @@ void main() {
             'needs to match expected DTO list '
             '${expectedValue.toPrintableString()}',
       );
-    });
-  });
-
-  ////////////////////////////////////////////////////////////////////////////////
-  /// Integration tests using WebFetchThreadedCache
-  ////////////////////////////////////////////////////////////////////////////////
-
-  group('WebFetchThreadedCache unit tests', () {
-    test('empty cache', () async {
-      final criteria = SearchCriteriaDTO().fromString('Marco');
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      await testClass.clearThreadedCache();
-      final listResult = await testClass.readCachedList(
-        source: (_) => Future.value(Stream.value('Polo')),
-      );
-      expect(listResult, <MovieResultDTO>[]);
-      final resultIsCached = await testClass.isThreadedResultCached();
-      expect(resultIsCached, false);
-      final resultIsStale = testClass.isThreadedCacheStale();
-      expect(resultIsStale, false);
-    });
-
-    test('add to cache via readPrioritisedCachedList', () async {
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      await testClass.clearThreadedCache();
-      // Load data into the cache.
-      // ignore: unused_result
-      await testClass.readPrioritisedCachedList(
-        source: streamImdbHtmlOfflineData,
-      );
-      final listResult = await testClass.readPrioritisedCachedList(
-        source: StaticJsonGenerator.stuff,
-        // Return some random junk that will not get used do to caching
-      );
-      expect(
-        listResult,
-        MovieResultDTOListMatcher(expectedDTOList),
-        reason:
-            'Emitted DTO list ${listResult.toPrintableString()} '
-            'needs to match expected DTO List'
-            '${expectedDTOList.toPrintableString()}',
-      );
-      final resultIsCached = await testClass.isThreadedResultCached();
-      expect(resultIsCached, true);
-      final resultIsStale = testClass.isThreadedCacheStale();
-      expect(resultIsStale, false);
-    });
-
-    test('fetch result from cache', () async {
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      await testClass.clearThreadedCache();
-      // Load data into the cache.
-      // ignore: unused_result
-      await testClass.readPrioritisedCachedList(
-        source: streamImdbHtmlOfflineData,
-      );
-      final listResult = await testClass
-          .fetchResultFromThreadedCache()
-          .toList();
-      expect(listResult, MovieResultDTOListMatcher(expectedDTOList));
-      final resultIsCached = await testClass.isThreadedResultCached();
-      expect(resultIsCached, true);
-      final resultIsStale = testClass.isThreadedCacheStale();
-      expect(resultIsStale, false);
-    });
-
-    test('clear cache', () async {
-      final criteria = SearchCriteriaDTO().fromString('tt7602562');
-      final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      await testClass.clearThreadedCache();
-      // Load data into the cache.
-      // ignore: unused_result
-      await testClass.readPrioritisedCachedList(
-        source: streamImdbHtmlOfflineData,
-      );
-      await testClass.clearThreadedCache();
-      final resultIsCached = await testClass.isThreadedResultCached();
-      expect(resultIsCached, false);
-      final resultIsStale = testClass.isThreadedCacheStale();
-      expect(resultIsStale, false);
     });
   });
 

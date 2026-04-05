@@ -55,10 +55,10 @@ HeadlessInAppWebView defaultWebView({
 }) {
   final settings = InAppWebViewSettings(
     // 1. Core JS execution
-    javaScriptEnabled: true,
+    // javaScriptEnabled: true,
 
     // 2. Crucial: AWS WAF stores tokens/state in DOM Storage
-    domStorageEnabled: true,
+    // domStorageEnabled: true,
 
     // 3. Allows the script to handle its own redirects/reloads
     javaScriptCanOpenWindowsAutomatically: true,
@@ -70,7 +70,9 @@ HeadlessInAppWebView defaultWebView({
     // 5. User-Agent: Sometimes AWS blocks default WebView agents
     // Try setting a standard mobile browser string if it still fails
     userAgent:
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36",
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
+        'AppleWebKit/537.36 (KHTML, like Gecko) '
+        'Chrome/146.0.0.0 Safari/537.36',
   );
   return HeadlessInAppWebView(
     initialSettings: settings,
@@ -132,27 +134,33 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
 
   late DataCallback _onEngineData;
   PageLoadCallback? _onPageLoaded;
-  late String _apiFilter;
+  late String _urlProxyFilter;
   String _imdbUrl = '';
 
   /// Runs the headless web engine to extract data from a web page.
   ///
   /// [url] The URL of the web page to extract data from.
-  /// [apiAcceptFilter] The query to use for filtering JSON data.
-  /// [onEngineData] A callback function to process the extracted JSON data.
+  /// [urlInterceptFilter] The filter for choosing JSON data 
+  ///   to be passed to onEngineData.
+  ///   Any resource request url containing this string will be intercepted.
+  ///   If empty, no urls will be intercepted.
+  /// [onEngineData] A callback function to process the main html page
+  ///                and extracted JSON data.
   /// [onPageLoaded] A callback function to process the page complete event.
+  ///                This is called multiple times in the case of redirects.
+  
   @override
   @awaitNotRequired
   Future<int> run({
     required String url,
-    required String apiAcceptFilter,
+    required String urlInterceptFilter,
     required DataCallback onEngineData,
     PageLoadCallback? onPageLoaded,
   }) async {
     _imdbUrl = url;
     _onEngineData = onEngineData;
     _onPageLoaded = onPageLoaded;
-    _apiFilter = apiAcceptFilter;
+    _urlProxyFilter = urlInterceptFilter;
 
     _headlessWebView = _webViewRunner(
       initialUrl: url,
@@ -358,7 +366,7 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
       return true;
     }
     // Pass through non-API URLs
-    if (!url.contains(_apiFilter)) {
+    if (_urlProxyFilter.isEmpty || !url.contains(_urlProxyFilter)) {
       return true;
     }
     // Pass through non-GET requests

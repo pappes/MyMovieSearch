@@ -10,6 +10,35 @@ import 'package:my_movie_search/utilities/web_data/platform_other/headless_web_e
 import 'package:my_movie_search/utilities/web_data/web_headless_extractor.dart';
 import 'package:universal_io/io.dart';
 
+/// Simplified interface for extracting html data from a web page.
+///
+/// Hides the underlying callback mechanism.
+class WebHtmlSychroniser {
+  WebHtmlSychroniser(this.webPageUrl) {
+    base = WebHtmlExtractor();
+  }
+
+  final String webPageUrl;
+  late WebHtmlExtractor base;
+  List<String> htmlResults = [];
+
+  void _htmlCallback(String html) {
+    htmlResults.add(html);
+  }
+
+  /// Consolidate all html results into a single list.
+  ///
+  /// If no results are found, add a single entry with the string
+  /// 'no dynamic html results'.
+  Future<List<String>> getHtml() async {
+    await base.execute(webPageUrl, _htmlCallback);
+    if (htmlResults.isEmpty) {
+      htmlResults.add('no dynamic html results');
+    }
+    return htmlResults;
+  }
+}
+
 /// Extracts the HTML body from a web page.
 class WebHtmlExtractor extends WebHeadlessExtractor {
   WebHtmlExtractor({super.webEngine}) {
@@ -30,11 +59,12 @@ class WebHtmlExtractor extends WebHeadlessExtractor {
   @override
   Future<int> execute(
     String url,
-    String apiAcceptFilter,
-    DataCallback onData,
+    DataCallback onData, {
+    String apiAcceptFilter = '',
+  }
   ) => webEngine!.run(
     url: url,
-    apiAcceptFilter: apiAcceptFilter,
+    urlInterceptFilter: apiAcceptFilter,
     onEngineData: (data) => processRawData(data, onData),
     onPageLoaded: () => _noop(onData),
   );
@@ -51,7 +81,8 @@ class WebHtmlExtractor extends WebHeadlessExtractor {
       pagesLoaded++;
       if (pagesLoaded == 1) {
         logger.t(
-          'processRawData: HTML fragment ${data.length} sample: ${data.substring(0, 1000)}',
+          'processRawData: HTML fragment ${data.length} '
+          'sample: ${data.substring(0, 1000)}',
         );
         onData(data);
       }
@@ -243,8 +274,6 @@ class HeadlessHttpClientRequest implements HttpClientRequest {
       // Brutal!
       _statusCode = await base!.execute(
         webPageUrl,
-        // Dummy filter so standard interception avoids matching logic.
-        'never_match_this_string_to_avoid_intercepts',
         htmlCallback,
       );
     } catch (e) {

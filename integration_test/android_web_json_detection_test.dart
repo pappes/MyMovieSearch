@@ -52,14 +52,10 @@ void callback(String jsonString) {
 
 Future<void> _getDataFromImdb() async {
   jsonChunkCount = 0;
-  final synchroniser = WebJsonSychroniser(
+  await WebJsonExtractor().execute(
     'https://www.imdb.com/name/nm0000149/',
-    'FilmographyV2Pagination',
-  );
-  await synchroniser.base.execute(
-    'https://www.imdb.com/name/nm0000149/',
-    'FilmographyV2Pagination',
     callback,
+    apiAcceptFilter: 'FilmographyV2Pagination',
   );
 }
 

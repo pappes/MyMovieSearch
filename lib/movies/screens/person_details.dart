@@ -15,7 +15,6 @@ import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart'
 import 'package:my_movie_search/movies/web_data_providers/detail/wikidata_detail.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
-import 'package:my_movie_search/utilities/thread.dart';
 
 class PersonDetailsPage extends StatefulWidget {
   const PersonDetailsPage({
@@ -73,7 +72,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
       /// Fetch person details from cache using a separate thread.
       unawaited(
         QueryIMDBNameDetails(criteria)
-            .readPrioritisedCachedList(priority: ThreadRunner.fast)
+            .readList()
             .then(_requestShowDetails),
       );
 

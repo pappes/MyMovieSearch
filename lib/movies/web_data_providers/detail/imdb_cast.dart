@@ -1,4 +1,3 @@
-import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -15,8 +14,8 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 /// QueryIMDBCastDetails().readList(criteria);
 /// ```
 class QueryIMDBCastDetails
-    extends WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO>
-    with ScrapeIMDBJsonDetails {
+    extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
+    with HeadlessWebFetch, ScrapeIMDBJsonDetails {
   QueryIMDBCastDetails(super.criteria);
 
   static const _baseURL = 'https://www.imdb.com/title/';
@@ -25,12 +24,6 @@ class QueryIMDBCastDetails
   /// Describe where the data is coming from.
   @override
   String myDataSourceName() => 'imdb_cast';
-
-  @override
-  @factory
-  WebFetchThreadedCache<MovieResultDTO, SearchCriteriaDTO> myClone(
-    SearchCriteriaDTO criteria,
-  ) => QueryIMDBCastDetails(criteria);
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.

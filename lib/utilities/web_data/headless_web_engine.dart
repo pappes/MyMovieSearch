@@ -10,7 +10,7 @@ abstract class HeadlessWebEngine {
   ///
   /// [onPageLoaded] is invoked once the page fully loads,
   /// allowing scripts to be evaluated.
-  /// [apiAcceptFilter] restricts which network requests are
+  /// [urlInterceptFilter] restricts which network requests are
   /// intercepted vs passed through.
   ///
   /// returns HttpStatus codes:
@@ -22,11 +22,11 @@ abstract class HeadlessWebEngine {
   /// 501 - notImplemented - not implemented (HttpStatus.notImplemented)
   ///
   /// 404 - not found - page not found (HttpStatus.notFound)
-  /// 503 - service unavailable - service unavailable (HttpStatus.serviceUnavailable)
+  /// 503 - unavailable - service unavailable (HttpStatus.serviceUnavailable)
   
   Future<int> run({
     required String url,
-    required String apiAcceptFilter,
+    required String urlInterceptFilter,
     required DataCallback onEngineData,
     PageLoadCallback? onPageLoaded,
   });

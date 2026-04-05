@@ -19,7 +19,6 @@ import 'package:my_movie_search/movies/web_data_providers/detail/wikidata_detail
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
-import 'package:my_movie_search/utilities/thread.dart';
 
 class MovieDetailsPage extends StatefulWidget {
   const MovieDetailsPage({
@@ -78,9 +77,7 @@ class _MovieDetailsPageState extends State<MovieDetailsPage>
 
       /// Fetch cast details from cache using a separate thread.
       unawaited(
-        QueryIMDBCastDetails(criteria)
-            .readPrioritisedCachedList(priority: ThreadRunner.fast)
-            .then(_requestShowDetails),
+        QueryIMDBCastDetails(criteria).readList().then(_requestShowDetails),
       );
 
       /// Fetch full actor/director/writer/producer data

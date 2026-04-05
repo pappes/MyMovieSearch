@@ -92,7 +92,7 @@ void main() {
           webViewRunner: mockWebView,
         )..run(
           url: 'https://www.imdb.com/name/nm0000149/',
-          apiAcceptFilter: 'FilmographyV2Pagination',
+          urlInterceptFilter: 'FilmographyV2Pagination',
           onEngineData: (_) {},
         );
   });

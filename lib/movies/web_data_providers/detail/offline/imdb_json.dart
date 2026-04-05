@@ -219,7 +219,3 @@ const imdbJsonNode3Sample = {
     },
   },
 };
-
-
-
-const imdbJsonInnerFilteredSampleAdhoc = {};
