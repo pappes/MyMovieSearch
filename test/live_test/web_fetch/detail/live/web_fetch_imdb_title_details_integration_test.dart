@@ -17,6 +17,7 @@ void main() {
   group('live QueryIMDBTitleDetails test', () {
     // Convert 3 IMDB pages into dtos.
     test('Run read 3 pages from IMDB', () async {
+      await QueryIMDBTitleDetails(SearchCriteriaDTO()).myClearCache();
       final actualOutput = await executeMultipleFetches(
         (criteria) => QueryIMDBTitleDetails(criteria).readList(),
       );

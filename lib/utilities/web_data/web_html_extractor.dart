@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -82,7 +84,7 @@ class WebHtmlExtractor extends WebHeadlessExtractor {
       if (pagesLoaded == 1) {
         logger.t(
           'processRawData: HTML fragment ${data.length} '
-          'sample: ${data.substring(0, 1000)}',
+          'sample: ${data.characters.take(1000)}',
         );
         onData(data);
       }
@@ -97,20 +99,11 @@ class WebHtmlExtractor extends WebHeadlessExtractor {
 /// to load the full website, including running any javascript
 /// to extract HTML from a web page.
 ///
-/// Falls back to a standard `HttpClient` on other platforms.
-///
 /// Note: only methods used by `WebFetchBase` are implemented.
 class HeadlessHttpClient implements HttpClient {
-  HeadlessHttpClient() {
-    if (!Platform.isAndroid) {
-      deligate = HttpClient();
-    }
-  }
-
-  HttpClient? deligate;
 
   @override
-  void close({bool force = false}) => deligate?.close(force: force);
+  void close({bool force = false}) {}
 
   @override
   Future<HttpClientRequest> open(
@@ -119,12 +112,10 @@ class HeadlessHttpClient implements HttpClient {
     int port,
     String path,
   ) =>
-      deligate?.open(method, host, port, path) ??
       Future.value(HeadlessHttpClientRequest('http://$host:$port$path'));
 
   @override
   Future<HttpClientRequest> openUrl(String method, Uri url) =>
-      deligate?.openUrl(method, url) ??
       Future.value(HeadlessHttpClientRequest(url.toString()));
 
   /*@override

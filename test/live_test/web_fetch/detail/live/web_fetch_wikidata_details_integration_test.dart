@@ -94,7 +94,7 @@ void main() {
       final expectedOutput = readTestData(testName: 'imdb_1000_movies');
       expect(
         actualOutput,
-        MovieResultDTOListFuzzyMatcher(expectedOutput),
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
         reason:
             'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '

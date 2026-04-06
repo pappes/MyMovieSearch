@@ -83,3 +83,4 @@ linux/flutter/generated_plugins.cmake
 linux/runner/cmake_install.cmake
 linux/_deps/
 linux/plugins/
+.local-chrome/

@@ -78,6 +78,7 @@ dependencies:
 
   path_provider_linux: ^2.2.1           # Device filesystem access for accessing filesytstem during testing. 
   provider: ^6.1.5+1                      # so ChangeNotifierProvider can notify change to firebase login state
+  puppeteer: ^3.21.0                    # linux headless browser to substitute for flutter_inappwebview
   quiver: ^3.2.2                        # mega library incluing ranges, caches, collections, etc.
 
   simple_barcode_scanner: ^0.4.0        # DOES NOT COMPILE with flutter 3.24

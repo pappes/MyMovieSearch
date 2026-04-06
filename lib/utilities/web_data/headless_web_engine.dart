@@ -18,7 +18,7 @@ abstract class HeadlessWebEngine {
   /// 200 - success - page loaded and data extracted (HttpStatus.ok)
   /// 204 - noContent - request suppressed (HttpStatus.noContent)
   /// 400 - badRequest - recieved error (HttpStatus.badRequest)
-  /// 510 - notExtended - not status avaialble (HttpStatus.notExtended)
+  /// 510 - notExtended - no status available (HttpStatus.notExtended)
   /// 501 - notImplemented - not implemented (HttpStatus.notImplemented)
   ///
   /// 404 - not found - page not found (HttpStatus.notFound)

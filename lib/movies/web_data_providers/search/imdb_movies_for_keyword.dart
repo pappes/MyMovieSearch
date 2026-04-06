@@ -1,6 +1,7 @@
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_json_web_scraper.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_movies_for_keyword_converter.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_movies_for_keyword.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/imdb_movies_for_keyword.dart';
@@ -17,7 +18,7 @@ const jsonPageKey = 'page';
 /// ```
 class QueryIMDBMoviesForKeyword
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
-    with ScrapeIMDBMoviesForKeyword {
+    with HeadlessWebFetch, ScrapeIMDBMoviesForKeyword {
   QueryIMDBMoviesForKeyword(super.criteria);
 
   static const _baseUrl = 'https://www.imdb.com/search/title/?keywords=';
