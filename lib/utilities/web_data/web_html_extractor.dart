@@ -44,15 +44,7 @@ class WebHtmlSychroniser {
 /// Extracts the HTML body from a web page.
 class WebHtmlExtractor extends WebHeadlessExtractor {
   WebHtmlExtractor({super.webEngine}) {
-    if (webEngine == null) {
-      if (Platform.isAndroid) {
-        webEngine = HeadlessWebEngineAndroid();
-      } else if (Platform.isLinux) {
-        webEngine = HeadlessWebEngineLinux();
-      } else {
-        webEngine = HeadlessWebEngineOther();
-      }
-    }
+    webEngine ??= HeadlessWebEngine();
   }
 
   int pagesLoaded = 0;

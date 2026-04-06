@@ -1,32 +1,13 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:meta/meta.dart';
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:puppeteer/puppeteer.dart';
-
-const _timeoutDurationFull = Duration(seconds: 15);
-const _timeoutDurationShort = Duration(seconds: 10);
-const _timeoutDurationVeryShort = Duration(seconds: 3);
-const _timeoutDurationMicroSleep = Duration(milliseconds: 50);
 
 /// Headless web engine for Linux platforms.
 ///
 /// This class implements the [HeadlessWebEngine] interface for Linux platforms.
-class HeadlessWebEngineLinux implements HeadlessWebEngine {
+class HeadlessWebEngineLinux extends HeadlessWebEngineBase {
   static Browser? browser;
   Page? _page;
-
-  final Completer<void> _dataLoadedCompleter = Completer<void>();
-  int pageLoadCompleteCount = 0;
-  int? httpStatusCode;
-  String? pageContents;
-  Timer? _timeoutTimer;
-
-  late DataCallback _onEngineData;
-  PageLoadCallback? _onPageLoaded;
-  late String _urlProxyFilter;
-  String _imdbUrl = '';
 
   @override
   Future<int> run({
@@ -35,11 +16,12 @@ class HeadlessWebEngineLinux implements HeadlessWebEngine {
     required DataCallback onEngineData,
     PageLoadCallback? onPageLoaded,
   }) async {
-    _imdbUrl = url;
-    _onEngineData = onEngineData;
-    _onPageLoaded = onPageLoaded;
-    _urlProxyFilter = urlInterceptFilter;
-    httpStatusCode = HttpStatus.notExtended;
+    await super.run(
+      url: url,
+      urlInterceptFilter: urlInterceptFilter,
+      onEngineData: onEngineData,
+      onPageLoaded: onPageLoaded,
+    );
 
     browser ??= await puppeteer.launch(
       headless: false,
@@ -53,7 +35,7 @@ class HeadlessWebEngineLinux implements HeadlessWebEngine {
     if (onPageLoaded != null) {
       await onPageLoaded();
     }
-    await _dataLoadedCompleter.future;
+    await dataLoadedCompleter.future;
     httpStatusCode = response.status;
     await dispose();
     return httpStatusCode!;
@@ -61,66 +43,35 @@ class HeadlessWebEngineLinux implements HeadlessWebEngine {
 
   @override
   Future<dynamic> evaluateJavascript(String script) async => null;
+  // TODO: implement find out why changing the dom causes JS to crash
+  // Future<dynamic> evaluateJavascript(String script) async {
+  //   logger.t('evaluateJavascript: $script');
+  //   final result = await _page?.evaluate<dynamic>(script);
 
-  /// Disposes the headless web engine after a timeout period.
-  ///
-  /// [timeoutDuration] The duration to wait before disposing the engine.
-  void resetTimeout([Duration timeoutDuration = _timeoutDurationFull]) {
-    _timeoutTimer?.cancel();
-    _timeoutTimer = Timer(timeoutDuration, () {
-      if (_page != null) {
-        logger.i(
-          'Disposing InAppWebViewController due to timeout for $_imdbUrl',
-        );
-        dispose();
-      }
-    });
-  }
+  //   logger.t('evaluateJavascript result: $result');
+  //   return result;
+  // }
 
-  /// Disposes the headless web engine and signals that the data is loaded.
-  ///
-  /// [optionalDelay] optional delay to wait before disposing the engine.
+  /// Disposes the headless web page
   @override
-  @awaitNotRequired
-  Future<void> dispose({Duration optionalDelay = Duration.zero}) async {
-    _timeoutTimer?.cancel();
-    await Future<void>.delayed(optionalDelay);
+  Future<void> closePage() {
     final webView = _page;
     if (webView != null) {
       _page = null;
-      await webView.close();
+      return webView.close();
     }
-
-    if (!_dataLoadedCompleter.isCompleted) {
-      _onEngineData(pageContents ?? 'Unable to get html from HeadlessWebView');
-      _dataLoadedCompleter.complete();
-    }
-    // Allow time for any final requests to complete.
-    await Future<void>.delayed(_timeoutDurationMicroSleep);
+    return Future.value();
   }
 
-  Future<void> _loadStopped(_) async {
-    logger.t('Page load complete for $_imdbUrl');
-    httpStatusCode ??= HttpStatus.ok;
-    if (_onPageLoaded == null || _page == null) {
-      dispose();
-    } else {
-      await _onPageLoaded!();
-      final html = await _page!.content;
-      if (html != null) {
-        pageContents = html;
-      }
-      // Timeout if requests do not complete quickly enough.
-      pageLoadCompleteCount++;
-      if (pageLoadCompleteCount == 1) {
-        logger.t('Page load complete');
-        resetTimeout(_timeoutDurationShort);
-      } else {
-        logger.t('Page load fully complete');
-        // Sometimes there is a false positive for page load complete.
-        // Delay disposal to allow any final requests to complete.
-        resetTimeout(_timeoutDurationVeryShort);
-      }
-    }
+  @override
+  Future<void> closeEngine() async {
+    await closePage();
+    await browser?.close();
   }
+
+  @override
+  Future<void> _loadStopped(_) => pageLoadComplete();
+
+  @override
+  Future<String?> getPageContent() async => _page?.content;
 }

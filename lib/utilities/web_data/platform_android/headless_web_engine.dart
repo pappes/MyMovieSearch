@@ -11,11 +11,6 @@ import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/http_method.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
-const _timeoutDurationFull = Duration(seconds: 15);
-const _timeoutDurationShort = Duration(seconds: 10);
-const _timeoutDurationVeryShort = Duration(seconds: 3);
-const _timeoutDurationMicroSleep = Duration(milliseconds: 50);
-
 /// This function type abstracts the creation of the HttpClient,
 /// making it mockable.
 typedef HttpClientFactory = HttpClient Function();
@@ -115,7 +110,7 @@ class InterceptionDecision {
 }
 
 /// Implementation of [HeadlessWebEngine] for Android using [InAppWebView].
-class HeadlessWebEngineAndroid implements HeadlessWebEngine {
+class HeadlessWebEngineAndroid extends HeadlessWebEngineBase {
   HeadlessWebEngineAndroid({
     HttpClientFactory httpClientFactory = HttpClient.new,
     WebViewFactory webViewRunner = defaultWebView,
@@ -126,21 +121,10 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
   final WebViewFactory _webViewRunner;
   HeadlessInAppWebView? _headlessWebView;
 
-  final Completer<void> _dataLoadedCompleter = Completer<void>();
-  int pageLoadCompleteCount = 0;
-  int? httpStatusCode;
-  String? pageContents;
-  Timer? _timeoutTimer;
-
-  late DataCallback _onEngineData;
-  PageLoadCallback? _onPageLoaded;
-  late String _urlProxyFilter;
-  String _imdbUrl = '';
-
   /// Runs the headless web engine to extract data from a web page.
   ///
   /// [url] The URL of the web page to extract data from.
-  /// [urlInterceptFilter] The filter for choosing JSON data 
+  /// [urlInterceptFilter] The filter for choosing JSON data
   ///   to be passed to onEngineData.
   ///   Any resource request url containing this string will be intercepted.
   ///   If empty, no urls will be intercepted.
@@ -148,7 +132,7 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
   ///                and extracted JSON data.
   /// [onPageLoaded] A callback function to process the page complete event.
   ///                This is called multiple times in the case of redirects.
-  
+
   @override
   @awaitNotRequired
   Future<int> run({
@@ -157,10 +141,12 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
     required DataCallback onEngineData,
     PageLoadCallback? onPageLoaded,
   }) async {
-    _imdbUrl = url;
-    _onEngineData = onEngineData;
-    _onPageLoaded = onPageLoaded;
-    _urlProxyFilter = urlInterceptFilter;
+    await super.run(
+      url: url,
+      urlInterceptFilter: urlInterceptFilter,
+      onEngineData: onEngineData,
+      onPageLoaded: onPageLoaded,
+    );
 
     _headlessWebView = _webViewRunner(
       initialUrl: url,
@@ -171,7 +157,7 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
     resetTimeout();
 
     await _headlessWebView!.run();
-    await _dataLoadedCompleter.future;
+    await dataLoadedCompleter.future;
     return httpStatusCode ?? HttpStatus.processing;
   }
 
@@ -186,73 +172,30 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
     );
   }
 
-  /// Disposes the headless web engine after a timeout period.
-  ///
-  /// [timeoutDuration] The duration to wait before disposing the engine.
-  void resetTimeout([Duration timeoutDuration = _timeoutDurationFull]) {
-    _timeoutTimer?.cancel();
-    _timeoutTimer = Timer(timeoutDuration, () {
-      if (_headlessWebView != null && _headlessWebView!.isRunning()) {
-        logger.i(
-          'Disposing InAppWebViewController due to timeout for $_imdbUrl',
-        );
-        dispose();
-      }
-    });
-  }
-
-  /// Disposes the headless web engine and signals that the data is loaded.
-  ///
-  /// [optionalDelay] optional delay to wait before disposing the engine.
+  /// Disposes the headless web page
   @override
-  @awaitNotRequired
-  Future<void> dispose({Duration optionalDelay = Duration.zero}) async {
-    _timeoutTimer?.cancel();
-    await Future<void>.delayed(optionalDelay);
+  Future<void> closePage() {
     final webView = _headlessWebView;
     if (webView != null) {
       _headlessWebView = null;
-      await webView.dispose();
+      return webView.dispose();
     }
-    if (!_dataLoadedCompleter.isCompleted) {
-      _onEngineData(pageContents ?? 'Unable to get html from HeadlessWebView');
-      _dataLoadedCompleter.complete();
-    }
-    // Allow time for any final requests to complete.
-    await Future<void>.delayed(_timeoutDurationMicroSleep);
+    return Future.value();
   }
 
-  /// Handles the completion of a page load.
-  ///
-  /// Page load can complete multiple times because code is
-  /// interacting with the page after the initial load complete.
+  @override
+  Future<void> closeEngine() async {
+    await closePage();
+  }
+
+  @override
+  Future<String?> getPageContent() async =>
+      _headlessWebView?.webViewController?.getHtml();
+
   // void return signature required
   // so that it can be used as a callback for the WebView.
   // ignore: avoid_void_async
-  void _loadStopped(InAppWebViewController controller, WebUri? url) async {
-    logger.t('Page load complete for $_imdbUrl');
-    httpStatusCode ??= HttpStatus.ok;
-    if (_onPageLoaded == null || _headlessWebView == null) {
-      dispose();
-    } else {
-      await _onPageLoaded!();
-      final html = await controller.getHtml();
-      if (html != null) {
-        pageContents = html;
-      }
-      // Timeout if requests do not complete quickly enough.
-      pageLoadCompleteCount++;
-      if (pageLoadCompleteCount == 1) {
-        logger.t('Page load complete');
-        resetTimeout(_timeoutDurationShort);
-      } else {
-        logger.t('Page load fully complete');
-        // Sometimes there is a false positive for page load complete.
-        // Delay disposal to allow any final requests to complete.
-        resetTimeout(_timeoutDurationVeryShort);
-      }
-    }
-  }
+  void _loadStopped(_, _) => unawaited(pageLoadComplete());
 
   /// Exposes the private proxy selector for testing purposes.
   Future<WebResourceResponse?> executeProxySelectorForTest(
@@ -366,7 +309,7 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
       return true;
     }
     // Pass through non-API URLs
-    if (_urlProxyFilter.isEmpty || !url.contains(_urlProxyFilter)) {
+    if (urlProxyFilter.isEmpty || !url.contains(urlProxyFilter)) {
       return true;
     }
     // Pass through non-GET requests
@@ -410,7 +353,7 @@ class HeadlessWebEngineAndroid implements HeadlessWebEngine {
 
     final contentType = response.headers.contentType?.mimeType;
     if (contentType == 'application/json' || contentType == 'text/html') {
-      _onEngineData(String.fromCharCodes(bodyBytes));
+      onEngineData(String.fromCharCodes(bodyBytes));
     }
 
     return WebResourceResponse(

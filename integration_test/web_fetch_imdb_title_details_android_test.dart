@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -49,10 +48,7 @@ void main() {
       // printTestDataJson(actualOutput);
 
       // Check the results.
-      final jsonString = await rootBundle.loadString(
-        getDataFileLocation(integrationTest: true),
-      );
-      final expectedOutput = loadTestData(jsonString);
+    final expectedOutput = await readIntegrationTestData();
       expect(
         actualOutput,
         MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
@@ -63,7 +59,6 @@ void main() {
       );
     },
     timeout: const Timeout(Duration(seconds: 60)),
-    skip: !Platform.isAndroid,
   );
 
   testWidgets('Run an empty search', (tester) async {

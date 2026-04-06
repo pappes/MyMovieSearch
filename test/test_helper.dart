@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meta/meta.dart';
@@ -142,7 +143,11 @@ String rawTestData({
 }) {
   final testSeperator = (testName == '') ? testName : '_$testName';
   final testLocation = getDataFileLocation(suffix: '$testSeperator$suffix');
-  return File(location ?? testLocation).readAsStringSync();
+  if (testLocation.contains('integration_test')) {
+    return File(location ?? testLocation).readAsStringSync();
+  } else {
+    return File(location ?? testLocation).readAsStringSync();
+  }
 }
 
 List<MovieResultDTO> readTestData({
@@ -152,6 +157,20 @@ List<MovieResultDTO> readTestData({
 }) => loadTestData(
   rawTestData(location: location, suffix: suffix, testName: testName),
 );
+
+Future<List<MovieResultDTO>> readIntegrationTestData({
+  String? location,
+  String suffix = '.json',
+  String testName = '',
+}) async {
+  final testSeperator = (testName == '') ? testName : '_$testName';
+  final testLocation = getDataFileLocation(
+    integrationTest: true,
+    suffix: '$testSeperator$suffix',
+  );
+  final jsonString = await rootBundle.loadString(location ?? testLocation);
+  return loadTestData(jsonString);
+}
 
 List<MovieResultDTO> loadTestData(String jsonText) {
   final jsonData = json.decode(jsonText);

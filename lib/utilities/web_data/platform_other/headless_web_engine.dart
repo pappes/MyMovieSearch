@@ -26,4 +26,7 @@ class HeadlessWebEngineOther implements HeadlessWebEngine {
 
   @override
   Future<void> dispose({Duration optionalDelay = Duration.zero}) async {}
+
+  @override
+  void resetTimeout([Duration? timeoutDuration]) {}
 }

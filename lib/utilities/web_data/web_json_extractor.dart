@@ -50,15 +50,7 @@ class WebJsonSychroniser {
 /// Extract JSON data from a web page using a headless web engine.
 class WebJsonExtractor extends WebHeadlessExtractor {
   WebJsonExtractor({super.webEngine}) {
-    if (webEngine == null) {
-      if (Platform.isAndroid) {
-        webEngine = HeadlessWebEngineAndroid();
-      } else if (Platform.isLinux) {
-        webEngine = HeadlessWebEngineLinux();
-      } else {
-        webEngine = HeadlessWebEngineOther();
-      }
-    }
+    webEngine ??= HeadlessWebEngine();
   }
 
   /// Execute the web engine and extract JSON data from a web page.

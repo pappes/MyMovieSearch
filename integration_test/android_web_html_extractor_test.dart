@@ -90,7 +90,6 @@ void main() async {
       );
     },
     timeout: const Timeout(Duration(seconds: 60)),
-    skip: !Platform.isAndroid,
   );
 
   testWidgets(
@@ -116,7 +115,6 @@ void main() async {
       );
     },
     timeout: const Timeout(Duration(seconds: 60)),
-    skip: !Platform.isAndroid,
   );
 
   testWidgets(
@@ -145,7 +143,6 @@ void main() async {
       );
     },
     timeout: const Timeout(Duration(seconds: 60)),
-    skip: !Platform.isAndroid,
   );
 
   testWidgets(
@@ -175,7 +172,6 @@ void main() async {
       );
     },
     timeout: const Timeout(Duration(seconds: 60)),
-    skip: !Platform.isAndroid,
   );
 
   testWidgets(
@@ -200,7 +196,6 @@ void main() async {
       );
     },
     timeout: const Timeout(Duration(seconds: 60)),
-    skip: !Platform.isAndroid,
   );
 
 }

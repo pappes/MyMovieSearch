@@ -57,10 +57,7 @@ void main() {
           actualOutput.last.related.values.first.length,
         ]..sort((a, b) => a.compareTo(b));
 
-        final jsonString = await rootBundle.loadString(
-          getDataFileLocation(integrationTest: true),
-        );
-        final expectedOutput = loadTestData(jsonString);
+        final expectedOutput = await readIntegrationTestData();
         // Check the results.
         expect(
           sampleOutput,
