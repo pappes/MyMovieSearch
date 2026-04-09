@@ -3,6 +3,7 @@ import 'dart:async' show StreamController, unawaited;
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
@@ -61,7 +62,7 @@ class BaseMovieRepository {
     final errorMessage = 'Error in BaseMovieRepository: $error\n$stackTrace';
     logger.e(errorMessage);
     if (_movieStreamController?.isClosed == false) {
-      searchIndicator.title = errorMessage.characters.take(200).toString();
+      searchIndicator.title = errorMessage.truncate(200);
       yieldResult(searchIndicator);
     }
   }

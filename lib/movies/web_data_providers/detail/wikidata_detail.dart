@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -11,6 +10,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/wikidata_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/http_method.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
@@ -248,7 +248,7 @@ SELECT DISTINCT ?item ?itemLabel WHERE {
     // check results
     if (response.statusCode == HttpStatus.ok) {
       final body = await response.transform(utf8.decoder).join();
-      return body.characters.take(1000).toString();
+      return body.truncate();
     }
     return null;
   }

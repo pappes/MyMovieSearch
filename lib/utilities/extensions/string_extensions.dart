@@ -3,6 +3,21 @@ import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 /// Extend [String] to provide convenience functions.
 ///
 extension StringHelper on String {
+  /// Truncate the string to the given length
+  ///
+  /// ```dart
+  /// final truncated = '2001 a space odyssey'.truncate(10);
+  /// ```
+  String truncate([int length = 1000]) {
+    if (length < 0) {
+      throw ArgumentError('Length must be non-negative');
+    }
+    if (length >= this.length) {
+      return this;
+    }
+    return '${substring(0, length)}...';
+  }
+
   /// Remove any 4 digit years from the string
   ///
   /// Substitutes a blank space by default

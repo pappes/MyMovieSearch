@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:html/parser.dart' show parse;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/fishpond_barcode.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -80,7 +80,7 @@ mixin ScrapeFishpondBarcodeSearch
     throw WebConvertException(
       'Possible FishpondBarcode site update, '
       'no search result found for search query, '
-      'json contents:${jsonText.characters.take(100)}...',
+      'json contents:${jsonText.truncate(100)}...',
     );
   }
 }

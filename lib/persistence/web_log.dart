@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:quiver/collection.dart';
 
 const errorsCollection = 'Recent Errors';
@@ -34,7 +34,7 @@ class Stats {
         'cachedResponses:$qtyCachedResponses  -  '
         'emptyResponses:$qtyEmptyResponses  -  '
         'errors:$qtyErrors\n'
-    ..alternateTitle = '${lastError.characters.take(1000)}'
+    ..alternateTitle = lastError.truncate()
     ..related = {errorsCollection: recentErrors};
 
   MovieResultDTO _formatError(String error) => MovieResultDTO()

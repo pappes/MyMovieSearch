@@ -1,12 +1,12 @@
 // https://thetvdb.github.io/v4-api/#/Series/getSeriesBase
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tvdb_details.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tvdb_details.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_common.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [WebFetchBase] for movie data from The Movie Database (TVDB).
@@ -58,7 +58,7 @@ class QueryTVDBDetails extends QueryTVDBCommon {
     }
     throw TreeConvertException(
       'expected map got ${map.runtimeType} unable to interpret data '
-      '${map?.toString().characters.take(100)}',
+      '${map?.toString().truncate(100)}',
     );
   }
 }

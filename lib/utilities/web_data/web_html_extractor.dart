@@ -1,14 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
-import 'package:my_movie_search/utilities/web_data/platform_android/headless_web_engine.dart';
-import 'package:my_movie_search/utilities/web_data/platform_linux/headless_web_engine.dart';
-import 'package:my_movie_search/utilities/web_data/platform_other/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/web_headless_extractor.dart';
 import 'package:universal_io/io.dart';
 
@@ -76,7 +72,7 @@ class WebHtmlExtractor extends WebHeadlessExtractor {
       if (pagesLoaded == 1) {
         logger.t(
           'processRawData: HTML fragment ${data.length} '
-          'sample: ${data.characters.take(1000)}',
+          'sample: ${data.truncate()}',
         );
         onData(data);
       }

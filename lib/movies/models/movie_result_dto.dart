@@ -489,7 +489,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     type = MovieContentType.error;
     _lastError = _lastError - 1;
     uniqueId = _lastError.toString();
-    title = errorText.characters.take(1000).toString();
+    title = errorText.truncate();
     bestSource = errorSource;
     return this;
   }

@@ -1,13 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
-import 'package:my_movie_search/utilities/web_data/platform_android/headless_web_engine.dart';
-import 'package:my_movie_search/utilities/web_data/platform_linux/headless_web_engine.dart';
-import 'package:my_movie_search/utilities/web_data/platform_other/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/web_headless_extractor.dart';
 
 const Duration _shortDelay = Duration(seconds: 2);
@@ -122,7 +119,7 @@ class WebJsonExtractor extends WebHeadlessExtractor {
     if (result != null) {
       logger.t(
         'Found on initial page load: '
-        '${result.toString().characters.take(1000)}',
+        '${result.toString().truncate(100)}',
       );
       try {
         final jsonScripts = json.decode(result.toString());
@@ -145,7 +142,7 @@ class WebJsonExtractor extends WebHeadlessExtractor {
       if (!data.trim().startsWith(startHtml)) {
         logger.t(
           'Processing Json  : '
-          '${data.characters.take(1000)}',
+          '${data.truncate()}',
         );
         json.decode(data); // Validate it's valid JSON
         onData(data);
@@ -153,7 +150,7 @@ class WebJsonExtractor extends WebHeadlessExtractor {
     } catch (e) {
       logger.t(
         'Failed to process Json  : '
-        '${e.toString().characters.take(1000)}',
+        '${e.toString().truncate()}',
       );
       // Ignore invalid JSON responses
     }

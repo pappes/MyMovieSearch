@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/http_method.dart';
@@ -395,7 +395,7 @@ class HeadlessWebEngineAndroid extends HeadlessWebEngineBase {
     WebResourceError error,
   ) {
     logger.e(
-      'Error loading headless page: ${error.description.characters.take(100)}'
+      'Error loading headless page: ${error.description.truncate(100)}'
       'for ${request.url}',
     );
     if (httpStatusCode == null || httpStatusCode == HttpStatus.ok) {

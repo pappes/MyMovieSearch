@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 extension StreamHelper<T> on Stream<T> {
@@ -13,7 +13,7 @@ extension StreamHelper<T> on Stream<T> {
       await for (final value in this) {
         final text = value.toString();
         if (text.length > limit) {
-          logger.i('$prefix ${text.characters.take(limit)}  ...');
+          logger.i('$prefix ${text.truncate(limit)}  ...');
         } else {
           logger.i('$prefix $value');
         }

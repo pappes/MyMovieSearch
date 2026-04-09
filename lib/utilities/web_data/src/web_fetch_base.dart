@@ -5,11 +5,11 @@ library;
 import 'dart:async' show FutureOr, StreamController, unawaited;
 import 'dart:convert' show jsonDecode, utf8;
 
-import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/persistence/web_log.dart';
 import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/http_method.dart';
@@ -477,7 +477,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     } catch (error) {
       logger.e(
         'Error in transform ${myFormatInputAsText()} to resulting object: '
-        '${error.toString().characters.take(1000)}',
+        '${error.toString().truncate()}',
       );
       final errorMessage = baseConstructErrorMessage(
         'transform ${myFormatInputAsText()} to resulting object',
@@ -722,7 +722,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   @visibleForTesting
   String baseConstructErrorMessage(String context, dynamic error) {
     final boilerplate = 'Error in $_getFetchContext';
-    final errorText = error.toString().characters.take(1000).toString();
+    final errorText = error.toString().truncate();
     WebLog(myDataSourceName()).logError(criteria, errorText);
     if (errorText.startsWith(boilerplate)) return errorText;
     return '$boilerplate $context :$errorText';

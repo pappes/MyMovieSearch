@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -9,6 +8,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_json_web_scraper.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_factory.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
@@ -137,7 +137,7 @@ abstract class QueryIMDBJsonDetailsBase
     if (map is Map) {
       logger.i(
         'JsonBase converting webText: '
-        '${map.toString().characters.take(100)}',
+        '${map.toString().truncate(100)}',
       );
 
       // Old IMDB data just required ImdbJsonConverter().

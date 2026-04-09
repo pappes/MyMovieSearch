@@ -1,7 +1,7 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
@@ -44,7 +44,7 @@ int jsonChunkCount = 0;
 void callback(String jsonString) {
   logger.i(
     'JSON Callback($jsonChunkCount): '
-    '${jsonString.characters.take(100)}'
+    '${jsonString.truncate(100)}'
     '...${jsonString.length}',
   );
   jsonChunkCount++;
@@ -80,8 +80,6 @@ void main() {
       );
     },
     timeout: const Timeout(Duration(seconds: 60)),
-    // This test uses flutter_inappwebview which is configured for Android.
-    skip: !Platform.isAndroid,
   );
   testWidgets(
     'Extract json from imdb for the same person again',
@@ -99,8 +97,6 @@ void main() {
       );
     },
     timeout: const Timeout(Duration(seconds: 60)),
-    // This test uses flutter_inappwebview which is configured for Android.
-    skip: !Platform.isAndroid,
   );
 
   testWidgets(
@@ -123,7 +119,5 @@ void main() {
       );
     },
     timeout: const Timeout(Duration(seconds: 60)),
-    // This test uses flutter_inappwebview which is configured for Android.
-    skip: !Platform.isAndroid,
   );
 }
