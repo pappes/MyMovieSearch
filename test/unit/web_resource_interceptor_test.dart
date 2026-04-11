@@ -71,7 +71,7 @@ class MockHttpClientRequest extends mockito.Mock implements HttpClientRequest {
 // Default implementation of the WebView using HeadlessInAppWebView.
 HeadlessInAppWebView mockWebView({
   required String initialUrl,
-  required WebResourceInterceptor proxySelector,
+  required Proxyselector proxySelector,
   required void Function(InAppWebViewController, WebUri?) onLoadStop,
   required void Function(
     InAppWebViewController,

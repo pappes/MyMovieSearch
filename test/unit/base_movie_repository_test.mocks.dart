@@ -690,14 +690,14 @@ class MockWebFetchBase extends _i1.Mock
   @override
   _i5.HttpClient myGetHttpClient() =>
       (super.noSuchMethod(
-            Invocation.method(#baseGetHttpClient, []),
+            Invocation.method(#myGetHttpClient, []),
             returnValue: _FakeHttpClient_4(
               this,
-              Invocation.method(#baseGetHttpClient, []),
+              Invocation.method(#myGetHttpClient, []),
             ),
             returnValueForMissingStub: _FakeHttpClient_4(
               this,
-              Invocation.method(#baseGetHttpClient, []),
+              Invocation.method(#myGetHttpClient, []),
             ),
           )
           as _i5.HttpClient);

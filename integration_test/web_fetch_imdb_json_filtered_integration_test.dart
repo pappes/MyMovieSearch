@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -94,8 +92,6 @@ Future<void> main() async {
       );
       },
       timeout: const Timeout(Duration(seconds: 60)),
-      // This test uses flutter_inappwebview which is configured for Android.
-      skip: !Platform.isAndroid,
     );
     testWidgets('Run an empty search', (tester) async {
       await tester.pumpWidget(const MyApp());
@@ -120,8 +116,6 @@ Future<void> main() async {
       );
       },
       timeout: const Timeout(Duration(seconds: 60)),
-      // This test uses flutter_inappwebview which is configured for Android.
-      skip: !Platform.isAndroid,
     );
   });
 }

@@ -34,15 +34,13 @@ class MockHeadlessWebEngine extends _i1.Mock implements _i2.HeadlessWebEngine {
     required String? urlInterceptFilter,
     required _i2.DataCallback? onEngineData,
     _i2.PageLoadCallback? onPageLoaded,
-    Map<String, String>? headers,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#run, [], {
               #url: url,
-              #apiAcceptFilter: urlInterceptFilter,
+              #urlInterceptFilter: urlInterceptFilter,
               #onEngineData: onEngineData,
               #onPageLoaded: onPageLoaded,
-              #headers: headers,
             }),
             returnValue: _i3.Future<int>.value(0),
             returnValueForMissingStub: _i3.Future<int>.value(0),
@@ -66,4 +64,10 @@ class MockHeadlessWebEngine extends _i1.Mock implements _i2.HeadlessWebEngine {
             returnValueForMissingStub: _i3.Future<void>.value(),
           )
           as _i3.Future<void>);
+
+  @override
+  void resetTimeout([Duration? timeoutDuration]) => super.noSuchMethod(
+    Invocation.method(#resetTimeout, [timeoutDuration]),
+    returnValueForMissingStub: null,
+  );
 }
