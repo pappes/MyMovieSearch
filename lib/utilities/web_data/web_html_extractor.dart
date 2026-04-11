@@ -51,8 +51,7 @@ class WebHtmlExtractor extends WebHeadlessExtractor {
     String url,
     DataCallback onData, {
     String apiAcceptFilter = '',
-  }
-  ) => webEngine!.run(
+  }) => webEngine!.run(
     url: url,
     urlInterceptFilter: apiAcceptFilter,
     onEngineData: (data) => processRawData(data, onData),
@@ -80,7 +79,6 @@ class WebHtmlExtractor extends WebHeadlessExtractor {
   }
 }
 
-
 /// A wrapper class around `WebHtmlExtractor` that simulates an `HttpClient`.
 ///
 /// This is used to drive a headless browser on android
@@ -88,8 +86,14 @@ class WebHtmlExtractor extends WebHeadlessExtractor {
 /// to extract HTML from a web page.
 ///
 /// Note: only methods used by `WebFetchBase` are implemented.
-class HeadlessHttpClient implements HttpClient {
+///
+/// Does not implement autoUncompress, connectionTimeout, idleTimeout,
+/// maxConnectionsPerHost, userAgent, addCredentials, addProxyCredentials,
+/// authenticate, authenticateProxy, badCertificateCallback, connectionFactory,
+/// delete, deleteUrl, findProxy, get, getUrl, head, headUrl, keyLog, patch,
+/// patchUrl, post, postUrl, put, putUrl.
 
+class HeadlessHttpClient implements HttpClient {
   @override
   void close({bool force = false}) {}
 
@@ -99,113 +103,11 @@ class HeadlessHttpClient implements HttpClient {
     String host,
     int port,
     String path,
-  ) =>
-      Future.value(HeadlessHttpClientRequest('http://$host:$port$path'));
+  ) => Future.value(HeadlessHttpClientRequest('http://$host:$port$path'));
 
   @override
   Future<HttpClientRequest> openUrl(String method, Uri url) =>
       Future.value(HeadlessHttpClientRequest(url.toString()));
-
-  /*@override
-  bool autoUncompress;
-
-  @override
-  Duration? connectionTimeout;
-
-  @override
-  Duration idleTimeout;
-
-  @override
-  int? maxConnectionsPerHost;
-
-  @override
-  String? userAgent;
-
-  @override
-  void addCredentials(Uri url, String realm, HttpClientCredentials credentials) {}
-
-  @override
-  void addProxyCredentials(String host, int port, String realm, HttpClientCredentials credentials) {}
-
-  @override
-  set authenticate(Future<bool> Function(Uri url, String scheme, String? realm)? f) {}
-
-  @override
-  set authenticateProxy(Future<bool> Function(String host, int port, String scheme, String? realm)? f) {}
-
-  @override
-  set badCertificateCallback(bool Function(X509Certificate cert, String host, int port)? callback) {}
-
-
-  @override
-  set connectionFactory(Future<ConnectionTask<Socket>> Function(Uri url, String? proxyHost, int? proxyPort)? f) {}
-
-  @override
-  Future<HttpClientRequest> delete(String host, int port, String path) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<HttpClientRequest> deleteUrl(Uri url) {
-    throw UnimplementedError();
-  }
-
-  @override
-  set findProxy(String Function(Uri url)? f) {}
-
-  @override
-  Future<HttpClientRequest> get(String host, int port, String path) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<HttpClientRequest> getUrl(Uri url) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<HttpClientRequest> head(String host, int port, String path) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<HttpClientRequest> headUrl(Uri url) {
-    throw UnimplementedError();
-  }
-
-  @override
-  set keyLog(Function(String line)? callback) {}
-
-
-  @override
-  Future<HttpClientRequest> patch(String host, int port, String path) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<HttpClientRequest> patchUrl(Uri url) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<HttpClientRequest> post(String host, int port, String path) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<HttpClientRequest> postUrl(Uri url) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<HttpClientRequest> put(String host, int port, String path) {
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<HttpClientRequest> putUrl(Uri url) {
-    throw UnimplementedError();
-  }*/
 
   // throw exception for all unimplimented methods.
   @override
@@ -217,6 +119,14 @@ class HeadlessHttpClient implements HttpClient {
 /// It returns an HTML response as a `Stream<String>`. This is designed
 /// to be a drop-in replacement for `myFetchWebText` implementations
 /// in classes that extend `WebFetchBase`.
+///
+/// Note: only methods used by `WebFetchBase` are implemented.
+///
+/// Does not implement bufferOutput, contentLength, followRedirects,
+/// maxRedirects, persistentConnection, encoding, abort, add, addError,
+/// addStream, connectionInfo, cookies, done, flush, headers, method, uri,
+/// write, writeAll, writeBytes, writeCharCode, writeEncodedString,
+/// writeIterable, writeln.
 class HeadlessHttpClientRequest implements HttpClientRequest {
   HeadlessHttpClientRequest(this.webPageUrl, {this.base}) {
     base ??= WebHtmlExtractor();
@@ -251,10 +161,7 @@ class HeadlessHttpClientRequest implements HttpClientRequest {
       // According to Gemini using a headless browser to replace a HttpClient
       // "is like taking a limousine to pick up a single grape".
       // Brutal!
-      _statusCode = await base!.execute(
-        webPageUrl,
-        htmlCallback,
-      );
+      _statusCode = await base!.execute(webPageUrl, htmlCallback);
     } catch (e) {
       if (!streamController.isClosed) {
         streamController.addError(e);
@@ -283,73 +190,6 @@ class HeadlessHttpClientRequest implements HttpClientRequest {
     yield* stream.map(utf8.encode);
   }
 
-  /*
-  @override
-  bool bufferOutput = false;
-
-  @override
-  int contentLength = -1;
-
-  @override
-  bool followRedirects = true;
-
-  @override
-  int maxRedirects = 5;
-
-  @override
-  bool persistentConnection = false;
-
-  @override
-  Encoding encoding = utf8;*/
-
-  /*
-  @override
-  void abort([Object? exception, StackTrace? stackTrace]) {}
-
-  @override
-  void add(List<int> data) {}
-
-  @override
-  void addError(Object error, [StackTrace? stackTrace]) {}
-
-  @override
-  Future<dynamic> addStream(Stream<List<int>> stream) {}
-
-  @override
-  HttpConnectionInfo? get connectionInfo => throw UnimplementedError();
-
-  @override
-  List<Cookie> get cookies => throw UnimplementedError();
-
-  @override
-  Future<HttpClientResponse> get done => throw UnimplementedError();
-
-  @override
-  Future<dynamic> flush() {
-    throw UnimplementedError();
-  }
-
-  @override
-  HttpHeaders get headers => requestHeaders;
-
-  @override
-  String get method => throw UnimplementedError();
-
-  @override
-  Uri get uri => throw UnimplementedError();
-
-  @override
-  void write(Object? object) {}
-
-  @override
-  void writeAll(Iterable<dynamic> objects, [String separator = ""]) {}
-
-  @override
-  void writeCharCode(int charCode) {}
-
-  @override
-  void writeln([Object? object = ""]) {}*/
-
   // throw exception for all unimplimented methods.
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
@@ -357,6 +197,13 @@ class HeadlessHttpClientRequest implements HttpClientRequest {
 
 /// A wrapper class around `Stream<List<int>>`
 /// that simulates an `HttpClientResponse`.
+///
+/// Note: only methods used by `WebFetchBase` are implemented.
+///
+/// Does not implement cookies, connectionInfo, certificate, compressionState,
+/// detachSocket, isRedirect, persistentConnection, reasonPhrase, redirect,
+/// redirects.
+
 class HeadlessHttpClientResponse extends StreamView<List<int>>
     implements HttpClientResponse {
   HeadlessHttpClientResponse.fromBasic(this.htmlStream, this.statusCode)
@@ -365,41 +212,6 @@ class HeadlessHttpClientResponse extends StreamView<List<int>>
   Stream<List<int>> htmlStream;
   @override
   int statusCode;
-
-  /*
-  @override
-  List<Cookie> cookies = const [];
-  @override
-  int contentLength = -1;
-  @override
-  HttpConnectionInfo? connectionInfo;
-  @override
-  X509Certificate? certificate;
-  @override
-  HttpClientResponseCompressionState compressionState =
-      HttpClientResponseCompressionState.notCompressed;
-
-  @override
-  Future<Socket> detachSocket() { throw UnimplementedError(); }
-
-  @override
-  bool get isRedirect => throw UnimplementedError();
-
-  @override
-  bool get persistentConnection => throw UnimplementedError();
-
-  @override
-  String get reasonPhrase => throw UnimplementedError();
-
-  @override
-  Future<HttpClientResponse> redirect([
-    String? method,
-    Uri? url,
-    bool? followLoops,
-  ]) { throw UnimplementedError(); }
-
-  @override
-  List<RedirectInfo> get redirects => throw UnimplementedError();*/
 
   // throw exception for all unimplimented methods.
   @override

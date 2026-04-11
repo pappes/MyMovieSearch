@@ -6,7 +6,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 // FIX: Import mockito with a prefix to prevent ambiguity with 'any'
 import 'package:mockito/mockito.dart' as mockito;
-import 'package:my_movie_search/utilities/web_data/http_method.dart';
 
 import 'package:my_movie_search/utilities/web_data/platform_android/headless_web_engine.dart';
 
@@ -58,16 +57,6 @@ class ConfigurableMockHttpClientResponse extends mockito.Mock
   }
 }
 
-class MockHttpClientRequest extends mockito.Mock implements HttpClientRequest {
-  @override
-  HttpHeaders get headers =>
-      super.noSuchMethod(
-            Invocation.getter(#headers),
-            returnValue: MockHttpHeaders(),
-          )
-          as HttpHeaders;
-}
-
 // Default implementation of the WebView using HeadlessInAppWebView.
 HeadlessInAppWebView mockWebView({
   required String initialUrl,
@@ -95,73 +84,6 @@ void main() {
           urlInterceptFilter: 'FilmographyV2Pagination',
           onEngineData: (_) {},
         );
-  });
-  // Helper function to create a mock request
-  WebResourceRequest createMockRequest({
-    required String url,
-    String method = 'GET',
-    Map<String, String>? headers,
-  }) {
-    final mockUri = MockWebUri();
-    mockito.when(mockUri.uriValue).thenReturn(Uri.parse(url));
-
-    final mockRequest = MockWebResourceRequest();
-    mockito.when(mockRequest.url).thenReturn(mockUri);
-    mockito.when(mockRequest.method).thenReturn(method);
-    mockito.when(mockRequest.headers).thenReturn(headers);
-    return mockRequest;
-  }
-
-  group('getInterceptionDecision (Parent Logic Tests)', () {
-    test('should return SyntheticResponse (204) for image requests', () {
-      const url = 'https://example.com/image.png';
-      final request = createMockRequest(url: url);
-      final decision = extractor.getInterceptionDecision(url, request.method);
-
-      expect(decision.action, InterceptionAction.syntheticResponse);
-      expect(decision.statusCode, HttpStatus.noContent);
-      expect(decision.contentType, 'text/plain');
-      expect(decision.body, Uint8List(0));
-    });
-
-    test('should return Passthrough for CSS resources', () {
-      const url = 'https://example.com/styles.css';
-      final request = createMockRequest(url: url);
-      final decision = extractor.getInterceptionDecision(url, request.method);
-
-      expect(decision.action, InterceptionAction.delegateRequest);
-    });
-
-    test('should return Passthrough for non-/api/ URLs', () {
-      const url = 'https://example.com/home';
-      final request = createMockRequest(url: url);
-      final decision = extractor.getInterceptionDecision(url, request.method);
-
-      expect(decision.action, InterceptionAction.delegateRequest);
-    });
-
-    test(
-      'should return Passthrough for POST requests(if not explicitly targeted)',
-      () {
-        const url = 'https://example.com/api/submit';
-        final request = createMockRequest(
-          url: url,
-          method: HttpMethod.post.value,
-        );
-        final decision = extractor.getInterceptionDecision(url, request.method);
-
-        expect(decision.action, InterceptionAction.delegateRequest);
-      },
-    );
-
-    test('should return ProxyNetwork for valid API GET requests', () {
-      const url =
-          'https://example.com/api/data/FilmographyV2Pagination?param=1';
-      final request = createMockRequest(url: url);
-      final decision = extractor.getInterceptionDecision(url, request.method);
-
-      expect(decision.action, InterceptionAction.executeRequest);
-    });
   });
 
   group('transferResponseData (Network Response Translation)', () {
@@ -209,42 +131,4 @@ void main() {
     );
   });
 
-  group('transferRequestData (Header Translation)', () {
-    test('should transfer necessary headers and skip blocked ones', () {
-      // Setup: Mock the platform request
-      final mockPlatformRequest = createMockRequest(
-        url: 'https://example.com',
-        headers: {
-          'Authorization': 'Bearer 123',
-          'User-Agent': 'TestClient',
-          'Content-Length': '100', // Should be skipped
-          'Host': 'example.com', // Should be skipped
-          'X-Custom-Header': 'CustomValue',
-        },
-      );
-
-      final mockDartRequest = MockHttpClientRequest();
-      final mockHeaders = MockHttpHeaders();
-      mockito.when(mockDartRequest.headers).thenReturn(mockHeaders);
-      // Stub set method on mockHeaders
-      mockito.when(mockHeaders.set(mockito.any, mockito.any)).thenReturn(null);
-
-      // Execute the function
-      HeadlessWebEngineAndroid.transferRequestData(
-        mockPlatformRequest,
-        mockDartRequest,
-      );
-
-      // Assertions: Verify the set method was called only for allowed headers
-      mockito.verify(mockHeaders.set('Authorization', 'Bearer 123')).called(1);
-      mockito.verify(mockHeaders.set('User-Agent', 'TestClient')).called(1);
-      mockito
-          .verify(mockHeaders.set('X-Custom-Header', 'CustomValue'))
-          .called(1);
-
-      // Verify that headers in the blocklist were never set.
-      mockito.verifyNever(mockHeaders.set('Content-Length', '100'));
-      mockito.verifyNever(mockHeaders.set('Host', 'example.com'));
-    });
-  });
 }

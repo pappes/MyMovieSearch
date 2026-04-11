@@ -32,7 +32,7 @@ void main() {
       final response = await interceptor.shouldProxyUrl(
         uri,
         HttpMethod.get.value,
-        (_, __) => throw UnimplementedError(),
+        (_, _) => throw UnimplementedError(),
         {},
         null,
       );
@@ -43,37 +43,46 @@ void main() {
       expect(response.decision.body, Uint8List(0));
     });
 
-    test('should return SyntheticResponse (204) for image requests by extension', () async {
-      const url = 'https://example.com/image.png';
-      final uri = Uri.parse(url);
+    test(
+      'should return SyntheticResponse (204) for image requests by extension',
+      () async {
+        const url = 'https://example.com/image.png';
+        final uri = Uri.parse(url);
 
-      final response = await interceptor.shouldProxyUrl(
-        uri,
-        HttpMethod.get.value,
-        (_, __) => throw UnimplementedError(),
-        {},
-        null,
-      );
+        final response = await interceptor.shouldProxyUrl(
+          uri,
+          HttpMethod.get.value,
+          (_, _) => throw UnimplementedError(),
+          {},
+          null,
+        );
 
-      expect(response.decision.action, InterceptionAction.syntheticResponse);
-      expect(response.decision.statusCode, HttpStatus.noContent);
-    });
+        expect(response.decision.action, InterceptionAction.syntheticResponse);
+        expect(response.decision.statusCode, HttpStatus.noContent);
+      },
+    );
 
-    test('should return SyntheticResponse (204) for image requests by header', () async {
-      const url = 'https://example.com/image';
-      final uri = Uri.parse(url);
+    test(
+      'should return SyntheticResponse (204) for image requests by header',
+      () async {
+        const url = 'https://example.com/image';
+        final uri = Uri.parse(url);
 
-      final response = await interceptor.shouldProxyUrl(
-        uri,
-        HttpMethod.get.value,
-        (_, __) => throw UnimplementedError(),
-        {'accept': 'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8'},
-        null,
-      );
+        final response = await interceptor.shouldProxyUrl(
+          uri,
+          HttpMethod.get.value,
+          (_, _) => throw UnimplementedError(),
+          {
+            'accept':
+                'image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8',
+          },
+          null,
+        );
 
-      expect(response.decision.action, InterceptionAction.syntheticResponse);
-      expect(response.decision.statusCode, HttpStatus.noContent);
-    });
+        expect(response.decision.action, InterceptionAction.syntheticResponse);
+        expect(response.decision.statusCode, HttpStatus.noContent);
+      },
+    );
 
     test('should return DelegateRequest for CSS resources', () async {
       const url = 'https://example.com/styles.css';
@@ -82,7 +91,7 @@ void main() {
       final response = await interceptor.shouldProxyUrl(
         uri,
         HttpMethod.get.value,
-        (_, __) => throw UnimplementedError(),
+        (_, _) => throw UnimplementedError(),
         {},
         null,
       );
@@ -90,46 +99,52 @@ void main() {
       expect(response.decision.action, InterceptionAction.delegateRequest);
     });
 
-    test('should return DelegateRequest when url proxy filter is not set', () async {
-      const url = 'https://example.com/home';
-      final uri = Uri.parse(url);
+    test(
+      'should return DelegateRequest when url proxy filter is not set',
+      () async {
+        const url = 'https://example.com/home';
+        final uri = Uri.parse(url);
 
-      final response = await interceptor.shouldProxyUrl(
-        uri,
-        HttpMethod.get.value,
-        (_, __) => throw UnimplementedError(),
-        {},
-        null,
-      );
+        final response = await interceptor.shouldProxyUrl(
+          uri,
+          HttpMethod.get.value,
+          (_, _) => throw UnimplementedError(),
+          {},
+          null,
+        );
 
-      expect(response.decision.action, InterceptionAction.delegateRequest);
-    });
+        expect(response.decision.action, InterceptionAction.delegateRequest);
+      },
+    );
 
-    test('should return DelegateRequest when url does not match filter', () async {
-      String urlProxyFilter = 'MyFilter';
-      const url = 'https://example.com/home';
-      final uri = Uri.parse(url);
+    test(
+      'should return DelegateRequest when url does not match filter',
+      () async {
+        const urlProxyFilter = 'MyFilter';
+        const url = 'https://example.com/home';
+        final uri = Uri.parse(url);
 
-      final response = await interceptor.shouldProxyUrl(
-        uri,
-        HttpMethod.get.value,
-        (_, __) => throw UnimplementedError(),
-        {},
-        urlProxyFilter,
-      );
+        final response = await interceptor.shouldProxyUrl(
+          uri,
+          HttpMethod.get.value,
+          (_, _) => throw UnimplementedError(),
+          {},
+          urlProxyFilter,
+        );
 
-      expect(response.decision.action, InterceptionAction.delegateRequest);
-    });
+        expect(response.decision.action, InterceptionAction.delegateRequest);
+      },
+    );
 
     test('should return DelegateRequest for non-GET requests', () async {
-      String urlProxyFilter = 'MyFilter';
+      const urlProxyFilter = 'MyFilter';
       const url = 'https://example.com/api/MyFilter';
       final uri = Uri.parse(url);
 
       final response = await interceptor.shouldProxyUrl(
         uri,
         HttpMethod.post.value,
-        (_, __) => throw UnimplementedError(),
+        (_, _) => throw UnimplementedError(),
         {},
         urlProxyFilter,
       );
@@ -140,8 +155,9 @@ void main() {
 
   group('Proxy Request Execution', () {
     test('should execute proxy request for matching GET requests', () async {
-      String urlProxyFilter = 'FilmographyV2Pagination';
-      const url = 'https://example.com/api/data/FilmographyV2Pagination?param=1';
+      const urlProxyFilter = 'FilmographyV2Pagination';
+      const url =
+          'https://example.com/api/data/FilmographyV2Pagination?param=1';
       final uri = Uri.parse(url);
 
       final mockRequest = MockHttpClientRequest();
