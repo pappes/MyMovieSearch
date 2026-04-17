@@ -122,6 +122,36 @@ void main() {
             '${expectedValue.toPrintableString()}',
       );
     });
+    // Confirm map can be converted to DTO.
+    test('Run dtoFromCompleteJsonMap() extra seeders', () async {
+      final basicResult = YtsDetailApiConverter.dtoFromCompleteJsonMap(
+        jsonSampleSimple,
+      );
+      var extendedResult = basicResult;
+      // Backup the original list of magnet sources.
+      final originalUrls = List<String>.from(magnetSources);
+      try {
+        await YtsDetailApiConverter.init();
+        extendedResult = YtsDetailApiConverter.dtoFromCompleteJsonMap(
+          jsonSampleSimple,
+        );
+      } finally {
+        // Restore the original list of magnet sources.
+        magnetSources
+          ..clear()
+          ..addAll(originalUrls);
+      }
+
+      // Check the results.
+      expect(
+        basicResult.first.imageUrl.length,
+        lessThan(extendedResult.first.imageUrl.length),
+        reason:
+            'Emitted image URL length \n${basicResult.first.imageUrl} \n'
+            'needs to be less than expected image URL length \n'
+            '${extendedResult.first.imageUrl}',
+      );
+    });
   });
 
   ////////////////////////////////////////////////////////////////////////////////

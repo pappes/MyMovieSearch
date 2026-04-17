@@ -2,7 +2,9 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
 import 'dart:convert';
+import 'dart:io';
 
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
@@ -36,7 +38,6 @@ import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 // torrents.peers = numeric peers
 // torrents.size = size of file as a string with units e.g. 2.38 GB
 // torrents.size_bytes = size of file in bytes
-
 
 // {
 //   "status": "ok",
@@ -92,18 +93,19 @@ import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 //   }
 // }
 
-
 const magnetFragment1 = 'magnet:?xt=urn:btih:';
 const magnetFragment2 = '&dn=';
 const magnetFragment3 = '&tr=';
-const magnetSources = [
+const magnetExtraSourcesUrl =
+    'https://raw.githubusercontent.com/ngosang/trackerslist/refs/heads/master/trackers_all.txt';
+final magnetSources = {
   'https://tracker.opentrackr.org:1337/announce',
   'https://tracker.torrent.eu.org:451/announce',
   'https://tracker.dler.org:6969/announce',
   'https://open.stealth.si:80/announce',
   'https://tracker.moeblog.cn:443/announce',
   'https://tracker.zhuqiy.com:443/announce',
-];
+};
 const statusSuccess = 'ok';
 const sourceBluray = 'bluray';
 const outerElementStatus = 'status';
@@ -115,10 +117,10 @@ const outerElementTorrents = 'torrents';
 const elementId = 'id';
 // const elementUrl = 'url';
 // const elementImdbCode = 'imdb_code';
-// const elementTitle = 'title';
+const elementTitle = 'title';
 // const elementTitleEnglish = 'title_english';
 // const elementSlug = 'slug';
-// const elementYear = 'year';
+const elementYear = 'year';
 // const elementRating = 'rating';
 // const elementRuntime = 'runtime';
 // const elementGenres = 'genres';
@@ -139,6 +141,16 @@ const elementPeers = 'peers';
 const elementSize = 'size';
 
 class YtsDetailApiConverter {
+  @awaitNotRequired
+  static Future<void> init() async {
+    // read extra magnet sources from web
+    // https://raw.githubusercontent.com/ngosang/trackerslist/refs/heads/master/trackers_all.txt
+
+    final request = await HttpClient().getUrl(Uri.parse(magnetExtraSourcesUrl));
+    final response = await request.close();
+    final extraSources = await response.transform(utf8.decoder).toList();
+    magnetSources.addAll(extraSources);
+  }
 
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
@@ -149,20 +161,21 @@ class YtsDetailApiConverter {
     try {
       final status = map[outerElementStatus]?.toString();
       if (status == statusSuccess) {
-        final movieid =
-            // try to get movie id
-            // ignore: avoid_dynamic_calls
-            map[outerElementResults][outerElementMovie][elementId] as int;
+        // Single movie result.
+        // ignore: avoid_dynamic_calls
+        final movieresults = map[outerElementResults][outerElementMovie] as Map;
+        final movieid = movieresults[elementId] as int;
         if (movieid == 0) {
+          // When nothing is matched, a dummy record is returned.
           return searchResults;
         }
-        final torrents =
-            // try to get torrents
-            // ignore: avoid_dynamic_calls
-            map[outerElementResults][outerElementMovie][outerElementTorrents]
-                as Iterable;
+        final title = movieresults[elementTitle] as String;
+        final year = movieresults[elementYear] as int;
+        final suffix = (year > 0) ? ' ($year)' : '';
+        final description = '$title$suffix';
+        final torrents = movieresults[outerElementTorrents] as Iterable;
         if (torrents.isNotEmpty) {
-          searchResults.addAll(dtoFromList(torrents));
+          searchResults.addAll(dtoFromList(torrents, description));
         }
       }
       return searchResults;
@@ -171,24 +184,31 @@ class YtsDetailApiConverter {
     }
   }
 
-  static List<MovieResultDTO> dtoFromList(Iterable<dynamic> maps) {
+  static List<MovieResultDTO> dtoFromList(
+    Iterable<dynamic> maps,
+    String description,
+  ) {
     final searchResults = <MovieResultDTO>[];
     for (final map in maps) {
       if (map is Map) {
-        searchResults.add(dtoFromMap(map));
+        searchResults.add(dtoFromMap(map, description));
       }
     }
     return searchResults;
   }
 
-  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
+  static MovieResultDTO dtoFromMap(
+    Map<dynamic, dynamic> map,
+    String description,
+  ) {
     final keywords = <String>[];
     if (map[elementSource] == sourceBluray) {
       keywords.add(sourceBluray);
     }
     final title =
+        '$description '
         '${map[elementQuality]} ${map[elementAudioChannels]} '
-        '${map[elementSource]}';
+        '${map[elementSource]} (YTS)';
 
     final movie = MovieResultDTO().init(
       bestSource: DataSourceType.ytsDetailApi,
@@ -198,10 +218,7 @@ class YtsDetailApiConverter {
       creditsOrder: map[elementSeeds]?.toString(),
       userRatingCount: map[elementPeers]?.toString(),
       description: map[elementSize]?.toString(),
-      imageUrl: getFullMagnetUrl(
-        map[elementHash]!.toString(),
-        map[elementUrlFragment]!.toString(),
-      ),
+      imageUrl: getFullMagnetUrl(map[elementHash]!.toString(), title),
       keywords: jsonEncode(keywords),
     );
 
