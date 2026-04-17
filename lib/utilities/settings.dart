@@ -11,7 +11,7 @@ import 'package:googleapis_auth/auth_io.dart';
 import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/converters/yts_detail_api.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_common.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
@@ -212,7 +212,7 @@ class Settings {
       secretsInitiaisedMutexLock.protect(_asyncInit);
 
   Future<void> _asyncInit() async {
-    YtsDetailApiConverter.init();
+    MagnetHelper.init();
     _getApplicationVersion();
     if (!_firebaseInitialised) {
       _firebaseInitialised = true;

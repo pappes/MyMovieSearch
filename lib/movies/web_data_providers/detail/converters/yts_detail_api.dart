@@ -2,11 +2,10 @@
 // ignore_for_file: avoid_classes_with_only_static_members
 
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 //query string https://movies-api.accel.li/api/v2/movie_details.json?imdb_id=0062622
@@ -96,16 +95,6 @@ import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 const magnetFragment1 = 'magnet:?xt=urn:btih:';
 const magnetFragment2 = '&dn=';
 const magnetFragment3 = '&tr=';
-const magnetExtraSourcesUrl =
-    'https://raw.githubusercontent.com/ngosang/trackerslist/refs/heads/master/trackers_all.txt';
-final magnetSources = {
-  'https://tracker.opentrackr.org:1337/announce',
-  'https://tracker.torrent.eu.org:451/announce',
-  'https://tracker.dler.org:6969/announce',
-  'https://open.stealth.si:80/announce',
-  'https://tracker.moeblog.cn:443/announce',
-  'https://tracker.zhuqiy.com:443/announce',
-};
 const statusSuccess = 'ok';
 const sourceBluray = 'bluray';
 const outerElementStatus = 'status';
@@ -141,16 +130,6 @@ const elementPeers = 'peers';
 const elementSize = 'size';
 
 class YtsDetailApiConverter {
-  @awaitNotRequired
-  static Future<void> init() async {
-    // read extra magnet sources from web
-    // https://raw.githubusercontent.com/ngosang/trackerslist/refs/heads/master/trackers_all.txt
-
-    final request = await HttpClient().getUrl(Uri.parse(magnetExtraSourcesUrl));
-    final response = await request.close();
-    final extraSources = await response.transform(utf8.decoder).toList();
-    magnetSources.addAll(extraSources);
-  }
 
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
@@ -236,9 +215,6 @@ class YtsDetailApiConverter {
       ..writeAll([hash, magnetFragment2, urlEncoded]);
 
     // add trackers
-    for (final tracker in magnetSources) {
-      buffer.write('$magnetFragment3${Uri.encodeComponent(tracker)}');
-    }
-    return buffer.toString();
+    return MagnetHelper.addTrackers(buffer.toString());
   }
 }
