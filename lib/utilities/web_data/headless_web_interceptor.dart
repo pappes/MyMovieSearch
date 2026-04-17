@@ -13,6 +13,20 @@ class InterceptionResponse {
   HttpClientResponse? httpResponse;
 }
 
+/// A synthetic response to be returned instead of the actual response.
+class SyntheticResponse {
+  SyntheticResponse({
+    required this.statusCode,
+    required this.contentType,
+    required this.body,
+    this.headers,
+  });
+  final int statusCode;
+  final String contentType;
+  final Map<String, String>? headers;
+  final String body;
+}
+
 /// Defines the three possible outcomes of an interception request,
 ///
 /// [delegateRequest] The request should be handled by the source.
