@@ -136,6 +136,11 @@ class _AboutState extends State<AboutPage> with RestorationMixin {
   );
 
   List<Widget> _attribution() => [
+    ListTile(
+      leading: const Icon(Icons.history),
+      title: const Text('View Changelog'),
+      onTap: () => MMSNav(context).showChangelogPage(widget.criteria),
+    ),
     ColoredBox(
       color: tmdbPrimaryColor,
       child: ListTile(

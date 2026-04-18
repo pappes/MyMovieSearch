@@ -56,8 +56,7 @@ dependencies:
 
   flutter_localizations:
     sdk: flutter
-
-
+  flutter_markdown: ^0.7.3              # Render markdown elegantly.
 
   go_router: ^17.2.1                    # screen navigation
   googleapis: ^16.0.0                   # interact with GCP resources  
@@ -126,6 +125,7 @@ flutter:
    - assets/images/
    - integration_test/data_files/
    - pubspec.yaml
+   - changelog.md
    - lib/movies/web_data_providers/detail/wikidata_detail_movie_query.sql
 
 

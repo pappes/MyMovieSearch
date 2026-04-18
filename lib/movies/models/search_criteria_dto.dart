@@ -232,6 +232,15 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     toUniqueReference(),
   );
 
+  /// Construct route to the changelog page.
+  ///
+  /// Always chooses ChangelogPage.
+  RouteInfo getChangelogPage() => RouteInfo(
+    ScreenRoute.changelog,
+    RestorableSearchCriteria.routeState(this),
+    toUniqueReference(),
+  );
+
   /// Construct route to the error details page.
   ///
   /// Always chooses ErrorDetailsPage.
