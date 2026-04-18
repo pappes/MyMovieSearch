@@ -3,6 +3,7 @@ import 'package:html/parser.dart' show parse;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_torrentz2.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -53,8 +54,9 @@ mixin ScrapeTorrentz2Search on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   void _processRow(Element row) {
     final result = <String, dynamic>{};
     result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;
-    result[jsonMagnetKey] =
-        row.querySelector(magnetSelector)?.attributes['href'] ?? '';
+    result[jsonMagnetKey] = MagnetHelper.addTrackers(
+      row.querySelector(magnetSelector)?.attributes['href'],
+    );
     final columns = row.querySelector(detailSelector)?.children;
 
     if (5 == columns?.length) {

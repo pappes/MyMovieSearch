@@ -155,7 +155,7 @@ void main() {
         );
       }
       // Uncomment this line to update expectedDTOList if sample data changes
-      //writeTestData(actualResult);
+      // writeTestData(actualResult);
 
       // Check the results.
       final expectedValue = readTestData();
@@ -215,7 +215,6 @@ void main() {
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
-      // printTestData(queryResult);
 
       // Check the results.
       final expectedValue = readTestData();

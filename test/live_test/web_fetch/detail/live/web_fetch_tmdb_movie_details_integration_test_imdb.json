@@ -6,14 +6,14 @@
     "bestSource": "DataSourceType.tmdbMovie",
     "type": "MovieContentType.title",
     "year": "2013",
-    "runTime": "5160",
+    "runTime": "5220",
     "language": "LanguageType.allEnglish",
     "languages": "[\"English\"]",
     "genres": "[\"Action\",\"Comedy\",\"Horror\",\"Science Fiction\",\"TV Movie\"]",
     "keywords": "[\"california\",\"helicopter\",\"beach\",\"tornado\",\"hurricane\",\"attack\",\"chainsaw\",\"creature\",\"storm\",\"explosion\",\"shark\",\"flood\"]",
     "links": "{\"Wikidata\":\"https://www.wikidata.org/wiki/Q13794921\"}",
-    "userRating": "3.926",
-    "userRatingCount": "1655",
+    "userRating": "3.919",
+    "userRatingCount": "1679",
     "imageUrl": "https://image.tmdb.org/t/p/w500/atEmHkVFTSGRYt2PeCiziQqbZnI.jpg",
     "sources": {
       "DataSourceType.tmdbMovie": "205321"

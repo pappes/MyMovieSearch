@@ -1,18 +1,6 @@
 // Raw data in code is generated from an external source.
 // ignore_for_file: unnecessary_raw_strings
 
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-
-/* To update this data, uncomment printTestData(actualResult);
-in test('Run dtoFromCompleteJsonMap()'*/
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"magnet:?xt=urn:btih:ac8c26d936b1da5ce94d415fb07a71384db7cb80&dn=Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS+%5BTGx%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Fexodus.desync.com%3A6969","bestSource":"DataSourceType.magnetDl","title":"Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS [TGx]","characterName":"Movie","type":"MovieContentType.download","creditsOrder":"1",
-      "description":"857.10 MB","imageUrl":"magnet:?xt=urn:btih:ac8c26d936b1da5ce94d415fb07a71384db7cb80&dn=Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS+%5BTGx%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Fexodus.desync.com%3A6969","sources":{"DataSourceType.magnetDl":"magnet:?xt=urn:btih:ac8c26d936b1da5ce94d415fb07a71384db7cb80&dn=Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS+%5BTGx%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Fexodus.desync.com%3A6969"}}
-''',
-];
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
-
 Future<Stream<String>> streamHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));
 
@@ -46,7 +34,7 @@ const intermediateMapList = [
     'magnet':
         // Generated code.
         // ignore: lines_longer_than_80_chars
-        'magnet:?xt=urn:btih:ac8c26d936b1da5ce94d415fb07a71384db7cb80&dn=Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS+%5BTGx%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Fexodus.desync.com%3A6969',
+        'magnet:?xt=urn:btih:ac8c26d936b1da5ce94d415fb07a71384db7cb80&dn=Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS+%5BTGx%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451&tr=udp%3A%2F%2Ftracker.moeking.me%3A6969&tr=udp%3A%2F%2Fopentracker.i2p.rocks%3A6969&tr=udp%3A%2F%2Ftracker.internetwarriors.net%3A1337&tr=udp%3A%2F%2Fexodus.desync.com%3A6969&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce',
     'name': 'Space.Babes.From.Outer.Space.2017.BDRip.x264-PEGASUS [TGx]',
     'description': '857.10 MB',
     'seeders': '1',

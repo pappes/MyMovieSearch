@@ -45,7 +45,7 @@ void main() {
       );
 
       // To update expected data, uncomment the following line
-      //writeTestData(actualOutput, testName: '500_fetches');
+      // writeTestData(actualOutput, testName: '500_fetches');
 
       // Check the results.
       final expectedOutput = readTestData(testName: '500_fetches');

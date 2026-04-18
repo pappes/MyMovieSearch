@@ -3,6 +3,7 @@ import 'package:html/parser.dart' show parse;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/tpb_search.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -59,8 +60,9 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     if (4 == columns.length) {
       final result = <String, dynamic>{};
       result[jsonCategoryKey] = columns[0].cleanText;
-      result[jsonMagnetKey] =
-          columns[1].querySelector(magnetSelector)?.attributes['href'] ?? '';
+      result[jsonMagnetKey] = MagnetHelper.addTrackers(
+        columns[1].querySelector(magnetSelector)?.attributes['href'],
+      );
       result[jsonNameKey] = columns[1].querySelector(nameSelector)?.cleanText;
       result[jsonDescriptionKey] = columns[1]
           .querySelector(detailSelector)
@@ -77,8 +79,9 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     if (8 == columns.length) {
       final result = <String, dynamic>{};
       result[jsonCategoryKey] = columns[0].cleanText;
-      result[jsonMagnetKey] =
-          row.querySelector(magnetSelector)?.attributes['href'] ?? '';
+      result[jsonMagnetKey] = MagnetHelper.addTrackers(
+        row.querySelector(magnetSelector)?.attributes['href'],
+      );
       result[jsonNameKey] = columns[1].cleanText;
       result[jsonDescriptionKey] = columns[4].cleanText;
       result[jsonSeedersKey] = columns[5].cleanText;

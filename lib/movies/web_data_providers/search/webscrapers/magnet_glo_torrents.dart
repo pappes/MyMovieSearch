@@ -3,6 +3,7 @@ import 'package:html/parser.dart' show parse;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_glo_torrents.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
@@ -58,8 +59,9 @@ mixin ScrapeGloTorrentsSearch
     if (9 == columns.length) {
       final result = <String, dynamic>{};
 
-      result[jsonMagnetKey] =
-          row.querySelector(magnetSelector)?.attributes['href'] ?? '';
+      result[jsonMagnetKey] = MagnetHelper.addTrackers(
+        row.querySelector(magnetSelector)?.attributes['href'],
+      );
       result[jsonNameKey] = columns[1].children.last.attributes['title'];
       result[jsonDescriptionKey] = columns[4].cleanText;
 

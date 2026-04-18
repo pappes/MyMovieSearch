@@ -3,6 +3,7 @@ import 'package:html/parser.dart' show parse;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/magnet_torrent_download_detail.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -46,7 +47,9 @@ mixin ScrapeTorrentDownloadDetail
     final links = document.querySelectorAll(magnetSelector);
     if (links.isNotEmpty) {
       validPage = true;
-      result[jsonDetailLink] = links.first.attributes['href'];
+      result[jsonDetailLink] = MagnetHelper.addTrackers(
+        links.first.attributes['href'],
+      );
       final fileTable = document.querySelectorAll(resultTableSelector);
       if (1 == fileTable.length) {
         result[jsonDescriptionKey] = fileTable.first.cleanText;

@@ -5,7 +5,7 @@ import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/magnet_torrent_download_detail.dart';
-import 'package:my_movie_search/movies/web_data_providers/detail/yts_detail.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/yts_detail_api.dart';
 
 /// Search for movie download data from multiple download sources.
 ///
@@ -49,7 +49,7 @@ class TorMultiSearchRepository extends BaseMovieRepository {
     final detailCriteria = SearchCriteriaDTO().fromString(dto.uniqueId);
     if (_readyForYtsDetails(dto)) {
       // Fetch YTS details from the url.
-      const constructor = QueryYtsDetails.new;
+      const constructor = QueryYtsDetailApi.new;
       await _search(originalSearchUID, detailCriteria, constructor);
     }
     if (_readyForTDDetails(dto)) {

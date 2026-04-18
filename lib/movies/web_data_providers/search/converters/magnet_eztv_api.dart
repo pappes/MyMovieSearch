@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 //query string https://eztv.yt/api/get-torrents?imdb_id=13443470&limit=100
@@ -86,7 +87,7 @@ class MagnetEztvApiSearchConverter {
       type: MovieContentType.download.toString(),
       uniqueId: map[elementMagnetUrl]?.toString(),
       title: map[elementName]?.toString(),
-      imageUrl: map[elementMagnetUrl]?.toString(),
+      imageUrl: MagnetHelper.addTrackers(map[elementMagnetUrl]?.toString()),
       creditsOrder: map[elementSeeds]?.toString(),
       userRatingCount: map[elementPeers]?.toString(),
       description: size,

@@ -132,8 +132,8 @@ void main() {
       // Uncomment this line to update expectedDTOList if sample data changes
       // printTestData(actualResult);
 
-      final expectedValue = expectedDTOList;
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -174,7 +174,6 @@ void main() {
   group('TorrentDownloadDetailConverter integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final expectedValue = expectedDTOList;
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);
       final actualResult = <MovieResultDTO>[];
 
@@ -186,6 +185,7 @@ void main() {
       }
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -231,7 +231,6 @@ void main() {
     // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
-      final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final torrentDownloadDetail = QueryTorrentDownloadDetail(criteria);
 
@@ -244,9 +243,10 @@ void main() {
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
-      // printTestData(queryResult);
+      // writeTestData(queryResult);
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue, related: false),

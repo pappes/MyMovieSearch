@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/yts_detail_api.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/yts_detail_api.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/yts_detail_api.dart';
 import 'package:my_movie_search/utilities/settings.dart';
@@ -25,7 +26,10 @@ SearchCriteriaDTO sampleCriteria() {
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() => Settings().init());
+  setUpAll(() {
+    MagnetHelper.testMode = true;
+    Settings().init();
+  });
   ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
   ////////////////////////////////////////////////////////////////////////////////
@@ -108,9 +112,6 @@ void main() {
         jsonSampleNotFound,
       );
 
-      // Uncomment this line to update expectedDTOList if sample data changes
-      // writeTestData(actualResult);
-
       final expectedValue = <MovieResultDTO>[];
       // Check the results.
       expect(
@@ -148,6 +149,9 @@ void main() {
   ////////////////////////////////////////////////////////////////////////////////
 
   group('QueryYtsDetailApi integration tests', () {
+    setUpAll(() {
+      MagnetHelper.testMode = true;
+    });
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final testClass = QueryYtsDetailApi(sampleCriteria());

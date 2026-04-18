@@ -12,8 +12,7 @@ void main() {
   /// Unit tests
   ////////////////////////////////////////////////////////////////////////////////
 
-  group('MagnetHelper intagration tests', () {
-    // Confirm map can be converted to DTO.
+  group('MagnetHelper integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run addTrackers to get extra seeders', () async {
       const basicResult = magnetFragment1;
@@ -28,15 +27,24 @@ void main() {
           ..addAll(originalUrls);
       }
       final extendedResult = MagnetHelper.addTrackers(basicResult);
+      final extendedResult2 = MagnetHelper.addTrackers(extendedResult);
 
       // Check the results.
       expect(
-        basicResult.length,
-        lessThan(extendedResult.length),
+        basicResult.length + 5,
+        lessThan(extendedResult!.length),
         reason:
             'Emitted image URL length \n$basicResult \n'
             'needs to be less than expected image URL length \n'
             '$extendedResult',
+      );
+      expect(
+        extendedResult.length,
+        equals(extendedResult2!.length),
+        reason:
+            'Emitted image URL length \n$extendedResult \n'
+            'needs to be the same as expected image URL length \n'
+            '$extendedResult2',
       );
     });
   });

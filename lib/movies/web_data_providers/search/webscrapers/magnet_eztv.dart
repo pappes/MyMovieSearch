@@ -3,6 +3,7 @@ import 'package:html/parser.dart' show parse;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_eztv.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -55,8 +56,9 @@ mixin ScrapeMagnetEztvSearch
   /// Collect webpage text to construct a map of the movie data.
   void _processRow(Element row) {
     final result = <String, dynamic>{};
-    result[jsonMagnetKey] =
-        row.querySelector(magnetSelector)?.attributes['href'] ?? '';
+    result[jsonMagnetKey] = MagnetHelper.addTrackers(
+      row.querySelector(magnetSelector)?.attributes['href'],
+    );
     result[jsonNameKey] = getName(row);
     result[jsonSeedersKey] = row.querySelector(seedSelector)?.cleanText;
 

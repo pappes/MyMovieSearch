@@ -204,7 +204,7 @@ class YtsDetailApiConverter {
     return movie;
   }
 
-  static String getFullMagnetUrl(String hash, String fragment) {
+  static String? getFullMagnetUrl(String hash, String fragment) {
     //magnet:?xt=urn:btih:TORRENT_HASH&dn=Url+Encoded+Movie+Name&tr=https://tracker.one:1234/announce&tr=udp://tracker.two:80
     // stuff<TORRENT_HASH>stuff<Url+Encoded+Movie+Name>&tr=<trr1>&tr=<trr2>
     // e.g. https://yts.bz/torrent/download/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7

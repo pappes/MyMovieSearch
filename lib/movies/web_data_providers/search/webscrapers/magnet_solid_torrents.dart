@@ -3,6 +3,7 @@ import 'package:html/parser.dart' show parse;
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_solid_torrents.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
@@ -63,8 +64,9 @@ mixin ScrapeSolidTorrentsSearch
         result[jsonCategoryKey] = row
             .querySelector(categorySelector)
             ?.cleanText;
-        result[jsonMagnetKey] =
-            row.querySelector(magnetSelector)?.attributes['href'] ?? '';
+        result[jsonMagnetKey] = MagnetHelper.addTrackers(
+          row.querySelector(magnetSelector)?.attributes['href'],
+        );
         result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;
         result[jsonSeedersKey] = stats.children[2].cleanText;
         result[jsonLeechersKey] = stats.children[3].cleanText;

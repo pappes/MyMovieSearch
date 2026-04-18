@@ -124,9 +124,9 @@ void main() {
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // printTestData(actualResult);
+      // writeTestData(actualResult);
 
-      final expectedValue = expectedDTOList;
+      final expectedValue = readTestData();
       // Check the results.
       expect(
         actualResult,
@@ -145,7 +145,7 @@ void main() {
   group('MagnetDlSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final expectedValue = expectedDTOList;
+      final expectedValue = readTestData();
       final magnetDlSearch = QueryMagnetDlSearch(criteria);
       final actualResult = <MovieResultDTO>[];
 
@@ -201,7 +201,7 @@ void main() {
     // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
-      final expectedValue = expectedDTOList;
+      final expectedValue = readTestData();
       final queryResult = <MovieResultDTO>[];
       final magnetDlSearch = QueryMagnetDlSearch(criteria);
 

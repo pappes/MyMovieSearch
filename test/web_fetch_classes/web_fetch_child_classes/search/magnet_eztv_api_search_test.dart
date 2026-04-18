@@ -64,7 +64,8 @@ void main() {
 
     // Confirm URL is constructed as expected.
     test('Run myConstructURI()', () {
-      const expectedResult = 'https://eztv.yt/api/get-torrents?imdb_id=1234';
+      const expectedResult =
+          'https://eztv.yt/api/get-torrents?limit=100&imdb_id=1234';
 
       // Invoke the functionality.
       final testClass = QueryMagnetEztvApiSearch(fullCriteria)
@@ -106,7 +107,7 @@ void main() {
       final actualOutput = QueryMagnetEztvApiSearch(
         criteria,
       ).myConvertWebTextToTraversableTree(jsonSampleEmpty);
-      // actualOutput should be a list with a single map 
+      // actualOutput should be a list with a single map
       // which contains 'torrents_count': 0
       final list = await actualOutput;
       expect(list.length, 1);
@@ -118,7 +119,7 @@ void main() {
         final actualOutput = QueryMagnetEztvApiSearch(
           criteria,
         ).myConvertWebTextToTraversableTree(jsonSampleTooMany);
-        // actualOutput should be a list with a single map 
+        // actualOutput should be a list with a single map
         // which contains 'torrents_count': 0
         final list = await actualOutput;
         expect(list.length, 1);

@@ -22,7 +22,7 @@ const mdlHtmlSampleEnd = '''
 const intermediateMapList = [
   {
     'magnet':
-        'magnet:?xt=urn:btih:1697fa425af41580da18a07b3dd0bc6b589c51a0&dn=Breaking.Brad.S02E02.Doom.II.Ultra.Violence.Part.02.REPACK.480p.x264-mSD%5Beztv%5D.mkv%5Beztvx.to%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce&tr=udp%3A%2F%2Fopen.dstud.io%3A6969%2Fannounce',
+        'magnet:?xt=urn:btih:1697fa425af41580da18a07b3dd0bc6b589c51a0&dn=Breaking.Brad.S02E02.Doom.II.Ultra.Violence.Part.02.REPACK.480p.x264-mSD%5Beztv%5D.mkv%5Beztvx.to%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=udp%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce&tr=udp%3A%2F%2Fopen.dstud.io%3A6969%2Fannounce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce',
     'name': 'Breaking Brad S02E02 Doom II Ultra Violence Part 02 REPACK 480p x264-mSD [eztv] (881 MB)',
     'seeders': '2',
   },

@@ -29,7 +29,7 @@ class QueryGloTorrentsSearch
   QueryGloTorrentsSearch(super.criteria);
 
   // https://www.thetechbasket.com/glotorrents-proxy-list/
-  static const _baseURL = 'https://glodls.online/search_results.php?search=';
+  static const _baseURL = 'https://gtorrents.sbs/search_results.php?search=';
   static const _pageURL = '&sort=seeders&order=desc&page=';
 
   /// Describe where the data is coming from.
