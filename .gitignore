@@ -64,6 +64,8 @@ app.*.symbols
 app.*.map.json
 secrets.json
 *.sh
+!connect_phone.sh
+!setup.sh
 *.bat
 
 # Android Studio will place build artifacts here
@@ -71,12 +73,16 @@ android/app/debug
 android/app/profile
 android/app/release
 android/app/.cxx
+.gradle/
+android/.gradle/
+android/app/build/
 
 # Linux build artifacts
 linux/build/
 linux/CMakeCache.txt
 linux/CMakeFiles/
 linux/cmake_install.cmake
+linux/flutter/ephemeral/
 linux/flutter/generated_*.h
 linux/flutter/generated_*.cc
 linux/flutter/generated_plugins.cmake
@@ -84,3 +90,21 @@ linux/runner/cmake_install.cmake
 linux/_deps/
 linux/plugins/
 .local-chrome/
+
+# Windows build artifacts
+windows/flutter/ephemeral/
+windows/flutter/generated_plugin_registrant.cc
+windows/flutter/generated_plugins.cmake
+
+# macOS build artifacts
+macos/Flutter/ephemeral/
+macos/Flutter/GeneratedPluginRegistrant.swift
+
+# iOS build artifacts
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework/
+ios/Flutter/App.framework/
+ios/Flutter/plugin_registrant.h
+ios/Flutter/plugin_registrant.m
+ios/Flutter/Generated.xcconfig
