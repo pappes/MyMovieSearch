@@ -21,13 +21,13 @@ class NavLog extends ChangeNotifier {
       ? null
       : Provider.of<SessionNavTree>(_context, listen: false);
 
-  void logPageOpen(String destination, String request) {
+  void logPageOpen(String destination, String request, String description) {
     getFirestoreProvider()?.addRecord(
       'MMSNavLog/screen/$destination',
       id: request,
         message: ReadHistory.reading.toString(),
       );
-    getSessionNavTree()?.logPageOpen(destination, request);
+    getSessionNavTree()?.logPageOpen(destination, request, description);
   }
 
   void logPageClose(String destination, String request, Object params) {

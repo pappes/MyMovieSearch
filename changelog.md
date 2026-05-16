@@ -1,3 +1,6 @@
+##version 1.2.3
+- Add navigation history page.
+
 ## Version 1.2.2
 - Add trackers dynamically to all torrent sources.
 

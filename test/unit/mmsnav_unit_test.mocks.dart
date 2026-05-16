@@ -287,10 +287,11 @@ class MockNavLog extends _i1.Mock implements _i7.NavLog {
           as bool);
 
   @override
-  void logPageOpen(String? destination, String? request) => super.noSuchMethod(
-    Invocation.method(#logPageOpen, [destination, request]),
-    returnValueForMissingStub: null,
-  );
+  void logPageOpen(String? destination, String? request, String? description) =>
+      super.noSuchMethod(
+        Invocation.method(#logPageOpen, [destination, request, description]),
+        returnValueForMissingStub: null,
+      );
 
   @override
   void logPageClose(String? destination, String? request, Object? params) =>

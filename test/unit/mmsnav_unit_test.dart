@@ -39,12 +39,14 @@ void main() {
       ScreenRoute.persondetails, // Dummy object for params
       <String, dynamic>{},
       'uniqueId',
+      'dummy description',
     );
 
     test('toString()', () {
       expect(
         testClass.toString(),
-        '{"path":"ScreenRoute.persondetails","params":"{}","ref":"uniqueId"}',
+        '{"path":"ScreenRoute.persondetails","params":"{}","ref":"uniqueId",'
+        '"description":"dummy description"}',
       );
     });
   });
@@ -385,9 +387,12 @@ void main() {
         // customTabsLauncher is not used in this test group, so it can be null.
         navLog: mockNavLog,
       );
-      testPageInfo = RouteInfo(ScreenRoute.moviedetails, {
-        'id': '123',
-      }, 'ref123');
+      testPageInfo = RouteInfo(
+        ScreenRoute.moviedetails,
+        {'id': '123'},
+        'ref123',
+        'dummy description',
+      );
     });
 
     test('should log open and close, and hide keyboard on success', () async {
@@ -411,6 +416,7 @@ void main() {
             mockNavLog.logPageOpen(
               testPageInfo.routePath.name,
               testPageInfo.reference,
+              testPageInfo.description,
             ),
           )
           .called(1);
@@ -430,15 +436,15 @@ void main() {
 
     test('should not do anything if context is null', () async {
       // Arrange
-      final canvasWithNullContext = MMSFlutterCanvas(
-        navLog: mockNavLog,
-      );
+      final canvasWithNullContext = MMSFlutterCanvas(navLog: mockNavLog);
 
       // Act
       await canvasWithNullContext.viewFlutterPage(testPageInfo);
 
       // Assert
-      mockito.verifyNever(mockNavLog.logPageOpen(mockito.any, mockito.any));
+      mockito.verifyNever(
+        mockNavLog.logPageOpen(mockito.any, mockito.any, mockito.any),
+      );
       // We don't need to verify pushNamed on the fakeNavigator because it was
       // never passed to the canvasWithNullContext. The null check inside the
       // production code handles this case.

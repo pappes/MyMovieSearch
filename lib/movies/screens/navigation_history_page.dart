@@ -76,7 +76,7 @@ class NavigationHistoryPage extends StatelessWidget {
       padding: EdgeInsets.only(left: 16.0 * depth),
       child: ListTile(
         title: Text(node.destination),
-        subtitle: Text(node.reference),
+        subtitle: Text(node.description),
         trailing: Text(
           timeFormat,
           style: Theme.of(context).textTheme.bodySmall,

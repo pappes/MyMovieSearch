@@ -13,7 +13,7 @@ void main() {
     ),
   );
 
-  testWidgets('shows empty state when no history', (WidgetTester tester) async {
+  testWidgets('shows empty state when no history', (tester) async {
     final mockTree = SessionNavTree();
 
     await tester.pumpWidget(createWidgetUnderTest(mockTree));
@@ -22,12 +22,12 @@ void main() {
   });
 
   testWidgets('displays navigation roots and children with sticky scroll', (
-    WidgetTester tester,
+    tester,
   ) async {
     final mockTree = SessionNavTree()
-      ..logPageOpen('Home', NavLog.rootReference)
-      ..logPageOpen('Details', 'movie_1')
-      ..logPageOpen('Person', 'person_1');
+      ..logPageOpen('Home', NavLog.rootReference, 'dummy home')
+      ..logPageOpen('Details', 'movie_1', 'dummy details')
+      ..logPageOpen('Person', 'person_1', 'dummy person');
 
     await tester.pumpWidget(createWidgetUnderTest(mockTree));
 
@@ -36,8 +36,8 @@ void main() {
     expect(find.text('Person'), findsOneWidget);
 
     // Verify references are also present
-    expect(find.text(NavLog.rootReference), findsOneWidget);
-    expect(find.text('movie_1'), findsOneWidget);
-    expect(find.text('person_1'), findsOneWidget);
+    expect(find.text('dummy home'), findsOneWidget);
+    expect(find.text('dummy details'), findsOneWidget);
+    expect(find.text('dummy person'), findsOneWidget);
   });
 }

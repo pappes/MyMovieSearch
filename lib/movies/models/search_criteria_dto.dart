@@ -15,6 +15,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
+import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class SearchRequest extends Equatable {
@@ -212,6 +213,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     ScreenRoute.searchresults,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
+    criteriaTitle.truncate(50),
   );
 
   /// Construct route to the search criteria page MovieSearchCriteriaPage
@@ -222,6 +224,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     ScreenRoute.search,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
+    'Search for ${criteriaTitle.truncate(50)}',
   );
 
   /// Construct route to the about page.
@@ -231,6 +234,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     ScreenRoute.about,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
+    'About Aperture',
   );
 
   /// Construct route to the changelog page.
@@ -240,6 +244,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     ScreenRoute.changelog,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
+    'Changelog'
   );
 
   /// Construct route to the navigation history page.
@@ -249,6 +254,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     ScreenRoute.navigationHistory,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
+    'Navigation History',
   );
 
   /// Construct route to the error details page.
@@ -258,6 +264,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     ScreenRoute.errordetails,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
+    'Error details for ${criteriaTitle.truncate(50)}',
   );
 
   /// Determine which WebFetch to use to gather data

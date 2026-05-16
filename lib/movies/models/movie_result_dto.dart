@@ -1141,6 +1141,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         ScreenRoute.persondetails,
         RestorableMovie.routeState(this),
         uniqueId,
+        title.truncate(50),
       );
     } else if (uniqueId.startsWith(imdbTitlePrefix) ||
         type == MovieContentType.movie ||
@@ -1154,6 +1155,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         ScreenRoute.moviedetails,
         RestorableMovie.routeState(this),
         uniqueId,
+        title.truncate(50),
       );
     } else {
       // Open error details.
@@ -1161,6 +1163,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         ScreenRoute.errordetails,
         RestorableMovie.routeState(this),
         MovieContentType.error.toString(),
+        'Error details for ${title.truncate(50)}',
       );
     }
   }
@@ -1490,8 +1493,7 @@ extension MapMovieResultDTOHelpers on Map<dynamic, MovieResultDTO> {
       separator = ',\n';
     }
     if (listContents.length > 1000) {
-      final truncated = listContents.toString().substring(0, 500);
-      return '$truncated...';
+      return '${listContents.toString().truncate(500)}...';
     }
     return listContents.toString();
   }

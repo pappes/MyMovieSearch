@@ -40,17 +40,19 @@ enum ScreenRoute {
 }
 
 class RouteInfo {
-  RouteInfo(this.routePath, this.params, this.reference);
+  RouteInfo(this.routePath, this.params, this.reference, this.description);
 
   final ScreenRoute routePath;
   final Object params;
   final String reference;
+  final String description;
 
   @override
   String toString() => json.encode({
     'path': routePath.toString(),
     'params': params.toString(),
     'ref': reference,
+    'description': description,
   });
 }
 
@@ -192,6 +194,7 @@ class MMSNav {
       ScreenRoute.addlocation,
       RestorableMovie.routeState(movie),
       movie.uniqueId,
+      'Stacker locations for ${movie.title} (${movie.year})',
     ),
   );
 
@@ -367,7 +370,11 @@ class MMSFlutterCanvas {
   Future<Object?> viewFlutterPage(RouteInfo page) {
     if (navigator != null) {
       // Record page open event.
-      _navLog.logPageOpen(page.routePath.name, page.reference);
+      _navLog.logPageOpen(
+        page.routePath.name,
+        page.reference,
+        page.description,
+      );
       try {
         // Open the page.
         final openedPage = navigator!.pushNamed(
@@ -425,7 +432,11 @@ class MMSFlutterCanvas {
   Future<Object?> viewFlutterRootPage(RouteInfo page) async {
     if (navigator is FlutterAppContext) {
       // Record page open event.
-      _navLog.logPageOpen(page.routePath.name, NavLog.rootReference);
+      _navLog.logPageOpen(
+        page.routePath.name,
+        NavLog.rootReference,
+        page.description,
+      );
       while (closeCurrentScreen()) {
         await Future<dynamic>.delayed(Duration.zero);
       }

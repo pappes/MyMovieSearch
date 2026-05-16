@@ -5,11 +5,13 @@ class NavTreeNode {
   NavTreeNode({
     required this.destination,
     required this.reference,
+    required this.description,
     required this.timestamp,
   });
 
   final String destination;
   final String reference;
+  final String description;
   final DateTime timestamp;
   final List<NavTreeNode> children = [];
 }
@@ -18,10 +20,11 @@ class SessionNavTree extends ChangeNotifier {
   final List<NavTreeNode> roots = [];
   final List<NavTreeNode> _activeStack = [];
 
-  void logPageOpen(String destination, String reference) {
+  void logPageOpen(String destination, String reference, String description) {
     final node = NavTreeNode(
       destination: destination,
       reference: reference,
+      description: description,
       timestamp: DateTime.now(),
     );
 

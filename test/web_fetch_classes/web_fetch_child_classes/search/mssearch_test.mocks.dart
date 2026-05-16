@@ -67,58 +67,63 @@ class _FakeMultiSearchResult_7 extends _i1.SmartFake
     : super(parent, parentInvocation);
 }
 
-class _FakeMeiliSearchClient_8 extends _i1.SmartFake
+class _FakeNetwork_8 extends _i1.SmartFake implements _i3.Network {
+  _FakeNetwork_8(Object parent, Invocation parentInvocation)
+    : super(parent, parentInvocation);
+}
+
+class _FakeMeiliSearchClient_9 extends _i1.SmartFake
     implements _i3.MeiliSearchClient {
-  _FakeMeiliSearchClient_8(Object parent, Invocation parentInvocation)
+  _FakeMeiliSearchClient_9(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeSearcheable_9<T> extends _i1.SmartFake
+class _FakeSearcheable_10<T> extends _i1.SmartFake
     implements _i3.Searcheable<T> {
-  _FakeSearcheable_9(Object parent, Invocation parentInvocation)
+  _FakeSearcheable_10(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeFacetSearchResult_10 extends _i1.SmartFake
+class _FakeFacetSearchResult_11 extends _i1.SmartFake
     implements _i3.FacetSearchResult {
-  _FakeFacetSearchResult_10(Object parent, Invocation parentInvocation)
+  _FakeFacetSearchResult_11(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeIndexSettings_11 extends _i1.SmartFake implements _i3.IndexSettings {
-  _FakeIndexSettings_11(Object parent, Invocation parentInvocation)
+class _FakeIndexSettings_12 extends _i1.SmartFake implements _i3.IndexSettings {
+  _FakeIndexSettings_12(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeTypoTolerance_12 extends _i1.SmartFake implements _i3.TypoTolerance {
-  _FakeTypoTolerance_12(Object parent, Invocation parentInvocation)
+class _FakeTypoTolerance_13 extends _i1.SmartFake implements _i3.TypoTolerance {
+  _FakeTypoTolerance_13(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakePagination_13 extends _i1.SmartFake implements _i3.Pagination {
-  _FakePagination_13(Object parent, Invocation parentInvocation)
+class _FakePagination_14 extends _i1.SmartFake implements _i3.Pagination {
+  _FakePagination_14(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeFaceting_14 extends _i1.SmartFake implements _i3.Faceting {
-  _FakeFaceting_14(Object parent, Invocation parentInvocation)
+class _FakeFaceting_15 extends _i1.SmartFake implements _i3.Faceting {
+  _FakeFaceting_15(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeIndexStats_15 extends _i1.SmartFake implements _i3.IndexStats {
-  _FakeIndexStats_15(Object parent, Invocation parentInvocation)
+class _FakeIndexStats_16 extends _i1.SmartFake implements _i3.IndexStats {
+  _FakeIndexStats_16(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakePaginatedSearchResult_16<T1> extends _i1.SmartFake
+class _FakePaginatedSearchResult_17<T1> extends _i1.SmartFake
     implements _i3.PaginatedSearchResult<T1> {
-  _FakePaginatedSearchResult_16(Object parent, Invocation parentInvocation)
+  _FakePaginatedSearchResult_17(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
-class _FakeSearchResult_17<T1> extends _i1.SmartFake
+class _FakeSearchResult_18<T1> extends _i1.SmartFake
     implements _i3.SearchResult<T1> {
-  _FakeSearchResult_17(Object parent, Invocation parentInvocation)
+  _FakeSearchResult_18(Object parent, Invocation parentInvocation)
     : super(parent, parentInvocation);
 }
 
@@ -468,6 +473,97 @@ class MockMeiliSearchClient extends _i1.Mock implements _i3.MeiliSearchClient {
             ),
           )
           as _i5.Future<_i3.MultiSearchResult>);
+
+  @override
+  _i5.Future<_i3.Task> export(_i3.ExportQuery? query) =>
+      (super.noSuchMethod(
+            Invocation.method(#export, [query]),
+            returnValue: _i5.Future<_i3.Task>.value(
+              _FakeTask_2(this, Invocation.method(#export, [query])),
+            ),
+          )
+          as _i5.Future<_i3.Task>);
+
+  @override
+  _i5.Future<_i3.Network> getNetwork() =>
+      (super.noSuchMethod(
+            Invocation.method(#getNetwork, []),
+            returnValue: _i5.Future<_i3.Network>.value(
+              _FakeNetwork_8(this, Invocation.method(#getNetwork, [])),
+            ),
+          )
+          as _i5.Future<_i3.Network>);
+
+  @override
+  _i5.Future<_i3.Network> updateNetwork(_i3.UpdateNetworkOptions? input) =>
+      (super.noSuchMethod(
+            Invocation.method(#updateNetwork, [input]),
+            returnValue: _i5.Future<_i3.Network>.value(
+              _FakeNetwork_8(this, Invocation.method(#updateNetwork, [input])),
+            ),
+          )
+          as _i5.Future<_i3.Network>);
+
+  @override
+  _i5.Future<_i3.Network> addRemote(String? remoteName, _i3.Remote? remote) =>
+      (super.noSuchMethod(
+            Invocation.method(#addRemote, [remoteName, remote]),
+            returnValue: _i5.Future<_i3.Network>.value(
+              _FakeNetwork_8(
+                this,
+                Invocation.method(#addRemote, [remoteName, remote]),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Network>);
+
+  @override
+  _i5.Future<_i3.Network> removeRemote(String? remoteName) =>
+      (super.noSuchMethod(
+            Invocation.method(#removeRemote, [remoteName]),
+            returnValue: _i5.Future<_i3.Network>.value(
+              _FakeNetwork_8(
+                this,
+                Invocation.method(#removeRemote, [remoteName]),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Network>);
+
+  @override
+  _i5.Future<_i3.Network> addRemotesToShard(
+    String? shardName,
+    List<String>? remotes,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#addRemotesToShard, [shardName, remotes]),
+            returnValue: _i5.Future<_i3.Network>.value(
+              _FakeNetwork_8(
+                this,
+                Invocation.method(#addRemotesToShard, [shardName, remotes]),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Network>);
+
+  @override
+  _i5.Future<_i3.Network> removeRemotesFromShard(
+    String? shardName,
+    List<String>? remotes,
+  ) =>
+      (super.noSuchMethod(
+            Invocation.method(#removeRemotesFromShard, [shardName, remotes]),
+            returnValue: _i5.Future<_i3.Network>.value(
+              _FakeNetwork_8(
+                this,
+                Invocation.method(#removeRemotesFromShard, [
+                  shardName,
+                  remotes,
+                ]),
+              ),
+            ),
+          )
+          as _i5.Future<_i3.Network>);
 }
 
 /// A class which mocks [MeiliSearchIndex].
@@ -482,7 +578,7 @@ class MockMeiliSearchIndex extends _i1.Mock implements _i3.MeiliSearchIndex {
   _i3.MeiliSearchClient get client =>
       (super.noSuchMethod(
             Invocation.getter(#client),
-            returnValue: _FakeMeiliSearchClient_8(
+            returnValue: _FakeMeiliSearchClient_9(
               this,
               Invocation.getter(#client),
             ),
@@ -561,7 +657,7 @@ class MockMeiliSearchIndex extends _i1.Mock implements _i3.MeiliSearchIndex {
             Invocation.method(#search, [text, q]),
             returnValue:
                 _i5.Future<_i3.Searcheable<Map<String, dynamic>>>.value(
-                  _FakeSearcheable_9<Map<String, dynamic>>(
+                  _FakeSearcheable_10<Map<String, dynamic>>(
                     this,
                     Invocation.method(#search, [text, q]),
                   ),
@@ -574,7 +670,7 @@ class MockMeiliSearchIndex extends _i1.Mock implements _i3.MeiliSearchIndex {
       (super.noSuchMethod(
             Invocation.method(#facetSearch, [query]),
             returnValue: _i5.Future<_i3.FacetSearchResult>.value(
-              _FakeFacetSearchResult_10(
+              _FakeFacetSearchResult_11(
                 this,
                 Invocation.method(#facetSearch, [query]),
               ),
@@ -943,7 +1039,7 @@ class MockMeiliSearchIndex extends _i1.Mock implements _i3.MeiliSearchIndex {
       (super.noSuchMethod(
             Invocation.method(#getSettings, []),
             returnValue: _i5.Future<_i3.IndexSettings>.value(
-              _FakeIndexSettings_11(this, Invocation.method(#getSettings, [])),
+              _FakeIndexSettings_12(this, Invocation.method(#getSettings, [])),
             ),
           )
           as _i5.Future<_i3.IndexSettings>);
@@ -1356,7 +1452,7 @@ class MockMeiliSearchIndex extends _i1.Mock implements _i3.MeiliSearchIndex {
       (super.noSuchMethod(
             Invocation.method(#getTypoTolerance, []),
             returnValue: _i5.Future<_i3.TypoTolerance>.value(
-              _FakeTypoTolerance_12(
+              _FakeTypoTolerance_13(
                 this,
                 Invocation.method(#getTypoTolerance, []),
               ),
@@ -1392,7 +1488,7 @@ class MockMeiliSearchIndex extends _i1.Mock implements _i3.MeiliSearchIndex {
       (super.noSuchMethod(
             Invocation.method(#getPagination, []),
             returnValue: _i5.Future<_i3.Pagination>.value(
-              _FakePagination_13(this, Invocation.method(#getPagination, [])),
+              _FakePagination_14(this, Invocation.method(#getPagination, [])),
             ),
           )
           as _i5.Future<_i3.Pagination>);
@@ -1425,7 +1521,7 @@ class MockMeiliSearchIndex extends _i1.Mock implements _i3.MeiliSearchIndex {
       (super.noSuchMethod(
             Invocation.method(#getFaceting, []),
             returnValue: _i5.Future<_i3.Faceting>.value(
-              _FakeFaceting_14(this, Invocation.method(#getFaceting, [])),
+              _FakeFaceting_15(this, Invocation.method(#getFaceting, [])),
             ),
           )
           as _i5.Future<_i3.Faceting>);
@@ -1455,7 +1551,7 @@ class MockMeiliSearchIndex extends _i1.Mock implements _i3.MeiliSearchIndex {
       (super.noSuchMethod(
             Invocation.method(#getStats, []),
             returnValue: _i5.Future<_i3.IndexStats>.value(
-              _FakeIndexStats_15(this, Invocation.method(#getStats, [])),
+              _FakeIndexStats_16(this, Invocation.method(#getStats, [])),
             ),
           )
           as _i5.Future<_i3.IndexStats>);
@@ -1522,7 +1618,7 @@ class MockSearcheable<T> extends _i1.Mock implements _i3.Searcheable<T> {
   ) =>
       (super.noSuchMethod(
             Invocation.method(#map, [mapper]),
-            returnValue: _FakeSearcheable_9<TOther>(
+            returnValue: _FakeSearcheable_10<TOther>(
               this,
               Invocation.method(#map, [mapper]),
             ),
@@ -1533,7 +1629,7 @@ class MockSearcheable<T> extends _i1.Mock implements _i3.Searcheable<T> {
   _i3.PaginatedSearchResult<T> asPaginatedResult() =>
       (super.noSuchMethod(
             Invocation.method(#asPaginatedResult, []),
-            returnValue: _FakePaginatedSearchResult_16<T>(
+            returnValue: _FakePaginatedSearchResult_17<T>(
               this,
               Invocation.method(#asPaginatedResult, []),
             ),
@@ -1544,7 +1640,7 @@ class MockSearcheable<T> extends _i1.Mock implements _i3.Searcheable<T> {
   _i3.SearchResult<T> asSearchResult() =>
       (super.noSuchMethod(
             Invocation.method(#asSearchResult, []),
-            returnValue: _FakeSearchResult_17<T>(
+            returnValue: _FakeSearchResult_18<T>(
               this,
               Invocation.method(#asSearchResult, []),
             ),
