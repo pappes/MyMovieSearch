@@ -9,6 +9,7 @@ import 'package:my_movie_search/movies/blocs/repositories/movie_search_repositor
 import 'package:my_movie_search/movies/models/movie_location.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/yts_helpers.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
+import 'package:my_movie_search/persistence/session_nav_tree.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:provider/provider.dart';
@@ -27,8 +28,15 @@ Future<void> main() async {
   YtsHelper();
 
   runApp(
-    ChangeNotifierProvider<FirebaseApplicationState>(
-      create: (_) => FirebaseApplicationState(),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider<FirebaseApplicationState>(
+          create: (_) => FirebaseApplicationState(),
+        ),
+        ChangeNotifierProvider<SessionNavTree>(
+          create: (_) => SessionNavTree(),
+        ),
+      ],
       builder: (_, _) =>
           MMSearchApp(movieBlocRepository: MovieSearchRepository()),
     ),

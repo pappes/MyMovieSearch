@@ -16,6 +16,7 @@ import 'package:my_movie_search/movies/screens/movie_details.dart';
 import 'package:my_movie_search/movies/screens/movie_physical_location.dart';
 import 'package:my_movie_search/movies/screens/movie_search_criteria.dart';
 import 'package:my_movie_search/movies/screens/movie_search_results.dart';
+import 'package:my_movie_search/movies/screens/navigation_history_page.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
@@ -35,6 +36,7 @@ enum ScreenRoute {
   errordetails,
   about,
   changelog,
+  navigationHistory,
 }
 
 class RouteInfo {
@@ -106,6 +108,11 @@ class MMSNav {
   @awaitNotRequired
   Future<Object?> showChangelogPage(SearchCriteriaDTO criteria) =>
       canvas.viewFlutterPage(criteria.getChangelogPage());
+
+  /// Navigates to the navigation history page.
+  @awaitNotRequired
+  Future<Object?> showNavigationHistory(SearchCriteriaDTO criteria) =>
+      canvas.viewFlutterPage(criteria.getNavigationHistoryPage());
 
   /// Navigates to a search criteria page with no criteria populated.
   ///
@@ -309,6 +316,11 @@ class MMSNav {
       path: '/$ScreenRoute.changelog.name',
       pageBuilder: ChangelogPage.goRoute,
     ),
+    GoRoute(
+      name: ScreenRoute.navigationHistory.name,
+      path: '/$ScreenRoute.navigationHistory.name',
+      pageBuilder: NavigationHistoryPage.goRoute,
+    ),
   ];
 }
 
@@ -413,7 +425,7 @@ class MMSFlutterCanvas {
   Future<Object?> viewFlutterRootPage(RouteInfo page) async {
     if (navigator is FlutterAppContext) {
       // Record page open event.
-      _navLog.logPageOpen(page.routePath.name, 'root');
+      _navLog.logPageOpen(page.routePath.name, NavLog.rootReference);
       while (closeCurrentScreen()) {
         await Future<dynamic>.delayed(Duration.zero);
       }

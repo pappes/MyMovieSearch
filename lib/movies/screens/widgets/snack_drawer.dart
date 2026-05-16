@@ -42,6 +42,15 @@ Drawer getDrawer(BuildContext context) => Drawer(
           await MMSNav(context).showAboutPage(searchType);
         },
       ),
+      ListTile(
+        title: const Text('Navigation History'),
+        onTap: () async {
+          Navigator.pop(context);
+          final searchType = SearchCriteriaDTO()
+            ..init(SearchCriteriaType.navigationHistory);
+          await MMSNav(context).showNavigationHistory(searchType);
+        },
+      ),
     ],
   ),
 );

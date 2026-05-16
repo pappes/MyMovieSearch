@@ -42,6 +42,7 @@ enum SearchCriteriaType {
   dvdLocations,
   meilisearch,
   statistics,
+  navigationHistory,
   error,
   custom,
 }
@@ -241,6 +242,15 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     toUniqueReference(),
   );
 
+  /// Construct route to the navigation history page.
+  ///
+  /// Always chooses NavigationHistoryPage.
+  RouteInfo getNavigationHistoryPage() => RouteInfo(
+    ScreenRoute.navigationHistory,
+    RestorableSearchCriteria.routeState(this),
+    toUniqueReference(),
+  );
+
   /// Construct route to the error details page.
   ///
   /// Always chooses ErrorDetailsPage.
@@ -266,6 +276,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
         return MovieMeiliSearchRepository();
       case SearchCriteriaType.error:
       case SearchCriteriaType.statistics:
+      case SearchCriteriaType.navigationHistory:
         return ApplicationStatisticsRepository();
       case SearchCriteriaType.dvdLocations:
       case SearchCriteriaType.none:
