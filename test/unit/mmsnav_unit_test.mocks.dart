@@ -14,6 +14,7 @@ import 'package:my_movie_search/persistence/firebase/firebase_common.dart'
 import 'package:my_movie_search/persistence/nav_log.dart' as _i7;
 import 'package:my_movie_search/utilities/navigation/app_context.dart' as _i8;
 import 'package:my_movie_search/utilities/navigation/web_nav.dart' as _i2;
+import 'package:my_movie_search/utilities/navigation/route_info.dart' as _i10;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -44,7 +45,7 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
           as _i3.Future<Object?>);
 
   @override
-  _i3.Future<Object?> viewFlutterPage(_i2.RouteInfo? page) =>
+  _i3.Future<Object?> viewFlutterPage(_i10.RouteInfo? page) =>
       (super.noSuchMethod(
             Invocation.method(#viewFlutterPage, [page]),
             returnValue: _i3.Future<Object?>.value(),
@@ -53,7 +54,7 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
           as _i3.Future<Object?>);
 
   @override
-  _i3.Future<Object?> viewFlutterRootPage(_i2.RouteInfo? page) =>
+  _i3.Future<Object?> viewFlutterRootPage(_i10.RouteInfo? page) =>
       (super.noSuchMethod(
             Invocation.method(#viewFlutterRootPage, [page]),
             returnValue: _i3.Future<Object?>.value(),
@@ -287,16 +288,16 @@ class MockNavLog extends _i1.Mock implements _i7.NavLog {
           as bool);
 
   @override
-  void logPageOpen(String? destination, String? request, String? description) =>
+  void logPageOpen(_i10.RouteInfo? route) =>
       super.noSuchMethod(
-        Invocation.method(#logPageOpen, [destination, request, description]),
+        Invocation.method(#logPageOpen, [route]),
         returnValueForMissingStub: null,
       );
 
   @override
-  void logPageClose(String? destination, String? request, Object? params) =>
+  void logPageClose(_i10.RouteInfo? route) =>
       super.noSuchMethod(
-        Invocation.method(#logPageClose, [destination, request, params]),
+        Invocation.method(#logPageClose, [route]),
         returnValueForMissingStub: null,
       );
 

@@ -18,6 +18,7 @@ import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
+import 'package:my_movie_search/utilities/navigation/route_info.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 typedef MovieCollection = Map<String, MovieResultDTO>;

@@ -27,34 +27,7 @@ import 'package:my_movie_search/utilities/navigation/flutter_app_context.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
-enum ScreenRoute {
-  search,
-  searchresults,
-  persondetails,
-  moviedetails,
-  addlocation,
-  errordetails,
-  about,
-  changelog,
-  navigationHistory,
-}
-
-class RouteInfo {
-  RouteInfo(this.routePath, this.params, this.reference, this.description);
-
-  final ScreenRoute routePath;
-  final Object params;
-  final String reference;
-  final String description;
-
-  @override
-  String toString() => json.encode({
-    'path': routePath.toString(),
-    'params': params.toString(),
-    'ref': reference,
-    'description': description,
-  });
-}
+import 'package:my_movie_search/utilities/navigation/route_info.dart';
 
 /// Performs page navigation
 ///
@@ -370,11 +343,7 @@ class MMSFlutterCanvas {
   Future<Object?> viewFlutterPage(RouteInfo page) {
     if (navigator != null) {
       // Record page open event.
-      _navLog.logPageOpen(
-        page.routePath.name,
-        page.reference,
-        page.description,
-      );
+      _navLog.logPageOpen(page);
       try {
         // Open the page.
         final openedPage = navigator!.pushNamed(
@@ -383,11 +352,7 @@ class MMSFlutterCanvas {
         );
         return openedPage.then((val) {
           // Record page closure event.
-          _navLog.logPageClose(
-            page.routePath.name,
-            page.reference,
-            page.params,
-          );
+          _navLog.logPageClose(page);
           _hideKeyboard();
           return null;
         });
@@ -433,9 +398,12 @@ class MMSFlutterCanvas {
     if (navigator is FlutterAppContext) {
       // Record page open event.
       _navLog.logPageOpen(
-        page.routePath.name,
-        NavLog.rootReference,
-        page.description,
+        RouteInfo(
+          page.routePath,
+          page.params,
+          NavLog.rootReference,
+          page.description,
+        )
       );
       while (closeCurrentScreen()) {
         await Future<dynamic>.delayed(Duration.zero);

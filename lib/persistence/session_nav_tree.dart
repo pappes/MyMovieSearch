@@ -1,17 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
+import 'package:my_movie_search/utilities/navigation/route_info.dart';
 
 class NavTreeNode {
   NavTreeNode({
-    required this.destination,
-    required this.reference,
-    required this.description,
+    required this.route,
     required this.timestamp,
   });
 
-  final String destination;
-  final String reference;
-  final String description;
+  final RouteInfo route;
   final DateTime timestamp;
   final List<NavTreeNode> children = [];
 }
@@ -20,15 +17,13 @@ class SessionNavTree extends ChangeNotifier {
   final List<NavTreeNode> roots = [];
   final List<NavTreeNode> _activeStack = [];
 
-  void logPageOpen(String destination, String reference, String description) {
+  void logPageOpen(RouteInfo route) {
     final node = NavTreeNode(
-      destination: destination,
-      reference: reference,
-      description: description,
+      route: route,
       timestamp: DateTime.now(),
     );
 
-    if (isRoot(reference, _activeStack)) {
+    if (isRoot(route.reference, _activeStack)) {
       roots.add(node);
       _activeStack
         ..clear()
@@ -40,12 +35,12 @@ class SessionNavTree extends ChangeNotifier {
     notifyListeners();
   }
 
-  void logPageClose(String destination, String reference) {
+  void logPageClose(RouteInfo route) {
     if (_activeStack.isNotEmpty) {
       final last = _activeStack.last;
       // Only pop if the closing page matches the active top of stack.
       // This protects against async pops happening after a new root is pushed.
-      if (last.destination == destination && last.reference == reference) {
+      if (last.route.routePath.name == route.routePath.name && last.route.reference == route.reference) {
         _activeStack.removeLast();
         notifyListeners();
       }

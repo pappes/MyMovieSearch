@@ -17,6 +17,7 @@ import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
+import 'package:my_movie_search/utilities/navigation/route_info.dart';
 
 class SearchRequest extends Equatable {
   const SearchRequest(this._title);

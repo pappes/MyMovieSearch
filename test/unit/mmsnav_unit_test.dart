@@ -11,6 +11,7 @@ import 'package:my_movie_search/persistence/nav_log.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/app_context.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
+import 'package:my_movie_search/utilities/navigation/route_info.dart';
 
 import 'mmsnav_unit_test.mocks.dart';
 
@@ -413,20 +414,12 @@ void main() {
       // Verify logging calls
       mockito
           .verify(
-            mockNavLog.logPageOpen(
-              testPageInfo.routePath.name,
-              testPageInfo.reference,
-              testPageInfo.description,
-            ),
+            mockNavLog.logPageOpen(testPageInfo),
           )
           .called(1);
       mockito
           .verify(
-            mockNavLog.logPageClose(
-              testPageInfo.routePath.name,
-              testPageInfo.reference,
-              testPageInfo.params,
-            ),
+            mockNavLog.logPageClose(testPageInfo),
           )
           .called(1);
 
@@ -443,7 +436,7 @@ void main() {
 
       // Assert
       mockito.verifyNever(
-        mockNavLog.logPageOpen(mockito.any, mockito.any, mockito.any),
+        mockNavLog.logPageOpen(mockito.any),
       );
       // We don't need to verify pushNamed on the fakeNavigator because it was
       // never passed to the canvasWithNullContext. The null check inside the
