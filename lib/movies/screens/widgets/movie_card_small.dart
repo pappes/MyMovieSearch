@@ -179,7 +179,7 @@ class MovieTile extends ListTile {
       case MovieContentType.barcode:
       case MovieContentType.searchprompt:
         widgets.add(_navigateButton(context, movie));
-        
+
       case MovieContentType.download:
         if (movie.imageUrl.isNotEmpty) {
           widgets
@@ -265,7 +265,7 @@ class MovieTile extends ListTile {
     MovieResultDTO movie, {
     Widget? icon,
   }) => ElevatedButton(
-    onPressed: () => MMSNav(context).remoteMagnetLink(movie),
+    onPressed: () => MMSNav(context).remoteMagnetLink(movie, context),
     child: icon ?? _getIcon(movie),
   );
 }

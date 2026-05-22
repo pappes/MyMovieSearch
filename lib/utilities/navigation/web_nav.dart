@@ -178,11 +178,22 @@ class MMSNav {
 
   /// Open the remote magnet link using the remote URL.
   ///
-  void remoteMagnetLink(MovieResultDTO movie) {
+  Future<bool> remoteMagnetLink(
+    MovieResultDTO movie,
+    BuildContext context,
+  ) async {
     if (movie.type == MovieContentType.download) {
       // Open magnet link on remote server.
-      MagnetHelper.remoteDownload(movie.imageUrl);
+      final result = await MagnetHelper.remoteDownload(movie.imageUrl);
+      if (result && context.mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Uploaded magnet link.')));
+      }
+
+      return result;
     }
+    return false;
   }
 
   /// Display more details for the selected card.
