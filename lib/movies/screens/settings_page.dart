@@ -47,28 +47,32 @@ class _SettingsPageState extends State<SettingsPage> {
 
     _offline = settings.offline;
 
-    _serverController = TextEditingController(text: settings.magnetServer);
-    _portController = TextEditingController(text: settings.magnetPort);
-    _usernameController = TextEditingController(text: settings.magnetUsername);
-    _passwordController = TextEditingController(text: settings.magnetPassword);
+    _serverController = TextEditingController(text: settings.localMagnetServer);
+    _portController = TextEditingController(text: settings.localMagnetPort);
+    _usernameController = TextEditingController(
+      text: settings.localMagnetUsername,
+    );
+    _passwordController = TextEditingController(
+      text: settings.localMagnetPassword,
+    );
 
-    _googleUrlController = TextEditingController(text: settings.googleurl);
-    _googleKeyController = TextEditingController(text: settings.googlekey);
-    _omdbKeyController = TextEditingController(text: settings.omdbkey);
-    _tmdbKeyController = TextEditingController(text: settings.tmdbkey);
-    _tvdbKeyController = TextEditingController(text: settings.tvdbkey);
+    _googleUrlController = TextEditingController(text: settings.localGoogleurl);
+    _googleKeyController = TextEditingController(text: settings.localGooglekey);
+    _omdbKeyController = TextEditingController(text: settings.localOmdbkey);
+    _tmdbKeyController = TextEditingController(text: settings.localTmdbkey);
+    _tvdbKeyController = TextEditingController(text: settings.localTvdbkey);
 
-    _meiliUrlController = TextEditingController(text: settings.meiliurl);
+    _meiliUrlController = TextEditingController(text: settings.localMeiliurl);
     _meiliSearchKeyController = TextEditingController(
-      text: settings.meilisearchkey,
+      text: settings.localMeilisearchkey,
     );
     _meiliAdminKeyController = TextEditingController(
-      text: settings.meiliadminkey,
+      text: settings.localMeiliadminkey,
     );
 
-    _seVmKeyController = TextEditingController(text: settings.seVmKey);
+    _seVmKeyController = TextEditingController(text: settings.localSeVmKey);
     _firebaseSecretsLocationController = TextEditingController(
-      text: settings.firebaseSecretsLocation,
+      text: settings.localFirebaseSecretsLocation,
     );
   }
 
@@ -100,20 +104,21 @@ class _SettingsPageState extends State<SettingsPage> {
     if (_formKey.currentState?.validate() ?? false) {
       final settings = Settings()
         ..offline = _offline
-        ..magnetServer = _serverController.text
-        ..magnetPort = _portController.text
-        ..magnetUsername = _usernameController.text
-        ..magnetPassword = _passwordController.text
-        ..googleurl = _googleUrlController.text
-        ..googlekey = _googleKeyController.text
-        ..omdbkey = _omdbKeyController.text
-        ..tmdbkey = _tmdbKeyController.text
-        ..tvdbkey = _tvdbKeyController.text
-        ..meiliurl = _meiliUrlController.text
-        ..meilisearchkey = _meiliSearchKeyController.text
-        ..meiliadminkey = _meiliAdminKeyController.text
-        ..seVmKey = _seVmKeyController.text
-        ..firebaseSecretsLocation = _firebaseSecretsLocationController.text;
+        ..localMagnetServer = _serverController.text
+        ..localMagnetPort = _portController.text
+        ..localMagnetUsername = _usernameController.text
+        ..localMagnetPassword = _passwordController.text
+        ..localGoogleurl = _googleUrlController.text
+        ..localGooglekey = _googleKeyController.text
+        ..localOmdbkey = _omdbKeyController.text
+        ..localTmdbkey = _tmdbKeyController.text
+        ..localTvdbkey = _tvdbKeyController.text
+        ..localMeiliurl = _meiliUrlController.text
+        ..localMeilisearchkey = _meiliSearchKeyController.text
+        ..localMeiliadminkey = _meiliAdminKeyController.text
+        ..localSeVmKey = _seVmKeyController.text
+        ..localFirebaseSecretsLocation =
+            _firebaseSecretsLocationController.text;
 
       await settings.saveToLocal();
 
@@ -231,7 +236,6 @@ class _SettingsPageState extends State<SettingsPage> {
               labelText: 'Password',
               border: OutlineInputBorder(),
             ),
-            obscureText: true,
           ),
         ],
       ),
@@ -261,7 +265,6 @@ class _SettingsPageState extends State<SettingsPage> {
               labelText: 'Google Key',
               border: OutlineInputBorder(),
             ),
-            obscureText: true,
           ),
           const SizedBox(height: 16),
           TextFormField(
@@ -270,7 +273,6 @@ class _SettingsPageState extends State<SettingsPage> {
               labelText: 'OMDB Key',
               border: OutlineInputBorder(),
             ),
-            obscureText: true,
           ),
           const SizedBox(height: 16),
           TextFormField(
@@ -279,7 +281,6 @@ class _SettingsPageState extends State<SettingsPage> {
               labelText: 'TMDB Key',
               border: OutlineInputBorder(),
             ),
-            obscureText: true,
           ),
           const SizedBox(height: 16),
           TextFormField(
@@ -288,7 +289,6 @@ class _SettingsPageState extends State<SettingsPage> {
               labelText: 'TVDB Key',
               border: OutlineInputBorder(),
             ),
-            obscureText: true,
           ),
         ],
       ),
@@ -318,7 +318,6 @@ class _SettingsPageState extends State<SettingsPage> {
               labelText: 'Search Key',
               border: OutlineInputBorder(),
             ),
-            obscureText: true,
           ),
           const SizedBox(height: 16),
           TextFormField(
@@ -327,7 +326,6 @@ class _SettingsPageState extends State<SettingsPage> {
               labelText: 'Admin Key',
               border: OutlineInputBorder(),
             ),
-            obscureText: true,
           ),
         ],
       ),
@@ -357,7 +355,6 @@ class _SettingsPageState extends State<SettingsPage> {
               labelText: 'SE VM Key',
               border: OutlineInputBorder(),
             ),
-            obscureText: true,
           ),
         ],
       ),

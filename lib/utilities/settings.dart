@@ -276,6 +276,7 @@ class Settings {
       await _firebaseData.init();
     }
     await _updateFromCloud();
+    //await clearLocalSettings();
     await _loadFromLocal();
     unawaited(QueryTVDBCommon.init());
   }
@@ -619,55 +620,76 @@ class Settings {
     }
   }
 
+  Future<void> clearLocalSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove('GOOGLE_URL');
+    await prefs.remove('GOOGLE_KEY');
+    await prefs.remove('OMDB_KEY');
+    await prefs.remove('TMDB_KEY');
+    await prefs.remove('TVDB_KEY');
+    await prefs.remove('MEILIADMIN_KEY');
+    await prefs.remove('MEILISEARCH_KEY');
+    await prefs.remove('MEILISEARCH_URL');
+    await prefs.remove('SE_VM_KEY');
+    await prefs.remove('SECRETS_LOCATION');
+    await prefs.remove('OFFLINE');
+    await prefs.remove('MAGNET_SERVER');
+    await prefs.remove('MAGNET_PORT');
+    await prefs.remove('MAGNET_USERNAME');
+    await prefs.remove('MAGNET_PASSWORD');
+  }
+
   Future<void> saveToLocal() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      if (localGoogleurl != null) {
+      if (localGoogleurl != null && localGoogleurl!.isNotEmpty) {
         await prefs.setString('GOOGLE_URL', localGoogleurl!);
       }
-      if (localGooglekey != null) {
+      if (localGooglekey != null && localGooglekey!.isNotEmpty) {
         await prefs.setString('GOOGLE_KEY', localGooglekey!);
       }
-      if (localOmdbkey != null) {
+      if (localOmdbkey != null && localOmdbkey!.isNotEmpty) {
         await prefs.setString('OMDB_KEY', localOmdbkey!);
       }
-      if (localTmdbkey != null) {
+      if (localTmdbkey != null && localTmdbkey!.isNotEmpty) {
         await prefs.setString('TMDB_KEY', localTmdbkey!);
       }
-      if (localTvdbkey != null) {
+      if (localTvdbkey != null && localTvdbkey!.isNotEmpty) {
         await prefs.setString('TVDB_KEY', localTvdbkey!);
       }
-      if (localMeiliadminkey != null) {
+      if (localMeiliadminkey != null && localMeiliadminkey!.isNotEmpty) {
         await prefs.setString('MEILIADMIN_KEY', localMeiliadminkey!);
       }
-      if (localMeilisearchkey != null) {
+      if (localMeilisearchkey != null && localMeilisearchkey!.isNotEmpty) {
         await prefs.setString('MEILISEARCH_KEY', localMeilisearchkey!);
       }
-      if (localMeiliurl != null) {
+      if (localMeiliurl != null && localMeiliurl!.isNotEmpty) {
         await prefs.setString('MEILISEARCH_URL', localMeiliurl!);
       }
-      if (localSeVmKey != null) {
+      if (localSeVmKey != null && localSeVmKey!.isNotEmpty) {
         await prefs.setString('SE_VM_KEY', localSeVmKey!);
       }
-      if (localFirebaseSecretsLocation != null) {
+      if (localFirebaseSecretsLocation != null &&
+          localFirebaseSecretsLocation!.isNotEmpty) {
         await prefs.setString(
           'SECRETS_LOCATION',
           localFirebaseSecretsLocation!,
         );
       }
-      if (_offlineText != null) {
+      if (_offlineText != null && _offlineText!.isNotEmpty) {
         await prefs.setString('OFFLINE', _offlineText!);
       }
-      if (localMagnetServer != null) {
+      if (localMagnetServer != null && localMagnetServer!.isNotEmpty) {
         await prefs.setString('MAGNET_SERVER', localMagnetServer!);
       }
-      if (localMagnetPort != null) {
+      if (localMagnetPort != null && localMagnetPort!.isNotEmpty) {
         await prefs.setString('MAGNET_PORT', localMagnetPort!);
       }
-      if (localMagnetUsername != null) {
+      if (localMagnetUsername != null && localMagnetUsername!.isNotEmpty) {
         await prefs.setString('MAGNET_USERNAME', localMagnetUsername!);
       }
-      if (localMagnetPassword != null) {
+      if (localMagnetPassword != null && localMagnetPassword!.isNotEmpty) {
         await prefs.setString('MAGNET_PASSWORD', localMagnetPassword!);
       }
       _updateFromLocalSetting();
