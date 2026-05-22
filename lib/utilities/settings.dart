@@ -574,6 +574,7 @@ class Settings {
     return record?.toString();
   }
 
+  /// load all stored settings from local storage and update the settings.
   Future<void> _loadFromLocal() async {
     try {
       final prefs = await SharedPreferences.getInstance();
@@ -598,6 +599,7 @@ class Settings {
     }
   }
 
+  /// update the settings with the local settings.
   void _updateFromLocalSetting() {
     try {
       googleurl = localGoogleurl ?? googleurl;
@@ -620,6 +622,50 @@ class Settings {
     }
   }
 
+  /// save all settings to local storage.
+  Future<void> saveToLocal() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await _updateLocalSetting(prefs, 'GOOGLE_URL', localGoogleurl);
+      await _updateLocalSetting(prefs, 'GOOGLE_KEY', localGooglekey);
+      await _updateLocalSetting(prefs, 'OMDB_KEY', localOmdbkey);
+      await _updateLocalSetting(prefs, 'TMDB_KEY', localTmdbkey);
+      await _updateLocalSetting(prefs, 'TVDB_KEY', localTvdbkey);
+      await _updateLocalSetting(prefs, 'MEILIADMIN_KEY', localMeiliadminkey);
+      await _updateLocalSetting(prefs, 'MEILISEARCH_KEY', localMeilisearchkey);
+      await _updateLocalSetting(prefs, 'MEILISEARCH_URL', localMeiliurl);
+      await _updateLocalSetting(prefs, 'SE_VM_KEY', localSeVmKey);
+      await _updateLocalSetting(prefs, 'MAGNET_SERVER', localMagnetServer);
+      await _updateLocalSetting(prefs, 'MAGNET_PORT', localMagnetPort);
+      await _updateLocalSetting(prefs, 'MAGNET_USERNAME', localMagnetUsername);
+      await _updateLocalSetting(prefs, 'MAGNET_PASSWORD', localMagnetPassword);
+
+      await _updateLocalSetting(prefs, 'OFFLINE', _offlineText);
+      await _updateLocalSetting(
+        prefs,
+        'SECRETS_LOCATION',
+        localFirebaseSecretsLocation,
+      );
+      _updateFromLocalSetting();
+    } catch (e) {
+      logger?.e('Failed to save local settings: $e');
+    }
+  }
+
+  /// update the local settings with the given key and value.
+  Future<void> _updateLocalSetting(
+    SharedPreferences prefs,
+    String key,
+    String? value,
+  ) async {
+    if (value != null && value.isNotEmpty) {
+      await prefs.setString(key, value);
+    } else {
+      await prefs.remove(key);
+    }
+  }
+
+  /// clear all stored settings from local storage.
   Future<void> clearLocalSettings() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -638,63 +684,5 @@ class Settings {
     await prefs.remove('MAGNET_PORT');
     await prefs.remove('MAGNET_USERNAME');
     await prefs.remove('MAGNET_PASSWORD');
-  }
-
-  Future<void> saveToLocal() async {
-    try {
-      final prefs = await SharedPreferences.getInstance();
-      if (localGoogleurl != null && localGoogleurl!.isNotEmpty) {
-        await prefs.setString('GOOGLE_URL', localGoogleurl!);
-      }
-      if (localGooglekey != null && localGooglekey!.isNotEmpty) {
-        await prefs.setString('GOOGLE_KEY', localGooglekey!);
-      }
-      if (localOmdbkey != null && localOmdbkey!.isNotEmpty) {
-        await prefs.setString('OMDB_KEY', localOmdbkey!);
-      }
-      if (localTmdbkey != null && localTmdbkey!.isNotEmpty) {
-        await prefs.setString('TMDB_KEY', localTmdbkey!);
-      }
-      if (localTvdbkey != null && localTvdbkey!.isNotEmpty) {
-        await prefs.setString('TVDB_KEY', localTvdbkey!);
-      }
-      if (localMeiliadminkey != null && localMeiliadminkey!.isNotEmpty) {
-        await prefs.setString('MEILIADMIN_KEY', localMeiliadminkey!);
-      }
-      if (localMeilisearchkey != null && localMeilisearchkey!.isNotEmpty) {
-        await prefs.setString('MEILISEARCH_KEY', localMeilisearchkey!);
-      }
-      if (localMeiliurl != null && localMeiliurl!.isNotEmpty) {
-        await prefs.setString('MEILISEARCH_URL', localMeiliurl!);
-      }
-      if (localSeVmKey != null && localSeVmKey!.isNotEmpty) {
-        await prefs.setString('SE_VM_KEY', localSeVmKey!);
-      }
-      if (localFirebaseSecretsLocation != null &&
-          localFirebaseSecretsLocation!.isNotEmpty) {
-        await prefs.setString(
-          'SECRETS_LOCATION',
-          localFirebaseSecretsLocation!,
-        );
-      }
-      if (_offlineText != null && _offlineText!.isNotEmpty) {
-        await prefs.setString('OFFLINE', _offlineText!);
-      }
-      if (localMagnetServer != null && localMagnetServer!.isNotEmpty) {
-        await prefs.setString('MAGNET_SERVER', localMagnetServer!);
-      }
-      if (localMagnetPort != null && localMagnetPort!.isNotEmpty) {
-        await prefs.setString('MAGNET_PORT', localMagnetPort!);
-      }
-      if (localMagnetUsername != null && localMagnetUsername!.isNotEmpty) {
-        await prefs.setString('MAGNET_USERNAME', localMagnetUsername!);
-      }
-      if (localMagnetPassword != null && localMagnetPassword!.isNotEmpty) {
-        await prefs.setString('MAGNET_PASSWORD', localMagnetPassword!);
-      }
-      _updateFromLocalSetting();
-    } catch (e) {
-      logger?.e('Failed to save local settings: $e');
-    }
   }
 }

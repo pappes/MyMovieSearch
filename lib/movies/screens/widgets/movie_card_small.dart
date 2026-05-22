@@ -181,7 +181,15 @@ class MovieTile extends ListTile {
         widgets.add(_navigateButton(context, movie));
       case MovieContentType.download:
         if (movie.imageUrl.isNotEmpty) {
-          widgets.add(_navigateButton(context, movie));
+          widgets
+            ..add(_navigateButton(context, movie))
+            ..add(
+              _navigateButton(
+                context,
+                movie,
+                icon: const Icon(Icons.dynamic_form),
+              ),
+            );
         }
 
       case MovieContentType.person:
