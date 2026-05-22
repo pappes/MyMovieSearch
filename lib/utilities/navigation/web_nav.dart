@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -18,16 +17,16 @@ import 'package:my_movie_search/movies/screens/movie_search_criteria.dart';
 import 'package:my_movie_search/movies/screens/movie_search_results.dart';
 import 'package:my_movie_search/movies/screens/navigation_history_page.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
+import 'package:my_movie_search/movies/screens/settings_page.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
 import 'package:my_movie_search/persistence/web_log.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/app_context.dart';
 import 'package:my_movie_search/utilities/navigation/flutter_app_context.dart';
+import 'package:my_movie_search/utilities/navigation/route_info.dart';
 import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
-
-import 'package:my_movie_search/utilities/navigation/route_info.dart';
 
 /// Performs page navigation
 ///
@@ -88,6 +87,11 @@ class MMSNav {
   @awaitNotRequired
   Future<Object?> showNavigationHistory(SearchCriteriaDTO criteria) =>
       canvas.viewFlutterPage(criteria.getNavigationHistoryPage());
+
+  /// Navigates to the settings page.
+  @awaitNotRequired
+  Future<Object?> showSettingsPage(SearchCriteriaDTO criteria) =>
+      canvas.viewFlutterPage(criteria.getSettingsPage());
 
   /// Navigates to a search criteria page with no criteria populated.
   ///
@@ -294,8 +298,13 @@ class MMSNav {
     ),
     GoRoute(
       name: ScreenRoute.navigationHistory.name,
-      path: '/$ScreenRoute.navigationHistory.name',
+      path: '/${ScreenRoute.navigationHistory.name}',
       pageBuilder: NavigationHistoryPage.goRoute,
+    ),
+    GoRoute(
+      name: ScreenRoute.settings.name,
+      path: '/${ScreenRoute.settings.name}',
+      pageBuilder: SettingsPage.goRoute,
     ),
   ];
 }
@@ -403,7 +412,7 @@ class MMSFlutterCanvas {
           page.params,
           NavLog.rootReference,
           page.description,
-        )
+        ),
       );
       while (closeCurrentScreen()) {
         await Future<dynamic>.delayed(Duration.zero);

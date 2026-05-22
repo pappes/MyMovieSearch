@@ -7,14 +7,13 @@ import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
 class ChangelogPage extends StatelessWidget {
   const ChangelogPage({super.key});
 
-  static MaterialPage<dynamic> goRoute(_, __) => const MaterialPage(
+  static MaterialPage<dynamic> goRoute(_, _) => const MaterialPage(
         restorationId: 'ChangelogPage',
         child: ChangelogPage(),
       );
 
   @override
-  Widget build(BuildContext context) {
-    return AppScaffold(
+  Widget build(BuildContext context) => AppScaffold(
       appBar: AppBar(
         title: const Text('Changelog'),
         leading: BackButton(
@@ -38,11 +37,9 @@ class ChangelogPage extends StatelessWidget {
           }
           return Markdown(
             data: snapshot.data ?? 'No changelog found.',
-            selectable: true,
-            padding: const EdgeInsets.all(16),
+          selectable: true,
           );
         },
       ),
-    );
-  }
+  );
 }

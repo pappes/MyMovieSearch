@@ -10,6 +10,7 @@ enum ScreenRoute {
   about,
   changelog,
   navigationHistory,
+  settings,
 }
 
 class RouteInfo {

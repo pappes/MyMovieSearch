@@ -80,6 +80,7 @@ dependencies:
   puppeteer: ^3.22.0                    # linux headless browser to substitute for flutter_inappwebview
   quiver: ^3.2.2                        # mega library incluing ranges, caches, collections, etc.
 
+  shared_preferences: ^2.5.5
   simple_barcode_scanner: ^0.6.0        # DOES NOT COMPILE with flutter 3.24
   #sqflite: ^2.0.2                       # Database storage for persisting state across sessions.
   sqflite_common_ffi: ^2.4.0+2          # Database storage for persisting state across sessions.

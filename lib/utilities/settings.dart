@@ -15,6 +15,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.d
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_common.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_io/io.dart';
 import 'package:yaml/yaml.dart';
 
@@ -25,7 +26,8 @@ import 'package:yaml/yaml.dart';
 /// 1) compiled dart-define values
 /// 2) google secrets (cloud)
 /// 3) runtime environment variables
-/// it is recommended to use 2) for API keys and other sensitive information
+/// 4) local settings stored in shared preferences
+/// it is recommended to use 2) or 4) for API keys and other sensitive info
 /// it is recommended to use 3) for test environments
 ///
 ///
@@ -38,6 +40,10 @@ import 'package:yaml/yaml.dart';
 /// 'MEILIADMIN_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'MEILISEARCH_KEY': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
 /// 'MEILISEARCH_URL': 'https://cloud.meilisearch.com/',
+/// 'MAGNET_SERVER': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+/// 'MAGNET_PORT': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+/// 'MAGNET_USERNAME': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+/// 'MAGNET_PASSWORD': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 /// not applicable to cloud storage:
 /// 'SECRETS_LOCATION': 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
 /// 'OFFLINE': '!true', // defaults to null (hence online)
@@ -54,6 +60,10 @@ import 'package:yaml/yaml.dart';
 /// mms_sk = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// mms_su = "https://cloud.meilisearch.com/"
 /// mms_se = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// mms_ms = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// mms_mp = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// mms_mu = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// mms_mpp = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// SECRETS_LOCATION and OFFLINE are not applicable to cloud storage.
 ///
 /// or from the linux .profile/.bashrc at login time
@@ -68,6 +78,10 @@ import 'package:yaml/yaml.dart';
 /// export MEILISEARCH_URL="https://cloud.meilisearch.com/"
 /// export SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// export OFFLINE="true"
+/// export MAGNET_SERVER="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// export MAGNET_PORT="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// export MAGNET_USERNAME="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// export MAGNET_PASSWORD="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// ```
 ///
 ///
@@ -83,7 +97,12 @@ import 'package:yaml/yaml.dart';
 /// foo@bar:~$ export MEILISEARCH_URL="https://cloud.meilisearch.com/"
 /// foo@bar:~$ export SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// foo@bar:~$ export OFFLINE="true"
+/// foo@bar:~$ export MAGNET_SERVER="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// foo@bar:~$ export MAGNET_PORT="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// foo@bar:~$ export MAGNET_USERNAME="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// foo@bar:~$ export MAGNET_PASSWORD="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// ```
+///
 ///
 /// or from the command line at compile time
 /// ```shell
@@ -97,7 +116,11 @@ import 'package:yaml/yaml.dart';
 ///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
 ///   --dart-define MEILISEARCH_URL="https://cloud.meilisearch.com/" \
 ///   --dart-define SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
-///   --dart-define OFFLINE="true"
+///   --dart-define OFFLINE="true" \
+///   --dart-define MAGNET_SERVER="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MAGNET_PORT="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MAGNET_USERNAME="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MAGNET_PASSWORD="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// ```
 ///
 /// or from the command line at build time
@@ -112,7 +135,11 @@ import 'package:yaml/yaml.dart';
 ///   --dart-define MEILISEARCH_KEY="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
 ///   --dart-define MEILISEARCH_URL="https://cloud.meilisearch.com/" \
 ///   --dart-define SECRETS_LOCATION="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
-///   --dart-define OFFLINE="true"
+///   --dart-define OFFLINE="true" \
+///   --dart-define MAGNET_SERVER="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MAGNET_PORT="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MAGNET_USERNAME="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx" \
+///   --dart-define MAGNET_PASSWORD="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// ```
 ///
 /// or configured in vscode; but it should be noted
@@ -145,6 +172,14 @@ import 'package:yaml/yaml.dart';
 ///                 "SECRETS_LOCATION=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///                 "--dart-define",
 ///                 "OFFLINE=true"
+///                 "--dart-define",
+///                 "MAGNET_SERVER=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///                 "--dart-define",
+///                 "MAGNET_PORT=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///                 "--dart-define",
+///                 "MAGNET_USERNAME=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+///                 "--dart-define",
+///                 "MAGNET_PASSWORD=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
 ///             ]
 ///         },
 /// ```
@@ -170,6 +205,28 @@ class Settings {
   String? meilisearchkey;
   String meiliurl = 'https://cloud.meilisearch.com/';
   String? seVmKey;
+
+  String? magnetServer;
+  String? magnetPort;
+  String? magnetUsername;
+  String? magnetPassword;
+
+  // Setting loaded from device
+  String? localGoogleurl;
+  String? localGooglekey;
+  String? localOmdbkey;
+  String? localTmdbkey;
+  String? localTvdbkey;
+  String? localMeiliadminkey;
+  String? localMeilisearchkey;
+  String? localMeiliurl;
+  String? localSeVmKey;
+
+  String? localMagnetServer;
+  String? localMagnetPort;
+  String? localMagnetUsername;
+  String? localMagnetPassword;
+  String? localFirebaseSecretsLocation;
 
   String? firebaseSecretsLocation;
   String? gcpSecretsProject;
@@ -219,6 +276,7 @@ class Settings {
       await _firebaseData.init();
     }
     await _updateFromCloud();
+    await _loadFromLocal();
     unawaited(QueryTVDBCommon.init());
   }
 
@@ -272,6 +330,22 @@ class Settings {
         const String.fromEnvironment('MEILISEARCH_URL'),
       ),
     );
+    magnetServer = getSecretFromEnv(
+      'MAGNET_SERVER',
+      const String.fromEnvironment('MAGNET_SERVER'),
+    );
+    magnetPort = getSecretFromEnv(
+      'MAGNET_PORT',
+      const String.fromEnvironment('MAGNET_PORT'),
+    );
+    magnetUsername = getSecretFromEnv(
+      'MAGNET_USERNAME',
+      const String.fromEnvironment('MAGNET_USERNAME'),
+    );
+    magnetPassword = getSecretFromEnv(
+      'MAGNET_PASSWORD',
+      const String.fromEnvironment('MAGNET_PASSWORD'),
+    );
     // Environment only values.
     firebaseSecretsLocation = getSecretFromEnv(
       'SECRETS_LOCATION',
@@ -313,6 +387,30 @@ class Settings {
       await getSecretFromCloud(secrets, 'mms_su', meiliurl, 'MEILISEARCH_URL'),
     );
     seVmKey = await getSecretFromCloud(secrets, 'mms_se', seVmKey, '');
+    magnetServer = await getSecretFromCloud(
+      secrets,
+      'mms_ms',
+      magnetServer,
+      'MAGNET_SERVER',
+    );
+    magnetPort = await getSecretFromCloud(
+      secrets,
+      'mms_mpo',
+      magnetPort,
+      'MAGNET_PORT',
+    );
+    magnetUsername = await getSecretFromCloud(
+      secrets,
+      'mms_mu',
+      magnetUsername,
+      'MAGNET_USERNAME',
+    );
+    magnetPassword = await getSecretFromCloud(
+      secrets,
+      'mms_mpw',
+      magnetPassword,
+      'MAGNET_PASSWORD',
+    );
   }
 
   void logValues() {
@@ -326,6 +424,10 @@ class Settings {
     logValue('MEILISEARCH_URL', meiliurl);
     logValue('SECRETS_LOCATION', firebaseSecretsLocation);
     logValue('OFFLINE', _offlineText);
+    logValue('MAGNET_SERVER', magnetServer);
+    logValue('MAGNET_PORT', magnetPort);
+    logValue('MAGNET_USERNAME', magnetUsername);
+    logValue('MAGNET_PASSWORD', magnetPassword != null ? '********' : null);
   }
 
   void logValue(String label, String? value) {
@@ -469,5 +571,108 @@ class Settings {
     final record = await fb.fetchRecord(collection, id: id);
 
     return record?.toString();
+  }
+
+  Future<void> _loadFromLocal() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      localGoogleurl = prefs.getString('GOOGLE_URL');
+      localGooglekey = prefs.getString('GOOGLE_KEY');
+      localOmdbkey = prefs.getString('OMDB_KEY');
+      localTmdbkey = prefs.getString('TMDB_KEY');
+      localTvdbkey = prefs.getString('TVDB_KEY');
+      localMeiliadminkey = prefs.getString('MEILIADMIN_KEY');
+      localMeilisearchkey = prefs.getString('MEILISEARCH_KEY');
+      localMeiliurl = prefs.getString('MEILISEARCH_URL');
+      localSeVmKey = prefs.getString('SE_VM_KEY');
+      localFirebaseSecretsLocation = prefs.getString('SECRETS_LOCATION');
+      _offlineText = prefs.getString('OFFLINE');
+      localMagnetServer = prefs.getString('MAGNET_SERVER');
+      localMagnetPort = prefs.getString('MAGNET_PORT');
+      localMagnetUsername = prefs.getString('MAGNET_USERNAME');
+      localMagnetPassword = prefs.getString('MAGNET_PASSWORD');
+      _updateFromLocalSetting();
+    } catch (e) {
+      logger?.e('Failed to load local settings: $e');
+    }
+  }
+
+  void _updateFromLocalSetting() {
+    try {
+      googleurl = localGoogleurl ?? googleurl;
+      googlekey = localGooglekey ?? googlekey;
+      omdbkey = localOmdbkey ?? omdbkey;
+      tmdbkey = localTmdbkey ?? tmdbkey;
+      tvdbkey = localTvdbkey ?? tvdbkey;
+      meiliadminkey = localMeiliadminkey ?? meiliadminkey;
+      meilisearchkey = localMeilisearchkey ?? meilisearchkey;
+      meiliurl = localMeiliurl ?? meiliurl;
+      seVmKey = localSeVmKey ?? seVmKey;
+      firebaseSecretsLocation =
+          localFirebaseSecretsLocation ?? firebaseSecretsLocation;
+      magnetServer = localMagnetServer ?? magnetServer;
+      magnetPort = localMagnetPort ?? magnetPort;
+      magnetUsername = localMagnetUsername ?? magnetUsername;
+      magnetPassword = localMagnetPassword ?? magnetPassword;
+    } catch (e) {
+      logger?.e('Failed to load local settings: $e');
+    }
+  }
+
+  Future<void> saveToLocal() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      if (localGoogleurl != null) {
+        await prefs.setString('GOOGLE_URL', localGoogleurl!);
+      }
+      if (localGooglekey != null) {
+        await prefs.setString('GOOGLE_KEY', localGooglekey!);
+      }
+      if (localOmdbkey != null) {
+        await prefs.setString('OMDB_KEY', localOmdbkey!);
+      }
+      if (localTmdbkey != null) {
+        await prefs.setString('TMDB_KEY', localTmdbkey!);
+      }
+      if (localTvdbkey != null) {
+        await prefs.setString('TVDB_KEY', localTvdbkey!);
+      }
+      if (localMeiliadminkey != null) {
+        await prefs.setString('MEILIADMIN_KEY', localMeiliadminkey!);
+      }
+      if (localMeilisearchkey != null) {
+        await prefs.setString('MEILISEARCH_KEY', localMeilisearchkey!);
+      }
+      if (localMeiliurl != null) {
+        await prefs.setString('MEILISEARCH_URL', localMeiliurl!);
+      }
+      if (localSeVmKey != null) {
+        await prefs.setString('SE_VM_KEY', localSeVmKey!);
+      }
+      if (localFirebaseSecretsLocation != null) {
+        await prefs.setString(
+          'SECRETS_LOCATION',
+          localFirebaseSecretsLocation!,
+        );
+      }
+      if (_offlineText != null) {
+        await prefs.setString('OFFLINE', _offlineText!);
+      }
+      if (localMagnetServer != null) {
+        await prefs.setString('MAGNET_SERVER', localMagnetServer!);
+      }
+      if (localMagnetPort != null) {
+        await prefs.setString('MAGNET_PORT', localMagnetPort!);
+      }
+      if (localMagnetUsername != null) {
+        await prefs.setString('MAGNET_USERNAME', localMagnetUsername!);
+      }
+      if (localMagnetPassword != null) {
+        await prefs.setString('MAGNET_PASSWORD', localMagnetPassword!);
+      }
+      _updateFromLocalSetting();
+    } catch (e) {
+      logger?.e('Failed to save local settings: $e');
+    }
   }
 }

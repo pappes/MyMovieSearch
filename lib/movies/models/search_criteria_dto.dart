@@ -16,7 +16,6 @@ import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
-import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/navigation/route_info.dart';
 
 class SearchRequest extends Equatable {
@@ -46,6 +45,7 @@ enum SearchCriteriaType {
   statistics,
   navigationHistory,
   error,
+  settings,
   custom,
 }
 
@@ -268,6 +268,16 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     'Error details for ${criteriaTitle.truncate(50)}',
   );
 
+  /// Construct route to the settings page.
+  ///
+  /// Always chooses SettingsPage.
+  RouteInfo getSettingsPage() => RouteInfo(
+    ScreenRoute.settings,
+    RestorableSearchCriteria.routeState(this),
+    toUniqueReference(),
+    'Settings',
+  );
+
   /// Determine which WebFetch to use to gather data
   static BaseMovieRepository getDatasource(SearchCriteriaType criteriaType) {
     switch (criteriaType) {
@@ -284,6 +294,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
         return MovieMeiliSearchRepository();
       case SearchCriteriaType.error:
       case SearchCriteriaType.statistics:
+      case SearchCriteriaType.settings:
       case SearchCriteriaType.navigationHistory:
         return ApplicationStatisticsRepository();
       case SearchCriteriaType.dvdLocations:

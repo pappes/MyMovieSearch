@@ -5,9 +5,9 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
 import 'package:my_movie_search/persistence/session_nav_tree.dart';
-import 'package:provider/provider.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
-import 'package:my_movie_search/utilities/navigation/route_info.dart';
+import 'package:provider/provider.dart';
+
 class NavigationHistoryPage extends StatefulWidget {
   const NavigationHistoryPage({super.key});
 
@@ -21,15 +21,11 @@ class NavigationHistoryPage extends StatefulWidget {
 }
 
 class FlatNode {
+  FlatNode({required this.node, required this.depth, required this.path});
+
   final NavTreeNode node;
   final int depth;
   final List<NavTreeNode> path;
-
-  FlatNode({
-    required this.node,
-    required this.depth,
-    required this.path,
-  });
 }
 
 class _NavigationHistoryPageState extends State<NavigationHistoryPage> {
@@ -49,37 +45,42 @@ class _NavigationHistoryPageState extends State<NavigationHistoryPage> {
 
   void _scrollToBottom() {
     if (!mounted || !_scrollController.hasClients) return;
-    
+
     final maxExtent = _scrollController.position.maxScrollExtent;
-    
-    // Stop if we're at the bottom, or if we've tried too many times (prevents infinite layout loops)
-    if ((_scrollController.offset - maxExtent).abs() < 1.0 || _scrollBottomAttempts > 3) {
+
+    // Stop if we're at the bottom, or if we've tried too many times
+    // (prevents infinite layout loops)
+    if ((_scrollController.offset - maxExtent).abs() < 1.0 ||
+        _scrollBottomAttempts > 3) {
       return;
     }
 
     _scrollBottomAttempts++;
     _scrollController.jumpTo(maxExtent);
-    
-    // Since jumping changes the top index, it might change the dynamic size of the Parents Section.
+
+    // Since jumping changes the top index,
+    // it might change the dynamic size of the Parents Section.
     // This changes the maxScrollExtent, so we loop until it settles.
     WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
   }
 
   @override
   void dispose() {
-    _scrollController.removeListener(_onScroll);
-    _scrollController.dispose();
+    _scrollController
+      ..removeListener(_onScroll)
+      ..dispose();
     super.dispose();
   }
 
-  /// Listens to scroll events, calculates the top visible row using the 72px itemExtent,
+  /// Listens to scroll events,
+  ///  calculates the top visible row using the 72px itemExtent,
   /// and updates the active parents if they have changed.
   void _onScroll() {
     if (!_scrollController.hasClients || _flatNodes.isEmpty) return;
-    
-    final offset = math.max(0.0, _scrollController.offset);
+
+    final offset = math.max(0, _scrollController.offset);
     final topIndex = (offset / 72.0).floor().clamp(0, _flatNodes.length - 1);
-    
+
     final topNode = _flatNodes[topIndex];
     final activePath = topNode.path;
     final startIndex = math.max(0, activePath.length - 5);
@@ -94,13 +95,13 @@ class _NavigationHistoryPageState extends State<NavigationHistoryPage> {
 
   bool _parentsEqual(List<NavTreeNode> a, List<NavTreeNode> b) {
     if (a.length != b.length) return false;
-    for (int i = 0; i < a.length; i++) {
+    for (var i = 0; i < a.length; i++) {
       if (a[i] != b[i]) return false;
     }
     return true;
   }
 
-  /// Flattens the hierarchical session navigation tree into a 1D list 
+  /// Flattens the hierarchical session navigation tree into a 1D list
   /// while preserving depth and parent path information.
   List<FlatNode> _flattenTree(List<NavTreeNode> roots) {
     final list = <FlatNode>[];
@@ -111,13 +112,14 @@ class _NavigationHistoryPageState extends State<NavigationHistoryPage> {
         traverse(node.children, depth + 1, childPath);
       }
     }
+
     traverse(roots, 0, []);
     return list;
   }
 
   int _getTopIndex() {
     if (!_scrollController.hasClients) return 0;
-    final offset = math.max(0.0, _scrollController.offset);
+    final offset = math.max(0, _scrollController.offset);
     return (offset / 72.0).floor().clamp(0, math.max(0, _flatNodes.length - 1));
   }
 
@@ -150,7 +152,7 @@ class _NavigationHistoryPageState extends State<NavigationHistoryPage> {
         final activePath = topNode?.path ?? [];
         final startIndex = math.max(0, activePath.length - 5);
         final activeParents = activePath.skip(startIndex).toList();
-        
+
         // Update tracking variable quietly
         _lastActiveParents = activeParents;
 
@@ -165,9 +167,13 @@ class _NavigationHistoryPageState extends State<NavigationHistoryPage> {
     ),
   );
 
-  /// Builds the top reserved area displaying the 5 most recent parents 
+  /// Builds the top reserved area displaying the 5 most recent parents
   /// of the currently visible row in the list below.
-  Widget _buildParentsSection(BuildContext context, List<NavTreeNode> parents, int startIndex) {
+  Widget _buildParentsSection(
+    BuildContext context,
+    List<NavTreeNode> parents,
+    int startIndex,
+  ) {
     if (parents.isEmpty) return const SizedBox.shrink();
 
     return Material(
@@ -184,40 +190,51 @@ class _NavigationHistoryPageState extends State<NavigationHistoryPage> {
     );
   }
 
-  /// Builds the bottom scrollable area containing the full flattened navigation history.
-  Widget _buildNonParentsSection(BuildContext context) {
-    return Expanded(
-      child: ListView.builder(
-        controller: _scrollController,
-        itemExtent: 72.0,
-        itemCount: _flatNodes.length,
-        itemBuilder: (context, index) {
-          final flatNode = _flatNodes[index];
-          return _buildTile(context, flatNode.node, flatNode.depth, isHeader: false);
-        },
-      ),
-    );
-  }
+  /// Builds the bottom scrollable area
+  ///  containing the full flattened navigation history.
+  Widget _buildNonParentsSection(BuildContext context) => Expanded(
+    child: ListView.builder(
+      controller: _scrollController,
+      itemExtent: 72,
+      itemCount: _flatNodes.length,
+      itemBuilder: (context, index) {
+        final flatNode = _flatNodes[index];
+        return _buildTile(
+          context,
+          flatNode.node,
+          flatNode.depth,
+          isHeader: false,
+        );
+      },
+    ),
+  );
 
-  Widget _buildTile(BuildContext context, NavTreeNode node, int depth, {required bool isHeader}) {
+  Widget _buildTile(
+    BuildContext context,
+    NavTreeNode node,
+    int depth, {
+    required bool isHeader,
+  }) {
     final timeFormat = DateFormat.Hms().format(node.timestamp);
     return SizedBox(
-      height: 72.0,
+      height: 72,
       child: Padding(
         padding: EdgeInsets.only(left: 16.0 * depth),
         child: ListTile(
-          onTap: () {
-            MMSNav(context).canvas.viewFlutterPage(node.route);
+          onTap: () async {
+            await MMSNav(context).canvas.viewFlutterPage(node.route);
           },
           title: Text(
-            node.route.routePath.name, 
-            maxLines: 1, 
+            node.route.routePath.name,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: isHeader ? const TextStyle(fontWeight: FontWeight.bold) : null,
+            style: isHeader
+                ? const TextStyle(fontWeight: FontWeight.bold)
+                : null,
           ),
           subtitle: Text(
-            node.route.description, 
-            maxLines: 1, 
+            node.route.description,
+            maxLines: 1,
             overflow: TextOverflow.ellipsis,
           ),
           trailing: Text(

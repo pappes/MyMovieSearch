@@ -10,8 +10,8 @@ import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/app_context.dart';
-import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/navigation/route_info.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 import 'mmsnav_unit_test.mocks.dart';
 

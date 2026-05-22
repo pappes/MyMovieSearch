@@ -3,10 +3,7 @@ import 'package:my_movie_search/persistence/nav_log.dart';
 import 'package:my_movie_search/utilities/navigation/route_info.dart';
 
 class NavTreeNode {
-  NavTreeNode({
-    required this.route,
-    required this.timestamp,
-  });
+  NavTreeNode({required this.route, required this.timestamp});
 
   final RouteInfo route;
   final DateTime timestamp;
@@ -18,10 +15,7 @@ class SessionNavTree extends ChangeNotifier {
   final List<NavTreeNode> _activeStack = [];
 
   void logPageOpen(RouteInfo route) {
-    final node = NavTreeNode(
-      route: route,
-      timestamp: DateTime.now(),
-    );
+    final node = NavTreeNode(route: route, timestamp: DateTime.now());
 
     if (isRoot(route.reference, _activeStack)) {
       roots.add(node);
@@ -40,7 +34,8 @@ class SessionNavTree extends ChangeNotifier {
       final last = _activeStack.last;
       // Only pop if the closing page matches the active top of stack.
       // This protects against async pops happening after a new root is pushed.
-      if (last.route.routePath.name == route.routePath.name && last.route.reference == route.reference) {
+      if (last.route.routePath.name == route.routePath.name &&
+          last.route.reference == route.reference) {
         _activeStack.removeLast();
         notifyListeners();
       }

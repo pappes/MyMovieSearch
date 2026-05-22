@@ -1,6 +1,3 @@
-// allow test to do thing production code should not
-// ignore_for_file: invalid_use_of_visible_for_overriding_member
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/utilities/settings.dart';

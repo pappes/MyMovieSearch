@@ -16,6 +16,8 @@ flutter build apk --flavor=prod --dart-define OMDB_KEY="xxxxxxxx" --dart-define 
         --dart-define MEILISEARCH_KEY="xxxxxxxx"  --dart-define GOOGLE_KEY="xxxxxxxx" \
         --dart-define TVDB_KEY="xxxxxxxx" \
         --dart-define GOOGLE_URL="xxxxxxxx" --dart-define SECRETS_LOCATION="xxxxxxxx" \
+        --dart-define MAGNET_SERVER="xxxxxxxx" --dart-define MAGNET_PORT="xxxxxxxx" \
+        --dart-define MAGNET_USERNAME="xxxxxxxx" --dart-define MAGNET_PASSWORD="xxxxxxxx" \
         --dart-define OFFLINE="!true" 
 ```
 

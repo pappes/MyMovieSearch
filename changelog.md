@@ -1,3 +1,7 @@
+##version 1.2.4
+- Add settings page
+- Add changelog page
+
 ##version 1.2.3
 - Add navigation history page.
 
