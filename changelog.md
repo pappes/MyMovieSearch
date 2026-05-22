@@ -1,6 +1,6 @@
 ##version 1.2.4
 - Add settings page
-- Add changelog page
+- Send magnets to tTorrent client
 
 ##version 1.2.3
 - Add navigation history page.

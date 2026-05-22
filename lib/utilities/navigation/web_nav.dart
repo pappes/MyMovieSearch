@@ -19,6 +19,7 @@ import 'package:my_movie_search/movies/screens/navigation_history_page.dart';
 import 'package:my_movie_search/movies/screens/person_details.dart';
 import 'package:my_movie_search/movies/screens/settings_page.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
 import 'package:my_movie_search/persistence/web_log.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
@@ -174,6 +175,15 @@ class MMSNav {
       'Stacker locations for ${movie.title} (${movie.year})',
     ),
   );
+
+  /// Open the remote magnet link using the remote URL.
+  ///
+  void remoteMagnetLink(MovieResultDTO movie) {
+    if (movie.type == MovieContentType.download) {
+      // Open magnet link on remote server.
+      MagnetHelper.remoteDownload(movie.imageUrl);
+    }
+  }
 
   /// Display more details for the selected card.
   ///

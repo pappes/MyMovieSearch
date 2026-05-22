@@ -4,7 +4,9 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 
 const magnetFragment1 = 'magnet:?xt=urn:btih:';
 // const magnetFragment2 = '&dn=';
@@ -62,5 +64,123 @@ class MagnetHelper {
       }
     }
     return buffer.toString();
+  }
+
+  /// Download magnet link using the remote URL.
+  static Future<bool> remoteDownload(String? magnet) async {
+    if (null == magnet) {
+      return false;
+    }
+    final server = Settings().magnetServer;
+    final port = Settings().magnetPort;
+    final username = Settings().magnetUsername;
+    final password = Settings().magnetPassword;
+
+    if (server == null || port == null) {
+      return false;
+    }
+    //test connection
+    await TorrentConnectionTester().testBasicGetRequest('$server:$port');
+    // Open magnet link on remote server.
+    final result = await TorrentRemoteService().uploadMagnetToServer(
+      ipAddress: '$server:$port',
+      username: username,
+      password: password,
+      magnetUri: magnet,
+    );
+    return result;
+  }
+}
+
+class TorrentConnectionTester {
+  /// Simple GET request to test if the ttorrents web interface is reachable.
+  /// [ipAddress] should be "192.168.0.30:1080"
+  Future<void> testBasicGetRequest(String ipAddress) async {
+    final client = HttpClient()..connectionTimeout = const Duration(seconds: 4);
+
+    // We hit the base route to see if the webserver responds
+    final url = 'http://$ipAddress/bt/';
+
+    try {
+      Logger().t('Initiating connection test to: $url');
+
+      final request = await client.getUrl(Uri.parse(url));
+
+      // Basic setup to simulate a standard browser transaction
+      request.headers.set('Accept', 'text/html,application/xhtml+xml');
+      request.headers.set('Connection', 'close');
+
+      final response = await request.close();
+
+      Logger().t(
+        'HTTP Status Code: ${response.statusCode}',
+      ); // Expecting 200 OK or 401 Unauthorized
+
+      // Print the headers to verify it's actually tTorrent talking
+      response.headers.forEach((name, values) {
+        Logger().t('Header -> $name: ${values.join(', ')}');
+      });
+    } catch (e) {
+      Logger().t('Connection Error Detail: $e');
+    } finally {
+      client.close(force: true);
+    }
+  }
+}
+
+class TorrentRemoteService {
+  /// Sends a magnet URI straight to the remote ttorrent instance.
+  /// [ipAddress] must include the port (e.g., "192.168.0.30:1080")
+  Future<bool> uploadMagnetToServer({
+    required String ipAddress,
+    required String? username,
+    required String? password,
+    required String magnetUri,
+  }) async {
+    // The exact functional endpoint discovered via curl
+    final url = 'http://$ipAddress/command/download';
+
+    // Converts {'urls': magnetUri} into 'urls=magnet%3A...' in one clean step
+    final bodyString = Uri(queryParameters: {'urls': magnetUri}).query;
+
+    final client = HttpClient()..connectionTimeout = const Duration(seconds: 5);
+
+    try {
+      final request = await client.postUrl(Uri.parse(url));
+
+      // MUST be form-urlencoded for the /command/download endpoint
+      request.headers.chunkedTransferEncoding = false;
+      request.headers.set('Content-Type', 'application/x-www-form-urlencoded');
+      request.headers.set('Connection', 'close');
+
+      // Inject your Basic Authentication headers
+      if (username != null && password != null && username.isNotEmpty) {
+        final credentials = '$username:$password';
+        final encodedCredentials = base64Encode(utf8.encode(credentials));
+        request.headers.set('Authorization', 'Basic $encodedCredentials');
+      }
+
+      // Convert body string to raw payload bytes
+      final bodyBytes = utf8.encode(bodyString);
+      request.headers.contentLength = bodyBytes.length;
+      request.add(bodyBytes);
+
+      final response = await request.close();
+
+      // The server returns 200 OK on a successful ingestion trigger
+      if (response.statusCode == HttpStatus.ok) {
+        return true;
+      }
+
+      Logger().t(
+        'tTorrent server rejected payload with code: ${response.statusCode}',
+      );
+      return false;
+    } catch (e) {
+      Logger().t('Network exception forwarding magnet link: $e');
+      return false;
+    } finally {
+      client.close(force: true);
+    }
   }
 }
