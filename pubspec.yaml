@@ -23,10 +23,10 @@ environment:
 dependencies:
   
   # Note: use "dart pub outdated" to find libraries that should be upgraded
-  bloc: ^9.2.0                          # Assist with the BLoC design pattern.
+  bloc: ^9.2.1                          # Assist with the BLoC design pattern.
   
   cached_network_image: ^3.4.1          # preload large images
-  cloud_firestore: ^6.3.0               # Store data in Firebase Firestore cloud database
+  cloud_firestore: ^6.4.1               # Store data in Firebase Firestore cloud database
   
   cupertino_icons: ^1.0.9               # iOS style icons.
   #device_info_plus: ^10.1.0             # get infomation about the manufacturer of the phone
@@ -35,8 +35,8 @@ dependencies:
   easy_image_viewer: ^1.5.1
   equatable: ^2.0.7                     # Simplify object comparisons.
 
-  firebase_auth: ^6.4.0                 # Authenticate users against Firebase
-  firebase_core: ^4.7.0                 # Firebase initialisation
+  firebase_auth: ^6.5.1                # Authenticate users against Firebase
+  firebase_core: ^4.9.0                 # Firebase initialisation
   #firebase_ui_auth: ^1.7.0              # does not work on linux :(
   #firebase_core: ^1.0.3                 # Firebase initialisation
   #firebase_auth: ^3.0.1                 # Authenticate users against Firebase
@@ -50,7 +50,7 @@ dependencies:
     sdk: flutter
   flutter_bloc: ^9.1.1                  # Assist with the BLoC design pattern.
   flutter_custom_tabs: ^2.4.1           # replace webview with android chrome browser
-  flutter_dotenv: ^6.0.0                # Read secrets and settings from .env file.
+  flutter_dotenv: ^6.0.1                # Read secrets and settings from .env file.
   flutter_inappwebview: ^6.1.5          # A webview that can be controlled programatically
 
 
@@ -58,9 +58,9 @@ dependencies:
     sdk: flutter
   flutter_markdown: ^0.7.3              # Render markdown elegantly.
 
-  go_router: ^17.2.1                    # screen navigation
+  go_router: ^17.2.3                    # screen navigation
   googleapis: ^16.0.0                   # interact with GCP resources  
-  googleapis_auth: ^2.3.0               # log in to google API with service accounts  ### old version required by meta via sdk
+  googleapis_auth: ^2.3.1               # log in to google API with service accounts
   grpc: ^5.1.0                          # extended firedart error handling
   html: ^0.15.6                         # Dart dom and html utilities.
   html_unescape: ^2.0.0                 # decode &apos;
@@ -70,20 +70,20 @@ dependencies:
   logger: ^2.7.0                        # Log trace messages to console.
   ####logger_flutter: ^0.7.1             # Shake device to see trace messages.
   meilisearch: ^0.19.0
-  meta: ^1.17.0                         # extended annotations  # old version required by flutter test
+  meta: ^1.18.0                         # extended annotations  # old version required by flutter test
   mutex: ^3.1.0
   path: ^1.9.1                          # File path manipulation library
   path_provider: ^2.1.5                 # Device filesystem access for accessing database files.
 
   path_provider_linux: ^2.2.1           # Device filesystem access for accessing filesytstem during testing. 
   provider: ^6.1.5+1                      # so ChangeNotifierProvider can notify change to firebase login state
-  puppeteer: ^3.22.0                    # linux headless browser to substitute for flutter_inappwebview
+  puppeteer: ^3.23.0                    # linux headless browser to substitute for flutter_inappwebview
   quiver: ^3.2.2                        # mega library incluing ranges, caches, collections, etc.
 
   shared_preferences: ^2.5.5
   simple_barcode_scanner: ^0.6.0        # DOES NOT COMPILE with flutter 3.24
   #sqflite: ^2.0.2                       # Database storage for persisting state across sessions.
-  sqflite_common_ffi: ^2.4.0+2          # Database storage for persisting state across sessions.
+  sqflite_common_ffi: ^2.4.0+3          # Database storage for persisting state across sessions.
   sqlite3: ^3.3.1                       # Database storage for persisting state across sessions.
   universal_io: ^2.3.1                  # Consistent environment variable fetching and CORS http gets across web&mobile platforms.
   url_launcher: ^6.3.2                  # for hyperlinks e.g. https://pub.dev/documentation/url_launcher/latest/link/Link-class.html
@@ -96,13 +96,13 @@ dependency_overrides:
  # win32: ^5.5.3                        # if above libraries need to be forced to use updated versions of a dependent library
 
 dev_dependencies:
-  build_runner: ^2.13.1
+  build_runner: ^2.15.0
   flutter_lints: ^6.0.0
   flutter_test:
     sdk: flutter
   integration_test:
     sdk: flutter
-  mockito: ^5.6.4
+  mockito: ^5.7.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
