@@ -12,7 +12,7 @@ import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 
-final imdbCriteria = SearchCriteriaDTO().fromString('tt1231');
+final SearchCriteriaDTO imdbCriteria = SearchCriteriaDTO().fromString('tt1231');
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => Settings().init());

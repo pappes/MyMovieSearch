@@ -3,7 +3,9 @@
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/

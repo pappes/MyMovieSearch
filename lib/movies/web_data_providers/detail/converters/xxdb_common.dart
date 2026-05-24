@@ -39,7 +39,7 @@ enum XxdbSource {
   plex,
 }
 
-const xxdbSouceDescriptions = {
+const Map<XxdbSource, String> xxdbSouceDescriptions = {
   XxdbSource.imdb: 'IMDB',
   XxdbSource.tmdb: 'TMDB',
   XxdbSource.eidr: 'EIDR',
@@ -65,7 +65,7 @@ const xxdbSouceDescriptions = {
   XxdbSource.plex: 'Plex',
 };
 
-const sourceWebsiteMapping = {
+const Map<XxdbSource, String> sourceWebsiteMapping = {
   // do not need to add imbd explicitly 'imdb_id': sourceImdb,
   XxdbSource.eidr: 'https://ui.eidr.org',
   XxdbSource.instagram: 'https://www.instagram.com',
@@ -89,7 +89,7 @@ const sourceWebsiteMapping = {
   XxdbSource.tvdb: 'https://thetvdb.com',
   XxdbSource.plex: 'https://app.plex.tv',
 };
-const sourceWebsitePath = {
+const Map<XxdbSource, String> sourceWebsitePath = {
   // do not need to add imbd explicitly 'imdb_id': sourceImdb,
   XxdbSource.eidr: '/content/',
   XxdbSource.instagram: '/',

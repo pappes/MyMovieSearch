@@ -23,14 +23,16 @@ List<MovieResultDTO> jsonMapToDto(Iterable<Map<dynamic, dynamic>> records) {
   return result;
 }
 
-final expectedDTOList = jsonMapToDto(expectedDTOMap);
-final expectedErrorDTOList = jsonMapToDto(expectedDTOMap);
-final expectedDTOStream = Stream.value(expectedDTOList);
+final List<MovieResultDTO> expectedDTOList = jsonMapToDto(expectedDTOMap);
+final List<MovieResultDTO> expectedErrorDTOList = jsonMapToDto(expectedDTOMap);
+final Stream<List<MovieResultDTO>> expectedDTOStream = Stream.value(
+  expectedDTOList,
+);
 
-final intermediateMapList = [
+final List<Map<String, Object>> intermediateMapList = [
   {'v': 1, 'q': 'imdb_offline_suggestions', 'd': expectedDTOMap},
 ];
-final intermediateEmptyMapList = [
+final List<Map<String, Object>> intermediateEmptyMapList = [
   {
     'd': <void>[],
     'q':
@@ -40,7 +42,7 @@ final intermediateEmptyMapList = [
     'v': 1,
   },
 ];
-final intermediateErrorMapList =
+final List<Map<String, Object>> intermediateErrorMapList =
     intermediateEmptyMapList; //['[jsonDecode(jsonSampleError)]'];
 
 const imdbCustomKeyName = 'Cust';
@@ -116,7 +118,7 @@ const imdbJsonSampleInner = '''
       ,"i":["https://m.media-amazon.com/images/M/MV5B...cxNQ@@._V1_.jpg",640,428]}
 ''';
 
-final expectedDTOMap = [
+final List<Map<String, Object>> expectedDTOMap = [
   {
     'l': 'Imdb Offline Suggestions 1984',
     'id': 'tt7324958',

@@ -11,7 +11,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 
 const host = 'https://search.dvds.mms.pappes.net';
-final apiKey = Settings().meiliadminkey;
+final String? apiKey = Settings().meiliadminkey;
 
 class MeiliSearch {
   MeiliSearch({required String indexName})

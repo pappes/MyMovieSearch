@@ -13,14 +13,14 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const tvdbApiPath = 'https://api4.thetvdb.com/v4/';
 const requestsPerSecond = 30;
-const tvdbTypeMapping = {
+const Map<String, MovieContentType> tvdbTypeMapping = {
   'movie': MovieContentType.title,
   'series': MovieContentType.series,
   'people': MovieContentType.person,
   'episode': MovieContentType.episode,
 };
 
-const tvdbEndpointMapping = {
+const Map<MovieContentType, String> tvdbEndpointMapping = {
   MovieContentType.title: 'movies/',
   MovieContentType.series: 'series/',
   MovieContentType.person: 'people/',

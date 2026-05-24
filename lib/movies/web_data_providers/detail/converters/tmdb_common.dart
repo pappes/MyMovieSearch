@@ -6,7 +6,7 @@ const innerElementIdentity = 'id';
 const innerElementImdbId = 'imdb_id';
 const innerElementExternalIds = 'external_ids';
 
-const tvdbSourceToEnumMapping = {
+const Map<String, XxdbSource> tvdbSourceToEnumMapping = {
   'imdb_id': XxdbSource.imdb,
   'wikidata_id': XxdbSource.wikidata,
   'facebook_id': XxdbSource.facebook,

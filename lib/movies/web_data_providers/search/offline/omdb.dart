@@ -12,7 +12,9 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 const expectedDtoJsonStringList = [
   '{"bestSource": "omdb", "uniqueId": "tt0451279", "title": "Wonder Woman", "type": "movie", "year": "2017", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BMTYzODQzYjQtNTczNC00MzZhLTg1ZWYtZDUxYmQ3ZTY4NzA1XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg", "related": {}}',
   '{"bestSource": "omdb", "uniqueId": "tt7126948", "title": "Wonder Woman 1984", "type": "movie", "year": "2020", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BYTlhNzJjYzYtNGU3My00ZDI5LTgzZDUtYzllYjU1ZmU0YTgwXkEyXkFqcGdeQXVyMjQwMDg0Ng@@._V1_SX300.jpg", "related": {}}',
@@ -26,8 +28,8 @@ const expectedDtoJsonStringList = [
   '{"bestSource": "omdb", "uniqueId": "tt0293979", "title": "Wonder Woman: Who\'s Afraid of Diana Prince?", "type": "movie", "year": "1967", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BYzk4Y2NkNjItZWE1OC00MDc5LWEwNGMtZDFkOGM3MTQzY2YzXkEyXkFqcGdeQXVyMTU2MjI3NTk@._V1_SX300.jpg", "related": {}}',
 ];
 
-final intermediateMapList = [jsonDecode(jsonSampleFull)];
-final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
+final List<dynamic> intermediateMapList = [jsonDecode(jsonSampleFull)];
+final List<dynamic> intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
 const jsonSampleFull =
     ' {"Search":[ $omdbJsonSearchInner ], '

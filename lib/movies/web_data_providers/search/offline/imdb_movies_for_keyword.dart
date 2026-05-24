@@ -25,7 +25,9 @@ const imdbJsonEmptySampleInner =
 Future<Stream<String>> streamImdbKeywordsHtmlOfflineData(_) =>
     Future.value(Stream.value(imdbHtmlSampleFull));
 
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
@@ -44,7 +46,7 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-const intermediateEmptyMapList = [
+const List<Map<String, Object>> intermediateEmptyMapList = [
   {
     'props': {
       'pageProps': {
@@ -56,7 +58,7 @@ const intermediateEmptyMapList = [
   },
 ];
 
-const intermediateMapList = [
+const List<Map<String, Object>> intermediateMapList = [
   {
     'props': {
       'pageProps': {

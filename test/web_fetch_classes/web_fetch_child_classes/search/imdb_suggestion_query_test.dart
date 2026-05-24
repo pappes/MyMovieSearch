@@ -13,7 +13,7 @@ Future<Stream<String>> _emitUnexpectedJsonSample(_) =>
 Future<Stream<String>> _emitInvalidJsonSample(_) =>
     Future.value(Stream.value('imdbJsonFunction({not valid json})'));
 
-final criteria = SearchCriteriaDTO().fromString('123');
+final SearchCriteriaDTO criteria = SearchCriteriaDTO().fromString('123');
 
 void main() {
   ////////////////////////////////////////////////////////////////////////////////

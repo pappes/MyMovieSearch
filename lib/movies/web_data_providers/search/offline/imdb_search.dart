@@ -5,7 +5,9 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 
 Future<Stream<String>> streamImdbSearchHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));
@@ -68,7 +70,7 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-const intermediateMapList = [
+const List<Map<String, Object?>> intermediateMapList = [
   {
     'id': 'nm0152436',
     'name': 'Hye NDace',

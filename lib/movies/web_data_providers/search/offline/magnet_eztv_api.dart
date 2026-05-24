@@ -14,8 +14,8 @@ const jsonSampleTooMany =
     '{"imdb_id":"93443470","torrents_count":1027471,"limit":100,"page":1}';
 const jsonSampleInvalid = 'NOT VALID JSON';
 
-final jsonSample = jsonEncode(intermediateMapList);
-final jsonSampleLarge = jsonEncode(largeMapList);
+final String jsonSample = jsonEncode(intermediateMapList);
+final String jsonSampleLarge = jsonEncode(largeMapList);
 
 const htmlSampleError = '''
 {
@@ -43,7 +43,7 @@ const htmlSampleError = '''
 }
 ''';
 
-const intermediateMapList = {
+const Map<String, Object> intermediateMapList = {
   'imdb_id': '13443470',
   'torrents_count': 80,
   'limit': 100,
@@ -105,7 +105,7 @@ const intermediateMapList = {
   ],
 };
 
-const largeMapList = {
+const Map<String, Object> largeMapList = {
   'imdb_id': '13443470',
   'torrents_count': 80,
   'limit': 100,

@@ -27,7 +27,7 @@ class QueryGoogleMovies
   QueryGoogleMovies(super.criteria);
 
   // 'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
-  static final _baseURL = Settings().googleurl;
+  static final String _baseURL = Settings().googleurl;
 
   /// Describe where the data is coming from.
   @override

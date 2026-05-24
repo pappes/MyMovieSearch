@@ -17,7 +17,9 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 final expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0120193","title":"Stage Fright","bestSource":"DataSourceType.imdb","alternateTitle":"Страх сцены","type":"MovieContentType.short","year":"1997","yearRange":"1997","runTime":"720","language":"LanguageType.allEnglish",
@@ -37,7 +39,7 @@ final expectedDtoJsonStringList = [
 ''',
 ];
 
-final expectedErrorDTOList = ListDTOConversion.decodeList([
+final List<MovieResultDTO> expectedErrorDTOList = ListDTOConversion.decodeList([
   '''
 {
   "uniqueId": "-1", 
@@ -46,9 +48,9 @@ final expectedErrorDTOList = ListDTOConversion.decodeList([
 ''',
 ]);
 
-final intermediateMapList = [jsonDecode(jsonSampleFull)];
-final intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
-final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
+final List<dynamic> intermediateMapList = [jsonDecode(jsonSampleFull)];
+final List<dynamic> intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
+final List<dynamic> intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
 const jsonSampleFull =
     ' $jsonSearchPrefix '

@@ -11,7 +11,9 @@ const expectedDtoJsonStringList = [
       "description":"9324915073425","sources":{"DataSourceType.uhttBarcode":"9324915073425"}}
 ''',
 ];
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 
 Future<Stream<String>> streamHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));

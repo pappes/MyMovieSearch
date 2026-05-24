@@ -7,26 +7,27 @@ import '../test_helper.dart';
 /// Test Data
 ////////////////////////////////////////////////////////////////////////////////
 
-final expectedDTOList = expectedDTOStream.toList();
-final expectedDTOStream = streamMovieResultDTOFromJsonMap([
-  {
-    movieDTOTitle: '1234',
-    movieDTOUniqueId: 'tt7602562',
-    movieDTOBestSource: DataSourceType.imdb.toString(),
-    movieDTOYear: '2016',
-    movieDTODescription: '1234 is a movie ... terror in the country.',
-    movieDTOLanguages: 'null',
-    movieDTOGenres: '"Drama"',
-    movieDTOKeywords: '["terror","T&A"]',
-    // movieResultDTOYearRange = 'yearRange';
-    movieDTOType: MovieContentType.movie.toString(),
-    movieDTOUserRating: '6.5',
-    movieDTOUserRatingCount: '10',
-    // movieResultDTOCensorRating = 'censorRating';
-    movieDTOImageUrl:
-        'https://m.media-amazon.com/images/M/MV5B...c4OTM4NjE@._V1_.jpg',
-  },
-]);
+final Future<List<MovieResultDTO>> expectedDTOList = expectedDTOStream.toList();
+final Stream<MovieResultDTO> expectedDTOStream =
+    streamMovieResultDTOFromJsonMap([
+      {
+        movieDTOTitle: '1234',
+        movieDTOUniqueId: 'tt7602562',
+        movieDTOBestSource: DataSourceType.imdb.toString(),
+        movieDTOYear: '2016',
+        movieDTODescription: '1234 is a movie ... terror in the country.',
+        movieDTOLanguages: 'null',
+        movieDTOGenres: '"Drama"',
+        movieDTOKeywords: '["terror","T&A"]',
+        // movieResultDTOYearRange = 'yearRange';
+        movieDTOType: MovieContentType.movie.toString(),
+        movieDTOUserRating: '6.5',
+        movieDTOUserRatingCount: '10',
+        // movieResultDTOCensorRating = 'censorRating';
+        movieDTOImageUrl:
+            'https://m.media-amazon.com/images/M/MV5B...c4OTM4NjE@._V1_.jpg',
+      },
+    ]);
 
 const htmlSampleInner = r'''
 <script type="application/ld+json">{
@@ -92,4 +93,4 @@ const htmlSampleInner = r'''
 }</script>
 ''';
 const htmlSampleOuter = '<html> $htmlSampleInner </html>>';
-const htmlSampleFull = htmlSampleOuter;
+const String htmlSampleFull = htmlSampleOuter;

@@ -15,7 +15,7 @@ Future<Stream<String>> _emitUnexpectedJsonSample(_) =>
 Future<Stream<String>> _emitInvalidJsonSample(_) =>
     Future.value(Stream.value('not valid json'));
 
-final criteria = SearchCriteriaDTO().fromString('tt1231');
+final SearchCriteriaDTO criteria = SearchCriteriaDTO().fromString('tt1231');
 
 void main() {
   // Wait for api key to be initialised

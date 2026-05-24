@@ -11,7 +11,9 @@ const expectedDtoJsonStringList = [
       "description":"placeholder: 2.38 GB","userRatingCount":"248","sources":{"DataSourceType.torrentDownloadSearch":"https://www.torrentdownload.info/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7/2001-A-Space-Odyssey-+1968+-+BluRay+-+1080p+-+YTS-AM+"}}
 ''',
 ];
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 
 Future<Stream<String>> streamHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));

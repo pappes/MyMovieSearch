@@ -73,7 +73,7 @@ const nameField = 'sourceName';
 const idField = 'id';
 const imdbIdField = 'movieIMDB';
 
-const tvdbSourceToEnumMapping = {
+const Map<Object, XxdbSource> tvdbSourceToEnumMapping = {
   'P345': XxdbSource.imdb,
   'P4947': XxdbSource.tvdb,
   'P2704': XxdbSource.eidr,
@@ -92,7 +92,7 @@ const tvdbSourceToEnumMapping = {
 class WikidataDetailConverter {
   String? imdbId;
   String? failureMessage;
-  final dataSource = DataSourceType.wikidataDetail;
+  final DataSourceType dataSource = DataSourceType.wikidataDetail;
   String dataSourceName = 'WikidataDetailConverter';
 
   List<MovieResultDTO> dtoFromCompleteJsonMap(Map<dynamic, dynamic> map) {

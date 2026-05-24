@@ -15,10 +15,10 @@ Future<Stream<String>> _emitUnexpectedJsonSample(_) =>
 Future<Stream<String>> _emitInvalidJsonSample(_) =>
     Future.value(Stream.value('not valid json'));
 
-final imdbCriteria = SearchCriteriaDTO().fromString('tt1231');
+final SearchCriteriaDTO imdbCriteria = SearchCriteriaDTO().fromString('tt1231');
 final dto = MovieResultDTO()..init(type: MovieContentType.movie.toString());
 
-final tvdbCriteria = SearchCriteriaDTO().fromString('987654');
+final SearchCriteriaDTO tvdbCriteria = SearchCriteriaDTO().fromString('987654');
 
 void main() {
   // Wait for api key to be initialised

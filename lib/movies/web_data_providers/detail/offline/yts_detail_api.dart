@@ -6,10 +6,10 @@ import 'dart:convert';
 Future<Stream<String>> streamhtmlOfflineData(_) =>
     Future.value(Stream.value(jsonTextSimple));
 
-final jsonTextSimple = jsonEncode(jsonSampleSimple);
-final jsonTextNotFound = jsonEncode(jsonSampleNotFound);
+final String jsonTextSimple = jsonEncode(jsonSampleSimple);
+final String jsonTextNotFound = jsonEncode(jsonSampleNotFound);
 
-const intermediateMapList = [
+const List<Map<String, Object>> intermediateMapList = [
   {
     'name': '2001: A Space Odyssey',
     'year': '1968',
@@ -48,7 +48,7 @@ const intermediateMapList = [
   },
 ];
 
-const jsonSampleNotFound = {
+const Map<String, Object> jsonSampleNotFound = {
   'status': 'ok',
   'status_message': 'Query was successful',
   'data': {
@@ -75,7 +75,7 @@ const jsonSampleNotFound = {
   '@meta': {'api_version': 2, 'execution_time': '0 ms'},
 };
 
-const jsonSampleSimple = {
+const Map<String, Object> jsonSampleSimple = {
   'status': 'ok',
   'status_message': 'Query was successful',
   'data': {

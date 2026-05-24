@@ -10,7 +10,9 @@ const expectedDtoJsonStringList = [
 {"uniqueId":"DataSourceType.fishpondBarcode dream","bestSource":"DataSourceType.fishpondBarcode","title":"Love And Other Catastrophes 1996","alternateTitle":"A day in the life of two film-school students...","type":"MovieContentType.barcode","imageUrl":"https://d3fa68hw0m2vcc.cloudfront.net/099/25035.jpeg","sources":{"DataSourceType.fishpondBarcode":"DataSourceType.fishpondBarcode dream"}}
 ''',
 ];
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 
 Future<Stream<String>> streamHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));

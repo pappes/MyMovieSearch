@@ -16,7 +16,9 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 final expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"tt0074074","bestSource":"DataSourceType.google","title":"Wonder Woman ","type":"MovieContentType.series","year":"1979","yearRange":"1975-1979","imageUrl":"https://m.media-amazon.com/images/M/MV5BZjAxYTcxMDUtZTRmMi00NTk3LThkZTItNGNlZTQ3NWRhMjY5XkEyXkFqcGdeQXVyNjExODE1MDc@._V1_UY1200_CR107,0,630,1200_AL_.jpg","sources":{"DataSourceType.google":"tt0074074"}}
@@ -47,7 +49,7 @@ final expectedDtoJsonStringList = [
 ''',
 ];
 
-final expectedErrorDTOList = ListDTOConversion.decodeList([
+final List<MovieResultDTO> expectedErrorDTOList = ListDTOConversion.decodeList([
   '''
 {
   "uniqueId": "-1", 
@@ -56,9 +58,9 @@ final expectedErrorDTOList = ListDTOConversion.decodeList([
 ''',
 ]);
 
-final intermediateMapList = [jsonDecode(jsonSampleFull)];
-final intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
-final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
+final List<dynamic> intermediateMapList = [jsonDecode(jsonSampleFull)];
+final List<dynamic> intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
+final List<dynamic> intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
 const jsonSampleFull =
     ' $googleMoviesJsonSearchPrefix '

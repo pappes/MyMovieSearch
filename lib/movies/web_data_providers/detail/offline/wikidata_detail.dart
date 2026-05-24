@@ -3,7 +3,7 @@
 
 import 'dart:convert';
 
-final intermediateErrorList = [jsonDecode(jsonSampleEmpty)];
+final List<dynamic> intermediateErrorList = [jsonDecode(jsonSampleEmpty)];
 
 const jsonSampleEmpty = '''
 <!DOCTYPE html>
@@ -21,7 +21,7 @@ Future<Stream<String>> streamMovieJsonOfflineData(_) =>
 Future<Stream<String>> streamPersonJsonOfflineData(_) =>
     Future.value(Stream.value(jsonEncode(jsonPerson)));
 
-final jsonMovie = {
+final Map<String, Object> jsonMovie = {
   'entities': {
     'Q13794921': {
       'id': 'Q13794921',
@@ -122,7 +122,7 @@ final jsonMovie = {
   },
 };
 
-final jsonSeries = {
+final Map<String, Object> jsonSeries = {
   'entities': {
     'Q253205': {
       'id': 'Q253205',
@@ -208,7 +208,7 @@ final jsonSeries = {
   },
 };
 
-final jsonPerson = {
+final Map<String, Object> jsonPerson = {
   'entities': {
     'Q211082': {
       'pageid': 206800,
@@ -282,7 +282,7 @@ final jsonPerson = {
   },
 };
 
-final jsonMultipleMovie = {
+final Map<String, Object> jsonMultipleMovie = {
   'head': {
     'vars': [
       'movieIMDB',

@@ -26,7 +26,9 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"429617","bestSource":"DataSourceType.tmdbSearch","title":"Spider-Man: Far from Home","year":"2019","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://image.tmdb.org/t/p/w500/4q2NyXl.jpg","sources":{"DataSourceType.tmdbSearch":"429617"},"related":{}}
@@ -42,9 +44,9 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-final intermediateMapList = [jsonDecode(jsonSampleFull)];
-final intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
-final intermediateErrorMapList = [jsonDecode(jsonSampleError)];
+final List<dynamic> intermediateMapList = [jsonDecode(jsonSampleFull)];
+final List<dynamic> intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
+final List<dynamic> intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
 const jsonSampleFull =
     ' { "page": 1, "results": [ $tmdbJsonSearchInner ], '

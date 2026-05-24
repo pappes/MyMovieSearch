@@ -29,7 +29,7 @@ Future<Stream<String>> _emitEmtpyJsonSample(_) {
   return Future.value(Stream.value(emptyJson));
 }
 
-final criteria = SearchCriteriaDTO().fromString('123');
+final SearchCriteriaDTO criteria = SearchCriteriaDTO().fromString('123');
 
 void main() {
   ////////////////////////////////////////////////////////////////////////////////

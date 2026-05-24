@@ -285,7 +285,9 @@ String _makeJson(int qty) {
   return results.toString();
 }
 
-final criteriaDto = SearchCriteriaDTO().fromString('criteria');
+final SearchCriteriaDTO criteriaDto = SearchCriteriaDTO().fromString(
+  'criteria',
+);
 void main() {
   ////////////////////////////////////////////////////////////////////////////////
   /// Non Mocked Unit tests

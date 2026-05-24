@@ -29,7 +29,9 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 const expectedDtoJsonStringList = [
   r'''
 {"uniqueId":"ttImdbId123","bestSource":"DataSourceType.tmdbFinder","title":"The Taking of Pelham 1 2 3","type":"MovieContentType.title","year":"2009","language":"LanguageType.allEnglish",
@@ -39,8 +41,8 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-final intermediateMapList = [jsonDecode(jsonSampleFull)];
-final intermediateMapListError = [jsonDecode(jsonSampleError)];
+final List<dynamic> intermediateMapList = [jsonDecode(jsonSampleFull)];
+final List<dynamic> intermediateMapListError = [jsonDecode(jsonSampleError)];
 
 const tmdbJsonSearchInner = '''
   {"adult":false,

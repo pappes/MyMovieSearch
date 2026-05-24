@@ -7,7 +7,9 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 //query string https://www.imdb.com/title/tt0106977/fullcredits?ref_=tt_ov_st_sm
 
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 
 const _imdbHtmlSampleStart = ' <!DOCTYPE html> <html     <head>';
 const _imdbHtmlSampleMiddle =
@@ -22,7 +24,7 @@ final _imdbJsonSampleInner =
 ''';
 const _imdbHtmlSampleInner = '';
 
-final _embeddedJson = jsonEncode(intermediateMapList.first);
+final String _embeddedJson = jsonEncode(intermediateMapList.first);
 
 /* To update this data, uncomment printTestData(actualResult);
 in test('Run dtoFromCompleteJsonMap()'*/
@@ -39,6 +41,9 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
+/// The map list is intentionally left untyped so that the 
+/// test can demonstrate the parsing of the raw JSON.
+// ignore: specify_nonobvious_property_types
 const intermediateMapList = [
   {
     "props": {

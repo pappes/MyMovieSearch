@@ -11,15 +11,15 @@ Future<Stream<String>> streamImdbHtmlOfflineFilteredData(_) =>
 Future<Stream<String>> streamImdbHtmlOfflinePaginatedData(_) =>
     Future.value(Stream.value(jsonEncode(imdbJsonWrappedPaginatedSample)));
 
-const imdbJsonWrappedPaginatedSample = {
+const Map<String, Object> imdbJsonWrappedPaginatedSample = {
   'data': {'name': imdbJsonInnerPaginatedSample},
 };
 
-const imdbJsonWrappedFilteredSample = {
+const Map<String, Object> imdbJsonWrappedFilteredSample = {
   'data': {'name': imdbJsonInnerFilteredSample},
 };
 
-const imdbJsonInnerNameSample = <String, Object>{
+const Map<String, Object> imdbJsonInnerNameSample = {
   'nameText': {'text': 'Raman Rodger'},
   'primaryImage': {
     'caption': {'plainText': 'Raman Rodger'},
@@ -30,19 +30,19 @@ const imdbJsonInnerNameSample = <String, Object>{
   },
 };
 
-const imdbJsonInnerPaginatedSample = {
+const Map<String, Object> imdbJsonInnerPaginatedSample = {
   'id': 'nm1913125',
   ...imdbJsonInnerNameSample,
   'actor_credits': threeEdges,
 };
 
-const imdbJsonInnerFilteredSample = {
+const Map<String, Object> imdbJsonInnerFilteredSample = {
   'id': 'nm1913125',
   ...imdbJsonInnerNameSample,
   ...imdbJsonInnerFilteredSampleResults,
 };
 
-const imdbJsonInnerFilteredSampleResults = {
+const Map<String, Object> imdbJsonInnerFilteredSampleResults = {
   'unreleasedCredits': [
     {
       'category': {'id': 'actor', 'text': 'Actor'},
@@ -57,22 +57,22 @@ const imdbJsonInnerFilteredSampleResults = {
   ],
 };
 
-const oneEdge = {
+const Map<String, Object> oneEdge = {
   'total': 1,
   'edges': [imdbJsonNode1Sample],
 };
 
-const twoEdges = {
+const Map<String, Object> twoEdges = {
   'total': 2,
   'edges': [imdbJsonNode2Sample, imdbJsonNode3Sample],
 };
 
-const threeEdges = {
+const Map<String, Object> threeEdges = {
   'total': 3,
   'edges': [imdbJsonNode1Sample, imdbJsonNode2Sample, imdbJsonNode3Sample],
 };
 
-const imdbJsonNode1Sample = {
+const Map<String, Object> imdbJsonNode1Sample = {
   'node': {
     'attributes': null,
     'category': {'id': 'actor', 'text': 'Actor'},
@@ -134,7 +134,8 @@ const imdbJsonNode1Sample = {
     },
   },
 };
-const imdbJsonNode2Sample = {
+
+const Map<String, Object> imdbJsonNode2Sample = {
   'node': {
     'attributes': [
       {'text': 'as Raman Rodger'},
@@ -178,7 +179,8 @@ const imdbJsonNode2Sample = {
     },
   },
 };
-const imdbJsonNode3Sample = {
+
+const Map<String, Object> imdbJsonNode3Sample = {
   'node': {
     'attributes': [
       {'text': 'as Raman Rodger'},

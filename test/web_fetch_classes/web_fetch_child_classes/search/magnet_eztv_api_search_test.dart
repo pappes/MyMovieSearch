@@ -17,7 +17,7 @@ Future<Stream<String>> _emitUnexpectedHtmlSample(_) =>
 Future<Stream<String>> _emitInvalidHtmlSample(_) =>
     Future.value(Stream.value('not valid html'));
 
-final criteria = SearchCriteriaDTO().fromString('dream');
+final SearchCriteriaDTO criteria = SearchCriteriaDTO().fromString('dream');
 
 final fullCriteria = SearchCriteriaDTO()
   ..init(

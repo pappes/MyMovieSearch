@@ -18,7 +18,7 @@ const sourceImdb = 'IMDB';
 const sourceTvdb = 'TheMovieDB.com';
 
 // surpress tvdb from TMDB links
-const tvdbSourceToEnumMapping = {
+const Map<String, XxdbSource> tvdbSourceToEnumMapping = {
   'IMDB': XxdbSource.imdb,
   'TVDB': XxdbSource.tvdb,
   'EIDR': XxdbSource.eidr,

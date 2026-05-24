@@ -12,7 +12,9 @@ const expectedDtoJsonStringList = [
       "description":"item-331233484","imageUrl":"https://www.picclickimg.com/bv123456789O9j~TH2/The-Pink-Panther-Film-Collection-DVD-Box-Set.jpg","sources":{"DataSourceType.picclickBarcode":"item-331233484"}}
 ''',
 ];
-final expectedDTOList = ListDTOConversion.decodeList(expectedDtoJsonStringList);
+final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
+  expectedDtoJsonStringList,
+);
 
 Future<Stream<String>> streamHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));

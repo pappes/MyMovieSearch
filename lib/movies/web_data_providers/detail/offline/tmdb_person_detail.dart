@@ -18,9 +18,9 @@
 
 import 'dart:convert';
 
-final intermediateMapList = [jsonDecode(jsonSampleFull)];
+final List<dynamic> intermediateMapList = [jsonDecode(jsonSampleFull)];
 
-const tmdbTree = {
+const Map<String, Object?> tmdbTree = {
   'adult': false,
   'also_known_as': <void>[],
   'biography': 'I came, I saw, I went',
@@ -45,9 +45,9 @@ const tmdbTree = {
   },
 };
 
-final jsonSampleInner = jsonEncode(tmdbTree);
+final String jsonSampleInner = jsonEncode(tmdbTree);
 
-final jsonSampleFull = jsonSampleInner;
+final String jsonSampleFull = jsonSampleInner;
 const jsonSampleEmpty =
     '{"success":false,"status_code":34,'
     '"status_message":"The resource you requested could not be found."}';

@@ -18,9 +18,9 @@
 
 import 'dart:convert';
 
-final intermediateMapList = [jsonDecode(jsonSampleFull)];
+final List<dynamic> intermediateMapList = [jsonDecode(jsonSampleFull)];
 
-const jsonSampleFull = tmdbJsonSearchInner;
+const String jsonSampleFull = tmdbJsonSearchInner;
 const jsonSampleEmpty =
     '{"success":false,"status_code":34,'
     '"status_message":"The resource you requested could not be found."}';

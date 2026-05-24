@@ -14,7 +14,7 @@ const imdbJsonSampleInner =
 ''';
 const imdbHtmlSampleInner = '';
 
-const intermediateMapList = [
+const List<Map<String, Object>> intermediateMapList = [
   {
     'props': {
       'pageProps': {

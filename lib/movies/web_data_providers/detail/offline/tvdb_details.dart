@@ -71,19 +71,21 @@
 
 import 'dart:convert';
 
-final intermediateEmptyList = [jsonDecode(jsonSampleEmpty)];
+final List<dynamic> intermediateEmptyList = [jsonDecode(jsonSampleEmpty)];
 
-final intermediateMovieList = [jsonDecode(tvdbJsonSearchMovie)];
-final intermediateSeriesList = [jsonDecode(tvdbJsonSearchSeries)];
-final intermediateEpisodeList = [jsonDecode(tvdbJsonSearchEpisode)];
-final intermediatePersonList = [jsonDecode(tvdbJsonSearchPerson)];
+final List<dynamic> intermediateMovieList = [jsonDecode(tvdbJsonSearchMovie)];
+final List<dynamic> intermediateSeriesList = [jsonDecode(tvdbJsonSearchSeries)];
+final List<dynamic> intermediateEpisodeList = [
+  jsonDecode(tvdbJsonSearchEpisode),
+];
+final List<dynamic> intermediatePersonList = [jsonDecode(tvdbJsonSearchPerson)];
 
 const jsonSampleEmpty = '	{  "status": "success",  "data": null}';
 const jsonSampleError =
     '{"status_code":7,"status_message":'
     '"Invalid API key: You must be granted a valid key.","success":false}';
 
-const jsonSampleFull = tvdbJsonSearchMovie;
+const String jsonSampleFull = tvdbJsonSearchMovie;
 Future<Stream<String>> streamTvdbJsonOfflineData(_) =>
     Future.value(Stream.value(jsonSampleFull));
 
