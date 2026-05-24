@@ -9,20 +9,20 @@ void main() {
     SharedPreferences.setMockInitialValues({});
     Settings()
       ..offline = false
-      ..magnetServer = 'http://old-server'
-      ..magnetPort = '8080'
-      ..magnetUsername = 'old-user'
-      ..magnetPassword = 'old-password'
-      ..googleurl = 'http://google'
-      ..googlekey = 'g-key'
-      ..omdbkey = 'o-key'
-      ..tmdbkey = 't-key'
-      ..tvdbkey = 'tv-key'
-      ..meiliurl = 'http://meili'
-      ..meilisearchkey = 'ms-key'
-      ..meiliadminkey = 'ma-key'
-      ..firebaseSecretsLocation = 'secret-loc'
-      ..seVmKey = 'se-key';
+      ..localMagnetServer = 'http://old-server'
+      ..localMagnetPort = '8080'
+      ..localMagnetUsername = 'old-user'
+      ..localMagnetPassword = 'old-password'
+      ..localGoogleurl = 'http://google'
+      ..localGooglekey = 'g-key'
+      ..localOmdbkey = 'o-key'
+      ..localTmdbkey = 't-key'
+      ..localTvdbkey = 'tv-key'
+      ..localMeiliurl = 'http://meili'
+      ..localMeilisearchkey = 'ms-key'
+      ..localMeiliadminkey = 'ma-key'
+      ..localFirebaseSecretsLocation = 'secret-loc'
+      ..localSeVmKey = 'se-key';
   });
 
   testWidgets('SettingsPage renders correctly and updates Settings', (

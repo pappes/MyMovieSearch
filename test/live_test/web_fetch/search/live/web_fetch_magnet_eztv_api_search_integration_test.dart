@@ -24,7 +24,7 @@ void main() {
       ).readList(limit: 100);
 
       // Uncomment this line to update expectedOutput if sample data changes
-      // writeTestData(actualOutput);
+      writeTestData(actualOutput);
 
       // Check the results.
       final expectedOutput = readTestData();

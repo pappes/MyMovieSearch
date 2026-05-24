@@ -5,6 +5,7 @@
     "description": "746.92 MB",
     "bestSource": "DataSourceType.ytsDetailApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "5",
     "keywords": "[\"bluray\"]",
     "imageUrl": "magnet:?xt=urn:btih:189005B4A9531C7A8BCA6CBE611E10D875632939&dn=Space%20Babes%20from%20Outer%20Space%20(2017)%20720p%202.0%20bluray%20(YTS)&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
@@ -17,9 +18,7 @@
     "description": "7.02 GB",
     "bestSource": "DataSourceType.ytsDetailApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "100",
     "keywords": "[\"bluray\"]",
-    "userRatingCount": "37",
     "imageUrl": "magnet:?xt=urn:btih:35EB8826EA87E7D655949F8A715CD36FEB0730F3&dn=2001%3A%20A%20Space%20Odyssey%20(1968)%202160p%205.1%20bluray%20(YTS)&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.ytsDetailApi": "https://yts.bz/torrent/download/35EB8826EA87E7D655949F8A715CD36FEB0730F3"
@@ -43,9 +42,7 @@
     "description": "1.24 GB",
     "bestSource": "DataSourceType.ytsDetailApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "56",
     "keywords": "[\"bluray\"]",
-    "userRatingCount": "4",
     "imageUrl": "magnet:?xt=urn:btih:7217CBE3100E8647851D980BE50DBE7572BFD1CA&dn=Sharknado%20(2013)%201080p%202.0%20bluray%20(YTS)&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.ytsDetailApi": "https://yts.bz/torrent/download/7217CBE3100E8647851D980BE50DBE7572BFD1CA"
@@ -81,9 +78,7 @@
     "description": "853.57 MB",
     "bestSource": "DataSourceType.ytsDetailApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "60",
     "keywords": "[\"bluray\"]",
-    "userRatingCount": "12",
     "imageUrl": "magnet:?xt=urn:btih:E3529DBC0CE47429A8A9B411AB381C893BFEF575&dn=2001%3A%20A%20Space%20Odyssey%20(1968)%20720p%202.0%20bluray%20(YTS)&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.ytsDetailApi": "https://yts.bz/torrent/download/E3529DBC0CE47429A8A9B411AB381C893BFEF575"

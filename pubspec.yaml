@@ -35,8 +35,11 @@ dependencies:
   easy_image_viewer: ^1.5.1
   equatable: ^2.0.7                     # Simplify object comparisons.
 
-  firebase_auth: ^6.5.1                # Authenticate users against Firebase
-  firebase_core: ^4.9.0                 # Firebase initialisation
+
+  #firebase_auth: ^6.5.1                 # DOES NOT DISPLAY READ INDICATORS (2026-05-24)
+  #firebase_core: ^4.9.0                 # DOES NOT DISPLAY READ INDICATORS (2026-05-24)
+  firebase_auth: ^6.4.0                 # Authenticate users against Firebase
+  firebase_core: ^4.7.0                 # Firebase initialisation
   #firebase_ui_auth: ^1.7.0              # does not work on linux :(
   #firebase_core: ^1.0.3                 # Firebase initialisation
   #firebase_auth: ^3.0.1                 # Authenticate users against Firebase

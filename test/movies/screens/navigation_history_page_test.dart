@@ -43,9 +43,9 @@ void main() {
     await tester.pumpWidget(createWidgetUnderTest(mockTree));
     await tester.pumpAndSettle();
 
-    expect(find.text('ScreenRoute.search'), findsOneWidget);
-    expect(find.text('ScreenRoute.moviedetails'), findsOneWidget);
-    expect(find.text('ScreenRoute.persondetails'), findsOneWidget);
+    expect(find.text('search'), findsOneWidget);
+    expect(find.text('moviedetails'), findsOneWidget);
+    expect(find.text('persondetails'), findsOneWidget);
 
     // Verify references are also present
     expect(find.text('dummy home'), findsOneWidget);
