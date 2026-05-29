@@ -10,7 +10,7 @@ import 'package:my_movie_search/utilities/web_data/http_method.dart';
 
 import 'headless_web_interceptor_test.mocks.dart';
 // To regenerate mocks run the following command
-// flutter pub run build_runner build --delete-conflicting-outputs
+// dart run build_runner build
 
 @GenerateNiceMocks([
   MockSpec<HttpClientRequest>(),

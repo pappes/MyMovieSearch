@@ -16,7 +16,7 @@ import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'mmsnav_unit_test.mocks.dart';
 
 // To regenerate mocks run the following command
-// flutter pub run build_runner build --delete-conflicting-outputs
+// dart run build_runner build
 @GenerateNiceMocks([
   MockSpec<MMSFlutterCanvas>(),
   MockSpec<FirebaseApplicationState>(),

@@ -34,7 +34,7 @@ import 'web_fetch_unit_test.mocks.dart';
 ////////////////////////////////////////////////////////////////////////////////
 
 // To regenerate mocks run the following command
-// flutter pub run build_runner build --delete-conflicting-outputs
+// dart run build_runner build
 @GenerateMocks([HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders])
 typedef ConvertWebTextToTreeFn = Future<List<dynamic>> Function(String t);
 typedef ConvertTreeToOutputType =

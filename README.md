@@ -24,7 +24,7 @@ flutter build apk --flavor=prod --dart-define OMDB_KEY="xxxxxxxx" --dart-define 
 ## Tips and Tricks
 
 To rebuild test mocks after major changes run
-```flutter pub run build_runner build --delete-conflicting-outputs```
+```dart run build_runner build```
 
 ADB tip: to install on a device that is not directly connected to the dev machine, use wireless debugging or a remote adb server
 
