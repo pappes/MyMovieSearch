@@ -102,9 +102,10 @@ List<String> _makeQueries(int qty) {
   for (final i in range(0, qty)) {
     results.add('tt002${1000 + i}');
   }
-  results..add('tt0062622')
-  ..add('tt2724064')
-  ..add('tt6644286');
+  results
+    ..add('tt0062622')
+    ..add('tt2724064')
+    ..add('tt6644286');
   return results;
 }
 

@@ -4,13 +4,11 @@ import 'dart:typed_data';
 
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:meta/meta.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
-
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/headless_web_interceptor.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
-
 
 /// This function type abstracts the creation of the HttpClient,
 /// making it mockable.
@@ -244,7 +242,7 @@ class HeadlessWebEngineAndroid extends HeadlessWebEngineBase {
     WebResourceRequest request,
     WebResourceError error,
   ) {
-    logger.e(
+    AppLogger.instance.error(
       'Error loading headless page: ${error.description.truncate(100)}'
       'for ${request.url}',
     );

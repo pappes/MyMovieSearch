@@ -32,64 +32,66 @@ Future<void> main() async {
 
   group('live QueryIMDBJsonDetails test', () {
     // Convert 3 IMDB pages into dtos.
-    testWidgets('Run read 2 json queries from IMDB', (tester) async {
-      await tester.pumpWidget(const MyApp());
-      await tester.pumpAndSettle();
-      await warmUpHeadlessEngine();
-      await tester.pumpAndSettle();
+    testWidgets(
+      'Run read 2 json queries from IMDB',
+      (tester) async {
+        await tester.pumpWidget(const MyApp());
+        await tester.pumpAndSettle();
+        await warmUpHeadlessEngine();
+        await tester.pumpAndSettle();
 
         final expectedOutput = await readIntegrationTestData();
 
-      final actualOutput = await _testRead(['nm0000233', 'nm0000149']);
-      final sampleOutput = sampleTestData(
-        actualOutput,
-        relatedSampleQuantity: 5,
-      );
-      late MovieResultDTO actualOutput233;
-      late MovieResultDTO actualOutput149;
-      if (actualOutput.first.uniqueId == 'nm0000233') {
-        actualOutput233 = actualOutput.first;
-        actualOutput149 = actualOutput.last;
-      } else {
-        actualOutput149 = actualOutput.first;
-        actualOutput233 = actualOutput.last;
-      }
+        final actualOutput = await _testRead(['nm0000233', 'nm0000149']);
+        final sampleOutput = sampleTestData(
+          actualOutput,
+          relatedSampleQuantity: 5,
+        );
+        late MovieResultDTO actualOutput233;
+        late MovieResultDTO actualOutput149;
+        if (actualOutput.first.uniqueId == 'nm0000233') {
+          actualOutput233 = actualOutput.first;
+          actualOutput149 = actualOutput.last;
+        } else {
+          actualOutput149 = actualOutput.first;
+          actualOutput233 = actualOutput.last;
+        }
 
-      // To update expected data, uncomment the following lines
-      // print(actualOutput.first.related.values.first.length);
-      // print(actualOutput.last.related.values.first.length);
-      // printTestDataJson(sampleOutput);
+        // To update expected data, uncomment the following lines
+        // print(actualOutput.first.related.values.first.length);
+        // print(actualOutput.last.related.values.first.length);
+        // printTestDataJson(sampleOutput);
 
-      // Check the results.
-      expect(
-        sampleOutput,
-        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
-        reason:
-            'Emitted DTO list ${sampleOutput.toPrintableString()} '
-            'needs to match expected DTO list '
-            '${expectedOutput.toPrintableString()}',
-      );
-      expect(
-        actualOutput233.related['Actor:']?.length,
-        greaterThanOrEqualTo(40),
-        reason:
-            'Quinten should have 41 Actor credits but the data says '
-            '${actualOutput.first.title}-'
-            '${actualOutput.first.related.keys.first}'
-            '${actualOutput.first.related.values.first.length}'
-            '${actualOutput.last.title}-'
-            '${actualOutput.last.related.keys.first}'
-            '${actualOutput.last.related.values.first.length}',
-      );
-      expect(
-        actualOutput149.related['Actress:']?.length,
-        greaterThanOrEqualTo(80),
-        reason:
-            'Jodie Foster should have 84 Actress credits but the data says '
-            '${actualOutput.first.title}-'
-            '${actualOutput.first.related.keys.first}:'
-            '${actualOutput.last.related.values.first.length}',
-      );
+        // Check the results.
+        expect(
+          sampleOutput,
+          MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
+          reason:
+              'Emitted DTO list ${sampleOutput.toPrintableString()} '
+              'needs to match expected DTO list '
+              '${expectedOutput.toPrintableString()}',
+        );
+        expect(
+          actualOutput233.related['Actor:']?.length,
+          greaterThanOrEqualTo(40),
+          reason:
+              'Quinten should have 41 Actor credits but the data says '
+              '${actualOutput.first.title}-'
+              '${actualOutput.first.related.keys.first}'
+              '${actualOutput.first.related.values.first.length}'
+              '${actualOutput.last.title}-'
+              '${actualOutput.last.related.keys.first}'
+              '${actualOutput.last.related.values.first.length}',
+        );
+        expect(
+          actualOutput149.related['Actress:']?.length,
+          greaterThanOrEqualTo(80),
+          reason:
+              'Jodie Foster should have 84 Actress credits but the data says '
+              '${actualOutput.first.title}-'
+              '${actualOutput.first.related.keys.first}:'
+              '${actualOutput.last.related.values.first.length}',
+        );
       },
       timeout: const Timeout(Duration(seconds: 60)),
     );
@@ -114,9 +116,7 @@ Future<void> main() async {
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
-      },
-      timeout: const Timeout(Duration(seconds: 60)),
-    );
+    }, timeout: const Timeout(Duration(seconds: 60)));
   });
 }
 

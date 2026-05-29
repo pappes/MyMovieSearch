@@ -245,7 +245,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     ScreenRoute.changelog,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
-    'Changelog'
+    'Changelog',
   );
 
   /// Construct route to the navigation history page.

@@ -38,7 +38,7 @@ void main() {
     expect(find.text('g-key'), findsOneWidget);
     expect(find.text('ms-key'), findsOneWidget);
 
-    // Enter new values (only testing a few to keep test concise, 
+    // Enter new values (only testing a few to keep test concise,
     // but covering the main path)
     await tester.enterText(
       find.widgetWithText(TextFormField, 'Server URL'),

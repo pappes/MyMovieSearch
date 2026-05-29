@@ -52,7 +52,6 @@ const elementDate = 'date_released_unix';
 const elementSize = 'size_bytes';
 
 class MagnetEztvApiSearchConverter {
-
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
   ) {

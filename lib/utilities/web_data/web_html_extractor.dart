@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_headless_extractor.dart';
 import 'package:universal_io/io.dart';
 
@@ -69,7 +69,7 @@ class WebHtmlExtractor extends WebHeadlessExtractor {
     if (data.trim().startsWith(startHtml) && data.contains(endHtml)) {
       pagesLoaded++;
       if (pagesLoaded == 1) {
-        logger.t(
+        AppLogger.instance.trace(
           'processRawData: HTML fragment ${data.length} '
           'sample: ${data.truncate()}',
         );

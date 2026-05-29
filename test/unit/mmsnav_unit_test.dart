@@ -412,16 +412,8 @@ void main() {
           .called(1);
 
       // Verify logging calls
-      mockito
-          .verify(
-            mockNavLog.logPageOpen(testPageInfo),
-          )
-          .called(1);
-      mockito
-          .verify(
-            mockNavLog.logPageClose(testPageInfo),
-          )
-          .called(1);
+      mockito.verify(mockNavLog.logPageOpen(testPageInfo)).called(1);
+      mockito.verify(mockNavLog.logPageClose(testPageInfo)).called(1);
 
       // We can't easily test the private _hideKeyboard method directly,
       // but we know it's called after the Future from pushNamed completes.
@@ -435,9 +427,7 @@ void main() {
       await canvasWithNullContext.viewFlutterPage(testPageInfo);
 
       // Assert
-      mockito.verifyNever(
-        mockNavLog.logPageOpen(mockito.any),
-      );
+      mockito.verifyNever(mockNavLog.logPageOpen(mockito.any));
       // We don't need to verify pushNamed on the fakeNavigator because it was
       // never passed to the canvasWithNullContext. The null check inside the
       // production code handles this case.

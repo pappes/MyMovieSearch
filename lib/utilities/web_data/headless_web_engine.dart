@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:meta/meta.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/web_data/platform_android/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/platform_linux/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/platform_other/headless_web_engine.dart';
@@ -133,7 +134,7 @@ abstract class HeadlessWebEngineBase implements HeadlessWebEngine {
   /// Page load can complete multiple times because code is
   /// interacting with the page after the initial load complete.
   Future<void> pageLoadComplete() async {
-    logger.t('Page load complete event for $imdbUrl');
+    AppLogger.instance.trace('Page load complete event for $imdbUrl');
     httpStatusCode ??= HttpStatus.ok;
     if (onPageLoaded == null) {
       dispose();
@@ -146,10 +147,10 @@ abstract class HeadlessWebEngineBase implements HeadlessWebEngine {
       // Timeout if requests do not complete quickly enough.
       pageLoadCompleteCount++;
       if (pageLoadCompleteCount == 1) {
-        logger.t('First page load complete for $imdbUrl');
+        AppLogger.instance.trace('First page load complete for $imdbUrl');
         resetTimeout(timeoutDurationShort);
       } else {
-        logger.t('Subsequent page load complete for $imdbUrl');
+        AppLogger.instance.trace('Subsequent page load complete for $imdbUrl');
         // Sometimes there is a false positive for page load complete.
         // Delay disposal to allow any final requests to complete.
         resetTimeout(timeoutDurationVeryShort);

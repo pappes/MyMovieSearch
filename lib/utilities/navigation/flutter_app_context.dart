@@ -13,9 +13,7 @@ class FlutterAppContext
 
   @override
   Future<T?> pushNamed<T extends Object?>(String name, {Object? extra}) =>
-      context.mounted
-      ? context.pushNamed(name, extra: extra)
-      : Future.value();
+      context.mounted ? context.pushNamed(name, extra: extra) : Future.value();
   @override
   void pushReplacementNamed<T extends Object?>(String name, {Object? extra}) =>
       context.mounted ? context.pushReplacementNamed(name, extra: extra) : null;
@@ -33,9 +31,8 @@ class FlutterAppContext
       context.mounted ? Theme.of(context).primaryColor : null;
 
   @override
-  Future<Object?> popup(String dialogText, String title) => context.mounted
-      ? showPopup(context, dialogText, title)
-      : Future.value();
+  Future<Object?> popup(String dialogText, String title) =>
+      context.mounted ? showPopup(context, dialogText, title) : Future.value();
 
   @override
   FocusNode? primaryFocus() => FocusManager.instance.primaryFocus;

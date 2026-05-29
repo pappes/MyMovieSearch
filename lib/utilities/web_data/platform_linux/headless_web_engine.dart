@@ -2,10 +2,10 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
 import 'package:my_movie_search/utilities/web_data/headless_web_interceptor.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:puppeteer/puppeteer.dart';
 
 /// This function type abstracts the creation of the HttpClient,
@@ -126,7 +126,9 @@ class HeadlessWebEngineLinux extends HeadlessWebEngineBase {
       }
     } catch (e) {
       // If an error occurs, continue the request.
-      logger.e('Error intercepting request for ${request.url}: $e');
+      AppLogger.instance.error(
+        'Error intercepting request for ${request.url}: $e',
+      );
       await request.continueRequest();
     }
   }
@@ -206,7 +208,9 @@ class HeadlessWebEngineLinux extends HeadlessWebEngineBase {
   /// [body] The response body as a string.
   void _notifyCallerOfNewData(String? contentType, String body) {
     if (contentType == 'application/json' || contentType == 'text/html') {
-      logger.t('_handleRequest intercepted body: ${body.truncate()}');
+      AppLogger.instance.trace(
+        '_handleRequest intercepted body: ${body.truncate()}',
+      );
       onEngineData(body);
     }
   }
@@ -218,15 +222,17 @@ class HeadlessWebEngineLinux extends HeadlessWebEngineBase {
   /// Returns the result of the script evaluation.
   @override
   Future<dynamic> evaluateJavascript(String script) async {
-    logger.t('evaluateJavascript: $script');
+    AppLogger.instance.trace('evaluateJavascript: $script');
     try {
       final result = await _page?.evaluate<dynamic>(script);
 
-      logger.t('evaluateJavascript result: ${result.toString().truncate(100)}');
+      AppLogger.instance.trace(
+        'evaluateJavascript result: ${result.toString().truncate(100)}',
+      );
       resetTimeout(timeoutDurationVeryShort);
       return result;
     } catch (e) {
-      logger.e('evaluateJavascript error: $e');
+      AppLogger.instance.error('evaluateJavascript error: $e');
       return null;
     }
   }
@@ -244,7 +250,7 @@ class HeadlessWebEngineLinux extends HeadlessWebEngineBase {
 
   @override
   Future<void> closeEngine() async {
-    logger.t('closeEngine');
+    AppLogger.instance.trace('closeEngine');
     await closePage();
     await closeBroswer();
   }

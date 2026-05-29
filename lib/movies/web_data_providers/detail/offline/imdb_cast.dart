@@ -41,7 +41,7 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-/// The map list is intentionally left untyped so that the 
+/// The map list is intentionally left untyped so that the
 /// test can demonstrate the parsing of the raw JSON.
 // ignore: specify_nonobvious_property_types
 const intermediateMapList = [

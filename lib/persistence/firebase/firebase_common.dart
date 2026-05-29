@@ -5,10 +5,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
-
 import 'package:my_movie_search/persistence/firebase/android/firebase_android.dart';
 import 'package:my_movie_search/persistence/firebase/linux/firebase_linux.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 
 enum Fields { devices, text }
 
@@ -57,7 +56,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
       final success = await platformLogin();
       return success;
     } catch (e) {
-      logger.t('firebase initialisation failure $e');
+      AppLogger.instance.trace('firebase initialisation failure $e');
       return false;
     }
   }
@@ -71,11 +70,13 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
     required String id,
   }) async {
     if (!await loggedIn) {
-      logger.t('Must be logged in');
+      AppLogger.instance.trace('Must be logged in');
       return false;
     }
 
-    logger.t('Fetching Message $id from collection $collectionPath');
+    AppLogger.instance.trace(
+      'Fetching Message $id from collection $collectionPath',
+    );
     return true;
   }
 
@@ -104,11 +105,11 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
     Completer<bool>? initalDataLoadComplete,
   }) async* {
     if (!await loggedIn) {
-      logger.t('Must be logged in');
+      AppLogger.instance.trace('Must be logged in');
       throw MMSFirebaseException('not logged in');
     }
 
-    logger.t('Fetching collection $collectionPath');
+    AppLogger.instance.trace('Fetching collection $collectionPath');
   }
 
   /// Insert data into Firebase.
@@ -119,11 +120,13 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
     String? id,
   }) async {
     if (!await loggedIn) {
-      logger.t('Must be logged in');
+      AppLogger.instance.trace('Must be logged in');
       return false;
     }
 
-    logger.t('Logging Message $message to collection $collectionPath');
+    AppLogger.instance.trace(
+      'Logging Message $message to collection $collectionPath',
+    );
     return true;
   }
 

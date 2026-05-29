@@ -8,8 +8,8 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_json_web_scraper.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_factory.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
 
@@ -135,7 +135,7 @@ abstract class QueryIMDBJsonDetailsBase
     dynamic map,
   ) async {
     if (map is Map) {
-      logger.i(
+      AppLogger.instance.info(
         'JsonBase converting webText: '
         '${map.toString().truncate(100)}',
       );
@@ -147,7 +147,7 @@ abstract class QueryIMDBJsonDetailsBase
         DataSourceType.imdbJson,
       );
       for (final dto in dtos) {
-        logger.i(
+        AppLogger.instance.info(
           'JsonBase id: ${dto.uniqueId} '
           'related count: ${dto.related.values.first.length} '
           'related type: ${dto.related.keys.first}'

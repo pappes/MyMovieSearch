@@ -130,7 +130,6 @@ const elementPeers = 'peers';
 const elementSize = 'size';
 
 class YtsDetailApiConverter {
-
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<dynamic, dynamic> map,
   ) {

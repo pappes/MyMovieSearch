@@ -69,7 +69,7 @@ class QueryMagnetEztvSearch
     final url = '$_baseURL$encodedCriteria';
     return Uri.parse(url);
   }
-  
+
   // Set extv specific headers
   @override
   void myConstructHeaders(HttpHeaders headers) {

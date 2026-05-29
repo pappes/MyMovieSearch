@@ -1,6 +1,5 @@
-import 'package:logger/logger.dart' show Logger;
+import 'package:my_movie_search/utilities/app_logger.dart';
 
-final logger = Logger();
 const defaultToOffline = false;
 
 /// Perform alternate logic if network connections are being avoided.
@@ -17,7 +16,7 @@ class OnlineOfflineSelector {
     } else {
       _offline = offline.toString().toLowerCase() == 'true';
     }
-    logger.d(
+    AppLogger.instance.debug(
       'OnlineOfflineSelector initialised to: '
       '${_offline ? 'offline' : 'online'}',
     );

@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 extension StreamHelper<T> on Stream<T> {
   /// Consumes values from a stream
@@ -13,15 +13,15 @@ extension StreamHelper<T> on Stream<T> {
       await for (final value in this) {
         final text = value.toString();
         if (text.length > limit) {
-          logger.i('$prefix ${text.truncate(limit)}  ...');
+          AppLogger.instance.info('$prefix ${text.truncate(limit)}  ...');
         } else {
-          logger.i('$prefix $value');
+          AppLogger.instance.info('$prefix $value');
         }
         yield value;
       }
-      logger.i('$prefix done');
+      AppLogger.instance.info('$prefix done');
     } catch (error, stackTrace) {
-      logger.i('$prefix ERR: $error');
+      AppLogger.instance.info('$prefix ERR: $error');
       yield* Stream<T>.error(error, stackTrace);
     }
   }
@@ -42,10 +42,10 @@ extension FutureStreamHelper<T> on Future<Stream<T>?> {
       final datatype = (awaited == null)
           ? 'null'
           : awaited.runtimeType.toString();
-      logger.w('$prefix Unexpected data type: $datatype');
+      AppLogger.instance.warning('$prefix Unexpected data type: $datatype');
       return Stream<T>.empty();
     } catch (error) {
-      logger.w('$prefix EXCEPTION: $error');
+      AppLogger.instance.warning('$prefix EXCEPTION: $error');
       rethrow;
     }
   }

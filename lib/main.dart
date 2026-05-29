@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
 import 'package:my_movie_search/app.dart';
 import 'package:my_movie_search/movies/blocs/bloc_parts/mm_search_observer.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';
@@ -16,8 +15,7 @@ import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  Settings().init(Logger());
+  Settings().init();
   OnlineOfflineSelector.init(Settings().offline);
 
   Bloc.observer = MMSearchObserver();
@@ -33,9 +31,7 @@ Future<void> main() async {
         ChangeNotifierProvider<FirebaseApplicationState>(
           create: (_) => FirebaseApplicationState(),
         ),
-        ChangeNotifierProvider<SessionNavTree>(
-          create: (_) => SessionNavTree(),
-        ),
+        ChangeNotifierProvider<SessionNavTree>(create: (_) => SessionNavTree()),
       ],
       builder: (_, _) =>
           MMSearchApp(movieBlocRepository: MovieSearchRepository()),

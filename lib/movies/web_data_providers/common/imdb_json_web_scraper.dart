@@ -1,14 +1,14 @@
 import 'dart:async';
 import 'dart:convert' show json;
 import 'dart:io';
+
 import 'package:html/dom.dart' show Document;
 import 'package:html/parser.dart' show parse;
-
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 import 'package:my_movie_search/utilities/web_data/web_html_extractor.dart';
 
@@ -66,7 +66,7 @@ mixin ScrapeIMDBJsonDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   String _getImdbJson(Document document) {
     final scriptElement = document.querySelector(jsonScript);
     if (scriptElement == null || scriptElement.innerHtml.isEmpty) {
-      logger.e('no JSON details found for $getCriteriaText');
+      AppLogger.instance.error('no JSON details found for $getCriteriaText');
       return '{}';
     }
     return scriptElement.innerHtml;

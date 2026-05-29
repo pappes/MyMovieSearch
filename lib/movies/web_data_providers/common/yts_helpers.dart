@@ -7,8 +7,7 @@ import 'package:meta/meta.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 
 const ytsDefaultUrl = 'https://yts.lt';
-const emptySearchResult =
-    '{"status":"false","message":"No results found."}';
+const emptySearchResult = '{"status":"false","message":"No results found."}';
 
 class YtsHelper {
   YtsHelper() {
@@ -56,7 +55,6 @@ class YtsHelper {
       // In essence, it captures the URL from the first link after the text
       // "Current official domain:".
       final linkMatch = RegExp('href="([^"]+)"').firstMatch(afterDomain);
-      //print('official: ${linkMatch?.group(1)}');
       return linkMatch?.group(1) ?? '';
     }
     return '';

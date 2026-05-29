@@ -1,12 +1,11 @@
 // https://developer.themoviedb.org/reference/find-by-id
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
-
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_finder.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_finder.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Implements [WebFetchBase] for using IMDB IDs
@@ -43,7 +42,7 @@ class QueryTMDBFinder extends QueryTMDBCommon {
     if (text.startsWith(imdbPersonPrefix) || text.startsWith(imdbTitlePrefix)) {
       return text;
     }
-    logger.t('surpressed $source search for non IMDB id $text');
+    AppLogger.instance.trace('surpressed $source search for non IMDB id $text');
     return ''; // do not allow searches for non-imdb IDs
   }
 

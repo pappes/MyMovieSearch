@@ -8,9 +8,9 @@ import 'dart:convert' show jsonDecode, utf8;
 import 'package:html/parser.dart';
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/persistence/web_log.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/stream_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
-
 import 'package:my_movie_search/utilities/thread.dart';
 import 'package:my_movie_search/utilities/web_data/http_method.dart';
 import 'package:my_movie_search/utilities/web_data/jsonp_transformer.dart';
@@ -108,7 +108,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   }) {
     void errorHandler(dynamic error, StackTrace stackTrace) {
       final message = baseConstructErrorMessage('WebFetch populate', error);
-      logger.e(message);
+      AppLogger.instance.error(message);
       sc.add(myYieldError(message));
     }
 
@@ -248,7 +248,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       pageNumber: myGetPageNumber(),
     );
     final body = await myConstructBody();
-    logger.t('requesting: $address');
+    AppLogger.instance.trace('requesting: $address');
     final request = await myGetHttpClient().openUrl(
       body == null ? HttpMethod.get.value : HttpMethod.post.value,
       address,
@@ -266,9 +266,12 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       // The body of a 202 response is often a JavaScript challenge.
       // Logging it can be useful for debugging WAF issues.
       final body = await response.transform(utf8.decoder).join();
-      logger
-        ..w('Received HTTP 202 (Accepted), likely a WAF challenge.')
-        ..d('Response headers: ${response.headers}\nResponse body: $body');
+      AppLogger.instance.warning(
+        'Received HTTP 202 (Accepted), likely a WAF challenge.',
+      );
+      AppLogger.instance.debug(
+        'Response headers: ${response.headers}\nResponse body: $body',
+      );
     }
 
     // Retry with exponential backoff for server errors
@@ -450,7 +453,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     if (HttpStatus.ok != statusCode) {
       final errorMsg =
           'Error in http read, HTTP status code : $statusCode for $address';
-      logger.e(errorMsg);
+      AppLogger.instance.error(errorMsg);
       return Stream.error(errorMsg);
     }
     return null;
@@ -475,7 +478,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       );
       yield* baseConvertTreeToOutputType(map);
     } catch (error) {
-      logger.e(
+      AppLogger.instance.error(
         'Error in transform ${myFormatInputAsText()} to resulting object: '
         '${error.toString().truncate()}',
       );
@@ -655,7 +658,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     WebLog(myDataSourceName()).logRequest(criteria);
     // if cached yield from cache
     if (isCached && !myIsCacheStale()) {
-      logger.t(
+      AppLogger.instance.trace(
         'base ${ThreadRunner.currentThreadName} '
         'value was cached ${myFormatInputAsText()}',
       );
@@ -670,7 +673,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
       return Stream.fromIterable([]);
     }
     // if not cached or cache is stale retrieve fresh data
-    logger.t(
+    AppLogger.instance.trace(
       'base ${ThreadRunner.currentThreadName} ${myDataSourceName()} '
       'uncached ${myFormatInputAsText()}',
     );

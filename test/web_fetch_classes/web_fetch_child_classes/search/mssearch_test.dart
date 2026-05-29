@@ -25,6 +25,8 @@ Future<Stream<String>> _emitInvalidJsonSample(_) =>
 
 final SearchCriteriaDTO criteria = SearchCriteriaDTO().fromString('123');
 
+// To regenerate mocks run the following command
+// dart run build_runner build
 @GenerateMocks([MeiliSearchClient])
 @GenerateMocks([MeiliSearchIndex])
 @GenerateMocks([Searcheable])

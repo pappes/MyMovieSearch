@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/headless_web_engine.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_headless_extractor.dart';
 
 const Duration _shortDelay = Duration(seconds: 2);
@@ -117,7 +117,7 @@ class WebJsonExtractor extends WebHeadlessExtractor {
     // Execute the script and get the result.
     final result = await webEngine?.evaluateJavascript(javascriptToExecute);
     if (result != null) {
-      logger.t(
+      AppLogger.instance.trace(
         'Found on initial page load: '
         '${result.toString().truncate(100)}',
       );
@@ -140,7 +140,7 @@ class WebJsonExtractor extends WebHeadlessExtractor {
   void processRawData(String data, DataCallback onData) {
     try {
       if (!data.trim().startsWith(startHtml)) {
-        logger.t(
+        AppLogger.instance.trace(
           'Processing Json  : '
           '${data.truncate()}',
         );
@@ -148,7 +148,7 @@ class WebJsonExtractor extends WebHeadlessExtractor {
         onData(data);
       }
     } catch (e) {
-      logger.t(
+      AppLogger.instance.trace(
         'Failed to process Json  : '
         '${e.toString().truncate()}',
       );

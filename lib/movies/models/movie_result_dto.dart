@@ -12,13 +12,13 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/route_info.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 typedef MovieCollection = Map<String, MovieResultDTO>;
 typedef RelatedMovieCategories = Map<String, MovieCollection>;
@@ -417,7 +417,7 @@ class DtoCache {
   static Map<dynamic, dynamic> dumpCache() {
     final cache = _singleton._globalDtoCache.memoryCache;
     for (final record in cache.entries) {
-      logger.i('${record.key} - ${record.value.title}');
+      AppLogger.instance.info('${record.key} - ${record.value.title}');
     }
     return cache;
   }

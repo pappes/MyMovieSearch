@@ -71,9 +71,7 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
     if (MovieContentType.person == _restorablePerson.value.type) {
       /// Fetch person details from cache using a separate thread.
       unawaited(
-        QueryIMDBNameDetails(criteria)
-            .readList()
-            .then(_requestShowDetails),
+        QueryIMDBNameDetails(criteria).readList().then(_requestShowDetails),
       );
 
       /// Fetch full actor/director/writer/producer data

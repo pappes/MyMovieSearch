@@ -7,8 +7,8 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_title.dart';
 import 'package:my_movie_search/persistence/meilisearch.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/settings.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 void main() {
   group('meilisearch backup', () {
@@ -61,7 +61,7 @@ Future<void> getDataFromSearchEngine() async {
 typedef JsonCallback = Future<String> Function();
 
 Future<void> writeJsonFile(String filename, JsonCallback jsonGenerator) async {
-  logger.w(
+  AppLogger.instance.warning(
     'backup started at timestamp ${DateTime.now().millisecondsSinceEpoch}',
   );
 
@@ -69,14 +69,14 @@ Future<void> writeJsonFile(String filename, JsonCallback jsonGenerator) async {
 
   await File('$filename.json').writeAsString(data, flush: true);
 
-  logger.w(
+  AppLogger.instance.warning(
     'Backup written to $filename '
     'file size: ${data.length}',
   );
 }
 
 Future<void> writeHtmlFile(String filename, List<MovieResultDTO> movies) async {
-  logger.w('Writing HTML to $filename ');
+  AppLogger.instance.warning('Writing HTML to $filename ');
   final html = StringBuffer()..write(htmlHeader);
   movies.sort((m1, m2) => m1.year.compareTo(m2.year));
   html.write(jsonToHtml(movies.take(95)));
@@ -88,7 +88,7 @@ Future<void> writeHtmlFile(String filename, List<MovieResultDTO> movies) async {
     ..write(htmlFooter);
 
   await File('$filename.html').writeAsString(html.toString(), flush: true);
-  logger.w('HTML size ${html.toString().length} ');
+  AppLogger.instance.warning('HTML size ${html.toString().length} ');
 }
 
 String jsonToHtml(Iterable<MovieResultDTO> movies) {
@@ -117,7 +117,7 @@ Future<Map<String, dynamic>> getFirebaseData({required bool clearCache}) async {
   final fb = MovieLocation();
   final data = await fb.getBackupData(clearCache: clearCache);
 
-  logger.w('Database statistics: ${fb.statistics()}');
+  AppLogger.instance.warning('Database statistics: ${fb.statistics()}');
   return data;
 }
 
@@ -134,7 +134,7 @@ Future<String> getMovieDetails() async {
 
   // Loop through each movie in the Firebase data.
   for (final uniqueId in movies.keys) {
-    logger.w(
+    AppLogger.instance.warning(
       'Fetching record ${recordNumber++} '
       'of ${movies.keys.length} uniqueId:$uniqueId',
     );
@@ -171,7 +171,7 @@ Future<List<MovieResultDTO>> getMeilisearchDvdDetails() async {
 
   // Loop through each movie in the Firebase data.
   for (final uniqueId in movies.keys) {
-    logger.w(
+    AppLogger.instance.warning(
       'Fetching record ${recordNumber++} '
       'of ${movies.keys.length} uniqueId:$uniqueId',
     );
@@ -183,7 +183,7 @@ Future<List<MovieResultDTO>> getMeilisearchDvdDetails() async {
         movieDetails.add(doc);
       }
     } catch (e) {
-      logger.e(e);
+      AppLogger.instance.error(e);
     }
   }
 

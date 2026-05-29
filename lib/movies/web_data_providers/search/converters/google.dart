@@ -3,10 +3,10 @@
 
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 //query string https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&q=wonder&safe=off&key=<key>
 //json format
@@ -66,7 +66,7 @@ class GoogleMovieSearchConverter {
       final error = MovieResultDTO().init(
         title: 'Unknown google error - potential API change! $e $map',
       );
-      logger.e(error.title);
+      AppLogger.instance.error(error.title);
 
       searchResults.add(error);
     }

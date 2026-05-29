@@ -5,7 +5,7 @@ import 'package:firedart/firedart.dart';
 import 'package:grpc/grpc.dart';
 import 'package:my_movie_search/firebase_options.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 
 class FirebaseApplicationStateLinux extends FirebaseApplicationState {
   FirebaseApplicationStateLinux() : super.internal();
@@ -62,7 +62,9 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
       if (exception.code == StatusCode.notFound) {
         return null; // record does not exist, ignore
       } else {
-        logger.t('Unable to fetch record to Firebase exception: $exception');
+        AppLogger.instance.trace(
+          'Unable to fetch record to Firebase exception: $exception',
+        );
       }
     }
     return null;
@@ -113,7 +115,9 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
         initalDataLoadComplete?.complete(true);
       }
     } on GrpcError catch (exception) {
-      logger.t('Unable to fetch collection Firebase exception: $exception');
+      AppLogger.instance.trace(
+        'Unable to fetch collection Firebase exception: $exception',
+      );
       rethrow;
     }
     if (initalDataLoadComplete != null && !initalDataLoadComplete.isCompleted) {
@@ -180,7 +184,7 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
         }
       }
     } catch (exception) {
-      logger.t(
+      AppLogger.instance.trace(
         'Unable to add record to Firebase exception: $exception '
         'collection: $collectionPath id: $id message: $message',
       );

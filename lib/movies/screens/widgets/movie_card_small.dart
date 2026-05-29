@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
-
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/duration_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 class MovieTile extends ListTile {
   MovieTile(BuildContext context, MovieResultDTO movie, {super.key})
@@ -218,7 +217,7 @@ class MovieTile extends ListTile {
     final read = movie.getReadIndicator();
     try {
       final readHistory = ReadHistory.values.byFullName(read);
-      logger.t('read indicator = ${movie.uniqueId} $read');
+      AppLogger.instance.trace('read indicator = ${movie.uniqueId} $read');
       switch (readHistory) {
         case ReadHistory.starred:
           widgets.add(const Icon(Icons.star));
@@ -234,7 +233,7 @@ class MovieTile extends ListTile {
       // Make deserialisation robust.
       // ignore: avoid_catching_errors
     } on ArgumentError {
-      logger.t('old inidcator = ${movie.uniqueId} $read');
+      AppLogger.instance.trace('old inidcator = ${movie.uniqueId} $read');
       if (read != null && read.isNotEmpty) {
         widgets.add(const Icon(Icons.visibility_off, fill: 1));
       }

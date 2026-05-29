@@ -8,6 +8,6 @@ class MMSearchObserver extends BlocObserver {
   @override
   void onChange(BlocBase<dynamic> bloc, Change<dynamic> change) {
     super.onChange(bloc, change);
-    //print('MMSearchObserver: ${bloc.runtimeType} $change');
+    //AppLogger.instance.info('MMSearchObserver: ${bloc.runtimeType} $change');
   }
 }

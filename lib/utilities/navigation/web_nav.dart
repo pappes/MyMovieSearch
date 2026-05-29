@@ -22,11 +22,11 @@ import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers
 import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
 import 'package:my_movie_search/persistence/web_log.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/app_context.dart';
 import 'package:my_movie_search/utilities/navigation/flutter_app_context.dart';
 import 'package:my_movie_search/utilities/navigation/route_info.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 /// Performs page navigation
@@ -387,7 +387,7 @@ class MMSFlutterCanvas {
           return null;
         });
       } catch (e) {
-        logger.t(e);
+        AppLogger.instance.trace(e);
       }
     }
     return Future.value();
@@ -445,7 +445,7 @@ class MMSFlutterCanvas {
           extra: page.params,
         );
       } catch (e) {
-        logger.t(e);
+        AppLogger.instance.trace(e);
       }
     }
     // Tell the mock tests what we would have done.
@@ -492,7 +492,7 @@ class MMSFlutterCanvas {
 
   Future<Object?> _customTabsError(AppDialogs? dialogs, Object? e, String url) {
     // An exception is thrown if browser app is not installed on Android device.
-    debugPrint(e.toString());
+    AppLogger.instance.debug(e.toString());
     return dialogs?.popup(
           'Received error $e\nwhen opening $url',
           'Navigation error',

@@ -19,7 +19,6 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 // const jsonSeedersKey = 'seeders';
 // const jsonLeechersKey = 'leechers';
 
-
 const apiBaseUrl = 'https://movies-api.accel.li/api/v2/';
 const apiMovieUrl = 'movie_details.json?imdb_id=';
 
@@ -55,7 +54,6 @@ class QueryYtsDetailApi
   /// API call to YTS API returning all torrents for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-
     // remove imdbid prefix tt
     final cleanCriteria = searchCriteria.replaceFirst(imdbTitlePrefix, '');
     final url = '$apiBaseUrl$apiMovieUrl$cleanCriteria';

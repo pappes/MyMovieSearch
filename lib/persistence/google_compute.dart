@@ -8,8 +8,8 @@ import 'dart:convert';
 
 import 'package:googleapis/compute/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/settings.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 
 const host = 'https://search.dvds.mms.pappes.net';
 final String? apiKey = Settings().meiliadminkey;
@@ -48,13 +48,13 @@ class GCP {
           );
         } catch (exception) {
           // If instance is running with throw an exception.
-          logger.e(exception.toString());
+          AppLogger.instance.error(exception.toString());
         }
 
         // Start the VM instance.
         await compute.instances.start(projectId, zone, instanceName);
       } catch (exception) {
-        logger.e(exception.toString());
+        AppLogger.instance.error(exception.toString());
         return false;
       }
       return true;

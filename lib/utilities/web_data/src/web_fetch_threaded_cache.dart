@@ -4,8 +4,8 @@ library;
 
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/persistence/tiered_cache.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/thread.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 /// Execute [WebFetchBase] requests in another thread and cache output.
@@ -41,7 +41,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
 
     // if cached and not stale yield from cache
     if (await isThreadedResultCached() && !isThreadedCacheStale()) {
-      logger.t(
+      AppLogger.instance.trace(
         '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
         'value was pre-cached ${myFormatInputAsText()}',
       );
@@ -50,14 +50,14 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     final newPriority = confirmThreadCachePriority(priority, limit);
 
     if (null == newPriority) {
-      logger.t(
+      AppLogger.instance.trace(
         '${ThreadRunner.currentThreadName}($priority) '
         'discarded ${myFormatInputAsText()}',
       );
       completeThreadCacheRequest(priority);
       return [];
     }
-    logger.t(
+    AppLogger.instance.trace(
       '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
       'requesting ${myFormatInputAsText()}',
     );

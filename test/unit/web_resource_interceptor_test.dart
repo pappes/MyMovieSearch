@@ -11,7 +11,6 @@ import 'package:my_movie_search/utilities/web_data/platform_android/headless_web
 
 import 'web_resource_interceptor_test.mocks.dart';
 
-
 // To regenerate mocks run the following command
 // flutter pub run build_runner build --delete-conflicting-outputs
 
@@ -130,5 +129,4 @@ void main() {
       },
     );
   });
-
 }

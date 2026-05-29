@@ -28,36 +28,32 @@ flutter drive \
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets(
-    'Run read 3 pages from IMDB',
-    (tester) async {
-      await tester.pumpWidget(const MyApp());
-      await tester.pumpAndSettle();
-      await warmUpHeadlessEngine();
-      await tester.pumpAndSettle();
+  testWidgets('Run read 3 pages from IMDB', (tester) async {
+    await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
+    await warmUpHeadlessEngine();
+    await tester.pumpAndSettle();
 
-      // Convert 3 IMDB pages into dtos.
-      final actualOutput = await executeMultipleFetches(
-        (criteria) => QueryIMDBTitleDetails(criteria).readList(),
-      );
-      actualOutput.clearCopyrightedData();
+    // Convert 3 IMDB pages into dtos.
+    final actualOutput = await executeMultipleFetches(
+      (criteria) => QueryIMDBTitleDetails(criteria).readList(),
+    );
+    actualOutput.clearCopyrightedData();
 
-      // To update expected data, uncomment the following line
-      // printTestDataJson(actualOutput);
+    // To update expected data, uncomment the following line
+    // printTestDataJson(actualOutput);
 
-      // Check the results.
+    // Check the results.
     final expectedOutput = await readIntegrationTestData();
-      expect(
-        actualOutput,
-        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
-        reason:
-            'Emitted DTO list ${actualOutput.toPrintableString()} '
-            'needs to match expected DTO list '
-            '${expectedOutput.toPrintableString()}',
-      );
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-  );
+    expect(
+      actualOutput,
+      MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
+      reason:
+          'Emitted DTO list ${actualOutput.toPrintableString()} '
+          'needs to match expected DTO list '
+          '${expectedOutput.toPrintableString()}',
+    );
+  }, timeout: const Timeout(Duration(seconds: 60)));
 
   testWidgets('Run an empty search', (tester) async {
     await tester.pumpWidget(const MyApp());

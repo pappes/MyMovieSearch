@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
+import 'package:my_movie_search/utilities/extensions/enum.dart';
 import 'package:my_movie_search/utilities/settings.dart';
-
 
 /// Settings page
 class SettingsPage extends StatefulWidget {
@@ -20,6 +21,12 @@ class _SettingsPageState extends State<SettingsPage> {
   final _formKey = GlobalKey<FormState>();
 
   bool _offline = false;
+  bool _enableLogging = false;
+  LogLevel _logLevel = LogLevel.info;
+
+  late final bool _initialOffline;
+  late final bool _initialEnableLogging;
+  late final LogLevel _initialLogLevel;
 
   late final TextEditingController _serverController;
   late final TextEditingController _portController;
@@ -46,6 +53,13 @@ class _SettingsPageState extends State<SettingsPage> {
     final settings = Settings();
 
     _offline = settings.offline;
+    _initialOffline = _offline;
+
+    _enableLogging = settings.enableLogging;
+    _initialEnableLogging = _enableLogging;
+
+    _logLevel = settings.logLevel;
+    _initialLogLevel = _logLevel;
 
     _serverController = TextEditingController(text: settings.localMagnetServer);
     _portController = TextEditingController(text: settings.localMagnetPort);
@@ -76,6 +90,31 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
+  bool _hasChanges() {
+    final settings = Settings();
+    return _offline != _initialOffline ||
+        _enableLogging != _initialEnableLogging ||
+        _logLevel != _initialLogLevel ||
+        _serverController.text != (settings.localMagnetServer ?? '') ||
+        _portController.text != (settings.localMagnetPort ?? '') ||
+        _usernameController.text != (settings.localMagnetUsername ?? '') ||
+        _passwordController.text != (settings.localMagnetPassword ?? '') ||
+        _googleUrlController.text !=
+            (settings.localGoogleurl ?? settings.googleurl) ||
+        _googleKeyController.text != (settings.localGooglekey ?? '') ||
+        _omdbKeyController.text != (settings.localOmdbkey ?? '') ||
+        _tmdbKeyController.text != (settings.localTmdbkey ?? '') ||
+        _tvdbKeyController.text != (settings.localTvdbkey ?? '') ||
+        _meiliUrlController.text !=
+            (settings.localMeiliurl ?? settings.meiliurl) ||
+        _meiliSearchKeyController.text !=
+            (settings.localMeilisearchkey ?? '') ||
+        _meiliAdminKeyController.text != (settings.localMeiliadminkey ?? '') ||
+        _seVmKeyController.text != (settings.localSeVmKey ?? '') ||
+        _firebaseSecretsLocationController.text !=
+            (settings.localFirebaseSecretsLocation ?? '');
+  }
+
   @override
   /// Dispose the settings page
   void dispose() {
@@ -104,6 +143,8 @@ class _SettingsPageState extends State<SettingsPage> {
     if (_formKey.currentState?.validate() ?? false) {
       final settings = Settings()
         ..offline = _offline
+        ..enableLogging = _enableLogging
+        ..logLevel = _logLevel
         ..localMagnetServer = _serverController.text
         ..localMagnetPort = _portController.text
         ..localMagnetUsername = _usernameController.text
@@ -121,6 +162,9 @@ class _SettingsPageState extends State<SettingsPage> {
             _firebaseSecretsLocationController.text;
 
       await settings.saveToLocal();
+
+      // Update the logger dynamically
+      AppLogger.instance.init(enabled: _enableLogging, level: _logLevel);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -147,24 +191,29 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   /// Build the settings page
-  Widget build(BuildContext context) => AppScaffold(
-    appBar: AppBar(title: const Text('Settings')),
-    body: SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            generalCard(),
-            magnetTorrentCard(),
-            searchCard(),
-            meilisearchCard(),
-            systemSecrets(),
-            saveButton(),
-
-            const SizedBox(height: 48), // Padding at bottom
-          ],
+  Widget build(BuildContext context) => PopScope(
+    onPopInvokedWithResult: (didPop, result) async {
+      if (_hasChanges()) {
+        await _saveSettings();
+      }
+    },
+    child: AppScaffold(
+      appBar: AppBar(title: const Text('Settings')),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              generalCard(),
+              magnetTorrentCard(),
+              searchCard(),
+              meilisearchCard(),
+              systemSecrets(),
+              const SizedBox(height: 48), // Padding at bottom
+            ],
+          ),
         ),
       ),
     ),
@@ -191,6 +240,44 @@ class _SettingsPageState extends State<SettingsPage> {
               });
             },
           ),
+          const SizedBox(height: 16),
+          _buildSectionHeader('Logging Settings'),
+          SwitchListTile(
+            title: const Text('Enable Logging'),
+            value: _enableLogging,
+            onChanged: (val) {
+              setState(() {
+                _enableLogging = val;
+              });
+            },
+          ),
+          if (_enableLogging)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: DropdownButtonFormField<String>(
+                initialValue: _logLevel.name,
+                decoration: const InputDecoration(
+                  labelText: 'Log Level',
+                  border: OutlineInputBorder(),
+                ),
+                items: const [
+                  DropdownMenuItem(value: 'trace', child: Text('Trace')),
+                  DropdownMenuItem(value: 'debug', child: Text('Debug')),
+                  DropdownMenuItem(value: 'info', child: Text('Info')),
+                  DropdownMenuItem(value: 'warning', child: Text('Warning')),
+                  DropdownMenuItem(value: 'error', child: Text('Error')),
+                  DropdownMenuItem(value: 'fatal', child: Text('Fatal')),
+                ],
+                onChanged: (val) {
+                  if (val != null) {
+                    setState(() {
+                      _logLevel =
+                          LogLevel.values.byFullName(val) ?? LogLevel.off;
+                    });
+                  }
+                },
+              ),
+            ),
         ],
       ),
     ),
@@ -359,14 +446,5 @@ class _SettingsPageState extends State<SettingsPage> {
         ],
       ),
     ),
-  );
-
-  /// Build the save button
-  ElevatedButton saveButton() => ElevatedButton(
-    onPressed: _saveSettings,
-    style: ElevatedButton.styleFrom(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-    ),
-    child: const Text('Save Settings', style: TextStyle(fontSize: 18)),
   );
 }

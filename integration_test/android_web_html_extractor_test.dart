@@ -145,34 +145,30 @@ void main() async {
     timeout: const Timeout(Duration(seconds: 60)),
   );
 
-  testWidgets(
-    'WebHtmlSychroniser',
-    (tester) async {
-      await tester.pumpWidget(const MyApp());
-      await tester.pumpAndSettle();
+  testWidgets('WebHtmlSychroniser', (tester) async {
+    await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
 
-      Future<String> getHtml(String url) async {
-        await warmUpHeadlessEngine();
-        final htmlData = await WebHtmlSychroniser(url).getHtml();
-        if (htmlData.isEmpty) {
-          return 'noresults';
-        }
-        return htmlData.first;
+    Future<String> getHtml(String url) async {
+      await warmUpHeadlessEngine();
+      final htmlData = await WebHtmlSychroniser(url).getHtml();
+      if (htmlData.isEmpty) {
+        return 'noresults';
       }
+      return htmlData.first;
+    }
 
-      final htmlOutput = await getHtml('https://www.imdb.com/name/nm0000149/');
+    final htmlOutput = await getHtml('https://www.imdb.com/name/nm0000149/');
 
-      expect(htmlOutput, isNotNull);
-      expect(
-        htmlOutput,
-        contains(
-          '<script id="__NEXT_DATA__" '
-          'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
-        ),
-      );
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-  );
+    expect(htmlOutput, isNotNull);
+    expect(
+      htmlOutput,
+      contains(
+        '<script id="__NEXT_DATA__" '
+        'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
+      ),
+    );
+  }, timeout: const Timeout(Duration(seconds: 60)));
 
   testWidgets(
     'WebHtmlSychroniser on non-UI thread',
@@ -197,5 +193,4 @@ void main() async {
     },
     timeout: const Timeout(Duration(seconds: 60)),
   );
-
 }

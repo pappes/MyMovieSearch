@@ -8,12 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:googleapis/secretmanager/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
-import 'package:logger/logger.dart';
 import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_common.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_io/io.dart';
@@ -99,8 +99,8 @@ import 'package:yaml/yaml.dart';
 /// foo@bar:~$ export OFFLINE="true"
 /// foo@bar:~$ export MAGNET_SERVER="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// foo@bar:~$ export MAGNET_PORT="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-/// foo@bar:~$ export MAGNET_USERNAME="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-/// foo@bar:~$ export MAGNET_PASSWORD="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// foo@bar:~$ export MAGNET_USERNAME="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+/// foo@bar:~$ export MAGNET_PASSWORD="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 /// ```
 ///
 ///
@@ -192,7 +192,9 @@ class Settings {
   Settings._internal();
   static final Settings _singleton = Settings._internal();
 
-  Logger? logger;
+  bool enableLogging = false;
+  LogLevel logLevel = LogLevel.info;
+
   String applicationVersion = '';
   String applicationDescription = '';
   String googleurl =
@@ -245,10 +247,11 @@ class Settings {
   ///
   /// To be called once during application initialisation and in tests
   /// before accessing values.
-  void init([Logger? logger]) {
+  void init() {
     if (!_cloudSettingsInit.isCompleted) {
       cloudSettingsInitialised = _cloudSettingsInit.future;
-      this.logger = logger ?? this.logger;
+
+      AppLogger.instance.init(enabled: enableLogging, level: logLevel);
       // Manually initialise flutter to ensure that
       // settings can be loaded before RunApp
       // and to ensure tests are not prevented from calling real http endpoints.
@@ -256,7 +259,7 @@ class Settings {
       _firebaseData = FirebaseApplicationState();
 
       getSecretsFromEnvironment();
-      logger?.t('Settings initialised');
+      AppLogger.instance.trace('Settings initialised');
       logValues();
 
       asyncInit();
@@ -432,9 +435,9 @@ class Settings {
   }
 
   void logValue(String label, String? value) {
-    logger?.t('settings fetched $label: $value');
-    if (value == '') logger?.t('$label is empty');
-    if (value == null) logger?.t('$label is null');
+    AppLogger.instance.trace('settings fetched $label: $value');
+    if (value == '') AppLogger.instance.trace('$label is empty');
+    if (value == null) AppLogger.instance.trace('$label is null');
   }
 
   // Retrieve the secret from the best location available.
@@ -515,7 +518,7 @@ class Settings {
       }
     } catch (exception) {
       // Log any errors that occur during retrieval.
-      logger?.e(exception.toString());
+      AppLogger.instance.error(exception.toString());
     }
     return null;
   }
@@ -537,7 +540,7 @@ class Settings {
 
         await updateSecretsFromCloud(secretApi);
         client.close();
-        logger?.t('Settings reinitialised');
+        AppLogger.instance.trace('Settings reinitialised');
         logValues();
       }
     }
@@ -595,7 +598,7 @@ class Settings {
       localMagnetPassword = prefs.getString('MAGNET_PASSWORD');
       _updateFromLocalSetting();
     } catch (e) {
-      logger?.e('Failed to load local settings: $e');
+      AppLogger.instance.error('Failed to load local settings: $e');
     }
   }
 
@@ -618,7 +621,7 @@ class Settings {
       magnetUsername = localMagnetUsername ?? magnetUsername;
       magnetPassword = localMagnetPassword ?? magnetPassword;
     } catch (e) {
-      logger?.e('Failed to load local settings: $e');
+      AppLogger.instance.error('Failed to load local settings: $e');
     }
   }
 
@@ -648,7 +651,7 @@ class Settings {
       );
       _updateFromLocalSetting();
     } catch (e) {
-      logger?.e('Failed to save local settings: $e');
+      AppLogger.instance.error('Failed to save local settings: $e');
     }
   }
 

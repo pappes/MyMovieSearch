@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 
 void main() {
   group('firebase backup', () {
@@ -26,7 +26,7 @@ void main() {
 }
 
 Future<void> backupFirebaseData() async {
-  logger.w(
+  AppLogger.instance.warning(
     'Constant lastFirebaseBackupDate needs to be updated in '
     'lib/movies/models/movie_location.dart',
   );
@@ -46,14 +46,14 @@ typedef JsonCallback = Future<String> Function();
 Future<void> writeDataFile(String filename, JsonCallback jsonGenerator) async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  logger.w(
+  AppLogger.instance.warning(
     'backup started at timestamp ${DateTime.now().millisecondsSinceEpoch}',
   );
 
   final data = await jsonGenerator();
   await File(filename).writeAsString(data, flush: true);
 
-  logger.w(
+  AppLogger.instance.warning(
     'Backup written to $filename '
     'file size: ${data.length}',
   );
@@ -64,6 +64,6 @@ Future<Map<String, dynamic>> getFirebaseData() async {
   final fb = MovieLocation();
   final data = await fb.getBackupData();
 
-  logger.w('Database statistics: ${fb.statistics()}');
+  AppLogger.instance.warning('Database statistics: ${fb.statistics()}');
   return data;
 }

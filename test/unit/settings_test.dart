@@ -1,13 +1,12 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:universal_io/io.dart';
 
 import 'settings_test.mocks.dart';
 
-@GenerateMocks([FirebaseApplicationState])
+// To regenerate mocks run the following command
+// dart run build_runner build@GenerateMocks([FirebaseApplicationState])
 void main() {
   group('getSecretsServiceAccount', () {
     test('returns null for invalid secretsLocation format', () async {

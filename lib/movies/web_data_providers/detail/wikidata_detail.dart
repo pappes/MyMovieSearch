@@ -9,11 +9,11 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/wikidata_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/imdb_title.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/http_method.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 const wikiIdPrefix = 'Q';
@@ -71,7 +71,9 @@ class QueryWikidataDetails
         return text;
       }
     }
-    logger.t('surpressed ${myDataSourceName()} search for non IMDB id $text');
+    AppLogger.instance.trace(
+      'surpressed ${myDataSourceName()} search for non IMDB id $text',
+    );
     return ''; // do not allow searches for non-imdb IDs
   }
 

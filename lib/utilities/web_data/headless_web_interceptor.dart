@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/web_data/http_method.dart';
 
 /// This function type abstracts the creation of the HttpClientRequest.
@@ -83,7 +84,10 @@ class HeadlessWebInterceptor {
       acceptHeader: headers[HttpHeaders.acceptHeader],
       urlProxyFilter: urlProxyFilter,
     );
-    // print('Interception decision: ${decision.action} for ${request.url}');
+    AppLogger.instance.info(
+      'Interception decision: ${decision.action} '
+      'for $uri',
+    );
 
     final response = InterceptionResponse(decision);
 

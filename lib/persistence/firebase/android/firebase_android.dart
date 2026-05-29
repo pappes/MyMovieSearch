@@ -11,7 +11,7 @@ import 'package:meta/meta.dart';
 
 import 'package:my_movie_search/firebase_options.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 
 class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
   FirebaseApplicationStateAndriod() : super.internal();
@@ -86,7 +86,9 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
         return '';
       }
     } catch (exception) {
-      logger.e('Unable to fetch record to Firebase exception: $exception');
+      AppLogger.instance.error(
+        'Unable to fetch record to Firebase exception: $exception',
+      );
     }
     return null;
   }
@@ -158,14 +160,16 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
             .asyncExpand(_collectionConverter);
       }
     } catch (exception) {
-      logger.t('Unable to fetch collection Firebase exception: $exception');
+      AppLogger.instance.trace(
+        'Unable to fetch collection Firebase exception: $exception',
+      );
       rethrow;
     }
     _notifyIntitialLoadCompleted(initalDataLoadComplete);
     return;
   }
 
-  /// Notify the caller when the initial data load is has finished 
+  /// Notify the caller when the initial data load is has finished
   /// via a completer.
   ///
   @awaitNotRequired
@@ -238,7 +242,9 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
         }
       }
     } catch (exception) {
-      logger.e('Unable to add record to Firebase exception: $exception');
+      AppLogger.instance.error(
+        'Unable to add record to Firebase exception: $exception',
+      );
     }
     return false;
   }

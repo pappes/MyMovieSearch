@@ -3,8 +3,8 @@ import 'dart:async' show StreamController, unawaited;
 import 'package:flutter/material.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
-import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 typedef ExtraDetailFn = Future<List<MovieResultDTO>> Function(MovieResultDTO);
@@ -60,7 +60,7 @@ class BaseMovieRepository {
   /// Handle errors during search processing.
   void handleError(Object error, StackTrace stackTrace) {
     final errorMessage = 'Error in BaseMovieRepository: $error\n$stackTrace';
-    logger.e(errorMessage);
+    AppLogger.instance.error(errorMessage);
     if (_movieStreamController?.isClosed == false) {
       searchIndicator.title = errorMessage.truncate(200);
       yieldResult(searchIndicator);
@@ -73,7 +73,7 @@ class BaseMovieRepository {
     yieldResult(searchIndicator);
 
     if (_movieStreamController != null) {
-      logger.t('closing repository stream');
+      AppLogger.instance.trace('closing repository stream');
       final tempController = _movieStreamController;
       _movieStreamController = null;
       return tempController?.close();

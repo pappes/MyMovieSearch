@@ -4,17 +4,17 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'dart:async' as _i3;
-import 'dart:ui' as _i6;
+import 'dart:ui' as _i7;
 
-import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as _i9;
+import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as _i10;
 import 'package:mockito/mockito.dart' as _i1;
-import 'package:mockito/src/dummies.dart' as _i5;
+import 'package:mockito/src/dummies.dart' as _i6;
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart'
-    as _i4;
-import 'package:my_movie_search/persistence/nav_log.dart' as _i7;
-import 'package:my_movie_search/utilities/navigation/app_context.dart' as _i8;
+    as _i5;
+import 'package:my_movie_search/persistence/nav_log.dart' as _i8;
+import 'package:my_movie_search/utilities/navigation/app_context.dart' as _i9;
+import 'package:my_movie_search/utilities/navigation/route_info.dart' as _i4;
 import 'package:my_movie_search/utilities/navigation/web_nav.dart' as _i2;
-import 'package:my_movie_search/utilities/navigation/route_info.dart' as _i10;
 
 // ignore_for_file: type=lint
 // ignore_for_file: avoid_redundant_argument_values
@@ -45,7 +45,7 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
           as _i3.Future<Object?>);
 
   @override
-  _i3.Future<Object?> viewFlutterPage(_i10.RouteInfo? page) =>
+  _i3.Future<Object?> viewFlutterPage(_i4.RouteInfo? page) =>
       (super.noSuchMethod(
             Invocation.method(#viewFlutterPage, [page]),
             returnValue: _i3.Future<Object?>.value(),
@@ -54,7 +54,7 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
           as _i3.Future<Object?>);
 
   @override
-  _i3.Future<Object?> viewFlutterRootPage(_i10.RouteInfo? page) =>
+  _i3.Future<Object?> viewFlutterRootPage(_i4.RouteInfo? page) =>
       (super.noSuchMethod(
             Invocation.method(#viewFlutterRootPage, [page]),
             returnValue: _i3.Future<Object?>.value(),
@@ -76,7 +76,7 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockFirebaseApplicationState extends _i1.Mock
-    implements _i4.FirebaseApplicationState {
+    implements _i5.FirebaseApplicationState {
   @override
   _i3.Future<bool> get loggedIn =>
       (super.noSuchMethod(
@@ -229,11 +229,11 @@ class MockFirebaseApplicationState extends _i1.Mock
   String derivedUser(String? device) =>
       (super.noSuchMethod(
             Invocation.method(#derivedUser, [device]),
-            returnValue: _i5.dummyValue<String>(
+            returnValue: _i6.dummyValue<String>(
               this,
               Invocation.method(#derivedUser, [device]),
             ),
-            returnValueForMissingStub: _i5.dummyValue<String>(
+            returnValueForMissingStub: _i6.dummyValue<String>(
               this,
               Invocation.method(#derivedUser, [device]),
             ),
@@ -250,13 +250,13 @@ class MockFirebaseApplicationState extends _i1.Mock
           as bool);
 
   @override
-  void addListener(_i6.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i7.VoidCallback? listener) => super.noSuchMethod(
     Invocation.method(#addListener, [listener]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void removeListener(_i6.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i7.VoidCallback? listener) => super.noSuchMethod(
     Invocation.method(#removeListener, [listener]),
     returnValueForMissingStub: null,
   );
@@ -277,7 +277,7 @@ class MockFirebaseApplicationState extends _i1.Mock
 /// A class which mocks [NavLog].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockNavLog extends _i1.Mock implements _i7.NavLog {
+class MockNavLog extends _i1.Mock implements _i8.NavLog {
   @override
   bool get hasListeners =>
       (super.noSuchMethod(
@@ -288,27 +288,25 @@ class MockNavLog extends _i1.Mock implements _i7.NavLog {
           as bool);
 
   @override
-  void logPageOpen(_i10.RouteInfo? route) =>
-      super.noSuchMethod(
-        Invocation.method(#logPageOpen, [route]),
-        returnValueForMissingStub: null,
-      );
+  void logPageOpen(_i4.RouteInfo? route) => super.noSuchMethod(
+    Invocation.method(#logPageOpen, [route]),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  void logPageClose(_i10.RouteInfo? route) =>
-      super.noSuchMethod(
-        Invocation.method(#logPageClose, [route]),
-        returnValueForMissingStub: null,
-      );
+  void logPageClose(_i4.RouteInfo? route) => super.noSuchMethod(
+    Invocation.method(#logPageClose, [route]),
+    returnValueForMissingStub: null,
+  );
 
   @override
-  void addListener(_i6.VoidCallback? listener) => super.noSuchMethod(
+  void addListener(_i7.VoidCallback? listener) => super.noSuchMethod(
     Invocation.method(#addListener, [listener]),
     returnValueForMissingStub: null,
   );
 
   @override
-  void removeListener(_i6.VoidCallback? listener) => super.noSuchMethod(
+  void removeListener(_i7.VoidCallback? listener) => super.noSuchMethod(
     Invocation.method(#removeListener, [listener]),
     returnValueForMissingStub: null,
   );
@@ -329,7 +327,7 @@ class MockNavLog extends _i1.Mock implements _i7.NavLog {
 /// A class which mocks [AppNavigator].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAppNavigator extends _i1.Mock implements _i8.AppNavigator {
+class MockAppNavigator extends _i1.Mock implements _i9.AppNavigator {
   @override
   _i3.Future<T?> pushNamed<T extends Object?>(String? name, {Object? extra}) =>
       (super.noSuchMethod(
@@ -359,12 +357,12 @@ class MockAppNavigator extends _i1.Mock implements _i8.AppNavigator {
 /// A class which mocks [AppTheme].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAppTheme extends _i1.Mock implements _i8.AppTheme {}
+class MockAppTheme extends _i1.Mock implements _i9.AppTheme {}
 
 /// A class which mocks [AppDialogs].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAppDialogs extends _i1.Mock implements _i8.AppDialogs {
+class MockAppDialogs extends _i1.Mock implements _i9.AppDialogs {
   @override
   _i3.Future<Object?> popup(String? dialogText, String? title) =>
       (super.noSuchMethod(
@@ -378,17 +376,17 @@ class MockAppDialogs extends _i1.Mock implements _i8.AppDialogs {
 /// A class which mocks [AppFocus].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAppFocus extends _i1.Mock implements _i8.AppFocus {}
+class MockAppFocus extends _i1.Mock implements _i9.AppFocus {}
 
 /// A class which mocks [CustomTabsLauncher].
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockCustomTabsLauncher extends _i1.Mock
-    implements _i8.CustomTabsLauncher {
+    implements _i9.CustomTabsLauncher {
   @override
   _i3.Future<void> launch(
     String? url, {
-    _i9.CustomTabsOptions? customTabsOptions,
+    _i10.CustomTabsOptions? customTabsOptions,
   }) =>
       (super.noSuchMethod(
             Invocation.method(
