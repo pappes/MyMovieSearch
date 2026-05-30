@@ -51,8 +51,8 @@ class QueryMsSearchMovies
     Settings().init();
     await Settings().cloudSettingsInitialised;
     // 'https://cloud.meilisearch.com/',
-    final url = Settings().meiliurl;
-    final key = Settings().meilisearchkey;
+    final url = Settings().meiliUrl;
+    final key = Settings().meiliSearchKey;
 
     final client = initialiseApi(url, key);
 

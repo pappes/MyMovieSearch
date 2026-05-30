@@ -12,7 +12,7 @@ import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 
 const host = 'https://search.dvds.mms.pappes.net';
-final String? apiKey = Settings().meiliadminkey;
+final String? apiKey = Settings().meiliAdminKey;
 
 class GCP {
   String? accountJson;

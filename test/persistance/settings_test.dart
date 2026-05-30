@@ -12,32 +12,32 @@ void main() {
   group('Settings', () {
     test('Check the local settings', () {
       expect(
-        obsfucate(Settings().googlekey),
+        obsfucate(Settings().googleKey),
         'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         reason: 'google key does not match',
       );
       expect(
-        obsfucate(Settings().omdbkey),
+        obsfucate(Settings().omdbKey),
         'xxxxxxxx',
         reason: 'omdb key does not match',
       );
       expect(
-        obsfucate(Settings().tmdbkey),
+        obsfucate(Settings().tmdbKey),
         'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         reason: 'tmdb key does not match',
       );
       expect(
-        obsfucate(Settings().tvdbkey),
+        obsfucate(Settings().tvdbKey),
         'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
         reason: 'tvdb key does not match',
       );
       expect(
-        obsfucate(Settings().meiliadminkey),
+        obsfucate(Settings().meiliAdminKey),
         null,
         reason: 'meiliadmin key does not match',
       );
       expect(
-        obsfucate(Settings().meilisearchkey),
+        obsfucate(Settings().meiliSearchKey),
         null,
         reason: 'meilisearch key does not match',
       );
@@ -47,7 +47,7 @@ void main() {
         reason: 'secrets location does not match',
       );
       expect(
-        obsfucate(Settings().meiliurl),
+        obsfucate(Settings().meiliUrl),
         'xxxxx://xxxxx.xxxxxxxxxxx.xxx/',
         reason: 'meiliurl does not match',
       );
@@ -57,17 +57,17 @@ void main() {
       await Settings().asyncInit();
 
       expect(
-        obsfucate(Settings().meiliadminkey),
+        obsfucate(Settings().meiliAdminKey),
         'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         reason: 'meiliadmin key does not match',
       );
       expect(
-        obsfucate(Settings().meilisearchkey),
+        obsfucate(Settings().meiliSearchKey),
         'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
         reason: 'meilisearch key does not match',
       );
       expect(
-        obsfucate(Settings().meiliurl),
+        obsfucate(Settings().meiliUrl),
         'xxxxx://xxxxxx.xxxx.xxx.xxxxxx.xxx/',
         reason: 'meiliurl does not match',
       );

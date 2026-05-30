@@ -7,23 +7,28 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   setUp(() {
     SharedPreferences.setMockInitialValues({});
+
+    final newValues = <SettingKey, String>{
+      SettingKey.magnetServer: 'http://old-server',
+      SettingKey.magnetPort: '8080',
+      SettingKey.magnetUsername: 'old-user',
+      SettingKey.magnetPassword: 'old-password',
+      SettingKey.loggingKey: 'old-logging-key',
+      SettingKey.googleUrl: 'http://google',
+      SettingKey.googleKey: 'g-key',
+      SettingKey.omdbKey: 'o-key',
+      SettingKey.tmdbKey: 't-key',
+      SettingKey.tvdbKey: 'tv-key',
+      SettingKey.meiliUrl: 'http://meili',
+      SettingKey.meiliSearchKey: 'ms-key',
+      SettingKey.meiliAdminKey: 'ma-key',
+      SettingKey.firebaseSecretsLocation: 'secret-loc',
+      SettingKey.seVirtualMachineKey: 'se-key',
+    };
+
     Settings()
       ..offline = false
-      ..localMagnetServer = 'http://old-server'
-      ..localMagnetPort = '8080'
-      ..localMagnetUsername = 'old-user'
-      ..localMagnetPassword = 'old-password'
-      ..localLoggingKey = 'old-logging-key'
-      ..localGoogleurl = 'http://google'
-      ..localGooglekey = 'g-key'
-      ..localOmdbkey = 'o-key'
-      ..localTmdbkey = 't-key'
-      ..localTvdbkey = 'tv-key'
-      ..localMeiliurl = 'http://meili'
-      ..localMeilisearchkey = 'ms-key'
-      ..localMeiliadminkey = 'ma-key'
-      ..localFirebaseSecretsLocation = 'secret-loc'
-      ..localSeVmKey = 'se-key';
+      ..saveToLocal(newValues);
   });
 
   testWidgets('SettingsPage renders correctly and updates Settings', (
@@ -60,7 +65,7 @@ void main() {
     // Verify Settings singleton was updated
     expect(Settings().magnetServer, 'http://new-server');
     expect(Settings().magnetPort, '9091');
-    expect(Settings().googlekey, 'new-g-key');
+    expect(Settings().googleKey, 'new-g-key');
 
     // Verify SharedPreferences
     final prefs = await SharedPreferences.getInstance();

@@ -66,7 +66,7 @@ abstract class QueryTVDBCommon
     const tvdbExpectedResult = 'success';
     const tvdbPayload = 'data';
     const tvdbAttribte = 'token';
-    final tmdbKey = Settings().tvdbkey;
+    final tmdbKey = Settings().tvdbKey;
 
     // Send APIKey.
     final uri = Uri.parse(tvdbLoginUrl);

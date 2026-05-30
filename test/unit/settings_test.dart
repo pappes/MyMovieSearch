@@ -81,49 +81,14 @@ void main() {
     group('getSecretFromEnv', () {
       test('returns environment variable value if set', () {
         // Arrange
-        const environmentVar = 'PATH';
-        const compiledValue = '';
-        final environmentValue = Platform.environment[environmentVar];
+        final environmentValue =
+            Platform.environment[SettingKey.googleKey.envKey] = 'testing';
 
         // Act
-        final result = Settings().getSecretFromEnv(
-          environmentVar,
-          compiledValue,
-        );
+        final result = Settings().environmentValue(SettingKey.googleKey);
 
         // Assert
         expect(result, environmentValue);
-      });
-
-      test('returns compiled value if environment variable is not set', () {
-        // Arrange
-        const environmentVar = 'MissingTEST_ENV_VAR';
-        const compiledValue = 'compiled_value';
-
-        // Act
-        final result = Settings().getSecretFromEnv(
-          environmentVar,
-          compiledValue,
-        );
-
-        // Assert
-        expect(result, compiledValue);
-      });
-
-      test('returns null if both environment variable '
-          'and compiled value are not set', () {
-        // Arrange
-        const environmentVar = 'MissingTEST_ENV_VAR';
-        const compiledValue = '';
-
-        // Act
-        final result = Settings().getSecretFromEnv(
-          environmentVar,
-          compiledValue,
-        );
-
-        // Assert
-        expect(result, isNull);
       });
     });
   });

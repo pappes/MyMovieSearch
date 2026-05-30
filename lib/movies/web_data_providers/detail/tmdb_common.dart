@@ -61,7 +61,7 @@ abstract class QueryTMDBCommon
   /// API call to TMDB returning the movie details for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final tmdbKey = Settings().tmdbkey;
+    final tmdbKey = Settings().tmdbKey;
     return Uri.parse('$baseURL$searchCriteria$midURL$tmdbKey');
   }
 
@@ -96,7 +96,7 @@ abstract class QueryTMDBCommon
   // Add authorization token for compatability with the TMDB V4 API.
   @override
   void myConstructHeaders(HttpHeaders headers) {
-    final tmdbKey = Settings().tmdbkey;
+    final tmdbKey = Settings().tmdbKey;
     headers.add('Authorization', ' Bearer $tmdbKey');
   }
 

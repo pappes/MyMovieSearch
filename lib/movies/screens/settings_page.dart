@@ -19,20 +19,15 @@ class SettingsPage extends StatefulWidget {
 
 /// State for the SettingsPage
 class _SettingsPageState extends State<SettingsPage> {
-
   /// The URL of the betterstack logging server.
   static const _logsUrl =
       'https://telemetry.betterstack.com/team/t550725/tail?s=2476806';
-      
+
   final _formKey = GlobalKey<FormState>();
 
   bool _offline = false;
   bool _enableLogging = false;
   LogLevel _logLevel = LogLevel.info;
-
-  late final bool _initialOffline;
-  late final bool _initialEnableLogging;
-  late final LogLevel _initialLogLevel;
 
   late final TextEditingController _serverController;
   late final TextEditingController _portController;
@@ -60,70 +55,57 @@ class _SettingsPageState extends State<SettingsPage> {
     final settings = Settings();
 
     _offline = settings.offline;
-    _initialOffline = _offline;
-
     _enableLogging = settings.enableLogging;
-    _initialEnableLogging = _enableLogging;
-
     _logLevel = settings.logLevel;
-    _initialLogLevel = _logLevel;
 
-    _serverController = TextEditingController(text: settings.localMagnetServer);
-    _portController = TextEditingController(text: settings.localMagnetPort);
+    _serverController = TextEditingController(
+      text: settings.localValue(SettingKey.magnetServer),
+    );
+    _portController = TextEditingController(
+      text: settings.localValue(SettingKey.magnetPort),
+    );
     _usernameController = TextEditingController(
-      text: settings.localMagnetUsername,
+      text: settings.localValue(SettingKey.magnetUsername),
     );
     _passwordController = TextEditingController(
-      text: settings.localMagnetPassword,
+      text: settings.localValue(SettingKey.magnetPassword),
     );
 
-    _googleUrlController = TextEditingController(text: settings.localGoogleurl);
-    _googleKeyController = TextEditingController(text: settings.localGooglekey);
-    _omdbKeyController = TextEditingController(text: settings.localOmdbkey);
-    _tmdbKeyController = TextEditingController(text: settings.localTmdbkey);
-    _tvdbKeyController = TextEditingController(text: settings.localTvdbkey);
+    _googleUrlController = TextEditingController(
+      text: settings.localValue(SettingKey.googleUrl),
+    );
+    _googleKeyController = TextEditingController(
+      text: settings.localValue(SettingKey.googleKey),
+    );
+    _omdbKeyController = TextEditingController(
+      text: settings.localValue(SettingKey.omdbKey),
+    );
+    _tmdbKeyController = TextEditingController(
+      text: settings.localValue(SettingKey.tmdbKey),
+    );
+    _tvdbKeyController = TextEditingController(
+      text: settings.localValue(SettingKey.tvdbKey),
+    );
     _loggingKeyController = TextEditingController(
-      text: settings.localLoggingKey,
+      text: settings.localValue(SettingKey.loggingKey),
     );
 
-    _meiliUrlController = TextEditingController(text: settings.localMeiliurl);
+    _meiliUrlController = TextEditingController(
+      text: settings.localValue(SettingKey.meiliUrl),
+    );
     _meiliSearchKeyController = TextEditingController(
-      text: settings.localMeilisearchkey,
+      text: settings.localValue(SettingKey.meiliSearchKey),
     );
     _meiliAdminKeyController = TextEditingController(
-      text: settings.localMeiliadminkey,
+      text: settings.localValue(SettingKey.meiliAdminKey),
     );
 
-    _seVmKeyController = TextEditingController(text: settings.localSeVmKey);
+    _seVmKeyController = TextEditingController(
+      text: settings.localValue(SettingKey.seVirtualMachineKey),
+    );
     _firebaseSecretsLocationController = TextEditingController(
-      text: settings.localFirebaseSecretsLocation,
+      text: settings.localValue(SettingKey.firebaseSecretsLocation),
     );
-  }
-
-  bool _hasChanges() {
-    final settings = Settings();
-    return _offline != _initialOffline ||
-        _enableLogging != _initialEnableLogging ||
-        _logLevel != _initialLogLevel ||
-        _serverController.text != (settings.localMagnetServer ?? '') ||
-        _portController.text != (settings.localMagnetPort ?? '') ||
-        _usernameController.text != (settings.localMagnetUsername ?? '') ||
-        _passwordController.text != (settings.localMagnetPassword ?? '') ||
-        _googleUrlController.text !=
-            (settings.localGoogleurl ?? settings.googleurl) ||
-        _googleKeyController.text != (settings.localGooglekey ?? '') ||
-        _omdbKeyController.text != (settings.localOmdbkey ?? '') ||
-        _tmdbKeyController.text != (settings.localTmdbkey ?? '') ||
-        _tvdbKeyController.text != (settings.localTvdbkey ?? '') ||
-        _loggingKeyController.text != (settings.localLoggingKey ?? '') ||
-        _meiliUrlController.text !=
-            (settings.localMeiliurl ?? settings.meiliurl) ||
-        _meiliSearchKeyController.text !=
-            (settings.localMeilisearchkey ?? '') ||
-        _meiliAdminKeyController.text != (settings.localMeiliadminkey ?? '') ||
-        _seVmKeyController.text != (settings.localSeVmKey ?? '') ||
-        _firebaseSecretsLocationController.text !=
-            (settings.localFirebaseSecretsLocation ?? '');
   }
 
   @override
@@ -156,25 +138,27 @@ class _SettingsPageState extends State<SettingsPage> {
       final settings = Settings()
         ..offline = _offline
         ..enableLogging = _enableLogging
-        ..logLevel = _logLevel
-        ..localMagnetServer = _serverController.text
-        ..localMagnetPort = _portController.text
-        ..localMagnetUsername = _usernameController.text
-        ..localMagnetPassword = _passwordController.text
-        ..localGoogleurl = _googleUrlController.text
-        ..localGooglekey = _googleKeyController.text
-        ..localOmdbkey = _omdbKeyController.text
-        ..localTmdbkey = _tmdbKeyController.text
-        ..localTvdbkey = _tvdbKeyController.text
-        ..localLoggingKey = _loggingKeyController.text
-        ..localMeiliurl = _meiliUrlController.text
-        ..localMeilisearchkey = _meiliSearchKeyController.text
-        ..localMeiliadminkey = _meiliAdminKeyController.text
-        ..localSeVmKey = _seVmKeyController.text
-        ..localFirebaseSecretsLocation =
-            _firebaseSecretsLocationController.text;
+        ..logLevel = _logLevel;
 
-      await settings.saveToLocal();
+      final SettingsCollection localValues = {};
+      localValues[SettingKey.magnetServer] = _serverController.text;
+      localValues[SettingKey.magnetPort] = _portController.text;
+      localValues[SettingKey.magnetUsername] = _usernameController.text;
+      localValues[SettingKey.magnetPassword] = _passwordController.text;
+      localValues[SettingKey.googleUrl] = _googleUrlController.text;
+      localValues[SettingKey.googleKey] = _googleKeyController.text;
+      localValues[SettingKey.omdbKey] = _omdbKeyController.text;
+      localValues[SettingKey.tmdbKey] = _tmdbKeyController.text;
+      localValues[SettingKey.tvdbKey] = _tvdbKeyController.text;
+      localValues[SettingKey.loggingKey] = _loggingKeyController.text;
+      localValues[SettingKey.meiliUrl] = _meiliUrlController.text;
+      localValues[SettingKey.meiliSearchKey] = _meiliSearchKeyController.text;
+      localValues[SettingKey.meiliAdminKey] = _meiliAdminKeyController.text;
+      localValues[SettingKey.seVirtualMachineKey] = _seVmKeyController.text;
+      localValues[SettingKey.firebaseSecretsLocation] =
+          _firebaseSecretsLocationController.text;
+
+      settings.saveToLocal(localValues);
 
       // Update the logger dynamically
       AppLogger.instance.init(enabled: _enableLogging, level: _logLevel);
@@ -206,9 +190,7 @@ class _SettingsPageState extends State<SettingsPage> {
   /// Build the settings page
   Widget build(BuildContext context) => PopScope(
     onPopInvokedWithResult: (didPop, result) async {
-      if (_hasChanges()) {
-        await _saveSettings();
-      }
+      await _saveSettings();
     },
     child: AppScaffold(
       appBar: AppBar(title: const Text('Settings')),

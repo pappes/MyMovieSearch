@@ -27,7 +27,7 @@ class QueryGoogleMovies
   QueryGoogleMovies(super.criteria);
 
   // 'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
-  static final String _baseURL = Settings().googleurl;
+  static final String _baseURL = Settings().googleUrl;
 
   /// Describe where the data is coming from.
   @override
@@ -66,7 +66,7 @@ class QueryGoogleMovies
   /// for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final googleKey = Settings().googlekey;
+    final googleKey = Settings().googleKey;
     final startRecord = (pageNumber - 1) * _googleResultsPerPage;
     final url =
         '$_baseURL$googleKey'

@@ -57,7 +57,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final tmdbKey = Settings().tmdbkey;
+    final tmdbKey = Settings().tmdbKey;
     return Uri.parse(
       '$_baseURL$tmdbKey&query=$searchCriteria&page=$pageNumber',
     );
@@ -66,7 +66,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   // Add authorization token for compatability with the TMDB V4 API.
   @override
   void myConstructHeaders(HttpHeaders headers) {
-    final tmdbKey = Settings().tmdbkey;
+    final tmdbKey = Settings().tmdbKey;
     headers.add('Authorization', ' Bearer $tmdbKey');
   }
 

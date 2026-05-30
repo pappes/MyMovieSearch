@@ -56,7 +56,7 @@ class QueryOMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    final omdbKey = Settings().omdbkey;
+    final omdbKey = Settings().omdbKey;
     return Uri.parse('$_baseURL$omdbKey&s=$searchCriteria&page=$pageNumber');
   }
 
