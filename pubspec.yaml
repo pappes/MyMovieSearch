@@ -68,6 +68,7 @@ dependencies:
   html: ^0.15.6                         # Dart dom and html utilities.
   html_unescape: ^2.0.0                 # decode &apos;
   # hydrated_bloc: ^9.1.2                # automatic restoration for bloc data
+  http: ^1.6.0                          # for simplified http get, post etc
   intl: ^0.20.2                         # internationalisation including number and data formatting.
   lint: ^2.8.0
   logger: ^2.7.0                        # Log trace messages to console.

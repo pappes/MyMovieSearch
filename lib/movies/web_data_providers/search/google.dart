@@ -66,7 +66,6 @@ class QueryGoogleMovies
   /// for [searchCriteria].
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) {
-    // Get key from the file assets/secrets.json (not source controlled)
     final googleKey = Settings().googlekey;
     final startRecord = (pageNumber - 1) * _googleResultsPerPage;
     final url =

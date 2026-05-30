@@ -87,6 +87,7 @@ abstract class QueryTVDBCommon
       final payload = jsonMap[tvdbPayload];
       if (payload is Map && payload.containsKey(tvdbAttribte)) {
         sessionKey = payload[tvdbAttribte]?.toString();
+        Secrets().addSecret(sessionKey);
         return true;
       }
     }

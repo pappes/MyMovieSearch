@@ -13,6 +13,7 @@ void main() {
       ..localMagnetPort = '8080'
       ..localMagnetUsername = 'old-user'
       ..localMagnetPassword = 'old-password'
+      ..localLoggingKey = 'old-logging-key'
       ..localGoogleurl = 'http://google'
       ..localGooglekey = 'g-key'
       ..localOmdbkey = 'o-key'

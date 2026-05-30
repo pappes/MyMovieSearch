@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
 import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
+import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 
 /// Settings page
@@ -18,6 +19,11 @@ class SettingsPage extends StatefulWidget {
 
 /// State for the SettingsPage
 class _SettingsPageState extends State<SettingsPage> {
+
+  /// The URL of the betterstack logging server.
+  static const _logsUrl =
+      'https://telemetry.betterstack.com/team/t550725/tail?s=2476806';
+      
   final _formKey = GlobalKey<FormState>();
 
   bool _offline = false;
@@ -38,6 +44,7 @@ class _SettingsPageState extends State<SettingsPage> {
   late final TextEditingController _omdbKeyController;
   late final TextEditingController _tmdbKeyController;
   late final TextEditingController _tvdbKeyController;
+  late final TextEditingController _loggingKeyController;
 
   late final TextEditingController _meiliUrlController;
   late final TextEditingController _meiliSearchKeyController;
@@ -75,6 +82,9 @@ class _SettingsPageState extends State<SettingsPage> {
     _omdbKeyController = TextEditingController(text: settings.localOmdbkey);
     _tmdbKeyController = TextEditingController(text: settings.localTmdbkey);
     _tvdbKeyController = TextEditingController(text: settings.localTvdbkey);
+    _loggingKeyController = TextEditingController(
+      text: settings.localLoggingKey,
+    );
 
     _meiliUrlController = TextEditingController(text: settings.localMeiliurl);
     _meiliSearchKeyController = TextEditingController(
@@ -105,6 +115,7 @@ class _SettingsPageState extends State<SettingsPage> {
         _omdbKeyController.text != (settings.localOmdbkey ?? '') ||
         _tmdbKeyController.text != (settings.localTmdbkey ?? '') ||
         _tvdbKeyController.text != (settings.localTvdbkey ?? '') ||
+        _loggingKeyController.text != (settings.localLoggingKey ?? '') ||
         _meiliUrlController.text !=
             (settings.localMeiliurl ?? settings.meiliurl) ||
         _meiliSearchKeyController.text !=
@@ -128,6 +139,7 @@ class _SettingsPageState extends State<SettingsPage> {
     _omdbKeyController.dispose();
     _tmdbKeyController.dispose();
     _tvdbKeyController.dispose();
+    _loggingKeyController.dispose();
 
     _meiliUrlController.dispose();
     _meiliSearchKeyController.dispose();
@@ -154,6 +166,7 @@ class _SettingsPageState extends State<SettingsPage> {
         ..localOmdbkey = _omdbKeyController.text
         ..localTmdbkey = _tmdbKeyController.text
         ..localTvdbkey = _tvdbKeyController.text
+        ..localLoggingKey = _loggingKeyController.text
         ..localMeiliurl = _meiliUrlController.text
         ..localMeilisearchkey = _meiliSearchKeyController.text
         ..localMeiliadminkey = _meiliAdminKeyController.text
@@ -278,6 +291,14 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
             ),
+
+          // cloud logs can be viewed at:
+          // https://telemetry.betterstack.com/team/t550725/tail?s=2476806
+          const SizedBox(height: 16),
+          TextButton(
+            onPressed: () => MMSNav(context).viewWebPage(_logsUrl),
+            child: const Text('View Cloud Logs'),
+          ),
         ],
       ),
     ),
@@ -374,6 +395,14 @@ class _SettingsPageState extends State<SettingsPage> {
             controller: _tvdbKeyController,
             decoration: const InputDecoration(
               labelText: 'TVDB Key',
+              border: OutlineInputBorder(),
+            ),
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            controller: _loggingKeyController,
+            decoration: const InputDecoration(
+              labelText: 'Betterstack Logging Key',
               border: OutlineInputBorder(),
             ),
           ),
