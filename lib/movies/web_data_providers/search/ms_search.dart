@@ -50,8 +50,7 @@ class QueryMsSearchMovies
   Future<Stream<String>> myFetchWebText(SearchCriteriaDTO criteria) async {
     Settings().init();
     await Settings().cloudSettingsInitialised;
-    // 'https://cloud.meilisearch.com/',
-    final url = Settings().meiliUrl;
+    final url = Settings().meiliUrl ?? 'https://cloud.meilisearch.com/';
     final key = Settings().meiliSearchKey;
 
     final client = initialiseApi(url, key);

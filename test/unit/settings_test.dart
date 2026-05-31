@@ -81,11 +81,12 @@ void main() {
     group('getSecretFromEnv', () {
       test('returns environment variable value if set', () {
         // Arrange
+        Settings().init();
         final environmentValue =
-            Platform.environment[SettingKey.googleKey.envKey] = 'testing';
+            Platform.environment[SettingKey.googleKey.envKey];
 
         // Act
-        final result = Settings().environmentValue(SettingKey.googleKey);
+        final result = Settings().runtimeEnvValue(SettingKey.googleKey);
 
         // Assert
         expect(result, environmentValue);

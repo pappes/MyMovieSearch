@@ -7,9 +7,8 @@ import 'package:my_movie_search/utilities/settings.dart';
 String? obsfucate(String? setting) =>
     setting?.replaceAll(RegExp('[a-zA-Z0-9]'), 'x');
 void main() {
-  // Wait for api key to be initialised
-  setUpAll(() => Settings().init());
   group('Settings', () {
+    Settings().init();
     test('Check the local settings', () {
       expect(
         obsfucate(Settings().googleKey),
@@ -54,7 +53,7 @@ void main() {
     });
 
     test('check the cloud based settings', () async {
-      await Settings().asyncInit();
+      await Settings().init();
 
       expect(
         obsfucate(Settings().meiliAdminKey),

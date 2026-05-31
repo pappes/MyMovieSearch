@@ -26,8 +26,9 @@ class QueryGoogleMovies
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   QueryGoogleMovies(super.criteria);
 
-  // 'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
-  static final String _baseURL = Settings().googleUrl;
+  static final String _baseURL =
+      Settings().googleUrl ??
+      'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
 
   /// Describe where the data is coming from.
   @override

@@ -16,6 +16,8 @@
     "description": "0.58 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "2",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:0a4f06bea7f122454f0af244774bd5e11e698693&dn=Wednesday+S02E08+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:0a4f06bea7f122454f0af244774bd5e11e698693&dn=Wednesday+S02E08+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -49,6 +51,8 @@
     "description": "0.60 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "5",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:1a1a1dd76e86690c8e2a6ef5221444fad85635f0&dn=Wednesday+S02E02+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:1a1a1dd76e86690c8e2a6ef5221444fad85635f0&dn=Wednesday+S02E02+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -60,6 +64,8 @@
     "description": "0.79 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "23",
+    "userRatingCount": "21",
     "imageUrl": "magnet:?xt=urn:btih:1e9bf5d63970646c97611c7faa6520e99ef9510a&dn=wednesday.s02e02.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:1e9bf5d63970646c97611c7faa6520e99ef9510a&dn=wednesday.s02e02.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -71,6 +77,7 @@
     "description": "0.93 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "5",
     "imageUrl": "magnet:?xt=urn:btih:1fcbe8fef901b7214c311967a1317470f338cfc2&dn=Wednesday+S02E03+Call+of+the+Woe+720p+NF+WEB-DL+DDP5+1+Atmos+H+264-FLUX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:1fcbe8fef901b7214c311967a1317470f338cfc2&dn=Wednesday+S02E03+Call+of+the+Woe+720p+NF+WEB-DL+DDP5+1+Atmos+H+264-FLUX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -82,7 +89,8 @@
     "description": "0.56 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "4",
+    "creditsOrder": "3",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:3ca18d96d9e5a2400219474aa04679f9175e6f13&dn=Wednesday+S02E05+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:3ca18d96d9e5a2400219474aa04679f9175e6f13&dn=Wednesday+S02E05+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -94,6 +102,8 @@
     "description": "2.58 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "13",
+    "userRatingCount": "2",
     "imageUrl": "magnet:?xt=urn:btih:3caa4dc0d9ef4ddd2e4cf0da21013fae9431886a&dn=Wednesday+S02E01+MULTI+1080p+WEB+X264-HiggsBoson%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:3caa4dc0d9ef4ddd2e4cf0da21013fae9431886a&dn=Wednesday+S02E01+MULTI+1080p+WEB+X264-HiggsBoson%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -105,6 +115,8 @@
     "description": "0.76 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "56",
+    "userRatingCount": "4",
     "imageUrl": "magnet:?xt=urn:btih:3e5c95533816c16935a2344d7cb35b0acacd874f&dn=Wednesday.S02E03.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:3e5c95533816c16935a2344d7cb35b0acacd874f&dn=Wednesday.S02E03.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -116,6 +128,8 @@
     "description": "0.87 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "8",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:42c55dfd10487f42e2bb1cfd2a9a112c4380e06b&dn=Wednesday+S02E04+If+These+Woes+Could+Talk+720p+NF+WEB-DL+DDP5+1+Atmos+H+264-FLUX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:42c55dfd10487f42e2bb1cfd2a9a112c4380e06b&dn=Wednesday+S02E04+If+These+Woes+Could+Talk+720p+NF+WEB-DL+DDP5+1+Atmos+H+264-FLUX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -127,6 +141,8 @@
     "description": "0.40 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "6",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:438554f7a1fbd6b1f1fccc1c4fabd2af0abb1020&dn=Wednesday.S02E02.XviD-AFG%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:438554f7a1fbd6b1f1fccc1c4fabd2af0abb1020&dn=Wednesday.S02E02.XviD-AFG%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -138,6 +154,7 @@
     "description": "0.77 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "3",
     "imageUrl": "magnet:?xt=urn:btih:447fe0e2dcc0a96f7174d0dfbfd8eb144be3ad22&dn=Wednesday+S02E01+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:447fe0e2dcc0a96f7174d0dfbfd8eb144be3ad22&dn=Wednesday+S02E01+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -149,9 +166,9 @@
     "description": "6.60 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "55",
+    "creditsOrder": "48",
     "keywords": "[\"Season 2\"]",
-    "userRatingCount": "9",
+    "userRatingCount": "11",
     "imageUrl": "magnet:?xt=urn:btih:482EAC3D9670A10ECC2BDA2FB7A920F1B65958CA&dn=Wednesday.S02.1080p.x265-ELiTE&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.darkness.services:6969/announce&tr=https://tracker.bjut.jp:443/announce&tr=http://tracker.bt4g.com:2095/announce&tr=udp://open.demonii.com:1337/announce&tr=udp://open.tracker.cl:1337/announce&tr=udp://tracker.dler.org:6969/announce&tr=udp://p4p.arenabg.com:1337/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:482EAC3D9670A10ECC2BDA2FB7A920F1B65958CA&dn=Wednesday.S02.1080p.x265-ELiTE&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.darkness.services:6969/announce&tr=https://tracker.bjut.jp:443/announce&tr=http://tracker.bt4g.com:2095/announce&tr=udp://open.demonii.com:1337/announce&tr=udp://open.tracker.cl:1337/announce&tr=udp://tracker.dler.org:6969/announce&tr=udp://p4p.arenabg.com:1337/announce"
@@ -163,6 +180,8 @@
     "description": "0.51 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "20",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:4b26e71b91e973470dc51cfdbcc37e81e24a3802&dn=Wednesday.S02E04.720p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:4b26e71b91e973470dc51cfdbcc37e81e24a3802&dn=Wednesday.S02E04.720p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -174,6 +193,8 @@
     "description": "0.65 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "54",
+    "userRatingCount": "3",
     "imageUrl": "magnet:?xt=urn:btih:4cba1657fe8fe5d283d3cb8ce445dba4b9c9e2c3&dn=Wednesday.S02E04.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:4cba1657fe8fe5d283d3cb8ce445dba4b9c9e2c3&dn=Wednesday.S02E04.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -185,8 +206,8 @@
     "description": "1.58 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "14",
-    "userRatingCount": "3",
+    "creditsOrder": "11",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:53168c0b25b8465144e4ee506e52608c78cedacb&dn=Wednesday+S01E04+Woe+What+A+Night+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:53168c0b25b8465144e4ee506e52608c78cedacb&dn=Wednesday+S01E04+Woe+What+A+Night+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -200,6 +221,7 @@
     "type": "MovieContentType.download",
     "creditsOrder": "1",
     "keywords": "[\"Season 1\"]",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:54d794e04755734e544e25cf68bcaab5d2fb1903&dn=Wednesday.S01.720p.NF.WEBRip.DDP5.1.Atmos.x264-SMURF%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:54d794e04755734e544e25cf68bcaab5d2fb1903&dn=Wednesday.S01.720p.NF.WEBRip.DDP5.1.Atmos.x264-SMURF%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -211,6 +233,8 @@
     "description": "2.58 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "28",
+    "userRatingCount": "3",
     "imageUrl": "magnet:?xt=urn:btih:56896848a1aca08e80c90c7747b143306cd00575&dn=Wednesday+S02E04+MULTI+1080p+WEB+X264-HiggsBoson%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:56896848a1aca08e80c90c7747b143306cd00575&dn=Wednesday+S02E04+MULTI+1080p+WEB+X264-HiggsBoson%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -222,8 +246,8 @@
     "description": "1.54 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "12",
-    "userRatingCount": "2",
+    "creditsOrder": "13",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:5853ae59958137194f7a1a9f43360960997da133&dn=Wednesday+S01E07+If+You+Dont+Woe+By+Now+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:5853ae59958137194f7a1a9f43360960997da133&dn=Wednesday+S01E07+If+You+Dont+Woe+By+Now+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -235,8 +259,8 @@
     "description": "1.55 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "12",
-    "userRatingCount": "1",
+    "creditsOrder": "10",
+    "userRatingCount": "2",
     "imageUrl": "magnet:?xt=urn:btih:5db163e85144b4ecae0ca6248f94d5c6914f455c&dn=Wednesday+S01E02+Woe+is+the+Loneliest+Number+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:5db163e85144b4ecae0ca6248f94d5c6914f455c&dn=Wednesday+S01E02+Woe+is+the+Loneliest+Number+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -248,6 +272,8 @@
     "description": "0.48 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "11",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:63bae701ce6d4c03494d5a2b4a32bec6f1cc5a68&dn=Wednesday.S02E02.720p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:63bae701ce6d4c03494d5a2b4a32bec6f1cc5a68&dn=Wednesday.S02E02.720p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -259,9 +285,9 @@
     "description": "6.39 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "33",
+    "creditsOrder": "29",
     "keywords": "[\"Season 1\"]",
-    "userRatingCount": "14",
+    "userRatingCount": "8",
     "imageUrl": "magnet:?xt=urn:btih:64841f0e670babe14747cdc792e54ae1b7ab1491&dn=Wednesday.S01.1080p.WEBRip.x265%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:64841f0e670babe14747cdc792e54ae1b7ab1491&dn=Wednesday.S01.1080p.WEBRip.x265%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -273,6 +299,8 @@
     "description": "0.93 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "15",
+    "userRatingCount": "3",
     "imageUrl": "magnet:?xt=urn:btih:64d4139b8418dfe9e6552ff8216b07570396b063&dn=wednesday.s02e03.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:64d4139b8418dfe9e6552ff8216b07570396b063&dn=wednesday.s02e03.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -285,7 +313,7 @@
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
     "creditsOrder": "12",
-    "userRatingCount": "4",
+    "userRatingCount": "2",
     "imageUrl": "magnet:?xt=urn:btih:70fff85607f0fd1a40042b05b58839afcccddabb&dn=Wednesday+S01E08+A+Murder+of+Woes+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:70fff85607f0fd1a40042b05b58839afcccddabb&dn=Wednesday+S01E08+A+Murder+of+Woes+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -308,6 +336,8 @@
     "description": "0.59 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "5",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:734b53447429c62f0235458b857f7cee018c528e&dn=Wednesday.S02E01.XviD-AFG%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:734b53447429c62f0235458b857f7cee018c528e&dn=Wednesday.S02E01.XviD-AFG%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -341,8 +371,6 @@
     "description": "0.46 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "4",
-    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:8963faf89008cb93181b70d6c2c5bacf863c8d3a&dn=Wednesday+S01E03+Friend+or+Woe+1080p+NF+WEB-DL+DDP5+1+H+264-NINJACENTRAL%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:8963faf89008cb93181b70d6c2c5bacf863c8d3a&dn=Wednesday+S01E03+Friend+or+Woe+1080p+NF+WEB-DL+DDP5+1+H+264-NINJACENTRAL%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -354,7 +382,8 @@
     "description": "1.91 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "16",
+    "creditsOrder": "18",
+    "userRatingCount": "2",
     "imageUrl": "magnet:?xt=urn:btih:89b6bbe1c92c9ac617082460e3f8563866a1a206&dn=Wednesday+S01E01+Wednesdays+Child+is+Full+of+Woe+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:89b6bbe1c92c9ac617082460e3f8563866a1a206&dn=Wednesday+S01E01+Wednesdays+Child+is+Full+of+Woe+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -367,7 +396,7 @@
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
     "creditsOrder": "11",
-    "userRatingCount": "1",
+    "userRatingCount": "2",
     "imageUrl": "magnet:?xt=urn:btih:89bdd316a1baf2213f65d819178f90905c1bbe1a&dn=wednesday.s02e06.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:89bdd316a1baf2213f65d819178f90905c1bbe1a&dn=wednesday.s02e06.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -379,7 +408,7 @@
     "description": "0.75 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "18",
+    "creditsOrder": "19",
     "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:89eaab81744ba47412251ff001f84130f38293ea&dn=wednesday.s02e05.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
@@ -392,9 +421,9 @@
     "description": "9.11 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "17",
+    "creditsOrder": "14",
     "keywords": "[\"Season 1\"]",
-    "userRatingCount": "10",
+    "userRatingCount": "5",
     "imageUrl": "magnet:?xt=urn:btih:8b36eaa423cd0f923784335d4cda47eedb1fe7db&dn=Wednesday.S01.1080p.NF.WEB-DL.x265.10bit.HDR.DDP5.1.Atmos-SMURF%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:8b36eaa423cd0f923784335d4cda47eedb1fe7db&dn=Wednesday.S01.1080p.NF.WEB-DL.x265.10bit.HDR.DDP5.1.Atmos-SMURF%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -406,6 +435,8 @@
     "description": "1.63 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "13",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:8d8ec55ba4531e0af06280f7ca89f91e1595cbc4&dn=Wednesday+S01E06+Quid+Pro+Woe+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:8d8ec55ba4531e0af06280f7ca89f91e1595cbc4&dn=Wednesday+S01E06+Quid+Pro+Woe+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -417,6 +448,8 @@
     "description": "2.26 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "287",
+    "userRatingCount": "39",
     "imageUrl": "magnet:?xt=urn:btih:8ddcdd2a822485648928e96e677fe62bfbde80e4&dn=Wednesday.S02E01.1080p.WEB.h264-ETHEL%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:8ddcdd2a822485648928e96e677fe62bfbde80e4&dn=Wednesday.S02E01.1080p.WEB.h264-ETHEL%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -439,6 +472,7 @@
     "description": "1.01 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "24",
     "imageUrl": "magnet:?xt=urn:btih:8f22c4ccc0ace72c5c103812d31f30620193d790&dn=Wednesday+S02E01+Here+We+Woe+Again+720p+NF+WEB-DL+DDP5+1+Atmos+H+264-FLUX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:8f22c4ccc0ace72c5c103812d31f30620193d790&dn=Wednesday+S02E01+Here+We+Woe+Again+720p+NF+WEB-DL+DDP5+1+Atmos+H+264-FLUX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -450,6 +484,8 @@
     "description": "0.45 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "4",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:8f8cac005e72c6eea06c744fdf3b39c028175479&dn=Wednesday.S02E04.XviD-AFG%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:8f8cac005e72c6eea06c744fdf3b39c028175479&dn=Wednesday.S02E04.XviD-AFG%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -461,6 +497,8 @@
     "description": "0.66 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "7",
+    "userRatingCount": "2",
     "imageUrl": "magnet:?xt=urn:btih:8fd8d197b5461f4c6a59c96823f0f71b6392a6d0&dn=Wednesday+S02E04+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:8fd8d197b5461f4c6a59c96823f0f71b6392a6d0&dn=Wednesday+S02E04+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -483,8 +521,8 @@
     "description": "0.74 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "9",
-    "userRatingCount": "1",
+    "creditsOrder": "11",
+    "userRatingCount": "2",
     "imageUrl": "magnet:?xt=urn:btih:96ad97f403b855c7f7cdad6f329dafa6154f79e5&dn=wednesday.s02e07.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:96ad97f403b855c7f7cdad6f329dafa6154f79e5&dn=wednesday.s02e07.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -496,6 +534,8 @@
     "description": "0.58 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "27",
+    "userRatingCount": "3",
     "imageUrl": "magnet:?xt=urn:btih:9d10055983f587a4ab6e94e623b88cb409d8d3b5&dn=Wednesday.S02E03.720p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:9d10055983f587a4ab6e94e623b88cb409d8d3b5&dn=Wednesday.S02E03.720p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -507,7 +547,7 @@
     "description": "5.10 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "18",
+    "creditsOrder": "19",
     "keywords": "[\"Season 2\"]",
     "userRatingCount": "5",
     "imageUrl": "magnet:?xt=urn:btih:F327685EE0AC43C993A19902067F31E2AF86F784&dn=Wednesday.S02.720p.x264-FENiX&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://explodie.org:6969/announce&tr=udp://tracker.darkness.services:6969/announce&tr=https://tracker.bjut.jp:443/announce&tr=http://tracker.bt4g.com:2095/announce&tr=udp://open.demonii.com:1337/announce&tr=udp://open.tracker.cl:1337/announce&tr=udp://tracker.dler.org:6969/announce&tr=udp://p4p.arenabg.com:1337/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
@@ -532,8 +572,6 @@
     "description": "0.46 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "3",
-    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:a4442befea6f7654c0f401b35b649c213b5173ce&dn=Wednesday.S02E06.XviD-AFG%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:a4442befea6f7654c0f401b35b649c213b5173ce&dn=Wednesday.S02E06.XviD-AFG%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -578,8 +616,6 @@
     "description": "0.66 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "51",
-    "userRatingCount": "3",
     "imageUrl": "magnet:?xt=urn:btih:a87a585b2cabb780febbd4ad159483f64fb1bed5&dn=Wednesday.S02E06.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:a87a585b2cabb780febbd4ad159483f64fb1bed5&dn=Wednesday.S02E06.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -591,6 +627,8 @@
     "description": "0.56 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "3",
+    "userRatingCount": "2",
     "imageUrl": "magnet:?xt=urn:btih:a880e6b299b8742e2991e2f81ef61873bdee9ba2&dn=Wednesday+S02E07+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:a880e6b299b8742e2991e2f81ef61873bdee9ba2&dn=Wednesday+S02E07+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -613,6 +651,8 @@
     "description": "2.58 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "35",
+    "userRatingCount": "4",
     "imageUrl": "magnet:?xt=urn:btih:aa6123af8d6a803eb1dfe5299de144ca91bf68ba&dn=Wednesday+S02E02+MULTI+1080p+WEB+X264-HiggsBoson%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:aa6123af8d6a803eb1dfe5299de144ca91bf68ba&dn=Wednesday+S02E02+MULTI+1080p+WEB+X264-HiggsBoson%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -624,8 +664,6 @@
     "description": "0.38 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "2",
-    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:ab5a9128e8f6e0cff720385accf05a715eecaf2e&dn=Wednesday.S02E08.XviD-AFG%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:ab5a9128e8f6e0cff720385accf05a715eecaf2e&dn=Wednesday.S02E08.XviD-AFG%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -637,6 +675,8 @@
     "description": "1.01 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "25",
+    "userRatingCount": "12",
     "imageUrl": "magnet:?xt=urn:btih:aedf94102a5c6ef562d2e85653abd2be6a52519d&dn=wednesday.s02e01.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:aedf94102a5c6ef562d2e85653abd2be6a52519d&dn=wednesday.s02e01.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -648,7 +688,7 @@
     "description": "3.62 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "16",
+    "creditsOrder": "20",
     "keywords": "[\"Season 1\"]",
     "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:b2db79cfa02d1b5c30c8dd2540280ace1c77e8c8&dn=Wednesday.S01.WEBRip.x264-ION10%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
@@ -662,6 +702,8 @@
     "description": "0.44 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "11",
+    "userRatingCount": "4",
     "imageUrl": "magnet:?xt=urn:btih:b49bfbd536503cbee6ed0cd77eac074cee076abe&dn=Wednesday.S02E02.480p.x264-mSD%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:b49bfbd536503cbee6ed0cd77eac074cee076abe&dn=Wednesday.S02E02.480p.x264-mSD%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -673,6 +715,8 @@
     "description": "0.60 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "58",
+    "userRatingCount": "6",
     "imageUrl": "magnet:?xt=urn:btih:b6a41e557f64f4c4a61852bfe537c723e8b218e8&dn=Wednesday.S02E02.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:b6a41e557f64f4c4a61852bfe537c723e8b218e8&dn=Wednesday.S02E02.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -685,7 +729,7 @@
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
     "creditsOrder": "15",
-    "userRatingCount": "1",
+    "userRatingCount": "2",
     "imageUrl": "magnet:?xt=urn:btih:ba02fa8661bb9b7325ba5f536e8a75a21beb8533&dn=wednesday.s02e08.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:ba02fa8661bb9b7325ba5f536e8a75a21beb8533&dn=wednesday.s02e08.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -697,6 +741,8 @@
     "description": "0.48 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "18",
+    "userRatingCount": "4",
     "imageUrl": "magnet:?xt=urn:btih:bd111e91477625960a58bc71811c75dc3aaef362&dn=Wednesday.S02E03.480p.x264-mSD%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:bd111e91477625960a58bc71811c75dc3aaef362&dn=Wednesday.S02E03.480p.x264-mSD%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -708,6 +754,8 @@
     "description": "0.87 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "13",
+    "userRatingCount": "3",
     "imageUrl": "magnet:?xt=urn:btih:c13b83d8fd2e6333a08d2fb0813160ecd98493d7&dn=wednesday.s02e04.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:c13b83d8fd2e6333a08d2fb0813160ecd98493d7&dn=wednesday.s02e04.720p.web.h264-sylix%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -719,8 +767,6 @@
     "description": "0.54 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "48",
-    "userRatingCount": "3",
     "imageUrl": "magnet:?xt=urn:btih:c41d2f354ffb6719cf2aee9483499bff9560e898&dn=Wednesday.S02E08.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:c41d2f354ffb6719cf2aee9483499bff9560e898&dn=Wednesday.S02E08.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -743,6 +789,8 @@
     "description": "0.59 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "3",
+    "userRatingCount": "2",
     "imageUrl": "magnet:?xt=urn:btih:cdb34363ad50f0652c62df5234ea5acd97c1e928&dn=Wednesday.S02E03.XviD-AFG%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:cdb34363ad50f0652c62df5234ea5acd97c1e928&dn=Wednesday.S02E03.XviD-AFG%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -765,7 +813,7 @@
     "description": "17.52 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "13",
+    "creditsOrder": "12",
     "keywords": "[\"Season 1\"]",
     "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:d19da5f589d4a4b25746c39f3b2277b7901fb3ce&dn=Wednesday.S01.1080p.NF.WEBRip.DDP5.1.Atmos.x264-SMURF%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
@@ -779,6 +827,7 @@
     "description": "0.72 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "5",
     "imageUrl": "magnet:?xt=urn:btih:d90ac3b8981e3cb6c4160474695b841118b7352f&dn=Wednesday+S02E03+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:d90ac3b8981e3cb6c4160474695b841118b7352f&dn=Wednesday+S02E03+720p+x264-FENiX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -790,6 +839,8 @@
     "description": "2.52 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "40",
+    "userRatingCount": "4",
     "imageUrl": "magnet:?xt=urn:btih:de3faf5c08e6394c5fd4bc96775a911e219157ba&dn=Wednesday+S02E03+MULTI+1080p+WEB+X264-HiggsBoson%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:de3faf5c08e6394c5fd4bc96775a911e219157ba&dn=Wednesday+S02E03+MULTI+1080p+WEB+X264-HiggsBoson%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -801,6 +852,8 @@
     "description": "2.26 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "271",
+    "userRatingCount": "31",
     "imageUrl": "magnet:?xt=urn:btih:de5841b3575698dfbd9d0f2a868508ca8769d7e2&dn=wednesday.s02e04.1080p.web.h264-successfulcrab%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:de5841b3575698dfbd9d0f2a868508ca8769d7e2&dn=wednesday.s02e04.1080p.web.h264-successfulcrab%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -812,8 +865,8 @@
     "description": "1.54 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "15",
-    "userRatingCount": "3",
+    "creditsOrder": "14",
+    "userRatingCount": "2",
     "imageUrl": "magnet:?xt=urn:btih:e3570c63893c56f34ff1d589b00a6c4af8241e9e&dn=Wednesday+S01E03+Friend+or+Woe+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:e3570c63893c56f34ff1d589b00a6c4af8241e9e&dn=Wednesday+S01E03+Friend+or+Woe+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -825,6 +878,8 @@
     "description": "0.79 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "23",
+    "userRatingCount": "1",
     "imageUrl": "magnet:?xt=urn:btih:e39dcc9a941c335567ababd12496dbe5a127b3eb&dn=Wednesday+S02E02+The+Devil+You+Woe+720p+NF+WEB-DL+DDP5+1+Atmos+H+264-FLUX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:e39dcc9a941c335567ababd12496dbe5a127b3eb&dn=Wednesday+S02E02+The+Devil+You+Woe+720p+NF+WEB-DL+DDP5+1+Atmos+H+264-FLUX%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -836,7 +891,8 @@
     "description": "1.69 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "9",
+    "creditsOrder": "14",
+    "userRatingCount": "3",
     "imageUrl": "magnet:?xt=urn:btih:e3cde6c3ddcf8c7537f073d362d7ac2857fe9b84&dn=Wednesday+S01E05+You+Reap+What+You+Woe+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:e3cde6c3ddcf8c7537f073d362d7ac2857fe9b84&dn=Wednesday+S01E05+You+Reap+What+You+Woe+1080p+Blu-ray+10Bit+DDP5+1+HEVC-d3g%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -848,8 +904,8 @@
     "description": "0.55 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "31",
-    "userRatingCount": "6",
+    "creditsOrder": "36",
+    "userRatingCount": "4",
     "imageUrl": "magnet:?xt=urn:btih:e6c2a52f658253f7c1e89f73a0b9c83db507f0ae&dn=Wednesday.S02E07.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:e6c2a52f658253f7c1e89f73a0b9c83db507f0ae&dn=Wednesday.S02E07.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -861,6 +917,8 @@
     "description": "0.59 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "15",
+    "userRatingCount": "2",
     "imageUrl": "magnet:?xt=urn:btih:ebad6026763b3e7fe54b8964e0f0735703f38968&dn=Wednesday.S02E01.720p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:ebad6026763b3e7fe54b8964e0f0735703f38968&dn=Wednesday.S02E01.720p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -872,7 +930,7 @@
     "description": "2.67 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
-    "creditsOrder": "5",
+    "creditsOrder": "4",
     "keywords": "[\"Season 1\"]",
     "imageUrl": "magnet:?xt=urn:btih:f2ec7e25dd712f079668f9b748ade71343efba0a&dn=Wednesday.S01.WEBRip.x265-ION265%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
@@ -885,6 +943,8 @@
     "description": "0.49 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "20",
+    "userRatingCount": "3",
     "imageUrl": "magnet:?xt=urn:btih:f62b42c95a9240fd88210cb275c114c8e520ac40&dn=Wednesday.S02E01.480p.x264-mSD%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:f62b42c95a9240fd88210cb275c114c8e520ac40&dn=Wednesday.S02E01.480p.x264-mSD%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -896,6 +956,8 @@
     "description": "0.46 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "12",
+    "userRatingCount": "5",
     "imageUrl": "magnet:?xt=urn:btih:f678bbe6e85e5460b587f3a9289fe21dade0764e&dn=Wednesday.S02E04.480p.x264-mSD%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:f678bbe6e85e5460b587f3a9289fe21dade0764e&dn=Wednesday.S02E04.480p.x264-mSD%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -907,6 +969,8 @@
     "description": "2.26 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "265",
+    "userRatingCount": "29",
     "imageUrl": "magnet:?xt=urn:btih:fcdd521edb45986026960e1260fdf806a28bd97d&dn=wednesday.s02e02.1080p.web.h264-successfulcrab%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:fcdd521edb45986026960e1260fdf806a28bd97d&dn=wednesday.s02e02.1080p.web.h264-successfulcrab%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -918,6 +982,8 @@
     "description": "2.20 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "241",
+    "userRatingCount": "29",
     "imageUrl": "magnet:?xt=urn:btih:fe746b0784007c8fedc6cfcd6a5146c37a6f00b2&dn=wednesday.s02e03.1080p.web.h264-successfulcrab%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:fe746b0784007c8fedc6cfcd6a5146c37a6f00b2&dn=wednesday.s02e03.1080p.web.h264-successfulcrab%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"
@@ -929,6 +995,8 @@
     "description": "0.78 GB",
     "bestSource": "DataSourceType.eztvApi",
     "type": "MovieContentType.download",
+    "creditsOrder": "59",
+    "userRatingCount": "3",
     "imageUrl": "magnet:?xt=urn:btih:ff5c4c6e8b2ceb33c50ff554fbc57e00250dcfef&dn=Wednesday.S02E01.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce&tr=https%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=https%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce&tr=https%3A%2F%2Ftracker.dler.org%3A6969%2Fannounce&tr=https%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=https%3A%2F%2Ftracker.moeblog.cn%3A443%2Fannounce&tr=https%3A%2F%2Ftracker.zhuqiy.com%3A443%2Fannounce",
     "sources": {
       "DataSourceType.eztvApi": "magnet:?xt=urn:btih:ff5c4c6e8b2ceb33c50ff554fbc57e00250dcfef&dn=Wednesday.S02E01.1080p.HEVC.x265-MeGusta%5Beztvx.to%5D&tr=udp://tracker.opentrackr.org:1337/announce&tr=udp://open.stealth.si:80/announce&tr=udp://tracker.torrent.eu.org:451/announce&tr=udp://tracker.dler.org:6969/announce&tr=https://tracker.moeblog.cn:443/announce&tr=https://tracker.zhuqiy.com:443/announce&tr=udp://open.dstud.io:6969/announce"

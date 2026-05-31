@@ -56,10 +56,8 @@ void main() {
       'new-g-key',
     );
 
-    // Tap Save Settings
-    // Ensure button is visible by scrolling
-    await tester.ensureVisible(find.text('Save Settings'));
-    await tester.tap(find.text('Save Settings'));
+    // Close the form, which saves the settings
+    (tester.state(find.byType(Navigator)) as NavigatorState).pop();
     await tester.pumpAndSettle();
 
     // Verify Settings singleton was updated
@@ -72,8 +70,5 @@ void main() {
     expect(prefs.getString('MAGNET_SERVER'), 'http://new-server');
     expect(prefs.getString('MAGNET_PORT'), '9091');
     expect(prefs.getString('GOOGLE_KEY'), 'new-g-key');
-
-    // Verify snackbar
-    expect(find.textContaining('Settings saved.'), findsOneWidget);
   });
 }
