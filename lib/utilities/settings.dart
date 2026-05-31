@@ -14,10 +14,41 @@ import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.d
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_common.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/utilities/app_logger.dart';
-import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_io/io.dart';
 import 'package:yaml/yaml.dart';
+
+/// Supported application settings identifiers.
+enum SettingKey {
+  googleUrl(
+    'GOOGLE_URL',
+    'mms_gc',
+    'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=',
+  ),
+  googleKey('GOOGLE_KEY', 'mms_gk'),
+  omdbKey('OMDB_KEY', 'mms_o'),
+  tmdbKey('TMDB_KEY', 'mms_t'),
+  tvdbKey('TVDB_KEY', 'mms_tv'),
+  meiliAdminKey('MEILIADMIN_KEY', 'mms_s'),
+  meiliSearchKey('MEILISEARCH_KEY', 'mms_sk'),
+  meiliUrl('MEILISEARCH_URL', 'mms_su', 'https://cloud.meilisearch.com/'),
+  seVirtualMachineKey('SE_VM_KEY', 'mms_se'),
+  magnetServer('MAGNET_SERVER', 'mms_ms'),
+  magnetPort('MAGNET_PORT', 'mms_mpo'),
+  magnetUsername('MAGNET_USERNAME', 'mms_mu'),
+  magnetPassword('MAGNET_PASSWORD', 'mms_mpw'),
+  loggingKey('LOGGING_KEY', 'mms_l'),
+  firebaseSecretsLocation('SECRETS_LOCATION', ''),
+  offline('OFFLINE', '');
+
+  const SettingKey(this.envKey, this.cloudKey, [this.defaultValue]);
+
+  final String envKey;
+  final String cloudKey;
+  final String? defaultValue;
+}
+
+typedef SettingsCollection = Map<SettingKey, String>;
 
 /// Load application defined settings.
 ///
@@ -196,71 +227,85 @@ const millisecondsPerSecond = 1000;
 
 class Settings {
   factory Settings() => _singleton;
-
   Settings._internal();
   static final Settings _singleton = Settings._internal();
 
   bool enableLogging = false;
   LogLevel logLevel = LogLevel.info;
-
   String applicationVersion = '';
   String applicationDescription = '';
-  String googleurl =
-      'https://customsearch.googleapis.com/customsearch/v1?cx=821cd5ca4ed114a04&safe=off&key=';
-  String? googlekey;
-  String? omdbkey;
-  String? tmdbkey;
-  String? tvdbkey;
-  String? meiliadminkey;
-  String? meilisearchkey;
-  String meiliurl = 'https://cloud.meilisearch.com/';
-  String? seVmKey;
-
-  String? magnetServer;
-  String? magnetPort;
-  String? magnetUsername;
-  String? magnetPassword;
-  String? loggingKey;
-
-  // Setting loaded from device
-  String? localGoogleurl;
-  String? localGooglekey;
-  String? localOmdbkey;
-  String? localTmdbkey;
-  String? localTvdbkey;
-  String? localMeiliadminkey;
-  String? localMeilisearchkey;
-  String? localMeiliurl;
-  String? localSeVmKey;
-
-  String? localMagnetServer;
-  String? localMagnetPort;
-  String? localMagnetUsername;
-  String? localMagnetPassword;
-  String? localLoggingKey;
-  String? localFirebaseSecretsLocation;
-
-  String? firebaseSecretsLocation;
   String? gcpSecretsProject;
-  String? _offlineText = '!true';
-  bool get offline => 'true' == (_offlineText?.toLowerCase() ?? '');
-  set offline(bool val) => _offlineText = val ? 'true' : '!true';
+
+  // Concentrated settings structures
+  final SettingsCollection _environmentValues = {};
+  final SettingsCollection _cloudValues = {};
+  final SettingsCollection _localValues = {};
+
+  String? cloudValue(SettingKey key) => _cloudValues[key];
+  String? localValue(SettingKey key) => _localValues[key];
+  String? environmentValue(SettingKey key) => _environmentValues[key];
+
+  // Hierarchy Cascading Getters
+  String get googleUrl => _resolve(SettingKey.googleUrl);
+  String? get googleKey => _resolveNullable(SettingKey.googleKey);
+  String? get omdbKey => _resolveNullable(SettingKey.omdbKey);
+  String? get tmdbKey => _resolveNullable(SettingKey.tmdbKey);
+  String? get tvdbKey => _resolveNullable(SettingKey.tvdbKey);
+  String? get meiliAdminKey => _resolveNullable(SettingKey.meiliAdminKey);
+  String? get meiliSearchKey => _resolveNullable(SettingKey.meiliSearchKey);
+  String get meiliUrl => _resolve(SettingKey.meiliUrl);
+  String? get seVmKey => _resolveNullable(SettingKey.seVirtualMachineKey);
+  String? get magnetServer => _resolveNullable(SettingKey.magnetServer);
+  String? get magnetPort => _resolveNullable(SettingKey.magnetPort);
+  String? get magnetUsername => _resolveNullable(SettingKey.magnetUsername);
+  String? get magnetPassword => _resolveNullable(SettingKey.magnetPassword);
+  String? get loggingKey => _resolveNullable(SettingKey.loggingKey);
+  String? get firebaseSecretsLocation =>
+      _resolveNullable(SettingKey.firebaseSecretsLocation);
+
+  bool get offline => 'true' == _resolve(SettingKey.offline).toLowerCase();
+  set offline(bool val) =>
+      _localValues[SettingKey.offline] = val ? 'true' : '!true';
 
   late FirebaseApplicationState _firebaseData;
   bool _firebaseInitialised = false;
-
   Future<bool> cloudSettingsInitialised = Future.value(false);
   final _cloudSettingsInit = Completer<bool>();
   static final secretsInitiaisedMutexLock = Mutex();
 
-  /// Establish logger for use at runtime and schedules cloud retrieval.
+  /// Resolves value priority chain: Local Storage overrides Cloud, Cloud overrides Env/Defaults.
+  String _resolve(SettingKey key) {
+    final localValue = _localValues[key];
+    final cloudValue = _cloudValues[key];
+    final environmentValue = _environmentValues[key];
+    final defaultValue = key.defaultValue;
+    if (localValue != null && localValue.isNotEmpty) {
+      return localValue;
+    }
+    if (cloudValue != null && cloudValue.isNotEmpty) {
+      return cloudValue;
+    }
+    if (environmentValue != null && environmentValue.isNotEmpty) {
+      return environmentValue;
+    }
+    if (defaultValue != null && defaultValue.isNotEmpty) {
+      return defaultValue;
+    }
+    return '';
+  }
+
+  String? _resolveNullable(SettingKey key) {
+    final val = _resolve(key);
+    return val.isEmpty ? null : val;
+  }
+
+  /// Initialize settings from all sources.
   ///
   /// To be called once during application initialisation and in tests
   /// before accessing values.
   void init() {
     if (!_cloudSettingsInit.isCompleted) {
       cloudSettingsInitialised = _cloudSettingsInit.future;
-
       AppLogger.instance.init(enabled: enableLogging, level: logLevel);
       // Manually initialise flutter to ensure that
       // settings can be loaded before RunApp
@@ -271,7 +316,6 @@ class Settings {
       getSecretsFromEnvironment();
       AppLogger.instance.trace('Settings initialised');
       logValues();
-
       asyncInit();
     }
   }
@@ -289,7 +333,7 @@ class Settings {
       await _firebaseData.init();
     }
     await _updateFromCloud();
-    //await clearLocalSettings();
+    //await clearLocalSettings(); // uncomment to reset all settings!!!
     await _loadFromLocal();
     unawaited(QueryTVDBCommon.init());
   }
@@ -306,272 +350,105 @@ class Settings {
     }
   }
 
-  // Update secrets from runtime environment or compiled environment.
+  /// Fetch values from runtime environment or compile time environment.
   void getSecretsFromEnvironment() {
-    googleurl = googleurl.orBetterYet(
-      getSecretFromEnv(
-        'GOOGLE_URL',
-        const String.fromEnvironment('GOOGLE_URL'),
-      ),
-    );
-    googlekey = getSecretFromEnv(
-      'GOOGLE_KEY',
-      const String.fromEnvironment('GOOGLE_KEY'),
-    );
-    omdbkey = getSecretFromEnv(
-      'OMDB_KEY',
-      const String.fromEnvironment('OMDB_KEY'),
-    );
-    tmdbkey = getSecretFromEnv(
-      'TMDB_KEY',
-      const String.fromEnvironment('TMDB_KEY'),
-    );
-    tvdbkey = getSecretFromEnv(
-      'TVDB_KEY',
-      const String.fromEnvironment('TVDB_KEY'),
-    );
-    meiliadminkey = getSecretFromEnv(
-      'MEILIADMIN_KEY',
-      const String.fromEnvironment('MEILIADMIN_KEY'),
-    );
-    meilisearchkey = getSecretFromEnv(
-      'MEILISEARCH_KEY',
-      const String.fromEnvironment('MEILISEARCH_KEY'),
-    );
-    meiliurl = meiliurl.orBetterYet(
-      getSecretFromEnv(
-        'MEILISEARCH_URL',
-        const String.fromEnvironment('MEILISEARCH_URL'),
-      ),
-    );
-    magnetServer = getSecretFromEnv(
-      'MAGNET_SERVER',
-      const String.fromEnvironment('MAGNET_SERVER'),
-    );
-    magnetPort = getSecretFromEnv(
-      'MAGNET_PORT',
-      const String.fromEnvironment('MAGNET_PORT'),
-    );
-    magnetUsername = getSecretFromEnv(
-      'MAGNET_USERNAME',
-      const String.fromEnvironment('MAGNET_USERNAME'),
-    );
-    magnetPassword = getSecretFromEnv(
-      'MAGNET_PASSWORD',
-      const String.fromEnvironment('MAGNET_PASSWORD'),
-    );
-    loggingKey = getSecretFromEnv(
-      'LOGGING_KEY',
-      const String.fromEnvironment('LOGGING_KEY'),
-    );
-    // Environment only values.
-    firebaseSecretsLocation = getSecretFromEnv(
-      'SECRETS_LOCATION',
-      const String.fromEnvironment('SECRETS_LOCATION'),
-    );
-    _offlineText = getSecretFromEnv(
-      'OFFLINE',
-      const String.fromEnvironment('OFFLINE'),
-    );
-    addToSecrets();
+    for (final key in SettingKey.values) {
+      String? val;
+      // Fetch platform environment variables safely
+      if (Platform.environment.containsKey(key.envKey)) {
+        val = Platform.environment[key.envKey];
+      }
+
+      // Fallback matching your compile-time String.fromEnvironment assignments
+      val ??= _compileTimeFallback(key);
+
+      if (val != null && val.isNotEmpty && val != 'not set') {
+        _environmentValues[key] = val;
+        Secrets().addSecret(val);
+      }
+    }
   }
 
-  // Update secrets from the cloud if available.
-  Future<void> updateSecretsFromCloud(SecretManagerApi secrets) async {
-    googleurl = googleurl.orBetterYet(
-      await getSecretFromCloud(secrets, 'mms_gc', googleurl, 'GOOGLE_URL'),
-    );
-    googlekey = await getSecretFromCloud(
-      secrets,
-      'mms_gk',
-      googlekey,
-      'GOOGLE_KEY',
-    );
-    omdbkey = await getSecretFromCloud(secrets, 'mms_o', omdbkey, 'OMDB_KEY');
-    tmdbkey = await getSecretFromCloud(secrets, 'mms_t', tmdbkey, 'TMDB_KEY');
-    tvdbkey = await getSecretFromCloud(secrets, 'mms_tv', tvdbkey, 'TVDB_KEY');
-    meiliadminkey = await getSecretFromCloud(
-      secrets,
-      'mms_s',
-      meiliadminkey,
-      'MEILIADMIN_KEY',
-    );
-    meilisearchkey = await getSecretFromCloud(
-      secrets,
-      'mms_sk',
-      meilisearchkey,
+  /// Fetch a value from the compile time enviroment.
+  String? _compileTimeFallback(SettingKey key) => switch (key) {
+    SettingKey.googleUrl => const String.fromEnvironment('GOOGLE_URL'),
+    SettingKey.googleKey => const String.fromEnvironment('GOOGLE_KEY'),
+    SettingKey.omdbKey => const String.fromEnvironment('OMDB_KEY'),
+    SettingKey.tmdbKey => const String.fromEnvironment('TMDB_KEY'),
+    SettingKey.tvdbKey => const String.fromEnvironment('TVDB_KEY'),
+    SettingKey.meiliAdminKey => const String.fromEnvironment('MEILIADMIN_KEY'),
+    SettingKey.meiliSearchKey => const String.fromEnvironment(
       'MEILISEARCH_KEY',
-    );
-    meiliurl = meiliurl.orBetterYet(
-      await getSecretFromCloud(secrets, 'mms_su', meiliurl, 'MEILISEARCH_URL'),
-    );
-    seVmKey = await getSecretFromCloud(secrets, 'mms_se', seVmKey, '');
-    magnetServer = await getSecretFromCloud(
-      secrets,
-      'mms_ms',
-      magnetServer,
-      'MAGNET_SERVER',
-    );
-    magnetPort = await getSecretFromCloud(
-      secrets,
-      'mms_mpo',
-      magnetPort,
-      'MAGNET_PORT',
-    );
-    magnetUsername = await getSecretFromCloud(
-      secrets,
-      'mms_mu',
-      magnetUsername,
+    ),
+    SettingKey.meiliUrl => const String.fromEnvironment('MEILISEARCH_URL'),
+    SettingKey.magnetServer => const String.fromEnvironment('MAGNET_SERVER'),
+    SettingKey.magnetPort => const String.fromEnvironment('MAGNET_PORT'),
+    SettingKey.magnetUsername => const String.fromEnvironment(
       'MAGNET_USERNAME',
-    );
-    magnetPassword = await getSecretFromCloud(
-      secrets,
-      'mms_mpw',
-      magnetPassword,
+    ),
+    SettingKey.magnetPassword => const String.fromEnvironment(
       'MAGNET_PASSWORD',
-    );
-    loggingKey = await getSecretFromCloud(
-      secrets,
-      'mms_l',
-      loggingKey,
-      'LOGGING_KEY',
-    );
-    addToSecrets();
+    ),
+    SettingKey.loggingKey => const String.fromEnvironment('LOGGING_KEY'),
+    SettingKey.firebaseSecretsLocation => const String.fromEnvironment(
+      'SECRETS_LOCATION',
+    ),
+    SettingKey.offline => const String.fromEnvironment('OFFLINE'),
+    _ => null,
+  };
+
+  /// Fetch values from cloud.
+  Future<void> updateSecretsFromCloud(SecretManagerApi secrets) async {
+    for (final key in SettingKey.values) {
+      if (key.cloudKey.isEmpty ||
+          Platform.environment.containsKey(key.envKey)) {
+        continue;
+      }
+
+      try {
+        final name =
+            'projects/$gcpSecretsProject/secrets/${key.cloudKey}/versions/latest';
+        // Attempt to retrieve the secret from the cloud.
+        final secret = await secrets.projects.secrets.versions.access(name);
+        // If the secret is found, decode it and add to cloud settings.
+        final data = secret.payload?.dataAsBytes;
+
+        if (data != null) {
+          final decoded = utf8.decode(data);
+          if (decoded.isNotEmpty) {
+            _cloudValues[key] = decoded;
+            Secrets().addSecret(decoded);
+          }
+        }
+      } catch (e) {
+        // Log any errors that occur during retrieval.
+        AppLogger.instance.error(
+          'Cloud lookup missing or rejected for key ${key.cloudKey}: $e',
+        );
+      }
+    }
   }
 
   void logValues() {
-    logValue('GOOGLE_URL', googleurl);
-    logValue('GOOGLE_KEY', googlekey);
-    logValue('OMDB_KEY', omdbkey);
-    logValue('TMDB_KEY', tmdbkey);
-    logValue('TVDB_KEY', tvdbkey);
-    logValue('MEILIADMIN_KEY', meiliadminkey);
-    logValue('MEILISEARCH_KEY', meilisearchkey);
-    logValue('MEILISEARCH_URL', meiliurl);
-    logValue('SECRETS_LOCATION', firebaseSecretsLocation);
-    logValue('OFFLINE', _offlineText);
-    logValue('MAGNET_SERVER', magnetServer);
-    logValue('MAGNET_PORT', magnetPort);
-    logValue('MAGNET_USERNAME', magnetUsername);
-    logValue('MAGNET_PASSWORD', magnetPassword);
-    logValue('LOGGING_KEY', loggingKey);
-  }
-
-  void addToSecrets() {
-    Secrets().addSecret(googleurl);
-    Secrets().addSecret(googlekey);
-    Secrets().addSecret(omdbkey);
-    Secrets().addSecret(tmdbkey);
-    Secrets().addSecret(tvdbkey);
-    Secrets().addSecret(meiliadminkey);
-    Secrets().addSecret(meilisearchkey);
-    Secrets().addSecret(meiliurl);
-    Secrets().addSecret(firebaseSecretsLocation);
-    Secrets().addSecret(magnetServer);
-    Secrets().addSecret(magnetPort);
-    Secrets().addSecret(magnetUsername);
-    Secrets().addSecret(magnetPassword);
-    Secrets().addSecret(loggingKey);
-  }
-
-  void logValue(String label, String? value) {
-    AppLogger.instance.trace('settings fetched $label: $value');
-    if (value == '') AppLogger.instance.trace('$label is empty');
-    if (value == null) AppLogger.instance.trace('$label is null');
-  }
-
-  // Retrieve the secret from the best location available.
-  //
-  // 1) retrieve from the cloud (most up to date)
-  // 2) retrieve from the runtime environment [environmentVar] e.g. 'OMDB_KEY'
-  // 3) Allow compiler to supply a default value for [compiledEnv] e.g.
-  //    const String.fromEnvironment('OMDB_KEY')
-  String? getSecretFromEnv(String environmentVar, String? compiledEnv) {
-    // Check if the runtime environment variable is set and not empty.
-    final dynamicEnv = Platform.environment[environmentVar];
-    if (dynamicEnv != null &&
-        dynamicEnv.isNotEmpty &&
-        dynamicEnv != 'not set') {
-      Secrets().addSecret(dynamicEnv);
-      return dynamicEnv;
-    }
-
-    // If the environment variable is not set, use the compiled value.
-    if (compiledEnv != null &&
-        compiledEnv.isNotEmpty &&
-        compiledEnv != 'not set') {
-      Secrets().addSecret(compiledEnv);
-      return compiledEnv;
-    }
-
-    // If neither value is set, return null.
-    return null;
-  }
-
-  // Retrieves a secret from the cloud.
-  //
-  // Takes four arguments:
-  //
-  // * [secrets]: An instance of the [GoogleSecretManager] class,
-  //         for interacting with the Google Secret Manager service.
-  // * [secretName]: The name of the secret to retrieve.
-  // * [originalValue]: The original value of the setting.
-  // * [environmentVar]: The name of the environment variable to check
-  //                     for a better value.
-  //
-  // Returns a `Future` that resolves to the secret value if it is found,
-  // or `null` if the secret is not found or there is an error.
-  Future<String?> getSecretFromCloud(
-    SecretManagerApi secrets,
-    String secretName,
-    String? originalValue,
-    String? environmentVar,
-  ) async {
-    if (Platform.environment.containsKey(environmentVar)) return originalValue;
-    final gcpValue = await _getSecretFromGCP(secrets, secretName);
-    return gcpValue ?? originalValue;
-  }
-
-  // Retrieves a secret from the google cloud.
-  //
-  // Takes two arguments:
-  //
-  // * [secrets]: An instance of the [GoogleSecretManager] class,
-  //         for interacting with the Google Secret Manager service.
-  // * [secretName]: The name of the secret to retrieve.
-  //
-  // Returns a `Future` that resolves to the secret value if it is found,
-  // or `null` if the secret is not found or there is an error.
-  Future<String?> _getSecretFromGCP(
-    SecretManagerApi secrets,
-    String secretName,
-  ) async {
-    try {
-      final name =
-          'projects/$gcpSecretsProject/secrets/$secretName/versions/latest';
-      // Attempt to retrieve the secret from the cloud.
-      final secret = await secrets.projects.secrets.versions.access(name);
-
-      // If the secret is found, decode it and return the value.
-      final data = secret.payload?.dataAsBytes;
-      if (data != null) {
-        final decoded = utf8.decode(data);
-        Secrets().addSecret(decoded);
-        return decoded.isEmpty ? null : decoded;
-      }
-    } catch (exception) {
-      // Log any errors that occur during retrieval.
-      AppLogger.instance.error(exception.toString());
-    }
-    return null;
-  }
-
-  Future<void> _updateFromCloud() async {
-    if (firebaseSecretsLocation != null) {
-      final account = await getSecretsServiceAccount(
-        _firebaseData,
-        firebaseSecretsLocation!,
+    for (final key in SettingKey.values) {
+      final resolvedValue = _resolveNullable(key);
+      AppLogger.instance.trace(
+        'settings fetched ${key.envKey}: $resolvedValue',
       );
+      if (resolvedValue == '') {
+        AppLogger.instance.trace('${key.envKey} is empty');
+      }
+      if (resolvedValue == null) {
+        AppLogger.instance.trace('${key.envKey} is null');
+      }
+    }
+  }
+
+  /// Fetch values from Firebase Firestore.
+  Future<void> _updateFromCloud() async {
+    final location = firebaseSecretsLocation;
+    if (location != null) {
+      final account = await getSecretsServiceAccount(_firebaseData, location);
       if (account != null) {
         final credentials = ServiceAccountCredentials.fromJson(account);
         gcpSecretsProject = (jsonDecode(account) as Map)['project_id']
@@ -622,194 +499,66 @@ class Settings {
     return secret;
   }
 
-  /// load all stored settings from local storage and update the settings.
+  /// Read values from local storage.
   Future<void> _loadFromLocal() async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      localGoogleurl = _getFromLocalPrefs(prefs, 'GOOGLE_URL');
-      localGooglekey = _getFromLocalPrefs(prefs, 'GOOGLE_KEY');
-      localOmdbkey = _getFromLocalPrefs(prefs, 'OMDB_KEY');
-      localTmdbkey = _getFromLocalPrefs(prefs, 'TMDB_KEY');
-      localTvdbkey = _getFromLocalPrefs(prefs, 'TVDB_KEY');
-      localMeiliadminkey = _getFromLocalPrefs(prefs, 'MEILIADMIN_KEY');
-      localMeilisearchkey = _getFromLocalPrefs(prefs, 'MEILISEARCH_KEY');
-      localMeiliurl = _getFromLocalPrefs(prefs, 'MEILISEARCH_URL');
-      localSeVmKey = _getFromLocalPrefs(prefs, 'SE_VM_KEY');
-      localFirebaseSecretsLocation = _getFromLocalPrefs(
-        prefs,
-        'SECRETS_LOCATION',
-      );
-      _offlineText = _getFromLocalPrefs(prefs, 'OFFLINE');
-      localMagnetServer = _getFromLocalPrefs(prefs, 'MAGNET_SERVER');
-      localMagnetPort = _getFromLocalPrefs(prefs, 'MAGNET_PORT');
-      localMagnetUsername = _getFromLocalPrefs(prefs, 'MAGNET_USERNAME');
-      localMagnetPassword = _getFromLocalPrefs(prefs, 'MAGNET_PASSWORD');
-      localLoggingKey = _getFromLocalPrefs(prefs, 'LOGGING_KEY');
-      _updateFromLocalSetting();
-    } catch (e) {
-      AppLogger.instance.error('Failed to load local settings: $e');
-    }
-  }
-
-  String? _getFromLocalPrefs(SharedPreferences prefs, String key) {
-    final value = prefs.getString(key);
-    if (value == '') {
-      return null;
-    }
-    if (value != null) Secrets().addSecret(value);
-    return value;
-  }
-
-  /// update the settings with the local settings.
-  void _updateFromLocalSetting() {
-    try {
-      googleurl = localGoogleurl ?? googleurl;
-      googlekey = localGooglekey ?? googlekey;
-      omdbkey = localOmdbkey ?? omdbkey;
-      tmdbkey = localTmdbkey ?? tmdbkey;
-      tvdbkey = localTvdbkey ?? tvdbkey;
-      meiliadminkey = localMeiliadminkey ?? meiliadminkey;
-      meilisearchkey = localMeilisearchkey ?? meilisearchkey;
-      meiliurl = localMeiliurl ?? meiliurl;
-      seVmKey = localSeVmKey ?? seVmKey;
-      firebaseSecretsLocation =
-          localFirebaseSecretsLocation ?? firebaseSecretsLocation;
-      magnetServer = localMagnetServer ?? magnetServer;
-      magnetPort = localMagnetPort ?? magnetPort;
-      magnetUsername = localMagnetUsername ?? magnetUsername;
-      magnetPassword = localMagnetPassword ?? magnetPassword;
-      loggingKey = localLoggingKey ?? loggingKey;
+      for (final key in SettingKey.values) {
+        final val = prefs.getString(key.envKey);
+        if (val != null && val.isNotEmpty) {
+          _localValues[key] = val;
+          Secrets().addSecret(val);
+        }
+      }
       logValues();
-      Secrets().addSecret(_offlineText);
     } catch (e) {
       AppLogger.instance.error('Failed to load local settings: $e');
     }
   }
 
-  /// save all settings to local storage.
-  Future<void> saveToLocal() async {
+  /// Save new values to local storage.
+  void saveToLocal(SettingsCollection newValues) {
+    for (final key in SettingKey.values) {
+      final value = newValues[key];
+      if (value != _localValues[key]) {
+        if (value != null) {
+          _localValues[key] = value;
+        } else {
+          _localValues.remove(key);
+        }
+        updateLocalPref(key, value);
+      }
+    }
+    logValues();
+  }
+
+  /// Update a single preference.
+  @awaitNotRequired
+  Future<void> updateLocalPref(SettingKey key, String? value) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      _setBlankStringToNull();
-      await _updateLocalSetting(prefs, 'GOOGLE_URL', localGoogleurl);
-      await _updateLocalSetting(prefs, 'GOOGLE_KEY', localGooglekey);
-      await _updateLocalSetting(prefs, 'OMDB_KEY', localOmdbkey);
-      await _updateLocalSetting(prefs, 'TMDB_KEY', localTmdbkey);
-      await _updateLocalSetting(prefs, 'TVDB_KEY', localTvdbkey);
-      await _updateLocalSetting(prefs, 'MEILIADMIN_KEY', localMeiliadminkey);
-      await _updateLocalSetting(prefs, 'MEILISEARCH_KEY', localMeilisearchkey);
-      await _updateLocalSetting(prefs, 'MEILISEARCH_URL', localMeiliurl);
-      await _updateLocalSetting(prefs, 'SE_VM_KEY', localSeVmKey);
-      await _updateLocalSetting(prefs, 'MAGNET_SERVER', localMagnetServer);
-      await _updateLocalSetting(prefs, 'MAGNET_PORT', localMagnetPort);
-      await _updateLocalSetting(prefs, 'MAGNET_USERNAME', localMagnetUsername);
-      await _updateLocalSetting(prefs, 'MAGNET_PASSWORD', localMagnetPassword);
-      await _updateLocalSetting(prefs, 'LOGGING_KEY', localLoggingKey);
-
-      await _updateLocalSetting(prefs, 'OFFLINE', _offlineText);
-      await _updateLocalSetting(
-        prefs,
-        'SECRETS_LOCATION',
-        localFirebaseSecretsLocation,
-      );
-      _updateFromLocalSetting();
+      if (value != null && value.isNotEmpty) {
+        Secrets().addSecret(value);
+        await prefs.setString(key.envKey, value);
+      } else {
+        await prefs.remove(key.envKey);
+      }
     } catch (e) {
-      AppLogger.instance.error('Failed to save local settings: $e');
+      AppLogger.instance.error('Failed to update local setting: $e');
     }
   }
 
-  void _setBlankStringToNull() {
-    if (localGoogleurl != null && localGoogleurl!.isEmpty) {
-      localGoogleurl = null;
-    }
-    if (localGooglekey != null && localGooglekey!.isEmpty) {
-      localGooglekey = null;
-    }
-    if (localOmdbkey != null && localOmdbkey!.isEmpty) {
-      localOmdbkey = null;
-    }
-    if (localTmdbkey != null && localTmdbkey!.isEmpty) {
-      localTmdbkey = null;
-    }
-    if (localTvdbkey != null && localTvdbkey!.isEmpty) {
-      localTvdbkey = null;
-    }
-    if (localMeiliadminkey != null && localMeiliadminkey!.isEmpty) {
-      localMeiliadminkey = null;
-    }
-    if (localMeilisearchkey != null && localMeilisearchkey!.isEmpty) {
-      localMeilisearchkey = null;
-    }
-    if (localMeiliurl != null && localMeiliurl!.isEmpty) {
-      localMeiliurl = null;
-    }
-    if (localSeVmKey != null && localSeVmKey!.isEmpty) {
-      localSeVmKey = null;
-    }
-    if (localFirebaseSecretsLocation != null &&
-        localFirebaseSecretsLocation!.isEmpty) {
-      localFirebaseSecretsLocation = null;
-    }
-    if (_offlineText != null && _offlineText!.isEmpty) {
-      _offlineText = null;
-    }
-    if (localMagnetServer != null && localMagnetServer!.isEmpty) {
-      localMagnetServer = null;
-    }
-    if (localMagnetPort != null && localMagnetPort!.isEmpty) {
-      localMagnetPort = null;
-    }
-    if (localMagnetUsername != null && localMagnetUsername!.isEmpty) {
-      localMagnetUsername = null;
-    }
-    if (localMagnetPassword != null && localMagnetPassword!.isEmpty) {
-      localMagnetPassword = null;
-    }
-    if (localLoggingKey != null && localLoggingKey!.isEmpty) {
-      localLoggingKey = null;
-    }
-  }
-
-  /// update the local settings with the given key and value.
-  Future<void> _updateLocalSetting(
-    SharedPreferences prefs,
-    String key,
-    String? value,
-  ) async {
-    if (value != null && value.isNotEmpty) {
-      Secrets().addSecret(value);
-      await prefs.setString(key, value);
-    } else {
-      await prefs.remove(key);
-    }
-  }
-
-  /// clear all stored settings from local storage.
   Future<void> clearLocalSettings() async {
     final prefs = await SharedPreferences.getInstance();
-
-    await prefs.remove('GOOGLE_URL');
-    await prefs.remove('GOOGLE_KEY');
-    await prefs.remove('OMDB_KEY');
-    await prefs.remove('TMDB_KEY');
-    await prefs.remove('TVDB_KEY');
-    await prefs.remove('MEILIADMIN_KEY');
-    await prefs.remove('MEILISEARCH_KEY');
-    await prefs.remove('MEILISEARCH_URL');
-    await prefs.remove('SE_VM_KEY');
-    await prefs.remove('SECRETS_LOCATION');
-    await prefs.remove('OFFLINE');
-    await prefs.remove('MAGNET_SERVER');
-    await prefs.remove('MAGNET_PORT');
-    await prefs.remove('MAGNET_USERNAME');
-    await prefs.remove('MAGNET_PASSWORD');
-    await prefs.remove('LOGGING_KEY');
+    for (final key in SettingKey.values) {
+      await prefs.remove(key.envKey);
+    }
+    _localValues.clear();
   }
 }
 
 class Secrets {
   factory Secrets() => _singleton;
-
   Secrets._internal();
   static final Secrets _singleton = Secrets._internal();
 
