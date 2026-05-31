@@ -8,7 +8,7 @@ String? obsfucate(String? setting) =>
     setting?.replaceAll(RegExp('[a-zA-Z0-9]'), 'x');
 void main() {
   group('Settings', () {
-    Settings().init();
+    Settings().init(includeCloudSettings: false);
     test('Check the local settings', () {
       expect(
         obsfucate(Settings().googleKey),

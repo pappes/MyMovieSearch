@@ -14,6 +14,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.d
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_common.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/utilities/app_logger.dart';
+import 'package:my_movie_search/utilities/web_data/online_offline_search.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_io/io.dart';
 import 'package:yaml/yaml.dart';
@@ -261,7 +262,10 @@ class Settings {
         caseSensitive: false,
       ) ??
       false;
-  set offline(bool val) => _localValues[SettingKey.offline] = val.toString();
+  set offline(bool val) {
+    _localValues[SettingKey.offline] = val.toString();
+    OnlineOfflineSelector.init(val);
+  }
 
   // Individual settings source structures
   final SettingsCollection _runtimeEnvValues = {};
@@ -287,7 +291,7 @@ class Settings {
   /// before accessing values.
   /// Some settings are initalised asynchronously.
   @awaitNotRequired
-  Future<bool> init() {
+  Future<bool> init({bool includeCloudSettings = true}) {
     if (!_cloudSettingsInit.isCompleted) {
       cloudSettingsInitialised = _cloudSettingsInit.future;
       AppLogger.instance.init(enabled: enableLogging, level: logLevel);
@@ -301,7 +305,12 @@ class Settings {
       _getSettingsFromCompileTimeEnvironment();
       AppLogger.instance.trace('Settings initialised from env & compile time');
       logValues();
-      return asyncInit();
+      // Some testes can skip slower cloud initialisation.
+      if (includeCloudSettings) {
+        return asyncInit();
+      } else {
+        return Future.value(true);
+      }
     }
     return cloudSettingsInitialised;
   }

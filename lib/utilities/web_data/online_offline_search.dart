@@ -14,7 +14,9 @@ class OnlineOfflineSelector {
     if (offline == null) {
       _offline = defaultToOffline;
     } else {
-      _offline = offline.toString().toLowerCase() == 'true';
+      _offline =
+          bool.tryParse(offline.toString(), caseSensitive: false) ??
+          defaultToOffline;
     }
     AppLogger.instance.debug(
       'OnlineOfflineSelector initialised to: '

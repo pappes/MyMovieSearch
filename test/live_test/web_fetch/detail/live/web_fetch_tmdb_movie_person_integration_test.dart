@@ -11,7 +11,7 @@ import '../../../../test_helper.dart';
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() => Settings().init());
+  setUpAll(() => Settings().init(includeCloudSettings: false));
   ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
   ////////////////////////////////////////////////////////////////////////////////

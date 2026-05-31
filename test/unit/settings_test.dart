@@ -81,7 +81,7 @@ void main() {
     group('getSecretFromEnv', () {
       test('returns environment variable value if set', () {
         // Arrange
-        Settings().init();
+        Settings().init(includeCloudSettings: false);
         final environmentValue =
             Platform.environment[SettingKey.googleKey.envKey];
 

@@ -48,8 +48,7 @@ class QueryMsSearchMovies
   /// Call Meiliseach API to fetch search results for [criteria].
   @override
   Future<Stream<String>> myFetchWebText(SearchCriteriaDTO criteria) async {
-    Settings().init();
-    await Settings().cloudSettingsInitialised;
+    await Settings().init();
     final url = Settings().meiliUrl ?? 'https://cloud.meilisearch.com/';
     final key = Settings().meiliSearchKey;
 

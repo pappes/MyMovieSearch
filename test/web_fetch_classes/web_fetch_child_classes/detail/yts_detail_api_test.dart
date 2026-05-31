@@ -28,7 +28,7 @@ void main() {
   // Wait for api key to be initialised
   setUpAll(() {
     MagnetHelper.testMode = true;
-    Settings().init();
+    Settings().init(includeCloudSettings: false);
   });
   ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests

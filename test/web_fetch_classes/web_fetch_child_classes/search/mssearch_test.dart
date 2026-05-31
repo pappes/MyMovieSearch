@@ -147,7 +147,6 @@ void main() {
     late SearchCriteriaDTO criteria;
 
     setUp(() {
-      Settings().init();
       mockMeiliSearchClient = MockMeiliSearchClient();
       mockIndex = MockMeiliSearchIndex();
       mockSearcheable = MockSearcheable();

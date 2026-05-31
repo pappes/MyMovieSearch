@@ -17,8 +17,7 @@ final String? apiKey = Settings().meiliAdminKey;
 class GCP {
   String? accountJson;
   Future<void> init() async {
-    Settings().init();
-    await Settings().cloudSettingsInitialised;
+    await Settings().init();
     accountJson = Settings().seVmKey;
   }
 

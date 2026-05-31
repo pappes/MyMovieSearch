@@ -15,7 +15,7 @@ import '../../../test_helper.dart';
 final SearchCriteriaDTO imdbCriteria = SearchCriteriaDTO().fromString('tt1231');
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() => Settings().init());
+  setUpAll(() => Settings().init(includeCloudSettings: false));
   ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
   ////////////////////////////////////////////////////////////////////////////////

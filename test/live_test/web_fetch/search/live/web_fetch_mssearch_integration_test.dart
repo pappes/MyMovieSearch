@@ -12,7 +12,7 @@ import '../../../../test_helper.dart';
 
 void main() {
   // Wait for api key to be initialised
-  setUpAll(() => Settings().init());
+  setUpAll(() => Settings().init(includeCloudSettings: false));
   ////////////////////////////////////////////////////////////////////////////////
   /// Integration tests
   ////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +40,6 @@ void main() {
       );
     });
     test('Run an empty search', () async {
-      Settings().init();
       await Settings().cloudSettingsInitialised;
 
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
