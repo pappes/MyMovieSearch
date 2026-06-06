@@ -35,6 +35,11 @@ class FlutterAppContext
       context.mounted ? showPopup(context, dialogText, title) : Future.value();
 
   @override
+  Future<String?> inputPopup(String dialogText, String title) => context.mounted
+      ? showInputPopup(context, dialogText, title)
+      : Future.value();
+
+  @override
   FocusNode? primaryFocus() => FocusManager.instance.primaryFocus;
 }
 

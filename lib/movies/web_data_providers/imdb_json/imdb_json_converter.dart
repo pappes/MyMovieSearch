@@ -15,15 +15,15 @@ class ImdbJsonConverter extends ImdbConverterBase
         ReleatedPeopleForPredefinedCategory {
   @override
   /// Get basic details for the movie or person from [data].
-  Object? getMovieOrPerson(MovieResultDTO dto, Map<Object?, Object?> data) {
+  ///
+  /// Return void for now. It would be hard to return the related movies
+  /// and people for the caller to handle in a generic way.
+  void getMovieOrPerson(MovieResultDTO dto, Map<Object?, Object?> data) {
     if (data.containsKey(outerElementIdentity)) {
       // Used by QueryIMDBJson* and QueryIMDBSearch
       _shallowConvert(dto, data);
-      return null;
     } else {
-      return [
-        dto.error('Unable to interpret IMDB contents from data $data', source),
-      ];
+      dto.error('Unable to interpret IMDB contents from data $data', source);
     }
   }
 
@@ -105,9 +105,6 @@ class ImdbJsonConverter extends ImdbConverterBase
       personRelatedWriterLabel,
       _getDeepPersonRelatedMoviesForCategory(map[deepPersonWriterHeader]),
     );
-
-    // Reintialise the source after setting the ID
-    movie.setSource(newSource: source);
   }
 
   void _shallowConvertTitle(MovieResultDTO movie, Map<Object?, Object?> map) {

@@ -183,6 +183,13 @@ class MMSNav {
     BuildContext context,
   ) async {
     if (movie.type == MovieContentType.download) {
+      /*final magnetName = await canvas.getInput(
+        movie.title,
+        MagnetHelper.getName(movie.imageUrl),
+      );
+      if (magnetName == null) return false;
+      final magnetUri = MagnetHelper.setName(magnetName, movie.imageUrl);*/
+
       // Open magnet link on remote server.
       final result = await MagnetHelper.remoteDownload(movie.imageUrl);
       if (result && context.mounted) {
@@ -508,4 +515,9 @@ class MMSFlutterCanvas {
     }
     return success;
   }
+
+  /// Get input from user for [prompt] and use the [title] as the page title.
+  ///
+  Future<String?>? getInput(String title, String prompt) =>
+      dialogs?.inputPopup(prompt, title);
 }

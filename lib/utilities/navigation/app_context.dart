@@ -15,9 +15,9 @@ abstract class AppTheme {
 }
 
 /// An abstraction for dialogs to make testing easier.
-// ignore: one_member_abstracts
 abstract class AppDialogs {
   Future<Object?> popup(String dialogText, String title);
+  Future<String?> inputPopup(String dialogText, String title);
 }
 
 /// An abstraction for focus management to make testing easier.

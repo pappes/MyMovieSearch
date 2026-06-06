@@ -9,8 +9,8 @@ import 'package:meta/meta.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 
 const magnetFragment1 = 'magnet:?xt=urn:btih:';
-// const magnetFragment2 = '&dn=';
-const magnetTracker = '&tr=';
+const magnetName = 'dn=';
+const magnetTracker = 'tr=';
 const magnetExtraSourcesUrl =
     'https://raw.githubusercontent.com/ngosang/trackerslist/refs/heads/master/trackers_all.txt';
 final magnetSources = <String>{
@@ -45,6 +45,49 @@ class MagnetHelper {
     }
   }
 
+  /// Extract the name from a magnet url.
+  static String getName(String? magnet) {
+    // e.g. magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B1080p%5D+%5BYTS.BZ%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce
+    // becomes 2001: A Space Odyssey (1968) [1080p] [YTS.BZ]
+    const noMatch = 'Unknown Name';
+    if (null == magnet || !magnet.startsWith(magnetFragment1)) {
+      return noMatch;
+    }
+
+    final parts = magnet.split('&');
+    for (final part in parts) {
+      if (part.startsWith(magnetName)) {
+        final name = Uri.decodeComponent(part.substring(magnetName.length));
+        return name.replaceAll('+', ' ');
+      }
+    }
+    return noMatch;
+  }
+
+  /// Set the name in a magnet url.
+  static String? setName(String? name, String? magnet) {
+    // e.g. magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B1080p%5D+%5BYTS.BZ%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce
+    // plus new name = (great movie) 2001: A Space Odyssey (1968)
+    // becomes
+    // magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=(great%20movie)%202001%3A%20A%20Space%20Odyssey%20%281968%29%20%5B1080p%5D%20%5BYTS.BZ%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce
+    if (null == magnet || !magnet.startsWith(magnetFragment1)) {
+      return magnet;
+    }
+
+    if (null == name || name.isEmpty) {
+      return magnet;
+    }
+
+    final parts = magnet.split('&');
+    for (final part in parts) {
+      if (part.startsWith(magnetName)) {
+        final newName = Uri.encodeComponent(name);
+        return magnet.replaceFirst(part, '$magnetName$newName');
+      }
+    }
+    return magnet;
+  }
+
   /// Add more trackers to a magnet url.
   static String? addTrackers(String? magnet) {
     // e.g. magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B1080p%5D+%5BYTS.BZ%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce
@@ -60,7 +103,7 @@ class MagnetHelper {
       final uriEncoded = Uri.encodeComponent(tracker);
       final httpEncoded = Uri.encodeComponent(uriEncoded);
       if (!magnet.contains(uriEncoded) && !magnet.contains(httpEncoded)) {
-        buffer.write('$magnetTracker$uriEncoded');
+        buffer.write('&$magnetTracker$uriEncoded');
       }
     }
     return buffer.toString();
