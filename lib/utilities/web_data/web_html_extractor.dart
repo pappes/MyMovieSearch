@@ -27,11 +27,11 @@ class WebHtmlSychroniser {
   /// Consolidate all html results into a single list.
   ///
   /// If no results are found, add a single entry with the string
-  /// 'no dynamic html results'.
+  /// 'no Object? html results'.
   Future<List<String>> getHtml() async {
     await base.execute(webPageUrl, _htmlCallback);
     if (htmlResults.isEmpty) {
-      htmlResults.add('no dynamic html results');
+      htmlResults.add('no Object? html results');
     }
     return htmlResults;
   }
@@ -111,7 +111,7 @@ class HeadlessHttpClient implements HttpClient {
 
   // throw exception for all unimplimented methods.
   @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+  Object? noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 /// A wrapper class around `WebHtmlExtractor` that simulates an `HttpClient`.
@@ -192,7 +192,7 @@ class HeadlessHttpClientRequest implements HttpClientRequest {
 
   // throw exception for all unimplimented methods.
   @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+  Object? noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 /// A wrapper class around `Stream<List<int>>`
@@ -215,12 +215,12 @@ class HeadlessHttpClientResponse extends StreamView<List<int>>
 
   // throw exception for all unimplimented methods.
   @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+  Object? noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }
 
 /// Headless client does not support headers.
 class HeadlessHttpHeaders implements HttpHeaders {
   // throw exception for all unimplimented methods.
   @override
-  dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+  Object? noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
 }

@@ -49,7 +49,7 @@ extension StringIterableHelper on Iterable<String> {
   }
 
   /// Add values to the current list.
-  /// [additions] can be null, scalar, a dynamic list or a map.
+  /// [additions] can be null, scalar, a Object? list or a map.
   ///
   /// Removes any duplicate values.
   /// Converts map to a List (adds values, discard keys)
@@ -58,7 +58,7 @@ extension StringIterableHelper on Iterable<String> {
   /// ['a', 'b', 'b'].combineUnique(['b', 'b', 'c']); // returns ['a', 'b', 'c']
   /// ['a', 'b', 'c'].combineUnique({'A': '1', 'B': '2'}); // returns ['a', 'b', 'c', '1', '2']
   /// ```
-  void combineUnique(dynamic additions) {
+  void combineUnique(Object? additions) {
     if (null == additions) return;
     Set<String> itemSet = toSet();
     if (additions is Iterable<String>) {
@@ -143,7 +143,7 @@ extension LanguageTypeHelper on Iterable<String> {
 ///
 extension ListHelper<T> on List<T> {
   /// Ensure value is a list.  Make it a list if it is not.
-  void valueAsList(dynamic value) {
+  void valueAsList(Object? value) {
     if (value is T) {
       clear();
       add(value);
@@ -185,11 +185,11 @@ extension ListHelper<T> on List<T> {
 ///
 ///
 void forEachType<T>(
-  dynamic input,
+  Object? input,
   void Function(T element) action, {
   bool fallback = false,
 }) {
-  void callAction(dynamic item) {
+  void callAction(Object? item) {
     if (item is T) {
       action(item);
     }

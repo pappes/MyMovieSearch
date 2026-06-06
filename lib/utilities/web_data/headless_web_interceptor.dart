@@ -84,7 +84,7 @@ class HeadlessWebInterceptor {
       acceptHeader: headers[HttpHeaders.acceptHeader],
       urlProxyFilter: urlProxyFilter,
     );
-    AppLogger.instance.info(
+    AppLogger.instance.trace(
       'Interception decision: ${decision.action} '
       'for $uri',
     );

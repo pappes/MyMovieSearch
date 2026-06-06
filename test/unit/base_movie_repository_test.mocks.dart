@@ -222,10 +222,10 @@ class MockWebFetchBase extends _i1.Mock
   _i7.DataSourceFn get selectedDataSource =>
       (super.noSuchMethod(
             Invocation.getter(#selectedDataSource),
-            returnValue: (dynamic s) => _i8.Future<_i8.Stream<String>>.value(
+            returnValue: (Object? s) => _i8.Future<_i8.Stream<String>>.value(
               _i8.Stream<String>.empty(),
             ),
-            returnValueForMissingStub: (dynamic s) =>
+            returnValueForMissingStub: (Object? s) =>
                 _i8.Future<_i8.Stream<String>>.value(
                   _i8.Stream<String>.empty(),
                 ),
@@ -332,7 +332,7 @@ class MockWebFetchBase extends _i1.Mock
 
   @override
   _i8.Future<Iterable<_i4.MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic listOrMapOrDocument,
+    Object? listOrMapOrDocument,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#myConvertTreeToOutputType, [
@@ -349,17 +349,17 @@ class MockWebFetchBase extends _i1.Mock
           as _i8.Future<Iterable<_i4.MovieResultDTO>>);
 
   @override
-  _i8.Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  _i8.Future<List<Object?>> myConvertWebTextToTraversableTree(
     String? webText,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#myConvertWebTextToTraversableTree, [webText]),
-            returnValue: _i8.Future<List<dynamic>>.value(<dynamic>[]),
-            returnValueForMissingStub: _i8.Future<List<dynamic>>.value(
-              <dynamic>[],
+            returnValue: _i8.Future<List<Object?>>.value(<Object?>[]),
+            returnValueForMissingStub: _i8.Future<List<Object?>>.value(
+              <Object?>[],
             ),
           )
-          as _i8.Future<List<dynamic>>);
+          as _i8.Future<List<Object?>>);
 
   @override
   _i8.Future<_i8.Stream<String>> myConvertCriteriaToWebText() =>
@@ -408,10 +408,10 @@ class MockWebFetchBase extends _i1.Mock
   _i7.DataSourceFn myOfflineData() =>
       (super.noSuchMethod(
             Invocation.method(#myOfflineData, []),
-            returnValue: (dynamic s) => _i8.Future<_i8.Stream<String>>.value(
+            returnValue: (Object? s) => _i8.Future<_i8.Stream<String>>.value(
               _i8.Stream<String>.empty(),
             ),
-            returnValueForMissingStub: (dynamic s) =>
+            returnValueForMissingStub: (Object? s) =>
                 _i8.Future<_i8.Stream<String>>.value(
                   _i8.Stream<String>.empty(),
                 ),
@@ -609,21 +609,21 @@ class MockWebFetchBase extends _i1.Mock
           as _i8.Stream<String>);
 
   @override
-  _i8.Stream<dynamic> baseConvertWebTextToTraversableTree(
+  _i8.Stream<Object?> baseConvertWebTextToTraversableTree(
     _i8.Stream<String>? webStream,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#baseConvertWebTextToTraversableTree, [
               webStream,
             ]),
-            returnValue: _i8.Stream<dynamic>.empty(),
-            returnValueForMissingStub: _i8.Stream<dynamic>.empty(),
+            returnValue: _i8.Stream<Object?>.empty(),
+            returnValueForMissingStub: _i8.Stream<Object?>.empty(),
           )
-          as _i8.Stream<dynamic>);
+          as _i8.Stream<Object?>);
 
   @override
   _i8.Stream<_i4.MovieResultDTO> baseConvertTreeToOutputType(
-    _i8.Stream<dynamic>? pageMap,
+    _i8.Stream<Object?>? pageMap,
   ) =>
       (super.noSuchMethod(
             Invocation.method(#baseConvertTreeToOutputType, [pageMap]),
@@ -660,7 +660,7 @@ class MockWebFetchBase extends _i1.Mock
           as _i8.Future<_i8.Stream<_i4.MovieResultDTO>>);
 
   @override
-  _i8.Future<_i8.Stream<String>> baseFetchWebText(dynamic criteria) =>
+  _i8.Future<_i8.Stream<String>> baseFetchWebText(Object? criteria) =>
       (super.noSuchMethod(
             Invocation.method(#baseFetchWebText, [criteria]),
             returnValue: _i8.Future<_i8.Stream<String>>.value(
@@ -673,7 +673,7 @@ class MockWebFetchBase extends _i1.Mock
           as _i8.Future<_i8.Stream<String>>);
 
   @override
-  String baseConstructErrorMessage(String? context, dynamic error) =>
+  String baseConstructErrorMessage(String? context, Object? error) =>
       (super.noSuchMethod(
             Invocation.method(#baseConstructErrorMessage, [context, error]),
             returnValue: _i6.dummyValue<String>(

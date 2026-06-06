@@ -43,14 +43,14 @@ final List<MovieResultDTO> expectedErrorDTOList = ListDTOConversion.decodeList([
   '''
 {
   "uniqueId": "-1", 
-  "title": "Unknown MsSearch error - potential API change! type 'Null' is not a subtype of type 'Map<dynamic, dynamic>' in type cast {error: {code: 400, message: Request contains an invalid argument., errors: [{message: Request contains an invalid argument., domain: global, reason: badRequest}], status: INVALID_ARGUMENT}}"
+  "title": "Unknown MsSearch error - potential API change! type 'Null' is not a subtype of type 'Map<Object?, Object?>' in type cast {error: {code: 400, message: Request contains an invalid argument., errors: [{message: Request contains an invalid argument., domain: global, reason: badRequest}], status: INVALID_ARGUMENT}}"
 }
 ''',
 ]);
 
-final List<dynamic> intermediateMapList = [jsonDecode(jsonSampleFull)];
-final List<dynamic> intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
-final List<dynamic> intermediateErrorMapList = [jsonDecode(jsonSampleError)];
+final List<Object?> intermediateMapList = [jsonDecode(jsonSampleFull)];
+final List<Object?> intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
+final List<Object?> intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
 const jsonSampleFull =
     ' $jsonSearchPrefix '

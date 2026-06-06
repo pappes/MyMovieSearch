@@ -81,7 +81,7 @@ class ThreadRunner {
   /// that attempt to write to common objects
   ///     e.g. external files, etc because the libraries may not be thread safe
   ///     console appears to be thread safe.
-  Future<dynamic> run<T>(dynamic Function(T) function, T parameter) async {
+  Future<Object?> run<T>(Object? Function(T) function, T parameter) async {
     final receivePort = ReceivePort();
     final message = ThreadRequest(function, parameter);
     if (!ready) await initialised;
@@ -159,5 +159,5 @@ class ThreadRequest {
   ThreadRequest(this.function, this.parameter);
 
   final Function function;
-  final dynamic parameter;
+  final Object? parameter;
 }

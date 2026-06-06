@@ -24,7 +24,7 @@ import 'package:universal_io/io.dart'
         HttpStatus,
         SocketException; // limit inclusions to reduce size
 
-typedef DataSourceFn = Future<Stream<String>> Function(dynamic s);
+typedef DataSourceFn = Future<Stream<String>> Function(Object? s);
 
 /// Fetch data from web sources (web services or web pages).
 ///
@@ -106,7 +106,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     DataSourceFn? source,
     int? limit,
   }) {
-    void errorHandler(dynamic error, StackTrace stackTrace) {
+    void errorHandler(Object? error, StackTrace stackTrace) {
       final message = baseConstructErrorMessage('WebFetch populate', error);
       AppLogger.instance.error(message);
       sc.add(myYieldError(message));
@@ -162,7 +162,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// when unable to covert the tree to [OUTPUT_TYPE].
   @visibleForOverriding
   Future<Iterable<OUTPUT_TYPE>> myConvertTreeToOutputType(
-    dynamic listOrMapOrDocument,
+    Object? listOrMapOrDocument,
   );
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
@@ -181,7 +181,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should throw WebConvertException
   /// when unable to covert [webText] to a tree.
   @visibleForOverriding
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Object?>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if ('' == webText) {
@@ -216,7 +216,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   Future<Stream<String>> myConvertCriteriaToWebText() async {
     final errors = StringBuffer();
 
-    Stream<String> captureError(dynamic error, _) {
+    Stream<String> captureError(Object? error, _) {
       errors.writeln(baseConstructErrorMessage('fetching web text', error));
       return const Stream.empty();
     }
@@ -500,7 +500,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   Stream<String> baseConvertCriteriaToWebText() async* {
     final errors = <String>[];
 
-    Stream<String> captureGenericError(dynamic error, _) {
+    Stream<String> captureGenericError(Object? error, _) {
       errors.add(
         baseConstructErrorMessage(
           'non-confomant baseConvertCriteriaToWebText error '
@@ -540,19 +540,19 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// to make child class logic simpler
   /// Converts Future\<List\<Map\>\> to Stream\<Map\>
   @visibleForTesting
-  Stream<dynamic> baseConvertWebTextToTraversableTree(
+  Stream<Object?> baseConvertWebTextToTraversableTree(
     Stream<String> webStream,
   ) async* {
     final errors = <String>[];
-    List<String> captureError(dynamic error, String message) {
+    List<String> captureError(Object? error, String message) {
       final errorMessge = baseConstructErrorMessage(message, error);
       errors.add(errorMessge);
       return [];
     }
 
-    List<String> captureStreamError(dynamic error, StackTrace _) =>
+    List<String> captureStreamError(Object? error, StackTrace _) =>
         captureError(error, 'stream error interpreting web text as a map');
-    List<String> captureGenericConvertError(dynamic error, StackTrace _) =>
+    List<String> captureGenericConvertError(Object? error, StackTrace _) =>
         captureError(
           error,
           'non-confomant baseConvertWebTextToTraversableTree error '
@@ -592,18 +592,18 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   /// Should not be overridden by child classes.
   @visibleForTesting
   Stream<OUTPUT_TYPE> baseConvertTreeToOutputType(
-    Stream<dynamic> pageMap,
+    Stream<Object?> pageMap,
   ) async* {
     final errors = <OUTPUT_TYPE>[];
-    List<OUTPUT_TYPE> captureError(dynamic error, String message) {
+    List<OUTPUT_TYPE> captureError(Object? error, String message) {
       final errorMessge = baseConstructErrorMessage(message, error);
       errors.add(myYieldError(errorMessge));
       return [];
     }
 
-    List<OUTPUT_TYPE> captureStreamError(dynamic error, StackTrace _) =>
+    List<OUTPUT_TYPE> captureStreamError(Object? error, StackTrace _) =>
         captureError(error, 'stream error translating page map to objects');
-    List<OUTPUT_TYPE> captureGenericError(dynamic error, StackTrace _) =>
+    List<OUTPUT_TYPE> captureGenericError(Object? error, StackTrace _) =>
         captureError(
           error,
           'non-confomant baseConvertTreeToOutputType error '
@@ -697,7 +697,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Should not be overridden by child classes.
   @visibleForTesting
-  Future<Stream<String>> baseFetchWebText(dynamic criteria) async {
+  Future<Stream<String>> baseFetchWebText(Object? criteria) async {
     try {
       criteria as INPUT_TYPE;
       final text = await myFetchWebText(criteria);
@@ -723,7 +723,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///
   /// Should not be be overridden by child classes.
   @visibleForTesting
-  String baseConstructErrorMessage(String context, dynamic error) {
+  String baseConstructErrorMessage(String context, Object? error) {
     final boilerplate = 'Error in $_getFetchContext';
     final errorText = error.toString().truncate();
     WebLog(myDataSourceName()).logError(criteria, errorText);

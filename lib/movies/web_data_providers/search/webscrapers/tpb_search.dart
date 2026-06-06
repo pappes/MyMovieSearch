@@ -19,13 +19,13 @@ const detailSelector = '.detDesc';
 /// ScrapeTpbSearch().readList(criteria, limit: 10)
 /// ```
 mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = <Map<String, dynamic>>[];
+  final movieData = <Map<String, Object?>>[];
   bool validPage = false;
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
   @override
-  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, Object?>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if (webText.contains(
@@ -58,7 +58,7 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   void _processRow(Element row) {
     final columns = row.querySelectorAll('td');
     if (4 == columns.length) {
-      final result = <String, dynamic>{};
+      final result = <String, Object?>{};
       result[jsonCategoryKey] = columns[0].cleanText;
       result[jsonMagnetKey] = MagnetHelper.addTrackers(
         columns[1].querySelector(magnetSelector)?.attributes['href'],
@@ -77,7 +77,7 @@ mixin ScrapeTpbSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
       }
     }
     if (8 == columns.length) {
-      final result = <String, dynamic>{};
+      final result = <String, Object?>{};
       result[jsonCategoryKey] = columns[0].cleanText;
       result[jsonMagnetKey] = MagnetHelper.addTrackers(
         row.querySelector(magnetSelector)?.attributes['href'],

@@ -19,7 +19,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     extends WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   WebFetchThreadedCache(super.criteria);
 
-  static final _cache = TieredCache<List<dynamic>>();
+  static final _cache = TieredCache<List<Object?>>();
 
   /// Return a list with data matching [criteria].
   ///
@@ -107,7 +107,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE> myClone(INPUT_TYPE criteria);
 
   /// static wrapper to readList() for compatibility with ThreadRunner.
-  static Future<List<dynamic>> runReadList(Map<String, dynamic> input) {
+  static Future<List<Object?>> runReadList(Map<String, Object?> input) {
     final instance = input['newInstance'] as WebFetchBase;
     return instance.readList(
       source: input['source'] as DataSourceFn?,

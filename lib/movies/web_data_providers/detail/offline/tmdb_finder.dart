@@ -41,8 +41,8 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-final List<dynamic> intermediateMapList = [jsonDecode(jsonSampleFull)];
-final List<dynamic> intermediateMapListError = [jsonDecode(jsonSampleError)];
+final List<Object?> intermediateMapList = [jsonDecode(jsonSampleFull)];
+final List<Object?> intermediateMapListError = [jsonDecode(jsonSampleError)];
 
 const tmdbJsonSearchInner = '''
   {"adult":false,

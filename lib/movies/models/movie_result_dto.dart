@@ -57,7 +57,7 @@ class MovieResultDTO {
 
   /// Convert a [MovieResultDTO] to a map tha can be consumed by jsonEncode.
   ///
-  Map<String, dynamic> toJson({bool includeRelated = true}) =>
+  Map<String, Object> toJson({bool includeRelated = true}) =>
       toMap(includeRelated: includeRelated);
 }
 
@@ -145,13 +145,13 @@ class RestorableMovie extends RestorableValue<MovieResultDTO> {
     }
   }
 
-  static Map<String, dynamic> _getMap(GoRouterState state) {
+  static Map<String, Object?> _getMap(GoRouterState state) {
     final criteria = state.extra;
-    if (criteria != null && criteria is Map<String, dynamic>) return criteria;
+    if (criteria != null && criteria is Map<String, Object?>) return criteria;
     return {};
   }
 
-  static Map<String, dynamic> routeState(MovieResultDTO dto) {
+  static Map<String, Object> routeState(MovieResultDTO dto) {
     DtoCache.singleton().merge(dto);
     return {'id': nextId++, 'dtoId': dto.uniqueId};
   }
@@ -261,7 +261,7 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   @factory
   // Linter does not understand that decodeList is a factory method.
   // ignore: invalid_factory_method_impl
-  static List<MovieResultDTO> decodeList(Iterable<dynamic> encoded) {
+  static List<MovieResultDTO> decodeList(Iterable<Object?> encoded) {
     final result = <MovieResultDTO>[];
     for (final json in encoded) {
       if (json is Map) {
@@ -298,8 +298,8 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
   }
 }
 
-extension MapResultDTOConversion on Map<dynamic, dynamic> {
-  /// Convert a [Map] into a [MovieResultDTO] object
+extension MapResultDTOConversion on Map<Object?, Object?> {
+  /// Convert a `Map` into a `MovieResultDTO` object
   ///
   @factory
   // Linter does not understand that toMovieResultDTO is a factory method.
@@ -342,11 +342,11 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
     return dto;
   }
 
-  /// Convert json encoded [Map]<[String], [String]>
-  /// to [Map]<[DataSourceType][String]>.
+  /// Convert json encoded `Map<String, String>`
+  /// to `Map<DataSourceType,String>`.
   ///
-  /// Discards anything that cannont be converted.
-  MovieSources stringToSources(dynamic input) {
+  /// Discards anything that cannot be converted.
+  MovieSources stringToSources(Object? input) {
     final MovieSources sources = {};
     if (input is Map) {
       for (final sourceEntry in input.entries) {
@@ -367,7 +367,7 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
   /// Related movie list is a json encoded DTO
   /// Wrapped in a map using uniqueId as key
   /// Which is wrapped in another map using category name as key.
-  RelatedMovieCategories stringToRelated(dynamic categories) {
+  RelatedMovieCategories stringToRelated(Object? categories) {
     final RelatedMovieCategories related = {};
     if (categories is Map) {
       // Find the categories that movie are collected under
@@ -378,7 +378,7 @@ extension MapResultDTOConversion on Map<dynamic, dynamic> {
           final categoryContents = category.value;
 
           // Convert the contents of the category to a list.
-          Iterable<dynamic> movieList = [];
+          Iterable<Object?> movieList = [];
           if (categoryContents is Map) {
             movieList = categoryContents.values;
           } else if (categoryContents is Iterable<Map>) {
@@ -414,7 +414,7 @@ class DtoCache {
 
   final _globalDtoCache = TieredCache<MovieResultDTO>();
 
-  static Map<dynamic, dynamic> dumpCache() {
+  static Map<Object, MovieResultDTO> dumpCache() {
     final cache = _singleton._globalDtoCache.memoryCache;
     for (final record in cache.entries) {
       AppLogger.instance.info('${record.key} - ${record.value.title}');
@@ -649,9 +649,11 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Convert a json [String] to a [MovieResultDTO].
   ///
   @factory
-  MovieResultDTO fromJson(dynamic json) {
-    final decoded = jsonDecode(json.toString());
-    if (decoded is Map) return decoded.toMovieResultDTO();
+  MovieResultDTO fromJson(Object? json) {
+    if (json != null) {
+      final decoded = jsonDecode(json.toString());
+      if (decoded is Map) return decoded.toMovieResultDTO();
+    }
     return MovieResultDTO();
   }
 
@@ -776,7 +778,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
         relatedMap[category.key] = movies;
       } else {
         // Present related values as a Map.
-        final movies = <String, dynamic>{};
+        final movies = <String, Object>{};
         for (final dto in category.value.entries) {
           final movieMap = dto.value.toMap();
           movies[dto.value.uniqueId] = movieMap;
@@ -1259,7 +1261,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// [fuzzy] allows volitile numeric data to have a 75% variation
   bool matches(
     MovieResultDTO actualDTO, {
-    Map<dynamic, dynamic>? matchState,
+    Map<Object?, Object?>? matchState,
     bool related = true,
     bool fuzzy = false,
     String prefix = '',
@@ -1468,8 +1470,8 @@ extension StringMovieResultDTOHelpers on String {
   }
 }
 
-extension MapMovieResultDTOHelpers on Map<dynamic, MovieResultDTO> {
-  /// Create a string representation of a [Map]<[String],[MovieResultDTO]>.
+extension MapMovieResultDTOHelpers on MovieCollection {
+  /// Create a string representation of a `Map<String,MovieResultDTO>`.
   ///
   String toPrintableString() {
     final listContents = StringBuffer();
@@ -1482,7 +1484,7 @@ extension MapMovieResultDTOHelpers on Map<dynamic, MovieResultDTO> {
   }
 
   /// Create a short string representation
-  /// of a [Map]<[dynamic],[MovieResultDTO]>.
+  /// of a `Map<String,MovieResultDTO>`.
   ///
   /// Output will be less than 1000 chars long, truncating if required.
   String toShortString() {
@@ -1500,9 +1502,9 @@ extension MapMovieResultDTOHelpers on Map<dynamic, MovieResultDTO> {
 }
 
 extension MapMapMovieResultDTOHelpers
-    on Map<dynamic, Map<dynamic, MovieResultDTO>> {
+    on RelatedMovieCategories {
   /// Create a string representation
-  /// of a Map<[dynamic], Map<[dynamic], [MovieResultDTO]>>>.
+  /// of a `Map<String, Map<String, MovieResultDTO>>`.
   ///
   String toPrintableString() {
     final listContents = StringBuffer();
@@ -1515,7 +1517,7 @@ extension MapMapMovieResultDTOHelpers
   }
 
   /// Create a short string representation
-  /// of a Map<[dynamic], Map<[dynamic], [MovieResultDTO]>>>.
+  /// of a `Map<String, Map<String, MovieResultDTO>>`.
   ///
   String toShortString() {
     final listContents = StringBuffer();

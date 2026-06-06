@@ -59,11 +59,11 @@ class QueryMsSearchMovies
     return Stream.value(jsonEncode(list));
   }
 
-  Future<List<dynamic>> fetchFromApi(MeiliSearchClient client) async {
+  Future<List<Object?>> fetchFromApi(MeiliSearchClient client) async {
     final index = client.index(indexName);
     //return index;
 
-    Searcheable<Map<String, dynamic>> resultmap;
+    Searcheable<Map<String, Object?>> resultmap;
     try {
       resultmap = await index.search(criteria.criteriaTitle);
     } on MeiliSearchApiException catch (e) {
@@ -100,11 +100,11 @@ class QueryMsSearchMovies
 
   /// Convert MsSearch map to MovieResultDTO records.
   @override
-  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(dynamic tree) =>
+  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(Object? tree) =>
       // Use Future.sync to allow code to run synchronously and ensure
       // that exceptions are propagated as Future errors.
       Future.sync(() {
-        if (tree is List<dynamic>) {
+        if (tree is List<Object?>) {
           return MsSearchMovieSearchConverter.dtoFromCompleteJsonMap(
             tree,
           ).toList();

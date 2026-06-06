@@ -22,8 +22,8 @@ const resultError = 'error';
 
 abstract class TvdbCommonConverter {
   MovieContentType parseResultTypeAndData(
-    Map<dynamic, dynamic> inputData,
-    Map<dynamic, dynamic> outputData,
+    Map<Object?, Object?> inputData,
+    Map<Object?, Object?> outputData,
   );
 
   String? imdbId;
@@ -31,10 +31,10 @@ abstract class TvdbCommonConverter {
   final DataSourceType dataSource = DataSourceType.tvdbDetails;
   String dataSourceName = 'TvdbDetailConverter';
 
-  List<MovieResultDTO> dtoFromCompleteJsonMap(Map<dynamic, dynamic> map) {
+  List<MovieResultDTO> dtoFromCompleteJsonMap(Map<Object?, Object?> map) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
-    final resultData = <dynamic, dynamic>{};
+    final resultData = <Object?, Object?>{};
     dataSourceName = dataSource.name; //datasource
 
     final resultType = parseResultTypeAndData(map, resultData);
@@ -52,7 +52,7 @@ abstract class TvdbCommonConverter {
 
   MovieResultDTO dtoFromMap(
     MovieContentType resultType,
-    Map<dynamic, dynamic> resultData, {
+    Map<Object?, Object?> resultData, {
     String? imdbId,
   }) {
     final movie = MovieResultDTO()
@@ -98,7 +98,7 @@ abstract class TvdbCommonConverter {
     return movie;
   }
 
-  String? getFailureReasonFromMap(Map<dynamic, dynamic> map) {
+  String? getFailureReasonFromMap(Map<Object?, Object?> map) {
     final failureIndicator = map[outerElementFailureIndicator];
     if (null != failureIndicator) {
       return failureIndicator?.toString() ??

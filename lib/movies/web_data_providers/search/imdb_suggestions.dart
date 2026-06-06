@@ -44,7 +44,7 @@ class QueryIMDBSuggestions
   /// Convert IMDB map to MovieResultDTO records.
   @override
   Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic map,
+    Object? map,
   ) async {
     if (map is Map) return ImdbSuggestionConverter.dtoFromCompleteJsonMap(map);
     throw TreeConvertException(
@@ -68,7 +68,7 @@ class QueryIMDBSuggestions
   }
 
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Object?>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if ('' == webText) {

@@ -25,7 +25,7 @@ class MovieSearchResultsNewPage extends StatefulWidget {
       _MovieSearchResultsPageState();
 
   /// Instruct goroute how to navigate to this page.
-  static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
+  static MaterialPage<Object?> goRoute(_, GoRouterState state) => MaterialPage(
     restorationId: RestorableSearchCriteria.getRestorationId(state),
     child: MovieSearchResultsNewPage(
       criteria: RestorableSearchCriteria.getDto(state),
@@ -110,7 +110,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   }
 
   void _populateFromDtoCache(List<MovieResultDTO> dtos) {
-    final futures = <Future<dynamic>>[];
+    final futures = <Future<Object?>>[];
     for (final dto in dtos) {
       final cached = DtoCache.singleton().merge(dto);
       futures.add(_replaceEntry(dtos, dtos.indexOf(dto), cached));

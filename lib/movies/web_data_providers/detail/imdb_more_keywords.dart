@@ -51,7 +51,7 @@ class QueryIMDBMoreKeywordsDetails
   /// Convert IMDB map to MovieResultDTO records.
   @override
   Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic map,
+    Object? map,
   ) async {
     if (map is Map) {
       return ImdbMoreKeywordsConverter().dtoFromCompleteJsonMap(

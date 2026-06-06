@@ -22,14 +22,14 @@ const yearSelector = '.displayElementText.PUBDATE';
 /// ```
 mixin ScrapeLibsaBarcodeSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = <Map<String, dynamic>>[];
+  final movieData = <Map<String, Object?>>[];
   bool validPage = false;
   final searchLog = StringBuffer();
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
   @override
-  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, Object?>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if (webText.contains('No results found in Search Results.')) {
@@ -58,7 +58,7 @@ mixin ScrapeLibsaBarcodeSearch
 
   /// Collect webpage text to construct a map of the movie data.
   void _processRow(Element row) {
-    final result = <String, dynamic>{};
+    final result = <String, Object?>{};
     final rawDescription = row.querySelector(titleSelector)?.cleanText ?? '';
     final rawYear =
         row.querySelector(yearSelector)?.cleanText.replaceAll('\r', ' ') ?? '';

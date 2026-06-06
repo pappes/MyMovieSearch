@@ -73,7 +73,7 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
 
         // Check the currentuser
         if (msg.exists && msg.data()!.containsKey(Fields.text.name)) {
-          dynamic recordedDevices = runtimeDevices.keys.first; // assume dave
+          Object? recordedDevices = runtimeDevices.keys.first; // assume dave
           if (msg.data()!.containsKey(Fields.devices.name)) {
             recordedDevices = msg[Fields.devices.name];
           } else {
@@ -97,21 +97,21 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
   Stream<Map<String, String>> fetchRecords(
     String collectionPath, {
     String? filterFieldPath,
-    dynamic isEqualTo,
-    dynamic isNotEqualTo,
-    dynamic isLessThan,
-    dynamic isLessThanOrEqualTo,
-    dynamic isGreaterThan,
-    dynamic isGreaterThanOrEqualTo,
-    dynamic arrayContains,
-    List<dynamic>? arrayContainsAny,
-    List<dynamic>? whereIn,
-    List<dynamic>? whereNotIn,
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
     bool? isNull,
     Completer<bool>? initalDataLoadComplete,
   }) async* {
     try {
-      await super.fetchRecords(collectionPath).drain<dynamic>();
+      await super.fetchRecords(collectionPath).drain<Object?>();
       final fbcollection = FirebaseFirestore.instance.collection(
         collectionPath,
       );
@@ -185,7 +185,7 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
   }
 
   Stream<Map<String, String>> _collectionConverter(
-    QuerySnapshot<Map<String, dynamic>> documents,
+    QuerySnapshot<Map<String, Object?>> documents,
   ) async* {
     for (final document in documents.docs) {
       final message = document[Fields.text.name]?.toString();

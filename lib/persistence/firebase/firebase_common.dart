@@ -65,7 +65,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   Future<bool> platformLogin();
 
   /// Extract data from Firebase
-  Future<dynamic> fetchRecord(
+  Future<Object?> fetchRecord(
     String collectionPath, {
     required String id,
   }) async {
@@ -85,22 +85,22 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   /// Implementations need to ensure superclass has successfully completed
   /// by calling
   /// ``` dart
-  /// await super.fetchRecords(collectionPath).drain<dynamic>();
+  /// await super.fetchRecords(collectionPath).drain<Object?>();
   /// ```
   ///
-  Stream<dynamic> fetchRecords(
+  Stream<Object?> fetchRecords(
     String collectionPath, {
     String? filterFieldPath,
-    dynamic isEqualTo,
-    dynamic isNotEqualTo,
-    dynamic isLessThan,
-    dynamic isLessThanOrEqualTo,
-    dynamic isGreaterThan,
-    dynamic isGreaterThanOrEqualTo,
-    dynamic arrayContains,
-    List<dynamic>? arrayContainsAny,
-    List<dynamic>? whereIn,
-    List<dynamic>? whereNotIn,
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
     bool isNull = false,
     Completer<bool>? initalDataLoadComplete,
   }) async* {
@@ -114,7 +114,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
 
   /// Insert data into Firebase.
   @awaitNotRequired
-  Future<dynamic>? addRecord(
+  Future<Object?>? addRecord(
     String collectionPath, {
     String? message,
     String? id,
@@ -130,7 +130,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
     return true;
   }
 
-  Map<String, dynamic> newRecord(String message) => {
+  Map<String, Object?> newRecord(String message) => {
     Fields.text.name: message,
     'timestamp': DateTime.now().millisecondsSinceEpoch,
     'userName': userDisplayName,
@@ -139,7 +139,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
   };
 
   String derivedUser(String? device) => runtimeDevices[device] ?? 'tash';
-  bool derivedUserMatch(String? device, dynamic devices) {
+  bool derivedUserMatch(String? device, Object? devices) {
     if (devices is Iterable) {
       final currentUser = derivedUser(device);
       for (final storedDevice in devices) {

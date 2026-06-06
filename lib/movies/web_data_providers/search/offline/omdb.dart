@@ -28,8 +28,8 @@ const expectedDtoJsonStringList = [
   '{"bestSource": "omdb", "uniqueId": "tt0293979", "title": "Wonder Woman: Who\'s Afraid of Diana Prince?", "type": "movie", "year": "1967", "languages": [], "genres": [], "keywords": [], "imageUrl": "https://m.media-amazon.com/images/M/MV5BYzk4Y2NkNjItZWE1OC00MDc5LWEwNGMtZDFkOGM3MTQzY2YzXkEyXkFqcGdeQXVyMTU2MjI3NTk@._V1_SX300.jpg", "related": {}}',
 ];
 
-final List<dynamic> intermediateMapList = [jsonDecode(jsonSampleFull)];
-final List<dynamic> intermediateErrorMapList = [jsonDecode(jsonSampleError)];
+final List<Object?> intermediateMapList = [jsonDecode(jsonSampleFull)];
+final List<Object?> intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
 const jsonSampleFull =
     ' {"Search":[ $omdbJsonSearchInner ], '

@@ -35,7 +35,7 @@ class AboutPage extends StatefulWidget {
   State<AboutPage> createState() => _AboutState();
 
   /// Instruct goroute how to navigate to this page.
-  static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
+  static MaterialPage<Object?> goRoute(_, GoRouterState state) => MaterialPage(
     restorationId: RestorableSearchCriteria.getRestorationId(state),
     child: AboutPage(
       criteria: RestorableSearchCriteria.getDto(state),

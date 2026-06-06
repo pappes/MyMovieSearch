@@ -22,7 +22,7 @@ class MovieSearchCriteriaPage extends StatefulWidget {
       _MovieSearchCriteriaPageState();
 
   /// Instruct goroute how to navigate to this page.
-  static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
+  static MaterialPage<Object?> goRoute(_, GoRouterState state) => MaterialPage(
     restorationId: 'MovieSearchCriteriaPage',
     child: MovieSearchCriteriaPage(
       criteria: RestorableSearchCriteria.getDto(state),

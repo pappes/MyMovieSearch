@@ -224,7 +224,7 @@ void main() {
       final matcher = MovieResultDTOMatcher(dtoExpected);
 
       final Description mismatchDescription = StringDescription();
-      final matchState = <dynamic, dynamic>{};
+      final matchState = <Object?, Object?>{};
       const verbose = false;
       expect(matcher.matches(dtoActual, matchState), false);
       matcher.describeMismatch(
@@ -251,7 +251,7 @@ Expected: {uniqueId: abc_uniqueId, title: abc_title, description: abc_descriptio
       final matcher = MovieResultDTOMatcher(dto1);
 
       final Description mismatchDescription = StringDescription();
-      final matchState = <dynamic, dynamic>{};
+      final matchState = <Object?, Object?>{};
       const verbose = true;
       matcher
         ..matches(dto2, matchState)
@@ -294,7 +294,7 @@ Expected: {uniqueId: abc_uniqueId, title: abc_title, description: abc_descriptio
       final matcher = MovieResultDTOListMatcher(expectedDTOList);
 
       final Description mismatchDescription = StringDescription();
-      final Map<dynamic, dynamic> matchState = {};
+      final Map<Object?, Object?> matchState = {};
       const verbose = false;
       matcher
         ..matches(actualDTOList, matchState)
@@ -336,7 +336,7 @@ Expected: List<MovieResultDTO>(2)[
       final matcher = MovieResultDTOListMatcher(expectedDTOList);
 
       final Description mismatchDescription = StringDescription();
-      final Map<dynamic, dynamic> matchState = {};
+      final Map<Object?, Object?> matchState = {};
       const verbose = true;
       matcher
         ..matches(actualDTOList, matchState)
@@ -365,7 +365,7 @@ Expected: List<MovieResultDTO>(2)[
       final matcher = MovieResultDTOListFuzzyMatcher(expectedDTOList);
 
       final Description mismatchDescription = StringDescription();
-      final Map<dynamic, dynamic> matchState = {};
+      final Map<Object?, Object?> matchState = {};
       const verbose = true;
       matcher
         ..matches(actualDTOList, matchState)
@@ -399,7 +399,7 @@ Expected: List<MovieResultDTO>(2)[
       final matcher = MovieResultDTOListFuzzyMatcher(expectedDTOList);
 
       final Description mismatchDescription = StringDescription();
-      final Map<dynamic, dynamic> matchState = {};
+      final Map<Object?, Object?> matchState = {};
       const verbose = true;
       matcher
         ..matches(actualDTOList, matchState)
@@ -503,7 +503,7 @@ Expected: List<MovieResultDTO>(2)[
     // Compare a dto to a map equivalent of the dto.
     void testToMovieResultDTO(
       MovieResultDTO expected,
-      Map<String, dynamic> map,
+      Map<String, Object?> map,
     ) {
       final actual = map.toMovieResultDTO();
 
@@ -597,7 +597,7 @@ Expected: List<MovieResultDTO>(2)[
     // Compare a dto to a map equivalent of the dto.
     void testToMovieResultDTO(
       MovieResultDTO expected,
-      Map<String, dynamic> map,
+      Map<String, Object?> map,
     ) {
       final json = jsonEncode(map);
       final actual = MovieResultDTO().fromJson(json);

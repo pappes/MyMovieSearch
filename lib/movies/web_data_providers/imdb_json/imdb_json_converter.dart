@@ -15,10 +15,11 @@ class ImdbJsonConverter extends ImdbConverterBase
         ReleatedPeopleForPredefinedCategory {
   @override
   /// Get basic details for the movie or person from [data].
-  dynamic getMovieOrPerson(MovieResultDTO dto, Map<dynamic, dynamic> data) {
+  Object? getMovieOrPerson(MovieResultDTO dto, Map<Object?, Object?> data) {
     if (data.containsKey(outerElementIdentity)) {
       // Used by QueryIMDBJson* and QueryIMDBSearch
       _shallowConvert(dto, data);
+      return null;
     } else {
       return [
         dto.error('Unable to interpret IMDB contents from data $data', source),
@@ -26,7 +27,7 @@ class ImdbJsonConverter extends ImdbConverterBase
     }
   }
 
-  void _shallowConvert(MovieResultDTO movie, Map<dynamic, dynamic> map) {
+  void _shallowConvert(MovieResultDTO movie, Map<Object?, Object?> map) {
     movie.setSource(
       newSource: map[dataSource],
       newUniqueId: map[outerElementIdentity]!.toString(),
@@ -38,7 +39,7 @@ class ImdbJsonConverter extends ImdbConverterBase
     }
   }
 
-  void _shallowConvertPerson(MovieResultDTO movie, Map<dynamic, dynamic> map) {
+  void _shallowConvertPerson(MovieResultDTO movie, Map<Object?, Object?> map) {
     movie.type = MovieContentType.person;
     final name = map[outerElementOfficialTitle] ?? map[deepPersonNameHeader];
     if (name != null && name is Map) {
@@ -109,7 +110,7 @@ class ImdbJsonConverter extends ImdbConverterBase
     movie.setSource(newSource: source);
   }
 
-  void _shallowConvertTitle(MovieResultDTO movie, Map<dynamic, dynamic> map) {
+  void _shallowConvertTitle(MovieResultDTO movie, Map<Object?, Object?> map) {
     movie
       ..type = MovieContentType.title
       ..title = map[outerElementOfficialTitle]?.toString() ?? movie.title
@@ -174,8 +175,8 @@ class ImdbJsonConverter extends ImdbConverterBase
     movie.setSource(newSource: source);
   }
 
-  void _getRelated(MovieResultDTO movie, dynamic related, String label) {
-    void convertRelatedMapToDto(Map<dynamic, dynamic> related) {
+  void _getRelated(MovieResultDTO movie, Object? related, String label) {
+    void convertRelatedMapToDto(Map<Object?, Object?> related) {
       final converter = ImdbJsonConverterFactory().getConverter(related);
       for (final dto in converter.dtoFromCompleteJsonMap(related, source)) {
         movie.addRelated(label, dto);
@@ -189,9 +190,9 @@ class ImdbJsonConverter extends ImdbConverterBase
     );
   }
 
-  static List<MovieResultDTO> _getPeopleFromJson(dynamic people) {
+  static List<MovieResultDTO> _getPeopleFromJson(Object? people) {
     final result = <MovieResultDTO>[];
-    void addPerson(Map<dynamic, dynamic> person) {
+    void addPerson(Map<Object?, Object?> person) {
       final dto = _dtoFromPersonMap(person);
       if (dto != null) {
         result.add(dto);
@@ -202,7 +203,7 @@ class ImdbJsonConverter extends ImdbConverterBase
     return result;
   }
 
-  static MovieResultDTO? _dtoFromPersonMap(Map<dynamic, dynamic> map) {
+  static MovieResultDTO? _dtoFromPersonMap(Map<Object?, Object?> map) {
     final id = getIdFromIMDBLink(map[outerElementLink]?.toString());
     if (map[outerElementType] != 'Person' || id == '') {
       return null;
@@ -214,19 +215,19 @@ class ImdbJsonConverter extends ImdbConverterBase
     );
   }
 
-  static void _getRelatedSections(dynamic related, MovieResultDTO movie) {
-    void processSection(Map<dynamic, dynamic> section) =>
+  static void _getRelatedSections(Object? related, MovieResultDTO movie) {
+    void processSection(Map<Object?, Object?> section) =>
         _getMovieCategories(section, movie);
 
     ConverterHelper().forEachMap(related, processSection, fallback: true);
   }
 
   static void _getMovieCategories(
-    Map<dynamic, dynamic> related,
+    Map<Object?, Object?> related,
     MovieResultDTO movie,
   ) {
     for (final category in related.entries) {
-      void getMovie(Map<dynamic, dynamic> movies) {
+      void getMovie(Map<Object?, Object?> movies) {
         final dto = _dtoFromRelatedMap(movies);
         if (null != dto) {
           movie.addRelated(category.key.toString(), dto);
@@ -237,7 +238,7 @@ class ImdbJsonConverter extends ImdbConverterBase
     }
   }
 
-  static MovieResultDTO? _dtoFromRelatedMap(Map<dynamic, dynamic> map) {
+  static MovieResultDTO? _dtoFromRelatedMap(Map<Object?, Object?> map) {
     final id = getIdFromIMDBLink(map[outerElementLink]?.toString());
     if (id == '') {
       return null;
@@ -250,11 +251,11 @@ class ImdbJsonConverter extends ImdbConverterBase
   }
 
   /// Get the movie category information for a person.
-  RelatedMovieCategories _getDeepPersonRelatedCategories(dynamic list) {
+  RelatedMovieCategories _getDeepPersonRelatedCategories(Object? list) {
     final RelatedMovieCategories result = {};
 
     /// Search movie information to add to the movie collection.
-    void getCategory(Map<dynamic, dynamic> item) {
+    void getCategory(Map<Object?, Object?> item) {
       final movies = _getDeepPersonRelatedMoviesForCategory(item);
       final categories = ImdbConverterBase.getRolesFromCreditsV2(
         item.deepSearch(deepRelatedCategoryHeaderV2),
@@ -278,10 +279,10 @@ class ImdbJsonConverter extends ImdbConverterBase
 
   /// extract collections of movies for a specific category for the person
   /// from a map or a list.
-  MovieCollection _getDeepPersonRelatedMoviesForCategory(dynamic category) {
+  MovieCollection _getDeepPersonRelatedMoviesForCategory(Object? category) {
     final MovieCollection result = {};
 
-    void getRelated(Map<dynamic, dynamic> node) {
+    void getRelated(Map<Object?, Object?> node) {
       final title = node.deepSearch(deepRelatedMovieHeader)?.first;
       final movieDto = getRelatedMovieCharacter(title, node);
       if (movieDto != null) {

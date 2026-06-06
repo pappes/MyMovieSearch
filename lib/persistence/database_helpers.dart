@@ -25,7 +25,7 @@ class MovieModel {
   String uniqueId;
   String dtoJson;
   // convenience method to create a Map from this MovieModel object
-  Map<String, dynamic> toMap() => <String, dynamic>{
+  Map<String, Object?> toMap() => <String, Object?>{
     _colMovieUniqueId: uniqueId,
     _colMovieJson: dtoJson,
   };
@@ -125,7 +125,7 @@ class DatabaseHelper {
   }
 
   /// Query the database for all stored movie records.
-  Future<List<Map<dynamic, dynamic>>> queryAllMovies() async {
+  Future<List<Map<Object?, Object?>>> queryAllMovies() async {
     final db = await database;
     return mutexLock.protect(() => _queryAllMovies(db));
   }
@@ -155,7 +155,7 @@ class DatabaseHelper {
     whereArgs: [movie.uniqueId],
   );
 
-  Future<List<Map<dynamic, dynamic>>> _queryAllMovies(Database db) =>
+  Future<List<Map<Object?, Object?>>> _queryAllMovies(Database db) =>
       db.query(_tableMovie);
 
   /// Query the database for a specific movie record based on its unique ID.

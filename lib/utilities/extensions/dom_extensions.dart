@@ -68,7 +68,7 @@ extension ElementHelper on Element {
 
   String get cleanText => _cleanHtmlText(text);
 
-  String _cleanHtmlText(dynamic text) {
+  String _cleanHtmlText(Object? text) {
     final str = text?.toString() ?? '';
     final cleanStr = str
         .replaceAll('\n', ' ')

@@ -137,7 +137,7 @@ class HeadlessWebEngineAndroid extends HeadlessWebEngineBase {
   ///
   /// [script] The JavaScript script to execute.
   @override
-  Future<dynamic> evaluateJavascript(String script) async {
+  Future<Object?> evaluateJavascript(String script) async {
     if (_headlessWebView == null || !_headlessWebView!.isRunning()) return null;
     return await _headlessWebView!.webViewController?.evaluateJavascript(
       source: script,

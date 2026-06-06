@@ -51,7 +51,7 @@ const List<Map<String, Object>> intermediateEmptyMapList = [
     'props': {
       'pageProps': {
         'searchResults': {
-          'titleResults': {'titleListItems': <dynamic>[], 'total': 0},
+          'titleResults': {'titleListItems': <Object?>[], 'total': 0},
         },
       },
     },
@@ -67,8 +67,8 @@ const List<Map<String, Object>> intermediateMapList = [
             'titleListItems': [
               {
                 'certificate': 'TV-MA',
-                'creators': <dynamic>[],
-                'directors': <dynamic>[],
+                'creators': <Object?>[],
+                'directors': <Object?>[],
                 'endYear': 1991,
                 'genres': ['Crime', 'Drama', 'Mystery'],
                 'originalTitleText': 'Pwin Tweakers',

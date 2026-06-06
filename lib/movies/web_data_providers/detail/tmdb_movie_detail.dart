@@ -32,7 +32,7 @@ class QueryTMDBMovieDetails extends QueryTMDBCommon {
   /// Convert TMDB map to MovieResultDTO records.
   @override
   Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic map,
+    Object? map,
   ) async {
     if (map is Map) {
       final dto = TmdbMovieDetailConverter.dtoFromCompleteJsonMap(map);

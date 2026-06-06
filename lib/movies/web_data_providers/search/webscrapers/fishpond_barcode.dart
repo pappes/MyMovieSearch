@@ -23,14 +23,14 @@ const dateElement = 'datePublished';
 /// ```
 mixin ScrapeFishpondBarcodeSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = <Map<String, dynamic>>[];
+  final movieData = <Map<String, Object?>>[];
   bool validPage = false;
   final searchLog = StringBuffer();
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
   @override
-  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, Object?>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if (webText.contains('"totalResults": 0')) {
@@ -47,7 +47,7 @@ mixin ScrapeFishpondBarcodeSearch
   }
 
   /// Scrape movie data from html json <script> tag.
-  List<dynamic> _slowConvertWebTextToTraversableTree(String webText) {
+  List<Object?> _slowConvertWebTextToTraversableTree(String webText) {
     final document = parse(webText);
     final resultScriptElement = document.querySelector(jsonSelector);
     if (resultScriptElement?.innerHtml.isNotEmpty ?? false) {
@@ -58,10 +58,10 @@ mixin ScrapeFishpondBarcodeSearch
     throw WebConvertException('No search results found in html:$webText');
   }
 
-  List<dynamic> _scrapeSearchResult(String jsonText, dynamic jsonTree) {
+  List<Object?> _scrapeSearchResult(String jsonText, Object? jsonTree) {
     if (jsonTree is Map && jsonTree.containsKey(titleElement)) {
       validPage = true;
-      final result = <String, dynamic>{};
+      final result = <String, Object?>{};
 
       final title = jsonTree[titleElement]?.toString() ?? '';
       final rawDescription = jsonTree[descriptionElement]?.toString() ?? '';

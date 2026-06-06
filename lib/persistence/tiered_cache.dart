@@ -11,12 +11,12 @@ import 'package:my_movie_search/persistence/database_helpers.dart';
 /// to balance access speed with memory usage.
 ///
 class TieredCache<T> {
-  Map<dynamic, T> memoryCache = {};
+  Map<Object, T> memoryCache = {};
 
   /// Put a data item into the cache if it is not already there.
   /// If it is a list and already present, merge the lists.
   ///
-  void add(dynamic key, T? item) {
+  void add(Object key, T? item) {
     if (null != item) {
       final existing = memoryCache[key];
       if (null != existing && existing is List && item is List) {
@@ -33,7 +33,7 @@ class TieredCache<T> {
 
   /// Remove an item from the cache.
   ///
-  void remove(dynamic key) {
+  void remove(Object key) {
     memoryCache.remove(key);
     DatabaseHelper.instance.delete(
       MovieModel(uniqueId: key.toString(), dtoJson: ''),
@@ -66,7 +66,7 @@ class TieredCache<T> {
 
   /// Check the cache to see if the item is present.
   ///
-  Future<bool> isCached(dynamic key) async {
+  Future<bool> isCached(Object key) async {
     if (memoryCache.containsKey(key)) return true;
     // Attempt to fetch from db cache.
     final record = await DatabaseHelper.instance.queryMovieUniqueId(
@@ -116,14 +116,14 @@ class TieredCache<T> {
   /// The caller must validate the data in is the cache before calling get.
   ///
   /// Throws an error if there is no match in the cache.
-  T get(dynamic key) {
+  T get(Object key) {
     if (memoryCache.containsKey(key)) return memoryCache[key]!;
     throw CacheMissError('Requested key $key not found in the cache');
   }
 
   /// Put a data item as a list into into the cache.
   ///
-  void addToCacheList(dynamic key, dynamic item) {
+  void addToCacheList(Object key, Object? item) {
     if (null == item || [item] is! T) return;
 
     if (memoryCache.containsKey(key)) {

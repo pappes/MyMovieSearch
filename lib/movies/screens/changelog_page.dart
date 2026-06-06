@@ -7,7 +7,7 @@ import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
 class ChangelogPage extends StatelessWidget {
   const ChangelogPage({super.key});
 
-  static MaterialPage<dynamic> goRoute(_, _) => const MaterialPage(
+  static MaterialPage<Object?> goRoute(_, _) => const MaterialPage(
     restorationId: 'ChangelogPage',
     child: ChangelogPage(),
   );

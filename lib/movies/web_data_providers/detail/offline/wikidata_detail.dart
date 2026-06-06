@@ -3,7 +3,7 @@
 
 import 'dart:convert';
 
-final List<dynamic> intermediateErrorList = [jsonDecode(jsonSampleEmpty)];
+final List<Object?> intermediateErrorList = [jsonDecode(jsonSampleEmpty)];
 
 const jsonSampleEmpty = '''
 <!DOCTYPE html>

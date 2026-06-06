@@ -19,7 +19,7 @@ mixin ScrapeIMDBSearchDetails
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Reduce computation effort for html extraction.
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Object?>> myConvertWebTextToTraversableTree(
     String webText,
     // Use async to defer expensive processing until needed.
     // ignore: unnecessary_async
@@ -34,7 +34,7 @@ mixin ScrapeIMDBSearchDetails
   }
 
   /// Scrape movie data from html json <script> tag.
-  Future<List<dynamic>> _slowConvertWebTextToTraversableTree(String webText) {
+  Future<List<Object?>> _slowConvertWebTextToTraversableTree(String webText) {
     final document = parse(webText);
     final resultScriptElement = document.querySelector(jsonScript);
     if (resultScriptElement?.innerHtml.isNotEmpty ?? false) {
@@ -46,9 +46,9 @@ mixin ScrapeIMDBSearchDetails
   }
 
   /// Extract search content from json
-  Future<List<dynamic>> _scrapeSearchResult(
+  Future<List<Object?>> _scrapeSearchResult(
     String webText,
-    dynamic jsonTree, [
+    Object? jsonTree, [
     String? jsonText,
   ]) {
     final contents = TreeHelper(jsonTree).deepSearch(
@@ -71,14 +71,14 @@ mixin ScrapeIMDBSearchDetails
   }
 
   /// Delegate web scraping to IMDBMovie web scraper.
-  Future<List<dynamic>> _scrapeMovieDetails(String webText) {
+  Future<List<Object?>> _scrapeMovieDetails(String webText) {
     final movie = QueryIMDBTitleDetails(criteria);
     return movie.myConvertWebTextToTraversableTree(webText);
   }
 
   // Extract search content from json
-  List<Map<String, dynamic>> _extractSearchResults(List<dynamic> searchResult) {
-    final results = <Map<String, dynamic>>[];
+  List<Map<String, Object?>> _extractSearchResults(List<Object?> searchResult) {
+    final results = <Map<String, Object?>>[];
     final resultNodes =
         searchResult.deepSearch(
           deepJsonResults, // 'results'
@@ -111,8 +111,8 @@ mixin ScrapeIMDBSearchDetails
     return results;
   }
 
-  Map<String, dynamic> _getPerson(Map<dynamic, dynamic> person) {
-    final rowData = <String, dynamic>{};
+  Map<String, Object?> _getPerson(Map<Object?, Object?> person) {
+    final rowData = <String, Object?>{};
     rowData[outerElementIdentity] = person[outerSearchPersonId];
     rowData[outerElementOfficialTitle] = person[deepPersonNameHeader];
 
@@ -127,8 +127,8 @@ mixin ScrapeIMDBSearchDetails
     return rowData;
   }
 
-  Map<String, dynamic> _getMovie(Map<dynamic, dynamic> movie) {
-    final rowData = <String, dynamic>{};
+  Map<String, Object?> _getMovie(Map<Object?, Object?> movie) {
+    final rowData = <String, Object?>{};
     rowData[outerElementIdentity] = movie[deepTitleId1];
     rowData[outerElementOfficialTitle] = movie[outerSearchResultsMovieTitle];
     final startYear = movie[outerSearchResultsMovieStartYear];

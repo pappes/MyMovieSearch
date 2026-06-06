@@ -27,7 +27,7 @@ mixin HeadlessWebFetch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 mixin ScrapeIMDBJsonDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Reduce computation effort for html extraction.
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Object?>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     try {
@@ -40,7 +40,7 @@ mixin ScrapeIMDBJsonDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Convert web text to a traversable tree of [List] or [Map] data.
   ///
   ///
-  Future<List<dynamic>> slowConvertWebTextToTraversableTree(
+  Future<List<Object?>> slowConvertWebTextToTraversableTree(
     String webText,
   ) async {
     final document = parse(webText);
@@ -56,7 +56,7 @@ mixin ScrapeIMDBJsonDetails on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   }
 
   /// Collect JSON and webpage text to construct a map of the movie data.
-  Map<dynamic, dynamic> _scrapeWebPage(Document document) {
+  Map<Object?, Object?> _scrapeWebPage(Document document) {
     final movieData = json.decode(_getImdbJson(document)) as Map;
     return movieData;
   }

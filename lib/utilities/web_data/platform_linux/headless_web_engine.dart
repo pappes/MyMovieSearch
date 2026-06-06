@@ -221,10 +221,10 @@ class HeadlessWebEngineLinux extends HeadlessWebEngineBase {
   ///
   /// Returns the result of the script evaluation.
   @override
-  Future<dynamic> evaluateJavascript(String script) async {
+  Future<Object?> evaluateJavascript(String script) async {
     AppLogger.instance.trace('evaluateJavascript: $script');
     try {
-      final result = await _page?.evaluate<dynamic>(script);
+      final result = await _page?.evaluate<Object?>(script);
 
       AppLogger.instance.trace(
         'evaluateJavascript result: ${result.toString().truncate(100)}',

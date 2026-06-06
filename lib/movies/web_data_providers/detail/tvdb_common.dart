@@ -102,7 +102,7 @@ abstract class QueryTVDBCommon
   /// Must be overridden by child classes.
   /// Convert TVDB map to MovieResultDTO records.
   @override
-  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(dynamic map);
+  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(Object? map);
 
   /// Describe where the data is coming from.
   @override
@@ -155,13 +155,13 @@ abstract class QueryTVDBCommon
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Object?>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     /*if (webText.contains('data": []') || webText.contains('data": null')) {
       return [];
     }*/
-    dynamic tree;
+    Object? tree;
     try {
       // Assume text is json encoded.
       tree = jsonDecode(webText);

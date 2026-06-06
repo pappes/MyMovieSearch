@@ -91,13 +91,13 @@ class RestorableSearchCriteria extends RestorableValue<SearchCriteriaDTO> {
     }
   }
 
-  static Map<String, dynamic> _getMap(GoRouterState state) {
+  static Map<String, Object?> _getMap(GoRouterState state) {
     final criteria = state.extra;
-    if (criteria != null && criteria is Map<String, dynamic>) return criteria;
+    if (criteria != null && criteria is Map<String, Object?>) return criteria;
     return {};
   }
 
-  static Map<String, dynamic> routeState(SearchCriteriaDTO criteriaDto) =>
+  static Map<String, Object> routeState(SearchCriteriaDTO criteriaDto) =>
       // Condense movieDTO contentes to prevent crashing on restoration.
       {'id': nextId++, 'dto': criteriaDto.clone(condensed: true)};
 
@@ -194,7 +194,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
     movieCriteriaDTOCriteriaList: criteriaList.toJson(condensed: condensed),
   };
 
-  static List<MovieResultDTO> getMovieList(dynamic inputString) {
+  static List<MovieResultDTO> getMovieList(Object? inputString) {
     final converter = RestorableMovieList();
     final stringList = DynamicHelper.toString_(inputString);
     return converter.fromPrimitives(stringList);
@@ -325,7 +325,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
       toMap(condensed: condensed).toSearchCriteriaDTO(inflate: inflate);
 }
 
-extension MapCriteriaDTOConversion on Map<dynamic, dynamic> {
+extension MapCriteriaDTOConversion on Map<Object?, Object?> {
   /// Convert a [Map] into a [SearchCriteriaDTO] object.
   ///
   @factory

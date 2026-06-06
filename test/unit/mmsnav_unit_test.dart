@@ -38,7 +38,7 @@ void main() {
   group('MMSNav web page unit tests', () {
     final testClass = RouteInfo(
       ScreenRoute.persondetails, // Dummy object for params
-      <String, dynamic>{},
+      <String, Object?>{},
       'uniqueId',
       'dummy description',
     );
@@ -244,7 +244,7 @@ void main() {
     test('resultDrillDown() navigates to the correct screen '
         'for each content type', () async {
       // A data-driven approach makes this test cleaner and easier to maintain.
-      final testCases = <Map<String, dynamic>>[
+      final testCases = <Map<String, Object?>>[
         {'id': '${imdbTitlePrefix}12345', 'expected': 'moviedetails'},
         {'id': '${imdbPersonPrefix}12345', 'expected': 'persondetails'},
         {'id': '12345', 'expected': 'errordetails'},

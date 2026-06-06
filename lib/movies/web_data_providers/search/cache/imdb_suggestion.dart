@@ -67,7 +67,7 @@ mixin ThreadedCacheIMDBSuggestions
   }
 
   /// static wrapper to readList() for compatability with ThreadRunner.
-  static Future<List<MovieResultDTO>> runReadList(Map<String, dynamic> input) =>
+  static Future<List<MovieResultDTO>> runReadList(Map<String, Object?> input) =>
       QueryIMDBSuggestions(input['criteria'] as SearchCriteriaDTO).readList(
         source: input['source'] as DataSourceFn?,
         limit: input['limit'] as int?,

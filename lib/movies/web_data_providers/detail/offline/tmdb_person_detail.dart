@@ -18,7 +18,7 @@
 
 import 'dart:convert';
 
-final List<dynamic> intermediateMapList = [jsonDecode(jsonSampleFull)];
+final List<Object?> intermediateMapList = [jsonDecode(jsonSampleFull)];
 
 const Map<String, Object?> tmdbTree = {
   'adult': false,

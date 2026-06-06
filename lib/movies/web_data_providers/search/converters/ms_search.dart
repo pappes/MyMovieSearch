@@ -37,7 +37,7 @@ const imdbPageTypeParentPage = 'main';
 
 class MsSearchMovieSearchConverter {
   static Stream<MovieResultDTO> dtoFromCompleteJsonMap(
-    List<dynamic> list,
+    List<Object?> list,
   ) async* {
     for (final map in list) {
       if (map is Map) {

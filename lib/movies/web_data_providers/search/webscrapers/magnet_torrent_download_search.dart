@@ -21,13 +21,13 @@ const descriptionSelector = '.tdnormal';
 /// ```
 mixin ScrapeTorrentDownloadSearch
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = <Map<String, dynamic>>[];
+  final movieData = <Map<String, Object?>>[];
   bool validPage = false;
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
   @override
-  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, Object?>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if (webText.contains('<h2>No Results Found</h2>')) {
@@ -59,7 +59,7 @@ mixin ScrapeTorrentDownloadSearch
 
   /// Collect webpage text to construct a map of the movie data.
   void _processRow(Element row) {
-    final result = <String, dynamic>{};
+    final result = <String, Object?>{};
     result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;
     result[jsonSeedersKey] = row.querySelector(seedSelector)?.cleanText;
     result[jsonLeechersKey] = row.querySelector(leechSelector)?.cleanText;

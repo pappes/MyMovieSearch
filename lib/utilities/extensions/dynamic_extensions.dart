@@ -2,7 +2,7 @@ import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 
-/// Extend datatype "dynamic" to provide convenience functions.
+/// Extend datatype "Object?" to provide convenience functions.
 ///
 extension DynamicHelper<T> on T {
   void observe() {
@@ -29,8 +29,8 @@ extension DynamicHelper<T> on T {
   /// x = dynamicToString(y);
   /// ```
   ///
-  String dynamicToString(dynamic val) => DynamicHelper.toString_(val);
-  static String toString_(dynamic val) {
+  String dynamicToString(Object? val) => DynamicHelper.toString_(val);
+  static String toString_(Object? val) {
     if (val is String) {
       return val;
     }
@@ -54,8 +54,8 @@ extension DynamicHelper<T> on T {
   /// x = dynamicToStringList(y);
   /// ```
   ///
-  List<String> dynamicToStringList(dynamic val) => toStringList_(val);
-  static List<String> toStringList_(dynamic val) {
+  List<String> dynamicToStringList(Object? val) => toStringList_(val);
+  static List<String> toStringList_(Object? val) {
     if (val is String) return StringIterableHelper.fromJson(val).toList();
     if (val is List<String>) return val;
     final result = <String>[];
@@ -84,8 +84,8 @@ extension DynamicHelper<T> on T {
   /// x = dynamicToStringSet(y);
   /// ```
   ///
-  Set<String> dynamicToStringSet(dynamic val) => toStringSet_(val);
-  static Set<String> toStringSet_(dynamic val) {
+  Set<String> dynamicToStringSet(Object? val) => toStringSet_(val);
+  static Set<String> toStringSet_(Object? val) {
     if (val is String) return StringIterableHelper.fromJson(val);
     if (val is Set<String>) return val;
     if (val is List<String>) return val.toSet();
@@ -115,8 +115,8 @@ extension DynamicHelper<T> on T {
   /// x = dynamicToStringMap(y);
   /// ```
   ///
-  Map<String, String> dynamicToStringMap(dynamic val) => toStringMap_(val);
-  static Map<String, String> toStringMap_(dynamic val) {
+  Map<String, String> dynamicToStringMap(Object? val) => toStringMap_(val);
+  static Map<String, String> toStringMap_(Object? val) {
     if (val is String) return StringMapHelper.fromJson(val);
     if (val is Map<String, String>) return val;
     final result = <String, String>{};
@@ -145,8 +145,8 @@ extension DynamicHelper<T> on T {
   /// x = dynamicToInt(y);
   /// ```
   ///
-  int dynamicToInt(dynamic val) => toInt_(val);
-  static int toInt_(dynamic val) {
+  int dynamicToInt(Object? val) => toInt_(val);
+  static int toInt_(Object? val) {
     if (val is int) return val;
     if (val is String) return int.tryParse(val) ?? 0;
     if (val == null) return 0;
@@ -170,8 +170,8 @@ extension DynamicHelper<T> on T {
   /// x = dynamicToDouble(y);
   /// ```
   ///
-  double dynamicToDouble(dynamic val) => toDouble_(val);
-  static double toDouble_(dynamic val) {
+  double dynamicToDouble(Object? val) => toDouble_(val);
+  static double toDouble_(Object? val) {
     if (val is double) return val;
     if (val is String) return double.tryParse(val) ?? 0;
     if (val == null) return 0;

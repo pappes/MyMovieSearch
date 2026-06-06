@@ -34,7 +34,7 @@ class MovieDetailsPage extends StatefulWidget {
   State<MovieDetailsPage> createState() => _MovieDetailsPageState();
 
   /// Instruct goroute how to navigate to this page.
-  static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
+  static MaterialPage<Object?> goRoute(_, GoRouterState state) => MaterialPage(
     restorationId: RestorableMovie.getRestorationId(state),
     child: MovieDetailsPage(
       movie: RestorableMovie.getDto(state),

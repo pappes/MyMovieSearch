@@ -131,7 +131,7 @@ const elementSize = 'size';
 
 class YtsDetailApiConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, dynamic> map,
   ) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
@@ -139,9 +139,10 @@ class YtsDetailApiConverter {
     try {
       final status = map[outerElementStatus]?.toString();
       if (status == statusSuccess) {
+        final movieresults =
         // Single movie result.
         // ignore: avoid_dynamic_calls
-        final movieresults = map[outerElementResults][outerElementMovie] as Map;
+            map[outerElementResults]![outerElementMovie] as Map;
         final movieid = movieresults[elementId] as int;
         if (movieid == 0) {
           // When nothing is matched, a dummy record is returned.
@@ -163,7 +164,7 @@ class YtsDetailApiConverter {
   }
 
   static List<MovieResultDTO> dtoFromList(
-    Iterable<dynamic> maps,
+    Iterable<Object?> maps,
     String description,
   ) {
     final searchResults = <MovieResultDTO>[];
@@ -176,7 +177,7 @@ class YtsDetailApiConverter {
   }
 
   static MovieResultDTO dtoFromMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
     String description,
   ) {
     final keywords = <String>[];

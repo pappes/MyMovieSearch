@@ -32,18 +32,18 @@ Future<String?> globalFnThreadName(int value) async =>
     ThreadRunner.currentThreadName;
 
 class DynamicHelperTest {
-  String callToString(dynamic val) => dynamicToString(val);
-  static String callToString_(dynamic val) => DynamicHelper.toString_(val);
+  String callToString(Object? val) => dynamicToString(val);
+  static String callToString_(Object? val) => DynamicHelper.toString_(val);
 
-  List<String> callToStringList(dynamic val) => dynamicToStringList(val);
-  static List<String> callToStringList_(dynamic val) =>
+  List<String> callToStringList(Object? val) => dynamicToStringList(val);
+  static List<String> callToStringList_(Object? val) =>
       DynamicHelper.toStringList_(val);
 
-  int callToInt(dynamic val) => dynamicToInt(val);
-  static int callToInt_(dynamic val) => DynamicHelper.toInt_(val);
+  int callToInt(Object? val) => dynamicToInt(val);
+  static int callToInt_(Object? val) => DynamicHelper.toInt_(val);
 
-  double callToDouble(dynamic val) => dynamicToDouble(val);
-  static double callToDouble_(dynamic val) => DynamicHelper.toDouble_(val);
+  double callToDouble(Object? val) => dynamicToDouble(val);
+  static double callToDouble_(Object? val) => DynamicHelper.toDouble_(val);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -356,7 +356,7 @@ Future<void> main() async {
     // test to ensure that an exception generated on another thread
     // is propogated back to the calling thread.
     test('run function that throws exception', () {
-      String globalFnThrow(dynamic x) {
+      String globalFnThrow(Object? x) {
         throw Exception('throw from another thread');
       }
 
@@ -369,7 +369,7 @@ Future<void> main() async {
   group('DynamicHelper', () {
     // Convert a value to a string - non static version.
     test('dynamicToString()', () {
-      void testToString(dynamic input, String expectedOutput) =>
+      void testToString(Object? input, String expectedOutput) =>
           expect(DynamicHelperTest().callToString(input), expectedOutput);
 
       testToString('9', '9');
@@ -379,7 +379,7 @@ Future<void> main() async {
     });
     // Convert a value to a string - static version.
     test('dynamicToString_()', () {
-      void testToString(dynamic input, String expectedOutput) =>
+      void testToString(Object? input, String expectedOutput) =>
           expect(DynamicHelperTest.callToString_(input), expectedOutput);
 
       testToString('9', '9');
@@ -390,7 +390,7 @@ Future<void> main() async {
 
     // Convert a value to List<string> - non static version.
     test('dynamicToString()', () {
-      void testToStringList(dynamic input, List<String> expectedOutput) =>
+      void testToStringList(Object? input, List<String> expectedOutput) =>
           expect(DynamicHelperTest().callToStringList(input), expectedOutput);
 
       testToStringList(['9'], ['9']);
@@ -402,7 +402,7 @@ Future<void> main() async {
     });
     // Convert a value to List<string> - static version.
     test('dynamicToString_()', () {
-      void testToStringList(dynamic input, List<String> expectedOutput) =>
+      void testToStringList(Object? input, List<String> expectedOutput) =>
           expect(DynamicHelperTest.callToStringList_(input), expectedOutput);
 
       testToStringList(['9'], ['9']);
@@ -415,7 +415,7 @@ Future<void> main() async {
 
     // Convert a value to a int - non static version.
     test('dynamicToInt()', () {
-      void testToInt(dynamic input, int expectedOutput) =>
+      void testToInt(Object? input, int expectedOutput) =>
           expect(DynamicHelperTest().callToInt(input), expectedOutput);
 
       testToInt('9', 9);
@@ -425,7 +425,7 @@ Future<void> main() async {
     });
     // Convert a value to a int - static version.
     test('dynamicToInt_()', () {
-      void testToInt(dynamic input, int expectedOutput) =>
+      void testToInt(Object? input, int expectedOutput) =>
           expect(DynamicHelperTest.callToInt_(input), expectedOutput);
 
       testToInt('9', 9);
@@ -436,7 +436,7 @@ Future<void> main() async {
 
     // Convert a value to a double - non static version.
     test('dynamicToDouble()', () {
-      void testToDouble(dynamic input, double expectedOutput) =>
+      void testToDouble(Object? input, double expectedOutput) =>
           expect(DynamicHelperTest().callToDouble(input), expectedOutput);
 
       testToDouble('9', 9);
@@ -446,7 +446,7 @@ Future<void> main() async {
     });
     // Convert a value to a double - static version.
     test('dynamicToDouble_()', () {
-      void testToDouble(dynamic input, double expectedOutput) =>
+      void testToDouble(Object? input, double expectedOutput) =>
           expect(DynamicHelperTest.callToDouble_(input), expectedOutput);
 
       testToDouble('9', 9);
@@ -762,7 +762,7 @@ Future<void> main() async {
     group('combineUnique', () {
       void testCombineUnique(
         List<String> input1,
-        dynamic input2,
+        Object? input2,
         List<String> expectedOutput,
       ) {
         input1.combineUnique(input2);

@@ -112,7 +112,7 @@ String jsonToHtml(Iterable<MovieResultDTO> movies) {
   return html.toString();
 }
 
-Future<Map<String, dynamic>> getFirebaseData({required bool clearCache}) async {
+Future<Map<String, Object?>> getFirebaseData({required bool clearCache}) async {
   WidgetsFlutterBinding.ensureInitialized();
   final fb = MovieLocation();
   final data = await fb.getBackupData(clearCache: clearCache);
@@ -160,7 +160,7 @@ Future<String> getMovieDetails() async {
 
 Future<List<MovieResultDTO>> getMeilisearchDvdDetails() async {
   final movieDetails = <MovieResultDTO>[];
-  final futures = <Future<dynamic>>[];
+  final futures = <Future<Object?>>[];
   // Assume up to date firebase backup data.
   final movies = await getFirebaseData(clearCache: false);
   var recordNumber = 1;

@@ -34,7 +34,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Convert TMDB map to MovieResultDTO records.
   @override
   Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic map,
+    Object? map,
   ) async {
     if (map is Map) return TmdbMovieSearchConverter.dtoFromCompleteJsonMap(map);
     throw TreeConvertException(
@@ -73,7 +73,7 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Object?>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if (webText.contains('The resource you requested could not be found')) {

@@ -43,13 +43,13 @@ class QueryTVDBDetails extends QueryTVDBCommon {
 
   /// Convert TVDB map to MovieResultDTO records.
   @override
-  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(dynamic map) =>
+  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(Object? map) =>
       // Use Future.sync to allow code to run synchronously and ensure
       // that exceptions are propagated as Future errors.
       Future.sync(() => convertSync(map));
 
   // Synchronous conversion of TVDB map to MovieResultDTO records.
-  Iterable<MovieResultDTO> convertSync(dynamic map) {
+  Iterable<MovieResultDTO> convertSync(Object? map) {
     if (map is Map) {
       final dto = TvdbDetailConverter(
         criteria.criteriaTitle,

@@ -115,7 +115,7 @@ Iterable<DataRow> locationsWithCustomTitle(MovieResultDTO movie) sync* {
 }
 
 DataRow movieLocationRow(
-  DenomalizedLocation title, {
+  DenormalizedLocation title, {
   void Function()? onLongPress,
   // DataRow requires nullable bool for onSelectChanged
   // ignore: avoid_positional_boolean_parameters

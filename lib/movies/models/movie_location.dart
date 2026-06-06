@@ -74,7 +74,7 @@ class MovieLocation {
   }
 
   /// Remove all locations associated with a movie
-  Future<dynamic> deleteAllLocationsForMovie(String uniqueId) async {
+  Future<Object?> deleteAllLocationsForMovie(String uniqueId) async {
     if (_movies.containsKey(uniqueId) && _movies[uniqueId]!.isNotEmpty) {
       for (final location in getLocationsForMovie(uniqueId)) {
         void deleteMovie(StackerContents contents) =>
@@ -168,7 +168,7 @@ class MovieLocation {
   ///
   /// To update backup data and search engine data run tests in
   /// test/persistance/firebase_backup_is_not_a_test.dart
-  Future<Map<String, dynamic>> getBackupData({bool clearCache = true}) async {
+  Future<Map<String, Object>> getBackupData({bool clearCache = true}) async {
     // Wait for stream to be populated with initial data.
     await init();
     // Wait for data to be consumed from the stream.
@@ -183,7 +183,7 @@ class MovieLocation {
       await Future<void>.delayed(const Duration(seconds: 10));
       await streamSubscription.cancel();
     }
-    final movies = <String, dynamic>{};
+    final movies = <String, Object>{};
     for (final uniqueId in _movies.keys) {
       movies[uniqueId] = getTitlesForMovie(uniqueId);
     }
@@ -192,13 +192,13 @@ class MovieLocation {
 
   /// Find all titles associated with [uniqueId]
   /// and the loactions where they are stored.
-  List<DenomalizedLocation> getTitlesForMovie(String uniqueId) {
-    final titles = <DenomalizedLocation>[];
+  List<DenormalizedLocation> getTitlesForMovie(String uniqueId) {
+    final titles = <DenormalizedLocation>[];
     for (final location in getLocationsForMovie(uniqueId)) {
       for (final content in getMoviesAtLocation(location)) {
         if (content.uniqueId == uniqueId) {
           titles.add(
-            DenomalizedLocation(
+            DenormalizedLocation(
               uniqueId: uniqueId,
               libNum: location.libNum,
               location: location.location,
@@ -230,7 +230,7 @@ class MovieLocation {
 
   /// Insert a record into the cloud datastore.
   @awaitNotRequired
-  Future<dynamic>? _writeToCloud(StackerContents movie) {
+  Future<Object?>? _writeToCloud(StackerContents movie) {
     final locations = <String>[];
     for (final location in getLocationsForMovie(movie.uniqueId)) {
       locations.add(DvdLocation(location, movie).encode());
@@ -323,8 +323,8 @@ class MovieLocation {
   ///    'location':[StackerAddress],
   ///    'title':[String]
   ///    'dto':[MovieResultDTO]
-  Future<List<Map<String, dynamic>>> _getDvds() async {
-    final allDvds = <Map<String, dynamic>>[];
+  Future<List<Map<String, Object>>> _getDvds() async {
+    final allDvds = <Map<String, Object>>[];
     final rawContent = await _loadDvdFile();
     final table = rawContent.last as Map;
     final cdlib = table['data'] as List;
@@ -332,7 +332,7 @@ class MovieLocation {
     for (final oldDvd in cdlib) {
       oldDvd as List;
 
-      final newDvd = <String, dynamic>{};
+      final newDvd = <String, Object>{};
       newDvd['location'] = StackerAddress(
         libNum: oldDvd[DvdColumns.libnum.index].toString().padLeft(3, '0'),
         location: oldDvd[DvdColumns.location.index].toString().padLeft(3, '0'),
@@ -384,15 +384,15 @@ enum DvdColumns {
 enum Fields { libnum, location, dvdId, id, title }
 
 /// Combination of all movie and location data.
-class DenomalizedLocation {
-  DenomalizedLocation({
+class DenormalizedLocation {
+  DenormalizedLocation({
     required this.uniqueId,
     required this.title,
     required this.libNum,
     required this.location,
     required this.dvdId,
   });
-  DenomalizedLocation.combine(
+  DenormalizedLocation.combine(
     StackerContents contents,
     StackerAddress address,
   ) {

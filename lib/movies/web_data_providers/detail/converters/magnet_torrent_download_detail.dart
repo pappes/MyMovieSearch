@@ -8,7 +8,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/magnet_torrent_
 
 class TorrentDownloadDetailConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
     SearchCriteriaDTO criteria,
   ) => [
     MovieResultDTO().init(

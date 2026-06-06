@@ -53,7 +53,7 @@ abstract class HeadlessWebEngine {
   });
 
   /// Evaluates Javascript on the currently loaded page.
-  Future<dynamic> evaluateJavascript(String script);
+  Future<Object?> evaluateJavascript(String script);
 
   /// Cleans up engine resources.
   Future<void> dispose({Duration optionalDelay = Duration.zero});

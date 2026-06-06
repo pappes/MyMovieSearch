@@ -55,24 +55,24 @@ class WebLog {
   String source;
 
   /// Record that a request has been made.
-  void logRequest(dynamic criteria) {
+  void logRequest(Object? criteria) {
     statistics[source]!.qtyRequests++;
   }
 
-  void logResponse(dynamic criteria, dynamic dto, {bool cached = false}) {
+  void logResponse(Object? criteria, Object? dto, {bool cached = false}) {
     statistics[source]!.qtyResponses++;
     if (cached) {
       statistics[source]!.qtyCachedResponses++;
     }
   }
 
-  void logEmptyResponse(dynamic criteria) {
+  void logEmptyResponse(Object? criteria) {
     statistics[source]!.qtyResponses++;
   }
 
   /// Record that a response has been received.
   void logResponses<T>(
-    dynamic criteria,
+    Object? criteria,
     Iterable<T> dtos, {
     bool cached = false,
   }) {
@@ -83,7 +83,7 @@ class WebLog {
 
   /// Record that a response has been received.
   Stream<T> logResponsesAsync<T>(
-    dynamic criteria,
+    Object? criteria,
     Stream<T> dtos, {
     bool cached = false,
   }) async* {
@@ -94,7 +94,7 @@ class WebLog {
   }
 
   /// Record that an error has occurred.
-  void logError(dynamic criteria, String error) =>
+  void logError(Object? criteria, String error) =>
       statistics[source]!.addError(error);
 
   /// Retrieve statistics for all sources.

@@ -147,31 +147,31 @@ class MockFirebaseApplicationState extends _i1.Mock
           as _i3.Future<bool>);
 
   @override
-  _i3.Future<dynamic> fetchRecord(
+  _i3.Future<Object?> fetchRecord(
     String? collectionPath, {
     required String? id,
   }) =>
       (super.noSuchMethod(
             Invocation.method(#fetchRecord, [collectionPath], {#id: id}),
-            returnValue: _i3.Future<dynamic>.value(),
-            returnValueForMissingStub: _i3.Future<dynamic>.value(),
+            returnValue: _i3.Future<Object?>.value(),
+            returnValueForMissingStub: _i3.Future<Object?>.value(),
           )
-          as _i3.Future<dynamic>);
+          as _i3.Future<Object?>);
 
   @override
-  _i3.Stream<dynamic> fetchRecords(
+  _i3.Stream<Object?> fetchRecords(
     String? collectionPath, {
     String? filterFieldPath,
-    dynamic isEqualTo,
-    dynamic isNotEqualTo,
-    dynamic isLessThan,
-    dynamic isLessThanOrEqualTo,
-    dynamic isGreaterThan,
-    dynamic isGreaterThanOrEqualTo,
-    dynamic arrayContains,
-    List<dynamic>? arrayContainsAny,
-    List<dynamic>? whereIn,
-    List<dynamic>? whereNotIn,
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
     bool? isNull = false,
     _i3.Completer<bool>? initalDataLoadComplete,
   }) =>
@@ -195,13 +195,13 @@ class MockFirebaseApplicationState extends _i1.Mock
                 #initalDataLoadComplete: initalDataLoadComplete,
               },
             ),
-            returnValue: _i3.Stream<dynamic>.empty(),
-            returnValueForMissingStub: _i3.Stream<dynamic>.empty(),
+            returnValue: _i3.Stream<Object?>.empty(),
+            returnValueForMissingStub: _i3.Stream<Object?>.empty(),
           )
-          as _i3.Stream<dynamic>);
+          as _i3.Stream<Object?>);
 
   @override
-  _i3.Future<dynamic>? addRecord(
+  _i3.Future<Object?>? addRecord(
     String? collectionPath, {
     String? message,
     String? id,
@@ -214,16 +214,16 @@ class MockFirebaseApplicationState extends _i1.Mock
             ),
             returnValueForMissingStub: null,
           )
-          as _i3.Future<dynamic>?);
+          as _i3.Future<Object?>?);
 
   @override
-  Map<String, dynamic> newRecord(String? message) =>
+  Map<String, Object?> newRecord(String? message) =>
       (super.noSuchMethod(
             Invocation.method(#newRecord, [message]),
-            returnValue: <String, dynamic>{},
-            returnValueForMissingStub: <String, dynamic>{},
+            returnValue: <String, Object?>{},
+            returnValueForMissingStub: <String, Object?>{},
           )
-          as Map<String, dynamic>);
+          as Map<String, Object?>);
 
   @override
   String derivedUser(String? device) =>
@@ -241,7 +241,7 @@ class MockFirebaseApplicationState extends _i1.Mock
           as String);
 
   @override
-  bool derivedUserMatch(String? device, dynamic devices) =>
+  bool derivedUserMatch(String? device, Object? devices) =>
       (super.noSuchMethod(
             Invocation.method(#derivedUserMatch, [device, devices]),
             returnValue: false,

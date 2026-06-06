@@ -24,7 +24,7 @@ const innerElementYearRange = 'yr';
 
 class ImdbSuggestionConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
   ) {
     // deserialise outer json from map then iterate inner json
     final resultCollection = map[outerElementResultsCollection];
@@ -40,7 +40,7 @@ class ImdbSuggestionConverter {
     return allSuggestions;
   }
 
-  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
+  static MovieResultDTO dtoFromMap(Map<Object?, Object?> map) {
     final uniqueId = map[innerElementIdentity]?.toString();
     final movieType = MovieResultDTOHelpers.getMovieContentType(
       '${map[innerElementType]} ${map[innerElementYearRange]}',
@@ -60,7 +60,7 @@ class ImdbSuggestionConverter {
     return movie;
   }
 
-  static String? _getImage(dynamic imageData) {
+  static String? _getImage(Object? imageData) {
     if (imageData is List) return imageData.first as String;
     if (imageData is String) return imageData;
     return null;

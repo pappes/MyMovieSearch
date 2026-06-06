@@ -132,7 +132,7 @@ abstract class QueryIMDBJsonDetailsBase
   /// Convert IMDB map to MovieResultDTO records.
   @override
   Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic map,
+    Object? map,
   ) async {
     if (map is Map) {
       AppLogger.instance.info(
@@ -185,7 +185,7 @@ abstract class QueryIMDBJsonDetailsBase
   /// Ensure that the fetch results Map has a "data"
   /// key which is a Map with a "name" key.
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Object?>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if ('' == webText) {

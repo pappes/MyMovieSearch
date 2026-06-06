@@ -15,7 +15,7 @@ const Map<String, XxdbSource> tvdbSourceToEnumMapping = {
 };
 
 /// use the tmdb type and id to create a description and FQDN for each URL
-Map<String, String> getTmdbUrls(dynamic sources) {
+Map<String, String> getTmdbUrls(Object? sources) {
   final destinationUrls = <String, String>{};
   if (sources is Map) {
     for (final entry in sources.entries) {

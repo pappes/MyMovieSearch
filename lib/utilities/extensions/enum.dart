@@ -9,7 +9,7 @@ extension EnumListExtension<T extends Enum> on List<T> {
   /// ```dart
   /// SpokenLanguage.values.byFullName('English');
   /// ```
-  T? byFullName(dynamic stringValue) {
+  T? byFullName(Object? stringValue) {
     if (stringValue != null && stringValue != '' && stringValue != 'null') {
       final fullString = stringValue.toString();
       // If passed in value is type.enum then discard the type.

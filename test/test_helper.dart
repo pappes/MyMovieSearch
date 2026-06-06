@@ -315,9 +315,9 @@ class MovieResultDTOMatcher extends Matcher {
   @override
   // Tell test framework what difference was found.
   Description describeMismatch(
-    dynamic item,
+    Object? item,
     Description mismatchDescription,
-    Map<dynamic, dynamic> matchState,
+    Map<Object?, Object?> matchState,
     bool verbose,
   ) {
     if (verbose || this.verbose) {
@@ -330,7 +330,7 @@ class MovieResultDTOMatcher extends Matcher {
 
   @override
   // Compare expected with actual.
-  bool matches(dynamic actual, Map<dynamic, dynamic> matchState) {
+  bool matches(Object? actual, Map<Object?, Object?> matchState) {
     if (actual is MovieResultDTO) {
       _actual = actual;
       sortDtoList([_actual]);
@@ -366,9 +366,9 @@ class MovieResultDTOListMatcher extends Matcher {
   @override
   // Tell test framework what difference was found.
   Description describeMismatch(
-    dynamic item,
+    Object? item,
     Description mismatchDescription,
-    Map<dynamic, dynamic> matchState,
+    Map<Object?, Object?> matchState,
     bool verbose,
   ) {
     if (verbose || this.verbose) {
@@ -381,7 +381,7 @@ class MovieResultDTOListMatcher extends Matcher {
 
   @override
   // Compare expected with actual.
-  bool matches(dynamic actual, Map<dynamic, dynamic> matchState) {
+  bool matches(Object? actual, Map<Object?, Object?> matchState) {
     if (actual is List<MovieResultDTO>) {
       _actual = actual;
     } else if (actual is Iterable<MovieResultDTO>) {
@@ -431,9 +431,9 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
   @override
   // Tell test framework what difference was found.
   Description describeMismatch(
-    dynamic item,
+    Object? item,
     Description mismatchDescription,
-    Map<dynamic, dynamic> matchState,
+    Map<Object?, Object?> matchState,
     bool verbose,
   ) {
     mismatchDescription.add('has actual ${_actual.toPrintableString()}\n');
@@ -447,7 +447,7 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
 
   @override
   // Compare expected with actual.
-  bool matches(dynamic actual, Map<dynamic, dynamic> matchState) {
+  bool matches(Object? actual, Map<Object?, Object?> matchState) {
     matchQuantity = (expected.length * percentMatch / 100).ceil();
     if (actual is List<MovieResultDTO>) {
       _actual = actual;
@@ -466,7 +466,7 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
     for (final actualDto in _actual) {
       var resultMatched = false;
       for (final expectedDto in expected) {
-        final differences = <dynamic, dynamic>{};
+        final differences = <Object?, Object?>{};
         // Check if IDs or titles match.
         if (dtoSortCompareTo(actualDto, expectedDto) == 0) {
           resultMatched = true;
@@ -537,7 +537,7 @@ Stream<List<int>> emitByteStream(String text) async* {
 
 /// Converts [records] to a stream of DTOs.
 Stream<MovieResultDTO> streamMovieResultDTOFromJsonMap(
-  Iterable<Map<String, dynamic>> records,
+  Iterable<Map<String, Object?>> records,
 ) async* {
   for (final record in records) {
     yield record.toMovieResultDTO();

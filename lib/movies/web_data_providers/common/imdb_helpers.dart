@@ -348,7 +348,7 @@ String? _getRegexGroupInBrackets(String stringToSearch, String regexFormula) {
 ///
 /// Bypasses the need to perform a large html parse operation
 /// and an expensive querySelector operation.
-List<dynamic> fastParse(String webText) {
+List<Object?> fastParse(String webText) {
   final startTag = webText.indexOf('{"props":{"pageProps":{');
   if (-1 != startTag) {
     final endTag = webText.indexOf('</script>', startTag);

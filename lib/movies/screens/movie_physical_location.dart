@@ -30,7 +30,7 @@ class MoviePhysicalLocationPage extends StatefulWidget {
       _MoviePhysicalLocationPageState();
 
   /// Instruct goroute how to navigate to this page.
-  static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
+  static MaterialPage<Object?> goRoute(_, GoRouterState state) => MaterialPage(
     restorationId: RestorableMovie.getRestorationId(state),
     child: MoviePhysicalLocationPage(
       movieDto: RestorableMovie.getDto(state),
@@ -230,7 +230,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
     MovieLocation().usedLocations(_stackerController.value.text).entries,
   );
 
-  Iterable<Widget> _createLocationsWidgets(Iterable<dynamic> locations) sync* {
+  Iterable<Widget> _createLocationsWidgets(Iterable<Object?> locations) sync* {
     for (final location in locations) {
       yield selectableText(location, _locationController.value);
     }
@@ -244,7 +244,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
     return widgets;
   }
 
-  Widget selectableText(dynamic text, TextEditingController controller) {
+  Widget selectableText(Object? text, TextEditingController controller) {
     if (text is MapEntry) {
       return InkWell(
         child: Text('${text.key} - ${text.value}'),
@@ -327,7 +327,7 @@ class _MoviePhysicalLocationPageState extends State<MoviePhysicalLocationPage>
       final movies = MovieLocation().getMoviesAtLocation(location);
       for (final movie in movies) {
         yield movieLocationRow(
-          DenomalizedLocation.combine(movie, location),
+          DenormalizedLocation.combine(movie, location),
           onLongPress: () => _deleteLocation(location, movie.titleName),
         );
       }

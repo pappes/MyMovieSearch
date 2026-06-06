@@ -52,7 +52,7 @@ const elementLanguageCode = 'iso_639_1';
 /// Work out how to get a dto from the json data.
 class TmdbMovieDetailConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
   ) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
@@ -75,7 +75,7 @@ class TmdbMovieDetailConverter {
   }
 
   /// Capture all the useful info from the [Map] and create a [MovieResultDTO]
-  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
+  static MovieResultDTO dtoFromMap(Map<Object?, Object?> map) {
     final movie = MovieResultDTO()
       ..setSource(
         newSource: DataSourceType.tmdbMovie,
@@ -137,7 +137,7 @@ class TmdbMovieDetailConverter {
     return movie;
   }
 
-  static Set<String> _getLanguages(Map<dynamic, dynamic> map) {
+  static Set<String> _getLanguages(Map<Object?, Object?> map) {
     final languages = <String>{};
     // get the original language code
     final originalLanguage = map[innerElementOriginalLanguage]?.toString();
@@ -149,7 +149,7 @@ class TmdbMovieDetailConverter {
   }
 
   static Set<String> _getMatchingLanguages(
-    Map<dynamic, dynamic> map, {
+    Map<Object?, Object?> map, {
     String? languageFilter,
   }) {
     final languages = <String>{};
@@ -181,7 +181,7 @@ class TmdbMovieDetailConverter {
   }
 
   /// Get each keyword from the deeply embedded map and create a [Set]<[String]>
-  static Set<String> _getKeywords(dynamic keywords) {
+  static Set<String> _getKeywords(Object? keywords) {
     final list = TreeHelper(
       keywords,
     ).deepSearch(innerElementKeyword, multipleMatch: true);

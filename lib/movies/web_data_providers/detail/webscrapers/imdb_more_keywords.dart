@@ -12,7 +12,7 @@ mixin ScrapeIMDBMoreKeywordsDetails
   /// Scrape bibliography data from rows
   /// in the html div named fullcredits_content.
   @override
-  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, Object?>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if (webText.contains("don't have any Plot Keywords for this title yet")) {
@@ -23,14 +23,14 @@ mixin ScrapeIMDBMoreKeywordsDetails
   }
 
   /// Collect webpage text to construct a map of the movie data.
-  Map<String, dynamic> _scrapeWebPage(Document document) {
-    final movieData = <String, dynamic>{};
+  Map<String, Object?> _scrapeWebPage(Document document) {
+    final movieData = <String, Object?>{};
     _scrapeRelated(document, movieData);
     return movieData;
   }
 
   /// Extract the keywords for the current movie.
-  void _scrapeRelated(Document document, Map<String, dynamic> movieData) {
+  void _scrapeRelated(Document document, Map<String, Object?> movieData) {
     final links = document.querySelectorAll(
       '[href*="/search/"][href*="keyword"]',
     );

@@ -42,7 +42,7 @@ class QueryTpbSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   /// Convert TPB map to MovieResultDTO records.
   @override
   Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic map,
+    Object? map,
   ) async {
     if (map is Map) {
       return TpbSearchConverter.dtoFromCompleteJsonMap(map);

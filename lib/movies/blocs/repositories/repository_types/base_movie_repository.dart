@@ -29,7 +29,7 @@ class BaseMovieRepository {
 
   late SearchCriteriaDTO criteria;
   StreamController<MovieResultDTO>? _movieStreamController;
-  final _awaitingProviders = <dynamic>[];
+  final _awaitingProviders = <Object>[];
   final providers = <WebFetchBase<MovieResultDTO, SearchCriteriaDTO>>[];
   static int _searchUID = 1;
   final searchIndicator = MovieResultDTO()
@@ -125,7 +125,7 @@ class BaseMovieRepository {
   ///
   /// [provider] uniquely identifies the search source and search criteria.
   @protected
-  void initProvider(dynamic provider) {
+  void initProvider(Object provider) {
     _awaitingProviders.add(provider);
   }
 
@@ -134,7 +134,7 @@ class BaseMovieRepository {
   ///
   /// [provider] is the same passed through to initProvider.
   @protected
-  Future<void> finishProvider(dynamic provider) async {
+  Future<void> finishProvider(Object provider) async {
     _awaitingProviders.remove(provider);
     if (_awaitingProviders.isEmpty) {
       return close();
@@ -172,7 +172,7 @@ class BaseMovieRepository {
   /// Initiates a search with multiple WebFetch providers.
   /// Requests details retrieval for all returned search results.
   Future<void> _searchText(int searchUID) async {
-    final futures = <Future<dynamic>>{};
+    final futures = <Future<void>>{};
 
     for (final entry in getProviders().entries) {
       final provider = entry.key;

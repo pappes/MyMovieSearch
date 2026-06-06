@@ -7,7 +7,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/uhtt_barcode.da
 
 class UhttBarcodeSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
   ) => [
     MovieResultDTO().init(
       bestSource: DataSourceType.uhttBarcode,

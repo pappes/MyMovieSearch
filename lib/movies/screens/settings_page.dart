@@ -10,7 +10,7 @@ import 'package:my_movie_search/utilities/settings.dart';
 class SettingsPage extends StatefulWidget {
   const SettingsPage({super.key});
 
-  static MaterialPage<dynamic> goRoute(BuildContext _, GoRouterState _) =>
+  static MaterialPage<Object?> goRoute(BuildContext _, GoRouterState _) =>
       const MaterialPage(restorationId: 'SettingsPage', child: SettingsPage());
 
   @override

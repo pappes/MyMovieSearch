@@ -10,7 +10,7 @@ class OnlineOfflineSelector {
   static var _offline = false;
 
   /// Initialise the selector.
-  static void init(dynamic offline) {
+  static void init(Object? offline) {
     if (offline == null) {
       _offline = defaultToOffline;
     } else {

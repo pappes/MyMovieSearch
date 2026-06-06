@@ -28,7 +28,7 @@ const personRelatedWriterLabel = 'Writer:';
 abstract class ImdbConverterBase extends ConverterHelper {
   late final DataSourceType source;
   Iterable<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
     DataSourceType source,
   ) {
     this.source = source;
@@ -38,7 +38,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
   }
 
   /// Get full content of movies and people with related information.
-  void getMovieList(MovieCollection result, Map<dynamic, dynamic> data) {
+  void getMovieList(MovieCollection result, Map<Object?, Object?> data) {
     final movies = getMovieDataList(data);
     for (final movie in movies) {
       final dto = MovieResultDTO().init();
@@ -57,26 +57,26 @@ abstract class ImdbConverterBase extends ConverterHelper {
 
   /// Break [data] up into one Map per movie.
   /// Default behaviour is to assume there is only one movie.
-  Iterable<Map<dynamic, dynamic>> getMovieDataList(
-    Map<dynamic, dynamic> data,
+  Iterable<Map<Object?, Object?>> getMovieDataList(
+    Map<Object?, Object?> data,
   ) => [data];
 
   /// Get basic details for the movie or person from [data].
-  dynamic getMovieOrPerson(MovieResultDTO dto, Map<dynamic, dynamic> data);
+  Object? getMovieOrPerson(MovieResultDTO dto, Map<Object?, Object?> data);
 
   /// Get movies the person has worked on or recommended simliar movies.
-  void getRelatedMovies(RelatedMovieCategories related, dynamic data);
+  void getRelatedMovies(RelatedMovieCategories related, Object? data);
 
   /// Get people involved in making the movie.
-  void getRelatedPeople(RelatedMovieCategories related, dynamic data);
+  void getRelatedPeople(RelatedMovieCategories related, Object? data);
 
   /// Take a [Map] of IMDB data and create a [MovieResultDTO] from it.
-  //Iterable<MovieResultDTO> dtoFromMap(Map<dynamic, dynamic> map);
+  //Iterable<MovieResultDTO> dtoFromMap(Map<Object?, Object?> map);
 
   /// Common function to find the contents of map["props"]["pageProps"]
   /// returns null if child key is not present.
-  Map<dynamic, dynamic>? getDeepContent(
-    Map<dynamic, dynamic> map,
+  Map<Object?, Object?>? getDeepContent(
+    Map<Object?, Object?> map,
     String childKey,
   ) {
     final props = map[rootAttribute];
@@ -92,7 +92,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
   }
 
   /// extract basic movie details from [map].
-  MovieResultDTO getMovieAttributes(Map<dynamic, dynamic> map, String id) {
+  MovieResultDTO getMovieAttributes(Map<Object?, Object?> map, String id) {
     // ...{'titleText':...{...'text':<value>...}} or
     // ...{'titleText':<value>...}
     final title =
@@ -246,10 +246,10 @@ abstract class ImdbConverterBase extends ConverterHelper {
 
   /// extract collections of movies for a specific category for the title
   /// from a map or a list.
-  MovieCollection getRelatedMoviesForCategory(dynamic nodes) {
+  MovieCollection getRelatedMoviesForCategory(Object? nodes) {
     final MovieCollection result = {};
 
-    void addMovie(Map<dynamic, dynamic> node) {
+    void addMovie(Map<Object?, Object?> node) {
       final movieDto = getMovieDetails(node);
       getMovieCharacterName(movieDto, node);
       result[movieDto.uniqueId] = movieDto;
@@ -260,7 +260,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
   }
 
   /// extract related movie details from [map].
-  MovieResultDTO getMovieDetails(Map<dynamic, dynamic> map) {
+  MovieResultDTO getMovieDetails(Map<Object?, Object?> map) {
     final id = // ...{'id':<value>...}
     map.searchForString(
       key: deepRelatedMovieId,
@@ -272,7 +272,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
   /// Maintain credits order when extracting people involved in a movie.
   static void getRelatedPersonWithCreditsOrder(
     MovieCollection collection,
-    Map<dynamic, dynamic> node, [
+    Map<Object?, Object?> node, [
     int? creditsOrder,
   ]) {
     final movieDto = getRelatedPersonDetails(node);
@@ -286,7 +286,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
   /// Extract collections of movies for a specific category.
   static void getMovieCharacterName(
     MovieResultDTO dto,
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
   ) {
     final characters = // ...{'characters':...} or
     map
@@ -307,7 +307,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
   }
 
   /// extract related movie details from [map].
-  static MovieResultDTO getRelatedPersonDetails(Map<dynamic, dynamic> map) {
+  static MovieResultDTO getRelatedPersonDetails(Map<Object?, Object?> map) {
     final id = // ...{'id':<value>...}
     map.searchForString(
       key: deepRelatedPersonId,
@@ -331,7 +331,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
   }
 
   /// Find the roles a person has in a movie.
-  static List<String> getRolesFromCreditsV2(dynamic creditedRoles) {
+  static List<String> getRolesFromCreditsV2(Object? creditedRoles) {
     const defaultLabel = 'Unknown';
     final categories = {defaultLabel};
 
@@ -356,8 +356,8 @@ abstract class ImdbConverterBase extends ConverterHelper {
   /// get movie title in from a movie creditsV2 node.
   ///
   MovieResultDTO? getRelatedMovieCharacter(
-    dynamic title,
-    Map<dynamic, dynamic> parent,
+    Object? title,
+    Map<Object?, Object?> parent,
   ) {
     if (title is Map) {
       final movieDto = getMovieDetails(title);
@@ -403,7 +403,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
 // }
 mixin ReleatedMoviesForPredefinedCategory on ImdbConverterBase {
   @override
-  void getRelatedMovies(RelatedMovieCategories related, dynamic data) {
+  void getRelatedMovies(RelatedMovieCategories related, Object? data) {
     // imdb_title uses ...{'moreLikeThisTitles':...}
     final relatedTree = TreeHelper(data)
         .deepSearch(deepTitleRelatedTitlesHeader)
@@ -451,7 +451,7 @@ mixin ReleatedMoviesForPredefinedCategory on ImdbConverterBase {
 //  , imdb_movies_for_keyword_converter.dart  ????
 mixin ReleatedPeopleForPredefinedCategory on ImdbConverterBase {
   @override
-  void getRelatedPeople(RelatedMovieCategories related, dynamic data) {
+  void getRelatedPeople(RelatedMovieCategories related, Object? data) {
     final list = TreeHelper(data);
 
     // imdb_title uses ...{'cast':...}
@@ -494,11 +494,11 @@ mixin ReleatedPeopleForPredefinedCategory on ImdbConverterBase {
   /// from a map or a list.
   ///
   /// used from ImdbTitleConverter
-  static MovieCollection getPeopleForCategory(dynamic nodes) {
+  static MovieCollection getPeopleForCategory(Object? nodes) {
     final MovieCollection result = {};
     var creditsOrder = 100;
 
-    void addToCollection(Map<dynamic, dynamic> node) {
+    void addToCollection(Map<Object?, Object?> node) {
       ImdbConverterBase.getRelatedPersonWithCreditsOrder(
         result,
         node,
@@ -518,7 +518,7 @@ mixin ReleatedPeopleForPredefinedCategory on ImdbConverterBase {
   /// used from ImdbMoviesForKeywordConverter
   void getRelatedPeopleFromMainColumnData(
     RelatedMovieCategories related,
-    List<dynamic>? list,
+    List<Object?>? list,
   ) {
     // ...{'cast':...}
     final castTree = list
@@ -571,7 +571,7 @@ mixin ReleatedPeopleForPredefinedCategory on ImdbConverterBase {
 mixin RelatedMoviesForDynamicCategory on ImdbConverterBase {
   /// Search within a movie credits node for movie information for the person.
   @override
-  void getRelatedMovies(RelatedMovieCategories related, dynamic data) {
+  void getRelatedMovies(RelatedMovieCategories related, Object? data) {
     // ...[{'creditedRoles':...,'title':...}}]...}
     forEachMap(data, (map) => getMovieWithCategory(related, map));
 
@@ -593,7 +593,7 @@ mixin RelatedMoviesForDynamicCategory on ImdbConverterBase {
 
   void getMovieWithCategory(
     RelatedMovieCategories related,
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
   ) {
     if (map.containsKey(deepRelatedMovieHeader) &&
         (map.containsKey(deepRelatedCategoryHeaderV2) ||
@@ -624,7 +624,7 @@ mixin RelatedMoviesForDynamicCategory on ImdbConverterBase {
 mixin ReleatedPeopleForDynamicCategory on ImdbConverterBase {
   /// Search within a movie credits node for movie information for the person.
   @override
-  void getRelatedPeople(RelatedMovieCategories related, dynamic data) {}
+  void getRelatedPeople(RelatedMovieCategories related, Object? data) {}
 }
 
 class ConverterHelper {
@@ -652,10 +652,10 @@ class ConverterHelper {
   ///
   ///
   void forEachMap(
-    dynamic collection,
-    void Function(Map<dynamic, dynamic>) action, {
+    Object? collection,
+    void Function(Map<Object?, Object?>) action, {
     bool fallback = false,
   }) {
-    forEachType<Map<dynamic, dynamic>>(collection, action, fallback: fallback);
+    forEachType<Map<Object?, Object?>>(collection, action, fallback: fallback);
   }
 }

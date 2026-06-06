@@ -39,8 +39,8 @@ class TvdbMovieDetailConverter extends TvdbCommonConverter {
 
   @override
   MovieContentType parseResultTypeAndData(
-    Map<dynamic, dynamic> inputData,
-    Map<dynamic, dynamic> outputData,
+    Map<Object?, Object?> inputData,
+    Map<Object?, Object?> outputData,
   ) {
     // {"data": [{ lists: {[{ remoteIds: [{ id: ..., sourceName:..., }]}]}}]}
     // {"status": "success", "data": null }
@@ -81,7 +81,7 @@ class TvdbMovieDetailConverter extends TvdbCommonConverter {
 
   /// use the tvdb type and id to create a description and FQDN for each URL
   // [[{ "id": "tt13443470", "type": 2, sourceName": "IMDB" }]]
-  Map<String, String> constructUrls(List<dynamic>? rawData) {
+  Map<String, String> constructUrls(List<Object?>? rawData) {
     final fqdnUrls = <String, String>{};
     final links = rawData?.deepSearch(
       idField,
@@ -101,9 +101,9 @@ class TvdbMovieDetailConverter extends TvdbCommonConverter {
   }
 
   /// Search the returned data for a specific id (TVDB or IMDB)
-  String? getId(List<dynamic>? sources, String source) {
+  String? getId(List<Object?>? sources, String source) {
     String? idValue;
-    String? extractId(Map<dynamic, dynamic> map) {
+    String? extractId(Map<Object?, Object?> map) {
       if (map.containsKey(nameField) && map[nameField] == source) {
         return idValue = map[idField]?.toString() ?? idValue;
       }
@@ -123,7 +123,7 @@ class TvdbMovieDetailConverter extends TvdbCommonConverter {
 
   /// get a list of all external URLs that are already FQDN and dont need
   /// extra processing
-  void getRawUrls(Map<String, String> sourceUrls, List<dynamic>? sources) {
+  void getRawUrls(Map<String, String> sourceUrls, List<Object?>? sources) {
     for (final map in sources ?? []) {
       if (map is Map) {
         for (final entry in map.entries) {

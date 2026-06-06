@@ -8,10 +8,10 @@ import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
 
 class GloTorrentsSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
   ) => [dtoFromMap(map)];
 
-  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
+  static MovieResultDTO dtoFromMap(Map<Object?, Object?> map) {
     // Compensate for gloTorrents overrestimation
     final seeders = DoubleHelper.fromText(map[jsonSeedersKey]) ?? 0 / 10;
     final leechers = DoubleHelper.fromText(map[jsonLeechersKey]) ?? 0 / 10;

@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 class NavigationHistoryPage extends StatefulWidget {
   const NavigationHistoryPage({super.key});
 
-  static MaterialPage<dynamic> goRoute(_, _) => const MaterialPage(
+  static MaterialPage<Object?> goRoute(_, _) => const MaterialPage(
     restorationId: 'NavigationHistoryPage',
     child: NavigationHistoryPage(),
   );

@@ -161,7 +161,7 @@ class QueryWikidataDetails
   /// Convert IMDB map to MovieResultDTO records.
   @override
   Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic map,
+    Object? map,
   ) async {
     if (map is Map) {
       return WikidataDetailConverter().dtoFromCompleteJsonMap(map);
@@ -256,7 +256,7 @@ SELECT DISTINCT ?item ?itemLabel WHERE {
   }
 
   /// Extract wikidata id from json query results.
-  String _getWikiIdFromQueryResults(dynamic jsonData) =>
+  String _getWikiIdFromQueryResults(Object? jsonData) =>
       /*    
 [{"item":"http://www.wikidata.org/entity/Q13794921","itemLabel":"Sharknado"}]
 

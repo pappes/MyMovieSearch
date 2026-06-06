@@ -71,14 +71,14 @@
 
 import 'dart:convert';
 
-final List<dynamic> intermediateErrorList = [jsonDecode(jsonSampleEmpty)];
+final List<Object?> intermediateErrorList = [jsonDecode(jsonSampleEmpty)];
 
-final List<dynamic> intermediateMovieList = [jsonDecode(tvdbJsonSearchMovie)];
-final List<dynamic> intermediateSeriesList = [jsonDecode(tvdbJsonSearchSeries)];
-final List<dynamic> intermediateEpisodeList = [
+final List<Object?> intermediateMovieList = [jsonDecode(tvdbJsonSearchMovie)];
+final List<Object?> intermediateSeriesList = [jsonDecode(tvdbJsonSearchSeries)];
+final List<Object?> intermediateEpisodeList = [
   jsonDecode(tvdbJsonSearchEpisode),
 ];
-final List<dynamic> intermediatePersonList = [jsonDecode(tvdbJsonSearchPerson)];
+final List<Object?> intermediatePersonList = [jsonDecode(tvdbJsonSearchPerson)];
 
 const jsonSampleEmpty = '''
 {

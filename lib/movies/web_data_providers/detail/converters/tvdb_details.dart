@@ -13,8 +13,8 @@ class TvdbDetailConverter extends TvdbCommonConverter {
 
   @override
   MovieContentType parseResultTypeAndData(
-    Map<dynamic, dynamic> inputData,
-    Map<dynamic, dynamic> resultData,
+    Map<Object?, Object?> inputData,
+    Map<Object?, Object?> resultData,
   ) {
     // {"data": [ { movie: { ... } } ] }
     // {"data": [ { series: { ... } } ] }
@@ -38,7 +38,7 @@ class TvdbDetailConverter extends TvdbCommonConverter {
             for (final entry in row.entries) {
               // Dont care about seasons for a tv series.
               if (tvdbTypeMapping.keys.contains(entry.key)) {
-                resultData.addAll(entry.value as Map<dynamic, dynamic>);
+                resultData.addAll(entry.value as Map<Object?, Object?>);
                 final type = QueryTVDBCommon.typeToMovieContentType(
                   entry.key.toString(),
                 );

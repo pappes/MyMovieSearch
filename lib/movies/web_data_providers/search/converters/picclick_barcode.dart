@@ -7,7 +7,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/picclick_barcod
 
 class PicclickBarcodeSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
   ) => [
     MovieResultDTO().init(
       bestSource: DataSourceType.picclickBarcode,

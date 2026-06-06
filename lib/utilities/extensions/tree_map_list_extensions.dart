@@ -1,9 +1,9 @@
 /// Extend [Iterable] and [Map] to provide tree convenience functions.
 ///
-extension TreeListHelper on Iterable<dynamic> {
+extension TreeListHelper on Iterable<Object?> {
   /// Recursively traverse a tree to pull a specific value out.
   /// {@macro deepSearch}
-  List<dynamic>? deepSearch(
+  List<Object?>? deepSearch(
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
@@ -18,15 +18,15 @@ extension TreeListHelper on Iterable<dynamic> {
   );
 
   /// {@macro getGrandChildren}
-  List<dynamic> getGrandChildren() => TreeHelper(this).getGrandChildren();
+  List<Object?> getGrandChildren() => TreeHelper(this).getGrandChildren();
 
   /// {@macro searchForString}
   String? searchForString({Object key = 'text'}) =>
       TreeHelper(this).searchForString(key: key);
 }
 
-extension TreeMapHelper on Map<dynamic, dynamic> {
-  List<dynamic>? deepSearch(
+extension TreeMapHelper on Map<Object?, Object?> {
+  List<Object?>? deepSearch(
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
@@ -39,16 +39,16 @@ extension TreeMapHelper on Map<dynamic, dynamic> {
   );
 
   /// {@macro getGrandChildren}
-  List<dynamic> getGrandChildren() => values.getGrandChildren();
+  List<Object?> getGrandChildren() => values.getGrandChildren();
 
   /// {@macro searchForString}
   String? searchForString({Object key = 'text'}) =>
       TreeHelper(this).searchForString(key: key);
 }
 
-extension TreeSetHelper on Set<dynamic> {
+extension TreeSetHelper on Set<Object?> {
   /// {@macro deepSearch}
-  List<dynamic>? deepSearch(
+  List<Object?>? deepSearch(
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
@@ -61,7 +61,7 @@ extension TreeSetHelper on Set<dynamic> {
   );
 
   /// {@macro getGrandChildren}
-  List<dynamic> getGrandChildren() => toList().getGrandChildren();
+  List<Object?> getGrandChildren() => toList().getGrandChildren();
 
   /// {@macro searchForString}
   String? searchForString({Object key = 'text'}) =>
@@ -81,11 +81,11 @@ class TreeHelper {
     }
   }
 
-  final dynamic tree;
+  final Object? tree;
   late bool _isMap;
   late bool _isIterable;
-  Iterable<dynamic>? asIterable;
-  Map<dynamic, dynamic>? asMap;
+  Iterable<Object?>? asIterable;
+  Map<Object?, Object?>? asMap;
 
   /// Recursively traverse a tree to pull a specific value out.
   ///
@@ -97,17 +97,17 @@ class TreeHelper {
   /// * [stopAtTopLevel] do not search inside result for more matches.
   /// * [returnParent] identify the tree level above the matched node.
   /// {@endtemplate}
-  List<dynamic>? deepSearch(
+  List<Object?>? deepSearch(
     Object tag, {
     bool suffixMatch = false,
     bool multipleMatch = false,
     bool stopAtTopLevel = true,
     bool returnParent = false,
-    dynamic parent,
-    dynamic grandparent,
+    Object? parent,
+    Object? grandparent,
   }) {
     if (null == tree) return null;
-    final matches = <dynamic>[]; // Allow mutiple results on suffix search.
+    final matches = <Object?>[]; // Allow mutiple results on suffix search.
     for (final entry in asIterable ?? []) {
       final key = entry is MapEntry ? entry.key : entry;
       final value = entry is MapEntry ? entry.value : entry;
@@ -153,10 +153,10 @@ class TreeHelper {
   /// * grandparent if parent is part of a Map
   /// * parent if not part of a Map
   /// fall back to child if parent is null
-  dynamic _valueToReturn(
-    dynamic child,
-    dynamic parent,
-    dynamic grandparent,
+  Object? _valueToReturn(
+    Object? child,
+    Object? parent,
+    Object? grandparent,
     bool returnParent,
   ) {
     if (!returnParent) {
@@ -172,8 +172,8 @@ class TreeHelper {
   /// {@template getGrandChildren}
   /// Collapse one level of the tree.
   /// {@endtemplate}
-  List<dynamic> getGrandChildren() {
-    final List<dynamic> grandChildren = [];
+  List<Object?> getGrandChildren() {
+    final List<Object?> grandChildren = [];
     for (final child in asIterable ?? []) {
       if (child is Iterable) {
         grandChildren.addAll(child);

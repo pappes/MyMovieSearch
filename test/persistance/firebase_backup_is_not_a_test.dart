@@ -59,7 +59,7 @@ Future<void> writeDataFile(String filename, JsonCallback jsonGenerator) async {
   );
 }
 
-Future<Map<String, dynamic>> getFirebaseData() async {
+Future<Map<String, Object?>> getFirebaseData() async {
   WidgetsFlutterBinding.ensureInitialized();
   final fb = MovieLocation();
   final data = await fb.getBackupData();

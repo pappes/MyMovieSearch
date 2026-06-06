@@ -48,13 +48,13 @@ class MockHeadlessWebEngine extends _i1.Mock implements _i2.HeadlessWebEngine {
           as _i3.Future<int>);
 
   @override
-  _i3.Future<dynamic> evaluateJavascript(String? script) =>
+  _i3.Future<Object?> evaluateJavascript(String? script) =>
       (super.noSuchMethod(
             Invocation.method(#evaluateJavascript, [script]),
-            returnValue: _i3.Future<dynamic>.value(),
-            returnValueForMissingStub: _i3.Future<dynamic>.value(),
+            returnValue: _i3.Future<Object?>.value(),
+            returnValueForMissingStub: _i3.Future<Object?>.value(),
           )
-          as _i3.Future<dynamic>);
+          as _i3.Future<Object?>);
 
   @override
   _i3.Future<void> dispose({Duration? optionalDelay = Duration.zero}) =>

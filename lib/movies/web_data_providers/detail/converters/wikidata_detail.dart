@@ -95,10 +95,10 @@ class WikidataDetailConverter {
   final DataSourceType dataSource = DataSourceType.wikidataDetail;
   String dataSourceName = 'WikidataDetailConverter';
 
-  List<MovieResultDTO> dtoFromCompleteJsonMap(Map<dynamic, dynamic> map) {
+  List<MovieResultDTO> dtoFromCompleteJsonMap(Map<Object?, Object?> map) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
-    final resultData = <dynamic, dynamic>{};
+    final resultData = <Object?, Object?>{};
     dataSourceName = dataSource.name; //datasource
 
     final singleResult = map[nodeSingleResult];
@@ -136,7 +136,7 @@ class WikidataDetailConverter {
     return searchResults;
   }
 
-  Iterable<MovieResultDTO> dtosFromMaps(Map<dynamic, dynamic> resultData) {
+  Iterable<MovieResultDTO> dtosFromMaps(Map<Object?, Object?> resultData) {
     final dtos = <MovieResultDTO>[];
     for (final result in resultData.entries) {
       final rawData = result.value;
@@ -148,7 +148,7 @@ class WikidataDetailConverter {
     return dtos;
   }
 
-  MovieResultDTO dtoFromMap(Map<dynamic, dynamic> resultData) {
+  MovieResultDTO dtoFromMap(Map<Object?, Object?> resultData) {
     final id = resultData[idField]!.toString();
     final movie = MovieResultDTO()
       ..setSource(newSource: dataSource, newUniqueId: id);
@@ -172,8 +172,8 @@ class WikidataDetailConverter {
   }
 
   MovieContentType parseMultipleResultTypeAndData(
-    Map<dynamic, dynamic> inputData,
-    Map<dynamic, dynamic> outputData,
+    Map<Object?, Object?> inputData,
+    Map<Object?, Object?> outputData,
   ) {
     // [{head: { }, results: {bindings: [{...}]}}]
     var result = MovieContentType.none;
@@ -183,7 +183,7 @@ class WikidataDetailConverter {
       if (inputMap is List) {
         for (final row in inputMap) {
           if (row is Map) {
-            final outputRow = <String, dynamic>{};
+            final outputRow = <String, Object?>{};
             // insert data into map
             outputRow[nodeName] = getStringValue(row, branchText: multipleName);
             outputRow[nodeDescription] = getStringValue(
@@ -209,7 +209,7 @@ class WikidataDetailConverter {
     return result;
   }
 
-  Map<String, String> getMultipleLinks(Map<dynamic, dynamic> rawData) {
+  Map<String, String> getMultipleLinks(Map<Object?, Object?> rawData) {
     final destinationUrls = <String, String>{};
     for (final row in rawData.entries) {
       var websiteDescription = row.key.toString();
@@ -228,8 +228,8 @@ class WikidataDetailConverter {
   }
 
   MovieContentType parseSingleResultTypeAndData(
-    Map<dynamic, dynamic> inputData,
-    Map<dynamic, dynamic> outputData,
+    Map<Object?, Object?> inputData,
+    Map<Object?, Object?> outputData,
   ) {
     try {
       var movieType = MovieContentType.none;
@@ -291,7 +291,7 @@ class WikidataDetailConverter {
   /// Grab the URL part for the active external link (ignore deprecated).
   void getExternalLinks(
     Map<String, String> destinationUrls,
-    List<dynamic>? rawData,
+    List<Object?>? rawData,
   ) {
     for (final linkCode in tvdbSourceToEnumMapping.keys) {
       final linkType = tvdbSourceToEnumMapping[linkCode];
@@ -308,11 +308,11 @@ class WikidataDetailConverter {
     }
   }
 
-  Iterable<Map<dynamic, dynamic>> ignoreDeprecatedClaims(dynamic rawData) {
+  Iterable<Map<Object?, Object?>> ignoreDeprecatedClaims(Object? rawData) {
     final claims = TreeHelper(
       rawData,
     ).deepSearch(linkStatus, returnParent: true, multipleMatch: true);
-    final currentClaims = <Map<dynamic, dynamic>>[];
+    final currentClaims = <Map<Object?, Object?>>[];
     for (final link in claims ?? []) {
       // Discard deprecated links.
       if (link is Map && link[linkStatus] == linkActive) {
@@ -323,7 +323,7 @@ class WikidataDetailConverter {
   }
 
   /// Search the returned data for a specific id (wikiData or IMDB)
-  String getId(Map<dynamic, dynamic> sources) {
+  String getId(Map<Object?, Object?> sources) {
     final wikidataId = sources.searchForString(key: idField);
     return imdbId ?? wikidataId ?? wikiNotFound;
   }
@@ -381,12 +381,12 @@ class WikidataDetailConverter {
   }
 
   String? getStringValue(
-    dynamic rawData, {
+    Object? rawData, {
     String branchText = languageEnglish,
     String leafText = nodeText,
   }) {
     final ignoreDeprecated = (branchText == factVersion);
-    final Iterable<dynamic> claims = ignoreDeprecated
+    final Iterable<Object?> claims = ignoreDeprecated
         ? ignoreDeprecatedClaims(rawData)
         : TreeHelper(rawData).deepSearch(branchText) ?? [];
     String? returnValue;
@@ -399,7 +399,7 @@ class WikidataDetailConverter {
     return returnValue;
   }
 
-  int? getNumberValue(Map<dynamic, dynamic> rawData, String branchText) {
+  int? getNumberValue(Map<Object?, Object?> rawData, String branchText) {
     final type = rawData.searchForString(key: branchText);
     if (type == null || type.isEmpty) {
       return null;
@@ -407,7 +407,7 @@ class WikidataDetailConverter {
     return int.tryParse(type);
   }
 
-  Duration? getDurationValue(Map<dynamic, dynamic> rawData, String branchText) {
+  Duration? getDurationValue(Map<Object?, Object?> rawData, String branchText) {
     final minutes = getNumberValue(rawData, branchText);
     if (minutes == null) {
       return null;
@@ -415,7 +415,7 @@ class WikidataDetailConverter {
     return Duration(minutes: minutes);
   }
 
-  int? getDateValue(Map<dynamic, dynamic> rawData, String branchText) {
+  int? getDateValue(Map<Object?, Object?> rawData, String branchText) {
     final type = rawData.searchForString(key: branchText);
     if (type == null || type.isEmpty) {
       return null;
@@ -424,7 +424,7 @@ class WikidataDetailConverter {
   }
 
   String? getDateRangeValue(
-    Map<dynamic, dynamic> rawData,
+    Map<Object?, Object?> rawData,
     String branchText,
     int? startYear,
   ) {

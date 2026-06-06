@@ -9,8 +9,8 @@ class ImdbMoviesForKeywordConverter extends ImdbConverterBase
         ReleatedMoviesForPredefinedCategory {
   @override
   /// Break [data] up into one Map per movie.
-  Iterable<Map<dynamic, dynamic>> getMovieDataList(Map<dynamic, dynamic> data) {
-    final movies = <Map<dynamic, dynamic>>[];
+  Iterable<Map<Object?, Object?>> getMovieDataList(Map<Object?, Object?> data) {
+    final movies = <Map<Object?, Object?>>[];
     // Used by QueryIMDBMoviesForKeyword.
     final deepContent = getDeepContent(data, outerElementSearchResults);
     // ...{'titleListItems':...}
@@ -23,7 +23,7 @@ class ImdbMoviesForKeywordConverter extends ImdbConverterBase
 
   @override
   /// Parse [Map] to pull IMDB data out for a single movie.
-  dynamic getMovieOrPerson(MovieResultDTO movie, Map<dynamic, dynamic> map) {
+  Object? getMovieOrPerson(MovieResultDTO movie, Map<Object?, Object?> map) {
     final uniqueId = // ...{'titleId':<value>...} or ...{'tconst':<value>...}
         map.searchForString(key: deepTitleId1) ??
         map.searchForString(key: deepTitleId2)!;

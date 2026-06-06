@@ -22,7 +22,7 @@ class HeadlessWebEngineOther implements HeadlessWebEngine {
   }
 
   @override
-  Future<dynamic> evaluateJavascript(String script) async => null;
+  Future<Object?> evaluateJavascript(String script) async => null;
 
   @override
   Future<void> dispose({Duration optionalDelay = Duration.zero}) async {}

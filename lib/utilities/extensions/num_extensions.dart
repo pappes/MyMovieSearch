@@ -10,7 +10,7 @@ extension DoubleHelper on double {
   /// final number = DoubleHelper.fromText('9,999.99');
   /// ```
   static double? fromText(
-    dynamic formattedText, {
+    Object? formattedText, {
     double? nullValueSubstitute,
     double? zeroValueSubstitute = 0,
   }) {
@@ -60,7 +60,7 @@ extension IntHelper on int {
   /// final number = IntHelper.fromText('9,999');
   /// ```
   static int? fromText(
-    dynamic formattedText, {
+    Object? formattedText, {
     int? nullValueSubstitute,
     int? zeroValueSubstitute = 0,
   }) {

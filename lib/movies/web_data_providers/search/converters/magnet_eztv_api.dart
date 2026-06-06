@@ -53,7 +53,7 @@ const elementSize = 'size_bytes';
 
 class MagnetEztvApiSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
   ) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
@@ -70,7 +70,7 @@ class MagnetEztvApiSearchConverter {
     return searchResults;
   }
 
-  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
+  static MovieResultDTO dtoFromMap(Map<Object?, Object?> map) {
     // format size to giabytes with 2 decimal places with GB suffix
     final sizeBytes = IntHelper.fromText(map[elementSize]) ?? 0;
     final sizeGB = sizeBytes / 1024 / 1024 / 1024;

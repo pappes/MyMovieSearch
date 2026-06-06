@@ -13,7 +13,7 @@ extension DurationHelper on Duration {
   /// ```dart
   ///   ; // Returns hours=1, minutes=46
   /// ```
-  Duration fromIso8601(dynamic val) {
+  Duration fromIso8601(Object? val) {
     final isoString = val?.toString() ?? '';
     if (null == val || '' == val.toString()) {
       return Duration.zero;

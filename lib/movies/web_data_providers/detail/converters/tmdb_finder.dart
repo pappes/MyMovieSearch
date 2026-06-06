@@ -57,7 +57,7 @@ const personElementPopularity = 'popularity';
 
 class TmdbFinderConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
     String imdbId,
   ) {
     // deserialise outer json from map then iterate inner json
@@ -86,7 +86,7 @@ class TmdbFinderConverter {
   }
 
   static MovieResultDTO dtoFromMovieMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
     String imdbId,
   ) {
     final movie = MovieResultDTO()
@@ -141,7 +141,7 @@ class TmdbFinderConverter {
   }
 
   static MovieResultDTO dtoFromPersonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
     String imdbId,
   ) => MovieResultDTO()
     ..init(

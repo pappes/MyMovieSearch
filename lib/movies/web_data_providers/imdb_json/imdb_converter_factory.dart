@@ -9,7 +9,7 @@ import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_title_c
 
 class ImdbJsonConverterFactory extends ImdbJsonConverter {
   /// Take a [Map] of IMDB data and create a [MovieResultDTO] from it.
-  ImdbConverterBase getConverter(Map<dynamic, dynamic> map) {
+  ImdbConverterBase getConverter(Map<Object?, Object?> map) {
     if (getDeepContent(map, outerElementIdentity) != null) {
       // Used by QueryIMDBJson* and QueryIMDBSearch
       return ImdbJsonConverter();

@@ -63,7 +63,7 @@ class QueryYtsDetailApi
   /// Convert YTS json to MovieResultDTO records.
   @override
   Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(
-    dynamic map,
+    Object? map,
   ) async {
     if (map is Map) {
       return YtsDetailApiConverter.dtoFromCompleteJsonMap(map);

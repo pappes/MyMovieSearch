@@ -7,7 +7,7 @@ import 'package:my_movie_search/utilities/settings.dart';
 enum LogLevel { all, trace, debug, info, warning, error, fatal, off }
 
 typedef LogOutputFunc =
-    void Function(dynamic message, {dynamic error, StackTrace? stackTrace});
+    void Function(Object? message, {Object? error, StackTrace? stackTrace});
 
 /// Centralized application logger with asynchronous Better Stack cloud syncing
 ///
@@ -21,13 +21,24 @@ class AppLogger {
 
   Logger? _logger;
   bool _enabled = false;
+  bool _surpressCloud = false;
 
   // Better Stack logging endpoint
   final String _ingestUrl = 'https://s2476806.eu-fsn-3.betterstackdata.com';
 
+  static void turnOnLocalLogs({LogLevel level = LogLevel.info}) {
+    // Update the logger dynamically
+    AppLogger.instance.init(enabled: true, level: level, surpressCloud: true);
+  }
+
   /// Initialize the logger
-  void init({required bool enabled, required LogLevel level}) {
+  void init({
+    required bool enabled,
+    required LogLevel level,
+    bool surpressCloud = false,
+  }) {
     _enabled = enabled;
+    _surpressCloud = surpressCloud;
 
     Level loggerLevel;
     switch (level) {
@@ -61,8 +72,8 @@ class AppLogger {
 
   /// Log a message at trace level
   void trace(
-    dynamic message, {
-    dynamic error,
+    Object? message, {
+    Object? error,
     StackTrace? stackTrace,
     bool surpressCloud = false,
   }) {
@@ -78,8 +89,8 @@ class AppLogger {
 
   /// Log a message at debug level
   void debug(
-    dynamic message, {
-    dynamic error,
+    Object? message, {
+    Object? error,
     StackTrace? stackTrace,
     bool surpressCloud = false,
   }) {
@@ -95,8 +106,8 @@ class AppLogger {
 
   /// Log a message at info level
   void info(
-    dynamic message, {
-    dynamic error,
+    Object? message, {
+    Object? error,
     StackTrace? stackTrace,
     bool surpressCloud = false,
   }) {
@@ -112,8 +123,8 @@ class AppLogger {
 
   /// Log a message at warning level
   void warning(
-    dynamic message, {
-    dynamic error,
+    Object? message, {
+    Object? error,
     StackTrace? stackTrace,
     bool surpressCloud = false,
   }) {
@@ -129,8 +140,8 @@ class AppLogger {
 
   /// Log a message at error level
   void error(
-    dynamic message, {
-    dynamic error,
+    Object? message, {
+    Object? error,
     StackTrace? stackTrace,
     bool surpressCloud = false,
   }) {
@@ -146,8 +157,8 @@ class AppLogger {
 
   /// Log a message at fatal level
   void fatal(
-    dynamic message, {
-    dynamic error,
+    Object? message, {
+    Object? error,
     StackTrace? stackTrace,
     bool surpressCloud = false,
   }) {
@@ -165,21 +176,21 @@ class AppLogger {
   void _outputLog(
     LogLevel level,
     LogOutputFunc? func,
-    dynamic message,
-    dynamic error,
+    Object? message,
+    Object? error,
     StackTrace? stackTrace,
     bool surpressCloud,
   ) {
     if (_enabled) {
       func?.call(message, error: error, stackTrace: stackTrace);
-      if (!surpressCloud) {
+      if (!surpressCloud && !_surpressCloud) {
         _sendToCloud(level.name.toUpperCase(), message, error, stackTrace);
       }
     }
   }
 
   /// Hide secret keys from log messages
-  String _hideSecrets(dynamic message) {
+  String _hideSecrets(Object? message) {
     var newMessage = message.toString();
     for (final key in Secrets().secretStore) {
       newMessage = _hideSpecificSecret(newMessage, key);
@@ -195,8 +206,8 @@ class AppLogger {
   /// Prepare log messages to be sent to Better Stack cloud
   void _sendToCloud(
     String level,
-    dynamic message,
-    dynamic error,
+    Object? message,
+    Object? error,
     StackTrace? stackTrace,
   ) {
     if (!_enabled) return;
@@ -207,7 +218,7 @@ class AppLogger {
       ' UTC',
     );
 
-    final Map<String, dynamic> payload = {
+    final Map<String, Object?> payload = {
       'dt': timestamp,
       'level': level,
       'message': _hideSecrets(message),
@@ -224,7 +235,7 @@ class AppLogger {
 
   /// Send log messages to Better Stack cloud
   @awaitNotRequired
-  Future<void> _sendToCloudAsync(Map<String, dynamic> logs) async {
+  Future<void> _sendToCloudAsync(Map<String, Object?> logs) async {
     if (!_enabled) return;
 
     try {

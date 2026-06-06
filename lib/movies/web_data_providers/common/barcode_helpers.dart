@@ -20,7 +20,7 @@ class DVDBarcodeScanner {
   late BuildContext context;
   late BarcodeAction action;
 
-  bool _useBarcode(dynamic barcode) {
+  bool _useBarcode(Object? barcode) {
     if (barcode == null || barcode.toString().isEmpty) {
       // Assume the user requested cancelation
       return true;
@@ -31,7 +31,7 @@ class DVDBarcodeScanner {
     return false;
   }
 
-  Future<dynamic> _showScanner() => SimpleBarcodeScanner.scanBarcode(
+  Future<Object?> _showScanner() => SimpleBarcodeScanner.scanBarcode(
     context,
     barcodeAppBar: const BarcodeAppBar(
       appBarTitle: 'Test',

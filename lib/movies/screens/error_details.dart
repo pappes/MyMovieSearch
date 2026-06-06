@@ -27,7 +27,7 @@ class ErrorDetailsPage extends StatefulWidget {
   State<ErrorDetailsPage> createState() => _ErrorDetailsPageState();
 
   /// Instruct goroute how to navigate to this page.
-  static MaterialPage<dynamic> goRoute(_, GoRouterState state) => MaterialPage(
+  static MaterialPage<Object?> goRoute(_, GoRouterState state) => MaterialPage(
     restorationId: RestorableMovie.getRestorationId(state),
     child: ErrorDetailsPage(
       errorDto: RestorableMovie.getDto(state),

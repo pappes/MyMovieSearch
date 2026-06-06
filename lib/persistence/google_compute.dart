@@ -150,7 +150,7 @@ class GcpSchedule extends Scheduling {
   String? seconds;
 
   @override
-  Map<String, dynamic> toJson() {
+  Map<String, Object?> toJson() {
     final map = super.toJson();
     if (nanos != null) map['nanos'] = nanos;
     if (seconds != null) map['seconds'] = seconds;

@@ -18,13 +18,13 @@ const resultTableSelector = '.torrentcontent';
 /// ```
 mixin ScrapeTorrentDownloadDetail
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
-  final movieData = <Map<String, dynamic>>[];
+  final movieData = <Map<String, Object?>>[];
   bool validPage = false;
 
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
   @override
-  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, Object?>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     if (webText.contains('<b>TOP torrents last week</b>')) {
@@ -43,7 +43,7 @@ mixin ScrapeTorrentDownloadDetail
 
   /// extract each row from the page.
   void _scrapeWebPage(Document document) {
-    final result = <String, dynamic>{};
+    final result = <String, Object?>{};
     final links = document.querySelectorAll(magnetSelector);
     if (links.isNotEmpty) {
       validPage = true;

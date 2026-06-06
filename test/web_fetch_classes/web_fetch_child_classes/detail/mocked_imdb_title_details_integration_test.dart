@@ -114,7 +114,7 @@ List<String> _makeQueries(int startId, int qty) {
   return results;
 }
 
-Map<String, dynamic> offlineMapList(String id) => {
+Map<String, Object?> offlineMapList(String id) => {
   'props': {
     'pageProps': {
       'tconst': id,
@@ -139,7 +139,7 @@ Stream<String> _getOfflineHTML(String id) => Stream.value('''
 ''');
 
 /// Make dummy html results for offline queries.
-Future<Stream<String>> _offlineSearch(dynamic criteria) {
+Future<Stream<String>> _offlineSearch(Object? criteria) {
   criteria as SearchCriteriaDTO;
   return Future.value(_getOfflineHTML(criteria.criteriaTitle));
 }

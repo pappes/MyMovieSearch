@@ -16,7 +16,7 @@ const innerElementVoteAverage = 'popularity';
 
 class TmdbPersonDetailConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
   ) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
@@ -38,7 +38,7 @@ class TmdbPersonDetailConverter {
     return searchResults;
   }
 
-  static MovieResultDTO dtoFromMap(Map<dynamic, dynamic> map) {
+  static MovieResultDTO dtoFromMap(Map<Object?, Object?> map) {
     final year = DateTime.tryParse(
       map[innerElementYear]?.toString() ?? '',
     )?.year.toString();

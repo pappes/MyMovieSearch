@@ -8,10 +8,13 @@ import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.da
 class ImdbCastConverter extends ImdbConverterBase {
   @override
   /// Parse [Map] to pull IMDB data out for a single movie.
-  dynamic getMovieOrPerson(MovieResultDTO movie, Map<dynamic, dynamic> map) {
+  /// Used by QueryIMDBCastDetails.
+  void getMovieOrPerson(MovieResultDTO movie, Map<Object?, Object?> map) {
     final deepContent = getDeepContent(map, deepEntityHeader);
     if (deepContent != null) {
-      // Used by QueryIMDBCastDetails.
+
+      // Return void until the logic is refactored to pass person data out
+      // to be processed by getRelatedPeople()
       return _deepConvertMetadata(movie, deepContent);
     }
     throw Exception('$source Unable to interpret IMDB contents from map $map');
@@ -19,15 +22,15 @@ class ImdbCastConverter extends ImdbConverterBase {
 
   /// No related movies for a movie.
   @override
-  void getRelatedMovies(RelatedMovieCategories related, dynamic data) {}
+  void getRelatedMovies(RelatedMovieCategories related, Object? data) {}
 
   /// TODO extract people conversion logic out of _deepConvertMetadata.
   @override
-  void getRelatedPeople(RelatedMovieCategories related, dynamic data) {}
+  void getRelatedPeople(RelatedMovieCategories related, Object? data) {}
 
   // Parse [Map] to pull IMDB data out for a singl movie.
-  void _deepConvertMetadata(MovieResultDTO movie, Map<dynamic, dynamic> map) {
-    final contentData = map[deepEntityHeader] as Map<dynamic, dynamic>;
+  void _deepConvertMetadata(MovieResultDTO movie, Map<Object?, Object?> map) {
+    final contentData = map[deepEntityHeader] as Map<Object?, Object?>;
     final metadata = // ...{'entityMetadata':...}
     contentData.deepSearch(
       deepEntityMetadata,
@@ -64,7 +67,7 @@ class ImdbCastConverter extends ImdbConverterBase {
   /// contentData -> data -> creditCategories.
   void _getDeepCreditsMain(
     RelatedMovieCategories cast,
-    List<dynamic> relatedList,
+    List<Object?> relatedList,
   ) {
     for (final person in relatedList) {
       if (person is Map) {
@@ -91,7 +94,7 @@ class ImdbCastConverter extends ImdbConverterBase {
   /// contentData -> categories.
   void _getDeepCreditsExtra(
     RelatedMovieCategories cast,
-    List<dynamic> relatedList,
+    List<Object?> relatedList,
   ) {
     for (final category in relatedList) {
       if (category is Map) {
@@ -119,7 +122,7 @@ class ImdbCastConverter extends ImdbConverterBase {
   }
 
   /// Get the category name based on the key.
-  String _getDeepCategoryName(dynamic key) {
+  String _getDeepCategoryName(Object? key) {
     if (key != null && key is String && key.isNotEmpty) {
       switch (key.toUpperCase()) {
         case deepEntityExtraCastNameActors:
@@ -138,7 +141,7 @@ class ImdbCastConverter extends ImdbConverterBase {
   }
 
   /// Extract movie extra data to a DTO
-  MovieCollection _getDeepCreditsExtraPerson(Map<dynamic, dynamic> person) {
+  MovieCollection _getDeepCreditsExtraPerson(Map<Object?, Object?> person) {
     final MovieCollection collection = {};
 
     final imageProps = TreeHelper(person[deepEntityExtraCastImageProps]);
@@ -157,12 +160,12 @@ class ImdbCastConverter extends ImdbConverterBase {
 
   /// extract collections of people for a specific category for the title
   /// from a map or a list.
-  MovieCollection _getDeepNodeRelatedPerson(dynamic node) {
+  MovieCollection _getDeepNodeRelatedPerson(Object? node) {
     final MovieCollection result = {};
     if (node is Map) {
       // ...{'data':...{'node':...{'name':...}}}
       final personMap = node.deepSearch(deepEntityPersonName)?.first;
-      if (null != personMap && personMap is Map<dynamic, dynamic>) {
+      if (null != personMap && personMap is Map<Object?, Object?>) {
         ImdbConverterBase.getRelatedPersonWithCreditsOrder(result, personMap);
       }
     }

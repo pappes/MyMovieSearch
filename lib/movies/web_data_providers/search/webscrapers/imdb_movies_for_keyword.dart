@@ -18,7 +18,7 @@ mixin ScrapeIMDBMoviesForKeyword
     on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Reduce computation effort for html extraction.
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Object?>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     try {
@@ -31,7 +31,7 @@ mixin ScrapeIMDBMoviesForKeyword
   /// Convert web text to a traversable tree of [List] or [Map] data.
   ///
   ///
-  Future<List<dynamic>> slowConvertWebTextToTraversableTree(
+  Future<List<Object?>> slowConvertWebTextToTraversableTree(
     String webText,
   ) async {
     final document = parse(webText);
@@ -47,7 +47,7 @@ mixin ScrapeIMDBMoviesForKeyword
   }
 
   /// Collect JSON and webpage text to construct a map of the movie data.
-  Map<dynamic, dynamic> _scrapeWebPage(Document document) {
+  Map<Object?, Object?> _scrapeWebPage(Document document) {
     final movieData = json.decode(_getMovieJson(document)) as Map;
     return movieData;
   }
@@ -79,7 +79,7 @@ mixin ScrapeIMDBMoviesForKeyword
   /// Convert web text to a traversable tree of [List] or [Map] data.
   /// Scrape keyword data from rows in the html div named fullcredits_content.
   @override
-  Future<List<Map<String, dynamic>>> myConvertWebTextToTraversableTree(
+  Future<List<Map<String, Object?>>> myConvertWebTextToTraversableTree(
     String webText,
   ) async {
     final document = parse(webText);
@@ -87,8 +87,8 @@ mixin ScrapeIMDBMoviesForKeyword
   }
 
   /// Collect webpage text to construct a map of the movie data.
-  List<Map<String, dynamic>> _scrapeWebPage(Document document) {
-    final movieData = <Map<String, dynamic>>[];
+  List<Map<String, Object?>> _scrapeWebPage(Document document) {
+    final movieData = <Map<String, Object?>>[];
 
     final children = document.querySelector('.lister-list')?.children;
     if (null != children) {
@@ -108,9 +108,9 @@ mixin ScrapeIMDBMoviesForKeyword
     return movieData;
   }
 
-  Map<String, dynamic> _getMovie(Element row) {
+  Map<String, Object?> _getMovie(Element row) {
     final sections = _getSections(row);
-    final map = <String, dynamic>{};
+    final map = <String, Object?>{};
     map[keywordId] = _getId(sections['header']);
 
     map[keywordName] = _getTitle(sections['header']);
@@ -191,7 +191,7 @@ mixin ScrapeIMDBMoviesForKeyword
   String? _getKeywords(Element? section) => criteria.criteriaTitle;
 
   String? _getActors(Element? section) {
-    final cast = <String, dynamic>{};
+    final cast = <String, Object?>{};
     var skipDirectors = section?.innerHtml.contains('Director') ?? false;
     if (section?.innerHtml.contains('Stars') ?? false) {
       for (final element in section!.children) {
@@ -208,7 +208,7 @@ mixin ScrapeIMDBMoviesForKeyword
   }
 
   String? _getDirectors(Element? section) {
-    final directors = <String, dynamic>{};
+    final directors = <String, Object?>{};
     if (section?.innerHtml.contains('Director') ?? false) {
       for (final element in section!.children) {
         if (element.text == '|') {
@@ -263,7 +263,7 @@ mixin ScrapeIMDBMoviesForKeyword
       }
 
       
-  Map<String, dynamic> _addNextPage(Element next) {
+  Map<String, Object?> _addNextPage(Element next) {
     final keyword = criteria.criteriaTitle;
     final baseURL = myConstructURI(keyword);
     final String extraURL = next.attributes['href'] ?? '';

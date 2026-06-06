@@ -74,22 +74,22 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
   Stream<Map<String, String>> fetchRecords(
     String collectionPath, {
     String? filterFieldPath,
-    dynamic isEqualTo,
-    dynamic isNotEqualTo,
-    dynamic isLessThan,
-    dynamic isLessThanOrEqualTo,
-    dynamic isGreaterThan,
-    dynamic isGreaterThanOrEqualTo,
-    dynamic arrayContains,
-    List<dynamic>? arrayContainsAny,
-    List<dynamic>? whereIn,
-    List<dynamic>? whereNotIn,
+    Object? isEqualTo,
+    Object? isNotEqualTo,
+    Object? isLessThan,
+    Object? isLessThanOrEqualTo,
+    Object? isGreaterThan,
+    Object? isGreaterThanOrEqualTo,
+    Object? arrayContains,
+    List<Object?>? arrayContainsAny,
+    List<Object?>? whereIn,
+    List<Object?>? whereNotIn,
     bool isNull = false,
     Completer<bool>? initalDataLoadComplete,
   }) async* {
     try {
       // Let parent class prepare for data.
-      await super.fetchRecords(collectionPath).drain<dynamic>();
+      await super.fetchRecords(collectionPath).drain<Object?>();
       final fbcollection = Firestore.instance.collection(collectionPath);
       if (filterFieldPath == null) {
         // For Linux we can accept an ongoing stream if there is no filtering.

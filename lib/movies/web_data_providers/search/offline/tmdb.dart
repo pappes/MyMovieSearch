@@ -44,9 +44,9 @@ const expectedDtoJsonStringList = [
 ''',
 ];
 
-final List<dynamic> intermediateMapList = [jsonDecode(jsonSampleFull)];
-final List<dynamic> intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
-final List<dynamic> intermediateErrorMapList = [jsonDecode(jsonSampleError)];
+final List<Object?> intermediateMapList = [jsonDecode(jsonSampleFull)];
+final List<Object?> intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
+final List<Object?> intermediateErrorMapList = [jsonDecode(jsonSampleError)];
 
 const jsonSampleFull =
     ' { "page": 1, "results": [ $tmdbJsonSearchInner ], '

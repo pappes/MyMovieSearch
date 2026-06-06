@@ -9,7 +9,7 @@ class ImdbTitleConverter extends ImdbConverterBase
         ReleatedMoviesForPredefinedCategory {
   @override
   /// Get basic details for the movie or person from [data].
-  dynamic getMovieOrPerson(MovieResultDTO dto, Map<dynamic, dynamic> data) {
+  Object? getMovieOrPerson(MovieResultDTO dto, Map<Object?, Object?> data) {
     final deepContent = getDeepContent(data, deepTitleId2);
     if (deepContent != null) {
       // Used by QueryIMDBTitleDetails.
@@ -19,7 +19,7 @@ class ImdbTitleConverter extends ImdbConverterBase
   }
 
   /// Parse [Map] to pull IMDB data out for a singl movie.
-  dynamic _deepConvertTitle(MovieResultDTO movie, Map<dynamic, dynamic> map) {
+  Object? _deepConvertTitle(MovieResultDTO movie, Map<Object?, Object?> map) {
     final uniqueId = // ...{'titleId':<value>...} or ...{'tconst':<value>...}
         map.searchForString(key: deepTitleId1) ??
         map.searchForString(key: deepTitleId2)!;

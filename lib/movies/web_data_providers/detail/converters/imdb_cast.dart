@@ -7,10 +7,10 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 
 class ImdbCastConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<dynamic, dynamic> map,
+    Map<Object?, Object?> map,
   ) => [_dtoFromMap(map)];
 
-  static MovieResultDTO _dtoFromMap(Map<dynamic, dynamic> map) {
+  static MovieResultDTO _dtoFromMap(Map<Object?, Object?> map) {
     final movie = MovieResultDTO().init(
       bestSource: DataSourceType.imdbSuggestions,
       uniqueId: map[outerElementIdentity]?.toString(),
@@ -23,7 +23,7 @@ class ImdbCastConverter {
     return movie;
   }
 
-  static void _getMovies(MovieResultDTO movie, String label, dynamic movies) {
+  static void _getMovies(MovieResultDTO movie, String label, Object? movies) {
     var creditsOrder = 100;
     if (null != movies && movies is List) {
       for (final relatedMap in movies) {
@@ -40,7 +40,7 @@ class ImdbCastConverter {
     }
   }
 
-  static MovieResultDTO? dtoFromRelatedMap(Map<dynamic, dynamic> map) {
+  static MovieResultDTO? dtoFromRelatedMap(Map<Object?, Object?> map) {
     final id = getIdFromIMDBLink(map[outerElementLink]?.toString());
     if (id == '') {
       return null;

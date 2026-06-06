@@ -36,9 +36,9 @@ import 'web_fetch_unit_test.mocks.dart';
 // To regenerate mocks run the following command
 // dart run build_runner build
 @GenerateMocks([HttpClient, HttpClientRequest, HttpClientResponse, HttpHeaders])
-typedef ConvertWebTextToTreeFn = Future<List<dynamic>> Function(String t);
+typedef ConvertWebTextToTreeFn = Future<List<Object?>> Function(String t);
 typedef ConvertTreeToOutputType =
-    Future<List<MovieResultDTO>> Function(dynamic m);
+    Future<List<MovieResultDTO>> Function(Object? m);
 
 //HttpClient.getUrl(Uri) = Future<HttpClientRequest>
 //HttpClientRequest.close() = HttpClientResponse
@@ -102,7 +102,7 @@ class QueryUnknownSourceMocked
   // convert dart [List] or [Map] to [OUTPUT_TYPE] object data
   // but allow it to be overridden
   @override
-  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(dynamic tree) =>
+  Future<Iterable<MovieResultDTO>> myConvertTreeToOutputType(Object? tree) =>
       // Use Future.sync to allow code to run synchronously and ensure
       // that exceptions are propagated as Future errors.
       Future.sync(() => overriddenConvertTreeToOutputType(tree));
@@ -113,7 +113,7 @@ class QueryUnknownSourceMocked
   ConvertWebTextToTreeFn overriddenConvertWebTextToTraversableTree =
       (webText) => Future.value([jsonDecode(webText)]);
   @override
-  Future<List<dynamic>> myConvertWebTextToTraversableTree(
+  Future<List<Object?>> myConvertWebTextToTraversableTree(
     String webText,
     // Needs to be async so it handles future exceptions properly.
     // ignore: unnecessary_async
@@ -136,19 +136,19 @@ class QueryUnknownSourceMocked
   DataSourceFn myOfflineData() =>
       (_) async => const Stream<String>.empty();
 
-  static Future<List<MovieResultDTO>> treeToDto(dynamic tree) {
+  static Future<List<MovieResultDTO>> treeToDto(Object? tree) {
     if (tree is Map) return Future.value([_mapToDto(tree)]);
     if (tree is List) return Future.value(_listToDto(tree));
     throw TreeConvertException('Unknown: $tree');
   }
 
-  static MovieResultDTO _mapToDto(Map<dynamic, dynamic> map) =>
+  static MovieResultDTO _mapToDto(Map<Object?, Object?> map) =>
       MovieResultDTO().init(
         uniqueId: DynamicHelper.toString_(map[outerElementIdentity]),
         description: DynamicHelper.toString_(map[outerElementDescription]),
       );
 
-  static List<MovieResultDTO> _listToDto(List<dynamic> list) {
+  static List<MovieResultDTO> _listToDto(List<Object?> list) {
     final results = <MovieResultDTO>[];
     for (final value in list) {
       results.add(_mapToDto(value as Map));
@@ -157,27 +157,27 @@ class QueryUnknownSourceMocked
   }
 }
 
-typedef ConvertTreeToOutputTypeFn = Future<List<String>> Function(dynamic m);
+typedef ConvertTreeToOutputTypeFn = Future<List<String>> Function(Object? m);
 
 class WebFetchBasic extends WebFetchBase<String, String> {
   WebFetchBasic(super.criteria) {
     selectedDataSource = loopBackDataSource;
   }
-  Future<Stream<String>> loopBackDataSource(dynamic s) =>
+  Future<Stream<String>> loopBackDataSource(Object? s) =>
       Future.value(Stream.value(s.toString()));
 
   @override
   String myDataSourceName() => 'WebFetchBasic';
 
   ConvertTreeToOutputTypeFn overriddenMyConvertTreeToOutputType =
-      (dynamic map) async => [map.toString()];
+      (Object? map) async => [map.toString()];
 
   @override
   DataSourceFn myOfflineData() => loopBackDataSource;
   @override
   Uri myConstructURI(String searchCriteria, {int pageNumber = 1}) => Uri();
   @override
-  Future<List<String>> myConvertTreeToOutputType(dynamic map) =>
+  Future<List<String>> myConvertTreeToOutputType(Object? map) =>
       overriddenMyConvertTreeToOutputType(map);
   @override
   String myYieldError(String contents) => contents;
@@ -236,8 +236,8 @@ List<MovieResultDTO> _makeDTOs(int qty) {
 }
 
 /// Make dummy dto results for offline queries.
-List<Map<String, dynamic>> _makeMaps(int qty) {
-  final results = <Map<String, dynamic>>[];
+List<Map<String, Object?>> _makeMaps(int qty) {
+  final results = <Map<String, Object?>>[];
   const startId = 1000;
   final endId = startId + qty;
   for (final uniqueId in range(startId, endId)) {
@@ -362,7 +362,9 @@ void main() {
       final actualResult = _getOfflineHTML('123')
           .toList()
           .then(
-            (html) => testClass.myConvertWebTextToTraversableTree(html.first),
+            (html) =>
+                testClass.myConvertWebTextToTraversableTree(html.first)
+                    as dynamic,
           )
           // canned data so we know what to expect
           // ignore: avoid_dynamic_calls
@@ -420,7 +422,7 @@ void main() {
     });
 
     test('generic exception handler', () async {
-      Future<Stream<String>> myError(dynamic s) async =>
+      Future<Stream<String>> myError(Object? s) async =>
           throw Exception(s.toString());
       const jsonpText = 'JsonP([{"key":"val"}])';
       final testClass = WebFetchBasic(jsonpText)..selectedDataSource = myError;
@@ -439,7 +441,7 @@ void main() {
     });
 
     test('WebFetchException exception handler', () async {
-      Future<Stream<String>> myError(dynamic s) async =>
+      Future<Stream<String>> myError(Object? s) async =>
           throw WebFetchException(s.toString());
       const jsonpText = 'JsonP([{"key":"val"}])';
       final testClass = WebFetchBasic(jsonpText)..selectedDataSource = myError;
@@ -533,7 +535,7 @@ void main() {
 
   group('WebFetchBase mocked baseConvertTreeToOutputType', () {
     void testConvert(
-      List<Map<dynamic, dynamic>> input,
+      List<Map<Object?, Object?>> input,
       List<MovieResultDTO>? expectedValue, [
       String? expectedError,
     ]) {
@@ -549,7 +551,7 @@ void main() {
 
     // Convert 0 maps into dtos.
     test('empty input', () {
-      final input = [<String, dynamic>{}];
+      final input = [<String, Object?>{}];
       final output = <MovieResultDTO>[];
       testConvert(input, output);
     });
@@ -739,7 +741,7 @@ void main() {
   group('WebFetchBase mocked WebFetchBasic', () {
     void testConvert(
       String input,
-      List<dynamic>? expectedValue, [
+      List<Object?>? expectedValue, [
       String? expectedError,
     ]) {
       final jsonStream = Stream.value(input);
@@ -804,7 +806,7 @@ void main() {
 
     //override myConvertWebTextToTraversableTree to provide a streamed error
     test('stream contents after error', () async {
-      List<String> captureStreamError(dynamic error, StackTrace _) {
+      List<String> captureStreamError(Object? error, StackTrace _) {
         expect(
           error,
           'Error in QueryUnknownSourceMocked with criteria criteria '
