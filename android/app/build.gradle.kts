@@ -10,14 +10,21 @@ android {
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "28.2.13676358" //flutter.ndkVersion //was defaulting to "NDK 26.3.11579264"  for flutter 3.22.8
 
+    // for Android Gradle Plugin (AGP).
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
 
+    // For Kotlin Gradle Plugin (KGP).
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
+    // Not ready for newer syntax. When upgrading gradle/kotlin, change this to compilerOptions block.
+    // See https://docs.gradle.org/current/userguide/kotlin-dsl.html#kotlin-compiler-options
+    //compilerOptions {
+    //    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    //}
 
     defaultConfig {
         applicationId = "com.example.my_movie_search"
@@ -107,9 +114,9 @@ afterEvaluate {
     // Solution: We add a 'doLast' action to the 'dev' task to copy and rename the file to the location Flutter expects.
     if (assembleDevReleaseTask != null) {
         assembleDevReleaseTask.doLast {
-            val gradleApkDir = file("${project.buildDir}/outputs/apk/dev/release")
+            val gradleApkDir = project.layout.buildDirectory.dir("outputs/apk/dev/release").get().asFile
             val originalApk = file("${gradleApkDir}/app-dev-release.apk")
-            val flutterOutputDir = file("${project.rootProject.buildDir}/app/outputs/flutter-apk")
+            val flutterOutputDir = project.rootProject.layout.buildDirectory.dir("app/outputs/flutter-apk").get().asFile
             val targetApk = file("${flutterOutputDir}/app-release.apk")
 
             flutterOutputDir.mkdirs()
@@ -124,9 +131,9 @@ afterEvaluate {
 
     if (assembleDevDebugTask != null) {
         assembleDevDebugTask.doLast {
-            val gradleApkDir = file("${project.buildDir}/outputs/apk/dev/debug")
+            val gradleApkDir = project.layout.buildDirectory.dir("outputs/apk/dev/debug").get().asFile
             val originalApk = file("${gradleApkDir}/app-dev-debug.apk")
-            val flutterOutputDir = file("${project.rootProject.buildDir}/app/outputs/flutter-apk")
+            val flutterOutputDir = project.rootProject.layout.buildDirectory.dir("app/outputs/flutter-apk").get().asFile
             val targetApk = file("${flutterOutputDir}/app-debug.apk")
 
             flutterOutputDir.mkdirs()
