@@ -122,7 +122,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          TmdbPersonDetailConverter.dtoFromCompleteJsonMap(map as Map),
+          TmdbPersonDetailConverter.dtoFromCompleteJsonMap(map! as Map),
         );
       }
 

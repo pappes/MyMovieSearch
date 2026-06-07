@@ -122,7 +122,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
         actualResult.addAll(
-          TmdbMovieDetailConverter.dtoFromCompleteJsonMap(map as Map),
+          TmdbMovieDetailConverter.dtoFromCompleteJsonMap(map! as Map),
         );
       }
 

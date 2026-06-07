@@ -139,7 +139,7 @@ Stream<String> _getOfflineHTML(String id) => Stream.value('''
 ''');
 
 /// Make dummy html results for offline queries.
-Future<Stream<String>> _offlineSearch(Object? criteria) {
+Future<Stream<String>> _offlineSearch(dynamic criteria) {
   criteria as SearchCriteriaDTO;
   return Future.value(_getOfflineHTML(criteria.criteriaTitle));
 }

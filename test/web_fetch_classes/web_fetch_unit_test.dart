@@ -169,8 +169,7 @@ class WebFetchBasic extends WebFetchBase<String, String> {
   @override
   String myDataSourceName() => 'WebFetchBasic';
 
-  ConvertTreeToOutputTypeFn overriddenMyConvertTreeToOutputType =
-      (map) async =>
+  ConvertTreeToOutputTypeFn overriddenMyConvertTreeToOutputType = (map) async =>
       [map.toString()];
 
   @override
