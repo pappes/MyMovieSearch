@@ -1501,8 +1501,7 @@ extension MapMovieResultDTOHelpers on MovieCollection {
   }
 }
 
-extension MapMapMovieResultDTOHelpers
-    on RelatedMovieCategories {
+extension MapMapMovieResultDTOHelpers on RelatedMovieCategories {
   /// Create a string representation
   /// of a `Map<String, Map<String, MovieResultDTO>>`.
   ///
@@ -1531,6 +1530,10 @@ extension MapMapMovieResultDTOHelpers
 }
 
 extension DTOCompare on MovieResultDTO {
+  /// Extract year release or year of most recent episode.
+  ///
+  int maxYear() => max(year, yearRangeAsNumber());
+
   /// Rank movies against each other for sorting.
   ///
   int compareTo(MovieResultDTO other) {
@@ -1565,6 +1568,7 @@ extension DTOCompare on MovieResultDTO {
   }
 
   /// Compare people based returned order and populatrity.
+  @visibleForTesting
   int personCompare(MovieResultDTO other) {
     if (creditsOrder != other.creditsOrder ||
         userRatingCount != other.userRatingCount) {
@@ -1591,21 +1595,7 @@ extension DTOCompare on MovieResultDTO {
   }
 
   /// Compare downloads based availability.
-  int downloadCompare(MovieResultDTO other) {
-    if (keywords.length != other.keywords.length) {
-      // Compare number of keywords
-      // (more is better because seasons for extv have keywords)
-      return keywords.length.compareTo(other.keywords.length);
-    }
-    if (creditsOrder != other.creditsOrder) {
-      // Compare seeders
-      return creditsOrder.compareTo(other.creditsOrder);
-    }
-    // Compare Leachers
-    return userRatingCount.compareTo(other.userRatingCount);
-  }
-
-  /// Compare downloads based availability.
+  @visibleForTesting
   int barcodeCompare(MovieResultDTO other) {
     final hasYear = alternateTitle.contains(RegExp(r'.*\s\d\d\d\d\s.*'));
     final otherHasYear = other.alternateTitle.contains(
@@ -1632,6 +1622,7 @@ extension DTOCompare on MovieResultDTO {
   }
 
   /// Compare movies based on popularity, type, language, year, etc.
+  @visibleForTesting
   int movieCompare(MovieResultDTO other) {
     // See how many people have rated this movie.
     if (userRatingCategory() != other.userRatingCategory()) {
@@ -1660,6 +1651,7 @@ extension DTOCompare on MovieResultDTO {
   /// Rank movies based on popularity.
   ///
   /// 0-99, 100-9999, 10000+
+  @visibleForTesting
   int userRatingCategory() {
     if (userRatingCount == 0) return 0;
     if (userRatingCount < 100) return 1;
@@ -1669,6 +1661,7 @@ extension DTOCompare on MovieResultDTO {
 
   /// Rank movies based not recently viewed.
   ///
+  @visibleForTesting
   int viewedCategory() {
     final read = getReadIndicator();
 
@@ -1705,6 +1698,7 @@ extension DTOCompare on MovieResultDTO {
   /// Rank movies based on type of content.
   ///
   /// movie > miniseries > tv series > short > series episode > game & unknown
+  @visibleForTesting
   int titleContentCategory() {
     if (type == MovieContentType.none ||
         type == MovieContentType.custom ||
@@ -1721,6 +1715,7 @@ extension DTOCompare on MovieResultDTO {
   /// Rank dto based on type (person Vs movie).
   ///
   /// person > movie
+  @visibleForTesting
   int contentCategory() {
     switch (type) {
       case MovieContentType.person:
@@ -1734,23 +1729,23 @@ extension DTOCompare on MovieResultDTO {
         return 80;
       case MovieContentType.episode:
       case MovieContentType.miniseries:
-        return 8;
+        return 20;
       case MovieContentType.short:
-        return 7;
+        return 18;
       case MovieContentType.custom:
-        return 6;
+        return 15;
+      case MovieContentType.navigation:
+        return 10;
       case MovieContentType.keyword:
       case MovieContentType.barcode:
       case MovieContentType.searchprompt:
-        return 5;
+        return 8;
       case MovieContentType.download:
         return 4;
       case MovieContentType.error:
         return 3;
       case MovieContentType.information:
         return 2;
-      case MovieContentType.navigation:
-        return 1;
       case MovieContentType.status:
         return 0;
     }
@@ -1760,6 +1755,7 @@ extension DTOCompare on MovieResultDTO {
   ///
   /// English > mostly English > some English > no English > silent
   // Need to reverse the enum order for use with CompareTo().
+  @visibleForTesting
   int languageCategory() => language.index * -1;
 
   /// Rank movies based on popular opinion.
@@ -1767,6 +1763,7 @@ extension DTOCompare on MovieResultDTO {
   /// Any movie with a super low rating is probably not worth watching.
   /// A rating of 2 out of 5 is not great but better than nothing.
   /// Movies and series made before 2000 have a lower relevancy to today.
+  @visibleForTesting
   int popularityCategory() {
     if (userRating < 2) return 0;
     if (maxYear() < 2000) return 1;
@@ -1776,6 +1773,7 @@ extension DTOCompare on MovieResultDTO {
   /// Rank movies based on year released.
   ///
   /// For series use year of most recent episode.
+  @visibleForTesting
   int yearCompare(MovieResultDTO? other) {
     final thisYear = maxYear();
     final otherYear = other?.maxYear() ?? 0;
@@ -1784,6 +1782,7 @@ extension DTOCompare on MovieResultDTO {
 
   /// Rank movies based on raw popularity.
   ///
+  @visibleForTesting
   int personPopularityCompare(MovieResultDTO other) {
     if (creditsOrder > 1 || other.creditsOrder > 1) {
       return creditsOrder.compareTo(other.creditsOrder);
@@ -1791,11 +1790,84 @@ extension DTOCompare on MovieResultDTO {
     return userRatingCount.compareTo(other.userRatingCount);
   }
 
-  /// Extract year release or year of most recent episode.
-  ///
-  int maxYear() => max(year, yearRangeAsNumber());
-
   /// Extract year of most recent episode.
   ///
+  @visibleForTesting
   int yearRangeAsNumber() => yearRange.lastNumber();
+
+  /// Compare downloads based availability and scope.
+  @visibleForTesting
+  int downloadCompare(MovieResultDTO other) {
+    if (downloadScope() != other.downloadScope()) {
+      return downloadScope().compareTo(other.downloadScope());
+    }
+    if (creditsOrder != other.creditsOrder) {
+      // Compare seeders
+      return creditsOrder.compareTo(other.creditsOrder);
+    }
+    // Compare Leachers
+    return userRatingCount.compareTo(other.userRatingCount);
+  }
+
+  /// Rank dto based on type (season Vs episode).
+  ///
+  /// season > early episode > episode
+  @visibleForTesting
+  int downloadScope() {
+    if (isFirstSeason()) {
+      return 99;
+    }
+    if (isSeason()) {
+      return 90;
+    }
+    if (isEarlyEpisode()) {
+      return 10;
+    }
+    if (isEpisode()) {
+      return 1;
+    }
+    // Unknown so increase visibility to let the user choose.
+    return 50;
+  }
+
+  /// DTO is a season if it has keywords or contains S## and is not an episode.
+  @visibleForTesting
+  bool isSeason() {
+    final regexpSeason = RegExp(r'S\d{2}', caseSensitive: false);
+    final regexpSeasonFull = RegExp(r'Season ? ?\d', caseSensitive: false);
+    if (keywords.isNotEmpty) return true;
+    if (isEpisode()) return false;
+    if (regexpSeason.hasMatch(title)) return true;
+    if (regexpSeasonFull.hasMatch(title)) return true;
+    return false;
+  }
+
+  /// DTO is the full first season if it contains S01.
+  @visibleForTesting
+  bool isFirstSeason() {
+    final regexpSeason = RegExp('S01', caseSensitive: false);
+    final regexpSeasonFull = RegExp('Season ? ?1', caseSensitive: false);
+    final regexpSeason01 = RegExp('Season.01', caseSensitive: false);
+    if (isEpisode()) return false;
+    if (regexpSeason.hasMatch(title)) return true;
+    if (regexpSeasonFull.hasMatch(title)) return true;
+    if (regexpSeason01.hasMatch(title)) return true;
+    return false;
+  }
+
+  /// DTO is an early episode if it contains S##E0#.
+  @visibleForTesting
+  bool isEarlyEpisode() {
+    final regexpEarlyEpisode = RegExp(r'S\d{2}E0\d', caseSensitive: false);
+    if (regexpEarlyEpisode.hasMatch(title)) return true;
+    return false;
+  }
+
+  /// DTO is an episode if it contains S##E## and is not an early episode.
+  @visibleForTesting
+  bool isEpisode() {
+    final regexpEpisode = RegExp(r'S\d{2}E\d{2}', caseSensitive: false);
+    if (regexpEpisode.hasMatch(title)) return true;
+    return false;
+  }
 }

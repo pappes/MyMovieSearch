@@ -1,3 +1,7 @@
+## Version 1.2.5
+- Sort season above episodes.
+- Log levels able to be set at runtime and store logs in the cloud.
+
 ## Version 1.2.4
 - Added settings page.
 - Send magnets to remote tTorrent client.
