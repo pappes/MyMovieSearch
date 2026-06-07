@@ -47,8 +47,11 @@ class OmdbMovieSearchConverter {
 
     final resultsMatched = map[outerElementSearchSuccess] ?? '';
     if (resultsMatched == 'True') {
-      for (final movie in map[outerElementResultsCollection] as Iterable) {
-        searchResults.add(dtoFromMap(movie as Map));
+      final movies = map[outerElementResultsCollection];
+      if (movies is Iterable) {
+        for (final movie in movies) {
+          searchResults.add(dtoFromMap(movie as Map));
+        }
       }
     } else {
       final error =

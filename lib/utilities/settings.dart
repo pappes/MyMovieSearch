@@ -326,7 +326,7 @@ class Settings {
     _fetchApplicationVersion();
 
     // Settings retreival that require async calls to complete before use.
-    //await clearLocalSettings(); // uncomment to reset all settings!!!
+    //await _clearLocalSettings(); // uncomment to reset all settings!!!
     final pendingFetches = [
       _loadSettingsFromLocalStorage(),
       _updateFromCloud(),
@@ -341,6 +341,15 @@ class Settings {
     }
     return cloudSettingsInitialised;
   }
+
+  /// Clear all local settings.
+  /*Future<void> _clearLocalSettings() async {
+    final prefs = await SharedPreferences.getInstance();
+    for (final key in SettingKey.values) {
+      await prefs.remove(key.envKey);
+    }
+    _localValues.clear();
+  }*/
 
   /// Log all settings values.
   void logValues() {
@@ -625,14 +634,6 @@ class Settings {
     }
   }
 
-  /// Clear all local settings.
-  Future<void> _clearLocalSettings() async {
-    final prefs = await SharedPreferences.getInstance();
-    for (final key in SettingKey.values) {
-      await prefs.remove(key.envKey);
-    }
-    _localValues.clear();
-  }
 }
 
 /// Supported application settings identifiers.

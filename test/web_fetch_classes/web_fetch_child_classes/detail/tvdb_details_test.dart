@@ -107,7 +107,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMovieList) {
         actualResult.addAll(
-          TvdbDetailConverter('tt1231').dtoFromCompleteJsonMap(map as Map),
+          TvdbDetailConverter('tt1231').dtoFromCompleteJsonMap(map! as Map),
         );
       }
 
@@ -133,7 +133,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateSeriesList) {
         actualResult.addAll(
-          TvdbDetailConverter('tt1231').dtoFromCompleteJsonMap(map as Map),
+          TvdbDetailConverter('tt1231').dtoFromCompleteJsonMap(map! as Map),
         );
       }
 
@@ -159,7 +159,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateEpisodeList) {
         actualResult.addAll(
-          TvdbDetailConverter('tt1231').dtoFromCompleteJsonMap(map as Map),
+          TvdbDetailConverter('tt1231').dtoFromCompleteJsonMap(map! as Map),
         );
       }
 
@@ -185,7 +185,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediatePersonList) {
         actualResult.addAll(
-          TvdbDetailConverter('nm1231').dtoFromCompleteJsonMap(map as Map),
+          TvdbDetailConverter('nm1231').dtoFromCompleteJsonMap(map! as Map),
         );
       }
 

@@ -65,11 +65,17 @@ class TmdbFinderConverter {
 
     final failureIndicator = map[outerElementFailureIndicator];
     if (null == failureIndicator) {
-      for (final movie in map[outerElementMovies] as Iterable) {
-        searchResults.add(dtoFromMovieMap(movie as Map, imdbId));
+      final movies = map[outerElementMovies] as Iterable?;
+      if (null != movies) {
+        for (final movie in movies) {
+          searchResults.add(dtoFromMovieMap(movie as Map, imdbId));
+        }
       }
-      for (final person in map[outerElementPeople] as Iterable) {
-        searchResults.add(dtoFromPersonMap(person as Map, imdbId));
+      final people = map[outerElementPeople] as Iterable?;
+      if (null != people) {
+        for (final person in people) {
+          searchResults.add(dtoFromPersonMap(person as Map, imdbId));
+        }
       }
     } else {
       final error =

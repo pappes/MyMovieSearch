@@ -1,0 +1,17 @@
+[
+  {
+    "uniqueId": "ttImdbId123",
+    "title": "The Taking of Pelham 1 2 3",
+    "description": "Armed men hijack a New York City subway train, holding the passengers hostage in return for a ransom, and turning an ordinary day's work for dispatcher Walter Garber into a face-off with the mastermind behind the crime.",
+    "bestSource": "DataSourceType.tmdbFinder",
+    "type": "MovieContentType.title",
+    "year": "2009",
+    "language": "LanguageType.allEnglish",
+    "languages": "[\"en\"]",
+    "userRating": "6.3",
+    "userRatingCount": "2494",
+    "sources": {
+      "DataSourceType.tmdbFinder": "18487"
+    }
+  }
+]

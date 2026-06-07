@@ -112,7 +112,7 @@ class MovieLocation {
     final dtos = <MovieResultDTO>[];
     for (final dvd in await _getDvds()) {
       if (!_locations.keys.contains(dvd['location'])) {
-        dtos.add(dvd['dto'] as MovieResultDTO);
+        dtos.add(dvd['dto']! as MovieResultDTO);
       }
     }
     return dtos;

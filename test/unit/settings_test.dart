@@ -3,7 +3,7 @@ import 'package:mockito/mockito.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:universal_io/io.dart';
 
-import 'settings_test.mocks.dart';
+import 'mmsnav_unit_test.mocks.dart';
 
 // To regenerate mocks run the following command
 // dart run build_runner build@GenerateMocks([FirebaseApplicationState])

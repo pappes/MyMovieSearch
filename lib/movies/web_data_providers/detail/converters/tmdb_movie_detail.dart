@@ -117,9 +117,12 @@ class TmdbMovieDetailConverter {
       ..languages.combineUnique(_getLanguages(map).toList())
       ..getContentType()
       ..getLanguageType();
-    for (final genre in map[innerElementGenres] as Iterable) {
-      if (genre is Map) {
-        movie.genres.combineUnique(genre['name'] as String);
+    final genres = map[innerElementGenres];
+    if (genres is Iterable) {
+      for (final genre in genres) {
+        if (genre is Map) {
+          movie.genres.combineUnique(genre['name'] as String);
+        }
       }
     }
 

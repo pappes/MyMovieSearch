@@ -337,9 +337,9 @@ void main() {
 
       for (final testCase in testCases) {
         // Arrange
-        final id = testCase['id'] as String;
-        final type = testCase['type'] as MovieContentType?;
-        final expected = testCase['expected'] as String;
+        final id = testCase['id']! as String;
+        final type = testCase['type']! as MovieContentType?;
+        final expected = testCase['expected']! as String;
         final reason = 'criteria: id=$id type=$type';
 
         // Reset mocks for each iteration to ensure clean verification.

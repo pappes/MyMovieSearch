@@ -121,7 +121,7 @@ void main() {
         actualResult.addAll(
           TvdbMovieDetailConverter(
             MovieContentType.movie,
-          ).dtoFromCompleteJsonMap(map as Map),
+          ).dtoFromCompleteJsonMap(map! as Map),
         );
       }
 
@@ -148,7 +148,7 @@ void main() {
         actualResult.addAll(
           TvdbMovieDetailConverter(
             MovieContentType.movie,
-          ).dtoFromCompleteJsonMap(map as Map),
+          ).dtoFromCompleteJsonMap(map! as Map),
         );
       }
 
@@ -176,7 +176,7 @@ void main() {
         actualResult.addAll(
           TvdbMovieDetailConverter(
             MovieContentType.series,
-          ).dtoFromCompleteJsonMap(map as Map),
+          ).dtoFromCompleteJsonMap(map! as Map),
         );
       }
 

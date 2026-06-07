@@ -64,8 +64,11 @@ class MagnetEztvApiSearchConverter {
       // API returns everything if it matches nothing!
       return searchResults;
     }
-    for (final movie in map[outerElementTorrents] as Iterable) {
-      searchResults.add(dtoFromMap(movie as Map));
+    final movies = map[outerElementTorrents];
+    if (movies is Iterable) {
+      for (final movie in movies) {
+        searchResults.add(dtoFromMap(movie as Map));
+      }
     }
     return searchResults;
   }

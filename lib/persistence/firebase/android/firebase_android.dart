@@ -62,7 +62,8 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
     required String id,
   }) async {
     try {
-      if (await super.fetchRecord(collectionPath, id: id) as bool) {
+      final parentSuccess = await super.fetchRecord(collectionPath, id: id);
+      if (parentSuccess == true) {
         final fbcollection = FirebaseFirestore.instance.collection(
           collectionPath,
         );
@@ -200,8 +201,12 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
     String? id,
   }) async {
     try {
-      if (await super.addRecord(collectionPath, message: message, id: id)
-          as bool) {
+      final parentSuccess = await super.addRecord(
+        collectionPath,
+        message: message,
+        id: id,
+      );
+      if (parentSuccess == true) {
         final fbcollection = FirebaseFirestore.instance.collection(
           collectionPath,
         );

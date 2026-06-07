@@ -101,8 +101,7 @@ abstract class TvdbCommonConverter {
   String? getFailureReasonFromMap(Map<Object?, Object?> map) {
     final failureIndicator = map[outerElementFailureIndicator];
     if (null != failureIndicator) {
-      return failureIndicator?.toString() ??
-          'Failure reason provided in results $map';
+      return failureIndicator.toString();
     }
     return null;
   }

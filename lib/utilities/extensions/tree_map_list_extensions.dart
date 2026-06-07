@@ -71,19 +71,15 @@ extension TreeSetHelper on Set<Object?> {
 class TreeHelper {
   // Constructor to save tree for later use.
   TreeHelper(this.tree) {
-    _isMap = tree is Map;
-    _isIterable = tree is Iterable;
-    if (_isIterable) {
-      asIterable = tree as Iterable;
-    } else if (_isMap) {
-      asMap = tree as Map;
+    if (tree is Iterable) {
+      asIterable = tree! as Iterable;
+    } else if (tree is Map) {
+      asMap = tree! as Map;
       asIterable = asMap!.entries;
     }
   }
 
   final Object? tree;
-  late bool _isMap;
-  late bool _isIterable;
   Iterable<Object?>? asIterable;
   Map<Object?, Object?>? asMap;
 
@@ -162,8 +158,8 @@ class TreeHelper {
     if (!returnParent) {
       return child;
     } else if (parent is MapEntry) {
-      // need to return the full map, not just the current enry of the map
-      return grandparent ?? parent ?? child;
+      // need to return the full map, not just the current entry of the map
+      return grandparent ?? parent;
     } else {
       return parent ?? child;
     }

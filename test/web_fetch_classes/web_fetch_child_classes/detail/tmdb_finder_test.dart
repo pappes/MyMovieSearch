@@ -102,8 +102,9 @@ void main() {
 
   group('TmdbFinderConverter unit tests', () {
     // Confirm map can be converted to DTO.
-    test('Run dtoFromCompleteJsonMap()', () {
+    test('Run dtoFromCompleteJsonMap() for movie.', () {
       final actualResult = <MovieResultDTO>[];
+      final expectedValue = readTestData(testName: 'movie');
 
       // Invoke the functionality and collect results.
       for (final map in intermediateMapList) {
@@ -113,9 +114,33 @@ void main() {
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // printTestData(actualResult);
+      // writeTestData(actualResult, testName: 'movie');
 
-      final expectedValue = expectedDTOList;
+      // Check the results.
+      expect(
+        actualResult,
+        MovieResultDTOListMatcher(expectedValue),
+        reason:
+            'Emitted DTO list ${actualResult.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedValue.toPrintableString()}',
+      );
+    });
+    // Confirm map can be converted to DTO.
+    test('Run dtoFromCompleteJsonMap() for person.', () {
+      final actualResult = <MovieResultDTO>[];
+      final expectedValue = readTestData(testName: 'person');
+
+      // Invoke the functionality and collect results.
+      for (final map in intermediateMapListPerson) {
+        actualResult.addAll(
+          TmdbFinderConverter.dtoFromCompleteJsonMap(map as Map, 'ttImdbId124'),
+        );
+      }
+
+      // Uncomment this line to update expectedDTOList if sample data changes
+      // writeTestData(actualResult, testName: 'person');
+
       // Check the results.
       expect(
         actualResult,
@@ -155,7 +180,7 @@ void main() {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
       final testClass = QueryTMDBFinder(criteria);
-      final expectedValue = expectedDTOList;
+      final expectedValue = readTestData(testName: 'movie');
       final actualResult = <MovieResultDTO>[];
 
       testClass.imdbId = 'ttImdbId123';
@@ -206,7 +231,7 @@ void main() {
     // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
-      final expectedValue = expectedDTOList;
+      final expectedValue = readTestData(testName: 'movie');
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBFinder(criteria);
       await testClass.myClearCache();

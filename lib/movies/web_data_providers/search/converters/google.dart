@@ -42,14 +42,15 @@ const imdbPageTypeParentPage = 'main';
 
 class GoogleMovieSearchConverter {
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
-    Map<Object?, Object?> map,
+    Map<Object?, dynamic> map,
   ) {
     // deserialise outer json from map then iterate inner json
     final searchResults = <MovieResultDTO>[];
     try {
       final resultCountString =
-          (map[outerElementSearchInformation]
-              as Map)[innerElementSearchInfoCount];
+          // Execption handler will handle unexpected data.
+          // ignore: avoid_dynamic_calls
+          map[outerElementSearchInformation]?[innerElementSearchInfoCount];
       final resultCount = int.tryParse(resultCountString.toString());
       if (resultCount == 0) {
         return [];

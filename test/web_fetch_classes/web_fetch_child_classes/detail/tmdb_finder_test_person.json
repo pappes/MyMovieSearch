@@ -1,0 +1,12 @@
+[
+  {
+    "uniqueId": "ttImdbId124",
+    "title": "Morgan Freeman",
+    "bestSource": "DataSourceType.tmdbFinder",
+    "type": "MovieContentType.person",
+    "userRatingCount": "15",
+    "sources": {
+      "DataSourceType.tmdbFinder": "185573"
+    }
+  }
+]

@@ -118,7 +118,7 @@ void main() {
       for (final map in intermediateMapList) {
         actualResult.addAll(
           await MsSearchMovieSearchConverter.dtoFromCompleteJsonMap(
-            map as List,
+            map! as List,
           ).toList(),
         );
       }

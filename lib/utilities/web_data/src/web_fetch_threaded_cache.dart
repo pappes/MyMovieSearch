@@ -63,14 +63,14 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
     );
 
     initialiseThreadCacheRequest(newPriority, limit);
-    result =
-        await ThreadRunner.namedThread(newPriority).run(runReadList, {
-              'newInstance': myClone(criteria),
-              'criteria': criteria,
-              'source': source,
-              'limit': limit,
-            })
-            as List<OUTPUT_TYPE>;
+    final threadResult = await ThreadRunner.namedThread(newPriority)
+        .run(runReadList, {
+          'newInstance': myClone(criteria),
+          'criteria': criteria,
+          'source': source,
+          'limit': limit,
+        });
+    result = threadResult! as List<OUTPUT_TYPE>;
 
     _addResultToCache(result);
     completeThreadCacheRequest(priority);
@@ -108,7 +108,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
 
   /// static wrapper to readList() for compatibility with ThreadRunner.
   static Future<List<Object?>> runReadList(Map<String, Object?> input) {
-    final instance = input['newInstance'] as WebFetchBase;
+    final instance = input['newInstance']! as WebFetchBase;
     return instance.readList(
       source: input['source'] as DataSourceFn?,
       limit: input['limit'] as int?,

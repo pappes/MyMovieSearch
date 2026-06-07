@@ -25,24 +25,16 @@
 //  popularity = raking to indcate how popular the person is e.g. "280.151",
 
 import 'dart:convert';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
-/* To update this data, uncomment printTestData(actualResult);
-in test('Run dtoFromCompleteJsonMap()'*/
-final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
-  expectedDtoJsonStringList,
-);
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"ttImdbId123","bestSource":"DataSourceType.tmdbFinder","title":"The Taking of Pelham 1 2 3","type":"MovieContentType.title","year":"2009","language":"LanguageType.allEnglish",
-      "languages":"[\"en\"]","genres":"[]","keywords":"[]",
-      "description":"Armed men hijack a New York City subway train, holding the passengers hostage in return for a ransom, and turning an ordinary day's work for dispatcher Walter Garber into a face-off with the mastermind behind the crime.",
-      "userRating":"6.3","userRatingCount":"2494","sources":{"DataSourceType.tmdbFinder":"18487"},"related":{}}
-''',
+final List<Object> intermediateMapList = [
+  (jsonDecode(jsonSampleFull) as Map<String, Object?>?)!,
 ];
-
-final List<Object?> intermediateMapList = [jsonDecode(jsonSampleFull)];
-final List<Object?> intermediateMapListError = [jsonDecode(jsonSampleError)];
+final List<Object> intermediateMapListPerson = [
+  (jsonDecode(jsonSamplePerson) as Map<String, Object?>?)!,
+];
+final List<Object> intermediateMapListError = [
+  (jsonDecode(jsonSampleError) as Map<String, Object?>?)!,
+];
 
 const tmdbJsonSearchInner = '''
   {"adult":false,
@@ -61,9 +53,20 @@ const tmdbJsonSearchInner = '''
   "popularity":14.28}
 ''';
 
+const tmdbJsonPersonSearchInner = '''
+  {"adult":false,
+  "backdrop_path":"/kB555WPHSszi8jKLqW5tMaQV1bISB2.jpg",
+  "id":185573,
+  "poster_path":"/baR555XNiLDOpz3rH3VyjhayhgkWll.jpg",
+  "name":"Morgan Freeman",
+  "popularity":15.28}
+''';
+
 const jsonSampleFull =
     ' { "movie_results": [ $tmdbJsonSearchInner ],"person_results":[], '
     '"tv_results":[],"tv_episode_results":[],"tv_season_results":[]} ';
+const jsonSamplePerson =
+    ' { "person_results": [ $tmdbJsonPersonSearchInner ] } ';
 const jsonSampleEmpty =
     '{"movie_results":[],"person_results":[],"tv_results":[],'
     '"tv_episode_results":[],"tv_season_results":[]}';

@@ -151,7 +151,7 @@ class QueryUnknownSourceMocked
   static List<MovieResultDTO> _listToDto(List<Object?> list) {
     final results = <MovieResultDTO>[];
     for (final value in list) {
-      results.add(_mapToDto(value as Map));
+      results.add(_mapToDto(value! as Map));
     }
     return results;
   }
@@ -170,7 +170,8 @@ class WebFetchBasic extends WebFetchBase<String, String> {
   String myDataSourceName() => 'WebFetchBasic';
 
   ConvertTreeToOutputTypeFn overriddenMyConvertTreeToOutputType =
-      (Object? map) async => [map.toString()];
+      (map) async =>
+      [map.toString()];
 
   @override
   DataSourceFn myOfflineData() => loopBackDataSource;

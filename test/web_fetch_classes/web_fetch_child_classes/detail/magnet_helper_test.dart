@@ -46,15 +46,21 @@ void main() {
     });
     test('test getName', () {
       const magnet =
-          'magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B1080p%5D+%5BYTS.BZ%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce';
+          'magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7'
+          '&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B1080p%5D+%5BYTS.BZ%5D'
+          '&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce';
       final name = MagnetHelper.getName(magnet);
       expect(name, '2001: A Space Odyssey (1968) [1080p] [YTS.BZ]');
     });
     test('test setName', () {
       const magnet =
-          'magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B1080p%5D+%5BYTS.BZ%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce';
+          'magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7'
+          '&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B1080p%5D+%5BYTS.BZ%5D'
+          '&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce';
       const expectedName =
-          'magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=(great+movie)&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce';
+          'magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7'
+          '&dn=(great%20movie)'
+          '&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce';
       final name = MagnetHelper.setName('(great movie)', magnet);
       expect(
         name,

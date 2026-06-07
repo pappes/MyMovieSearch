@@ -42,7 +42,8 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
     required String id,
   }) async {
     try {
-      if (await super.fetchRecord(collectionPath, id: id) as bool) {
+      final parentSuccess = await super.fetchRecord(collectionPath, id: id);
+      if (parentSuccess == true) {
         final fbcollection = Firestore.instance.collection(collectionPath);
         // Get reference to supplied ID
         final doc = fbcollection.document(id);
@@ -148,8 +149,12 @@ class FirebaseApplicationStateLinux extends FirebaseApplicationState {
     String? id,
   }) async {
     try {
-      if (await super.addRecord(collectionPath, message: message, id: id)
-          as bool) {
+      final parentSuccess = await super.addRecord(
+        collectionPath,
+        message: message,
+        id: id,
+      );
+      if (parentSuccess == true) {
         final map = newRecord(message ?? 'blank');
         final fbcollection = Firestore.instance.collection(collectionPath);
         if (id == null) {

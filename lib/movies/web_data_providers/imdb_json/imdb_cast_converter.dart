@@ -12,7 +12,6 @@ class ImdbCastConverter extends ImdbConverterBase {
   void getMovieOrPerson(MovieResultDTO movie, Map<Object?, Object?> map) {
     final deepContent = getDeepContent(map, deepEntityHeader);
     if (deepContent != null) {
-
       // Return void until the logic is refactored to pass person data out
       // to be processed by getRelatedPeople()
       return _deepConvertMetadata(movie, deepContent);
@@ -28,9 +27,9 @@ class ImdbCastConverter extends ImdbConverterBase {
   @override
   void getRelatedPeople(RelatedMovieCategories related, Object? data) {}
 
-  // Parse [Map] to pull IMDB data out for a singl movie.
+  // Parse [Map] to pull IMDB data out for a single movie.
   void _deepConvertMetadata(MovieResultDTO movie, Map<Object?, Object?> map) {
-    final contentData = map[deepEntityHeader] as Map<Object?, Object?>;
+    final contentData = TreeHelper(map[deepEntityHeader]);
     final metadata = // ...{'entityMetadata':...}
     contentData.deepSearch(
       deepEntityMetadata,
@@ -41,7 +40,7 @@ class ImdbCastConverter extends ImdbConverterBase {
     )!;
     movie
       ..uniqueId = uniqueId
-      ..merge(getMovieAttributes(contentData, movie.uniqueId))
+      ..merge(getMovieAttributes(contentData.asMap ?? {}, movie.uniqueId))
       // Reintialise the source after setting the ID
       ..setSource(newSource: source);
 
@@ -54,7 +53,7 @@ class ImdbCastConverter extends ImdbConverterBase {
     }
 
     // ...{'categories':...}
-    final otherCredits = contentData[deepEntityExtraCastContainer];
+    final otherCredits = contentData.asMap?[deepEntityExtraCastContainer];
     if (null != otherCredits &&
         otherCredits is List &&
         otherCredits.isNotEmpty) {

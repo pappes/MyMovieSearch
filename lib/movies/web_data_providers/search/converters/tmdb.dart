@@ -51,8 +51,11 @@ class TmdbMovieSearchConverter {
       return [];
     } else if (IntHelper.fromText(resultsMatched, nullValueSubstitute: 0)! >
         0) {
-      for (final movie in map[outerElementResultsCollection] as Iterable) {
-        searchResults.add(dtoFromMap(movie as Map));
+      final movies = map[outerElementResultsCollection];
+      if (movies is Iterable) {
+        for (final movie in movies) {
+          searchResults.add(dtoFromMap(movie as Map));
+        }
       }
     } else {
       final error =
