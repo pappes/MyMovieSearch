@@ -64,8 +64,13 @@ class MMSNav {
   /// Navigates to a search results page populated with a movie list.
   ///
   @awaitNotRequired
-  Future<Object?> showResultsPage(SearchCriteriaDTO criteria) =>
-      canvas.viewFlutterPage(criteria.getSearchResultsPage());
+  Future<Object?> showResultsPage(
+    SearchCriteriaDTO criteria, {
+    bool showKeyboardOnReturn = false,
+  }) => canvas.viewFlutterPage(
+    criteria.getSearchResultsPage(),
+    showKeyboardOnReturn: showKeyboardOnReturn,
+  );
 
   /// Navigates to a search criteria page with no criteria populated.
   ///
@@ -377,7 +382,10 @@ class MMSFlutterCanvas {
   ///
   /// Chooses a MovieDetailsPage or PersonDetailsPage
   /// based on the IMDB unique ID or ErrorDetailsPage otherwise
-  Future<Object?> viewFlutterPage(RouteInfo page) {
+  Future<Object?> viewFlutterPage(
+    RouteInfo page, {
+    bool showKeyboardOnReturn = false,
+  }) {
     if (navigator != null) {
       // Record page open event.
       _navLog.logPageOpen(page);
@@ -390,7 +398,9 @@ class MMSFlutterCanvas {
         return openedPage.then((val) {
           // Record page closure event.
           _navLog.logPageClose(page);
-          _hideKeyboard();
+          if (!showKeyboardOnReturn) {
+            _hideKeyboard();
+          }
           return null;
         });
       } catch (e) {

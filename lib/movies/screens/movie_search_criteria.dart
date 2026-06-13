@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
@@ -36,14 +38,28 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
   late RestorableTextEditingController _textController;
   late FocusNode _criteriaFocusNode;
 
-  void performSearch(SearchCriteriaDTO criteria) =>
-      MMSNav(context).showResultsPage(criteria);
+  Future<Object?> performSearch(SearchCriteriaDTO criteria) async {
+    // Await the route close
+    final result = await MMSNav(
+      context,
+    ).showResultsPage(criteria, showKeyboardOnReturn: true);
+    showKeyboard();
+    return result;
+  }
 
-  void searchForBarcode(String barcode) => performSearch(
+  @awaitNotRequired
+  Future<void> showKeyboard({
+    Duration delay = const Duration(milliseconds: 200),
+  }) async {
+    await Future<void>.delayed(delay);
+    await SystemChannels.textInput.invokeMethod('TextInput.show');
+  }
+
+  Future<Object?> searchForBarcode(String barcode) => performSearch(
     SearchCriteriaDTO()..init(SearchCriteriaType.barcode, title: barcode),
   );
 
-  void searchForMovie() {
+  Future<Object?> searchForMovie() {
     widget.criteria.criteriaTitle = _textController.value.text;
     return performSearch(widget.criteria);
   }
@@ -64,6 +80,8 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     _textController = RestorableTextEditingController();
     _criteriaFocusNode = FocusNode();
     super.initState();
+
+    showKeyboard(delay: const Duration(milliseconds: 500));
   }
 
   @override
@@ -79,6 +97,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called.
     final page = AppScaffold(
+      // resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: (ModalRoute.of(context)?.canPop ?? false)
             ? const BackButton()
@@ -96,9 +115,22 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
             opacity: 0.1, // Adjust opacity to make text readable
           ),
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[_CriteriaInput(this)],
+        child: SingleChildScrollView(
+          child: SizedBox(
+            //special sizing to avoid redraw after keyboard pops up.
+            height:
+                MediaQuery.of(context).size.height -
+                kToolbarHeight -
+                MediaQuery.of(context).padding.top,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                const Spacer(flex: 1), // 1 part of space at the top
+                _CriteriaInput(this),
+                const Spacer(flex: 3), // 3 parts below the input box
+              ],
+            ),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -107,7 +139,6 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
         child: const Icon(Icons.search),
       ),
     );
-    _criteriaFocusNode.requestFocus();
     return page;
   }
 }
@@ -120,7 +151,7 @@ class _CriteriaInput extends Center {
           focusNode: state._criteriaFocusNode,
           textInputAction: TextInputAction.search,
           autofocus: true,
-          autofillHints: const [AutofillHints.sublocality],
+          autofillHints: const [AutofillHints.name],
           style: hugeFont,
           decoration: InputDecoration(
             labelText: 'Movie',

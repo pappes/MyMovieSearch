@@ -7,11 +7,13 @@ class AppScaffold extends StatelessWidget {
     this.appBar,
     this.body,
     this.floatingActionButton,
+    this.resizeToAvoidBottomInset = true,
   });
 
   final PreferredSizeWidget? appBar;
   final Widget? body;
   final Widget? floatingActionButton;
+  final bool resizeToAvoidBottomInset;
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -21,5 +23,6 @@ class AppScaffold extends StatelessWidget {
     endDrawerEnableOpenDragGesture: false,
     body: body,
     floatingActionButton: floatingActionButton,
+    resizeToAvoidBottomInset: resizeToAvoidBottomInset,
   );
 }
