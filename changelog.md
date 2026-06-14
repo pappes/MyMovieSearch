@@ -1,3 +1,8 @@
+
+
+## Version 1.2.6
+- Autocomplete suggestions for movie search page.
+
 ## Version 1.2.5
 - Sort season above episodes.
 - Log levels able to be set at runtime and store logs in the cloud.

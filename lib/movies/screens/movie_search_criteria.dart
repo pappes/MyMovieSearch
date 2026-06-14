@@ -1,11 +1,16 @@
+import 'dart:async';
+
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:meta/meta.dart';
+import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
@@ -126,7 +131,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const Spacer(flex: 1), // 1 part of space at the top
-                _CriteriaInput(this),
+                _CriteriaInput(state: this),
                 const Spacer(flex: 3), // 3 parts below the input box
               ],
             ),
@@ -143,40 +148,137 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
   }
 }
 
-class _CriteriaInput extends Center {
-  _CriteriaInput(_MovieSearchCriteriaPageState state)
-    : super(
-        child: TextField(
-          controller: state._textController.value,
-          focusNode: state._criteriaFocusNode,
-          textInputAction: TextInputAction.search,
-          autofocus: true,
-          autofillHints: const [AutofillHints.name],
-          style: hugeFont,
-          decoration: InputDecoration(
-            labelText: 'Movie',
-            hintText: 'Enter movie or tv series to search for',
-            suffixIcon: IconButton(
-              icon: const Icon(Icons.clear),
-              onPressed: () {
-                state._textController.value.clear();
-                state._criteriaFocusNode.requestFocus();
-              },
-            ),
-            prefixIcon: IconButton(
-              icon: const Icon(Icons.qr_code_2),
-              onPressed: () {
-                state._textController.value.clear();
-                DVDBarcodeScanner().scanBarcode(
-                  state.context,
-                  state.searchForBarcode,
-                );
-              },
-            ),
+class _CriteriaInput extends StatelessWidget {
+  const _CriteriaInput({required this.state, super.key});
+  final _MovieSearchCriteriaPageState state;
+
+  @override
+  Widget build(BuildContext context) => RawAutocomplete<MovieResultDTO>(
+    textEditingController: state._textController.value,
+    focusNode: state._criteriaFocusNode,
+    optionsBuilder: _getOptions,
+    fieldViewBuilder: _buildTextField,
+    optionsViewBuilder: _buildSuggestionsList,
+    onSelected: (_) => state.searchForMovie(),
+    displayStringForOption: (option) => option.title,
+  );
+
+  // Logic separated into private helper methods
+  Future<Iterable<MovieResultDTO>> _getOptions(
+    TextEditingValue textValue,
+  ) async {
+    if (textValue.text.length < 3) {
+      return const Iterable<MovieResultDTO>.empty();
+    }
+
+    final completer = Completer<Iterable<MovieResultDTO>>();
+    EasyDebounce.debounce(
+      'movie-search',
+      const Duration(milliseconds: 400),
+      () async {
+        try {
+          // Replace with your API call logic
+          final results = await ApiService.fetchSuggestions(textValue.text);
+          completer.complete(results);
+        } catch (_) {
+          completer.complete(const Iterable<MovieResultDTO>.empty());
+        }
+      },
+    );
+    return completer.future;
+  }
+
+  Widget _buildTextField(
+    BuildContext context,
+    TextEditingController controller,
+    FocusNode focusNode,
+    VoidCallback onFieldSubmitted,
+  ) => TextField(
+    controller: controller,
+    focusNode: focusNode,
+    style: hugeFont,
+    decoration: InputDecoration(
+      labelText: 'Movie',
+      hintText: 'Enter movie or tv series to search for',
+      suffixIcon: IconButton(
+        icon: const Icon(Icons.clear),
+        onPressed: () => controller.clear(),
+
+        // {
+        //         state._textController.value.clear();
+        //         state._criteriaFocusNode.requestFocus();
+        //       }
+      ),
+      prefixIcon: IconButton(
+        icon: const Icon(Icons.qr_code_2),
+        onPressed: () =>
+            DVDBarcodeScanner().scanBarcode(context, state.searchForBarcode),
+
+        // {
+        //                 state._textController.value.clear();
+        //                 DVDBarcodeScanner().scanBarcode(
+        //                   state.context,
+        //                   state.searchForBarcode,
+        //                 );
+        //               },
+      ),
+    ),
+    onSubmitted: (_) => state.searchForMovie(),
+  );
+
+  Widget _buildSuggestionsList(
+    BuildContext context,
+    AutocompleteOnSelected<MovieResultDTO> onSelected,
+    Iterable<MovieResultDTO> options,
+  ) => Align(
+    alignment: Alignment.topLeft,
+    child: Material(
+      elevation: 4,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width - 32,
+        child: ListView.builder(
+          shrinkWrap: true,
+          itemCount: options.length,
+          itemBuilder: (context, index) => ListTile(
+            title: Text(options.elementAt(index).title),
+            onTap: () => onSelected(options.elementAt(index)),
           ),
-          onSubmitted: (_) {
-            state.searchForMovie();
-          },
         ),
-      );
+      ),
+    ),
+  );
+}
+
+class ApiService {
+  static Future<List<MovieResultDTO>> fetchSuggestions(String query) async {
+    return QueryIMDBSuggestions(
+      SearchCriteriaDTO().fromString(query),
+    ).readList();
+    /*// Simulate network delay
+    await Future.delayed(const Duration(milliseconds: 500));
+
+    // Dummy data - replace with actual API call
+    final List<String> allSuggestions = [
+      'The Shawshank Redemption',
+      'The Godfather',
+      'The Dark Knight',
+      'Pulp Fiction',
+      'The Lord of the Rings: The Return of the King',
+      'Forrest Gump',
+      'Inception',
+      'The Matrix',
+      'Interstellar',
+      'Parasite',
+      'The Matrix Reloaded',
+      'The Matrix Revolutions',
+      'The Lord of the Rings: The Two Towers',
+      'The Lord of the Rings: The Fellowship of the Ring',
+      'The Godfather: Part II',
+      'The Dark Knight Rises',
+    ];
+
+    return allSuggestions
+        .where((title) => title.toLowerCase().contains(query.toLowerCase()))
+        .toList();*/
+  }
 }
