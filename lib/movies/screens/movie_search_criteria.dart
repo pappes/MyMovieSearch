@@ -130,7 +130,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                const Spacer(flex: 1), // 1 part of space at the top
+                const Spacer(flex: 2), // 1 part of space at the top
                 _CriteriaInput(state: this),
                 const Spacer(flex: 3), // 3 parts below the input box
               ],
@@ -161,6 +161,7 @@ class _CriteriaInput extends StatelessWidget {
     optionsViewBuilder: _buildSuggestionsList,
     onSelected: (_) => state.searchForMovie(),
     displayStringForOption: (option) => option.title,
+    optionsViewOpenDirection: OptionsViewOpenDirection.mostSpace,
   );
 
   // Logic separated into private helper methods
@@ -178,7 +179,9 @@ class _CriteriaInput extends StatelessWidget {
       () async {
         try {
           // Replace with your API call logic
-          final results = await ApiService.fetchSuggestions(textValue.text);
+          final results = await QueryIMDBSuggestions(
+            SearchCriteriaDTO().fromString(textValue.text),
+          ).readList();
           completer.complete(results);
         } catch (_) {
           completer.complete(const Iterable<MovieResultDTO>.empty());
@@ -202,25 +205,20 @@ class _CriteriaInput extends StatelessWidget {
       hintText: 'Enter movie or tv series to search for',
       suffixIcon: IconButton(
         icon: const Icon(Icons.clear),
-        onPressed: () => controller.clear(),
-
-        // {
-        //         state._textController.value.clear();
-        //         state._criteriaFocusNode.requestFocus();
-        //       }
+        onPressed: () {
+          state._textController.value.clear();
+          state._criteriaFocusNode.requestFocus();
+        },
       ),
       prefixIcon: IconButton(
         icon: const Icon(Icons.qr_code_2),
-        onPressed: () =>
-            DVDBarcodeScanner().scanBarcode(context, state.searchForBarcode),
-
-        // {
-        //                 state._textController.value.clear();
-        //                 DVDBarcodeScanner().scanBarcode(
-        //                   state.context,
-        //                   state.searchForBarcode,
-        //                 );
-        //               },
+        onPressed: () {
+          state._textController.value.clear();
+          DVDBarcodeScanner().scanBarcode(
+            state.context,
+            state.searchForBarcode,
+          );
+        },
       ),
     ),
     onSubmitted: (_) => state.searchForMovie(),
@@ -247,38 +245,4 @@ class _CriteriaInput extends StatelessWidget {
       ),
     ),
   );
-}
-
-class ApiService {
-  static Future<List<MovieResultDTO>> fetchSuggestions(String query) async {
-    return QueryIMDBSuggestions(
-      SearchCriteriaDTO().fromString(query),
-    ).readList();
-    /*// Simulate network delay
-    await Future.delayed(const Duration(milliseconds: 500));
-
-    // Dummy data - replace with actual API call
-    final List<String> allSuggestions = [
-      'The Shawshank Redemption',
-      'The Godfather',
-      'The Dark Knight',
-      'Pulp Fiction',
-      'The Lord of the Rings: The Return of the King',
-      'Forrest Gump',
-      'Inception',
-      'The Matrix',
-      'Interstellar',
-      'Parasite',
-      'The Matrix Reloaded',
-      'The Matrix Revolutions',
-      'The Lord of the Rings: The Two Towers',
-      'The Lord of the Rings: The Fellowship of the Ring',
-      'The Godfather: Part II',
-      'The Dark Knight Rises',
-    ];
-
-    return allSuggestions
-        .where((title) => title.toLowerCase().contains(query.toLowerCase()))
-        .toList();*/
-  }
 }

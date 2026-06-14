@@ -21,7 +21,9 @@ class DVDBarcodeScanner {
   late BarcodeAction action;
 
   bool _useBarcode(Object? barcode) {
-    if (barcode == null || barcode.toString().isEmpty) {
+    if (barcode == null ||
+        barcode.toString().isEmpty ||
+        barcode.toString() == '-1') {
       // Assume the user requested cancelation
       return true;
     } else if (barcode is String && !barcode.startsWith(webAddressPrefix)) {
