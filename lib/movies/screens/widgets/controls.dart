@@ -23,10 +23,10 @@ bool useMobileLayout(BuildContext context) =>
 class Poster extends Widget {
   Poster(
     this._context, {
-    required String url,
+    required this._url,
     void Function()? showImages,
     super.key,
-  }) : _url = url {
+  }) {
     _bigUrl = getBigImage(_url);
     _smallImage = Image(
       image: NetworkImage(_url),

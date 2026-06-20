@@ -10,7 +10,7 @@ import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 /// Search for barcode for a DVD.
 class BarcodeRepository extends BaseMovieRepository {
   @override
-  Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int> getProviders() => {
+  LimitedDtoFetch getProviders() => {
     QueryLibsaBarcodeSearch(criteria): 1000,
     QueryFishpondBarcodeSearch(criteria): 1000,
     QueryUhttBarcodeSearch(criteria): 1000,

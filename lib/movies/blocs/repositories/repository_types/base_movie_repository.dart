@@ -12,6 +12,10 @@ typedef WebFetchDTO = WebFetchBase<MovieResultDTO, SearchCriteriaDTO>;
 typedef WebFetchDTOFn =
     WebFetchBase<MovieResultDTO, SearchCriteriaDTO> Function(SearchCriteriaDTO);
 
+/// A web fetch with defined limit on number of returned results.
+typedef LimitedDtoFetch =
+    Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int>;
+
 /// Retrieve movie data from multiple online sources.
 ///
 /// BlockRepository to consolidate data retrieval from multiple search
@@ -105,8 +109,7 @@ class BaseMovieRepository {
   ///   WebFetchBase class : result quantity limit.
   /// e.g. Return [{QueryIMDBSearch(criteria):10}]
   @protected
-  Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int> getProviders() =>
-      {};
+  LimitedDtoFetch getProviders() => {};
 
   /// Initiates a secondary data fetch.
   ///

@@ -92,8 +92,7 @@ class HeadlessWebBrowserLinux {
 ///
 /// This class implements the [HeadlessWebEngine] interface for Linux platforms.
 class HeadlessWebEngineLinux extends HeadlessWebEngineBase {
-  HeadlessWebEngineLinux({HttpClientFactory httpClientFactory = HttpClient.new})
-    : _httpClientFactory = httpClientFactory;
+  HeadlessWebEngineLinux({this._httpClientFactory = HttpClient.new});
 
   final HttpClientFactory _httpClientFactory;
   final HeadlessWebInterceptor _interceptor = HeadlessWebInterceptor();

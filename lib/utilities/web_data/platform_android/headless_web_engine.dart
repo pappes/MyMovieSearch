@@ -84,10 +84,9 @@ HeadlessInAppWebView defaultWebView({
 /// Implementation of `HeadlessWebEngine` for Android using `InAppWebView`.
 class HeadlessWebEngineAndroid extends HeadlessWebEngineBase {
   HeadlessWebEngineAndroid({
-    HttpClientFactory httpClientFactory = HttpClient.new,
-    WebViewFactory webViewRunner = defaultWebView,
-  }) : _httpClientFactory = httpClientFactory,
-       _webViewRunner = webViewRunner;
+    this._httpClientFactory = HttpClient.new,
+    this._webViewRunner = defaultWebView,
+  });
 
   final HttpClientFactory _httpClientFactory;
   final WebViewFactory _webViewRunner;

@@ -19,18 +19,13 @@ import 'base_movie_repository_test.mocks.dart';
 /// A concrete implementation of [BaseMovieRepository] for testing purposes.
 /// Allows injecting mock providers and simulating errors.
 class TestMovieRepository extends BaseMovieRepository {
-  TestMovieRepository({
-    Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int> providers =
-        const {},
-    bool shouldThrow = false,
-  }) : _providers = providers,
-       _shouldThrow = shouldThrow;
+  TestMovieRepository({this._providers = const {}, this._shouldThrow = false});
 
-  final Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int> _providers;
+  final LimitedDtoFetch _providers;
   final bool _shouldThrow;
 
   @override
-  Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int> getProviders() {
+  LimitedDtoFetch getProviders() {
     if (_shouldThrow) {
       throw Exception('Simulated provider error');
     }

@@ -24,9 +24,8 @@ part 'bloc_parts/search_state.dart';
 /// In progress search results can be accessed from
 /// [SearchBloc].[sortedResults].
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  SearchBloc({required BaseMovieRepository movieRepository})
-    : _movieRepository = movieRepository,
-      super(const SearchState.awaitingInput()) {
+  SearchBloc({required this._movieRepository})
+    : super(const SearchState.awaitingInput()) {
     on<SearchCompleted>(
       (event, emit) => isClosed
           ? null
