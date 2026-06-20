@@ -45,9 +45,16 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
           as _i3.Future<Object?>);
 
   @override
-  _i3.Future<Object?> viewFlutterPage(_i4.RouteInfo? page) =>
+  _i3.Future<Object?> viewFlutterPage(
+    _i4.RouteInfo? page, {
+    bool? showKeyboardOnReturn = false,
+  }) =>
       (super.noSuchMethod(
-            Invocation.method(#viewFlutterPage, [page]),
+            Invocation.method(
+              #viewFlutterPage,
+              [page],
+              {#showKeyboardOnReturn: showKeyboardOnReturn},
+            ),
             returnValue: _i3.Future<Object?>.value(),
             returnValueForMissingStub: _i3.Future<Object?>.value(),
           )
@@ -70,6 +77,14 @@ class MockMMSFlutterCanvas extends _i1.Mock implements _i2.MMSFlutterCanvas {
             returnValueForMissingStub: false,
           )
           as bool);
+
+  @override
+  _i3.Future<String?>? getInput(String? title, String? prompt) =>
+      (super.noSuchMethod(
+            Invocation.method(#getInput, [title, prompt]),
+            returnValueForMissingStub: null,
+          )
+          as _i3.Future<String?>?);
 }
 
 /// A class which mocks [FirebaseApplicationState].
@@ -371,6 +386,15 @@ class MockAppDialogs extends _i1.Mock implements _i9.AppDialogs {
             returnValueForMissingStub: _i3.Future<Object?>.value(),
           )
           as _i3.Future<Object?>);
+
+  @override
+  _i3.Future<String?> inputPopup(String? dialogText, String? title) =>
+      (super.noSuchMethod(
+            Invocation.method(#inputPopup, [dialogText, title]),
+            returnValue: _i3.Future<String?>.value(),
+            returnValueForMissingStub: _i3.Future<String?>.value(),
+          )
+          as _i3.Future<String?>);
 }
 
 /// A class which mocks [AppFocus].

@@ -27,6 +27,7 @@ import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/app_context.dart';
 import 'package:my_movie_search/utilities/navigation/flutter_app_context.dart';
 import 'package:my_movie_search/utilities/navigation/route_info.dart';
+import 'package:my_movie_search/utilities/settings.dart';
 import 'package:url_launcher/url_launcher.dart' as launcher;
 
 /// Performs page navigation
@@ -398,7 +399,7 @@ class MMSFlutterCanvas {
         return openedPage.then((val) {
           // Record page closure event.
           _navLog.logPageClose(page);
-          if (!showKeyboardOnReturn) {
+          if (!showKeyboardOnReturn && Settings().forceHideKeyboard) {
             _hideKeyboard();
           }
           return null;

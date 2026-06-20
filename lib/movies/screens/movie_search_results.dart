@@ -9,6 +9,7 @@ import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
 import 'package:my_movie_search/movies/screens/widgets/movie_card_small.dart';
+import 'package:my_movie_search/movies/screens/widgets/search_text_field.dart';
 
 class MovieSearchResultsNewPage extends StatefulWidget {
   const MovieSearchResultsNewPage({
@@ -43,19 +44,12 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   late final _restorableList = RestorableMovieList();
   late final RestorableTextEditingController _textController;
   late final _criteriaFocusNode = FocusNode();
-  late final _searchFocusNode = FocusNode();
   bool searchRequested = false;
 
   @override
   void initState() {
-    _textController = RestorableTextEditingController(
-      text: (widget.criteria.criteriaType == SearchCriteriaType.moreKeywords)
-          ? 'Keywords for ${widget.criteria.criteriaContext?.title}'
-          : widget.criteria.criteriaTitle,
-    );
+    _textController = RestorableTextEditingController(text: _defaultText());
     super.initState();
-    //final controller = _textController.value;
-    //final text = controller.text;
     // TODO(pappes): use a factory in inject search bloc instances
     // e.g _searchBloc = BlocProvider.of<SearchBloc>(context);
     /*if (_searchBloc != null && !_searchBloc!.isClosed) {
@@ -82,6 +76,13 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     _performSearch();
   }
 
+  /// Provide the default text for the search bar based on the search criteria.
+  String _defaultText() =>
+      (widget.criteria.criteriaType == SearchCriteriaType.moreKeywords)
+      ? 'Keywords for ${widget.criteria.criteriaContext?.title}'
+      : widget.criteria.criteriaTitle;
+
+  /// Perform the search based on the search criteria.
   void _performSearch() {
     if (_restorableCriteria.value.criteriaType ==
         SearchCriteriaType.dvdLocations) {
@@ -105,10 +106,10 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     _textController.dispose();
     // Clean up the focus node when the Form is disposed.
     _criteriaFocusNode.dispose();
-    _searchFocusNode.dispose();
     super.dispose();
   }
 
+  /// Populate the movie list from the DTO cache.
   void _populateFromDtoCache(List<MovieResultDTO> dtos) {
     final futures = <Future<Object?>>[];
     for (final dto in dtos) {
@@ -119,6 +120,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     unawaited(Future.wait(futures).then((dto) => setState(() => {})));
   }
 
+  /// Populate the movie list from the DVD cache.
   void _populateFromDvdCache() {
     // Load data by combining internal caches.
     unawaited(
@@ -128,6 +130,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     );
   }
 
+  /// Replace an entry in the list with the cached data.
   Future<void> _replaceEntry(
     List<MovieResultDTO> dtos,
     int index,
@@ -137,48 +140,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     if (dtos[index].uniqueId == newValue.uniqueId) dtos[index] = newValue;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final criteriaText = TextField(
-      controller: _textController.value,
-      focusNode: _criteriaFocusNode,
-      onSubmitted: _newSearch,
-      showCursor: true,
-      decoration: InputDecoration(
-        hintText: 'search text',
-        suffixIcon: IconButton(
-          icon: const Icon(Icons.clear),
-          onPressed: () {
-            _textController.value.clear();
-            _criteriaFocusNode.requestFocus();
-          },
-        ),
-      ),
-    );
-
-    return AppScaffold(
-      appBar: AppBar(
-        // Use the search criteria to set our appbar title.
-        title: Align(
-          alignment: Alignment.centerLeft,
-          child: Row(
-            children: [
-              Expanded(child: criteriaText),
-              IconButton(
-                onPressed: () => _newSearch(_textController.value.text),
-                icon: const Icon(Icons.search),
-                focusNode: _searchFocusNode,
-              ),
-            ],
-          ),
-        ),
-      ),
-      body: Center(
-        child: searchRequested ? _buildMovieResults() : _movieListSection(),
-      ),
-    );
-  }
-
+  /// Create a new search when the search text changes.
   void _newSearch(String text) {
     if (_restorableList.value.isNotEmpty) _restorableList.value.clear();
     if (_restorableCriteria.value.criteriaList.isNotEmpty) {
@@ -186,9 +148,33 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     }
     _restorableCriteria.value.criteriaTitle = text;
     _performSearch();
-    _searchFocusNode.requestFocus();
   }
 
+  @override
+  Widget build(BuildContext context) => AppScaffold(
+    appBar: AppBar(
+      // Use the search criteria to set our appbar title.
+      title: Align(
+        alignment: Alignment.centerLeft,
+        child: Row(
+          children: [
+            Expanded(
+              child: SearchTextField(
+                textEditingController: _textController.value,
+                focusNode: _criteriaFocusNode,
+                onSelected: _newSearch,
+              ),
+            ),
+          ],
+        ),
+      ),
+    ),
+    body: Center(
+      child: searchRequested ? _buildMovieResults() : _movieListSection(),
+    ),
+  );
+
+  /// Build the movie results section.
   Widget _buildMovieResults() => BlocBuilder<SearchBloc, SearchState>(
     bloc: _searchBloc,
     builder: (context, state) {
@@ -202,6 +188,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     },
   );
 
+  /// Build the movie list section with a scrollbar.
   Scrollbar _movieListSection() => Scrollbar(
     thumbVisibility: true,
     child: ListView.builder(
@@ -212,6 +199,7 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
     ),
   );
 
+  /// Build the movie tile for an individual movie.
   Widget _movieListBuilder(BuildContext context, int listIndex) {
     if (listIndex >= _restorableList.value.length) {
       return const ListTile(

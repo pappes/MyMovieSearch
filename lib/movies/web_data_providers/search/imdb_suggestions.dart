@@ -24,6 +24,12 @@ class QueryIMDBSuggestions
     transformJsonP = true;
   }
 
+  /// Returns a list of movie titles from the IMDB search suggestions API.
+  ///
+  /// Removes duplicate titles by converting to a set.
+  Future<Iterable<String>> readStringList() =>
+      super.readList().then((results) => results.map((e) => e.title).toSet());
+
   static const _baseURL = 'https://sg.media-imdb.com/suggestion/x/';
   // Limit results to 10 most relevant by default.
   static const defaultSearchResultsLimit = 10;

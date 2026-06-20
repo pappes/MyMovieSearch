@@ -1,16 +1,14 @@
 import 'dart:async';
 
-import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
-import 'package:meta/meta.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
+import 'package:my_movie_search/movies/screens/widgets/search_text_field.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/barcode_helpers.dart';
-import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 
 class MovieSearchCriteriaPage extends StatefulWidget {
@@ -40,32 +38,62 @@ class MovieSearchCriteriaPage extends StatefulWidget {
 
 class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     with RestorationMixin {
-  late RestorableTextEditingController _textController;
-  late FocusNode _criteriaFocusNode;
+  late final RestorableTextEditingController _textController;
+  late final FocusNode _criteriaTextFocusNode;
 
+  static int _keyboardRetryCount = 0;
+
+  void _unfocus() {
+    _criteriaTextFocusNode.unfocus();
+  }
+
+  /// Perform the search and navigate to the results page.
   Future<Object?> performSearch(SearchCriteriaDTO criteria) async {
-    // Await the route close
+    // Unfocus before navigating
+    //to prevent the node from freezing in a 'disabled' state
+    _unfocus();
+
     final result = await MMSNav(
       context,
     ).showResultsPage(criteria, showKeyboardOnReturn: true);
-    showKeyboard();
+    _showKeyboard();
     return result;
   }
 
-  @awaitNotRequired
-  Future<void> showKeyboard({
-    Duration delay = const Duration(milliseconds: 200),
-  }) async {
-    await Future<void>.delayed(delay);
-    await SystemChannels.textInput.invokeMethod('TextInput.show');
+  /// Show the keyboard and request focus.
+  void _showKeyboard() {
+    _keyboardRetryCount = 0;
+    _tryRequestFocus();
+
+    unawaited(SystemChannels.textInput.invokeMethod('TextInput.show'));
   }
 
+  /// Poll for focusability over the next couple of frames 
+  /// in case the parent tree has IgnorePointer active.
+  void _tryRequestFocus() {
+    if (!mounted) return;
+
+    // Wait for the route-pop transition layout to completely settle down
+    if (_criteriaTextFocusNode.canRequestFocus) {
+      _unfocus();
+      FocusScope.of(context).requestFocus(_criteriaTextFocusNode);
+    } else {
+      if (_keyboardRetryCount < 100) {
+        _keyboardRetryCount++;
+        // If parent tree has IgnorePointer active, try the next frame
+        WidgetsBinding.instance.addPostFrameCallback((_) => _tryRequestFocus());
+      }
+    }
+  }
+
+  /// Search for a barcode.
   Future<Object?> searchForBarcode(String barcode) => performSearch(
     SearchCriteriaDTO()..init(SearchCriteriaType.barcode, title: barcode),
   );
 
-  Future<Object?> searchForMovie() {
-    widget.criteria.criteriaTitle = _textController.value.text;
+  /// Search for a movie.
+  Future<Object?> searchForMovie(String title) {
+    widget.criteria.criteriaTitle = title;
     return performSearch(widget.criteria);
   }
 
@@ -82,11 +110,13 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
 
   @override
   void initState() {
-    _textController = RestorableTextEditingController();
-    _criteriaFocusNode = FocusNode();
     super.initState();
+    _textController = RestorableTextEditingController();
+    _criteriaTextFocusNode = FocusNode();
 
-    showKeyboard(delay: const Duration(milliseconds: 500));
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _showKeyboard();
+    });
   }
 
   @override
@@ -94,7 +124,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     // Restorables must be disposed when no longer used.
     _textController.dispose();
     // Clean up the focus node when the Form is disposed.
-    _criteriaFocusNode.dispose();
+    _criteriaTextFocusNode.dispose();
     super.dispose();
   }
 
@@ -102,7 +132,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called.
     final page = AppScaffold(
-      // resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: (ModalRoute.of(context)?.canPop ?? false)
             ? const BackButton()
@@ -131,118 +161,29 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 const Spacer(flex: 2), // 1 part of space at the top
-                _CriteriaInput(state: this),
+                SearchTextField(
+                  textEditingController: _textController.value,
+                  focusNode: _criteriaTextFocusNode,
+                  textStyle: hugeFont,
+                  prefixIcon: _barcodeScanner(),
+                  onSelected: searchForMovie,
+                ),
                 const Spacer(flex: 3), // 3 parts below the input box
               ],
             ),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: searchForMovie,
-        tooltip: 'Search',
-        child: const Icon(Icons.search),
-      ),
     );
     return page;
   }
-}
 
-class _CriteriaInput extends StatelessWidget {
-  const _CriteriaInput({required this.state, super.key});
-  final _MovieSearchCriteriaPageState state;
-
-  @override
-  Widget build(BuildContext context) => RawAutocomplete<MovieResultDTO>(
-    textEditingController: state._textController.value,
-    focusNode: state._criteriaFocusNode,
-    optionsBuilder: _getOptions,
-    fieldViewBuilder: _buildTextField,
-    optionsViewBuilder: _buildSuggestionsList,
-    onSelected: (_) => state.searchForMovie(),
-    displayStringForOption: (option) => option.title,
-    optionsViewOpenDirection: OptionsViewOpenDirection.mostSpace,
-  );
-
-  // Logic separated into private helper methods
-  Future<Iterable<MovieResultDTO>> _getOptions(
-    TextEditingValue textValue,
-  ) async {
-    if (textValue.text.length < 3) {
-      return const Iterable<MovieResultDTO>.empty();
-    }
-
-    final completer = Completer<Iterable<MovieResultDTO>>();
-    EasyDebounce.debounce(
-      'movie-search',
-      const Duration(milliseconds: 400),
-      () async {
-        try {
-          // Replace with your API call logic
-          final results = await QueryIMDBSuggestions(
-            SearchCriteriaDTO().fromString(textValue.text),
-          ).readList();
-          completer.complete(results);
-        } catch (_) {
-          completer.complete(const Iterable<MovieResultDTO>.empty());
-        }
-      },
-    );
-    return completer.future;
-  }
-
-  Widget _buildTextField(
-    BuildContext context,
-    TextEditingController controller,
-    FocusNode focusNode,
-    VoidCallback onFieldSubmitted,
-  ) => TextField(
-    controller: controller,
-    focusNode: focusNode,
-    style: hugeFont,
-    decoration: InputDecoration(
-      labelText: 'Movie',
-      hintText: 'Enter movie or tv series to search for',
-      suffixIcon: IconButton(
-        icon: const Icon(Icons.clear),
-        onPressed: () {
-          state._textController.value.clear();
-          state._criteriaFocusNode.requestFocus();
-        },
-      ),
-      prefixIcon: IconButton(
-        icon: const Icon(Icons.qr_code_2),
-        onPressed: () {
-          state._textController.value.clear();
-          DVDBarcodeScanner().scanBarcode(
-            state.context,
-            state.searchForBarcode,
-          );
-        },
-      ),
-    ),
-    onSubmitted: (_) => state.searchForMovie(),
-  );
-
-  Widget _buildSuggestionsList(
-    BuildContext context,
-    AutocompleteOnSelected<MovieResultDTO> onSelected,
-    Iterable<MovieResultDTO> options,
-  ) => Align(
-    alignment: Alignment.topLeft,
-    child: Material(
-      elevation: 4,
-      child: SizedBox(
-        width: MediaQuery.of(context).size.width - 32,
-        child: ListView.builder(
-          shrinkWrap: true,
-          itemCount: options.length,
-          itemBuilder: (context, index) => ListTile(
-            title: Text(options.elementAt(index).title),
-            onTap: () => onSelected(options.elementAt(index)),
-          ),
-        ),
-      ),
-    ),
+  /// Return the widget for the barcode scanner.
+  Widget _barcodeScanner() => IconButton(
+    icon: const Icon(Icons.qr_code_2),
+    onPressed: () {
+      _textController.value.clear();
+      DVDBarcodeScanner().scanBarcode(context, searchForBarcode);
+    },
   );
 }

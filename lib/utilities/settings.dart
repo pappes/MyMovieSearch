@@ -234,6 +234,8 @@ class Settings {
   static final Settings _singleton = Settings._internal();
 
   bool enableLogging = false;
+  bool cloudLogging = false;
+  bool forceHideKeyboard = false;
   LogLevel logLevel = LogLevel.info;
   String applicationVersion = '';
   String applicationDescription = '';
@@ -294,7 +296,11 @@ class Settings {
   Future<bool> init({bool includeCloudSettings = true}) {
     if (!_cloudSettingsInit.isCompleted) {
       cloudSettingsInitialised = _cloudSettingsInit.future;
-      AppLogger.instance.init(enabled: enableLogging, level: logLevel);
+      AppLogger.instance.init(
+        enabled: enableLogging,
+        level: logLevel,
+        surpressCloud: !cloudLogging,
+      );
       // Manually initialise flutter to ensure that
       // settings can be loaded before RunApp
       // and to ensure tests are not prevented from calling real http endpoints.
@@ -633,7 +639,6 @@ class Settings {
       AppLogger.instance.error('Failed to update local setting: $e');
     }
   }
-
 }
 
 /// Supported application settings identifiers.

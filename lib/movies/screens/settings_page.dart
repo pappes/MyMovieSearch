@@ -27,6 +27,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
   bool _offline = false;
   bool _enableLogging = false;
+  bool _cloudLogging = false;
+  bool _forceHideKeyboard = false;
   LogLevel _logLevel = LogLevel.info;
 
   late final TextEditingController _serverController;
@@ -56,6 +58,8 @@ class _SettingsPageState extends State<SettingsPage> {
 
     _offline = settings.offline;
     _enableLogging = settings.enableLogging;
+    _cloudLogging = settings.cloudLogging;
+    _forceHideKeyboard = settings.forceHideKeyboard;
     _logLevel = settings.logLevel;
 
     _serverController = TextEditingController(
@@ -138,6 +142,8 @@ class _SettingsPageState extends State<SettingsPage> {
       final settings = Settings()
         ..offline = _offline
         ..enableLogging = _enableLogging
+        ..cloudLogging = _cloudLogging
+        ..forceHideKeyboard = _forceHideKeyboard
         ..logLevel = _logLevel;
 
       final SettingsCollection localValues = {};
@@ -161,7 +167,11 @@ class _SettingsPageState extends State<SettingsPage> {
       settings.saveToLocal(localValues);
 
       // Update the logger dynamically
-      AppLogger.instance.init(enabled: _enableLogging, level: _logLevel);
+      AppLogger.instance.init(
+        enabled: _enableLogging,
+        level: _logLevel,
+        surpressCloud: !_cloudLogging,
+      );
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -206,6 +216,7 @@ class _SettingsPageState extends State<SettingsPage> {
               searchCard(),
               meilisearchCard(),
               systemSecrets(),
+              featureToggleCard(),
               const SizedBox(height: 48), // Padding at bottom
             ],
           ),
@@ -245,8 +256,18 @@ class _SettingsPageState extends State<SettingsPage> {
                 _enableLogging = val;
               });
             },
-          ),
-          if (_enableLogging)
+          ),  
+          if (_enableLogging) ...[
+            SwitchListTile(
+              title: const Text('Cloud Logging'),
+              subtitle: const Text('Send logs to betterstack.com'),
+              value: _cloudLogging,
+              onChanged: (val) {
+                setState(() {
+                  _cloudLogging = val;
+                });
+              },
+            ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               child: DropdownButtonFormField<String>(
@@ -273,6 +294,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 },
               ),
             ),
+          ],
 
           // cloud logs can be viewed at:
           // https://telemetry.betterstack.com/team/t550725/tail?s=2476806
@@ -453,6 +475,29 @@ class _SettingsPageState extends State<SettingsPage> {
               labelText: 'SE VM Key',
               border: OutlineInputBorder(),
             ),
+          ),
+        ],
+      ),
+    ),
+  );
+
+  Card featureToggleCard() => Card(
+    margin: const EdgeInsets.only(bottom: 24),
+    child: Padding(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionHeader('Feature Toggles'),
+          SwitchListTile(
+            title: const Text('Force hide keyboard'),
+            subtitle: const Text('Hide keyboard when not in use'),
+            value: _forceHideKeyboard,
+            onChanged: (val) {
+              setState(() {
+                _forceHideKeyboard = val;
+              });
+            },
           ),
         ],
       ),
