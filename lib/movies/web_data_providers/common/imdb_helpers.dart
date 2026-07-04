@@ -236,68 +236,68 @@ CensorRatingType? getImdbCensorRating(String? type) {
   // Details available at
   // https://help.imdb.com/article/contribution/titles/certificates/GU757M8ZJ9ZPXB39
   if (type == null) return null;
-  if (type.lastIndexOf('Unrated') > -1) return CensorRatingType.none;
-  if (type.lastIndexOf('Banned') > -1) return CensorRatingType.adult;
-  if (type.lastIndexOf('X') > -1) return CensorRatingType.adult;
-  if (type.lastIndexOf('R21') > -1) return CensorRatingType.adult;
-  if (type.lastIndexOf('21') > -1) return CensorRatingType.adult;
+  if (type.lastIndexOf('Unrated') > -1) return .none;
+  if (type.lastIndexOf('Banned') > -1) return .adult;
+  if (type.lastIndexOf('X') > -1) return .adult;
+  if (type.lastIndexOf('R21') > -1) return .adult;
+  if (type.lastIndexOf('21') > -1) return .adult;
   // Suitable for Only Adults
-  if (type.lastIndexOf('SOA') > -1) return CensorRatingType.adult;
+  if (type.lastIndexOf('SOA') > -1) return .adult;
 
-  if (type.lastIndexOf('Z') > -1) return CensorRatingType.restricted;
-  if (type.lastIndexOf('Mature') > -1) return CensorRatingType.restricted;
-  if (type.lastIndexOf('Adult') > -1) return CensorRatingType.restricted;
-  if (type.lastIndexOf('GA') > -1) return CensorRatingType.restricted;
+  if (type.lastIndexOf('Z') > -1) return .restricted;
+  if (type.lastIndexOf('Mature') > -1) return .restricted;
+  if (type.lastIndexOf('Adult') > -1) return .restricted;
+  if (type.lastIndexOf('GA') > -1) return .restricted;
   //18 includes 18, R18, M18, RP18, 18+, VM18
-  if (type.lastIndexOf('18') > -1) return CensorRatingType.restricted;
-  if (type.lastIndexOf('19') > -1) return CensorRatingType.restricted;
-  if (type.lastIndexOf('17') > -1) return CensorRatingType.restricted; //NC-17
+  if (type.lastIndexOf('18') > -1) return .restricted;
+  if (type.lastIndexOf('19') > -1) return .restricted;
+  if (type.lastIndexOf('17') > -1) return .restricted; //NC-17
 
   // 16 includes 16, NC16, R16, RP16, VM 16
-  if (type.lastIndexOf('16') > -1) return CensorRatingType.mature;
+  if (type.lastIndexOf('16') > -1) return .mature;
   // 15 includes 15+, B15, R15+, 15A, 15PG
-  if (type.lastIndexOf('15') > -1) return CensorRatingType.mature;
-  if (type.lastIndexOf('14') > -1) return CensorRatingType.mature; // 14+, VM14
-  if (type.lastIndexOf('GY') > -1) return CensorRatingType.mature;
-  if (type.lastIndexOf('D') > -1) return CensorRatingType.mature;
-  if (type.lastIndexOf('LH') > -1) return CensorRatingType.mature;
+  if (type.lastIndexOf('15') > -1) return .mature;
+  if (type.lastIndexOf('14') > -1) return .mature; // 14+, VM14
+  if (type.lastIndexOf('GY') > -1) return .mature;
+  if (type.lastIndexOf('D') > -1) return .mature;
+  if (type.lastIndexOf('LH') > -1) return .mature;
 
-  if (type.lastIndexOf('Approved') > -1) return CensorRatingType.family;
+  if (type.lastIndexOf('Approved') > -1) return .family;
   // 13 includes PG-13, 13+, R13, RP13
-  if (type.lastIndexOf('13') > -1) return CensorRatingType.family;
+  if (type.lastIndexOf('13') > -1) return .family;
   // 12 includes 12+, 12A, PG12, 12A, 12PG
-  if (type.lastIndexOf('12') > -1) return CensorRatingType.family;
-  if (type.lastIndexOf('11') > -1) return CensorRatingType.family;
-  if (type.lastIndexOf('10') > -1) return CensorRatingType.family;
-  if (type.lastIndexOf('9') > -1) return CensorRatingType.family; // 9+
-  if (type.lastIndexOf('8') > -1) return CensorRatingType.family;
-  if (type.lastIndexOf('Teen') > -1) return CensorRatingType.family;
-  if (type.lastIndexOf('TE') > -1) return CensorRatingType.family;
-  if (type.lastIndexOf('7') > -1) return CensorRatingType.family; // 7+
-  if (type.lastIndexOf('6') > -1) return CensorRatingType.family; // 6+
-  if (type.lastIndexOf('S') > -1) return CensorRatingType.family;
+  if (type.lastIndexOf('12') > -1) return .family;
+  if (type.lastIndexOf('11') > -1) return .family;
+  if (type.lastIndexOf('10') > -1) return .family;
+  if (type.lastIndexOf('9') > -1) return .family; // 9+
+  if (type.lastIndexOf('8') > -1) return .family;
+  if (type.lastIndexOf('Teen') > -1) return .family;
+  if (type.lastIndexOf('TE') > -1) return .family;
+  if (type.lastIndexOf('7') > -1) return .family; // 7+
+  if (type.lastIndexOf('6') > -1) return .family; // 6+
+  if (type.lastIndexOf('S') > -1) return .family;
   // G includes G, PG, PG-13
-  if (type.lastIndexOf('G') > -1) return CensorRatingType.family;
+  if (type.lastIndexOf('G') > -1) return .family;
 
-  if (type.lastIndexOf('C') > -1) return CensorRatingType.kids;
-  if (type.lastIndexOf('Y') > -1) return CensorRatingType.kids; //TV-Y
-  if (type.lastIndexOf('U') > -1) return CensorRatingType.kids;
-  if (type.lastIndexOf('Btl') > -1) return CensorRatingType.kids;
-  if (type.lastIndexOf('TP') > -1) return CensorRatingType.kids;
-  if (type.lastIndexOf('0') > -1) return CensorRatingType.kids; // 0+
+  if (type.lastIndexOf('C') > -1) return .kids;
+  if (type.lastIndexOf('Y') > -1) return .kids; //TV-Y
+  if (type.lastIndexOf('U') > -1) return .kids;
+  if (type.lastIndexOf('Btl') > -1) return .kids;
+  if (type.lastIndexOf('TP') > -1) return .kids;
+  if (type.lastIndexOf('0') > -1) return .kids; // 0+
 
   //R includes R, R(A), RP18
-  if (type.lastIndexOf('R') > -1) return CensorRatingType.restricted;
+  if (type.lastIndexOf('R') > -1) return .restricted;
   // M includes M, MA, TV-MA
-  if (type.lastIndexOf('M') > -1) return CensorRatingType.mature;
+  if (type.lastIndexOf('M') > -1) return .mature;
 
   // A includes A, All, AL, AA
-  if (type.lastIndexOf('A') > -1) return CensorRatingType.kids;
+  if (type.lastIndexOf('A') > -1) return .kids;
 
-  if (type.lastIndexOf('T') > -1) return CensorRatingType.family; // T
-  if (type.lastIndexOf('B') > -1) return CensorRatingType.family;
+  if (type.lastIndexOf('T') > -1) return .family; // T
+  if (type.lastIndexOf('B') > -1) return .family;
 
-  return CensorRatingType.none;
+  return .none;
 }
 
 /// Strip image size information from an imdb url.

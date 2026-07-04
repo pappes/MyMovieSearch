@@ -184,15 +184,15 @@ class HeadlessWebEngineAndroid extends HeadlessWebEngineBase {
       urlProxyFilter,
     );
     switch (response.decision.action) {
-      case InterceptionAction.syntheticResponse:
+      case .syntheticResponse:
         return WebResourceResponse(
           statusCode: response.decision.statusCode,
           contentType: response.decision.contentType,
           data: response.decision.body,
         );
-      case InterceptionAction.delegateRequest:
+      case .delegateRequest:
         return null;
-      case InterceptionAction.executeRequest:
+      case .executeRequest:
         return transferResponseData(request, response.httpResponse!);
     }
   }

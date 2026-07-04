@@ -59,7 +59,7 @@ class QueryTpbSearch extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
   /// Include entire map in the movie title when an error occurs.
   @override
   MovieResultDTO myYieldError(String message) =>
-      MovieResultDTO().error('[QueryTpbSearch] $message', DataSourceType.tpb);
+      MovieResultDTO().error('[QueryTpbSearch] $message', .tpb);
 
   /// API call to tpb search
   /// returning the top matching results for [encodedCriteria].

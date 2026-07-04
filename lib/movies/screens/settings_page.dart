@@ -29,7 +29,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _enableLogging = false;
   bool _cloudLogging = false;
   bool _forceHideKeyboard = false;
-  LogLevel _logLevel = LogLevel.info;
+  LogLevel _logLevel = .info;
 
   late final TextEditingController _serverController;
   late final TextEditingController _portController;
@@ -63,52 +63,52 @@ class _SettingsPageState extends State<SettingsPage> {
     _logLevel = settings.logLevel;
 
     _serverController = TextEditingController(
-      text: settings.localValue(SettingKey.magnetServer),
+      text: settings.localValue(.magnetServer),
     );
     _portController = TextEditingController(
-      text: settings.localValue(SettingKey.magnetPort),
+      text: settings.localValue(.magnetPort),
     );
     _usernameController = TextEditingController(
-      text: settings.localValue(SettingKey.magnetUsername),
+      text: settings.localValue(.magnetUsername),
     );
     _passwordController = TextEditingController(
-      text: settings.localValue(SettingKey.magnetPassword),
+      text: settings.localValue(.magnetPassword),
     );
 
     _googleUrlController = TextEditingController(
-      text: settings.localValue(SettingKey.googleUrl),
+      text: settings.localValue(.googleUrl),
     );
     _googleKeyController = TextEditingController(
-      text: settings.localValue(SettingKey.googleKey),
+      text: settings.localValue(.googleKey),
     );
     _omdbKeyController = TextEditingController(
-      text: settings.localValue(SettingKey.omdbKey),
+      text: settings.localValue(.omdbKey),
     );
     _tmdbKeyController = TextEditingController(
-      text: settings.localValue(SettingKey.tmdbKey),
+      text: settings.localValue(.tmdbKey),
     );
     _tvdbKeyController = TextEditingController(
-      text: settings.localValue(SettingKey.tvdbKey),
+      text: settings.localValue(.tvdbKey),
     );
     _loggingKeyController = TextEditingController(
-      text: settings.localValue(SettingKey.loggingKey),
+      text: settings.localValue(.loggingKey),
     );
 
     _meiliUrlController = TextEditingController(
-      text: settings.localValue(SettingKey.meiliUrl),
+      text: settings.localValue(.meiliUrl),
     );
     _meiliSearchKeyController = TextEditingController(
-      text: settings.localValue(SettingKey.meiliSearchKey),
+      text: settings.localValue(.meiliSearchKey),
     );
     _meiliAdminKeyController = TextEditingController(
-      text: settings.localValue(SettingKey.meiliAdminKey),
+      text: settings.localValue(.meiliAdminKey),
     );
 
     _seVmKeyController = TextEditingController(
-      text: settings.localValue(SettingKey.seVirtualMachineKey),
+      text: settings.localValue(.seVirtualMachineKey),
     );
     _firebaseSecretsLocationController = TextEditingController(
-      text: settings.localValue(SettingKey.firebaseSecretsLocation),
+      text: settings.localValue(.firebaseSecretsLocation),
     );
   }
 
@@ -147,21 +147,21 @@ class _SettingsPageState extends State<SettingsPage> {
         ..logLevel = _logLevel;
 
       final SettingsCollection localValues = {};
-      localValues[SettingKey.magnetServer] = _serverController.text;
-      localValues[SettingKey.magnetPort] = _portController.text;
-      localValues[SettingKey.magnetUsername] = _usernameController.text;
-      localValues[SettingKey.magnetPassword] = _passwordController.text;
-      localValues[SettingKey.googleUrl] = _googleUrlController.text;
-      localValues[SettingKey.googleKey] = _googleKeyController.text;
-      localValues[SettingKey.omdbKey] = _omdbKeyController.text;
-      localValues[SettingKey.tmdbKey] = _tmdbKeyController.text;
-      localValues[SettingKey.tvdbKey] = _tvdbKeyController.text;
-      localValues[SettingKey.loggingKey] = _loggingKeyController.text;
-      localValues[SettingKey.meiliUrl] = _meiliUrlController.text;
-      localValues[SettingKey.meiliSearchKey] = _meiliSearchKeyController.text;
-      localValues[SettingKey.meiliAdminKey] = _meiliAdminKeyController.text;
-      localValues[SettingKey.seVirtualMachineKey] = _seVmKeyController.text;
-      localValues[SettingKey.firebaseSecretsLocation] =
+      localValues[.magnetServer] = _serverController.text;
+      localValues[.magnetPort] = _portController.text;
+      localValues[.magnetUsername] = _usernameController.text;
+      localValues[.magnetPassword] = _passwordController.text;
+      localValues[.googleUrl] = _googleUrlController.text;
+      localValues[.googleKey] = _googleKeyController.text;
+      localValues[.omdbKey] = _omdbKeyController.text;
+      localValues[.tmdbKey] = _tmdbKeyController.text;
+      localValues[.tvdbKey] = _tvdbKeyController.text;
+      localValues[.loggingKey] = _loggingKeyController.text;
+      localValues[.meiliUrl] = _meiliUrlController.text;
+      localValues[.meiliSearchKey] = _meiliSearchKeyController.text;
+      localValues[.meiliAdminKey] = _meiliAdminKeyController.text;
+      localValues[.seVirtualMachineKey] = _seVmKeyController.text;
+      localValues[.firebaseSecretsLocation] =
           _firebaseSecretsLocationController.text;
 
       settings.saveToLocal(localValues);
@@ -256,7 +256,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 _enableLogging = val;
               });
             },
-          ),  
+          ),
           if (_enableLogging) ...[
             SwitchListTile(
               title: const Text('Cloud Logging'),
@@ -287,8 +287,7 @@ class _SettingsPageState extends State<SettingsPage> {
                 onChanged: (val) {
                   if (val != null) {
                     setState(() {
-                      _logLevel =
-                          LogLevel.values.byFullName(val) ?? LogLevel.off;
+                      _logLevel = LogLevel.values.byFullName(val) ?? .off;
                     });
                   }
                 },

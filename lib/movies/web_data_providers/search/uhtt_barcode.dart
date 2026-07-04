@@ -52,10 +52,8 @@ class QueryUhttBarcodeSearch
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-    '[QueryUhttBarcodeSearch] $message',
-    DataSourceType.uhttBarcode,
-  );
+  MovieResultDTO myYieldError(String message) =>
+      MovieResultDTO().error('[QueryUhttBarcodeSearch] $message', .uhttBarcode);
 
   /// API call to search
   /// returning the top matching results for [encodedCriteria].

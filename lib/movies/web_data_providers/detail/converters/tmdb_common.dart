@@ -7,11 +7,11 @@ const innerElementImdbId = 'imdb_id';
 const innerElementExternalIds = 'external_ids';
 
 const Map<String, XxdbSource> tvdbSourceToEnumMapping = {
-  'imdb_id': XxdbSource.imdb,
-  'wikidata_id': XxdbSource.wikidata,
-  'facebook_id': XxdbSource.facebook,
-  'instagram_id': XxdbSource.instagram,
-  'twitter_id': XxdbSource.twitter,
+  'imdb_id': .imdb,
+  'wikidata_id': .wikidata,
+  'facebook_id': .facebook,
+  'instagram_id': .instagram,
+  'twitter_id': .twitter,
 };
 
 /// use the tmdb type and id to create a description and FQDN for each URL

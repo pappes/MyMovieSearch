@@ -1,4 +1,3 @@
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_base.dart';
@@ -146,7 +145,7 @@ class ImdbCastConverter extends ImdbConverterBase {
     final imageProps = TreeHelper(person[deepEntityExtraCastImageProps]);
 
     final movieDto = MovieResultDTO().init(
-      bestSource: DataSourceType.imdbSuggestions,
+      bestSource: .imdbSuggestions,
       // get id, rowTitle and image url
       uniqueId: person.searchForString(key: deepEntityExtraCastId),
       title: person.searchForString(key: deepEntityExtraCastPersonName),

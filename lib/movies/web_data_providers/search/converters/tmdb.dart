@@ -1,6 +1,5 @@
 // Helper to convert Tmdb movie search results.
 // ignore_for_file: avoid_classes_with_only_static_members
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
@@ -62,10 +61,7 @@ class TmdbMovieSearchConverter {
           map[outerElementFailureReason]?.toString() ??
           'No failure reason provided in results $map';
       searchResults.add(
-        MovieResultDTO().error(
-          '[TmdbMovieSearchConverter] $error',
-          DataSourceType.tmdbMovie,
-        ),
+        MovieResultDTO().error('[TmdbMovieSearchConverter] $error', .tmdbMovie),
       );
     }
     return searchResults;
@@ -73,7 +69,7 @@ class TmdbMovieSearchConverter {
 
   static MovieResultDTO dtoFromMap(Map<Object?, Object?> map) {
     final movie = MovieResultDTO().init(
-      bestSource: DataSourceType.tmdbSearch,
+      bestSource: .tmdbSearch,
       uniqueId: '${map[innerElementIdentity]}',
       title: map[innerElementTitle]?.toString(),
     );

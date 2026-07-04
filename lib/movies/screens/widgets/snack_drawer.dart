@@ -12,8 +12,7 @@ Drawer getDrawer(BuildContext context) => Drawer(
         title: const Text('New Movie Search'),
         onTap: () async {
           Navigator.pop(context);
-          final searchType = SearchCriteriaDTO()
-            ..init(SearchCriteriaType.movieTitle);
+          final searchType = SearchCriteriaDTO()..init(.movieTitle);
           await MMSNav(context).showCriteriaPage(searchType);
         },
       ),
@@ -28,8 +27,7 @@ Drawer getDrawer(BuildContext context) => Drawer(
         title: const Text('DVD Search'),
         onTap: () async {
           Navigator.pop(context);
-          final searchType = SearchCriteriaDTO()
-            ..init(SearchCriteriaType.meilisearch);
+          final searchType = SearchCriteriaDTO()..init(.meilisearch);
           await MMSNav(context).showCriteriaPage(searchType);
         },
       ),
@@ -37,8 +35,7 @@ Drawer getDrawer(BuildContext context) => Drawer(
         title: const Text('Navigation History'),
         onTap: () async {
           Navigator.pop(context);
-          final searchType = SearchCriteriaDTO()
-            ..init(SearchCriteriaType.navigationHistory);
+          final searchType = SearchCriteriaDTO()..init(.navigationHistory);
           await MMSNav(context).showNavigationHistory(searchType);
         },
       ),
@@ -46,8 +43,7 @@ Drawer getDrawer(BuildContext context) => Drawer(
         title: const Text('Settings'),
         onTap: () async {
           Navigator.pop(context);
-          final searchType = SearchCriteriaDTO()
-            ..init(SearchCriteriaType.settings);
+          final searchType = SearchCriteriaDTO()..init(.settings);
           await MMSNav(context).showSettingsPage(searchType);
         },
       ),
@@ -55,8 +51,7 @@ Drawer getDrawer(BuildContext context) => Drawer(
         title: const Text('About'),
         onTap: () async {
           Navigator.pop(context);
-          final searchType = SearchCriteriaDTO()
-            ..init(SearchCriteriaType.statistics);
+          final searchType = SearchCriteriaDTO()..init(.statistics);
           await MMSNav(context).showAboutPage(searchType);
         },
       ),

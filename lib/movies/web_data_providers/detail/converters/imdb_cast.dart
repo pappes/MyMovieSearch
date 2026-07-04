@@ -1,7 +1,6 @@
 // Helper class to convert IMDB cast JSON data to MovieResultDTO objects.
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 
@@ -12,7 +11,7 @@ class ImdbCastConverter {
 
   static MovieResultDTO _dtoFromMap(Map<Object?, Object?> map) {
     final movie = MovieResultDTO().init(
-      bestSource: DataSourceType.imdbSuggestions,
+      bestSource: .imdbSuggestions,
       uniqueId: map[outerElementIdentity]?.toString(),
     );
 
@@ -46,7 +45,7 @@ class ImdbCastConverter {
       return null;
     }
     final movie = MovieResultDTO().init(
-      bestSource: DataSourceType.imdbSuggestions,
+      bestSource: .imdbSuggestions,
       uniqueId: id,
       title: map[outerElementOfficialTitle]?.toString(),
       alternateTitle: map[outerElementAlternateTitle]?.toString(),

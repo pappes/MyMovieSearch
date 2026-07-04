@@ -48,10 +48,8 @@ class QueryTMDBMovies extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-    '[QueryTMDBMovies] $message',
-    DataSourceType.tmdbSearch,
-  );
+  MovieResultDTO myYieldError(String message) =>
+      MovieResultDTO().error('[QueryTMDBMovies] $message', .tmdbSearch);
 
   /// API call to TMDB returning the top 10 matching results
   /// for [searchCriteria].

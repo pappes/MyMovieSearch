@@ -189,7 +189,7 @@ class BoldLabel extends Text {
 
 List<Widget> externalSearchButtons(BuildContext context, MovieResultDTO dto) {
   final buttons = <Widget>[];
-  if (dto.type != MovieContentType.person) {
+  if (dto.type != .person) {
     buttons.add(
       _externalSearchButton(
         context,

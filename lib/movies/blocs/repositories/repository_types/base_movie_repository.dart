@@ -38,7 +38,7 @@ class BaseMovieRepository {
   static int _searchUID = 1;
   final searchIndicator = MovieResultDTO()
     ..title = 'Searching ...'
-    ..type = MovieContentType.status;
+    ..type = .status;
 
   /// Return a stream of data matching [criteria].
   ///
@@ -95,7 +95,7 @@ class BaseMovieRepository {
     if (criteria.criteriaList.isEmpty) {
       await _searchText(searchUID);
     }
-    if (criteria.criteriaType == SearchCriteriaType.barcode) {
+    if (criteria.criteriaType == .barcode) {
       await _searchText(searchUID);
     } else {
       await _searchList(searchUID);

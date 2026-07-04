@@ -13,7 +13,6 @@ import 'package:puppeteer/puppeteer.dart';
 /// making it mockable.
 typedef HttpClientFactory = HttpClient Function();
 
-
 /// Web browser class that uses the headless web engine.
 class HeadlessWebBrowserLinux {
   HeadlessWebBrowserLinux._();
@@ -180,7 +179,7 @@ class HeadlessWebEngineLinux extends HeadlessWebEngineBase {
 
       // Decide what to do with the request based on the interception decision.
       switch (interceptionResponse.decision.action) {
-        case InterceptionAction.syntheticResponse:
+        case .syntheticResponse:
           final response = _processSyntheticResponse(
             interceptionResponse.decision,
           );
@@ -189,9 +188,9 @@ class HeadlessWebEngineLinux extends HeadlessWebEngineBase {
             contentType: response.contentType,
             body: response.body,
           );
-        case InterceptionAction.delegateRequest:
+        case .delegateRequest:
           await request.continueRequest();
-        case InterceptionAction.executeRequest:
+        case .executeRequest:
           final response = await _processExecuteRequest(
             interceptionResponse.httpResponse,
           );

@@ -59,16 +59,14 @@ class _PersonDetailsPageState extends State<PersonDetailsPage>
   void _gotPerson(MovieResultDTO person) {
     _restorablePerson.value = person;
     _getDetails(
-      SearchCriteriaDTO()..init(
-        SearchCriteriaType.movieTitle,
-        title: _restorablePerson.value.uniqueId,
-      ),
+      SearchCriteriaDTO()
+        ..init(.movieTitle, title: _restorablePerson.value.uniqueId),
     );
   }
 
   /// Fetch full person details from imdb.
   void _getDetails(SearchCriteriaDTO criteria) {
-    if (MovieContentType.person == _restorablePerson.value.type) {
+    if (_restorablePerson.value.type == .person) {
       /// Fetch person details from cache using a separate thread.
       unawaited(
         QueryIMDBNameDetails(criteria).readList().then(_requestShowDetails),

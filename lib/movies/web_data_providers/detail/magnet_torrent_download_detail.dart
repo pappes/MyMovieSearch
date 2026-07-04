@@ -62,7 +62,7 @@ class QueryTorrentDownloadDetail
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
     '[QueryTorrentDownloadDetail] $message',
-    DataSourceType.torrentDownloadDetail,
+    .torrentDownloadDetail,
   );
 
   /// API call to search returning the top matching results

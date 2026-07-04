@@ -37,7 +37,7 @@ class _DetailsPageTestCase {
 void main() {
   group('MMSNav web page unit tests', () {
     final testClass = RouteInfo(
-      ScreenRoute.persondetails, // Dummy object for params
+      .persondetails, // Dummy object for params
       <String, Object?>{},
       'uniqueId',
       'dummy description',
@@ -83,16 +83,12 @@ void main() {
     });
 
     test('showResultsPage()', () async {
-      await testClass.showResultsPage(
-        SearchCriteriaDTO()..init(SearchCriteriaType.none),
-      );
+      await testClass.showResultsPage(SearchCriteriaDTO()..init(.none));
       expect(navigationResult, 'searchresults');
     });
 
     test('showCriteriaPage()', () async {
-      await testClass.showCriteriaPage(
-        SearchCriteriaDTO()..init(SearchCriteriaType.none),
-      );
+      await testClass.showCriteriaPage(SearchCriteriaDTO()..init(.none));
       // This uses viewFlutterRootPage, which we haven't mocked yet.
       // For now, let's verify viewFlutterPage wasn't called.
       mockito.verifyNever(mockCanvas.viewFlutterPage(mockito.any));
@@ -148,76 +144,20 @@ void main() {
         _DetailsPageTestCase('${imdbTitlePrefix}12345', 'moviedetails'),
         _DetailsPageTestCase('${imdbPersonPrefix}12345', 'persondetails'),
         _DetailsPageTestCase('12345', 'errordetails'),
-        _DetailsPageTestCase(
-          '12345',
-          'moviedetails',
-          type: MovieContentType.movie,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'persondetails',
-          type: MovieContentType.person,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'errordetails',
-          type: MovieContentType.custom,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'errordetails',
-          type: MovieContentType.download,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'moviedetails',
-          type: MovieContentType.episode,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'errordetails',
-          type: MovieContentType.error,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'errordetails',
-          type: MovieContentType.information,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'errordetails',
-          type: MovieContentType.keyword,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'moviedetails',
-          type: MovieContentType.miniseries,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'errordetails',
-          type: MovieContentType.navigation,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'errordetails',
-          type: MovieContentType.none,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'moviedetails',
-          type: MovieContentType.series,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'moviedetails',
-          type: MovieContentType.short,
-        ),
-        _DetailsPageTestCase(
-          '12345',
-          'moviedetails',
-          type: MovieContentType.title,
-        ),
+        _DetailsPageTestCase('12345', 'moviedetails', type: .movie),
+        _DetailsPageTestCase('12345', 'persondetails', type: .person),
+        _DetailsPageTestCase('12345', 'errordetails', type: .custom),
+        _DetailsPageTestCase('12345', 'errordetails', type: .download),
+        _DetailsPageTestCase('12345', 'moviedetails', type: .episode),
+        _DetailsPageTestCase('12345', 'errordetails', type: .error),
+        _DetailsPageTestCase('12345', 'errordetails', type: .information),
+        _DetailsPageTestCase('12345', 'errordetails', type: .keyword),
+        _DetailsPageTestCase('12345', 'moviedetails', type: .miniseries),
+        _DetailsPageTestCase('12345', 'errordetails', type: .navigation),
+        _DetailsPageTestCase('12345', 'errordetails', type: .none),
+        _DetailsPageTestCase('12345', 'moviedetails', type: .series),
+        _DetailsPageTestCase('12345', 'moviedetails', type: .short),
+        _DetailsPageTestCase('12345', 'moviedetails', type: .title),
       ];
 
       for (final testCase in testCases) {
@@ -389,7 +329,7 @@ void main() {
         navLog: mockNavLog,
       );
       testPageInfo = RouteInfo(
-        ScreenRoute.moviedetails,
+        .moviedetails,
         {'id': '123'},
         'ref123',
         'dummy description',

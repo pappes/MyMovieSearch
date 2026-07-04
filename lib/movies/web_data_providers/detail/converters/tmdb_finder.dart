@@ -1,7 +1,6 @@
 // Helper class to convert TMDB search data to MovieResultDTO objects.
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/collection_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';
@@ -82,10 +81,7 @@ class TmdbFinderConverter {
           map[outerElementFailureReason]?.toString() ??
           'No failure reason provided in results $map';
       searchResults.add(
-        MovieResultDTO().error(
-          '[TmdbFinderConverter] $error',
-          DataSourceType.tmdbFinder,
-        ),
+        MovieResultDTO().error('[TmdbFinderConverter] $error', .tmdbFinder),
       );
     }
     return searchResults;
@@ -97,7 +93,7 @@ class TmdbFinderConverter {
   ) {
     final movie = MovieResultDTO()
       ..setSource(
-        newSource: DataSourceType.tmdbFinder,
+        newSource: .tmdbFinder,
         newUniqueId: map[movieElementTMDBIdentity]?.toString(),
       )
       // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
@@ -124,10 +120,10 @@ class TmdbFinderConverter {
     // e.g. movie.imageUrl =
     //      map[movieElementPosterPath]?.toString() ?? movie.imageUrl;
     if ('true' == map[movieElementType]) {
-      movie.type = MovieContentType.short;
+      movie.type = .short;
     }
     if ('true' == map[movieElementAdult]) {
-      movie.censorRating = CensorRatingType.adult;
+      movie.censorRating = .adult;
     }
     movie
       ..description = map[movieElementOverview]?.toString() ?? movie.description
@@ -151,7 +147,7 @@ class TmdbFinderConverter {
     String imdbId,
   ) => MovieResultDTO()
     ..init(
-      bestSource: DataSourceType.tmdbFinder,
+      bestSource: .tmdbFinder,
       uniqueId: map[movieElementTMDBIdentity]?.toString(),
       title: map[personElementCommonTitle]?.toString(),
       userRatingCount: map[personElementPopularity]?.toString(),

@@ -121,10 +121,8 @@ class QueryMsSearchMovies
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String errBadApiKey) => MovieResultDTO().error(
-    '[QueryMsSearchMovies] $errBadApiKey',
-    DataSourceType.mssearch,
-  );
+  MovieResultDTO myYieldError(String errBadApiKey) =>
+      MovieResultDTO().error('[QueryMsSearchMovies] $errBadApiKey', .mssearch);
 
   /// API call to MsSearch returning the top 10 matching results
   /// for [searchCriteria].

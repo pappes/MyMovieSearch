@@ -12,7 +12,7 @@ class FishpondBarcodeSearchConverter {
     SearchCriteriaDTO criteria,
   ) => [
     MovieResultDTO().init(
-      bestSource: DataSourceType.fishpondBarcode,
+      bestSource: .fishpondBarcode,
       type: MovieContentType.barcode.toString(),
       uniqueId: '${DataSourceType.fishpondBarcode} ${criteria.criteriaTitle}',
       alternateTitle: map[jsonRawDescriptionKey]?.toString(),

@@ -77,15 +77,13 @@ class _MovieSearchResultsPageState extends State<MovieSearchResultsNewPage>
   }
 
   /// Provide the default text for the search bar based on the search criteria.
-  String _defaultText() =>
-      (widget.criteria.criteriaType == SearchCriteriaType.moreKeywords)
+  String _defaultText() => (widget.criteria.criteriaType == .moreKeywords)
       ? 'Keywords for ${widget.criteria.criteriaContext?.title}'
       : widget.criteria.criteriaTitle;
 
   /// Perform the search based on the search criteria.
   void _performSearch() {
-    if (_restorableCriteria.value.criteriaType ==
-        SearchCriteriaType.dvdLocations) {
+    if (_restorableCriteria.value.criteriaType == .dvdLocations) {
       // Initiate a search if not restoring data.
       searchRequested = false;
       _populateFromDvdCache();

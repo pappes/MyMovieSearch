@@ -75,8 +75,7 @@ class _AboutState extends State<AboutPage> with RestorationMixin {
 
   void _performSearch() {
     if (_restorableList.value.isEmpty &&
-        _restorableCriteria.value.criteriaType ==
-            SearchCriteriaType.statistics) {
+        _restorableCriteria.value.criteriaType == .statistics) {
       // Initiate a search if not restoring data.
       searchRequested = true;
       _searchBloc!.add(SearchRequested(_restorableCriteria.value));

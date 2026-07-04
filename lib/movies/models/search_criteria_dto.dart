@@ -52,7 +52,7 @@ enum SearchCriteriaType {
 class SearchCriteriaDTO {
   String searchId = '';
   String criteriaTitle = '';
-  SearchCriteriaType criteriaType = SearchCriteriaType.none;
+  SearchCriteriaType criteriaType = .none;
   MovieResultDTO? criteriaContext;
   List<MovieResultDTO> criteriaList = [];
 
@@ -205,13 +205,13 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   // ignore: invalid_factory_method_impl
   SearchCriteriaDTO fromString(String criteria) => SearchCriteriaDTO()
     ..criteriaTitle = criteria
-    ..criteriaType = SearchCriteriaType.movieTitle;
+    ..criteriaType = .movieTitle;
 
   /// Construct route to the search results page MovieSearchResultsNewPage
   /// as appropriate for the dto.
   ///
   RouteInfo getSearchResultsPage() => RouteInfo(
-    ScreenRoute.searchresults,
+    .searchresults,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
     criteriaTitle.truncate(50),
@@ -222,7 +222,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   ///
   /// Always chooses MovieSearchResultsNewPage.
   RouteInfo getSearchCriteriaPage() => RouteInfo(
-    ScreenRoute.search,
+    .search,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
     'Search for ${criteriaTitle.truncate(50)}',
@@ -232,7 +232,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   ///
   /// Always chooses AboutPage.
   RouteInfo getAboutPage() => RouteInfo(
-    ScreenRoute.about,
+    .about,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
     'About Aperture',
@@ -242,7 +242,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   ///
   /// Always chooses ChangelogPage.
   RouteInfo getChangelogPage() => RouteInfo(
-    ScreenRoute.changelog,
+    .changelog,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
     'Changelog',
@@ -252,7 +252,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   ///
   /// Always chooses NavigationHistoryPage.
   RouteInfo getNavigationHistoryPage() => RouteInfo(
-    ScreenRoute.navigationHistory,
+    .navigationHistory,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
     'Navigation History',
@@ -262,7 +262,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   ///
   /// Always chooses ErrorDetailsPage.
   RouteInfo getErrorPage() => RouteInfo(
-    ScreenRoute.errordetails,
+    .errordetails,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
     'Error details for ${criteriaTitle.truncate(50)}',
@@ -272,7 +272,7 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   ///
   /// Always chooses SettingsPage.
   RouteInfo getSettingsPage() => RouteInfo(
-    ScreenRoute.settings,
+    .settings,
     RestorableSearchCriteria.routeState(this),
     toUniqueReference(),
     'Settings',
@@ -281,27 +281,27 @@ extension SearchCriteriaDTOHelpers on SearchCriteriaDTO {
   /// Determine which WebFetch to use to gather data
   static BaseMovieRepository getDatasource(SearchCriteriaType criteriaType) {
     switch (criteriaType) {
-      case SearchCriteriaType.downloadSimple:
-      case SearchCriteriaType.downloadAdvanced:
+      case .downloadSimple:
+      case .downloadAdvanced:
         return TorRepository();
-      case SearchCriteriaType.moviesForKeyword:
+      case .moviesForKeyword:
         return MoviesForKeywordRepository();
-      case SearchCriteriaType.moreKeywords:
+      case .moreKeywords:
         return MoreKeywordsRepository();
-      case SearchCriteriaType.barcode:
+      case .barcode:
         return BarcodeRepository();
-      case SearchCriteriaType.meilisearch:
+      case .meilisearch:
         return MovieMeiliSearchRepository();
-      case SearchCriteriaType.error:
-      case SearchCriteriaType.statistics:
-      case SearchCriteriaType.settings:
-      case SearchCriteriaType.navigationHistory:
+      case .error:
+      case .statistics:
+      case .settings:
+      case .navigationHistory:
         return ApplicationStatisticsRepository();
-      case SearchCriteriaType.dvdLocations:
-      case SearchCriteriaType.none:
-      case SearchCriteriaType.custom:
-      case SearchCriteriaType.movieDTOList:
-      case SearchCriteriaType.movieTitle:
+      case .dvdLocations:
+      case .none:
+      case .custom:
+      case .movieDTOList:
+      case .movieTitle:
         return MovieSearchRepository();
     }
   }

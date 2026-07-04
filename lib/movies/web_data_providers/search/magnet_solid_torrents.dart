@@ -59,7 +59,7 @@ class QuerySolidTorrentsSearch
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
     '[QuerySolidTorrentsSearch] $message',
-    DataSourceType.solidTorrents,
+    .solidTorrents,
   );
 
   /// API call to search

@@ -1,7 +1,6 @@
 // Helper class to convert TMDB movie data to MovieResultDTO objects.
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_common.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dart';
@@ -65,10 +64,7 @@ class TmdbMovieDetailConverter {
           map[outerElementFailureReason]?.toString() ??
           'No failure reason provided in results $map';
       searchResults.add(
-        MovieResultDTO().error(
-          '[TmdbMovieDetailConverter] $error',
-          DataSourceType.tmdbMovie,
-        ),
+        MovieResultDTO().error('[TmdbMovieDetailConverter] $error', .tmdbMovie),
       );
     }
     return searchResults;
@@ -78,7 +74,7 @@ class TmdbMovieDetailConverter {
   static MovieResultDTO dtoFromMap(Map<Object?, Object?> map) {
     final movie = MovieResultDTO()
       ..setSource(
-        newSource: DataSourceType.tmdbMovie,
+        newSource: .tmdbMovie,
         newUniqueId: '${map[innerElementIdentity]}',
       );
     // Set the dto uniqueId to the IMDBID and the source ID to the TMDBID
@@ -132,10 +128,10 @@ class TmdbMovieDetailConverter {
     }
 
     if (map[innerElementTypeVideo] == 'true') {
-      movie.type = MovieContentType.short;
+      movie.type = .short;
     }
     if (map[innerElementAdult] == 'true') {
-      movie.censorRating = CensorRatingType.adult;
+      movie.censorRating = .adult;
     }
     return movie;
   }

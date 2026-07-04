@@ -57,7 +57,7 @@ class QueryFishpondBarcodeSearch
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
     '[QueryFishpondBarcodeSearch] $message',
-    DataSourceType.fishpondBarcode,
+    .fishpondBarcode,
   );
 
   /// API call to search

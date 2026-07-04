@@ -226,7 +226,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
     }
     return MovieResultDTO().init(
       uniqueId: id,
-      bestSource: DataSourceType.imdbSuggestions,
+      bestSource: .imdbSuggestions,
       title: title,
       alternateTitle: originalTitle,
       description: description,
@@ -322,7 +322,7 @@ abstract class ImdbConverterBase extends ConverterHelper {
         ?.searchForString(key: deepImageField);
 
     final newDTO = MovieResultDTO().init(
-      bestSource: DataSourceType.imdbSuggestions,
+      bestSource: .imdbSuggestions,
       uniqueId: id,
       title: title,
       imageUrl: url,

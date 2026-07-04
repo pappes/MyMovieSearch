@@ -57,10 +57,8 @@ class QueryTorrentz2Search
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-    '[QueryTorrentz2Search] $message',
-    DataSourceType.torrentz2,
-  );
+  MovieResultDTO myYieldError(String message) =>
+      MovieResultDTO().error('[QueryTorrentz2Search] $message', .torrentz2);
 
   /// API call to search
   /// returning the top matching results for [encodedCriteria].

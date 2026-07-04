@@ -25,7 +25,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryTVDBMovieDetails extends QueryTVDBCommon {
   QueryTVDBMovieDetails(super.criteria) {
     suffixURL = '/extended?short=true';
-    source = DataSourceType.tvdbDetails;
+    source = .tvdbDetails;
     _setCriteria(criteria);
   }
 
@@ -60,7 +60,7 @@ class QueryTVDBMovieDetails extends QueryTVDBCommon {
     return myConstructURI(tvdbId, pageNumber: pageNumber);
   }
 
-  MovieContentType movieContentType = MovieContentType.title;
+  MovieContentType movieContentType = .title;
 
   @override
   String myDataSourceName() => 'QueryTVDBMovieDetails';

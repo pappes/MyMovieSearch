@@ -86,7 +86,7 @@ void main() {
             Platform.environment[SettingKey.googleKey.envKey];
 
         // Act
-        final result = Settings().runtimeEnvValue(SettingKey.googleKey);
+        final result = Settings().runtimeEnvValue(.googleKey);
 
         // Assert
         expect(result, environmentValue);

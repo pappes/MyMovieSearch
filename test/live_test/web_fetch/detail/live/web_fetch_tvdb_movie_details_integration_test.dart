@@ -18,7 +18,7 @@ void main() {
 
   group('live QueryTVDBMovieDetails test', () {
     test('Run read 1 detailed series page from TVDB', () async {
-      final movieDto = MovieResultDTO()..type = MovieContentType.series;
+      final movieDto = MovieResultDTO()..type = .series;
       final criteria = SearchCriteriaDTO().fromString('397060')
         ..criteriaContext = movieDto;
       final actualOutput = await QueryTVDBMovieDetails(criteria).readList();
@@ -38,7 +38,7 @@ void main() {
       );
     });
     test('Run read 1 detailed movie page from TVDB', () async {
-      final movieDto = MovieResultDTO()..type = MovieContentType.title;
+      final movieDto = MovieResultDTO()..type = .title;
       final criteria = SearchCriteriaDTO().fromString('5391')
         ..criteriaContext = movieDto;
       final actualOutput = await QueryTVDBMovieDetails(criteria).readList();
@@ -58,7 +58,7 @@ void main() {
       );
     });
     test('Run read 1 detailed series page from TVDB using imdbid', () async {
-      final movieDto = MovieResultDTO()..type = MovieContentType.series;
+      final movieDto = MovieResultDTO()..type = .series;
       final criteria = SearchCriteriaDTO().fromString('tt13443470')
         ..criteriaContext = movieDto;
       final actualOutput = await QueryTVDBMovieDetails(criteria).readList();
@@ -78,7 +78,7 @@ void main() {
       );
     });
     test('Run read 1 detailed movie page from TVDB using imdbid', () async {
-      final movieDto = MovieResultDTO()..type = MovieContentType.title;
+      final movieDto = MovieResultDTO()..type = .title;
       final criteria = SearchCriteriaDTO().fromString('tt2724064')
         ..criteriaContext = movieDto;
       final actualOutput = await QueryTVDBMovieDetails(criteria).readList();

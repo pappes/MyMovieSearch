@@ -111,7 +111,7 @@ extension LanguageTypeHelper on Iterable<String> {
       return isoLanguageType;
     }
 
-    return LanguageType.none;
+    return .none;
   }
 
   LanguageType? _getSubsetLanguageType(Iterable<String> languages) {
@@ -123,16 +123,16 @@ extension LanguageTypeHelper on Iterable<String> {
       final someEnglish = languages.any(isEnglish);
       final allEnglish = languages.every(isEnglish);
       if (allEnglish) {
-        return LanguageType.allEnglish;
+        return .allEnglish;
       }
       if (firstLanguageIsEnglish) {
-        return LanguageType.mostlyEnglish;
+        return .mostlyEnglish;
       }
       if (someEnglish) {
-        return LanguageType.someEnglish;
+        return .someEnglish;
       }
       if (!someEnglish) {
-        return LanguageType.foreign;
+        return .foreign;
       }
     }
     return null;

@@ -119,9 +119,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateErrorList) {
         actualResult.addAll(
-          TvdbMovieDetailConverter(
-            MovieContentType.movie,
-          ).dtoFromCompleteJsonMap(map! as Map),
+          TvdbMovieDetailConverter(.movie).dtoFromCompleteJsonMap(map! as Map),
         );
       }
 
@@ -146,9 +144,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateMovieList) {
         actualResult.addAll(
-          TvdbMovieDetailConverter(
-            MovieContentType.movie,
-          ).dtoFromCompleteJsonMap(map! as Map),
+          TvdbMovieDetailConverter(.movie).dtoFromCompleteJsonMap(map! as Map),
         );
       }
 
@@ -174,9 +170,7 @@ void main() {
       // Invoke the functionality and collect results.
       for (final map in intermediateSeriesList) {
         actualResult.addAll(
-          TvdbMovieDetailConverter(
-            MovieContentType.series,
-          ).dtoFromCompleteJsonMap(map! as Map),
+          TvdbMovieDetailConverter(.series).dtoFromCompleteJsonMap(map! as Map),
         );
       }
 
@@ -227,7 +221,7 @@ void main() {
     });
     // Confirm URL is constructed as expected.
     test('Run myConstructURI() for movie tvdbid', () {
-      dto.type = MovieContentType.movie;
+      dto.type = .movie;
       final criteria = tvdbCriteria.clone()..criteriaContext = dto;
       final testClass = QueryTVDBMovieDetails(criteria);
       const expected =
@@ -241,7 +235,7 @@ void main() {
     });
     // Confirm URL is constructed as expected.
     test('Run myConstructURI() for series tvdbid', () {
-      dto.type = MovieContentType.series;
+      dto.type = .series;
       final criteria = tvdbCriteria.clone()..criteriaContext = dto;
       final testClass = QueryTVDBMovieDetails(criteria);
       const expected =
@@ -255,7 +249,7 @@ void main() {
     });
     // Confirm URL is constructed as expected.
     test('Run myConstructURI() for person tvdbid', () {
-      dto.type = MovieContentType.person;
+      dto.type = .person;
       final criteria = tvdbCriteria.clone()..criteriaContext = dto;
       final testClass = QueryTVDBMovieDetails(criteria);
       const expected =
@@ -269,7 +263,7 @@ void main() {
     });
     // Confirm URL is constructed as expected.
     test('Run myConstructURI() for episode tvdbid', () {
-      dto.type = MovieContentType.episode;
+      dto.type = .episode;
       final criteria = tvdbCriteria.clone()..criteriaContext = dto;
       final testClass = QueryTVDBMovieDetails(criteria);
       const expected =

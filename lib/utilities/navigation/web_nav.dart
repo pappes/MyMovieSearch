@@ -109,9 +109,8 @@ class MMSNav {
   /// Navigates to the list of old DVD locations.
   ///
   @awaitNotRequired
-  Future<Object?> showDVDsPage() => showResultsPage(
-    SearchCriteriaDTO()..init(SearchCriteriaType.dvdLocations),
-  );
+  Future<Object?> showDVDsPage() =>
+      showResultsPage(SearchCriteriaDTO()..init(.dvdLocations));
 
   /// Navigates to a search results page
   /// populated with a predefined list of dtos.
@@ -126,11 +125,8 @@ class MMSNav {
     } else {
       // Multiple results so show them as individual cards.
       return showResultsPage(
-        SearchCriteriaDTO()..init(
-          SearchCriteriaType.movieDTOList,
-          title: description,
-          list: movies,
-        ),
+        SearchCriteriaDTO()
+          ..init(.movieDTOList, title: description, list: movies),
       );
     }
   }
@@ -140,8 +136,7 @@ class MMSNav {
   Future<Object?> showMoviesForKeyword(String keyword) =>
       // Fetch first batch of movies that match the keyword.
       showResultsPage(
-        SearchCriteriaDTO()
-          ..init(SearchCriteriaType.moviesForKeyword, title: keyword),
+        SearchCriteriaDTO()..init(.moviesForKeyword, title: keyword),
       );
 
   /// Navigates to a search results page populated with keywords for the movie.
@@ -149,11 +144,8 @@ class MMSNav {
   Future<Object?> getMoreKeywords(MovieResultDTO movie) =>
       // Next first batch of movies that match the keyword.
       showResultsPage(
-        SearchCriteriaDTO()..init(
-          SearchCriteriaType.moreKeywords,
-          title: movie.uniqueId,
-          context: movie,
-        ),
+        SearchCriteriaDTO()
+          ..init(.moreKeywords, title: movie.uniqueId, context: movie),
       );
 
   /// Navigates to a search results page populated with downloads for the movie.
@@ -163,11 +155,7 @@ class MMSNav {
     final criteria = text.replaceAll(' ', '.');
     // Fetch first batch of movies that match the keyword.
     return showResultsPage(
-      SearchCriteriaDTO()..init(
-        SearchCriteriaType.downloadSimple,
-        title: criteria,
-        context: dto,
-      ),
+      SearchCriteriaDTO()..init(.downloadSimple, title: criteria, context: dto),
     );
   }
 
@@ -175,7 +163,7 @@ class MMSNav {
   ///
   Future<Object?> addLocation(MovieResultDTO movie) => canvas.viewFlutterPage(
     RouteInfo(
-      ScreenRoute.addlocation,
+      .addlocation,
       RestorableMovie.routeState(movie),
       movie.uniqueId,
       'Stacker locations for ${movie.title} (${movie.year})',
@@ -188,7 +176,7 @@ class MMSNav {
     MovieResultDTO movie,
     BuildContext context,
   ) async {
-    if (movie.type == MovieContentType.download) {
+    if (movie.type == .download) {
       /*final magnetName = await canvas.getInput(
         movie.title,
         MagnetHelper.getName(movie.imageUrl),
@@ -214,23 +202,20 @@ class MMSNav {
   @awaitNotRequired
   Future<Object?> resultDrillDown(MovieResultDTO movie) {
     switch (movie.type) {
-      case MovieContentType.keyword:
+      case .keyword:
         // Search for movies that match the keyword.
         return showMoviesForKeyword(movie.title);
 
-      case MovieContentType.barcode:
-      case MovieContentType.searchprompt:
+      case .barcode:
+      case .searchprompt:
         // Search for movies based on the data fetched for the barcode.
 
         return showResultsPage(
-          SearchCriteriaDTO()..init(
-            SearchCriteriaType.movieTitle,
-            title: getSearchTitle(movie),
-            context: movie,
-          ),
+          SearchCriteriaDTO()
+            ..init(.movieTitle, title: getSearchTitle(movie), context: movie),
         );
-      case MovieContentType.error:
-      case MovieContentType.information:
+      case .error:
+      case .information:
         // Show the data already fetched.
         final list = movie.related[errorsCollection]?.values.toList();
         if (list != null && list.isNotEmpty) {
@@ -238,14 +223,11 @@ class MMSNav {
         }
 
         return showErrorPage(
-          SearchCriteriaDTO()..init(
-            SearchCriteriaType.error,
-            title: getSearchTitle(movie),
-            context: movie,
-          ),
+          SearchCriteriaDTO()
+            ..init(.error, title: getSearchTitle(movie), context: movie),
         );
 
-      case MovieContentType.navigation:
+      case .navigation:
         if (movie.uniqueId.startsWith(webAddressPrefix)) {
           // Open web page.
           return canvas.viewWebPage(movie.uniqueId);
@@ -258,30 +240,29 @@ class MMSNav {
           final criteria = movie.uniqueId;
           // Fetch first batch of movies that match the keyword.
           return showResultsPage(
-            SearchCriteriaDTO()
-              ..init(SearchCriteriaType.downloadAdvanced, title: criteria),
+            SearchCriteriaDTO()..init(.downloadAdvanced, title: criteria),
           );
         }
 
-      case MovieContentType.download:
+      case .download:
         // Open magnet link.
         return canvas.viewWebPage(movie.imageUrl);
 
-      case MovieContentType.person:
-      case MovieContentType.movie:
-      case MovieContentType.none:
-      case MovieContentType.title:
-      case MovieContentType.episode:
-      case MovieContentType.series:
-      case MovieContentType.miniseries:
-      case MovieContentType.short:
-      case MovieContentType.custom:
-        movie.setReadIndicator(ReadHistory.reading.toString());
+      case .person:
+      case .movie:
+      case .none:
+      case .title:
+      case .episode:
+      case .series:
+      case .miniseries:
+      case .short:
+      case .custom:
+        movie.setReadIndicator(ReadHistory.reading.name);
         // Show details screen (movie details or person details)
         return canvas
             .viewFlutterPage(movie.getDetailsPage())
-            .then((_) => movie.setReadIndicator(ReadHistory.read.toString()));
-      case MovieContentType.status:
+            .then((_) => movie.setReadIndicator(ReadHistory.read.name));
+      case .status:
         return Future.value();
     }
   }

@@ -30,15 +30,9 @@ void main() {
 
   testWidgets('displays navigation roots and children', (tester) async {
     final mockTree = SessionNavTree()
-      ..logPageOpen(
-        createRoute(ScreenRoute.search, NavLog.rootReference, 'dummy home'),
-      )
-      ..logPageOpen(
-        createRoute(ScreenRoute.moviedetails, 'movie_1', 'dummy details'),
-      )
-      ..logPageOpen(
-        createRoute(ScreenRoute.persondetails, 'person_1', 'dummy person'),
-      );
+      ..logPageOpen(createRoute(.search, NavLog.rootReference, 'dummy home'))
+      ..logPageOpen(createRoute(.moviedetails, 'movie_1', 'dummy details'))
+      ..logPageOpen(createRoute(.persondetails, 'person_1', 'dummy person'));
 
     await tester.pumpWidget(createWidgetUnderTest(mockTree));
     await tester.pumpAndSettle();
@@ -59,9 +53,7 @@ void main() {
     final mockTree = SessionNavTree();
     // Create an 8-level deep tree (0 to 7)
     for (var i = 0; i < 8; i++) {
-      mockTree.logPageOpen(
-        createRoute(ScreenRoute.search, 'ref_$i', 'dummy level $i'),
-      );
+      mockTree.logPageOpen(createRoute(.search, 'ref_$i', 'dummy level $i'));
     }
 
     await tester.pumpWidget(createWidgetUnderTest(mockTree));
@@ -86,9 +78,7 @@ void main() {
     final mockTree = SessionNavTree();
     // Create a very deep tree to ensure it's scrollable
     for (var i = 0; i < 20; i++) {
-      mockTree.logPageOpen(
-        createRoute(ScreenRoute.search, 'ref_$i', 'dummy level $i'),
-      );
+      mockTree.logPageOpen(createRoute(.search, 'ref_$i', 'dummy level $i'));
     }
 
     await tester.pumpWidget(createWidgetUnderTest(mockTree));

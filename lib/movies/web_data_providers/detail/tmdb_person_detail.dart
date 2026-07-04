@@ -1,5 +1,4 @@
 // https://developer.themoviedb.org/reference/person-details
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_person_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_person_detail.dart';
@@ -19,7 +18,7 @@ class QueryTMDBPersonDetails extends QueryTMDBCommon {
   QueryTMDBPersonDetails(super.criteria) {
     baseURL = 'https://api.themoviedb.org/3/person/';
     midURL = '?append_to_response=external_ids&api_key=';
-    source = DataSourceType.tmdbPerson;
+    source = .tmdbPerson;
   }
 
   @override

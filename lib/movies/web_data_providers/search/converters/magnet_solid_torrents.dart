@@ -1,7 +1,6 @@
 // Helper to convert SolidTorrents search results.
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/magnet_solid_torrents.dart';
 
@@ -10,7 +9,7 @@ class SolidTorrentsSearchConverter {
     Map<Object?, Object?> map,
   ) => [
     MovieResultDTO().init(
-      bestSource: DataSourceType.solidTorrents,
+      bestSource: .solidTorrents,
       type: MovieContentType.download.toString(),
       uniqueId: map[jsonMagnetKey]?.toString(),
       title: map[jsonNameKey]?.toString(),

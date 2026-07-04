@@ -135,7 +135,7 @@ void main() {
   testWidgets(
     'Extract json from imdb for multiple people simultaneously',
     (tester) async {
-      AppLogger.turnOnLocalLogs(level: LogLevel.trace);
+      AppLogger.turnOnLocalLogs(level: .trace);
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
@@ -147,7 +147,6 @@ void main() {
         greaterThanOrEqualTo(3 * 3),
         reason: 'Json chunks should have 9 entries but has $jsonChunkCount',
       );
-
     },
     timeout: const Timeout(Duration(seconds: 60)),
   );

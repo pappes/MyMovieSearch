@@ -55,7 +55,7 @@ class QueryLibsaBarcodeSearch
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
     '[QueryLibsaBarcodeSearch] $message',
-    DataSourceType.libsaBarcode,
+    .libsaBarcode,
   );
 
   /// API call to search

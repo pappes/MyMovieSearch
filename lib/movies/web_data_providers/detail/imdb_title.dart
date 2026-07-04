@@ -56,10 +56,7 @@ class QueryIMDBTitleDetails
     Object? map,
   ) async {
     if (map is Map) {
-      return ImdbTitleConverter().dtoFromCompleteJsonMap(
-        map,
-        DataSourceType.imdb,
-      );
+      return ImdbTitleConverter().dtoFromCompleteJsonMap(map, .imdb);
     }
     throw TreeConvertException(
       'expected map got ${map.runtimeType} unable to interpret data $map',
@@ -68,8 +65,6 @@ class QueryIMDBTitleDetails
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-    '[QueryIMDBTitleDetails] $message',
-    DataSourceType.imdb,
-  );
+  MovieResultDTO myYieldError(String message) =>
+      MovieResultDTO().error('[QueryIMDBTitleDetails] $message', .imdb);
 }

@@ -20,10 +20,7 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
 final SearchCriteriaDTO criteria = SearchCriteriaDTO().fromString('dream');
 
 final fullCriteria = SearchCriteriaDTO()
-  ..init(
-    SearchCriteriaType.downloadSimple,
-    list: [MovieResultDTO().init(uniqueId: 'tt1234')],
-  );
+  ..init(.downloadSimple, list: [MovieResultDTO().init(uniqueId: 'tt1234')]);
 
 void main() {
   ////////////////////////////////////////////////////////////////////////////////

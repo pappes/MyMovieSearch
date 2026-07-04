@@ -57,10 +57,8 @@ class QueryMagnetEztvApiSearch
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-    '[QueryMagnetEztvApiSearch] $message',
-    DataSourceType.eztvApi,
-  );
+  MovieResultDTO myYieldError(String message) =>
+      MovieResultDTO().error('[QueryMagnetEztvApiSearch] $message', .eztvApi);
 
   /// API call to search
   /// returning the top matching results for [encodedCriteria].

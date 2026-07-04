@@ -1,7 +1,6 @@
 // Helper to convert Google movie search results.
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
@@ -87,10 +86,7 @@ class GoogleMovieSearchConverter {
     }
     error += ' $map';
     return [
-      MovieResultDTO().error(
-        '[GoogleMovieSearchConverter] $error',
-        DataSourceType.google,
-      ),
+      MovieResultDTO().error('[GoogleMovieSearchConverter] $error', .google),
     ];
   }
 
@@ -124,11 +120,11 @@ class GoogleMovieSearchConverter {
       ..yearRange = getYearRange(map)
       ..year = movie.maxYear();
     if (movie.yearRange.length > 4) {
-      movie.type = MovieContentType.series;
+      movie.type = .series;
     }
 
     // Reinitialise source after setting ID
-    movie.setSource(newSource: DataSourceType.google);
+    movie.setSource(newSource: .google);
     return movie;
   }
 
@@ -169,11 +165,11 @@ class GoogleMovieSearchConverter {
   static MovieContentType getType(Map<Object?, Object?> map) {
     switch (map[innerElementType]) {
       case imdbResultTypeMovie:
-        return MovieContentType.movie;
+        return .movie;
       case imdbResultTypeSeries:
-        return MovieContentType.series;
+        return .series;
       default:
-        return MovieContentType.none;
+        return .none;
     }
   }
 

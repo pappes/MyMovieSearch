@@ -21,7 +21,7 @@ class QueryTMDBFinder extends QueryTMDBCommon {
   QueryTMDBFinder(super.criteria) {
     baseURL = 'https://api.themoviedb.org/3/find/';
     midURL = '?language=en-US&external_source=imdb_id&api_key=';
-    source = DataSourceType.tmdbFinder;
+    source = .tmdbFinder;
     imdbId = criteria.criteriaTitle;
   }
   String imdbId = '';

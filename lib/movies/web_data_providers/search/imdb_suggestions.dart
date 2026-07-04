@@ -62,7 +62,7 @@ class QueryIMDBSuggestions
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
     '[QueryIMDBSuggestions] $message',
-    DataSourceType.imdbSuggestions,
+    .imdbSuggestions,
   );
 
   /// API call to IMDB search returning the top matching results

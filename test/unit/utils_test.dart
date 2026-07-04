@@ -88,9 +88,9 @@ Future<void> main() async {
 ''');
     test('getAttribute uses the enum to identify the attribute to extract', () {
       const expectedOutput = 'https://stuff.com';
-      final anchors = dom.body!.getElementsByType(ElementType.anchor);
+      final anchors = dom.body!.getElementsByType(.anchor);
       final anchorElement = anchors.first;
-      final url = anchorElement.getAttribute(AttributeType.address);
+      final url = anchorElement.getAttribute(.address);
       expect(url, expectedOutput);
     });
   });

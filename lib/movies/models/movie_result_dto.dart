@@ -25,13 +25,13 @@ typedef RelatedMovieCategories = Map<String, MovieCollection>;
 typedef MovieSources = Map<DataSourceType, String>;
 
 class MovieResultDTO {
-  DataSourceType bestSource = DataSourceType.none;
+  DataSourceType bestSource = .none;
   String uniqueId = movieDTOUninitialized; // ID in current data source
   String title = '';
   String alternateTitle = '';
   String characterName = '';
   String description = '';
-  MovieContentType type = MovieContentType.none;
+  MovieContentType type = .none;
   int year = 0;
   String yearRange = '';
   int creditsOrder = 0; // 100 = star, 0 = extra
@@ -40,10 +40,10 @@ class MovieResultDTO {
   // userRating also stores qtyCachedResponses
   int userRatingCount = 0;
   // userRatingCount also stores StackerDisk, NumberOfLeechers and qtyRequests
-  CensorRatingType censorRating = CensorRatingType.none;
-  Duration runTime = Duration.zero;
+  CensorRatingType censorRating = .none;
+  Duration runTime = .zero;
   String imageUrl = '';
-  LanguageType language = LanguageType.none;
+  LanguageType language = .none;
   Set<String> languages = {};
   Set<String> genres = {};
   Set<String> keywords = {};
@@ -484,9 +484,9 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
   MovieResultDTO error([
     String errorText = '',
-    DataSourceType errorSource = DataSourceType.none,
+    DataSourceType errorSource = .none,
   ]) {
-    type = MovieContentType.error;
+    type = .error;
     _lastError = _lastError - 1;
     uniqueId = _lastError.toString();
     title = errorText.truncate();
@@ -495,30 +495,30 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   }
 
   /// dto type is an error.
-  bool isError() => type == MovieContentType.error;
+  bool isError() => type == .error;
 
   /// dto type is an error, navigation command, or info.
   bool isMessage() {
     switch (type) {
-      case MovieContentType.error:
-      case MovieContentType.navigation:
-      case MovieContentType.information:
-      case MovieContentType.status:
+      case .error:
+      case .navigation:
+      case .information:
+      case .status:
         return true;
 
-      case MovieContentType.none:
-      case MovieContentType.keyword:
-      case MovieContentType.barcode:
-      case MovieContentType.searchprompt:
-      case MovieContentType.person:
-      case MovieContentType.download:
-      case MovieContentType.movie:
-      case MovieContentType.short:
-      case MovieContentType.series:
-      case MovieContentType.miniseries:
-      case MovieContentType.episode:
-      case MovieContentType.title:
-      case MovieContentType.custom:
+      case .none:
+      case .keyword:
+      case .barcode:
+      case .searchprompt:
+      case .person:
+      case .download:
+      case .movie:
+      case .short:
+      case .series:
+      case .miniseries:
+      case .episode:
+      case .title:
+      case .custom:
         return false;
     }
   }
@@ -526,35 +526,35 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// dto type is an error or navigation command.
   bool isAControlObject() {
     switch (type) {
-      case MovieContentType.error:
-      case MovieContentType.navigation:
+      case .error:
+      case .navigation:
         return true;
 
-      case MovieContentType.status:
-      case MovieContentType.information:
-      case MovieContentType.none:
-      case MovieContentType.keyword:
-      case MovieContentType.barcode:
-      case MovieContentType.searchprompt:
-      case MovieContentType.person:
-      case MovieContentType.download:
-      case MovieContentType.movie:
-      case MovieContentType.short:
-      case MovieContentType.series:
-      case MovieContentType.miniseries:
-      case MovieContentType.episode:
-      case MovieContentType.title:
-      case MovieContentType.custom:
+      case .status:
+      case .information:
+      case .none:
+      case .keyword:
+      case .barcode:
+      case .searchprompt:
+      case .person:
+      case .download:
+      case .movie:
+      case .short:
+      case .series:
+      case .miniseries:
+      case .episode:
+      case .title:
+      case .custom:
         return false;
     }
   }
 
   /// Reinitialise the source for a movie.
   ///
-  void setSource({Object? newSource, String? newUniqueId}) {
+  void setSource({DataSourceType? newSource, String? newUniqueId}) {
     uniqueId = newUniqueId ?? uniqueId;
 
-    if (newSource is DataSourceType) {
+    if (newSource != null) {
       bestSource = newSource;
     }
     final readIndicator = getReadIndicator();
@@ -565,16 +565,14 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     if (readIndicator != null) setReadIndicator(readIndicator);
   }
 
-  void setReadIndicator(String value) {
-    sources[DataSourceType.fbmmsnavlog] = value;
-  }
+  void setReadIndicator(String value) => sources[.fbmmsnavlog] = value;
 
   String? getReadIndicator() => sources[DataSourceType.fbmmsnavlog];
 
   /// Create a MovieResultDTO with supplied data.
   ///
   MovieResultDTO init({
-    DataSourceType bestSource = DataSourceType.none,
+    DataSourceType bestSource = .none,
     String? uniqueId = movieDTOUninitialized,
     String? title = '',
     String? alternateTitle = '',
@@ -623,16 +621,13 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     this.links = dynamicToStringMap(links);
 
     // Enumerations, work with what we get
-    this.type =
-        MovieContentType.values.byFullName(type) ?? MovieContentType.none;
+    this.type = MovieContentType.values.byFullName(type) ?? .none;
     this.censorRating =
-        CensorRatingType.values.byFullName(censorRating) ??
-        CensorRatingType.none;
+        CensorRatingType.values.byFullName(censorRating) ?? .none;
     this.language =
         LanguageType.values.byFullName(language) ?? getLanguageType();
 
-    if (this.type != MovieContentType.searchprompt &&
-        this.type != MovieContentType.episode) {
+    if (this.type != .searchprompt && this.type != .episode) {
       this.type = bestValue(
         getMovieContentType(
               '$genres $yearRange',
@@ -820,7 +815,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
       bestSource = bestValue(bestSource, newValue.bestSource);
 
       final oldTitle = title;
-      if (DataSourceType.imdb == newValue.bestSource && '' != newValue.title) {
+      if (newValue.bestSource == .imdb && '' != newValue.title) {
         title = _htmlDecode.convert(newValue.title);
       } else {
         title = bestValue(newValue.title, title).reduceWhitespace();
@@ -1005,7 +1000,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     DataSourceType existing,
     DataSourceType candidate,
   ) {
-    if (candidate == DataSourceType.imdb) return candidate;
+    if (candidate == .imdb) return candidate;
     return existing;
   }
 
@@ -1063,41 +1058,34 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     String id, {
     MovieContentType? existing,
   }) {
-    if (id.startsWith(imdbPersonPrefix)) return MovieContentType.person;
-    if (id == movieDTOUninitialized) return MovieContentType.none;
-    if (id.startsWith(movieDTOMessagePrefix)) return MovieContentType.error;
+    if (id.startsWith(imdbPersonPrefix)) return .person;
+    if (id == movieDTOUninitialized) return .none;
+    if (id.startsWith(movieDTOMessagePrefix)) return .error;
     final title = info.toLowerCase().replaceAll('sci-fi', '');
-    if (title.lastIndexOf('game') > -1) return MovieContentType.custom;
-    if (title.lastIndexOf('creativework') > -1) return MovieContentType.custom;
-    if (title.lastIndexOf('music') > -1) return MovieContentType.custom;
+    if (title.lastIndexOf('game') > -1) return .custom;
+    if (title.lastIndexOf('creativework') > -1) return .custom;
+    if (title.lastIndexOf('music') > -1) return .custom;
     // mini includes TV Mini-series
-    if (title.lastIndexOf('mini') > -1) return MovieContentType.miniseries;
-    if (title.lastIndexOf('episode') > -1) return MovieContentType.episode;
-    if (title.lastIndexOf('series') > -1) return MovieContentType.series;
-    if (title.lastIndexOf('-') > -1) return MovieContentType.series;
-    if (title.lastIndexOf('–') > -1) return MovieContentType.series;
-    if (title.lastIndexOf('special') > -1) return MovieContentType.series;
-    if (title.lastIndexOf('short') > -1) return MovieContentType.short;
+    if (title.lastIndexOf('mini') > -1) return .miniseries;
+    if (title.lastIndexOf('episode') > -1) return .episode;
+    if (title.lastIndexOf('series') > -1) return .series;
+    if (title.lastIndexOf('-') > -1) return .series;
+    if (title.lastIndexOf('–') > -1) return .series;
+    if (title.lastIndexOf('special') > -1) return .series;
+    if (title.lastIndexOf('short') > -1) return .short;
     if (seconds != null && seconds < (30 * 60) && seconds > 0) {
-      if (existing == MovieContentType.series) {
-        return MovieContentType.series;
-      }
-      return MovieContentType.short;
+      if (existing == .series) return .series;
+      return .short;
     }
     if (seconds != null && seconds < (60 * 60) && seconds > 0) {
-      if (existing == MovieContentType.series) {
-        return MovieContentType.series;
-      }
-      return MovieContentType.episode;
+      if (existing == .series) return .series;
+      return .episode;
     }
-    if (title.lastIndexOf('movie') > -1) return MovieContentType.movie;
-    if (title.lastIndexOf('video') > -1) return MovieContentType.movie;
-    if (title.lastIndexOf('feature') > -1) return MovieContentType.movie;
+    if (title.lastIndexOf('movie') > -1) return .movie;
+    if (title.lastIndexOf('video') > -1) return .movie;
+    if (title.lastIndexOf('feature') > -1) return .movie;
     if (id.startsWith(imdbTitlePrefix)) {
-      return bestType(
-        existing ?? MovieContentType.title,
-        MovieContentType.title,
-      );
+      return bestType(existing ?? .title, .title);
     }
     return existing;
   }
@@ -1136,25 +1124,24 @@ extension MovieResultDTOHelpers on MovieResultDTO {
   /// Chooses a MovieDetailsPage or PersonDetailsPage
   /// based on the IMDB unique ID or ErrorDetailsPage otherwise
   RouteInfo getDetailsPage() {
-    if (uniqueId.startsWith(imdbPersonPrefix) ||
-        type == MovieContentType.person) {
+    if (uniqueId.startsWith(imdbPersonPrefix) || type == .person) {
       // Open person details.
       return RouteInfo(
-        ScreenRoute.persondetails,
+        .persondetails,
         RestorableMovie.routeState(this),
         uniqueId,
         title.truncate(50),
       );
     } else if (uniqueId.startsWith(imdbTitlePrefix) ||
-        type == MovieContentType.movie ||
-        type == MovieContentType.miniseries ||
-        type == MovieContentType.short ||
-        type == MovieContentType.series ||
-        type == MovieContentType.episode ||
-        type == MovieContentType.title) {
+        type == .movie ||
+        type == .miniseries ||
+        type == .short ||
+        type == .series ||
+        type == .episode ||
+        type == .title) {
       // Open Movie details.
       return RouteInfo(
-        ScreenRoute.moviedetails,
+        .moviedetails,
         RestorableMovie.routeState(this),
         uniqueId,
         title.truncate(50),
@@ -1162,7 +1149,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
     } else {
       // Open error details.
       return RouteInfo(
-        ScreenRoute.errordetails,
+        .errordetails,
         RestorableMovie.routeState(this),
         MovieContentType.error.toString(),
         'Error details for ${title.truncate(50)}',
@@ -1289,7 +1276,7 @@ extension MovieResultDTOHelpers on MovieResultDTO {
 
     matchCompare('bestSource', actualDTO.bestSource, bestSource);
     matchCompareId('uniqueId', actualDTO.uniqueId, uniqueId);
-    if (MovieContentType.error != type && sources.isNotEmpty) {
+    if (type != .error && sources.isNotEmpty) {
       matchCompareIdMap('sources', actualDTO.sources, sources);
     }
     matchCompare('title', actualDTO.title, title);
@@ -1542,27 +1529,27 @@ extension DTOCompare on MovieResultDTO {
       return contentCategory().compareTo(other.contentCategory());
     }
     switch (type) {
-      case MovieContentType.person:
+      case .person:
         return personCompare(other);
-      case MovieContentType.error:
-      case MovieContentType.information:
-      case MovieContentType.status:
+      case .error:
+      case .information:
+      case .status:
         return messageCompare(other);
-      case MovieContentType.download:
+      case .download:
         return downloadCompare(other);
-      case MovieContentType.barcode:
-      case MovieContentType.searchprompt:
+      case .barcode:
+      case .searchprompt:
         return barcodeCompare(other);
-      case MovieContentType.movie:
-      case MovieContentType.keyword:
-      case MovieContentType.navigation:
-      case MovieContentType.none:
-      case MovieContentType.short:
-      case MovieContentType.series:
-      case MovieContentType.miniseries:
-      case MovieContentType.episode:
-      case MovieContentType.title:
-      case MovieContentType.custom:
+      case .movie:
+      case .keyword:
+      case .navigation:
+      case .none:
+      case .short:
+      case .series:
+      case .miniseries:
+      case .episode:
+      case .title:
+      case .custom:
         return movieCompare(other);
     }
   }
@@ -1677,15 +1664,15 @@ extension DTOCompare on MovieResultDTO {
           try {
             final readHistory = ReadHistory.values.byFullName(read);
             switch (readHistory) {
-              case ReadHistory.starred:
+              case .starred:
                 return 99;
-              case ReadHistory.reading:
+              case .reading:
                 return 1;
-              case ReadHistory.read:
+              case .read:
                 return 0;
               case null:
-              case ReadHistory.none:
-              case ReadHistory.custom:
+              case .none:
+              case .custom:
             }
             // Allow deserialisation to be more robust.
             // ignore: avoid_catching_errors
@@ -1700,15 +1687,13 @@ extension DTOCompare on MovieResultDTO {
   /// movie > miniseries > tv series > short > series episode > game & unknown
   @visibleForTesting
   int titleContentCategory() {
-    if (type == MovieContentType.none ||
-        type == MovieContentType.custom ||
-        type == MovieContentType.error) {
+    if (type == .none || type == .custom || type == .error) {
       return 0;
     }
-    if (type == MovieContentType.episode) return 1;
-    if (type == MovieContentType.short) return 2;
-    if (type == MovieContentType.series) return 3;
-    if (type == MovieContentType.miniseries) return 4;
+    if (type == .episode) return 1;
+    if (type == .short) return 2;
+    if (type == .series) return 3;
+    if (type == .miniseries) return 4;
     return 5;
   }
 
@@ -1718,35 +1703,35 @@ extension DTOCompare on MovieResultDTO {
   @visibleForTesting
   int contentCategory() {
     switch (type) {
-      case MovieContentType.person:
+      case .person:
         return 99;
-      case MovieContentType.movie:
+      case .movie:
         return 98;
-      case MovieContentType.series:
+      case .series:
         return 90;
-      case MovieContentType.none:
-      case MovieContentType.title:
+      case .none:
+      case .title:
         return 80;
-      case MovieContentType.episode:
-      case MovieContentType.miniseries:
+      case .episode:
+      case .miniseries:
         return 20;
-      case MovieContentType.short:
+      case .short:
         return 18;
-      case MovieContentType.custom:
+      case .custom:
         return 15;
-      case MovieContentType.navigation:
+      case .navigation:
         return 10;
-      case MovieContentType.keyword:
-      case MovieContentType.barcode:
-      case MovieContentType.searchprompt:
+      case .keyword:
+      case .barcode:
+      case .searchprompt:
         return 8;
-      case MovieContentType.download:
+      case .download:
         return 4;
-      case MovieContentType.error:
+      case .error:
         return 3;
-      case MovieContentType.information:
+      case .information:
         return 2;
-      case MovieContentType.status:
+      case .status:
         return 0;
     }
   }

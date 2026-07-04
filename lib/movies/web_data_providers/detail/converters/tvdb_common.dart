@@ -28,7 +28,7 @@ abstract class TvdbCommonConverter {
 
   String? imdbId;
   String? failureMessage;
-  final DataSourceType dataSource = DataSourceType.tvdbDetails;
+  final DataSourceType dataSource = .tvdbDetails;
   String dataSourceName = 'TvdbDetailConverter';
 
   List<MovieResultDTO> dtoFromCompleteJsonMap(Map<Object?, Object?> map) {
@@ -38,7 +38,7 @@ abstract class TvdbCommonConverter {
     dataSourceName = dataSource.name; //datasource
 
     final resultType = parseResultTypeAndData(map, resultData);
-    if (resultType == MovieContentType.none) {
+    if (resultType == .none) {
       return searchResults;
     } else if (failureMessage == null) {
       searchResults.add(dtoFromMap(resultType, resultData, imdbId: imdbId));
@@ -57,7 +57,7 @@ abstract class TvdbCommonConverter {
   }) {
     final movie = MovieResultDTO()
       ..setSource(
-        newSource: DataSourceType.tvdbDetails,
+        newSource: .tvdbDetails,
         newUniqueId: '${resultData[elementIdentity]}',
       )
       ..type = resultType;
@@ -86,8 +86,7 @@ abstract class TvdbCommonConverter {
       ..getContentType()
       ..getLanguageType();
 
-    if (resultType == MovieContentType.series ||
-        resultType == MovieContentType.episode) {
+    if (resultType == .series || resultType == .episode) {
       if (movie.year > 0) {
         final endYear =
             DateTime.tryParse('${resultData[elementEndYear]}')?.year ?? '';

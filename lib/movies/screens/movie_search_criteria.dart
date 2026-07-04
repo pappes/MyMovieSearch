@@ -68,7 +68,7 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
     unawaited(SystemChannels.textInput.invokeMethod('TextInput.show'));
   }
 
-  /// Poll for focusability over the next couple of frames 
+  /// Poll for focusability over the next couple of frames
   /// in case the parent tree has IgnorePointer active.
   void _tryRequestFocus() {
     if (!mounted) return;
@@ -87,9 +87,8 @@ class _MovieSearchCriteriaPageState extends State<MovieSearchCriteriaPage>
   }
 
   /// Search for a barcode.
-  Future<Object?> searchForBarcode(String barcode) => performSearch(
-    SearchCriteriaDTO()..init(SearchCriteriaType.barcode, title: barcode),
-  );
+  Future<Object?> searchForBarcode(String barcode) =>
+      performSearch(SearchCriteriaDTO()..init(.barcode, title: barcode));
 
   /// Search for a movie.
   Future<Object?> searchForMovie(String title) {

@@ -41,7 +41,7 @@ class QueryIMDBMoviesForKeyword
     if (map is Map) {
       return ImdbMoviesForKeywordConverter().dtoFromCompleteJsonMap(
         map,
-        DataSourceType.imdbKeywords,
+        .imdbKeywords,
       );
     }
     throw TreeConvertException(
@@ -57,7 +57,7 @@ class QueryIMDBMoviesForKeyword
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
     '[QueryIMDBMoviesForKeyword] $message',
-    DataSourceType.imdbKeywords,
+    .imdbKeywords,
   );
 
   /// API call to IMDB keywords returning the top matching results

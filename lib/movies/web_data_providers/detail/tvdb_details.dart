@@ -1,7 +1,6 @@
 // https://thetvdb.github.io/v4-api/#/Series/getSeriesBase
 import 'dart:async';
 
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tvdb_details.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tvdb_details.dart';
@@ -20,7 +19,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 class QueryTVDBDetails extends QueryTVDBCommon {
   QueryTVDBDetails(super.criteria) {
     midURL = 'search/remoteid/';
-    source = DataSourceType.tvdbDetails;
+    source = .tvdbDetails;
   }
 
   @override

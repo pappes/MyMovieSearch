@@ -26,7 +26,7 @@ class AppLogger {
   // Better Stack logging endpoint
   final String _ingestUrl = 'https://s2476806.eu-fsn-3.betterstackdata.com';
 
-  static void turnOnLocalLogs({LogLevel level = LogLevel.info}) {
+  static void turnOnLocalLogs({LogLevel level = .info}) {
     // Update the logger dynamically
     AppLogger.instance.init(enabled: true, level: level, surpressCloud: true);
   }
@@ -42,21 +42,21 @@ class AppLogger {
 
     Level loggerLevel;
     switch (level) {
-      case LogLevel.all:
+      case .all:
         loggerLevel = Level.all;
-      case LogLevel.trace:
+      case .trace:
         loggerLevel = Level.trace;
-      case LogLevel.debug:
+      case .debug:
         loggerLevel = Level.debug;
-      case LogLevel.info:
+      case .info:
         loggerLevel = Level.info;
-      case LogLevel.warning:
+      case .warning:
         loggerLevel = Level.warning;
-      case LogLevel.error:
+      case .error:
         loggerLevel = Level.error;
-      case LogLevel.fatal:
+      case .fatal:
         loggerLevel = Level.fatal;
-      case LogLevel.off:
+      case .off:
         loggerLevel = Level.off;
     }
 
@@ -77,14 +77,7 @@ class AppLogger {
     StackTrace? stackTrace,
     bool surpressCloud = false,
   }) {
-    _outputLog(
-      LogLevel.trace,
-      _logger?.t,
-      message,
-      error,
-      stackTrace,
-      surpressCloud,
-    );
+    _outputLog(.trace, _logger?.t, message, error, stackTrace, surpressCloud);
   }
 
   /// Log a message at debug level
@@ -94,14 +87,7 @@ class AppLogger {
     StackTrace? stackTrace,
     bool surpressCloud = false,
   }) {
-    _outputLog(
-      LogLevel.debug,
-      _logger?.d,
-      message,
-      error,
-      stackTrace,
-      surpressCloud,
-    );
+    _outputLog(.debug, _logger?.d, message, error, stackTrace, surpressCloud);
   }
 
   /// Log a message at info level
@@ -111,14 +97,7 @@ class AppLogger {
     StackTrace? stackTrace,
     bool surpressCloud = false,
   }) {
-    _outputLog(
-      LogLevel.info,
-      _logger?.i,
-      message,
-      error,
-      stackTrace,
-      surpressCloud,
-    );
+    _outputLog(.info, _logger?.i, message, error, stackTrace, surpressCloud);
   }
 
   /// Log a message at warning level
@@ -128,14 +107,7 @@ class AppLogger {
     StackTrace? stackTrace,
     bool surpressCloud = false,
   }) {
-    _outputLog(
-      LogLevel.warning,
-      _logger?.w,
-      message,
-      error,
-      stackTrace,
-      surpressCloud,
-    );
+    _outputLog(.warning, _logger?.w, message, error, stackTrace, surpressCloud);
   }
 
   /// Log a message at error level
@@ -145,14 +117,7 @@ class AppLogger {
     StackTrace? stackTrace,
     bool surpressCloud = false,
   }) {
-    _outputLog(
-      LogLevel.error,
-      _logger?.e,
-      message,
-      error,
-      stackTrace,
-      surpressCloud,
-    );
+    _outputLog(.error, _logger?.e, message, error, stackTrace, surpressCloud);
   }
 
   /// Log a message at fatal level
@@ -162,14 +127,7 @@ class AppLogger {
     StackTrace? stackTrace,
     bool surpressCloud = false,
   }) {
-    _outputLog(
-      LogLevel.fatal,
-      _logger?.f,
-      message,
-      error,
-      stackTrace,
-      surpressCloud,
-    );
+    _outputLog(.fatal, _logger?.f, message, error, stackTrace, surpressCloud);
   }
 
   /// Output log to console only

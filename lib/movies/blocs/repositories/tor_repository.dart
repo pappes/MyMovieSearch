@@ -46,7 +46,7 @@ class TorRepository extends TorMultiSearchRepository {
   /// Manufacture a navigation card
   /// to expand downloadSimple to downloadAdvanced
   Future<void> _advancedDownloadCard(int searchUID) async {
-    if (criteria.criteriaType == SearchCriteriaType.downloadSimple) {
+    if (criteria.criteriaType == .downloadSimple) {
       return addResults(searchUID, [
         MovieResultDTO().init(
           uniqueId: criteria.criteriaTitle,
@@ -59,7 +59,7 @@ class TorRepository extends TorMultiSearchRepository {
 
   /// Determine best provider(s) for the supplied criteria.
   List<WebFetchDTO> _getProviders(SearchCriteriaDTO criteria) {
-    if (criteria.criteriaType == SearchCriteriaType.downloadSimple) {
+    if (criteria.criteriaType == .downloadSimple) {
       // Yts searches based on IMDB ID
       return [QueryYtsDetailApi(criteria), QueryMagnetEztvApiSearch(criteria)];
     }

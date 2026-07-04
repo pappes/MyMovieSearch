@@ -1,7 +1,6 @@
 // Helper to convert Omdb movie search results.
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 
@@ -58,10 +57,7 @@ class OmdbMovieSearchConverter {
           map[outerElementFailureReason]?.toString() ??
           'No failure reason provided in results $map';
       searchResults.add(
-        MovieResultDTO().error(
-          '[OmdbMovieSearchConverter] $error',
-          DataSourceType.omdb,
-        ),
+        MovieResultDTO().error('[OmdbMovieSearchConverter] $error', .omdb),
       );
     }
     return searchResults;
@@ -69,7 +65,7 @@ class OmdbMovieSearchConverter {
 
   static MovieResultDTO dtoFromMap(Map<Object?, Object?> map) {
     final movie = MovieResultDTO().init(
-      bestSource: DataSourceType.omdb,
+      bestSource: .omdb,
       uniqueId: map[innerElementIdentity]?.toString(),
       title: map[innerElementTitle]?.toString(),
       imageUrl: map[innerElementImage]?.toString(),
@@ -77,13 +73,13 @@ class OmdbMovieSearchConverter {
 
     switch (map[innerElementType]) {
       case omdbResultTypeMovie:
-        movie.type = MovieContentType.movie;
+        movie.type = .movie;
       case omdbResultTypeSeries:
-        movie.type = MovieContentType.series;
+        movie.type = .series;
       case omdbResultTypeEpisode:
-        movie.type = MovieContentType.episode;
+        movie.type = .episode;
       default:
-        movie.type = MovieContentType.none;
+        movie.type = .none;
     }
 
     final year = map[innerElementYear]?.toString().getYear();
@@ -93,7 +89,7 @@ class OmdbMovieSearchConverter {
       movie
         ..yearRange = yearRange
         ..year = movie.maxYear()
-        ..type = MovieContentType.series;
+        ..type = .series;
     }
 
     return movie;

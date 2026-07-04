@@ -196,7 +196,7 @@ class QueryWikidataDetails
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
     '[QueryWikidataDetails] $message',
-    DataSourceType.wikidataDetail,
+    .wikidataDetail,
   );
 }
 

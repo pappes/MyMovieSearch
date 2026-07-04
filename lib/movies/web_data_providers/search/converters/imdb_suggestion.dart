@@ -1,7 +1,6 @@
 // Helper to convert IMDB suggestion search results.
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 //query string https://sg.media-imdb.com/suggestion/x/wonder%20woman.json
@@ -49,7 +48,7 @@ class ImdbSuggestionConverter {
     )?.toString();
 
     final movie = MovieResultDTO().init(
-      bestSource: DataSourceType.imdbSuggestions,
+      bestSource: .imdbSuggestions,
       uniqueId: map[innerElementIdentity]?.toString(),
       title: map[innerElementTitle]?.toString(),
       imageUrl: _getImage(map[innerElementImage]),

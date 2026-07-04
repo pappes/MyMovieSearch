@@ -74,25 +74,25 @@ const idField = 'id';
 const imdbIdField = 'movieIMDB';
 
 const Map<Object, XxdbSource> tvdbSourceToEnumMapping = {
-  'P345': XxdbSource.imdb,
-  'P4947': XxdbSource.tvdb,
-  'P2704': XxdbSource.eidr,
-  'P2003': XxdbSource.instagram,
-  'P1874': XxdbSource.netflix,
-  'P856': XxdbSource.officialWebsite,
-  'P2013': XxdbSource.facebook,
-  'P1258': XxdbSource.rottenTomatoes,
-  //'Reddit': XxdbSource.reddit,
-  'P8600': XxdbSource.tvMaze,
-  //'Wikidata': XxdbSource.wikidata,
-  XxdbSource.wikipedia: XxdbSource.wikipedia,
-  'P2002': XxdbSource.twitter,
+  'P345': .imdb,
+  'P4947': .tvdb,
+  'P2704': .eidr,
+  'P2003': .instagram,
+  'P1874': .netflix,
+  'P856': .officialWebsite,
+  'P2013': .facebook,
+  'P1258': .rottenTomatoes,
+  //'Reddit': .reddit,
+  'P8600': .tvMaze,
+  //'Wikidata': .wikidata,
+  XxdbSource.wikipedia: .wikipedia,
+  'P2002': .twitter,
 };
 
 class WikidataDetailConverter {
   String? imdbId;
   String? failureMessage;
-  final DataSourceType dataSource = DataSourceType.wikidataDetail;
+  final DataSourceType dataSource = .wikidataDetail;
   String dataSourceName = 'WikidataDetailConverter';
 
   List<MovieResultDTO> dtoFromCompleteJsonMap(Map<Object?, Object?> map) {
@@ -104,7 +104,7 @@ class WikidataDetailConverter {
     final singleResult = map[nodeSingleResult];
     if (singleResult != null) {
       final resultType = parseSingleResultTypeAndData(map, resultData);
-      if (resultType == MovieContentType.none) {
+      if (resultType == .none) {
         return searchResults;
       } else if (failureMessage == null) {
         searchResults.add(dtoFromMap(resultData));
@@ -120,7 +120,7 @@ class WikidataDetailConverter {
     final multipleResult = map[nodeMultipleResults];
     if (multipleResult != null) {
       final resultType = parseMultipleResultTypeAndData(map, resultData);
-      if (resultType == MovieContentType.none) {
+      if (resultType == .none) {
         return searchResults;
       } else if (failureMessage == null) {
         searchResults.addAll(dtosFromMaps(resultData));
@@ -176,7 +176,7 @@ class WikidataDetailConverter {
     Map<Object?, Object?> outputData,
   ) {
     // [{head: { }, results: {bindings: [{...}]}}]
-    var result = MovieContentType.none;
+    MovieContentType result = .none;
     final inputCollection = inputData.deepSearch(nodeMultipleResultCollection);
     if (inputCollection != null && inputCollection.isNotEmpty) {
       final inputMap = inputCollection.first;
@@ -197,8 +197,8 @@ class WikidataDetailConverter {
             final qid = getStringValue(row, branchText: multipleTypeId);
             final movieType = getMovieType(qid, imdbId ?? '');
             outputRow[nodeType] = movieType;
-            if (movieType != MovieContentType.none) {
-              result = MovieContentType.title;
+            if (movieType != .none) {
+              result = .title;
             }
 
             outputData[imdbId] = outputRow;
@@ -232,7 +232,7 @@ class WikidataDetailConverter {
     Map<Object?, Object?> outputData,
   ) {
     try {
-      var movieType = MovieContentType.none;
+      MovieContentType movieType = .none;
       final nameData = inputData.deepSearch(nodeName);
       final descriptionData = inputData.deepSearch(nodeDescription);
       final startDateData = inputData.deepSearch(nodeStartDate);
@@ -262,7 +262,7 @@ class WikidataDetailConverter {
 
       final destinationUrls = <String, String>{};
       final wikiUrl = wikiLinksData?.searchForString(key: nodeUrl);
-      getExternalUrl(destinationUrls, XxdbSource.wikipedia, wikiUrl);
+      getExternalUrl(destinationUrls, .wikipedia, wikiUrl);
       getExternalLinks(destinationUrls, rawLinkData);
       outputData[nodeExternalLinks] = destinationUrls;
 
@@ -270,7 +270,7 @@ class WikidataDetailConverter {
       final bestID = getId(inputData);
       outputData[idField] = bestID;
       if (bestID.startsWith(imdbPersonPrefix)) {
-        movieType = MovieContentType.person;
+        movieType = .person;
       } else if (bestID.startsWith(imdbTitlePrefix)) {
         final qid = getStringValue(
           inputData,
@@ -279,13 +279,13 @@ class WikidataDetailConverter {
         );
         movieType = getMovieType(qid, bestID);
       } else if (bestID.startsWith(wikiNotFound)) {
-        movieType = MovieContentType.error;
+        movieType = .error;
       }
       outputData[nodeType] = movieType;
       return movieType;
     } catch (_) {}
     failureMessage = 'Unable to interpret results $inputData';
-    return MovieContentType.error;
+    return .error;
   }
 
   /// Grab the URL part for the active external link (ignore deprecated).
@@ -330,54 +330,54 @@ class WikidataDetailConverter {
 
   MovieContentType getMovieType(String? qid, String imdbId) {
     if (imdbId.startsWith(imdbPersonPrefix)) {
-      return MovieContentType.person;
+      return .person;
     }
     if (qid != null) {
       // Type string may contain multiple values so look for
       // most specific values first e.g. Animated series before series
       if (qid.contains(typeShort)) {
-        return MovieContentType.short;
+        return .short;
       } else if (qid.contains(typeSilent)) {
-        return MovieContentType.custom;
+        return .custom;
       } else if (qid.contains(typeDoc)) {
-        return MovieContentType.custom;
+        return .custom;
       } else if (qid.contains(typeAnimatedSeries)) {
-        return MovieContentType.custom;
+        return .custom;
       } else if (qid.contains(typeAnimated)) {
-        return MovieContentType.custom;
+        return .custom;
       } else if (qid.contains(typeWebSeries)) {
-        return MovieContentType.series;
+        return .series;
       } else if (qid.contains(typeEpisode)) {
-        return MovieContentType.episode;
+        return .episode;
       } else if (qid.contains(typeSoapOpera)) {
-        return MovieContentType.series;
+        return .series;
       } else if (qid.contains(typeSeries)) {
-        return MovieContentType.series;
+        return .series;
       } else if (qid.contains(typePlay)) {
-        return MovieContentType.custom;
+        return .custom;
       } else if (qid.contains(typeConcert)) {
-        return MovieContentType.custom;
+        return .custom;
       } else if (qid.contains(typeMusical)) {
-        return MovieContentType.custom;
+        return .custom;
       } else if (qid.contains(typeOpera)) {
-        return MovieContentType.custom;
+        return .custom;
       } else if (qid.contains(typeVideoGame)) {
-        return MovieContentType.custom;
+        return .custom;
       } else if (qid.contains(typeMusicVideo)) {
-        return MovieContentType.short;
+        return .short;
       } else if (qid.contains(typeMiniseries)) {
-        return MovieContentType.miniseries;
+        return .miniseries;
       } else if (qid.contains(typeTV)) {
-        return MovieContentType.movie;
+        return .movie;
       } else if (qid.contains(typeSpecial)) {
-        return MovieContentType.movie;
+        return .movie;
       } else if (qid.contains(typeDirect)) {
-        return MovieContentType.movie;
+        return .movie;
       } else if (qid.contains(typeMovie)) {
-        return MovieContentType.movie;
+        return .movie;
       }
     }
-    return MovieContentType.title;
+    return .title;
   }
 
   String? getStringValue(

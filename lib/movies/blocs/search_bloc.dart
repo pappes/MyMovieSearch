@@ -144,12 +144,8 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     MovieCollection collection,
     MovieResultDTO newValue,
   ) async {
-    final tmdbSources = [
-      DataSourceType.tmdbFinder,
-      DataSourceType.tmdbMovie,
-      DataSourceType.tmdbPerson,
-    ];
-    if (MovieContentType.error != newValue.type) {
+    const tmdbSources = <DataSourceType>[.tmdbFinder, .tmdbMovie, .tmdbPerson];
+    if (newValue.type != .error) {
       for (final source in tmdbSources) {
         final imdbid = newValue.uniqueId;
         final tmdbid = newValue.sources[source];
@@ -172,7 +168,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     // and merge combined TMDB data with IMDB record
     // e.g. tmdbid="11234" imdbid="nm0109036"
     final temporaryRecord = collection[tmdbId]!;
-    if (MovieContentType.error != temporaryRecord.type) {
+    if (temporaryRecord.type != .error) {
       temporaryRecord.uniqueId = imdbId;
       _allResults[imdbId] = await DtoCache.singleton().merge(temporaryRecord);
 

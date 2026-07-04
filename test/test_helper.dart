@@ -7,7 +7,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:meta/meta.dart';
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -565,28 +564,28 @@ MovieResultDTO makeResultDTOWithRelatedDTO(String sample) {
 /// Helper function to make a unique dto containing unique values.
 MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
   final dto = MovieResultDTO()
-    ..bestSource = DataSourceType.wiki
+    ..bestSource = .wiki
     ..uniqueId = '${sample}_uniqueId'
     ..title = '${sample}_title'
     ..alternateTitle = '${sample}_alternateTitle'
     ..characterName = '${sample}_characterName'
     ..description = '${sample}_description'
-    ..type = MovieContentType.custom
+    ..type = .custom
     ..year = 123
     ..yearRange = '${sample}_yearRange'
     ..creditsOrder = 42
     ..userRating = 456
     ..userRatingCount = 789
-    ..censorRating = CensorRatingType.family
+    ..censorRating = .family
     ..runTime = const Duration(hours: 1, minutes: 2, seconds: 3)
     ..imageUrl = '${sample}_imageUrl'
-    ..language = LanguageType.mostlyEnglish
+    ..language = .mostlyEnglish
     ..languages = {'English', '${sample}_language1', '${sample}_language2'}
     ..genres = {'${sample}_genre1', '${sample}_genre2'}
     ..keywords = {'${sample}_keyword1', '${sample}_keyword2'}
     ..sources = {
-      DataSourceType.tmdbMovie: '${sample}_alternateTitle',
-      DataSourceType.wiki: '${sample}_uniqueId',
+      .tmdbMovie: '${sample}_alternateTitle',
+      .wiki: '${sample}_uniqueId',
     };
   if (makeRelated) {
     final ref = 'rel$sample';
@@ -608,7 +607,7 @@ MovieResultDTO makeResultDTO(String sample, {bool makeRelated = true}) {
 
 /// Helper function to make a unique dto containing unique values.
 SearchCriteriaDTO makeCriteriaDTO(String sample) => SearchCriteriaDTO()
-  ..criteriaType = SearchCriteriaType.movieDTOList
+  ..criteriaType = .movieDTOList
   ..criteriaTitle = '${sample}_criteriaTitle'
   ..searchId = '${sample}_searchId'
   ..criteriaList = [

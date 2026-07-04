@@ -29,7 +29,9 @@ class ImdbJsonConverter extends ImdbConverterBase
 
   void _shallowConvert(MovieResultDTO movie, Map<Object?, Object?> map) {
     movie.setSource(
-      newSource: map[dataSource],
+      newSource: map[dataSource] is DataSourceType
+          ? map[dataSource] as DataSourceType?
+          : null,
       newUniqueId: map[outerElementIdentity]!.toString(),
     );
     if (movie.uniqueId.startsWith(imdbPersonPrefix)) {
@@ -40,7 +42,7 @@ class ImdbJsonConverter extends ImdbConverterBase
   }
 
   void _shallowConvertPerson(MovieResultDTO movie, Map<Object?, Object?> map) {
-    movie.type = MovieContentType.person;
+    movie.type = .person;
     final name = map[outerElementOfficialTitle] ?? map[deepPersonNameHeader];
     if (name != null && name is Map) {
       movie.title = name.searchForString() ?? movie.imageUrl;
@@ -109,7 +111,7 @@ class ImdbJsonConverter extends ImdbConverterBase
 
   void _shallowConvertTitle(MovieResultDTO movie, Map<Object?, Object?> map) {
     movie
-      ..type = MovieContentType.title
+      ..type = .title
       ..title = map[outerElementOfficialTitle]?.toString() ?? movie.title
       ..alternateTitle =
           map[outerElementAlternateTitle]?.toString() ?? movie.alternateTitle;
@@ -206,7 +208,7 @@ class ImdbJsonConverter extends ImdbConverterBase
       return null;
     }
     return MovieResultDTO().init(
-      bestSource: DataSourceType.imdbSuggestions,
+      bestSource: .imdbSuggestions,
       uniqueId: id,
       title: map[outerElementOfficialTitle]?.toString(),
     );
@@ -241,7 +243,7 @@ class ImdbJsonConverter extends ImdbConverterBase
       return null;
     }
     return MovieResultDTO().init(
-      bestSource: DataSourceType.imdbSuggestions,
+      bestSource: .imdbSuggestions,
       uniqueId: id,
       title: map[outerElementOfficialTitle]?.toString(),
     );

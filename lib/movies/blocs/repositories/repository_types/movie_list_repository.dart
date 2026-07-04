@@ -136,7 +136,7 @@ class MovieListRepository extends BaseMovieRepository {
     if (null != tmdbId) {
       final detailCriteria = SearchCriteriaDTO().fromString(tmdbId);
 
-      final constructor = (MovieContentType.person == dto.type)
+      final constructor = (dto.type == .person)
           ? QueryTMDBPersonDetails.new
           : QueryTMDBMovieDetails.new;
       await _fetchDetails(originalSearchUID, detailCriteria, constructor);

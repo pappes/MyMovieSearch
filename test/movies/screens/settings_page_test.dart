@@ -9,21 +9,21 @@ void main() {
     SharedPreferences.setMockInitialValues({});
 
     final newValues = <SettingKey, String>{
-      SettingKey.magnetServer: 'http://old-server',
-      SettingKey.magnetPort: '8080',
-      SettingKey.magnetUsername: 'old-user',
-      SettingKey.magnetPassword: 'old-password',
-      SettingKey.loggingKey: 'old-logging-key',
-      SettingKey.googleUrl: 'http://google',
-      SettingKey.googleKey: 'g-key',
-      SettingKey.omdbKey: 'o-key',
-      SettingKey.tmdbKey: 't-key',
-      SettingKey.tvdbKey: 'tv-key',
-      SettingKey.meiliUrl: 'http://meili',
-      SettingKey.meiliSearchKey: 'ms-key',
-      SettingKey.meiliAdminKey: 'ma-key',
-      SettingKey.firebaseSecretsLocation: 'secret-loc',
-      SettingKey.seVirtualMachineKey: 'se-key',
+      .magnetServer: 'http://old-server',
+      .magnetPort: '8080',
+      .magnetUsername: 'old-user',
+      .magnetPassword: 'old-password',
+      .loggingKey: 'old-logging-key',
+      .googleUrl: 'http://google',
+      .googleKey: 'g-key',
+      .omdbKey: 'o-key',
+      .tmdbKey: 't-key',
+      .tvdbKey: 'tv-key',
+      .meiliUrl: 'http://meili',
+      .meiliSearchKey: 'ms-key',
+      .meiliAdminKey: 'ma-key',
+      .firebaseSecretsLocation: 'secret-loc',
+      .seVirtualMachineKey: 'se-key',
     };
 
     Settings()

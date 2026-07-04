@@ -219,7 +219,7 @@ void main() {
         'tt$startId stream error interpreting web text as a map '
         ':Error in http read, HTTP status code : 404 for '
         'https://www.imdb.com/title/tt$startId',
-        DataSourceType.imdb,
+        .imdb,
       );
       await testRead(queries, [errorMessage], forceError: true);
     });

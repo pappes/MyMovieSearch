@@ -25,12 +25,12 @@ class TvdbDetailConverter extends TvdbCommonConverter {
     try {
       failureMessage = getFailureReasonFromMap(inputData);
       if (null != failureMessage) {
-        return MovieContentType.error;
+        return .error;
       }
       final returnedData = inputData[keyData];
       if (inputData[keyResult] == keyResultSucessful && returnedData == null) {
         // No data found
-        return MovieContentType.none;
+        return .none;
       }
       if (returnedData is List) {
         for (final row in returnedData) {
@@ -50,6 +50,6 @@ class TvdbDetailConverter extends TvdbCommonConverter {
       }
     } catch (_) {}
     failureMessage = 'Unable to interpret results $inputData';
-    return MovieContentType.error;
+    return .error;
   }
 }

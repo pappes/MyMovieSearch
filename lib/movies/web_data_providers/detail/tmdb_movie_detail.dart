@@ -1,5 +1,4 @@
 // https://developer.themoviedb.org/reference/movie-details
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_movie_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tmdb_movie_detail.dart';
@@ -18,7 +17,7 @@ class QueryTMDBMovieDetails extends QueryTMDBCommon {
   QueryTMDBMovieDetails(super.criteria) {
     baseURL = 'https://api.themoviedb.org/3/movie/';
     midURL = '?append_to_response=external_ids,keywords&api_key=';
-    source = DataSourceType.tmdbMovie;
+    source = .tmdbMovie;
   }
 
   @override

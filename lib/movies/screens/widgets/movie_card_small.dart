@@ -33,27 +33,27 @@ class MovieTile extends ListTile {
     final middle = <String>[];
     final end = <String>[];
     switch (movie.type) {
-      case MovieContentType.download:
+      case .download:
         middle.add(movie.bestSource.excludeNone);
-      case MovieContentType.person:
+      case .person:
         break;
-      case MovieContentType.barcode:
-      case MovieContentType.searchprompt:
+      case .barcode:
+      case .searchprompt:
         start.add(movie.description);
-      case MovieContentType.error:
-      case MovieContentType.information:
-      case MovieContentType.status:
+      case .error:
+      case .information:
+      case .status:
         start.add(movie.description);
-      case MovieContentType.movie:
-      case MovieContentType.none:
-      case MovieContentType.title:
-      case MovieContentType.episode:
-      case MovieContentType.series:
-      case MovieContentType.miniseries:
-      case MovieContentType.short:
-      case MovieContentType.custom:
-      case MovieContentType.keyword:
-      case MovieContentType.navigation:
+      case .movie:
+      case .none:
+      case .title:
+      case .episode:
+      case .series:
+      case .miniseries:
+      case .short:
+      case .custom:
+      case .keyword:
+      case .navigation:
         middle.add(movie.bestSource.excludeNone);
         end.add(movie.language.excludeNone);
     }
@@ -74,38 +74,38 @@ class MovieTile extends ListTile {
     final middle = <String>[];
     final end = <String>[];
     switch (movie.type) {
-      case MovieContentType.download:
+      case .download:
         final seeders = 'S:${movie.creditsOrder} L:${movie.userRatingCount}';
         start.add(seeders);
         middle.add(movie.characterName);
         end.add(movie.description);
-      case MovieContentType.person:
+      case .person:
         start.add(movie.characterName);
         end.add(ratingCount);
-      case MovieContentType.barcode:
+      case .barcode:
         start.add(movie.bestSource.excludeNone);
         end.add(movie.alternateTitle);
-      case MovieContentType.searchprompt:
+      case .searchprompt:
         end.add(movie.alternateTitle);
         final location =
             'Stacker:${movie.creditsOrder} Disk:${movie.userRatingCount}';
         end.add(location);
 
-      case MovieContentType.error:
-      case MovieContentType.information:
-      case MovieContentType.status:
+      case .error:
+      case .information:
+      case .status:
         end.add(movie.alternateTitle);
 
-      case MovieContentType.movie:
-      case MovieContentType.keyword:
-      case MovieContentType.none:
-      case MovieContentType.title:
-      case MovieContentType.episode:
-      case MovieContentType.series:
-      case MovieContentType.miniseries:
-      case MovieContentType.short:
-      case MovieContentType.custom:
-      case MovieContentType.navigation:
+      case .movie:
+      case .keyword:
+      case .none:
+      case .title:
+      case .episode:
+      case .series:
+      case .miniseries:
+      case .short:
+      case .custom:
+      case .navigation:
         start.add(movie.runTime.toFormattedTime());
         middle.add(movie.censorRating.excludeNone);
         middle.add(movie.type.name);
@@ -127,40 +127,40 @@ class MovieTile extends ListTile {
   static Widget _getIcon(MovieResultDTO movie) {
     switch (movie.type) {
       // See available icons at https://fonts.google.com/icons
-      case MovieContentType.barcode:
+      case .barcode:
         return const Icon(Icons.skip_next);
-      case MovieContentType.searchprompt:
+      case .searchprompt:
         return const Icon(Icons.manage_search);
-      case MovieContentType.error:
+      case .error:
         return const Icon(Icons.unfold_more);
-      case MovieContentType.information:
-      case MovieContentType.status:
+      case .information:
+      case .status:
         return const Icon(Icons.info);
-      case MovieContentType.navigation:
+      case .navigation:
         return const Icon(Icons.skip_next);
-      case MovieContentType.person:
+      case .person:
         return const Icon(Icons.person);
-      case MovieContentType.keyword:
+      case .keyword:
         return const Icon(Icons.manage_search);
-      case MovieContentType.download:
+      case .download:
         return movie.imageUrl == ''
             ? const Icon(Icons.block)
             : const Icon(Icons.download);
 
-      case MovieContentType.movie:
-      case MovieContentType.none:
-      case MovieContentType.title:
-      case MovieContentType.episode:
-      case MovieContentType.series:
-      case MovieContentType.miniseries:
-      case MovieContentType.short:
-      case MovieContentType.custom:
+      case .movie:
+      case .none:
+      case .title:
+      case .episode:
+      case .series:
+      case .miniseries:
+      case .short:
+      case .custom:
         return const Icon(Icons.theaters);
     }
   }
 
   static Widget _getImage(MovieResultDTO movie) {
-    if (movie.type != MovieContentType.download &&
+    if (movie.type != .download &&
         movie.imageUrl.startsWith(webAddressPrefix)) {
       return Image(image: NetworkImage(movie.imageUrl));
     }
@@ -173,13 +173,13 @@ class MovieTile extends ListTile {
   ) {
     final widgets = <Widget>[];
     switch (movie.type) {
-      case MovieContentType.navigation:
-      case MovieContentType.keyword:
-      case MovieContentType.barcode:
-      case MovieContentType.searchprompt:
+      case .navigation:
+      case .keyword:
+      case .barcode:
+      case .searchprompt:
         widgets.add(_navigateButton(context, movie));
 
-      case MovieContentType.download:
+      case .download:
         if (movie.imageUrl.isNotEmpty) {
           widgets
             ..add(_navigateButton(context, movie))
@@ -192,22 +192,22 @@ class MovieTile extends ListTile {
             );
         }
 
-      case MovieContentType.person:
-      case MovieContentType.movie:
-      case MovieContentType.none:
-      case MovieContentType.title:
-      case MovieContentType.episode:
-      case MovieContentType.series:
-      case MovieContentType.miniseries:
-      case MovieContentType.custom:
-      case MovieContentType.short:
+      case .person:
+      case .movie:
+      case .none:
+      case .title:
+      case .episode:
+      case .series:
+      case .miniseries:
+      case .custom:
+      case .short:
         {
           getReadIcon(movie, widgets);
           getDVDIcon(movie, widgets);
         }
-      case MovieContentType.error:
-      case MovieContentType.information:
-      case MovieContentType.status:
+      case .error:
+      case .information:
+      case .status:
     }
     if (widgets.isEmpty) return null;
     return Row(mainAxisSize: MainAxisSize.min, children: widgets);
@@ -219,14 +219,14 @@ class MovieTile extends ListTile {
       final readHistory = ReadHistory.values.byFullName(read);
       AppLogger.instance.trace('read indicator = ${movie.uniqueId} $read');
       switch (readHistory) {
-        case ReadHistory.starred:
+        case .starred:
           widgets.add(const Icon(Icons.star));
-        case ReadHistory.reading:
+        case .reading:
           widgets.add(const Icon(Icons.visibility, fill: 1));
-        case ReadHistory.read:
+        case .read:
           widgets.add(const Icon(Icons.visibility));
-        case ReadHistory.none:
-        case ReadHistory.custom:
+        case .none:
+        case .custom:
           widgets.add(const Icon(Icons.question_mark));
         case null:
       }

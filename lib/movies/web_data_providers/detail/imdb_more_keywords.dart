@@ -1,4 +1,3 @@
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
@@ -56,7 +55,7 @@ class QueryIMDBMoreKeywordsDetails
     if (map is Map) {
       return ImdbMoreKeywordsConverter().dtoFromCompleteJsonMap(
         map,
-        DataSourceType.imdbKeywords,
+        .imdbKeywords,
       );
     }
     throw TreeConvertException(
@@ -66,8 +65,6 @@ class QueryIMDBMoreKeywordsDetails
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-    '[QueryIMDBMoreKeywordsDetails] $message',
-    DataSourceType.imdb,
-  );
+  MovieResultDTO myYieldError(String message) =>
+      MovieResultDTO().error('[QueryIMDBMoreKeywordsDetails] $message', .imdb);
 }

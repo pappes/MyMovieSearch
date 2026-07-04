@@ -18,7 +18,7 @@ class ImdbMoreKeywordsConverter extends ImdbConverterBase {
     dto
       ..uniqueId = data.values.first.toString()
       ..title = data.values.first.toString()
-      ..type = MovieContentType.keyword;
+      ..type = .keyword;
     // Empty retrun value as we have finsihed extracting all the keyword
     // data we can get from this map.
     return null;

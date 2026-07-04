@@ -3,7 +3,6 @@
 
 import 'dart:convert';
 
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
@@ -140,8 +139,8 @@ class YtsDetailApiConverter {
       final status = map[outerElementStatus]?.toString();
       if (status == statusSuccess) {
         final movieresults =
-        // Single movie result.
-        // ignore: avoid_dynamic_calls
+            // Single movie result.
+            // ignore: avoid_dynamic_calls
             map[outerElementResults]![outerElementMovie] as Map;
         final movieid = movieresults[elementId] as int;
         if (movieid == 0) {
@@ -190,7 +189,7 @@ class YtsDetailApiConverter {
         '${map[elementSource]} (YTS)';
 
     final movie = MovieResultDTO().init(
-      bestSource: DataSourceType.ytsDetailApi,
+      bestSource: .ytsDetailApi,
       type: MovieContentType.download.toString(),
       title: title,
       uniqueId: map[elementUrlFragment]?.toString(),

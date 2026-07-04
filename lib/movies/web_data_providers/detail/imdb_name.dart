@@ -1,4 +1,3 @@
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
@@ -55,10 +54,7 @@ class QueryIMDBNameDetails
     Object? map,
   ) async {
     if (map is Map) {
-      return ImdbNameConverter().dtoFromCompleteJsonMap(
-        map,
-        DataSourceType.imdb,
-      );
+      return ImdbNameConverter().dtoFromCompleteJsonMap(map, .imdb);
     }
     throw TreeConvertException(
       'expected map got ${map.runtimeType} unable to interpret data $map',
@@ -67,8 +63,6 @@ class QueryIMDBNameDetails
 
   /// Include entire map in the movie Name when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
-    '[QueryIMDBNameDetails] $message',
-    DataSourceType.imdb,
-  );
+  MovieResultDTO myYieldError(String message) =>
+      MovieResultDTO().error('[QueryIMDBNameDetails] $message', .imdb);
 }

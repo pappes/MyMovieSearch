@@ -38,26 +38,26 @@ MovieResultDTO fullDTO() {
   final dto3 = MovieResultDTO()..uniqueId = 'dto3';
   final dto4 = MovieResultDTO()..uniqueId = 'dto4';
   return MovieResultDTO()
-    ..bestSource = DataSourceType.wiki
+    ..bestSource = .wiki
     ..uniqueId = 'abc123'
     ..title = 'init testing'
     ..alternateTitle = 'testing init'
     ..characterName = 'testing dto'
     ..description = 'test dto'
-    ..type = MovieContentType.episode
+    ..type = .episode
     ..year = 1999
     ..yearRange = '1999-2005'
     ..creditsOrder = 42
     ..userRating = 1.5
     ..userRatingCount = 1500
-    ..censorRating = CensorRatingType.family
+    ..censorRating = .family
     ..runTime = const Duration(seconds: 9000)
     ..imageUrl = 'www.microsoft.com'
-    ..language = LanguageType.mostlyEnglish
+    ..language = .mostlyEnglish
     ..languages = {'a', 'b', 'c'}
     ..genres = {'x', 'y', 'z'}
     ..keywords = {'they', 'them'}
-    ..sources = {DataSourceType.wiki: 'abc123'}
+    ..sources = {.wiki: 'abc123'}
     ..related = {
       'Actress': {dto2.uniqueId: dto2, dto3.uniqueId: dto3},
       'Director': {dto4.uniqueId: dto4, dto3.uniqueId: dto3},
@@ -91,12 +91,12 @@ void main() {
         expect(testInput.titleContentCategory(), expectedOutput);
       }
 
-      testUserContentCategory(MovieContentType.custom, 0);
-      testUserContentCategory(MovieContentType.episode, 1);
-      testUserContentCategory(MovieContentType.short, 2);
-      testUserContentCategory(MovieContentType.series, 3);
-      testUserContentCategory(MovieContentType.miniseries, 4);
-      testUserContentCategory(MovieContentType.movie, 5);
+      testUserContentCategory(.custom, 0);
+      testUserContentCategory(.episode, 1);
+      testUserContentCategory(.short, 2);
+      testUserContentCategory(.series, 3);
+      testUserContentCategory(.miniseries, 4);
+      testUserContentCategory(.movie, 5);
     });
     // Categorise dto based on title type from MovieContentType.
     test('viewedCategory', () {
@@ -421,42 +421,45 @@ Expected: List<MovieResultDTO>(2)[
 
   group('LanguageType', () {
     // Check that language list is categorised corectly.
+    void checkLanguageType(MovieResultDTO dto, LanguageType expected) {
+      expect(dto.getLanguageType(), expected);
+      expect(dto.language, expected);
+    }
+
     test('empty_DTO', () {
       final dto = MovieResultDTO();
-      expect(dto.getLanguageType(), LanguageType.none);
+      checkLanguageType(dto, .none);
     });
     test('supply list to dto, get language from helper', () {
       final dto = MovieResultDTO()..languages = {'English'};
-      expect(dto.getLanguageType(), LanguageType.allEnglish);
+      checkLanguageType(dto, .allEnglish);
     });
     test('supply list to dto, get language from dto', () {
-      final dto = MovieResultDTO()
-        ..languages = {'English'}
-        ..getLanguageType();
-      expect(dto.language, LanguageType.allEnglish);
+      final dto = MovieResultDTO()..languages = {'English'};
+      checkLanguageType(dto, .allEnglish);
     });
     test('All English', () {
       final dto = MovieResultDTO()..languages = {'English', 'en', 'Englasias'};
-      expect(dto.getLanguageType(), LanguageType.allEnglish);
+      checkLanguageType(dto, .allEnglish);
     });
     test('Foreign', () {
       final dto = MovieResultDTO()
         ..languages = {'Not English', 'French', 'el-Englasias'};
-      expect(dto.getLanguageType(), LanguageType.foreign);
+      checkLanguageType(dto, .foreign);
     });
     test('Foreign - iso subset', () {
       final dto = MovieResultDTO()
         ..languages = {'en', 'French', 'el-Englasias'};
-      expect(dto.getLanguageType(), LanguageType.foreign);
+      checkLanguageType(dto, .foreign);
     });
     test('mostlyEnglish', () {
       final dto = MovieResultDTO()
         ..languages = {'English', 'French', 'el-Englasias'};
-      expect(dto.getLanguageType(), LanguageType.mostlyEnglish);
+      checkLanguageType(dto, .mostlyEnglish);
     });
     test('someEnglish', () {
       final dto = MovieResultDTO()..languages = {'French', 'Englasias'};
-      expect(dto.getLanguageType(), LanguageType.someEnglish);
+      checkLanguageType(dto, .someEnglish);
     });
   });
 
@@ -464,7 +467,7 @@ Expected: List<MovieResultDTO>(2)[
     // Convert a dto to a map.
     test('empty_DTO', () {
       final dto = MovieResultDTO()
-        ..type = MovieContentType.none
+        ..type = .none
         ..setSource();
       final initialisedDTO = MovieResultDTO().init();
       expect(dto, MovieResultDTOMatcher(initialisedDTO));
@@ -647,94 +650,55 @@ Expected: List<MovieResultDTO>(2)[
 
   group('findImdbMovieContentTypeFromTitle movie', () {
     test('normal movie', () => testContent(null, '', null, '1234'));
-    test(
-      'normal imdb movie',
-      () => testContent(MovieContentType.title, '', null, 'tt1234'),
-    );
-    test(
-      'unknown movie',
-      () => testContent(MovieContentType.title, 'info', null, 'tt1234'),
-    );
-    test(
-      'concise movie',
-      () => testContent(MovieContentType.movie, 'movie', null, 'tt1234'),
-    );
+    test('normal imdb movie', () => testContent(.title, '', null, 'tt1234'));
+    test('unknown movie', () => testContent(.title, 'info', null, 'tt1234'));
+    test('concise movie', () => testContent(.movie, 'movie', null, 'tt1234'));
     test(
       'verbose movie',
-      () => testContent(MovieContentType.movie, '(funMovie!)', null, 'tt1234'),
+      () => testContent(.movie, '(funMovie!)', null, 'tt1234'),
     );
-    test(
-      'video',
-      () => testContent(MovieContentType.movie, 'vhs video', null, 'tt1234'),
-    );
-    test(
-      'feature',
-      () => testContent(MovieContentType.movie, 'feature film', null, 'tt1234'),
-    );
+    test('video', () => testContent(.movie, 'vhs video', null, 'tt1234'));
+    test('feature', () => testContent(.movie, 'feature film', null, 'tt1234'));
   });
 
   group('findImdbMovieContentTypeFromTitle misc', () {
     test('empty string', () => testContent(null, '', null, ''));
-    test(
-      '30 mins title',
-      () => testContent(MovieContentType.short, 'info', 30, ''),
-    );
-    test(
-      'short title',
-      () => testContent(MovieContentType.short, 'short', null, ''),
-    );
-    test(
-      'normal person',
-      () => testContent(MovieContentType.person, 'info', null, 'nm1234'),
-    );
+    test('30 mins title', () => testContent(.short, 'info', 30, ''));
+    test('short title', () => testContent(.short, 'short', null, ''));
+    test('normal person', () => testContent(.person, 'info', null, 'nm1234'));
     test(
       'year range hyphen',
-      () => testContent(MovieContentType.series, '(2020-2022)', null, 'tt1234'),
+      () => testContent(.series, '(2020-2022)', null, 'tt1234'),
     );
     test(
       'year range dash',
-      () => testContent(MovieContentType.series, '(2020–2022)', null, 'tt1234'),
+      () => testContent(.series, '(2020–2022)', null, 'tt1234'),
     );
   });
 
   group('findImdbMovieContentTypeFromTitle not a movie ie game', () {
-    test('error', () => testContent(MovieContentType.none, 'info', null, '-1'));
-    test(
-      'error2',
-      () => testContent(MovieContentType.error, 'info', null, '-2'),
-    );
-    test(
-      'game',
-      () => testContent(MovieContentType.custom, 'game', null, 'tt1234'),
-    );
+    test('error', () => testContent(.none, 'info', null, '-1'));
+    test('error2', () => testContent(.error, 'info', null, '-2'));
+    test('game', () => testContent(.custom, 'game', null, 'tt1234'));
     test(
       'creativeWork',
-      () =>
-          testContent(MovieContentType.custom, 'creativeWork', null, 'tt1234'),
+      () => testContent(.custom, 'creativeWork', null, 'tt1234'),
     );
   });
 
   group('findImdbMovieContentTypeFromTitle episodic', () {
     test(
       'miniseries',
-      () => testContent(
-        MovieContentType.miniseries,
-        'mini series',
-        null,
-        'tt1234',
-      ),
+      () => testContent(.miniseries, 'mini series', null, 'tt1234'),
     );
     test(
       'series episode',
-      () => testContent(MovieContentType.episode, 'episode', null, 'tt1234'),
+      () => testContent(.episode, 'episode', null, 'tt1234'),
     );
-    test(
-      'tv series',
-      () => testContent(MovieContentType.series, 'series', null, 'tt1234'),
-    );
+    test('tv series', () => testContent(.series, 'series', null, 'tt1234'));
     test(
       'tv series special',
-      () => testContent(MovieContentType.series, 'special', null, 'tt1234'),
+      () => testContent(.series, 'special', null, 'tt1234'),
     );
   });
 
@@ -800,15 +764,15 @@ Expected: List<MovieResultDTO>(2)[
 
     group('full DTO', () {
       final betterValues = makeResultDTO('abc')
-        ..setSource(newSource: DataSourceType.omdb)
-        ..sources[DataSourceType.imdb] = 'good data'
+        ..setSource(newSource: .omdb)
+        ..sources[.imdb] = 'good data'
         ..languages = {'English', 'French', 'Italian'}
         ..userRating = 0
         ..userRatingCount = 0
         ..getLanguageType();
       final otherValues = MovieResultDTO()
-        ..sources[DataSourceType.imdb] = 'good data'
-        ..setSource(newSource: DataSourceType.wiki)
+        ..sources[.imdb] = 'good data'
+        ..setSource(newSource: .wiki)
         ..languages = {'French', 'English'}
         ..userRating = 0
         ..userRatingCount = 0

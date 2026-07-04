@@ -24,7 +24,7 @@ class Stats {
 
   MovieResultDTO formatStatistic() => MovieResultDTO()
     ..error(source)
-    ..type = MovieContentType.information
+    ..type = .information
     ..creditsOrder = qtyErrors
     ..userRating = qtyCachedResponses.toDouble()
     ..userRatingCount = qtyRequests

@@ -236,36 +236,33 @@ class Settings {
   bool enableLogging = false;
   bool cloudLogging = false;
   bool forceHideKeyboard = false;
-  LogLevel logLevel = LogLevel.info;
+  LogLevel logLevel = .info;
   String applicationVersion = '';
   String applicationDescription = '';
 
   // Getters for each setting value.
-  String? get googleUrl => _getSettingVal(SettingKey.googleUrl);
-  String? get googleKey => _getSettingVal(SettingKey.googleKey);
-  String? get omdbKey => _getSettingVal(SettingKey.omdbKey);
-  String? get tmdbKey => _getSettingVal(SettingKey.tmdbKey);
-  String? get tvdbKey => _getSettingVal(SettingKey.tvdbKey);
-  String? get meiliAdminKey => _getSettingVal(SettingKey.meiliAdminKey);
-  String? get meiliSearchKey => _getSettingVal(SettingKey.meiliSearchKey);
-  String? get meiliUrl => _getSettingVal(SettingKey.meiliUrl);
-  String? get seVmKey => _getSettingVal(SettingKey.seVirtualMachineKey);
-  String? get magnetServer => _getSettingVal(SettingKey.magnetServer);
-  String? get magnetPort => _getSettingVal(SettingKey.magnetPort);
-  String? get magnetUsername => _getSettingVal(SettingKey.magnetUsername);
-  String? get magnetPassword => _getSettingVal(SettingKey.magnetPassword);
-  String? get loggingKey => _getSettingVal(SettingKey.loggingKey);
+  String? get googleUrl => _getSettingVal(.googleUrl);
+  String? get googleKey => _getSettingVal(.googleKey);
+  String? get omdbKey => _getSettingVal(.omdbKey);
+  String? get tmdbKey => _getSettingVal(.tmdbKey);
+  String? get tvdbKey => _getSettingVal(.tvdbKey);
+  String? get meiliAdminKey => _getSettingVal(.meiliAdminKey);
+  String? get meiliSearchKey => _getSettingVal(.meiliSearchKey);
+  String? get meiliUrl => _getSettingVal(.meiliUrl);
+  String? get seVmKey => _getSettingVal(.seVirtualMachineKey);
+  String? get magnetServer => _getSettingVal(.magnetServer);
+  String? get magnetPort => _getSettingVal(.magnetPort);
+  String? get magnetUsername => _getSettingVal(.magnetUsername);
+  String? get magnetPassword => _getSettingVal(.magnetPassword);
+  String? get loggingKey => _getSettingVal(.loggingKey);
   String? get firebaseSecretsLocation =>
-      _getSettingVal(SettingKey.firebaseSecretsLocation);
+      _getSettingVal(.firebaseSecretsLocation);
 
   bool get offline =>
-      bool.tryParse(
-        _resolveSettingValue(SettingKey.offline),
-        caseSensitive: false,
-      ) ??
+      bool.tryParse(_resolveSettingValue(.offline), caseSensitive: false) ??
       false;
   set offline(bool val) {
-    _localValues[SettingKey.offline] = val.toString();
+    _localValues[.offline] = val.toString();
     OnlineOfflineSelector.init(val);
   }
 
@@ -485,37 +482,23 @@ class Settings {
 
   /// Fetch a value from the compile time enviroment.
   String? _compileTimeValue(SettingKey key) => switch (key) {
-    SettingKey.googleUrl => const String.fromEnvironment(_googleUrlEnvVariable),
-    SettingKey.googleKey => const String.fromEnvironment(_googleKeyEnvVariable),
-    SettingKey.omdbKey => const String.fromEnvironment(_omdbKeyEnvVariable),
-    SettingKey.tmdbKey => const String.fromEnvironment(_tmdbKeyEnvVariable),
-    SettingKey.tvdbKey => const String.fromEnvironment(_tvdbKeyEnvVariable),
-    SettingKey.meiliAdminKey => const String.fromEnvironment(
-      _meiliAdminKeyEnvVariable,
-    ),
-    SettingKey.meiliSearchKey => const String.fromEnvironment(
-      _meiliSearchKeyEnvVariable,
-    ),
-    SettingKey.meiliUrl => const String.fromEnvironment(_meiliUrlEnvVariable),
-    SettingKey.magnetServer => const String.fromEnvironment(
-      _magnetServerEnvVariable,
-    ),
-    SettingKey.magnetPort => const String.fromEnvironment(
-      _magnetPortEnvVariable,
-    ),
-    SettingKey.magnetUsername => const String.fromEnvironment(
-      _magnetUsernameEnvVariable,
-    ),
-    SettingKey.magnetPassword => const String.fromEnvironment(
-      _magnetPasswordEnvVariable,
-    ),
-    SettingKey.loggingKey => const String.fromEnvironment(
-      _loggingKeyEnvVariable,
-    ),
-    SettingKey.firebaseSecretsLocation => const String.fromEnvironment(
+    .googleUrl => const String.fromEnvironment(_googleUrlEnvVariable),
+    .googleKey => const String.fromEnvironment(_googleKeyEnvVariable),
+    .omdbKey => const String.fromEnvironment(_omdbKeyEnvVariable),
+    .tmdbKey => const String.fromEnvironment(_tmdbKeyEnvVariable),
+    .tvdbKey => const String.fromEnvironment(_tvdbKeyEnvVariable),
+    .meiliAdminKey => const String.fromEnvironment(_meiliAdminKeyEnvVariable),
+    .meiliSearchKey => const String.fromEnvironment(_meiliSearchKeyEnvVariable),
+    .meiliUrl => const String.fromEnvironment(_meiliUrlEnvVariable),
+    .magnetServer => const String.fromEnvironment(_magnetServerEnvVariable),
+    .magnetPort => const String.fromEnvironment(_magnetPortEnvVariable),
+    .magnetUsername => const String.fromEnvironment(_magnetUsernameEnvVariable),
+    .magnetPassword => const String.fromEnvironment(_magnetPasswordEnvVariable),
+    .loggingKey => const String.fromEnvironment(_loggingKeyEnvVariable),
+    .firebaseSecretsLocation => const String.fromEnvironment(
       _firebaseSecretsLocationEnvVariable,
     ),
-    SettingKey.offline => const String.fromEnvironment(_offlineEnvVariable),
+    .offline => const String.fromEnvironment(_offlineEnvVariable),
     _ => null,
   };
 

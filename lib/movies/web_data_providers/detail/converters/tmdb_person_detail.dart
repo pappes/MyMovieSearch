@@ -1,7 +1,6 @@
 // Helper class to convert TMDB data to MovieResultDTO objects.
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tmdb_common.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_common.dart';
@@ -31,7 +30,7 @@ class TmdbPersonDetailConverter {
       searchResults.add(
         MovieResultDTO().error(
           '[TmdbPersonDetailConverter] $error',
-          DataSourceType.tmdbPerson,
+          .tmdbPerson,
         ),
       );
     }
@@ -45,7 +44,7 @@ class TmdbPersonDetailConverter {
 
     final person = MovieResultDTO()
       ..init(
-        bestSource: DataSourceType.tmdbPerson,
+        bestSource: .tmdbPerson,
         uniqueId: map[innerElementIdentity]?.toString(),
         title: map[innerElementCommonTitle]?.toString(),
         description: map[innerElementOverview]?.toString(),

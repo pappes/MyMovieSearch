@@ -19,17 +19,17 @@ const sourceTvdb = 'TheMovieDB.com';
 
 // surpress tvdb from TMDB links
 const Map<String, XxdbSource> tvdbSourceToEnumMapping = {
-  'IMDB': XxdbSource.imdb,
-  'TVDB': XxdbSource.tvdb,
-  'EIDR': XxdbSource.eidr,
-  'Instagram': XxdbSource.instagram,
-  'Netflix': XxdbSource.netflix,
-  'Official Website': XxdbSource.officialWebsite,
-  'Reddit': XxdbSource.reddit,
-  'TV Maze': XxdbSource.tvMaze,
-  'Wikidata': XxdbSource.wikidata,
-  'Wikipedia': XxdbSource.wikipedia,
-  'X (Twitter)': XxdbSource.twitter,
+  'IMDB': .imdb,
+  'TVDB': .tvdb,
+  'EIDR': .eidr,
+  'Instagram': .instagram,
+  'Netflix': .netflix,
+  'Official Website': .officialWebsite,
+  'Reddit': .reddit,
+  'TV Maze': .tvMaze,
+  'Wikidata': .wikidata,
+  'Wikipedia': .wikipedia,
+  'X (Twitter)': .twitter,
 };
 
 class TvdbMovieDetailConverter extends TvdbCommonConverter {
@@ -51,12 +51,12 @@ class TvdbMovieDetailConverter extends TvdbCommonConverter {
         final returnedData = inputData[outerElementFailureIndicator];
         if (returnedData == tvdbNotFound) {
           // No data found
-          return MovieContentType.none;
+          return .none;
         }
       }
       failureMessage = getFailureReasonFromMap(inputData);
       if (null != failureMessage) {
-        return MovieContentType.error;
+        return .error;
       }
 
       final rawLinkData = inputData.deepSearch(
@@ -65,7 +65,7 @@ class TvdbMovieDetailConverter extends TvdbCommonConverter {
       );
       final id = getId(rawLinkData, sourceTvdb);
       if (id == null) {
-        return MovieContentType.none;
+        return .none;
       }
       outputData[elementIdentity] = id;
       imdbId = getId(rawLinkData, sourceImdb) ?? imdbId;
@@ -76,7 +76,7 @@ class TvdbMovieDetailConverter extends TvdbCommonConverter {
       return contentType;
     } catch (_) {}
     failureMessage = 'Unable to interpret results $inputData';
-    return MovieContentType.error;
+    return .error;
   }
 
   /// use the tvdb type and id to create a description and FQDN for each URL

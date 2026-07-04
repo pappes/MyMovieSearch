@@ -38,12 +38,12 @@ enum InterceptionAction { delegateRequest, syntheticResponse, executeRequest }
 /// Represents the interception decision made by the orchestration layer.
 class InterceptionDecision {
   InterceptionDecision.delegateRequest()
-    : action = InterceptionAction.delegateRequest,
+    : action = .delegateRequest,
       statusCode = null,
       contentType = null,
       body = null;
   InterceptionDecision.executeRequest()
-    : action = InterceptionAction.executeRequest,
+    : action = .executeRequest,
       statusCode = null,
       contentType = null,
       body = null;
@@ -51,7 +51,7 @@ class InterceptionDecision {
     required this.statusCode,
     required this.contentType,
     required this.body,
-  }) : action = InterceptionAction.syntheticResponse;
+  }) : action = .syntheticResponse;
 
   final InterceptionAction action;
   final int? statusCode;
@@ -91,7 +91,7 @@ class HeadlessWebInterceptor {
 
     final response = InterceptionResponse(decision);
 
-    if (decision.action == InterceptionAction.executeRequest) {
+    if (decision.action == .executeRequest) {
       response.httpResponse = await _executeProxyRequest(
         uri,
         method,

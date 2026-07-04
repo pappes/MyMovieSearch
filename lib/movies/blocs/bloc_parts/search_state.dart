@@ -2,8 +2,8 @@ part of '../search_bloc.dart';
 
 class SearchState extends Equatable {
   const SearchState._({
-    this.status = SearchStatus.awaitingInput,
-    this.request = SearchRequest.empty,
+    this.status = .awaitingInput,
+    this.request = .empty,
     this.uid = 0.0,
     this.result = const [],
   });
@@ -11,10 +11,10 @@ class SearchState extends Equatable {
   const SearchState.awaitingInput() : this._();
 
   const SearchState.searching(SearchRequest request)
-    : this._(status: SearchStatus.searching, request: request);
+    : this._(status: .searching, request: request);
 
   const SearchState.displayingResults(double uid)
-    : this._(status: SearchStatus.displayingResults, uid: uid);
+    : this._(status: .displayingResults, uid: uid);
 
   final SearchStatus status;
   final SearchRequest request;

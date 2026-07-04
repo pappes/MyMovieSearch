@@ -54,7 +54,7 @@ class QueryPicclickBarcodeSearch
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
     '[QueryPicclickBarcodeSearch] $message',
-    DataSourceType.picclickBarcode,
+    .picclickBarcode,
   );
 
   /// API call to search

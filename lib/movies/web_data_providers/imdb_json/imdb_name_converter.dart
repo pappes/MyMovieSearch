@@ -1,4 +1,3 @@
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_converter_base.dart';
@@ -50,9 +49,9 @@ class ImdbNameConverter extends ImdbConverterBase
         .deepSearch(deepPersonPopularityHeader)
         ?.searchForString(key: deepPersonPopularityField);
     movie
-      ..bestSource = DataSourceType.imdbSuggestions
+      ..bestSource = .imdbSuggestions
       ..title = name ?? movie.title
-      ..type = MovieContentType.person
+      ..type = .person
       ..description = description ?? movie.description
       ..imageUrl = url ?? movie.imageUrl
       ..year = IntHelper.fromText(startDate) ?? movie.year

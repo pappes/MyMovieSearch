@@ -79,8 +79,7 @@ class DVDBarcodeScanner {
 /// isEbay(DataSourceType.picclickBarcode);
 /// ```
 bool isEbay(DataSourceType source) =>
-    DataSourceType.picclickBarcode == source ||
-    DataSourceType.uhttBarcode == source;
+    source == .picclickBarcode || source == .uhttBarcode;
 
 /// Extract the DVDtitle from a DTO.
 ///
@@ -89,8 +88,7 @@ bool isEbay(DataSourceType source) =>
 /// //returns 'Dexter 2006 8 '
 /// ```
 String getSearchTitle(MovieResultDTO movie) {
-  if (movie.type == MovieContentType.information ||
-      movie.type == MovieContentType.error) {
+  if (movie.type == .information || movie.type == .error) {
     return '${movie.alternateTitle}\n ${movie.alternateTitle}';
   }
   if (movie.title.isEmpty) {
