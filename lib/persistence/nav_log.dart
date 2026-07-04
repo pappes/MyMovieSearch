@@ -25,7 +25,7 @@ class NavLog extends ChangeNotifier {
     getFirestoreProvider()?.addRecord(
       'MMSNavLog/screen/${route.routePath.name}',
       id: route.reference,
-      message: ReadHistory.reading.toString(),
+      message: ReadHistory.reading.name,
     );
     getSessionNavTree()?.logPageOpen(route);
   }
@@ -33,11 +33,11 @@ class NavLog extends ChangeNotifier {
   void logPageClose(RouteInfo route) {
     if (route.params is MovieResultDTO &&
         (route.params as MovieResultDTO).getReadIndicator() ==
-            ReadHistory.reading.toString()) {
+            ReadHistory.reading.name) {
       getFirestoreProvider()?.addRecord(
         'MMSNavLog/screen/${route.routePath.name}',
         id: route.reference,
-        message: ReadHistory.read.toString(),
+        message: ReadHistory.read.name,
       );
     }
     getSessionNavTree()?.logPageClose(route);
