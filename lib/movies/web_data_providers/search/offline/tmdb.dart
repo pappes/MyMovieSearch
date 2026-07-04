@@ -18,32 +18,6 @@
 
 import 'dart:convert';
 
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-
-// Raw data in code is generated from an external source.
-// ignore_for_file: unnecessary_ignore
-// ignore_for_file: unnecessary_raw_strings
-
-/* To update this data, uncomment printTestData(actualResult);
-in test('Run dtoFromCompleteJsonMap()'*/
-final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
-  expectedDtoJsonStringList,
-);
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"429617","bestSource":"DataSourceType.tmdbSearch","title":"Spider-Man: Far from Home","year":"2019","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://image.tmdb.org/t/p/w500/4q2NyXl.jpg","sources":{"DataSourceType.tmdbSearch":"429617"},"related":{}}
-''',
-  r'''
-{"uniqueId":"228161","bestSource":"DataSourceType.tmdbSearch","title":"Home","year":"2015","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://image.tmdb.org/t/p/w500/usFeWMGR.jpg","sources":{"DataSourceType.tmdbSearch":"228161"},"related":{}}
-''',
-  r'''
-{"uniqueId":"521029","bestSource":"DataSourceType.tmdbSearch","title":"Annabelle Comes Home","year":"2019","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://image.tmdb.org/t/p/w500/qWsHRVRs.jpg","sources":{"DataSourceType.tmdbSearch":"521029"},"related":{}}
-''',
-  r'''
-{"uniqueId":"380565","bestSource":"DataSourceType.tmdbSearch","title":"Home Invasion","year":"2016","languages":"[]","genres":"[]","keywords":"[]","imageUrl":"https://image.tmdb.org/t/p/w500/9Wbtkxnw.jpg","sources":{"DataSourceType.tmdbSearch":"380565"},"related":{}}
-''',
-];
-
 final List<Object?> intermediateMapList = [jsonDecode(jsonSampleFull)];
 final List<Object?> intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
 final List<Object?> intermediateErrorMapList = [jsonDecode(jsonSampleError)];

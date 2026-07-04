@@ -92,7 +92,6 @@ void main() {
   group('TmdbMovieSearchConverter unit tests', () {
     // Confirm map can be converted to DTO.
     test('Run dtoFromCompleteJsonMap()', () {
-      final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
 
       // Invoke the functionality and collect results.
@@ -103,9 +102,10 @@ void main() {
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // printTestData(actualResult);
+      //writeTestData(actualResult);
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -144,7 +144,6 @@ void main() {
   group('QueryTMDBMovies integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final expectedValue = expectedDTOList;
       final testClass = QueryTMDBMovies(criteria);
       final actualResult = <MovieResultDTO>[];
 
@@ -154,6 +153,7 @@ void main() {
       }
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -215,7 +215,6 @@ void main() {
     // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
-      final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryTMDBMovies(criteria);
 
@@ -230,6 +229,7 @@ void main() {
           );
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),

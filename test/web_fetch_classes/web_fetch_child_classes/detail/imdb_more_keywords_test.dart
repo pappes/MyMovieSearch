@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -88,16 +87,16 @@ void main() {
         actualResult.addAll(
           ImdbMoreKeywordsConverter().dtoFromCompleteJsonMap(
             map,
-            DataSourceType.imdbKeywords,
+            .imdbKeywords,
           ),
         );
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // printTestData(actualResult);
+      // writeTestData(actualResult);
 
-      final expectedValue = expectedDTOList;
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -137,7 +136,6 @@ void main() {
     test('Run myConvertTreeToOutputType()', () async {
       final criteria = SearchCriteriaDTO();
       final testClass = QueryIMDBMoreKeywordsDetails(criteria);
-      final expectedValue = expectedDTOList;
       final actualResult = <MovieResultDTO>[];
       await testClass.myClearCache();
 
@@ -147,6 +145,7 @@ void main() {
       }
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -190,7 +189,6 @@ void main() {
     // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
-      final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final criteria = SearchCriteriaDTO().fromString('tt7602562');
       final testClass = QueryIMDBMoreKeywordsDetails(criteria);
@@ -207,6 +205,7 @@ void main() {
           );
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),

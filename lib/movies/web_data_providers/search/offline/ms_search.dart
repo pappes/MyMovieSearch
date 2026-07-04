@@ -10,44 +10,6 @@
 
 import 'dart:convert';
 
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-// Raw data in code is generated from an external source.
-// ignore_for_file: unnecessary_ignore
-// ignore_for_file: unnecessary_raw_strings
-
-/* To update this data, uncomment printTestData(actualResult);
-in test('Run dtoFromCompleteJsonMap()'*/
-final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
-  expectedDtoJsonStringList,
-);
-final expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"tt0120193","title":"Stage Fright","bestSource":"DataSourceType.imdb","alternateTitle":"Страх сцены","type":"MovieContentType.short","year":"1997","yearRange":"1997","runTime":"720","language":"LanguageType.allEnglish",
-      "languages":"[\"English\"]",
-      "genres":"[\"Animation\",\"Short\",\"Drama\",\"Horror\"]",
-      "keywords":"[\"human\",\"dog\",\"stop motion animation\",\"stop motion\",\"independent film\"]",
-      "description":"A vaudevillian's act involving the juggling of dogs is no longer a hit. He and his partner must face a brutal villain and assorted obstacles in order to secure their future.",
-      "userRating":"6.8","userRatingCount":"417","imageUrl":"https://m.media-amazon.com/images/M/MV5BOWVmZGRiOGEtZTA2Yy00ZWRhLWFiNTgtODc4MWU1NjYxMTY0L2ltYWdlXkEyXkFqcGdeQXVyNzE5ODAxOTE@._V1_.jpg","sources":{"DataSourceType.imdb":"tt0120193"}}
-''',
-  r'''
-{"uniqueId":"tt0192145","title":"Humdrum","bestSource":"DataSourceType.imdb","alternateTitle":"Скучища","type":"MovieContentType.short","year":"1999","yearRange":"1999","runTime":"420","language":"LanguageType.allEnglish",
-      "languages":"[\"English\"]",
-      "genres":"[\"Animation\",\"Short\",\"Comedy\"]",
-      "keywords":"[\"shadow\",\"independent film\"]",
-      "description":"Two very bored shadowy characters try to think of something to do--and end up playing \"Shadow Puppets.\"",
-      "userRating":"6.7","userRatingCount":"429","imageUrl":"https://m.media-amazon.com/images/M/MV5BODM3ZDExNTUtMGQyZC00YWJlLWEyYzctZGZmOGIzOWQ5Zjc5XkEyXkFqcGdeQXVyNzg5OTk2OA@@._V1_.jpg","sources":{"DataSourceType.imdb":"tt0192145"}}
-''',
-];
-
-final List<MovieResultDTO> expectedErrorDTOList = ListDTOConversion.decodeList([
-  '''
-{
-  "uniqueId": "-1", 
-  "title": "Unknown MsSearch error - potential API change! type 'Null' is not a subtype of type 'Map<Object?, Object?>' in type cast {error: {code: 400, message: Request contains an invalid argument., errors: [{message: Request contains an invalid argument., domain: global, reason: badRequest}], status: INVALID_ARGUMENT}}"
-}
-''',
-]);
-
 final List<Object?> intermediateMapList = [jsonDecode(jsonSampleFull)];
 final List<Object?> intermediateEmptyMapList = [jsonDecode(jsonSampleEmpty)];
 final List<Object?> intermediateErrorMapList = [jsonDecode(jsonSampleError)];

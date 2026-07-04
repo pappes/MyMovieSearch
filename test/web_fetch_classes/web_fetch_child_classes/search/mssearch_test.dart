@@ -124,10 +124,10 @@ void main() {
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // printTestData(actualResult);
+      // writeTestData(actualResult);
 
-      final expectedValue = expectedDTOList;
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -150,8 +150,7 @@ void main() {
       mockMeiliSearchClient = MockMeiliSearchClient();
       mockIndex = MockMeiliSearchIndex();
       mockSearcheable = MockSearcheable();
-      criteria = SearchCriteriaDTO()
-        ..init(SearchCriteriaType.movieTitle, title: 'test');
+      criteria = SearchCriteriaDTO()..init(.movieTitle, title: 'test');
       queryMsSearchMovies = QueryMsSearchMovies(criteria);
     });
 
@@ -272,7 +271,6 @@ void main() {
   group('QueryMsSearchMovies integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final expectedValue = expectedDTOList;
       final testClass = QueryMsSearchMovies(criteria);
       final actualResult = <MovieResultDTO>[];
 
@@ -282,6 +280,7 @@ void main() {
       }
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -343,7 +342,6 @@ void main() {
     // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
-      final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final testClass = QueryMsSearchMovies(criteria);
 
@@ -358,6 +356,7 @@ void main() {
           );
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),

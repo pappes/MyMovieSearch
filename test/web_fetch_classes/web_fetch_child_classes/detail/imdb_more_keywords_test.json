@@ -1,0 +1,47 @@
+[
+  {
+    "uniqueId": "batman character",
+    "title": "batman character",
+    "bestSource": "DataSourceType.imdbKeywords",
+    "type": "MovieContentType.keyword",
+    "sources": {
+      "DataSourceType.imdbKeywords": "batman character"
+    }
+  },
+  {
+    "uniqueId": "dc comics",
+    "title": "dc comics",
+    "bestSource": "DataSourceType.imdbKeywords",
+    "type": "MovieContentType.keyword",
+    "sources": {
+      "DataSourceType.imdbKeywords": "dc comics"
+    }
+  },
+  {
+    "uniqueId": "gotham city",
+    "title": "gotham city",
+    "bestSource": "DataSourceType.imdbKeywords",
+    "type": "MovieContentType.keyword",
+    "sources": {
+      "DataSourceType.imdbKeywords": "gotham city"
+    }
+  },
+  {
+    "uniqueId": "masked superhero",
+    "title": "masked superhero",
+    "bestSource": "DataSourceType.imdbKeywords",
+    "type": "MovieContentType.keyword",
+    "sources": {
+      "DataSourceType.imdbKeywords": "masked superhero"
+    }
+  },
+  {
+    "uniqueId": "superhero",
+    "title": "superhero",
+    "bestSource": "DataSourceType.imdbKeywords",
+    "type": "MovieContentType.keyword",
+    "sources": {
+      "DataSourceType.imdbKeywords": "superhero"
+    }
+  }
+]

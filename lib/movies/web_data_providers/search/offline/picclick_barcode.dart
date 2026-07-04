@@ -1,21 +1,3 @@
-// Raw data in code is generated from an external source.
-// ignore_for_file: unnecessary_ignore
-// ignore_for_file: unnecessary_raw_strings
-
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-
-/* To update this data, uncomment printTestData(actualResult);
-in test('Run dtoFromCompleteJsonMap()'*/
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"item-331233484","bestSource":"DataSourceType.picclickBarcode","title":"the pink panther film collection 6 peter sellers rare set","alternateTitle":"The Pink Panther Film Collection DVD Box Set - 6 Disc - Peter Sellers RARE Set","type":"MovieContentType.barcode",
-      "description":"item-331233484","imageUrl":"https://www.picclickimg.com/bv123456789O9j~TH2/The-Pink-Panther-Film-Collection-DVD-Box-Set.jpg","sources":{"DataSourceType.picclickBarcode":"item-331233484"}}
-''',
-];
-final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
-  expectedDtoJsonStringList,
-);
-
 Future<Stream<String>> streamHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));
 

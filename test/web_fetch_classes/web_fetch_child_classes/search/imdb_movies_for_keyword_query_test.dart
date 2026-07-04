@@ -1,5 +1,4 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/imdb_json/imdb_movies_for_keyword_converter.dart';
@@ -159,7 +158,7 @@ testing and punctuation
         actualResult.addAll(
           ImdbMoviesForKeywordConverter().dtoFromCompleteJsonMap(
             map,
-            DataSourceType.imdbKeywords,
+            .imdbKeywords,
           ),
         );
       }
@@ -184,16 +183,16 @@ testing and punctuation
         actualResult.addAll(
           ImdbMoviesForKeywordConverter().dtoFromCompleteJsonMap(
             map,
-            DataSourceType.imdbKeywords,
+            .imdbKeywords,
           ),
         );
       }
 
       // Uncomment this line to update expectedDTOList if sample data changes
-      // printTestData(actualResult);
+      // writeTestData(actualResult);
 
-      final expectedValue = expectedDTOList;
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -211,7 +210,6 @@ testing and punctuation
   group('ImdbSearchConverter integration tests', () {
     // Confirm map can be converted to DTO.
     test('Run myConvertTreeToOutputType()', () async {
-      final expectedValue = expectedDTOList;
       final imdbKeywords = QueryIMDBMoviesForKeyword(criteria);
       final actualResult = <MovieResultDTO>[];
 
@@ -221,6 +219,7 @@ testing and punctuation
       }
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         actualResult,
         MovieResultDTOListMatcher(expectedValue),
@@ -263,7 +262,6 @@ testing and punctuation
     // and convert JSON to dtos.
     test('Run readList()', () async {
       // Set up the test data.
-      final expectedValue = expectedDTOList;
       final queryResult = <MovieResultDTO>[];
       final imdbKeywords = QueryIMDBMoviesForKeyword(criteria);
 
@@ -278,6 +276,7 @@ testing and punctuation
           );
 
       // Check the results.
+      final expectedValue = readTestData();
       expect(
         queryResult,
         MovieResultDTOListMatcher(expectedValue),

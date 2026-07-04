@@ -1,20 +1,3 @@
-// Raw data in code is generated from an external source.
-// ignore_for_file: unnecessary_ignore
-// ignore_for_file: unnecessary_raw_strings
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-
-/* To update this data, uncomment printTestData(actualResult);
-in test('Run dtoFromCompleteJsonMap()'*/
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"9324915073425","bestSource":"DataSourceType.uhttBarcode","title":"dexter the","alternateTitle":"Dexter DVD the first season","type":"MovieContentType.barcode",
-      "description":"9324915073425","sources":{"DataSourceType.uhttBarcode":"9324915073425"}}
-''',
-];
-final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
-  expectedDtoJsonStringList,
-);
-
 Future<Stream<String>> streamHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));
 

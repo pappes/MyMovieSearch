@@ -1,0 +1,13 @@
+[
+  {
+    "uniqueId": "9324915073425",
+    "title": "dexter the",
+    "description": "9324915073425",
+    "alternateTitle": "Dexter DVD the first season",
+    "bestSource": "DataSourceType.uhttBarcode",
+    "type": "MovieContentType.barcode",
+    "sources": {
+      "DataSourceType.uhttBarcode": "9324915073425"
+    }
+  }
+]

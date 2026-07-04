@@ -1,20 +1,3 @@
-// Raw data in code is generated from an external source.
-// ignore_for_file: unnecessary_raw_strings
-
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-
-/* To update this data, uncomment printTestData(actualResult);
-in test('Run dtoFromCompleteJsonMap()'*/
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"https://www.torrentdownload.info/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7/2001-A-Space-Odyssey-+1968+-+BluRay+-+1080p+-+YTS-AM+","bestSource":"DataSourceType.torrentDownloadSearch","title":"2001 A Space Odyssey (1968) [BluRay] [1080p] [YTS AM] � Movies","type":"MovieContentType.download","creditsOrder":"6",
-      "description":"placeholder: 2.38 GB","userRatingCount":"248","sources":{"DataSourceType.torrentDownloadSearch":"https://www.torrentdownload.info/A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7/2001-A-Space-Odyssey-+1968+-+BluRay+-+1080p+-+YTS-AM+"}}
-''',
-];
-final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
-  expectedDtoJsonStringList,
-);
-
 Future<Stream<String>> streamHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));
 
@@ -49,7 +32,7 @@ const intermediateMapList = [
 ];
 
 const htmlSampleMidEmpty = '<br><h2>No Results Found</h2><br>';
-const htmlSampleMid = r'''
+const htmlSampleMid = '''
 <table class="table2" cellspacing="0">
     <tbody>
         <tr>

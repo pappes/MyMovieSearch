@@ -1,13 +1,4 @@
-// Raw data in code is generated from an external source.
-// ignore_for_file: unnecessary_raw_strings
-
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
-
-/* To update this data, uncomment printTestData(actualResult);
-in test('Run dtoFromCompleteJsonMap()'*/
-final List<MovieResultDTO> expectedDTOList = ListDTOConversion.decodeList(
-  expectedDtoJsonStringList,
-);
 
 Future<Stream<String>> streamImdbSearchHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));
@@ -38,37 +29,6 @@ const htmlSampleEnd = '''
   </body>
 </html>
 ''';
-
-const expectedDtoJsonStringList = [
-  r'''
-{"uniqueId":"nm0152436","title":"Hye NDace","bestSource":"DataSourceType.imdbSearch","type":"MovieContentType.person",
-      "description":"known for Superman(1994)","imageUrl":"https://www.microsoft.com/gx@.jpg","sources":{"DataSourceType.imdbSearch":"nm0152436"}}
-''',
-  r'''
-{"uniqueId":"nm2122834","title":"ifdhKoliHeDene Her","bestSource":"DataSourceType.imdbSearch","type":"MovieContentType.person",
-      "description":"known for Catwoman!(1993- )","imageUrl":"https://www.microsoft.com/k0MTRlNmU@.jpg","sources":{"DataSourceType.imdbSearch":"nm2122834"}}
-''',
-  r'''
-{"uniqueId":"nm5122134","title":"nrnKge K-sDHmu","bestSource":"DataSourceType.imdbSearch","type":"MovieContentType.person",
-      "description":"known for Batman","imageUrl":"https://www.microsoft.com/Q0ZGExNj@.jpg","sources":{"DataSourceType.imdbSearch":"nm5122134"}}
-''',
-  r'''
-{"uniqueId":"tt0152239","title":"Batman","bestSource":"DataSourceType.imdbSearch","type":"MovieContentType.movie","year":"1997","yearRange":"1997",
-      "description":"staring [dot GaGal, s CarLyn]","imageUrl":"https://www.microsoft.com/YzODQzYj@.jpg","sources":{"DataSourceType.imdbSearch":"tt0152239"}}
-''',
-  r'''
-{"uniqueId":"tt0172034","title":"Batman","bestSource":"DataSourceType.imdbSearch","type":"MovieContentType.series","year":"1979","yearRange":"1975-1979",
-      "description":"staring [terda PiChrine, ggoe WaLylner]","imageUrl":"https://www.microsoft.com/AxYTcxMD@.jpg","sources":{"DataSourceType.imdbSearch":"tt0172034"}}
-''',
-  r'''
-{"uniqueId":"tt1142838","title":"Batman","bestSource":"DataSourceType.imdbSearch","type":"MovieContentType.movie","year":"1991","yearRange":"1991",
-      "description":"staring [calro FNation, aliianne PAdrcki]","imageUrl":"https://www.microsoft.com/M4NTRlZjAtzgwMDUw.jpg","sources":{"DataSourceType.imdbSearch":"tt1142838"}}
-''',
-  r'''
-{"uniqueId":"tt1182333","title":"Batman","bestSource":"DataSourceType.imdbSearch","type":"MovieContentType.movie","year":"1999","yearRange":"1999",
-      "description":"staring [elli illhan, RussKer PasPed]","imageUrl":"https://www.microsoft.com/U1NmNmNT@.jpg","sources":{"DataSourceType.imdbSearch":"tt1182333"}}
-''',
-];
 
 const List<Map<String, Object?>> intermediateMapList = [
   {

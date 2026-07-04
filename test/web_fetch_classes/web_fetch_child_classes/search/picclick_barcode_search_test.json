@@ -1,0 +1,14 @@
+[
+  {
+    "uniqueId": "item-331233484",
+    "title": "the pink panther film collection 6 peter sellers rare set",
+    "description": "item-331233484",
+    "alternateTitle": "The Pink Panther Film Collection DVD Box Set - 6 Disc - Peter Sellers RARE Set",
+    "bestSource": "DataSourceType.picclickBarcode",
+    "type": "MovieContentType.barcode",
+    "imageUrl": "https://www.picclickimg.com/bv123456789O9j~TH2/The-Pink-Panther-Film-Collection-DVD-Box-Set.jpg",
+    "sources": {
+      "DataSourceType.picclickBarcode": "item-331233484"
+    }
+  }
+]
