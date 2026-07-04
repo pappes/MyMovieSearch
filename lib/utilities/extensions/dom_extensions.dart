@@ -12,19 +12,19 @@ const startHtml = '<';
 const endHtml = '>';
 
 const Map<ElementType, String> _htmlTags = {
-  ElementType.anchor: 'a',
-  ElementType.image: 'img',
-  ElementType.text: 'text',
-  ElementType.table: 'table',
-  ElementType.row: 'tr',
+  .anchor: 'a',
+  .image: 'img',
+  .text: 'text',
+  .table: 'table',
+  .row: 'tr',
 };
 
 enum AttributeType { address, source, elementClass }
 
 const Map<AttributeType, String> _attributeNames = {
-  AttributeType.address: 'href',
-  AttributeType.source: 'src',
-  AttributeType.elementClass: 'class',
+  .address: 'href',
+  .source: 'src',
+  .elementClass: 'class',
 };
 
 /// Extend html DOM [Node] to provide convenience functions.
