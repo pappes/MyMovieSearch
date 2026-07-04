@@ -224,7 +224,7 @@ void main() {
             // ignore: avoid_print
             (error, stackTrace) => print('$error, $stackTrace'),
           );
-      // printTestData(queryResult);
+      // writeTestData(queryResult);
 
       // Check the results.
       expect(
