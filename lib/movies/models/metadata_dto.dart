@@ -7,14 +7,7 @@ enum DetailLevel {
   custom, //          context specific
 }
 
-enum ReadHistory {
-  none,
-  starred, //         Want to come back to this one later.
-  read, //            Read the text, got the tshirt to prove it.
-  reading, //         Give me a minute, sheesh.
-  custom, //          context specific.
-}
-
+/// The data source from which a `MovieResultDTO` was populated.
 enum DataSourceType {
   none,
   imdb,
@@ -55,6 +48,7 @@ enum DataSourceType {
   custom,
 }
 
+/// The metadata for a `MovieResultDTO`.
 class MetaDataDTO {
   DataSourceType type = .none;
   String uniqueId = '';

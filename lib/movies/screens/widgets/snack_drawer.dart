@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_movie_search/movies/domain/models/search_criteria_transformation.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 

@@ -7,6 +7,7 @@
 import 'dart:convert';
 
 import 'package:meilisearch/meilisearch.dart';
+import 'package:my_movie_search/movies/data/movie_result_mappers.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 

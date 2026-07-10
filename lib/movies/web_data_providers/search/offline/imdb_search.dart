@@ -1,4 +1,4 @@
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
 
 Future<Stream<String>> streamImdbSearchHtmlOfflineData(_) =>
     Future.value(Stream.value(htmlSampleFull));

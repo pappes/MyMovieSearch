@@ -2,6 +2,10 @@
 // ignore_for_file: invalid_use_of_visible_for_overriding_member
 
 import 'package:flutter_test/flutter_test.dart';
+import 'package:my_movie_search/movies/data/movie_result_mappers.dart';
+import 'package:my_movie_search/movies/data/search_criteria_mappers.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/yts_detail_api.dart';

@@ -3,12 +3,17 @@ import 'dart:async';
 import 'package:easy_debounce/easy_throttle.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_movie_search/data/persistence/dto_cache.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
+import 'package:my_movie_search/movies/domain/models/search_criteria_transformation.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
 import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
+import 'package:my_movie_search/movies/screens/widgets/restorables/restorable_movie_result.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_json.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/imdb_name.dart';

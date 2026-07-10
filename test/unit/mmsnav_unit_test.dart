@@ -2,9 +2,13 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart' as mockito;
+import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
+import 'package:my_movie_search/movies/domain/models/search_criteria_transformation.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/screens/screen_routing.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';

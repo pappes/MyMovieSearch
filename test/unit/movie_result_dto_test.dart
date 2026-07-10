@@ -2,9 +2,14 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:my_movie_search/movies/models/metadata_dto.dart';
+import 'package:my_movie_search/movies/data/movie_result_mappers.dart';
+import 'package:my_movie_search/movies/domain/models/move_result_comparison.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/screens/widgets/restorables/restorable_movie_result.dart';
 import '../test_helper.dart';
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -642,7 +647,11 @@ Expected: List<MovieResultDTO>(2)[
     String id,
   ) {
     expect(
-      MovieResultDTOHelpers.getMovieContentType(suffix, duration, id),
+      TransformationMovieResultDTOHelpers.setMovieContentType(
+        suffix,
+        duration,
+        id,
+      ),
       type,
       reason: 'unexpected value returned from getImdbMovieContentType',
     );

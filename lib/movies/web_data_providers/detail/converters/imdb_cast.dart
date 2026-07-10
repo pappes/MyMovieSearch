@@ -1,6 +1,7 @@
 // Helper class to convert IMDB cast JSON data to MovieResultDTO objects.
 // ignore_for_file: avoid_classes_with_only_static_members
 
+import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 

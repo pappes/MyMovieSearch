@@ -2,9 +2,11 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:my_movie_search/data/persistence/dto_cache.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
+import 'package:my_movie_search/movies/screens/widgets/restorables/restorable_movie_result.dart';
 
 /// Display details of an error meessag to the user.
 ///

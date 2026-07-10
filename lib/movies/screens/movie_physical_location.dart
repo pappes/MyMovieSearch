@@ -7,6 +7,7 @@ import 'package:my_movie_search/movies/models/movie_location.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
 import 'package:my_movie_search/movies/screens/widgets/controls.dart';
+import 'package:my_movie_search/movies/screens/widgets/restorables/restorable_movie_result.dart';
 
 /// Add information about storage of physical media.
 ///

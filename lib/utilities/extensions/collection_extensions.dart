@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
 
 /// Extend [Map]<[String],[String]> to provide convenience functions.
 ///

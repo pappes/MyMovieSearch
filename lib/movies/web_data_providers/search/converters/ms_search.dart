@@ -1,6 +1,7 @@
 // Helper to convert MS Search movie search results.
 // ignore_for_file: avoid_classes_with_only_static_members
 
+import 'package:my_movie_search/movies/data/movie_result_mappers.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 
 //query string https://customsearch.MsSearchapis.com/customsearch/v1?cx=821cd5ca4ed114a04&q=wonder&safe=off&key=<key>

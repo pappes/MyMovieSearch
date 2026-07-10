@@ -7,6 +7,8 @@ import 'dart:async' as _i8;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i6;
+import 'package:my_movie_search/movies/domain/models/search_criteria_enums.dart'
+    as _i2;
 import 'package:my_movie_search/movies/models/movie_result_dto.dart' as _i4;
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart' as _i2;
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart'

@@ -1,4 +1,4 @@
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tvdb_common.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_common.dart';
 

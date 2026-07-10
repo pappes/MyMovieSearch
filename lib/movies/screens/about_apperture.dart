@@ -5,10 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart' show BlocBuilder;
 import 'package:go_router/go_router.dart';
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/blocs/search_bloc.dart';
-import 'package:my_movie_search/movies/models/movie_result_dto.dart';
+import 'package:my_movie_search/movies/data/movie_result_mappers.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/app_scaffold.dart';
 import 'package:my_movie_search/movies/screens/widgets/movie_card_small.dart';
+import 'package:my_movie_search/movies/screens/widgets/restorables/restorable_movie_result.dart';
+import 'package:my_movie_search/movies/screens/widgets/restorables/restorable_search_criteria.dart';
 import 'package:my_movie_search/utilities/navigation/web_nav.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 

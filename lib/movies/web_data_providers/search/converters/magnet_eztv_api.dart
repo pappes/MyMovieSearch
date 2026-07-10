@@ -3,6 +3,8 @@
 
 import 'dart:convert';
 
+import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/magnet_helper.dart';
 import 'package:my_movie_search/utilities/extensions/num_extensions.dart';

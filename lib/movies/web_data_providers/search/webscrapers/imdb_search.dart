@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:html/parser.dart' show parse;
+import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -143,7 +145,7 @@ mixin ScrapeIMDBSearchDetails
     final typeContainer = movie[outerSearchResultsMovieType];
     if (typeContainer is Map) {
       final typeText = typeContainer[outerSearchResultsMovieTypeText];
-      final movieType = MovieResultDTOHelpers.getMovieContentType(
+      final movieType = TransformationMovieResultDTOHelpers.setMovieContentType(
         '$typeText $yearRange',
         int.tryParse(rowData[outerElementDuration].toString()),
         rowData[outerElementIdentity].toString(),

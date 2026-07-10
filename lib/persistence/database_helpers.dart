@@ -2,6 +2,7 @@ import 'dart:convert' show json;
 
 import 'package:meta/meta.dart';
 import 'package:mutex/mutex.dart';
+import 'package:my_movie_search/movies/data/movie_result_mappers.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:path/path.dart' show join;
 import 'package:path_provider/path_provider.dart'

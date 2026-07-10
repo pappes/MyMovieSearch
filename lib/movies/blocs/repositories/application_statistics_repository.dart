@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/movie_list_repository.dart';
+import 'package:my_movie_search/movies/domain/models/search_criteria_enums.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/persistence/web_log.dart';
 
