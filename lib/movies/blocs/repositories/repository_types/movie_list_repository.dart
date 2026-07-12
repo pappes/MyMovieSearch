@@ -14,6 +14,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_person_det
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_details.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/wikidata_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/google.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
 
 /// Search for movie data from multiple online search sources.
 ///
@@ -82,7 +83,13 @@ class MovieListRepository extends BaseMovieRepository {
   ) async {
     // Restrict google search to data that cannot be found in other sources.
     await _removePopulatedData(criteria.criteriaList);
-    await addResults(searchUID, await googleProvider.readMultipleList());
+    await Future.wait([
+      addResults(searchUID, await googleProvider.readMultipleList()),
+      addResults(
+        searchUID,
+        await QueryIMDBSuggestions(criteria).readMultipleList(),
+      ),
+    ]);
     finishProvider(googleProvider);
   }
 

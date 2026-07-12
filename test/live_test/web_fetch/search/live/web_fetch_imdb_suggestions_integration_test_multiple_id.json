@@ -1,0 +1,164 @@
+[
+  {
+    "uniqueId": "tt0358864",
+    "title": "On the Spot",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.series",
+    "year": "2003",
+    "yearRange": "2003-2003",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt0358864"
+    }
+  },
+  {
+    "uniqueId": "tt0497374",
+    "title": "Genetically Challenged",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2005",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt0497374"
+    }
+  },
+  {
+    "uniqueId": "tt10443084",
+    "title": "Show Business",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.short",
+    "year": "2017",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt10443084"
+    }
+  },
+  {
+    "uniqueId": "tt1997772",
+    "title": "Here Come Your Enemies",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.series",
+    "year": "1999",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt1997772"
+    }
+  },
+  {
+    "uniqueId": "tt21214578",
+    "title": "tt19777728 (Hope)",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.short",
+    "year": "2022",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt21214578"
+    }
+  },
+  {
+    "uniqueId": "tt2271733",
+    "title": "Family Trap",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2012",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt2271733"
+    }
+  },
+  {
+    "uniqueId": "tt2291131",
+    "title": "First Dates with Toby Harris",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.series",
+    "year": "2011",
+    "yearRange": "2011-2013",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt2291131"
+    }
+  },
+  {
+    "uniqueId": "tt2714072",
+    "title": "Holding Patterns",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2013",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt2714072"
+    }
+  },
+  {
+    "uniqueId": "tt2887828",
+    "title": "The Second Date Dangles",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2000",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt2887828"
+    }
+  },
+  {
+    "uniqueId": "tt2887856",
+    "title": "The Amazing Atomic Monster in 3D!",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.short",
+    "year": "2000",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt2887856"
+    }
+  },
+  {
+    "uniqueId": "tt29903537",
+    "title": "Misfits of Comedy with special guest @k.t.229 11-30-2022",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.episode",
+    "year": "2023",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt29903537"
+    }
+  },
+  {
+    "uniqueId": "tt37071105",
+    "title": "Stockholm Squad",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt37071105"
+    }
+  },
+  {
+    "uniqueId": "tt4051886",
+    "title": "Problem Child",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2015",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt4051886"
+    }
+  },
+  {
+    "uniqueId": "tt4712840",
+    "title": "Interior Night",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2016",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt4712840"
+    }
+  },
+  {
+    "uniqueId": "tt4799686",
+    "title": "The Pool 2",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.movie",
+    "year": "2005",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt4799686"
+    }
+  },
+  {
+    "uniqueId": "tt6992922",
+    "title": "Best Seller",
+    "bestSource": "DataSourceType.imdbSuggestions",
+    "type": "MovieContentType.series",
+    "year": "2019",
+    "yearRange": "2019-2019",
+    "sources": {
+      "DataSourceType.imdbSuggestions": "tt6992922"
+    }
+  }
+]

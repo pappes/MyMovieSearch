@@ -1,9 +1,13 @@
 import 'dart:convert';
 
+import 'package:my_movie_search/movies/domain/models/move_result_comparison.dart';
+import 'package:my_movie_search/movies/domain/models/search_criteria_enums.dart';
 import 'package:my_movie_search/movies/domain/models/search_criteria_formatting.dart';
+import 'package:my_movie_search/movies/domain/models/search_criteria_transformation.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/cache/imdb_suggestion.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_suggestion.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_suggestions.dart';
@@ -30,6 +34,29 @@ class QueryIMDBSuggestions
   /// Removes duplicate titles by converting to a set.
   Future<Iterable<String>> readStringList() =>
       super.readList().then((results) => results.map((e) => e.title).toSet());
+
+  /// Pass multiple IDs to google and filter output to only that list.
+  Future<List<MovieResultDTO>> readMultipleList() async {
+    final futureList = <Future<List<MovieResultDTO>>>[];
+    for (final movie in criteria.criteriaList) {
+      // Want to suppliment data for movies that are already in the list.
+      if (movie.isTitle() && movie.uniqueId.startsWith(imdbTitlePrefix)) {
+        final criteria = SearchCriteriaDTO().init(
+          SearchCriteriaType.movieTitle,
+          title: movie.uniqueId,
+        );
+        futureList.add(QueryIMDBSuggestions(criteria).readList());
+        // Avoid rate limit
+        await Future<void>.delayed(const Duration(milliseconds: 100));
+      }
+    }
+
+    final results = await Future.wait(futureList);
+    final combinedResults = <MovieResultDTO>[];
+    results.forEach(combinedResults.addAll);
+
+    return combinedResults;
+  }
 
   static const _baseURL = 'https://sg.media-imdb.com/suggestion/x/';
   // Limit results to 10 most relevant by default.

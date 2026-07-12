@@ -1,4 +1,5 @@
-
+## Version 1.2.7
+- More data for rare titles at bottom of list.
 
 ## Version 1.2.6
 - Autocomplete suggestions for movie search page.
