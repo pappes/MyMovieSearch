@@ -1,6 +1,6 @@
 import 'dart:async' show StreamController, unawaited;
 
-import 'package:flutter/material.dart';
+import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/utilities/app_logger.dart';
@@ -24,7 +24,7 @@ typedef LimitedDtoFetch =
 /// [search] provides a stream of incomplete and complete results.
 /// [close] can be used to cancel a search.
 ///
-/// Child calsses shoud override
+/// Child classes should override
 /// - initSearch if a
 /// - getProviders if using one or more WebFetchBase are use to fetch the data.
 /// - getExtraDetails if additional dat is require for each record returned.
@@ -54,9 +54,7 @@ class BaseMovieRepository {
     _movieStreamController = StreamController<MovieResultDTO>(sync: true);
     unawaited(initSearch(_searchUID, criteria).catchError(handleError));
     // TODO(pappes): make fetch duration configurable.
-    unawaited(
-      Future<void>.delayed(const Duration(seconds: 30)).then((_) => close()),
-    );
+    close(delay: const Duration(seconds: 30));
 
     yield* _movieStreamController!.stream;
   }
@@ -72,9 +70,17 @@ class BaseMovieRepository {
   }
 
   /// Cancels or completes an in progress search.
-  Future<void> close({String message = 'Search completed ...'}) async {
+  @awaitNotRequired
+  Future<void> close({
+    String message = 'Search completed ...',
+    Duration delay = const Duration(seconds: 1),
+  }) async {
+    await Future<void>.delayed(delay);
+
     searchIndicator.title = message;
     yieldResult(searchIndicator);
+    // Allow time for the message to be propogated before closing the stream.
+    await Future<void>.delayed(const Duration(milliseconds: 100));
 
     if (_movieStreamController != null) {
       AppLogger.instance.trace('closing repository stream');
@@ -132,15 +138,26 @@ class BaseMovieRepository {
     _awaitingProviders.add(provider);
   }
 
+  /// Check how many providers are active.
+  @protected
+  int waitingForProviders() => _awaitingProviders.length;
+
+  /// Check if the provider is active.
+  ///
+  /// [provider] uniquely identifies the search source and search criteria.
+  @protected
+  bool isWaitingForProvider(Object provider) =>
+      _awaitingProviders.contains(provider);
+
   /// Cease waiting for data provider to complete.
   /// Close the stream if all WebFetch operations have completed.
   ///
   /// [provider] is the same passed through to initProvider.
   @protected
-  Future<void> finishProvider(Object provider) async {
+  void finishProvider(Object provider) {
     _awaitingProviders.remove(provider);
     if (_awaitingProviders.isEmpty) {
-      return close();
+      close();
     }
   }
 
@@ -149,10 +166,14 @@ class BaseMovieRepository {
   void yieldResult(MovieResultDTO result) =>
       _movieStreamController?.add(result);
 
+  /// Returns the unique identifier for the current search.
+  @protected
+  int currentSearchUID() => _searchUID;
+
   /// Determines if a new search has been initatatd since originalSearchUID.
   @protected
   bool searchInterrupted(int originalSearchUID) =>
-      originalSearchUID != _searchUID;
+      originalSearchUID != currentSearchUID();
 
   /// Yields incomplete or completed results in the stream
   /// and initiates retrieval of movie details.

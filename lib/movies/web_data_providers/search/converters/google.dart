@@ -43,11 +43,14 @@ const imdbResultTypeSeries = 'video.tv_show';
 const imdbPageTypeParentPage = 'main';
 
 class GoogleMovieSearchConverter {
+  /// deserialise outer json from map then iterate inner json
   static List<MovieResultDTO> dtoFromCompleteJsonMap(
     Map<Object?, dynamic> map,
   ) {
-    // deserialise outer json from map then iterate inner json
-    final searchResults = <MovieResultDTO>[];
+    // Main IMDB page results with IDs directly matching the search criteria.
+    final searchResults = <String, MovieResultDTO>{};
+    // Results with IDs that are child pages of the search criteria.
+    final otherResults = <MovieResultDTO>[];
     try {
       final resultCountString =
           // Execption handler will handle unexpected data.
@@ -61,8 +64,23 @@ class GoogleMovieSearchConverter {
       }
       for (final movie in map[outerElementResultsCollection] as Iterable) {
         movie as Map;
-        if (!isImdbChildPage(movie)) {
-          searchResults.add(_dtoFromMap(movie));
+        // Prefer main page over child pages. 
+        // Child pages are reviews, fullcredits, trivia, 
+        // locations, plotsummary, etc.
+        if (isImdbChildPage(movie)) {
+          otherResults.add(_dtoFromMap(movie));
+        } else {
+          final dto = _dtoFromMap(movie);
+          searchResults[dto.uniqueId] = dto;
+        }
+      }
+      // Supplement main page results with child page results.
+      for (final dto in otherResults) {
+        final existing = searchResults[dto.uniqueId];
+        if (existing == null) {
+          searchResults[dto.uniqueId] = dto;
+        } else {
+          existing.merge(dto);
         }
       }
     } catch (e) {
@@ -70,10 +88,9 @@ class GoogleMovieSearchConverter {
         title: 'Unknown google error - potential API change! $e $map',
       );
       AppLogger.instance.error(error.title);
-
-      searchResults.add(error);
+      searchResults[movieDTOMessagePrefix] = error;
     }
-    return searchResults;
+    return searchResults.values.toList();
   }
 
   static List<MovieResultDTO> _searchError(Map<Object?, Object?> map) {

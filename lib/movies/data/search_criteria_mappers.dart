@@ -5,6 +5,7 @@ import 'package:my_movie_search/movies/data/movie_result_mappers.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 import 'package:my_movie_search/movies/domain/models/search_criteria_enums.dart';
+import 'package:my_movie_search/movies/domain/models/search_criteria_transformation.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/restorables/restorable_search_criteria.dart';
@@ -29,6 +30,11 @@ extension SearchCriteriaDTOMapper on SearchCriteriaDTO {
   SearchCriteriaDTO fromString(String criteria) => SearchCriteriaDTO()
     ..criteriaTitle = criteria
     ..criteriaType = .movieTitle;
+
+  /// Create a new criteria DTO with the same values
+  ///
+  SearchCriteriaDTO shallowCopy() =>
+      clone()..criteriaList = criteriaList.shallowCopy();
 }
 
 /// Extension methods for converting between [Map] and [SearchCriteriaDTO].

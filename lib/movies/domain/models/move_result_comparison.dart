@@ -381,6 +381,32 @@ extension DTOCompare on MovieResultDTO {
     }
   }
 
+  /// dto type is an error, navigation command, or info.
+  bool isTitle() {
+    switch (type) {
+      case .error:
+      case .navigation:
+      case .information:
+      case .status:
+      case .keyword:
+      case .barcode:
+      case .searchprompt:
+      case .person:
+      case .download:
+        return false;
+
+      case .none:
+      case .movie:
+      case .short:
+      case .series:
+      case .miniseries:
+      case .episode:
+      case .title:
+      case .custom:
+        return true;
+    }
+  }
+
   /// dto type is an error or navigation command.
   bool isAControlObject() {
     switch (type) {

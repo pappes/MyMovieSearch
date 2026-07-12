@@ -205,7 +205,7 @@ extension ListDTOConversion on Iterable<MovieResultDTO> {
 
   /// Create a new list with the same values
   ///
-  Iterable<MovieResultDTO> shallowCopy() {
+  List<MovieResultDTO> shallowCopy() {
     final newList = <MovieResultDTO>[];
     forEach(newList.add);
     return newList;

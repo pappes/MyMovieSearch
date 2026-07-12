@@ -18,6 +18,21 @@ extension StringHelper on String {
     return '${substring(0, length)}...';
   }
 
+  /// Remove the last n characters from the string
+  ///
+  /// ```dart
+  /// final truncated = '2001 a space odyssey'.removeLast(3);
+  /// ```
+  String removeLast(int length) {
+    if (length < 0) {
+      throw ArgumentError('Length must be non-negative');
+    }
+    if (length >= this.length) {
+      return this;
+    }
+    return substring(0, this.length - length);
+  }
+
   /// Remove any 4 digit years from the string
   ///
   /// Substitutes a blank space by default

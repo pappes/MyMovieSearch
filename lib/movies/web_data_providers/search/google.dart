@@ -1,7 +1,9 @@
+import 'package:my_movie_search/movies/domain/models/move_result_comparison.dart';
 import 'package:my_movie_search/movies/domain/models/search_criteria_formatting.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/google.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/google.dart';
 import 'package:my_movie_search/utilities/settings.dart';
@@ -53,9 +55,30 @@ class QueryGoogleMovies
     );
   }
 
+  /// Pass multiple IDs to google and filter output to only that list.
+  Future<List<MovieResultDTO>> readMultipleList() async {
+    final idList = <String>[];
+    for (final movie in criteria.criteriaList) {
+      // Want to supplument data for movies that are already in the list.
+      if (movie.isTitle() && movie.uniqueId.startsWith(imdbTitlePrefix)) {
+        idList.add(movie.uniqueId);
+      }
+    }
+    if (idList.isEmpty) {
+      return <MovieResultDTO>[];
+    }
+
+    final result = await readList();
+    // Filter returned movies to only those in idList.
+    final filteredResult = result
+        .where((movie) => idList.contains(movie.uniqueId))
+        .toList();
+    return filteredResult;
+  }
+
   /// converts SearchCriteriaDTO to a string representation.
   @override
-  String myFormatInputAsText() => criteria.toPrintableString();
+  String myFormatInputAsText() => criteria.toQuery();
 
   /// Include entire map in the movie title when an error occurs.
   @override

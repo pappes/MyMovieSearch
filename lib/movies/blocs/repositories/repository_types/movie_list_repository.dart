@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:my_movie_search/data/persistence/dto_cache.dart';
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
+import 'package:my_movie_search/movies/data/movie_result_mappers.dart';
 import 'package:my_movie_search/movies/data/search_criteria_mappers.dart';
 import 'package:my_movie_search/movies/domain/models/move_result_comparison.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
@@ -11,25 +13,77 @@ import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_deta
 import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_person_detail.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_details.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/wikidata_detail.dart';
+import 'package:my_movie_search/movies/web_data_providers/search/google.dart';
 
 /// Search for movie data from multiple online search sources.
 ///
-/// Suppliament content from detail providers
-/// with content from additonal detail providers.
+/// Supplement content from detail providers
+/// with content from additional detail providers.
 class MovieListRepository extends BaseMovieRepository {
+  bool _googleSearchStarted = false;
+
+  /// Initialize the search for movie data from multiple online sources.
+  ///
   @override
   Future<void> initSearch(int searchUID, SearchCriteriaDTO criteria) async {
     await super.initSearch(searchUID, criteria);
     if (criteria.criteriaList.isNotEmpty) {
-      // Wikidata can search multiple IDs at once
-
-      final provider = QueryWikidataDetails(criteria);
-      initProvider(provider);
-      await provider
-          .readList()
-          .then((values) => addResults(searchUID, values))
-          .whenComplete(() => finishProvider(provider));
+      // Wikidata and google can search multiple IDs at once
+      await _populateFromWikidata(searchUID);
     }
+  }
+
+  /// Cease waiting for data provider to complete.
+  /// Close the stream if all WebFetch operations have completed.
+  ///
+  /// [provider] is the same passed through to initProvider.
+  @override
+  void finishProvider(Object provider) {
+    if (waitingForProviders() == 1 && criteria.criteriaList.isNotEmpty) {
+      // Search google last to avoid duplicate data from other sources.
+      _populateFromGoogle(QueryGoogleMovies(criteria), currentSearchUID());
+    }
+    return super.finishProvider(provider);
+  }
+
+  /// Populate the stream with data from wikidata.
+  ///
+  /// [searchUID] is the unique identifier for the current search.
+  Future<void> _populateFromWikidata(int searchUID) async {
+    final provider = QueryWikidataDetails(criteria);
+    initProvider(provider);
+    await provider
+        .readList()
+        .then((values) => addResults(searchUID, values))
+        .whenComplete(() => finishProvider(provider));
+  }
+
+  /// Start populating the stream with extra data from google.
+  ///
+  /// [provider]  is the google WebFetch that has been initialized
+  ///             with the search criteria.
+  /// [searchUID] is the unique identifier for the current search.
+  void _populateFromGoogle(QueryGoogleMovies provider, int searchUID) {
+    if (!_googleSearchStarted) {
+      _googleSearchStarted = true;
+      initProvider(provider);
+      unawaited(_fetchGooleData(provider, searchUID));
+    }
+  }
+
+  /// Populate the stream with data from google.
+  ///
+  /// [googleProvider]  is the google WebFetch that has been initialized
+  ///             with the search criteria.
+  /// [searchUID] is the unique identifier for the current search.
+  Future<void> _fetchGooleData(
+    QueryGoogleMovies googleProvider,
+    int searchUID,
+  ) async {
+    // Restrict google search to data that cannot be found in other sources.
+    await _removePopulatedData(criteria.criteriaList);
+    await addResults(searchUID, await googleProvider.readMultipleList());
+    finishProvider(googleProvider);
   }
 
   /// Maintain a map of unique movie detail requests
@@ -66,7 +120,7 @@ class MovieListRepository extends BaseMovieRepository {
     final results = await provider.readList();
 
     results.forEach(yieldResult);
-    await finishProvider(provider);
+    finishProvider(provider);
     return results.length;
   }
 
@@ -159,6 +213,22 @@ class MovieListRepository extends BaseMovieRepository {
       for (final dto in values) {
         yieldResult(dto);
         await getExtraDetails(originalSearchUID, dto);
+      }
+    }
+  }
+
+  /// Filter out any movies that already have details from other sources.
+  /// This is to avoid making unnecessary calls to Google
+  /// for data that is already available.
+  Future<void> _removePopulatedData(List<MovieResultDTO> criteriaList) async {
+    final newList = criteriaList.shallowCopy();
+    for (final dto in newList) {
+      final cached = await DtoCache.singleton().fetch(dto);
+      if (cached.type != .title ||
+          cached.userRating > 0 ||
+          cached.userRatingCount > 0) {
+        // Remove from original list without impacting the for loop.
+        criteriaList.remove(dto);
       }
     }
   }

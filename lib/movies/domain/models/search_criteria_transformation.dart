@@ -7,7 +7,7 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 /// Extension methods for creating and editing a `SearchCriteriaDTO`.
 extension TransformationSearchCriteriaDTOHelpers on SearchCriteriaDTO {
   /// Initialize a [SearchCriteriaDTO].
-  void init(
+  SearchCriteriaDTO init(
     SearchCriteriaType source, {
     String title = '',
     MovieResultDTO? context,
@@ -17,6 +17,7 @@ extension TransformationSearchCriteriaDTOHelpers on SearchCriteriaDTO {
     criteriaType = source;
     criteriaContext = context;
     criteriaList = list;
+    return this;
   }
 
   /// Create a duplicate of a `SearchCriteriaDTO`.
