@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:my_movie_search/movies/domain/models/move_result_comparison.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
 import 'package:my_movie_search/movies/domain/models/search_criteria_enums.dart';
 import 'package:my_movie_search/movies/domain/models/search_criteria_formatting.dart';
 import 'package:my_movie_search/movies/domain/models/search_criteria_transformation.dart';
@@ -11,6 +12,7 @@ import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.da
 import 'package:my_movie_search/movies/web_data_providers/search/cache/imdb_suggestion.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/imdb_suggestion.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/imdb_suggestions.dart';
+import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_limiter.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
@@ -37,7 +39,7 @@ class QueryIMDBSuggestions
 
   /// Pass multiple IDs to google and filter output to only that list.
   Future<List<MovieResultDTO>> readMultipleList() async {
-    final futureList = <Future<List<MovieResultDTO>>>[];
+    final requests = <String, Future<List<MovieResultDTO>>>{};
     for (final movie in criteria.criteriaList) {
       // Want to suppliment data for movies that are already in the list.
       if (movie.isTitle() && movie.uniqueId.startsWith(imdbTitlePrefix)) {
@@ -45,15 +47,26 @@ class QueryIMDBSuggestions
           SearchCriteriaType.movieTitle,
           title: movie.uniqueId,
         );
-        futureList.add(QueryIMDBSuggestions(criteria).readList());
+        requests[movie.uniqueId] = QueryIMDBSuggestions(criteria).readList();
         // Avoid rate limit
         await Future<void>.delayed(const Duration(milliseconds: 100));
       }
     }
 
-    final results = await Future.wait(futureList);
+    final results = await Future.wait(requests.values);
     final combinedResults = <MovieResultDTO>[];
-    results.forEach(combinedResults.addAll);
+    for (final result in results) {
+      for (final movie in result) {
+        if (requests.containsKey(movie.uniqueId)) {
+          combinedResults.add(movie);
+        }
+      }
+    }
+    AppLogger.instance.info(
+      'QueryIMDBSuggestions.readMultipleList()  '
+      'seaching for ${criteria.criteriaList.toPrintableString()} '
+      'movies returning ${combinedResults.toPrintableString()} results',
+    );
 
     return combinedResults;
   }
