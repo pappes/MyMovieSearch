@@ -60,7 +60,7 @@ void main() {
           MovieResultDTO().init(uniqueId: 'tt0358864'),
           MovieResultDTO().init(uniqueId: 'tt2887856'),
           MovieResultDTO().init(uniqueId: 'tt2887828'),
-          MovieResultDTO().init(uniqueId: 'tt1997772')
+          MovieResultDTO().init(uniqueId: 'tt1997772'),
         ],
       );
       final actualOutput = await QueryGoogleMovies(criteria).readMultipleList();

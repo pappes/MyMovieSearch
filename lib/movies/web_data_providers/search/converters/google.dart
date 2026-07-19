@@ -64,8 +64,8 @@ class GoogleMovieSearchConverter {
       }
       for (final movie in map[outerElementResultsCollection] as Iterable) {
         movie as Map;
-        // Prefer main page over child pages. 
-        // Child pages are reviews, fullcredits, trivia, 
+        // Prefer main page over child pages.
+        // Child pages are reviews, fullcredits, trivia,
         // locations, plotsummary, etc.
         if (isImdbChildPage(movie)) {
           otherResults.add(_dtoFromMap(movie));

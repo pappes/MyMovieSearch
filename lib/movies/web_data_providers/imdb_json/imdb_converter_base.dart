@@ -416,7 +416,7 @@ mixin ReleatedMoviesForPredefinedCategory on ImdbConverterBase {
 
 // TODO  related logic for cast and json
 //       still need to be brought into the mixin classes
-// Sample ReleatedMoviesForPredefinedCategory Json 
+// Sample ReleatedMoviesForPredefinedCategory Json
 // from imdb_cast ???? imdb_json_converter.dart
 // { 'props'->pageProps->contentData-data->title
 //   'creditCategories': [
@@ -433,7 +433,7 @@ mixin ReleatedMoviesForPredefinedCategory on ImdbConverterBase {
 //   ]
 // }
 //             OR
-// Sample ReleatedMoviesForDynamicCategory Json 
+// Sample ReleatedMoviesForDynamicCategory Json
 // from imdb_title (AND ImdbMoviesForKeywordConverter)
 // { 'props'->pageProps->tconst->mainColumnData->edges->node->
 //       'cast': {
