@@ -108,3 +108,4 @@ ios/Flutter/App.framework/
 ios/Flutter/plugin_registrant.h
 ios/Flutter/plugin_registrant.m
 ios/Flutter/Generated.xcconfig
+.aider*

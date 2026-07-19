@@ -1,0 +1,20 @@
+name: Flutter CI
+on:
+  pull_request:
+    branches: [main, develop]
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+      - run: flutter pub get
+      - name: Static Analysis
+        run: flutter analyze --fatal-infos --fatal-warnings
+      - name: Formatting Check
+        run: dart format --output=none --set-exit-if-changed .
+      - name: Run Tests
+        run: flutter test --coverage
+      - name: Build Linux Executable
+        run: flutter build linux --release
+        
