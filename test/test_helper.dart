@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/data/movie_result_mappers.dart';
 import 'package:my_movie_search/movies/data/search_criteria_mappers.dart';
-import 'package:my_movie_search/movies/domain/models/move_result_comparison.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_comparison.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 
@@ -420,11 +420,16 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
   /// [expected] is the list of DTOs to look for
   /// [percentMatch] allows a portion of the records
   /// to match instead of all records
-  MovieResultDTOListFuzzyMatcher(this.expected, {this.percentMatch = 100});
+  MovieResultDTOListFuzzyMatcher(
+    this.expected, {
+    this.percentMatch = 100,
+    this.ignorePopularity = false,
+  });
 
   List<MovieResultDTO> expected;
   int matchQuantity = 0;
   int percentMatch;
+  bool ignorePopularity;
   late List<MovieResultDTO> _actual;
 
   @override
@@ -479,6 +484,7 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
             matchState: differences,
             related: false,
             fuzzy: true,
+            ignorePopularity: ignorePopularity,
           )) {
             matchQuantity--;
             if (0 == matchQuantity) {

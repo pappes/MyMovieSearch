@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/data/search_criteria_mappers.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
@@ -16,48 +18,59 @@ void main() {
   /// Integration tests
   ////////////////////////////////////////////////////////////////////////////////
 
-  group('live QueryIMDBMoviesForKeyword test', () {
-    // Search for a rare movie.
-    test(
-      'Run a keyword search on IMDB that is likely to have static results',
-      () async {
-        final criteria = SearchCriteriaDTO().fromString('enigma');
+  // Check if running on GitHub Actions
+  final cicdBuildValidationTester = Platform.environment['CI'] == 'true';
+
+  group(
+    'live QueryIMDBMoviesForKeyword test',
+    () {
+      // Search for a rare movie.
+      test(
+        'Run a keyword search on IMDB that is likely to have static results',
+        () async {
+          final criteria = SearchCriteriaDTO().fromString('enigma');
+          final actualOutput = await QueryIMDBMoviesForKeyword(
+            criteria,
+          ).readList(limit: 10);
+          actualOutput.clearCopyrightedData();
+
+          // Uncomment this line to update expectedOutput if sample data changes
+          // writeTestData(actualOutput);
+
+          // Check the results.
+          final expectedOutput = readTestData();
+          expect(
+            actualOutput,
+            MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),
+            reason:
+                'Emitted DTO list ${actualOutput.toPrintableString()} '
+                'needs to match expected DTO list '
+                '${expectedOutput.toPrintableString()}',
+          );
+        },
+      );
+      test('Run an empty search', () async {
+        final criteria = SearchCriteriaDTO().fromString(
+          'therearenoresultszzzz',
+        );
         final actualOutput = await QueryIMDBMoviesForKeyword(
           criteria,
         ).readList(limit: 10);
-        actualOutput.clearCopyrightedData();
-
-        // Uncomment this line to update expectedOutput if sample data changes
-        // writeTestData(actualOutput);
+        final expectedOutput = <MovieResultDTO>[];
 
         // Check the results.
-        final expectedOutput = readTestData();
         expect(
           actualOutput,
-          MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),
+          MovieResultDTOListMatcher(expectedOutput),
           reason:
               'Emitted DTO list ${actualOutput.toPrintableString()} '
               'needs to match expected DTO list '
               '${expectedOutput.toPrintableString()}',
         );
-      },
-    );
-    test('Run an empty search', () async {
-      final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
-      final actualOutput = await QueryIMDBMoviesForKeyword(
-        criteria,
-      ).readList(limit: 10);
-      final expectedOutput = <MovieResultDTO>[];
-
-      // Check the results.
-      expect(
-        actualOutput,
-        MovieResultDTOListMatcher(expectedOutput),
-        reason:
-            'Emitted DTO list ${actualOutput.toPrintableString()} '
-            'needs to match expected DTO list '
-            '${expectedOutput.toPrintableString()}',
-      );
-    });
-  });
+      });
+    },
+    skip: cicdBuildValidationTester
+        ? 'Do not run IMDB tests on CICD builds'
+        : false,
+  );
 }

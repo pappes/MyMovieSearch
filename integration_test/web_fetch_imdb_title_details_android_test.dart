@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -30,55 +32,68 @@ flutter drive \
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Run read 3 pages from IMDB', (tester) async {
-    await tester.pumpWidget(const MyApp());
-    await tester.pumpAndSettle();
-    await warmUpHeadlessEngine();
-    await tester.pumpAndSettle();
+  // Check if running on GitHub Actions
+  final cicdBuildValidationTester = Platform.environment['CI'] == 'true';
 
-    // Convert 3 IMDB pages into dtos.
-    final actualOutput = await executeMultipleFetches(
-      (criteria) => QueryIMDBTitleDetails(criteria).readList(),
-    );
-    actualOutput.clearCopyrightedData();
+  group(
+    'live android test for QueryIMDBTitleDetails test',
+    () {
+      testWidgets('Run read 3 pages from IMDB', (tester) async {
+        await tester.pumpWidget(const MyApp());
+        await tester.pumpAndSettle();
+        await warmUpHeadlessEngine();
+        await tester.pumpAndSettle();
 
-    // To update expected data, uncomment the following line
-    // printTestDataJson(actualOutput);
+        // Convert 3 IMDB pages into dtos.
+        final actualOutput = await executeMultipleFetches(
+          (criteria) => QueryIMDBTitleDetails(criteria).readList(),
+        );
+        actualOutput.clearCopyrightedData();
 
-    // Check the results.
-    final expectedOutput = await readIntegrationTestData();
-    expect(
-      actualOutput,
-      MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
-      reason:
-          'Emitted DTO list ${actualOutput.toPrintableString()} '
-          'needs to match expected DTO list '
-          '${expectedOutput.toPrintableString()}',
-    );
-  }, timeout: const Timeout(Duration(seconds: 60)));
+        // To update expected data, uncomment the following line
+        // printTestDataJson(actualOutput);
 
-  testWidgets('Run an empty search', (tester) async {
-    await tester.pumpWidget(const MyApp());
-    await tester.pumpAndSettle();
-    await warmUpHeadlessEngine();
-    await tester.pumpAndSettle();
+        // Check the results.
+        final expectedOutput = await readIntegrationTestData();
+        expect(
+          actualOutput,
+          MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 70),
+          reason:
+              'Emitted DTO list ${actualOutput.toPrintableString()} '
+              'needs to match expected DTO list '
+              '${expectedOutput.toPrintableString()}',
+        );
+      }, timeout: const Timeout(Duration(seconds: 60)));
 
-    final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
-    final actualOutput = await QueryIMDBTitleDetails(
-      criteria,
-    ).readList(limit: 10);
-    final expectedOutput = <MovieResultDTO>[];
+      testWidgets('Run an empty search', (tester) async {
+        await tester.pumpWidget(const MyApp());
+        await tester.pumpAndSettle();
+        await warmUpHeadlessEngine();
+        await tester.pumpAndSettle();
 
-    // Check the results.
-    expect(
-      actualOutput,
-      MovieResultDTOListMatcher(expectedOutput),
-      reason:
-          'Emitted DTO list ${actualOutput.toPrintableString()} '
-          'needs to match expected DTO list '
-          '${expectedOutput.toPrintableString()}',
-    );
-  }, timeout: const Timeout(Duration(seconds: 60)));
+        final criteria = SearchCriteriaDTO().fromString(
+          'therearenoresultszzzz',
+        );
+        final actualOutput = await QueryIMDBTitleDetails(
+          criteria,
+        ).readList(limit: 10);
+        final expectedOutput = <MovieResultDTO>[];
+
+        // Check the results.
+        expect(
+          actualOutput,
+          MovieResultDTOListMatcher(expectedOutput),
+          reason:
+              'Emitted DTO list ${actualOutput.toPrintableString()} '
+              'needs to match expected DTO list '
+              '${expectedOutput.toPrintableString()}',
+        );
+      }, timeout: const Timeout(Duration(seconds: 60)));
+    },
+    skip: cicdBuildValidationTester
+        ? 'Do not run IMDB tests on CICD builds'
+        : false,
+  );
 }
 
 class MyApp extends StatelessWidget {

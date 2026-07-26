@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
@@ -28,6 +30,9 @@ void main() {
   /// Integration tests
   ////////////////////////////////////////////////////////////////////////////////
 
+  // Check if running on GitHub Actions
+  final cicdBuildValidationTester = Platform.environment['CI'] == 'true';
+  
   group('live QueryIMDBJsonDetails test', () {
     // Convert 2 IMDB pages into dtos.
     testWidgets(
@@ -117,7 +122,11 @@ void main() {
         );
       },
     );
-  });
+    },
+    skip: cicdBuildValidationTester
+        ? 'Do not run IMDB tests on CICD builds'
+        : false,
+  );
 }
 
 ////////////////////////////////////////////////////////////////////////////////

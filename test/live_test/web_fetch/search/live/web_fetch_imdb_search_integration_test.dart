@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/data/search_criteria_mappers.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
@@ -16,44 +18,57 @@ void main() {
   /// Integration tests
   ////////////////////////////////////////////////////////////////////////////////
 
-  group('live QueryIMDBSearch test', () {
-    // Search for a rare movie.
-    test(
-      'Run a search on IMDB that is likely to have static results',
-      () async {
-        final criteria = SearchCriteriaDTO().fromString('rize');
-        final actualOutput = await QueryIMDBSearch(criteria).readList();
-        actualOutput.clearCopyrightedData();
+  // Check if running on GitHub Actions
+  final cicdBuildValidationTester = Platform.environment['CI'] == 'true';
 
-        // To update expected data, uncomment the following line
-        // writeTestData(actualOutput);
+  group(
+    'live QueryIMDBSearch test',
+    () {
+      // Search for a rare movie.
+      test(
+        'Run a search on IMDB that is likely to have static results',
+        () async {
+          final criteria = SearchCriteriaDTO().fromString('rize');
+          final actualOutput = await QueryIMDBSearch(criteria).readList();
+          actualOutput.clearCopyrightedData();
+
+          // To update expected data, uncomment the following line
+          // writeTestData(actualOutput);
+
+          // Check the results.
+          final expectedOutput = readTestData();
+          expect(
+            actualOutput,
+            MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),
+            reason:
+                'Emitted DTO list ${actualOutput.toPrintableString()} '
+                'needs to match expected DTO list '
+                '${expectedOutput.toPrintableString()}',
+          );
+        },
+      );
+      test('Run an empty search', () async {
+        final criteria = SearchCriteriaDTO().fromString(
+          'therearenoresultszzzz',
+        );
+        final actualOutput = await QueryIMDBSearch(
+          criteria,
+        ).readList(limit: 10);
+        final expectedOutput = <MovieResultDTO>[];
 
         // Check the results.
-        final expectedOutput = readTestData();
         expect(
           actualOutput,
-          MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),
+          MovieResultDTOListMatcher(expectedOutput),
           reason:
               'Emitted DTO list ${actualOutput.toPrintableString()} '
               'needs to match expected DTO list '
               '${expectedOutput.toPrintableString()}',
         );
-      },
-    );
-    test('Run an empty search', () async {
-      final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
-      final actualOutput = await QueryIMDBSearch(criteria).readList(limit: 10);
-      final expectedOutput = <MovieResultDTO>[];
-
-      // Check the results.
-      expect(
-        actualOutput,
-        MovieResultDTOListMatcher(expectedOutput),
-        reason:
-            'Emitted DTO list ${actualOutput.toPrintableString()} '
-            'needs to match expected DTO list '
-            '${expectedOutput.toPrintableString()}',
-      );
-    });
-  });
+      });
+    },
+    skip: cicdBuildValidationTester
+        ? 'Do not run IMDB tests on CICD builds'
+        : false,
+  );
 }

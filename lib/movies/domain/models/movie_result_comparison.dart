@@ -527,6 +527,7 @@ extension DTOCompare on MovieResultDTO {
     Map<Object?, Object?>? matchState,
     bool related = true,
     bool fuzzy = false,
+    bool ignorePopularity = false,
     String prefix = '',
   }) {
     if (title == actualDTO.title && title == 'unknown') return true;
@@ -540,6 +541,14 @@ extension DTOCompare on MovieResultDTO {
           expected,
           fuzzy: fuzzy,
         );
+    void popularityCompare<T>(String fieldName, num actual, num expected) {
+      if (ignorePopularity) return;
+      if (actual > 0 && expected > 0) {
+        // We have a value, we dont care what the value is.
+        return;
+      }
+      return matchCompare(fieldName, actual, expected);
+    }
 
     /// Compare 2 identifiers and store a description of the difference.
     ///
@@ -567,14 +576,19 @@ extension DTOCompare on MovieResultDTO {
     matchCompare('description', actualDTO.description, description);
     matchCompare('type', actualDTO.type, type);
     matchCompare('year', actualDTO.year, year);
-    matchCompare('creditsOrder', actualDTO.creditsOrder, creditsOrder);
     matchCompare('yearRange', actualDTO.yearRange, yearRange);
     matchCompare('censorRating', actualDTO.censorRating, censorRating);
     matchCompare('runTime', actualDTO.runTime, runTime);
     matchCompare('imageUrl', actualDTO.imageUrl, imageUrl);
     matchCompare('language', actualDTO.language, language);
+    popularityCompare(
+      'userRatingCount',
+      actualDTO.userRatingCount,
+      userRatingCount,
+    );
+    popularityCompare('creditsOrder', actualDTO.creditsOrder, creditsOrder);
     if (!fuzzy) {
-      matchCompare('userRating', actualDTO.userRating, userRating);
+      popularityCompare('userRating', actualDTO.userRating, userRating);
     }
     matchCompare(
       'languages',
