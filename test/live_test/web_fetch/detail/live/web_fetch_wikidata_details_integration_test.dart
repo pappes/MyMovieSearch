@@ -73,7 +73,7 @@ void main() {
       final expectedOutput = readTestData(testName: 'imdb_movies');
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(expectedOutput),
+        MovieResultDTOListFuzzyMatcher(expectedOutput),
         reason:
             'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '

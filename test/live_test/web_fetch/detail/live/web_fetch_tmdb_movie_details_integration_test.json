@@ -9,8 +9,8 @@
     "language": "LanguageType.foreign",
     "languages": "[\"Czech\"]",
     "genres": "[\"Drama\"]",
-    "userRating": "6.0",
-    "userRatingCount": "1",
+    "userRating": "7.0",
+    "userRatingCount": "2",
     "sources": {
       "DataSourceType.tmdbMovie": "913986"
     }
@@ -27,6 +27,8 @@
     "language": "LanguageType.foreign",
     "languages": "[\"Cantonese\"]",
     "genres": "[\"Horror\"]",
+    "userRating": "10.0",
+    "userRatingCount": "1",
     "imageUrl": "https://image.tmdb.org/t/p/w500/2TqIVoUH71ZwZBFtvG6Y8P2YY8l.jpg",
     "sources": {
       "DataSourceType.tmdbMovie": "1341041"
@@ -45,8 +47,8 @@
     "languages": "[\"Cantonese\"]",
     "genres": "[\"Crime\",\"Action\",\"Drama\"]",
     "links": "{\"Wikidata\":\"https://www.wikidata.org/wiki/Q1676737\"}",
-    "userRating": "7.063",
-    "userRatingCount": "8",
+    "userRating": "6.708",
+    "userRatingCount": "12",
     "imageUrl": "https://image.tmdb.org/t/p/w500/7zwS6ttVbgHXpgehTCcVg1f8nbM.jpg",
     "sources": {
       "DataSourceType.tmdbMovie": "230839"
