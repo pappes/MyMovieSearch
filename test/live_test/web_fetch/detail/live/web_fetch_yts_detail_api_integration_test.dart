@@ -65,7 +65,6 @@ void main() {
     test('Run read 3 torrents from YTS', () async {
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
-      // make this more robust by normalising the YTS URL e.g. yts.gg Vs yts.mx
       const regexScheme = 'https?://'; // http or https
       const regexDomain = r'[^/\s]+'; // domain up until first slash e.g. yts.gg
       final urlRegex = RegExp('$regexScheme$regexDomain');
