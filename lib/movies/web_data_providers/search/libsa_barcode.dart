@@ -2,6 +2,7 @@ import 'package:my_movie_search/movies/domain/models/search_criteria_formatting.
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
+import 'package:my_movie_search/movies/web_data_providers/common/imdb_json_web_scraper.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/converters/libsa_barcode.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/offline/libsa_barcode.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/webscrapers/libsa_barcode.dart';
@@ -18,7 +19,7 @@ const jsonUrlKey = 'url';
 /// ```
 class QueryLibsaBarcodeSearch
     extends WebFetchBase<MovieResultDTO, SearchCriteriaDTO>
-    with ScrapeLibsaBarcodeSearch {
+    with ScrapeLibsaBarcodeSearch, HeadlessWebFetch {
   QueryLibsaBarcodeSearch(super.criteria);
 
   static const _baseURL =
