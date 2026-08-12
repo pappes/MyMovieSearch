@@ -9,7 +9,8 @@ import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/tree_map_list_extensions.dart';
 
 const languageEnglish = 'en';
-const linkEnglish = 'enwiki';
+const wikiLinkEnglish = 'enwiki';
+const wikiPageTitle = 'title';
 
 const nodeMultipleResults = 'results';
 const nodeMultipleResultCollection = 'bindings';
@@ -229,6 +230,18 @@ class WikidataDetailConverter {
     return destinationUrls;
   }
 
+  String? getWikiUrl(Map<Object?, Object?> inputdata) {
+    final wikiLinksData = inputdata.deepSearch(nodeWikiLinks);
+    final englishLink = wikiLinksData?.deepSearch(wikiLinkEnglish);
+    final title = englishLink?.deepSearch(wikiPageTitle)?.first;
+    final wikiID = title?.toString().replaceAll(' ', '_');
+    if (wikiID == null) {
+      return null;
+    }
+
+    return wikiID;
+  }
+
   MovieContentType parseSingleResultTypeAndData(
     Map<Object?, Object?> inputData,
     Map<Object?, Object?> outputData,
@@ -239,9 +252,6 @@ class WikidataDetailConverter {
       final descriptionData = inputData.deepSearch(nodeDescription);
       final startDateData = inputData.deepSearch(nodeStartDate);
       final endDateData = inputData.deepSearch(nodeEndDate);
-      final wikiLinksData = inputData
-          .deepSearch(nodeWikiLinks)
-          ?.deepSearch(linkEnglish);
       final rawLinkData = inputData.deepSearch(nodeExternalLinks);
       // ...'en':...'value':'xxx'
       outputData[nodeName] = getStringValue(nameData);
@@ -263,8 +273,7 @@ class WikidataDetailConverter {
       );
 
       final destinationUrls = <String, String>{};
-      final wikiUrl = wikiLinksData?.searchForString(key: nodeUrl);
-      getExternalUrl(destinationUrls, .wikipedia, wikiUrl);
+      getExternalUrl(destinationUrls, .wikipedia, getWikiUrl(inputData));
       getExternalLinks(destinationUrls, rawLinkData);
       outputData[nodeExternalLinks] = destinationUrls;
 
