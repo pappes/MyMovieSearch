@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/data/search_criteria_mappers.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
@@ -19,50 +17,44 @@ void main() {
   /// Integration tests
   ////////////////////////////////////////////////////////////////////////////////
 
-  group(
-    'live QueryIMDBNameDetails test',
-    () {
-      // Convert 3 IMDB pages into dtos.
-      test('Run read 3 pages from IMDB', () async {
-        final actualOutput = await executeMultipleFetches(
-          (criteria) => QueryIMDBNameDetails(criteria).readList(),
-          prefix: imdbPersonPrefix,
-        );
+  group('live QueryIMDBNameDetails test', () {
+    // Convert 3 IMDB pages into dtos.
+    test('Run read 3 pages from IMDB', () async {
+      final actualOutput = await executeMultipleFetches(
+        (criteria) => QueryIMDBNameDetails(criteria).readList(),
+        prefix: imdbPersonPrefix,
+      );
 
-        // To update expected data, uncomment the following lines
-        // writeTestData(actualOutput, includeRelated: true);
+      // To update expected data, uncomment the following lines
+      // writeTestData(actualOutput, includeRelated: true);
 
-        // Check the results.
-        final expectedOutput = readTestData();
-        expect(
-          actualOutput,
-          MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
-          reason:
-              'Emitted DTO list ${actualOutput.toPrintableString()} '
-              'needs to match expected DTO list '
-              '${expectedOutput.toPrintableString()}',
-        );
-      });
-      test('Run an empty search', () async {
-        final criteria = SearchCriteriaDTO().fromString(
-          'therearenoresultszzzz',
-        );
-        final actualOutput = await QueryIMDBNameDetails(
-          criteria,
-        ).readList(limit: 10);
-        final expectedOutput = <MovieResultDTO>[];
+      // Check the results.
+      final expectedOutput = readTestData();
+      expect(
+        actualOutput,
+        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
+    test('Run an empty search', () async {
+      final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
+      final actualOutput = await QueryIMDBNameDetails(
+        criteria,
+      ).readList(limit: 10);
+      final expectedOutput = <MovieResultDTO>[];
 
-        // Check the results.
-        expect(
-          actualOutput,
-          MovieResultDTOListMatcher(expectedOutput),
-          reason:
-              'Emitted DTO list ${actualOutput.toPrintableString()} '
-              'needs to match expected DTO list '
-              '${expectedOutput.toPrintableString()}',
-        );
-      });
-    },
-    skip: skipLiveGroup(isImdb: true),
-  );
+      // Check the results.
+      expect(
+        actualOutput,
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
+  }, skip: skipLiveGroup(isImdb: true));
 }

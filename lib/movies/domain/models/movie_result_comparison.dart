@@ -463,9 +463,6 @@ extension DTOCompare on MovieResultDTO {
           allowExtra: allowExtra,
         );
       }
-      if (allowExtra) {
-        print('wtf');
-      }
       if (expected != actual) {
         mismatches[fieldName] =
             'is different\n  Expected: "$expected"\n    Actual: "$actual"\n';
