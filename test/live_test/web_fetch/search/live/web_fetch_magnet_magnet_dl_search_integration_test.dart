@@ -39,7 +39,7 @@ void main() {
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
-    }, skip: true);
+    }, skip: false);
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
       final actualOutput = await QueryMagnetDlSearch(
@@ -57,5 +57,5 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
-  }, skip: true);
+  }, skip: false);
 }

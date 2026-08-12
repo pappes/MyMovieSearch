@@ -27,7 +27,7 @@ class QueryMagnetDlSearch
     with ScrapeMagnetDlSearch {
   QueryMagnetDlSearch(super.criteria);
 
-  static const _baseURL = 'https://www.magnetdl.com/';
+  static const _baseURL = 'https://magnetdl.co/search/?q=';
   static const _pageURL = '/';
 
   /// Describe where the data is coming from.
