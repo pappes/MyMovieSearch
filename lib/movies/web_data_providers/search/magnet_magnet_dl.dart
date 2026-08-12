@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:my_movie_search/movies/domain/models/search_criteria_formatting.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -27,8 +29,8 @@ class QueryMagnetDlSearch
     with ScrapeMagnetDlSearch {
   QueryMagnetDlSearch(super.criteria);
 
-  static const _baseURL = 'https://magnetdl.co/search/?q=';
-  static const _pageURL = '/';
+  static const _baseURL = 'https://magnetdl.co/data.php?q=';
+  static const _pageURL = '&page=';
 
   /// Describe where the data is coming from.
   @override
@@ -66,11 +68,22 @@ class QueryMagnetDlSearch
   @override
   Uri myConstructURI(String encodedCriteria, {int pageNumber = 1}) {
     searchResultsLimit = WebFetchLimiter(55);
-    final prefix = encodedCriteria.isEmpty
-        ? ''
-        : encodedCriteria.substring(0, 1);
 
-    final url = '$_baseURL$prefix/$encodedCriteria/$pageNumber$_pageURL';
+    final url = '$_baseURL$encodedCriteria$_pageURL$pageNumber';
     return Uri.parse(url);
+  }
+
+  // Set TorrentDownload specific headers
+  @override
+  void myConstructHeaders(HttpHeaders headers) {
+    super.myConstructHeaders(headers);
+    // prevent invalid UTF encoding.
+    headers
+      ..set(
+        'accept',
+        'text/html,application/xhtml+xml,application/xml',
+        // do not accept ;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7,
+      )
+      ..set('accept-encoding', 'text/plain');
   }
 }
