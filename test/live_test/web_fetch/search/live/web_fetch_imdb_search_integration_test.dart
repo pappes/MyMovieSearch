@@ -18,9 +18,6 @@ void main() {
   /// Integration tests
   ////////////////////////////////////////////////////////////////////////////////
 
-  // Check if running on GitHub Actions
-  final cicdBuildValidationTester = Platform.environment['CI'] == 'true';
-
   group(
     'live QueryIMDBSearch test',
     () {
@@ -67,8 +64,6 @@ void main() {
         );
       });
     },
-    skip: cicdBuildValidationTester
-        ? 'Do not run IMDB tests on CICD builds'
-        : false,
+    skip: skipLiveGroup(isImdb: true),
   );
 }

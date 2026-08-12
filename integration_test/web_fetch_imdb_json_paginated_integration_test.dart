@@ -30,9 +30,6 @@ void main() {
   /// Integration tests
   ////////////////////////////////////////////////////////////////////////////////
 
-  // Check if running on GitHub Actions
-  final cicdBuildValidationTester = Platform.environment['CI'] == 'true';
-  
   group('live QueryIMDBJsonDetails test', () {
     // Convert 2 IMDB pages into dtos.
     testWidgets(
@@ -122,11 +119,7 @@ void main() {
         );
       },
     );
-    },
-    skip: cicdBuildValidationTester
-        ? 'Do not run IMDB tests on CICD builds'
-        : false,
-  );
+  }, skip: skipLiveGroup(isImdb: true));
 }
 
 ////////////////////////////////////////////////////////////////////////////////

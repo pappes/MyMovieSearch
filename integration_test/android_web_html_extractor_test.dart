@@ -42,9 +42,6 @@ void main() async {
     await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 
-  // Check if running on GitHub Actions
-  final cicdBuildValidationTester = Platform.environment['CI'] == 'true';
-
   group(
     'live android html test',
     () {
@@ -207,8 +204,6 @@ void main() async {
         timeout: const Timeout(Duration(seconds: 60)),
       );
     },
-    skip: cicdBuildValidationTester
-        ? 'Do not run IMDB tests on CICD builds'
-        : false,
+    skip: skipLiveGroup(isImdb: true)
   );
 }

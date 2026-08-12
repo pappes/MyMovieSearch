@@ -32,9 +32,6 @@ flutter drive \
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  // Check if running on GitHub Actions
-  final cicdBuildValidationTester = Platform.environment['CI'] == 'true';
-
   group(
     'live android test for QueryIMDBTitleDetails test',
     () {
@@ -90,9 +87,7 @@ void main() {
         );
       }, timeout: const Timeout(Duration(seconds: 60)));
     },
-    skip: cicdBuildValidationTester
-        ? 'Do not run IMDB tests on CICD builds'
-        : false,
+    skip: skipLiveGroup(isImdb: true),
   );
 }
 

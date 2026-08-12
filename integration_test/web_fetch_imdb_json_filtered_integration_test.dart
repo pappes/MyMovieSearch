@@ -34,9 +34,6 @@ Future<void> main() async {
   /// Integration tests
   ////////////////////////////////////////////////////////////////////////////////
 
-  // Check if running on GitHub Actions
-  final cicdBuildValidationTester = Platform.environment['CI'] == 'true';
-
   group(
     'live QueryIMDBJsonDetails test',
     () {
@@ -129,9 +126,7 @@ Future<void> main() async {
         );
       }, timeout: const Timeout(Duration(seconds: 60)));
     },
-    skip: cicdBuildValidationTester
-        ? 'Do not run IMDB tests on CICD builds'
-        : false,
+    skip: skipLiveGroup(isImdb: true),
   );
 }
 
