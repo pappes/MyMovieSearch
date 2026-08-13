@@ -84,7 +84,6 @@ mixin ScrapeSolidTorrentsSearch
     if (result[jsonMagnetKey] != null &&
         result[jsonNameKey] != null &&
         result[jsonSeedersKey] != null &&
-      
         result[jsonMagnetKey]!.toString().isNotEmpty &&
         result[jsonNameKey]!.toString().isNotEmpty &&
         result[jsonSeedersKey]!.toString().isNotEmpty) {
