@@ -24,7 +24,6 @@ void main() {
       final actualOutput = await QueryMagnetDlSearch(
         criteria,
       ).readList(limit: 10);
-      actualOutput.clearCopyrightedData();
 
       // Uncomment this line to update expectedOutput if sample data changes
       // writeTestData(actualOutput);

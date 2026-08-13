@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:my_movie_search/movies/domain/models/search_criteria_formatting.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -16,6 +18,7 @@ const jsonNameKey = 'name';
 const jsonDescriptionKey = 'description';
 const jsonSeedersKey = 'seeders';
 const jsonLeechersKey = 'leechers';
+const torrentz2BaseURL = 'https://torrentz2.nz';
 
 /// Implements [WebFetchBase] for the Torrentz2 search html web scraper.
 ///
@@ -27,7 +30,7 @@ class QueryTorrentz2Search
     with ScrapeTorrentz2Search {
   QueryTorrentz2Search(super.criteria);
 
-  static const _baseURL = 'https://torrentz2.nz/search?q=';
+  static const _searchURL = '$torrentz2BaseURL/search?q=';
   static const _pageURL = '&page=';
 
   /// Describe where the data is coming from.
@@ -68,7 +71,21 @@ class QueryTorrentz2Search
     searchResultsLimit = WebFetchLimiter(55);
     final convertedCriteria = encodedCriteria.replaceAll('.', '+');
 
-    final url = '$_baseURL$convertedCriteria$_pageURL$pageNumber';
+    final url = '$_searchURL$convertedCriteria$_pageURL$pageNumber';
     return Uri.parse(url);
+  }
+
+  // Set Torrentz2 specific headers
+  @override
+  void myConstructHeaders(HttpHeaders headers) {
+    super.myConstructHeaders(headers);
+    // prevent invalid UTF encoding.
+    headers
+      ..set(
+        'accept',
+        'text/html,application/xhtml+xml,application/xml',
+        // do not accept ;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7,
+      )
+      ..set('accept-encoding', 'text/plain');
   }
 }

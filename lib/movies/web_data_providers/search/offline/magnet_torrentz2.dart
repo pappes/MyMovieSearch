@@ -50,7 +50,7 @@ const intermediateMapList = [
   },
 ];
 
-const htmlSampleEmptyMid = '<h2>0+ Torrents </h2>';
+const htmlSampleEmptyMid = '<h2>0 Torrents </h2>';
 
 const htmlSampleMid = r'''
 <div class="results">

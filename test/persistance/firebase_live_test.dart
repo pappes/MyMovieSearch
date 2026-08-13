@@ -2,6 +2,8 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 
+import '../../integration_test/test_helper.dart';
+
 void main() {
   // Wait for api key to be initialised
   setUpAll(() => Settings().init(includeCloudSettings: false));
@@ -63,5 +65,5 @@ void main() {
 
       expect(actual, expected);
     });
-  });
+  }, skip: skipLiveGroup());
 }

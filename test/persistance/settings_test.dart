@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 
+import '../../integration_test/test_helper.dart';
+
 // Replace all alphnumeric chars with x.
 String? obsfucate(String? setting) =>
     setting?.replaceAll(RegExp('[a-zA-Z0-9]'), 'x');
@@ -77,5 +79,5 @@ void main() {
         reason: 'seVmKey does not match',
       );
     });
-  });
+  }, skip: skipLiveGroup());
 }

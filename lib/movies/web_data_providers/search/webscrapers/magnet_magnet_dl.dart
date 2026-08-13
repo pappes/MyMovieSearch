@@ -14,7 +14,7 @@ const magnetSelector = "[href^='magnet:']";
 const magnetHashSelector = 'dl.col2 > dd';
 const magnetUrlSelector = 'a';
 const nameSelector = 'td:not([class]), td[class=""]';
-const detailSelector = '.t2';
+const detailSelector = 'td:nth-child(5)'; // 5th column
 const seedSelector = '.s';
 const leechSelector = '.l';
 
@@ -65,18 +65,27 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
   /// Collect webpage text to construct a map of the movie data.
   Future<void> _processRow(Element row) async {
     final result = <String, Object?>{};
-    result[jsonCategoryKey] = row.querySelector(detailSelector)?.cleanText;
     final nameCell = row.querySelector(nameSelector);
     result[jsonNameKey] = nameCell?.cleanText;
-    result[jsonMagnetKey] = await lookupMagnetUrl(
-      nameCell?.querySelector(magnetUrlSelector)?.attributes['href'],
-      nameCell?.cleanText,
-    );
-    result[jsonDescriptionKey] = row
-        .querySelector(seedSelector)
-        ?.previousElementSibling
-        ?.cleanText;
-    result[jsonSeedersKey] = row.querySelector(seedSelector)?.cleanText;
+    result[jsonMagnetKey] = row
+        .querySelector(magnetSelector)
+        ?.attributes['href'];
+    if (result[jsonMagnetKey] != null) {
+      result[jsonMagnetKey] = MagnetHelper.addTrackers(
+        result[jsonMagnetKey].toString(),
+      );
+    } else {
+      result[jsonMagnetKey] = await lookupMagnetUrl(
+        nameCell?.querySelector(magnetUrlSelector)?.attributes['href'],
+        nameCell?.cleanText,
+      );
+    }
+    final seedElement = row.querySelector(seedSelector);
+    final descriptionElement = seedElement?.previousElementSibling;
+    final categoryElement = descriptionElement?.previousElementSibling;
+    result[jsonCategoryKey] = categoryElement?.cleanText;
+    result[jsonDescriptionKey] = descriptionElement?.cleanText;
+    result[jsonSeedersKey] = seedElement?.cleanText;
     result[jsonLeechersKey] = row.querySelector(leechSelector)?.cleanText;
 
     if (result[jsonMagnetKey] != null &&
@@ -95,13 +104,9 @@ mixin ScrapeMagnetDlSearch on WebFetchBase<MovieResultDTO, SearchCriteriaDTO> {
     }
     final response = await http.get(Uri.parse(source));
     if (response.statusCode == 200) {
-      // final response = await getHeadlessPage(source);
-      // final response = await getPageWithSessionCookie(Uri.parse(source));
-      // if (response != null && response.isNotEmpty) {
       final document = parse(response.body);
       final hash = document.querySelectorAll(magnetHashSelector).last.cleanText;
       if (hash.isNotEmpty) {
-        // return MagnetHelper.addTrackers(magnet);
         return MagnetHelper.createMagnet(hash, name);
       }
     }
