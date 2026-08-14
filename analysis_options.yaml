@@ -13,6 +13,13 @@ analyzer:
     - test/widget_test.dart
     - test/widget_tests/controls_test.dart
     - lib/firebase_options.dart
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
   language:
     strict-casts: true
     strict-inference: true   # forces declaration of synamic for literal constants e.g. <String,dynamic>{}
