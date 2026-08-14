@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
 import 'package:my_movie_search/movies/domain/models/search_criteria_transformation.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';

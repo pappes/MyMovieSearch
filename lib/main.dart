@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:my_movie_search/app.dart';
 import 'package:my_movie_search/movies/blocs/bloc_parts/mm_search_observer.dart';
 import 'package:my_movie_search/movies/blocs/repositories/movie_search_repository.dart';

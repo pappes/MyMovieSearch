@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:my_movie_search/movies/screens/widgets/snack_drawer.dart';
 
 class AppScaffold extends StatelessWidget {
