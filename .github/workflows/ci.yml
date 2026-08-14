@@ -15,6 +15,17 @@ jobs:
         run: dart format --output=none --set-exit-if-changed .
       - name: Run Tests
         run: flutter test --coverage
+      - name: Install Linux Desktop Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            clang \
+            cmake \
+            ninja-build \
+            pkg-config \
+            libgtk-3-dev \
+            liblzma-dev \
+            libstdc++-12-dev
       - name: Build Linux Executable
         run: flutter build linux --release
         
