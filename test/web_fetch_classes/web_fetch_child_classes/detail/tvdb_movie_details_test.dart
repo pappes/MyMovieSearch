@@ -220,7 +220,10 @@ void main() {
           'https://api4.thetvdb.com/v4/movies/449/extended?short=true';
 
       // Invoke the functionality.
-      final actualResult = await testClass.myConstructURIAsync('tt0892318');
+      final actualResult = await testClass.myConstructURIAsync(
+        'tt0892318',
+        ciDefault: '449',
+      );
 
       // Check the results.
       expect(actualResult.toString(), startsWith(expected));
