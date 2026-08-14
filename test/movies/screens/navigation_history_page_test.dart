@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:my_movie_search/movies/screens/navigation_history_page.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
 import 'package:my_movie_search/persistence/session_nav_tree.dart';

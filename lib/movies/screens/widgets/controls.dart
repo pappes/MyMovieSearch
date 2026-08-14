@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_image_viewer/easy_image_viewer.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as material; // used by easy image viewer
+import 'package:material_ui/material_ui.dart';
 import 'package:my_movie_search/movies/models/movie_location.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/screens/styles.dart';
@@ -78,7 +79,7 @@ class Poster extends Widget {
   @override
   Element createElement() => _controls.createElement();
 
-  Future<Dialog?> _pinchToZoom() =>
+  Future<material.Dialog?> _pinchToZoom() =>
       showImageViewer(_context, NetworkImage(_bigUrl));
 }
 

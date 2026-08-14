@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:my_movie_search/movies/screens/settings_page.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';

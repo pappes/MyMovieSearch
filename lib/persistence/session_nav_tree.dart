@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
 import 'package:my_movie_search/utilities/navigation/route_info.dart';
 

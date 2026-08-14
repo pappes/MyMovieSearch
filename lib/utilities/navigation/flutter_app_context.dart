@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_custom_tabs/flutter_custom_tabs.dart' as tabs;
 import 'package:go_router/go_router.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:my_movie_search/movies/screens/popup.dart';
 import 'package:my_movie_search/utilities/navigation/app_context.dart';
 
