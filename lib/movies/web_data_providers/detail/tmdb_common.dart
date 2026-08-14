@@ -16,6 +16,7 @@ import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
 import 'package:universal_io/io.dart'
     show HttpClientResponse, HttpHeaders, HttpStatus;
+
 // limit inclusions to reduce size
 
 const tmdbPosterPathPrefix = 'https://image.tmdb.org/t/p/w500';

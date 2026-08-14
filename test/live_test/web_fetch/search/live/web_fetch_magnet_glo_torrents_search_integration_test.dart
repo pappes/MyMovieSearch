@@ -15,54 +15,48 @@ void main() {
   /// Integration tests
   ////////////////////////////////////////////////////////////////////////////////
 
-  group(
-    'live QueryGloTorrentsSearch test',
-    () {
-      // Search for a rare movie.
-      test(
-        'Run a search on GloTorrents that is likely to have static results',
-        () async {
-          final criteria = SearchCriteriaDTO().fromString('space');
-          final actualOutput = await QueryGloTorrentsSearch(
-            criteria,
-          ).readList(limit: 10);
-          actualOutput.clearCopyrightedData();
-
-          // Uncomment this line to update expectedOutput if sample data changes
-          // writeTestData(actualOutput);
-
-          // Check the results.
-          final expectedOutput = readTestData();
-          expect(
-            actualOutput,
-            MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),
-            reason:
-                'Emitted DTO list ${actualOutput.toPrintableString()} '
-                'needs to match expected DTO list '
-                '${expectedOutput.toPrintableString()}',
-          );
-        },
-      );
-      test('Run an empty search', () async {
-        final criteria = SearchCriteriaDTO().fromString(
-          'therearenoresultszzzz',
-        );
+  group('live QueryGloTorrentsSearch test', () {
+    // Search for a rare movie.
+    test(
+      'Run a search on GloTorrents that is likely to have static results',
+      () async {
+        final criteria = SearchCriteriaDTO().fromString('space');
         final actualOutput = await QueryGloTorrentsSearch(
           criteria,
         ).readList(limit: 10);
-        final expectedOutput = <MovieResultDTO>[];
+        actualOutput.clearCopyrightedData();
+
+        // Uncomment this line to update expectedOutput if sample data changes
+        // writeTestData(actualOutput);
 
         // Check the results.
+        final expectedOutput = readTestData();
         expect(
           actualOutput,
-          MovieResultDTOListMatcher(expectedOutput),
+          MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),
           reason:
               'Emitted DTO list ${actualOutput.toPrintableString()} '
               'needs to match expected DTO list '
               '${expectedOutput.toPrintableString()}',
         );
-      });
-    },
-    skip: 'Skip live test for now, as GloTorrents is down',
-  );
+      },
+    );
+    test('Run an empty search', () async {
+      final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
+      final actualOutput = await QueryGloTorrentsSearch(
+        criteria,
+      ).readList(limit: 10);
+      final expectedOutput = <MovieResultDTO>[];
+
+      // Check the results.
+      expect(
+        actualOutput,
+        MovieResultDTOListMatcher(expectedOutput),
+        reason:
+            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'needs to match expected DTO list '
+            '${expectedOutput.toPrintableString()}',
+      );
+    });
+  }, skip: 'Skip live test for now, as GloTorrents is down');
 }

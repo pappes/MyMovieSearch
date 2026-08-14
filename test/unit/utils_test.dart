@@ -139,15 +139,11 @@ Future<void> main() async {
     }
 
     // Ensure that stream can be observed multiple times and not cause issues.
-    test(
-      'printStream outputs the same stream',
-      () async {
-        const input = 'abc';
-        const output = 'abc';
-        await testPrint(input, output);
-      },
-      timeout: const Timeout(Duration(seconds: 5)),
-    );
+    test('printStream outputs the same stream', () async {
+      const input = 'abc';
+      const output = 'abc';
+      await testPrint(input, output);
+    }, timeout: const Timeout(Duration(seconds: 5)));
   });
 
   group('SteamHelper printStreamFuture', () {
@@ -173,15 +169,11 @@ Future<void> main() async {
     }
 
     // Ensure that stream can be observed multiple times and not cause issues.
-    test(
-      'printStream outputs the same stream',
-      () async {
-        const input = 'abc';
-        const output = 'abc';
-        await testPrint(input, output);
-      },
-      timeout: const Timeout(Duration(seconds: 5)),
-    );
+    test('printStream outputs the same stream', () async {
+      const input = 'abc';
+      const output = 'abc';
+      await testPrint(input, output);
+    }, timeout: const Timeout(Duration(seconds: 5)));
   });
 
   group('OnlineOfflineSelector', () {

@@ -9,6 +9,7 @@ import 'package:my_movie_search/utilities/web_data/headless_web_interceptor.dart
 import 'package:my_movie_search/utilities/web_data/http_method.dart';
 
 import 'headless_web_interceptor_test.mocks.dart';
+
 // To regenerate mocks run the following command
 // dart run build_runner build
 
