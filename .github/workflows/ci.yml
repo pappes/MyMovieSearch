@@ -10,7 +10,7 @@ jobs:
       - uses: subosito/flutter-action@v2
       - run: flutter pub get
       - name: Static Analysis
-        run: flutter analyze --fatal-infos --fatal-warnings
+        run: flutter analyze --options=analysis_options.yaml --fatal-infos --fatal-warnings
       - name: Formatting Check
         run: dart format --output=none --set-exit-if-changed .
       - name: Run Tests
