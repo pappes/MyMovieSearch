@@ -78,9 +78,9 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'bestSource': 'DataSourceType.gloTorrents',
-        'title': '[QueryGloTorrentsSearch] new query',
-        'type': 'MovieContentType.error',
+        'title': 'gloTorrents unavailable',
+        'type': 'MovieContentType.information',
+        'sources': {'DataSourceType.none': '-1'},
       };
 
       // Invoke the functionality.
@@ -248,13 +248,7 @@ void main() {
       // Set up the test data.
       final queryResult = <MovieResultDTO>[];
       final gloTorrentsSearch = QueryGloTorrentsSearch(criteria);
-      final expectedException =
-          '[QueryGloTorrentsSearch] Error in gloTorrents with criteria '
-          '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
-          'interpreting web text as a map :gloTorrents '
-          'results data not detected for criteria '
-          '${criteria.toPrintableIdOrText().toLowerCase()} in '
-          'html:not valid html';
+      const expectedException = 'gloTorrents unavailable';
 
       // Invoke the functionality.
       await gloTorrentsSearch
@@ -267,13 +261,7 @@ void main() {
     // and report error due to unexpected html.
     test('unexpected html contents', () async {
       // Set up the test data.
-      final expectedException =
-          '[QueryGloTorrentsSearch] Error in gloTorrents with criteria '
-          '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
-          'interpreting web text as a map :gloTorrents '
-          'results data not detected for criteria '
-          '${criteria.toPrintableIdOrText().toLowerCase()} in '
-          'html:<html><body>stuff</body></html>';
+      const expectedException = 'gloTorrents unavailable';
       final queryResult = <MovieResultDTO>[];
       final gloTorrentsSearch = QueryGloTorrentsSearch(criteria);
 

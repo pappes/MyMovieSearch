@@ -24,10 +24,9 @@ void main() {
       final actualOutput = await QueryMagnetDlSearch(
         criteria,
       ).readList(limit: 10);
-      actualOutput.clearCopyrightedData();
 
       // Uncomment this line to update expectedOutput if sample data changes
-      //writeTestData(actualOutput);
+      // writeTestData(actualOutput);
 
       // Check the results.
       final expectedOutput = readTestData();
@@ -39,7 +38,7 @@ void main() {
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
-    }, skip: true);
+    });
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
       final actualOutput = await QueryMagnetDlSearch(
@@ -57,5 +56,5 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
-  }, skip: true);
+  }, skip: skipLiveGroup());
 }

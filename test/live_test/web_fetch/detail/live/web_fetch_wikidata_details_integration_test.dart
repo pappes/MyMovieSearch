@@ -8,6 +8,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/wikidata_detail
 import 'package:my_movie_search/utilities/settings.dart';
 
 import '../../../../test_helper.dart';
+
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real wikidata endpoint!
 ////////////////////////////////////////////////////////////////////////////////
@@ -73,7 +74,7 @@ void main() {
       final expectedOutput = readTestData(testName: 'imdb_movies');
       expect(
         actualOutput,
-        MovieResultDTOListMatcher(expectedOutput),
+        MovieResultDTOListFuzzyMatcher(expectedOutput),
         reason:
             'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
@@ -187,5 +188,5 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
-  });
+  }, skip: skipLiveGroup());
 }

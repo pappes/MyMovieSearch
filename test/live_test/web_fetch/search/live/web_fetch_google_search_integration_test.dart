@@ -47,8 +47,6 @@ void main() {
       final criteria = SearchCriteriaDTO().init(
         .movieDTOList,
         list: [
-          //        "title": "Google Custom Search - tt37071105 OR tt6992922 OR tt10443084 OR tt4712840 OR tt4051886 OR tt2714072 OR tt2271733 OR tt2291131 OR tt0497374 OR tt4799686 OR tt0358864 OR tt2887856 OR tt2887828 
-          //OR tt1997772 ",
           MovieResultDTO().init(uniqueId: 'tt37071105'),
           MovieResultDTO().init(uniqueId: 'tt6992922'),
           MovieResultDTO().init(uniqueId: 'tt10443084'),
@@ -62,7 +60,7 @@ void main() {
           MovieResultDTO().init(uniqueId: 'tt0358864'),
           MovieResultDTO().init(uniqueId: 'tt2887856'),
           MovieResultDTO().init(uniqueId: 'tt2887828'),
-          MovieResultDTO().init(uniqueId: 'tt1997772')
+          MovieResultDTO().init(uniqueId: 'tt1997772'),
         ],
       );
       final actualOutput = await QueryGoogleMovies(criteria).readMultipleList();
@@ -120,5 +118,5 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
-  });
+  }, skip: skipLiveGroup());
 }

@@ -58,5 +58,5 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
-  });
+  }, skip: 'Skip live test for now, as GloTorrents is down');
 }

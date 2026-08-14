@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/data/movie_result_mappers.dart';
-import 'package:my_movie_search/movies/domain/models/move_result_comparison.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_comparison.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';

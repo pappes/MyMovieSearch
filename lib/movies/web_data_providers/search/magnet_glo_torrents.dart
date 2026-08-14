@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 import 'package:my_movie_search/movies/domain/models/search_criteria_formatting.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -61,8 +63,10 @@ class QueryGloTorrentsSearch
 
   /// Include entire map in the movie title when an error occurs.
   @override
-  MovieResultDTO myYieldError(String message) =>
-      MovieResultDTO().error('[QueryGloTorrentsSearch] $message', .gloTorrents);
+  MovieResultDTO myYieldError(String message) => MovieResultDTO().init(
+    type: MovieContentType.information.name,
+    title: 'gloTorrents unavailable',
+  );
 
   /// API call to search
   /// returning the top matching results for [encodedCriteria].

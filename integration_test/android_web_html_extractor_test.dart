@@ -42,9 +42,8 @@ void main() async {
     await InAppWebViewController.setWebContentsDebuggingEnabled(true);
   }
 
-  testWidgets(
-    'Use real HttpClient to baseline test results',
-    (tester) async {
+  group('live android html test', () {
+    testWidgets('Use real HttpClient to baseline test results', (tester) async {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
@@ -59,13 +58,9 @@ void main() async {
 
       expect(htmlData, isEmpty);
       expect(statusCode, HttpStatus.accepted);
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-  );
+    }, timeout: const Timeout(Duration(seconds: 60)));
 
-  testWidgets(
-    'WebHtmlExtractor low level class',
-    (tester) async {
+    testWidgets('WebHtmlExtractor low level class', (tester) async {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
@@ -88,38 +83,36 @@ void main() async {
           'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
         ),
       );
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-  );
+    }, timeout: const Timeout(Duration(seconds: 60)));
 
-  testWidgets(
-    'HeadlessHttpClientRequest as replacement for HttpClientRequest',
-    (tester) async {
-      await tester.pumpWidget(const MyApp());
-      await tester.pumpAndSettle();
+    testWidgets(
+      'HeadlessHttpClientRequest as replacement for HttpClientRequest',
+      (tester) async {
+        await tester.pumpWidget(const MyApp());
+        await tester.pumpAndSettle();
 
-      final adapter = HeadlessHttpClientRequest(
-        'https://www.imdb.com/name/nm0000149/',
-      );
-      final htmlStream = await adapter.getHtmlStream();
-      final htmlData = await htmlStream.join();
-      await adapter.close();
+        final adapter = HeadlessHttpClientRequest(
+          'https://www.imdb.com/name/nm0000149/',
+        );
+        final htmlStream = await adapter.getHtmlStream();
+        final htmlData = await htmlStream.join();
+        await adapter.close();
 
-      expect(htmlData, isNotNull);
-      expect(
-        htmlData,
-        contains(
-          '<script id="__NEXT_DATA__" '
-          'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
-        ),
-      );
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-  );
+        expect(htmlData, isNotNull);
+        expect(
+          htmlData,
+          contains(
+            '<script id="__NEXT_DATA__" '
+            'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
+          ),
+        );
+      },
+      timeout: const Timeout(Duration(seconds: 60)),
+    );
 
-  testWidgets(
-    'HeadlessHttpClient for a movie as replacement for HttpClient',
-    (tester) async {
+    testWidgets('HeadlessHttpClient for movie as replacement for HttpClient', (
+      tester,
+    ) async {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
@@ -141,38 +134,34 @@ void main() async {
           'type="application/json">{"props":{"pageProps":{"contentData":{"entityMetadata":{"id":"tt0105236',
         ),
       );
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-  );
+    }, timeout: const Timeout(Duration(seconds: 60)));
 
-  testWidgets('WebHtmlSychroniser', (tester) async {
-    await tester.pumpWidget(const MyApp());
-    await tester.pumpAndSettle();
+    testWidgets('WebHtmlSychroniser', (tester) async {
+      await tester.pumpWidget(const MyApp());
+      await tester.pumpAndSettle();
 
-    Future<String> getHtml(String url) async {
-      await warmUpHeadlessEngine();
-      final htmlData = await WebHtmlSychroniser(url).getHtml();
-      if (htmlData.isEmpty) {
-        return 'noresults';
+      Future<String> getHtml(String url) async {
+        await warmUpHeadlessEngine();
+        final htmlData = await WebHtmlSychroniser(url).getHtml();
+        if (htmlData.isEmpty) {
+          return 'noresults';
+        }
+        return htmlData.first;
       }
-      return htmlData.first;
-    }
 
-    final htmlOutput = await getHtml('https://www.imdb.com/name/nm0000149/');
+      final htmlOutput = await getHtml('https://www.imdb.com/name/nm0000149/');
 
-    expect(htmlOutput, isNotNull);
-    expect(
-      htmlOutput,
-      contains(
-        '<script id="__NEXT_DATA__" '
-        'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
-      ),
-    );
-  }, timeout: const Timeout(Duration(seconds: 60)));
+      expect(htmlOutput, isNotNull);
+      expect(
+        htmlOutput,
+        contains(
+          '<script id="__NEXT_DATA__" '
+          'type="application/json">{"props":{"pageProps":{"nmconst":"nm0000149"',
+        ),
+      );
+    }, timeout: const Timeout(Duration(seconds: 60)));
 
-  testWidgets(
-    'WebHtmlSychroniser on non-UI thread',
-    (tester) async {
+    testWidgets('WebHtmlSychroniser on non-UI thread', (tester) async {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
@@ -190,7 +179,6 @@ void main() async {
         () => otherThread.run(getHtml, 'https://www.imdb.com/name/nm0000149/'),
         throwsA(isA<AssertionError>()),
       );
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-  );
+    }, timeout: const Timeout(Duration(seconds: 60)));
+  }, skip: skipLiveGroup(isImdb: true));
 }

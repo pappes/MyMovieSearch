@@ -6,6 +6,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_movie_deta
 import 'package:my_movie_search/utilities/settings.dart';
 
 import '../../../../test_helper.dart';
+
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real TMDB endpoint!
 ////////////////////////////////////////////////////////////////////////////////
@@ -37,7 +38,7 @@ void main() {
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
-    });
+    }, skip: skipLiveTest());
     // Convert 500 TMDB pages into dtos.
     test('Run read 500 pages from TMDB', () async {
       final actualOutput = await executeMultipleFetches(
@@ -58,7 +59,7 @@ void main() {
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
-    });
+    }, skip: skipLiveTest());
     test('Run an IMDBid search', () async {
       final criteria = SearchCriteriaDTO().fromString('tt2724064');
       final actualOutput = await QueryTMDBMovieDetails(
@@ -78,7 +79,7 @@ void main() {
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
-    });
+    }, skip: skipLiveTest());
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('0');
       final actualOutput = await QueryTMDBMovieDetails(
@@ -100,5 +101,5 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
-  });
+  }, skip: skipLiveGroup());
 }

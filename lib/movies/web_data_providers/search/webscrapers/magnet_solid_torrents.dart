@@ -8,10 +8,14 @@ import 'package:my_movie_search/movies/web_data_providers/search/magnet_solid_to
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_fetch.dart';
 
+const tableSelector = '.space-y-4 > .bg-white';
 const magnetSelector = "[href^='magnet:']";
-const nameSelector = '.title';
-const categorySelector = '.category';
-const detailSelector = '.stats';
+const nameSelector = 'h1, h2, h3, h4, h5, h6, h7';
+const categorySelector = '.fa-file';
+const sizeSelector = '.fa-download';
+const seedsSelector = '.fa-arrow-up';
+const leechersSelector = '.fa-arrow-down';
+//const detailSelector = '.stats';
 
 /// Implements [WebFetchBase] for the SolidTorrents search html web scraper.
 ///
@@ -46,7 +50,7 @@ mixin ScrapeSolidTorrentsSearch
 
   /// extract each row from the table.
   void _scrapeWebPage(Document document) {
-    final rows = document.querySelectorAll('li');
+    final rows = document.querySelectorAll(tableSelector);
     for (final row in rows) {
       validPage = true;
       _processRow(row);
@@ -56,27 +60,34 @@ mixin ScrapeSolidTorrentsSearch
   /// Collect webpage text to construct a map of the movie data.
   void _processRow(Element row) {
     final result = <String, Object?>{};
-    final details = row.querySelectorAll(detailSelector);
-    if (details.isNotEmpty) {
-      final stats = details.first;
-      if (5 == stats.children.length) {
-        result[jsonDescriptionKey] = stats.cleanText;
-        result[jsonCategoryKey] = row
-            .querySelector(categorySelector)
-            ?.cleanText;
-        result[jsonMagnetKey] = MagnetHelper.addTrackers(
-          row.querySelector(magnetSelector)?.attributes['href'],
-        );
-        result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;
-        result[jsonSeedersKey] = stats.children[2].cleanText;
-        result[jsonLeechersKey] = stats.children[3].cleanText;
+    result[jsonDescriptionKey] = row
+        .querySelector(sizeSelector)
+        ?.nextElementSibling
+        ?.cleanText;
+    result[jsonCategoryKey] = row
+        .querySelector(categorySelector)
+        ?.nextElementSibling
+        ?.cleanText;
+    result[jsonMagnetKey] = MagnetHelper.addTrackers(
+      row.querySelector(magnetSelector)?.attributes['href'],
+    );
+    result[jsonNameKey] = row.querySelector(nameSelector)?.cleanText;
+    result[jsonSeedersKey] = row
+        .querySelector(seedsSelector)
+        ?.nextElementSibling
+        ?.cleanText;
+    result[jsonLeechersKey] = row
+        .querySelector(leechersSelector)
+        ?.nextElementSibling
+        ?.cleanText;
 
-        if (result[jsonMagnetKey]!.toString().isNotEmpty &&
-            result[jsonNameKey]!.toString().isNotEmpty &&
-            result[jsonSeedersKey]!.toString().isNotEmpty) {
-          movieData.add(result);
-        }
-      }
+    if (result[jsonMagnetKey] != null &&
+        result[jsonNameKey] != null &&
+        result[jsonSeedersKey] != null &&
+        result[jsonMagnetKey]!.toString().isNotEmpty &&
+        result[jsonNameKey]!.toString().isNotEmpty &&
+        result[jsonSeedersKey]!.toString().isNotEmpty) {
+      movieData.add(result);
     }
   }
 }

@@ -64,6 +64,34 @@ class MagnetHelper {
     return noMatch;
   }
 
+  /// Create a magnet url from a hash, name, and trackers.
+  static String? createMagnet(String? hash, [String? name, String? trackers]) {
+    // e.g. hash:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7
+    // plus new name = (great movie) 2001: A Space Odyssey (1968)
+    // plus &tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce
+    // becomes
+    // magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=(great%20movie)%202001%3A%20A%20Space%20Odyssey%20%281968%29%20%5B1080p%5D%20%5BYTS.BZ%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce
+    if (null == hash || hash.isEmpty) {
+      return null;
+    }
+
+    final magnetParts = <String>['$magnetFragment1$hash'];
+
+    if (null != name && name.isNotEmpty) {
+      magnetParts.add('$magnetName${Uri.encodeComponent(name)}');
+    }
+
+    if (null != trackers && trackers.isNotEmpty) {
+      for (final tracker in trackers.split('&')) {
+        if (tracker.startsWith('tr=')) {
+          magnetParts.add(tracker);
+        }
+      }
+    }
+
+    return addTrackers(magnetParts.join('&'));
+  }
+
   /// Set the name in a magnet url.
   static String? setName(String? name, String? magnet) {
     // e.g. magnet:?xt=urn:btih:A2A78568F4CC7873E9E0088DDE28FA9D9976ACC7&dn=2001%3A+A+Space+Odyssey+%281968%29+%5B1080p%5D+%5BYTS.BZ%5D&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce

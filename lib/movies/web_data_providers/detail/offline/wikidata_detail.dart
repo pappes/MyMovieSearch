@@ -275,7 +275,8 @@ final Map<String, Object> jsonPerson = {
         'enwiki': {
           'site': 'enwiki',
           'title': 'Tara Reid',
-          'url': 'https://en.wikipedia.org/wiki/Tara_Reid',
+          'badges': <dynamic>[],
+          'url_not_used_anymore': 'https://en.wikipedia.org/wiki/Tara_Reid',
         },
       },
     },

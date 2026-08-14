@@ -1,6 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/persistence/google_compute.dart';
 
+import '../../integration_test/test_helper.dart';
+
 void main() {
   group('GCP', () {
     test('startSearchEngine should start the VM instance', () async {
@@ -26,5 +28,5 @@ void main() {
         expect(started, false);
       },
     );
-  });
+  }, skip: skipLiveGroup());
 }

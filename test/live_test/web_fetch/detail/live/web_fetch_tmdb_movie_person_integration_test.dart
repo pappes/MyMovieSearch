@@ -7,6 +7,7 @@ import 'package:my_movie_search/movies/web_data_providers/detail/tmdb_person_det
 import 'package:my_movie_search/utilities/settings.dart';
 
 import '../../../../test_helper.dart';
+
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real TMDB endpoint!
 ////////////////////////////////////////////////////////////////////////////////
@@ -88,5 +89,5 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
-  });
+  }, skip: skipLiveGroup());
 }

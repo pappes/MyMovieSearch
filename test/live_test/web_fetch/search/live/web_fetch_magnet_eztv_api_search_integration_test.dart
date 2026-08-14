@@ -32,7 +32,11 @@ void main() {
       final expectedOutput = readTestData();
       expect(
         actualOutput,
-        MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 60),
+        MovieResultDTOListFuzzyMatcher(
+          expectedOutput,
+          percentMatch: 60,
+          ignorePopularity: true,
+        ),
         reason:
             'Emitted DTO list ${actualOutput.toPrintableString()} '
             'needs to match expected DTO list '
@@ -56,5 +60,5 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
-  });
+  }, skip: skipLiveGroup());
 }

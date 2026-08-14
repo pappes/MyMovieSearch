@@ -27,12 +27,13 @@ class QuerySolidTorrentsSearch
     with ScrapeSolidTorrentsSearch {
   QuerySolidTorrentsSearch(super.criteria);
 
+  // Atomatically redirects to https://bitsearch.eu/search?q=
   static const _baseURL = 'https://solidtorrents.to/search?q=';
   static const _pageURL = '&sort=seeders&page=';
 
   /// Describe where the data is coming from.
   @override
-  String myDataSourceName() => DataSourceType.solidTorrents.name;
+  String myDataSourceName() => DataSourceType.solidTorrentsBitsearch.name;
 
   /// Static snapshot of data for offline operation.
   /// Does not filter data based on criteria.
@@ -60,7 +61,7 @@ class QuerySolidTorrentsSearch
   @override
   MovieResultDTO myYieldError(String message) => MovieResultDTO().error(
     '[QuerySolidTorrentsSearch] $message',
-    .solidTorrents,
+    .solidTorrentsBitsearch,
   );
 
   /// API call to search

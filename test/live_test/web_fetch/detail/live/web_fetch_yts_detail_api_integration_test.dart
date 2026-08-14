@@ -65,17 +65,25 @@ void main() {
     test('Run read 3 torrents from YTS', () async {
       final queries = _makeQueries(3);
       final actualOutput = await _testRead(queries);
+      const regexScheme = 'https?://'; // http or https
+      const regexDomain = r'[^/\s]+'; // domain up until first slash e.g. yts.gg
+      final urlRegex = RegExp('$regexScheme$regexDomain');
+
+      final jsonOuput = actualOutput.toJson();
+      final normalisedOutput = jsonOuput
+          .replaceAll(urlRegex, 'https://yts.mx')
+          .jsonToList();
 
       // To update expected data, uncomment the following lines
-      // writeTestData(actualOutput);
+      // writeTestData(normalisedOutput);
 
       // Check the results.
       final expectedOutput = readTestData();
       expect(
-        actualOutput,
+        normalisedOutput,
         MovieResultDTOListFuzzyMatcher(expectedOutput, percentMatch: 50),
         reason:
-            'Emitted DTO list ${actualOutput.toPrintableString()} '
+            'Emitted DTO list ${normalisedOutput.toPrintableString()} '
             'needs to match expected DTO list '
             '${expectedOutput.toPrintableString()}',
       );
@@ -96,7 +104,7 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
-  });
+  }, skip: skipLiveGroup());
 }
 
 /// Create a string list with [qty] unique criteria values.

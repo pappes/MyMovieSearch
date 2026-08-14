@@ -11,7 +11,7 @@ class SolidTorrentsSearchConverter {
     Map<Object?, Object?> map,
   ) => [
     MovieResultDTO().init(
-      bestSource: .solidTorrents,
+      bestSource: .solidTorrentsBitsearch,
       type: MovieContentType.download.toString(),
       uniqueId: map[jsonMagnetKey]?.toString(),
       title: map[jsonNameKey]?.toString(),

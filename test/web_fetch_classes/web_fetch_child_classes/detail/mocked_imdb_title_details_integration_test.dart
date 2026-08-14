@@ -261,15 +261,11 @@ void main() {
     });
 
     // Convert 300 IMDB pages into dtos!!!
-    test(
-      'Run read 300 pages from mocked IMDB',
-      () async {
-        const startId = 5000;
-        final queries = _makeQueries(startId, 300);
-        final queryResult = _makeDTOs(startId, queries.length);
-        await testRead(queries, queryResult);
-      },
-      timeout: const Timeout(Duration(seconds: 40)),
-    );
+    test('Run read 300 pages from mocked IMDB', () async {
+      const startId = 5000;
+      final queries = _makeQueries(startId, 300);
+      final queryResult = _makeDTOs(startId, queries.length);
+      await testRead(queries, queryResult);
+    }, timeout: const Timeout(Duration(seconds: 40)));
   });
 }

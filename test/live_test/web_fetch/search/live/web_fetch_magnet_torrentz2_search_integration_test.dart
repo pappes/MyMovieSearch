@@ -27,7 +27,6 @@ void main() {
         final actualOutput = await QueryTorrentz2Search(
           criteria,
         ).readList(limit: 10);
-        actualOutput.clearCopyrightedData();
 
         // Uncomment this line to update expectedOutput if sample data changes
         // writeTestData(actualOutput);
@@ -43,7 +42,6 @@ void main() {
               '${expectedOutput.toPrintableString()}',
         );
       },
-      skip: true,
     );
     test('Run an empty search', () async {
       final criteria = SearchCriteriaDTO().fromString('therearenoresultszzzz');
@@ -62,5 +60,5 @@ void main() {
             '${expectedOutput.toPrintableString()}',
       );
     });
-  }, skip: true);
+  }, skip: skipLiveGroup());
 }

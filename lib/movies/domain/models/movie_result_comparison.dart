@@ -440,10 +440,29 @@ extension DTOCompare on MovieResultDTO {
     T actual,
     T expected, {
     bool fuzzy = false,
+    bool allowExtra = false,
   }) {
     if (fuzzy && (actual is num || expected is num)) {
       _matchFuzzyCompare(mismatches, fieldName, actual as num, expected as num);
     } else {
+      if (actual is Iterable && expected is Iterable) {
+        return _matchCompareIterable(
+          mismatches,
+          fieldName,
+          actual,
+          expected,
+          allowExtra: allowExtra,
+        );
+      }
+      if (actual is Map && expected is Map) {
+        return _matchCompareIterable(
+          mismatches,
+          fieldName,
+          actual.entries,
+          expected.entries,
+          allowExtra: allowExtra,
+        );
+      }
       if (expected != actual) {
         mismatches[fieldName] =
             'is different\n  Expected: "$expected"\n    Actual: "$actual"\n';
@@ -465,6 +484,39 @@ extension DTOCompare on MovieResultDTO {
             '  Expected approx: "$expected"\n'
             '           Actual: "$actual"\n';
       }
+    }
+  }
+
+  /// Compare 2 iterables and describe the difference.
+  ///
+  /// Allow extra items in the actual iterable.
+  void _matchCompareIterable<T, U>(
+    Map<String, String> mismatches,
+    String fieldName,
+    Iterable<T> actual,
+    Iterable<U> expected, {
+    bool allowExtra = false,
+  }) {
+    final mismatch = StringBuffer();
+    if (expected.length != actual.length && !allowExtra) {
+      mismatch.write(
+        'is different\n  Expected length: "${expected.length}"\n'
+        '           Actual length: "${actual.length}"\n',
+      );
+    }
+    // Convert Iteratble<T> to iterable<String> for comparison.
+    final actualStrings = actual.map((e) => e.toString());
+    final expectedStrings = expected.map((e) => e.toString());
+    for (final item in expectedStrings) {
+      if (!actualStrings.contains(item)) {
+        mismatch.write(
+          'is missing a value\n  Expected contains: $item\n'
+          '             Actual: $actualStrings\n',
+        );
+      }
+    }
+    if (mismatch.isNotEmpty) {
+      mismatches[fieldName] = mismatch.toString();
     }
   }
 
@@ -527,19 +579,34 @@ extension DTOCompare on MovieResultDTO {
     Map<Object?, Object?>? matchState,
     bool related = true,
     bool fuzzy = false,
+    bool ignorePopularity = false,
+    bool allowExtraWebsites = false,
     String prefix = '',
   }) {
     if (title == actualDTO.title && title == 'unknown') return true;
 
     final mismatches = <String, String>{};
-    void matchCompare<T>(String fieldName, T actual, T expected) =>
-        _matchCompare(
-          mismatches,
-          '$prefix$fieldName',
-          actual,
-          expected,
-          fuzzy: fuzzy,
-        );
+    void matchCompare<T>(
+      String fieldName,
+      T actual,
+      T expected, {
+      bool allowExtra = false,
+    }) => _matchCompare(
+      mismatches,
+      '$prefix$fieldName',
+      actual,
+      expected,
+      fuzzy: fuzzy,
+      allowExtra: allowExtra,
+    );
+    void popularityCompare(String fieldName, num actual, num expected) {
+      if (ignorePopularity) return;
+      if (actual > 0 && expected > 0) {
+        // We have a value, we dont care what the value is.
+        return;
+      }
+      return matchCompare(fieldName, actual, expected);
+    }
 
     /// Compare 2 identifiers and store a description of the difference.
     ///
@@ -567,14 +634,19 @@ extension DTOCompare on MovieResultDTO {
     matchCompare('description', actualDTO.description, description);
     matchCompare('type', actualDTO.type, type);
     matchCompare('year', actualDTO.year, year);
-    matchCompare('creditsOrder', actualDTO.creditsOrder, creditsOrder);
     matchCompare('yearRange', actualDTO.yearRange, yearRange);
     matchCompare('censorRating', actualDTO.censorRating, censorRating);
     matchCompare('runTime', actualDTO.runTime, runTime);
     matchCompare('imageUrl', actualDTO.imageUrl, imageUrl);
     matchCompare('language', actualDTO.language, language);
+    popularityCompare(
+      'userRatingCount',
+      actualDTO.userRatingCount,
+      userRatingCount,
+    );
+    popularityCompare('creditsOrder', actualDTO.creditsOrder, creditsOrder);
     if (!fuzzy) {
-      matchCompare('userRating', actualDTO.userRating, userRating);
+      popularityCompare('userRating', actualDTO.userRating, userRating);
     }
     matchCompare(
       'languages',
@@ -587,7 +659,12 @@ extension DTOCompare on MovieResultDTO {
       actualDTO.keywords.toString(),
       keywords.toString(),
     );
-    matchCompare('links', actualDTO.links.toString(), links.toString());
+    matchCompare(
+      'links',
+      actualDTO.links,
+      links,
+      allowExtra: allowExtraWebsites,
+    );
 
     if (related) {
       final expected = this.related.toPrintableString();

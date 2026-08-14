@@ -23,13 +23,10 @@ mixin ScrapeIMDBSearchDetails
   @override
   Future<List<Object?>> myConvertWebTextToTraversableTree(
     String webText,
-    // Use async to defer expensive processing until needed.
-    // ignore: unnecessary_async
   ) async {
     try {
       final json = fastParse(webText);
-      final result = _scrapeSearchResult(webText, json);
-      return result;
+      return await _scrapeSearchResult(webText, json);
     } on FastParseException {
       return _slowConvertWebTextToTraversableTree(webText);
     }

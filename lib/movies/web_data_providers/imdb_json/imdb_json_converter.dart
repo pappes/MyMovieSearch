@@ -1,4 +1,4 @@
-import 'package:my_movie_search/movies/domain/models/move_result_comparison.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_comparison.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 import 'package:my_movie_search/movies/models/metadata_dto.dart';

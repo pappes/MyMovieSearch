@@ -32,7 +32,7 @@ enum DataSourceType {
   magnetDl,
   eztv,
   eztvApi,
-  solidTorrents,
+  solidTorrentsBitsearch,
   torrentDownloadDetail,
   torrentDownloadSearch,
   torrentz2,

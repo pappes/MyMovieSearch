@@ -31,7 +31,7 @@ void main() {
     test('Run myDataSourceName()', () {
       expect(
         QuerySolidTorrentsSearch(criteria).myDataSourceName(),
-        'solidTorrents',
+        'solidTorrentsBitsearch',
       );
     });
 
@@ -78,7 +78,7 @@ void main() {
     // Confirm error is constructed as expected.
     test('Run myYieldError()', () {
       const expectedResult = {
-        'bestSource': 'DataSourceType.solidTorrents',
+        'bestSource': 'DataSourceType.solidTorrentsBitsearch',
         'title': '[QuerySolidTorrentsSearch] new query',
         'type': 'MovieContentType.error',
       };
@@ -249,10 +249,10 @@ void main() {
       final queryResult = <MovieResultDTO>[];
       final solidTorrentsSearch = QuerySolidTorrentsSearch(criteria);
       final expectedException =
-          '[QuerySolidTorrentsSearch] Error in solidTorrents with criteria '
-          '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
-          'interpreting web text as a map :SolidTorrents '
-          'results data not detected for criteria '
+          '[QuerySolidTorrentsSearch] Error in solidTorrentsBitsearch '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} '
+          'convert error interpreting web text as a map '
+          ':SolidTorrents results data not detected for criteria '
           '${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:not valid html';
 
@@ -268,10 +268,10 @@ void main() {
     test('unexpected html contents', () async {
       // Set up the test data.
       final expectedException =
-          '[QuerySolidTorrentsSearch] Error in solidTorrents with criteria '
-          '${criteria.toPrintableIdOrText().toLowerCase()} convert error '
-          'interpreting web text as a map :SolidTorrents '
-          'results data not detected for criteria '
+          '[QuerySolidTorrentsSearch] Error in solidTorrentsBitsearch '
+          'with criteria ${criteria.toPrintableIdOrText().toLowerCase()} '
+          'convert error interpreting web text as a map '
+          ':SolidTorrents results data not detected for criteria '
           '${criteria.toPrintableIdOrText().toLowerCase()} in '
           'html:<html><body>stuff</body></html>';
       final queryResult = <MovieResultDTO>[];

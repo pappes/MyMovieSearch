@@ -833,51 +833,43 @@ void main() {
     }, timeout: const Timeout(Duration(seconds: 5)));
 
     //override myConvertWebTextToTraversableTree to encapsulate errors
-    test(
-      'child function generic exception handling',
-      () async {
-        final testClass = QueryUnknownSourceMocked(criteriaDto)
-          ..overriddenConvertWebTextToTraversableTree = (_) =>
-              throw Exception('Search Failed');
-        final actualOutput = testClass.baseConvertWebTextToTraversableTree(
-          Stream.fromIterable(['Part1', 'Part2']),
-        );
+    test('child function generic exception handling', () async {
+      final testClass = QueryUnknownSourceMocked(criteriaDto)
+        ..overriddenConvertWebTextToTraversableTree = (_) =>
+            throw Exception('Search Failed');
+      final actualOutput = testClass.baseConvertWebTextToTraversableTree(
+        Stream.fromIterable(['Part1', 'Part2']),
+      );
 
-        await expectLater(
-          actualOutput,
-          emitsError(
-            'Error in QueryUnknownSourceMocked with criteria'
-            ' ${criteriaDto.criteriaTitle} '
-            'non-confomant baseConvertWebTextToTraversableTree '
-            'error interpreting web text as a map :Exception: Search Failed',
-          ),
-        );
-      },
-      timeout: const Timeout(Duration(seconds: 5)),
-    );
+      await expectLater(
+        actualOutput,
+        emitsError(
+          'Error in QueryUnknownSourceMocked with criteria'
+          ' ${criteriaDto.criteriaTitle} '
+          'non-confomant baseConvertWebTextToTraversableTree '
+          'error interpreting web text as a map :Exception: Search Failed',
+        ),
+      );
+    }, timeout: const Timeout(Duration(seconds: 5)));
 
     //override myConvertWebTextToTraversableTree to encapsulate errors
-    test(
-      'child function WebConvertException exception handling',
-      () async {
-        final testClass = QueryUnknownSourceMocked(criteriaDto)
-          ..overriddenConvertWebTextToTraversableTree = (_) =>
-              throw WebConvertException('Search Failed');
-        final actualOutput = testClass.baseConvertWebTextToTraversableTree(
-          Stream.fromIterable(['Part1', 'Part2']),
-        );
+    test('child function WebConvertException exception handling', () async {
+      final testClass = QueryUnknownSourceMocked(criteriaDto)
+        ..overriddenConvertWebTextToTraversableTree = (_) =>
+            throw WebConvertException('Search Failed');
+      final actualOutput = testClass.baseConvertWebTextToTraversableTree(
+        Stream.fromIterable(['Part1', 'Part2']),
+      );
 
-        await expectLater(
-          actualOutput,
-          emitsError(
-            'Error in QueryUnknownSourceMocked with criteria '
-            '${criteriaDto.criteriaTitle} '
-            'convert error interpreting web text as a map :Search Failed',
-          ),
-        );
-      },
-      timeout: const Timeout(Duration(seconds: 5)),
-    );
+      await expectLater(
+        actualOutput,
+        emitsError(
+          'Error in QueryUnknownSourceMocked with criteria '
+          '${criteriaDto.criteriaTitle} '
+          'convert error interpreting web text as a map :Search Failed',
+        ),
+      );
+    }, timeout: const Timeout(Duration(seconds: 5)));
 
     //override myConvertWebTextToTraversableTree to encapsulate errors
     test('stream exception handling', () async {
@@ -1020,24 +1012,19 @@ void main() {
         ),
       );
     }, timeout: const Timeout(Duration(seconds: 5)));
-    test(
-      'WebFetchException exception handling',
-      () async {
-        final testClass = QueryUnknownSourceMocked(criteriaDto)
-          ..selectedDataSource = (_) =>
-              throw WebFetchException('Convert Failed');
-        final actualOutput = testClass.baseConvertCriteriaToWebText();
-        await expectLater(
-          actualOutput,
-          emitsError(
-            'Error in QueryUnknownSourceMocked with criteria '
-            '${criteriaDto.criteriaTitle} '
-            'fetching web text chunks :Convert Failed',
-          ),
-        );
-      },
-      timeout: const Timeout(Duration(seconds: 5)),
-    );
+    test('WebFetchException exception handling', () async {
+      final testClass = QueryUnknownSourceMocked(criteriaDto)
+        ..selectedDataSource = (_) => throw WebFetchException('Convert Failed');
+      final actualOutput = testClass.baseConvertCriteriaToWebText();
+      await expectLater(
+        actualOutput,
+        emitsError(
+          'Error in QueryUnknownSourceMocked with criteria '
+          '${criteriaDto.criteriaTitle} '
+          'fetching web text chunks :Convert Failed',
+        ),
+      );
+    }, timeout: const Timeout(Duration(seconds: 5)));
   });
 
   group('WebFetchBase mocked baseFetchWebText unit tests', () {

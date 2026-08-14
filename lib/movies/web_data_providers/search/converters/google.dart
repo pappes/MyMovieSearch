@@ -1,7 +1,7 @@
 // Helper to convert Google movie search results.
 // ignore_for_file: avoid_classes_with_only_static_members
 
-import 'package:my_movie_search/movies/domain/models/move_result_comparison.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_comparison.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -64,8 +64,8 @@ class GoogleMovieSearchConverter {
       }
       for (final movie in map[outerElementResultsCollection] as Iterable) {
         movie as Map;
-        // Prefer main page over child pages. 
-        // Child pages are reviews, fullcredits, trivia, 
+        // Prefer main page over child pages.
+        // Child pages are reviews, fullcredits, trivia,
         // locations, plotsummary, etc.
         if (isImdbChildPage(movie)) {
           otherResults.add(_dtoFromMap(movie));

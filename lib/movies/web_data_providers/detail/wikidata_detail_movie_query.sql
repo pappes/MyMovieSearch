@@ -116,6 +116,7 @@ SELECT
   (SAMPLE(?plexURL) AS ?plexLink)
   (SAMPLE(?ratingGraphURL) AS ?ratingGraphLink)
   (SAMPLE(?tvMazeURL) AS ?tvMazeLink)
+  (SAMPLE(?enWikiURL) AS ?enWikipediaLink)
   
 
 
@@ -132,6 +133,13 @@ WHERE {
 OPTIONAL {
 ?movie rdfs:label ?movieLabel.
 FILTER(LANG(?movieLabel) = "en")
+}
+
+# Fetch English Wikipedia Article URL
+OPTIONAL {
+  ?enWikiURI schema:about ?movie ;
+              schema:isPartOf <https://en.wikipedia.org/> .
+  BIND(REPLACE(STR(?enWikiURI), " ", "_") AS ?enWikiURL)
 }
   
 # IDENTIFY TYPE: Check if its a Movie or TV Series for path logic

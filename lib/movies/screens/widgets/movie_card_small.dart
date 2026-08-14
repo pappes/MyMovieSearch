@@ -107,12 +107,14 @@ class MovieTile extends ListTile {
       case .custom:
       case .navigation:
         start.add(movie.runTime.toFormattedTime());
-        middle.add(movie.censorRating.excludeNone);
-        middle.add(movie.type.name);
-        middle.add(movie.userRating.toString());
-        middle.add(ratingCount);
-        end.add(movie.alternateTitle);
-        end.add(movie.characterName);
+        middle
+          ..add(movie.censorRating.excludeNone)
+          ..add(movie.type.name)
+          ..add(movie.userRating.toString())
+          ..add(ratingCount);
+        end
+          ..add(movie.alternateTitle)
+          ..add(movie.characterName);
     }
     final combined = [
       ...start,

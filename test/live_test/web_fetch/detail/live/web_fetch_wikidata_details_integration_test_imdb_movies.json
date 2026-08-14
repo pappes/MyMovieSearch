@@ -27,7 +27,7 @@
     "description": "2022 film",
     "bestSource": "DataSourceType.wikidataDetail",
     "type": "MovieContentType.movie",
-    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/1013126\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/the_fence\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/6120ccb5898ddd002ca9edb5\"}",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/1013126\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/the_fence\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/6120ccb5898ddd002ca9edb5\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/350936\"}",
     "sources": {
       "DataSourceType.wikidataDetail": "tt15253488"
     }
@@ -49,7 +49,7 @@
     "description": "2025 film directed by Timo Tjahjanto",
     "bestSource": "DataSourceType.wikidataDetail",
     "type": "MovieContentType.movie",
-    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/1007734\",\"Metacritic\":\"https://www.metacritic.com/movie/nobody-2\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/nobody_2\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film323354.html\",\"YouTube\":\"https://www.youtube.com/watch?v=5X2pt95cIo\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/64fdc3a5732dc8989ba96acb\"}",
+    "links": "{\"TMDB\":\"https://www.themoviedb.org/movie/1007734\",\"Metacritic\":\"https://www.metacritic.com/movie/nobody-2\",\"Rotten Tomatoes\":\"https://www.rottentomatoes.com/m/nobody_2\",\"FilmAffinity\":\"https://www.filmaffinity.com/en/film323354.html\",\"YouTube\":\"https://www.youtube.com/watch?v=5X2pt95cIo\",\"Plex\":\"https://app.plex.tv/desktop/#!/provider/tv.plex.provider.metadata/details?key=/library/metadata/64fdc3a5732dc8989ba96acb\",\"TVDB\":\"https://thetvdb.com/dereferrer/movie/357496\"}",
     "sources": {
       "DataSourceType.wikidataDetail": "tt28996126"
     }

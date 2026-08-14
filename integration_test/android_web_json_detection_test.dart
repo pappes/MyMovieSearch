@@ -5,6 +5,8 @@ import 'package:my_movie_search/utilities/app_logger.dart';
 import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/web_json_extractor.dart';
 
+import 'test_helper.dart';
+
 ////////////////////////////////////////////////////////////////////////////////
 /// Read from real IMDB endpoint!
 ///     WebJsonExtractor uses a HeadlessInAppWebView
@@ -79,9 +81,10 @@ void main() {
   // Ensure the platform bindings are initialized for the integration test.
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets(
-    'Extract json from imdb for person filmography',
-    (tester) async {
+  group('live android json test', () {
+    testWidgets('Extract json from imdb for person filmography', (
+      tester,
+    ) async {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
@@ -93,12 +96,10 @@ void main() {
         greaterThanOrEqualTo(3),
         reason: 'Json chunks should have 3 entries but has $jsonChunkCount',
       );
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-  );
-  testWidgets(
-    'Extract json from imdb for the same person again',
-    (tester) async {
+    }, timeout: const Timeout(Duration(seconds: 60)));
+    testWidgets('Extract json from imdb for the same person again', (
+      tester,
+    ) async {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
@@ -110,13 +111,9 @@ void main() {
         greaterThanOrEqualTo(3),
         reason: 'Json chunks should have 3 entries but has $jsonChunkCount',
       );
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-  );
+    }, timeout: const Timeout(Duration(seconds: 60)));
 
-  testWidgets(
-    'Extract json using WebJsonSychroniser',
-    (tester) async {
+    testWidgets('Extract json using WebJsonSychroniser', (tester) async {
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
 
@@ -129,12 +126,10 @@ void main() {
         greaterThanOrEqualTo(3),
         reason: 'Json chunks should have 3 entries but has ${json.length}',
       );
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-  );
-  testWidgets(
-    'Extract json from imdb for multiple people simultaneously',
-    (tester) async {
+    }, timeout: const Timeout(Duration(seconds: 60)));
+    testWidgets('Extract json from imdb for multiple people simultaneously', (
+      tester,
+    ) async {
       AppLogger.turnOnLocalLogs(level: .trace);
       await tester.pumpWidget(const MyApp());
       await tester.pumpAndSettle();
@@ -147,7 +142,6 @@ void main() {
         greaterThanOrEqualTo(3 * 3),
         reason: 'Json chunks should have 9 entries but has $jsonChunkCount',
       );
-    },
-    timeout: const Timeout(Duration(seconds: 60)),
-  );
+    }, timeout: const Timeout(Duration(seconds: 60)));
+  }, skip: skipLiveGroup(allowAndroidOnly: true));
 }

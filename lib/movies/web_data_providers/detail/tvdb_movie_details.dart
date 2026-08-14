@@ -44,6 +44,7 @@ class QueryTVDBMovieDetails extends QueryTVDBCommon {
   FutureOr<Uri> myConstructURIAsync(
     String searchCriteria, {
     int pageNumber = 1,
+    String ciDefault = '',
   }) async {
     await QueryTVDBCommon.init();
     var tvdbId = searchCriteria;
@@ -54,7 +55,7 @@ class QueryTVDBMovieDetails extends QueryTVDBCommon {
       if (header.isNotEmpty) {
         criteria.criteriaContext = header.first;
         criteria.criteriaTitle =
-            header.first.sources[DataSourceType.tvdbDetails]!;
+            header.first.sources[DataSourceType.tvdbDetails] ?? ciDefault;
         tvdbId = criteria.criteriaTitle;
         _setCriteria(criteria);
       }

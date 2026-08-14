@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:my_movie_search/movies/data/movie_result_mappers.dart';
 import 'package:my_movie_search/movies/data/search_criteria_mappers.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
@@ -48,11 +49,13 @@ void main() {
     test('Run myFormatInputAsText() for SearchCriteriaDTO criteriaList', () {
       final input = SearchCriteriaDTO()
         ..criteriaList = [
-          MovieResultDTO().error('test1'),
-          MovieResultDTO().error('test2'),
+          MovieResultDTO().init(uniqueId: 'id1', title: 'test1'),
+          MovieResultDTO().init(uniqueId: 'id2', title: 'test2'),
         ];
-      expect(QueryGoogleMovies(input).myFormatInputAsText(), contains('test1'));
-      expect(QueryGoogleMovies(input).myFormatInputAsText(), contains('test2'));
+      expect(
+        QueryGoogleMovies(input).myFormatInputAsText(),
+        startsWith('id1 OR id2'),
+      );
     });
 
     // Confirm error is constructed as expected.

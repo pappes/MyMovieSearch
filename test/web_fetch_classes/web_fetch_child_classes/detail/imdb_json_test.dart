@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
@@ -14,15 +13,15 @@ import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 import '../../../test_helper.dart';
 
-Future<Stream<String>> _emitUnexpectedJsonSample(_) => Future.value(
-  Stream.value(
-    '{{['
-    ']}}',
-  ),
-);
+// Future<Stream<String>> _emitUnexpectedJsonSample(_) => Future.value(
+//   Stream.value(
+//     '{{['
+//     ']}}',
+//   ),
+// );
 
-Future<Stream<String>> _emitInvalidJsonSample(_) =>
-    Future.value(Stream.value('not valid json'));
+// Future<Stream<String>> _emitInvalidJsonSample(_) =>
+//     Future.value(Stream.value('not valid json'));
 
 void main() {
   ////////////////////////////////////////////////////////////////////////////////

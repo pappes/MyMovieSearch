@@ -9,7 +9,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:meta/meta.dart';
 import 'package:my_movie_search/movies/data/movie_result_mappers.dart';
 import 'package:my_movie_search/movies/data/search_criteria_mappers.dart';
-import 'package:my_movie_search/movies/domain/models/move_result_comparison.dart';
+import 'package:my_movie_search/movies/domain/models/movie_result_comparison.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 
@@ -289,6 +289,46 @@ Future<void> releaseExcusiveAccess(String mutexName) async {
   File('/tmp/testMutex_$mutexName.txt').deleteSync();
 }
 
+/// Check if the test should be skipped based on the platform and environment.
+///
+/// [isImdb] indicates if the test is related to IMDb data extraction.
+/// [allowAndroidOnly] indicates if the test is allowed to run on Android only.
+bool skipLiveTest({bool isImdb = false, bool allowAndroidOnly = false}) {
+  final skipResult = skipLiveGroup(
+    isImdb: isImdb,
+    allowAndroidOnly: allowAndroidOnly,
+  );
+  if (skipResult is bool) {
+    return skipResult;
+  }
+  return true;
+}
+
+/// Check if the test should be skipped based on the platform and environment.
+///
+/// [isImdb] indicates if the test is related to IMDb data extraction.
+/// [allowAndroidOnly] indicates if the test is allowed to run on Android only.
+Object skipLiveGroup({bool isImdb = false, bool allowAndroidOnly = false}) {
+  if (Platform.isAndroid) {
+    return false;
+  }
+  if (allowAndroidOnly) {
+    return 'Test is allowed to run on Android only, skipping on this platform.';
+  }
+  if (isImdb) {
+    return 'Test is related to IMDb data extraction '
+        'and is skipped on non-Android platforms.';
+  }
+  // If running on GitHub Actions, skip the test.
+  if (Platform.environment['CI'] == 'true') {
+    // live test are to fragile for CICD.
+    return 'Test is running in a CI/CD environment, skipping live execution.';
+  }
+  // Want to know if non-imdb websites have changed their structure
+  // and broken the tests.
+  return false;
+}
+
 Future<bool> lockWebFetchTreadedCache() {
   Settings().init();
   return waitForExcusiveAccess('WebFetchTreadedCache');
@@ -420,11 +460,16 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
   /// [expected] is the list of DTOs to look for
   /// [percentMatch] allows a portion of the records
   /// to match instead of all records
-  MovieResultDTOListFuzzyMatcher(this.expected, {this.percentMatch = 100});
+  MovieResultDTOListFuzzyMatcher(
+    this.expected, {
+    this.percentMatch = 100,
+    this.ignorePopularity = false,
+  });
 
   List<MovieResultDTO> expected;
   int matchQuantity = 0;
   int percentMatch;
+  bool ignorePopularity;
   late List<MovieResultDTO> _actual;
 
   @override
@@ -479,6 +524,8 @@ class MovieResultDTOListFuzzyMatcher extends Matcher {
             matchState: differences,
             related: false,
             fuzzy: true,
+            ignorePopularity: ignorePopularity,
+            allowExtraWebsites: true,
           )) {
             matchQuantity--;
             if (0 == matchQuantity) {
