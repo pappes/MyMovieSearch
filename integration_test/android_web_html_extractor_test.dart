@@ -110,7 +110,7 @@ void main() async {
       timeout: const Timeout(Duration(seconds: 60)),
     );
 
-    testWidgets('HeadlessHttpClient for a movie as replacement for HttpClient', (
+    testWidgets('HeadlessHttpClient for movie as replacement for HttpClient', (
       tester,
     ) async {
       await tester.pumpWidget(const MyApp());
