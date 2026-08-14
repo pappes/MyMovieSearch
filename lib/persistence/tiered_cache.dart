@@ -76,8 +76,12 @@ class TieredCache<T> {
     if (record != null) {
       T? result = _decodeDto(record.dtoJson);
       if (result == null) {
-        final decoded = jsonDecode(record.dtoJson);
-        if (decoded is T) result = decoded;
+        try {
+          final decoded = jsonDecode(record.dtoJson);
+          if (decoded is T) result = decoded;
+        } catch (e) {
+          // Ignore errors and return false.
+        }
       }
       if (result != null) {
         add(key, result);
