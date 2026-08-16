@@ -66,7 +66,7 @@ class TorMultiSearchRepository extends BaseMovieRepository {
   Future<void> _search(
     int originalSearchUID,
     SearchCriteriaDTO criteria,
-    WebFetchDTOFn searchClass,
+    WebFetchDTOConstructor searchClass,
   ) async {
     final provider = searchClass(criteria);
     initProvider(provider);

@@ -1,5 +1,5 @@
-import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/movie_list_repository.dart';
+import 'package:my_movie_search/movies/data/search_criteria_mappers.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/google.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_search.dart';
 import 'package:my_movie_search/movies/web_data_providers/search/imdb_suggestions.dart';
@@ -9,7 +9,7 @@ import 'package:my_movie_search/movies/web_data_providers/search/tmdb.dart';
 /// Search for movie data from all online search sources.
 class MovieSearchRepository extends MovieListRepository {
   @override
-  LimitedDtoFetch getProviders() => {
+  WebFetchDTOLimitedFetch getProviders() => {
     QueryIMDBSuggestions(criteria): 10,
     QueryIMDBSearch(criteria): 10,
     QueryOMDBMovies(criteria): 10,

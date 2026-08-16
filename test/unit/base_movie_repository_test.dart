@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:my_movie_search/movies/blocs/repositories/repository_types/base_movie_repository.dart';
+import 'package:my_movie_search/movies/data/search_criteria_mappers.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
@@ -21,11 +22,11 @@ import 'base_movie_repository_test.mocks.dart';
 class TestMovieRepository extends BaseMovieRepository {
   TestMovieRepository({this._providers = const {}, this._shouldThrow = false});
 
-  final LimitedDtoFetch _providers;
+  final WebFetchDTOLimitedFetch _providers;
   final bool _shouldThrow;
 
   @override
-  LimitedDtoFetch getProviders() {
+  WebFetchDTOLimitedFetch getProviders() {
     if (_shouldThrow) {
       throw Exception('Simulated provider error');
     }

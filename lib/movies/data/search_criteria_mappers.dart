@@ -11,6 +11,15 @@ import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/screens/widgets/restorables/restorable_search_criteria.dart';
 import 'package:my_movie_search/utilities/extensions/dynamic_extensions.dart';
 import 'package:my_movie_search/utilities/extensions/enum.dart';
+import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
+
+typedef WebFetchDTO = WebFetchBase<MovieResultDTO, SearchCriteriaDTO>;
+typedef WebFetchDTOConstructor =
+    WebFetchBase<MovieResultDTO, SearchCriteriaDTO> Function(SearchCriteriaDTO);
+
+/// A web fetch with defined limit on number of returned results.
+typedef WebFetchDTOLimitedFetch =
+    Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int>;
 
 /// Extension methods for converting between [SearchCriteriaDTO] and [Map].
 extension SearchCriteriaDTOMapper on SearchCriteriaDTO {

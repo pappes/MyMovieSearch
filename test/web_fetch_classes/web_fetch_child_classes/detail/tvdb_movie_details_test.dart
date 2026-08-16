@@ -5,11 +5,13 @@ import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_formatting.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
 import 'package:my_movie_search/movies/domain/models/search_criteria_transformation.dart';
+import 'package:my_movie_search/movies/models/metadata_dto.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/converters/tvdb_movie_details.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/offline/tvdb_movie_details.dart';
+import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_details.dart';
 import 'package:my_movie_search/movies/web_data_providers/detail/tvdb_movie_details.dart';
 import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
@@ -25,6 +27,25 @@ final SearchCriteriaDTO imdbCriteria = SearchCriteriaDTO().fromString('tt1231');
 final dto = MovieResultDTO()..init(type: MovieContentType.movie.toString());
 
 final SearchCriteriaDTO tvdbCriteria = SearchCriteriaDTO().fromString('987654');
+
+class FakeQueryTVDBDetails extends QueryTVDBDetails {
+  FakeQueryTVDBDetails(super.criteria);
+
+  // Override the readList method to return a known TVDB ID (449) for testing.
+  @override
+  Future<List<MovieResultDTO>> readList({
+    int? limit,
+    DataSourceFn? source,
+  }) async => [
+    MovieResultDTO()
+      ..init(type: MovieContentType.movie.toString())
+      ..sources = {DataSourceType.tvdbDetails: '449'},
+  ];
+
+  // throw exception for all unimplimented methods.
+  @override
+  Object? noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
+}
 
 void main() {
   // Wait for api key to be initialised
@@ -213,6 +234,7 @@ void main() {
       expect(actualResult, startsWith(expected));
     });
     // Confirm URL is constructed as expected.
+
     test('Run myConstructURIAsync() for imdbid', () async {
       // clone criteria to avoid impacting other test
       final testClass = QueryTVDBMovieDetails(imdbCriteria.clone());
@@ -222,7 +244,7 @@ void main() {
       // Invoke the functionality.
       final actualResult = await testClass.myConstructURIAsync(
         'tt0892318',
-        ciDefault: '449',
+        idLookupWebFetch: FakeQueryTVDBDetails.new,
       );
 
       // Check the results.

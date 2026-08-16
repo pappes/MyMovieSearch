@@ -1,6 +1,7 @@
 import 'dart:async' show StreamController, unawaited;
 
 import 'package:meta/meta.dart';
+import 'package:my_movie_search/movies/data/search_criteria_mappers.dart';
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/utilities/app_logger.dart';
@@ -8,13 +9,6 @@ import 'package:my_movie_search/utilities/extensions/string_extensions.dart';
 import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 typedef ExtraDetailFn = Future<List<MovieResultDTO>> Function(MovieResultDTO);
-typedef WebFetchDTO = WebFetchBase<MovieResultDTO, SearchCriteriaDTO>;
-typedef WebFetchDTOFn =
-    WebFetchBase<MovieResultDTO, SearchCriteriaDTO> Function(SearchCriteriaDTO);
-
-/// A web fetch with defined limit on number of returned results.
-typedef LimitedDtoFetch =
-    Map<WebFetchBase<MovieResultDTO, SearchCriteriaDTO>, int>;
 
 /// Retrieve movie data from multiple online sources.
 ///
@@ -115,7 +109,7 @@ class BaseMovieRepository {
   ///   WebFetchBase class : result quantity limit.
   /// e.g. Return [{QueryIMDBSearch(criteria):10}]
   @protected
-  LimitedDtoFetch getProviders() => {};
+  WebFetchDTOLimitedFetch getProviders() => {};
 
   /// Initiates a secondary data fetch.
   ///

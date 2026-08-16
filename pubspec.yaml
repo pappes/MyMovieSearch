@@ -57,7 +57,7 @@ dependencies:
 
   flutter_localizations:
     sdk: flutter
-  flutter_markdown: ^0.7.3              # Render markdown elegantly.
+  flutter_markdown_plus: ^1.0.12        # Render markdown for the changelog.
 
   go_router: ^17.3.0                    # screen navigation
   googleapis: ^16.0.0                   # interact with GCP resources  

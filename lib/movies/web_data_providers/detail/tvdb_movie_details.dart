@@ -40,18 +40,25 @@ class QueryTVDBMovieDetails extends QueryTVDBCommon {
   }
 
   /// Check to see if IMDB ID needs to be converted to TVDB ID
+  ///
+  /// If the criteria is an IMDB ID, it will be converted to a TVDB ID
+  /// the [criteria] will be updated with the TVDB ID
+  /// and the criteria title will be set to the TVDB ID.
+  ///
+  /// [idLookupWebFetch] is a WebFetch instance constructor that can be used to
+  /// inject a different lookup class for testing.
   @override
   FutureOr<Uri> myConstructURIAsync(
     String searchCriteria, {
     int pageNumber = 1,
     String ciDefault = '',
+    WebFetchDTOConstructor idLookupWebFetch = base_query.QueryTVDBDetails.new,
   }) async {
     await QueryTVDBCommon.init();
     var tvdbId = searchCriteria;
     if (searchCriteria.startsWith(imdbTitlePrefix)) {
-      final header = await base_query.QueryTVDBDetails(
-        SearchCriteriaDTO().fromString(searchCriteria),
-      ).readList();
+      final lookupCriteria = SearchCriteriaDTO().fromString(searchCriteria);
+      final header = await idLookupWebFetch(lookupCriteria).readList();
       if (header.isNotEmpty) {
         criteria.criteriaContext = header.first;
         criteria.criteriaTitle =
