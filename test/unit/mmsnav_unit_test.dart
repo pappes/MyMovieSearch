@@ -1,9 +1,12 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart' as mockito;
 import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
 import 'package:my_movie_search/movies/domain/models/movie_result_transformation.dart';
+import 'package:my_movie_search/movies/domain/models/search_criteria_enums.dart';
 import 'package:my_movie_search/movies/domain/models/search_criteria_transformation.dart';
 
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
@@ -12,6 +15,7 @@ import 'package:my_movie_search/movies/screens/screen_routing.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
 import 'package:my_movie_search/persistence/firebase/firebase_common.dart';
 import 'package:my_movie_search/persistence/nav_log.dart';
+import 'package:my_movie_search/persistence/web_log.dart';
 import 'package:my_movie_search/utilities/extensions/dom_extensions.dart';
 import 'package:my_movie_search/utilities/navigation/app_context.dart';
 import 'package:my_movie_search/utilities/navigation/route_info.dart';
@@ -30,6 +34,7 @@ import 'mmsnav_unit_test.mocks.dart';
   MockSpec<AppDialogs>(),
   MockSpec<AppFocus>(),
   MockSpec<CustomTabsLauncher>(),
+  MockSpec<BuildContext>(),
 ])
 class _DetailsPageTestCase {
   _DetailsPageTestCase(this.id, this.expectedRoute, {this.type});
@@ -376,5 +381,147 @@ void main() {
       // never passed to the canvasWithNullContext. The null check inside the
       // production code handles this case.
     });
+  });
+
+  group('MMSNav generated tests', () {
+    late MockMMSFlutterCanvas mockCanvas;
+    late MMSNav testClass;
+    late String? navigationResult;
+
+    setUp(() {
+      mockCanvas = MockMMSFlutterCanvas();
+      testClass = MMSNav.withCanvas(mockCanvas);
+      navigationResult = null;
+
+      mockito.when(mockCanvas.viewWebPage(mockito.any)).thenAnswer((
+        invocation,
+      ) {
+        navigationResult = invocation.positionalArguments[0] as String;
+        return Future.value();
+      });
+      mockito.when(mockCanvas.viewFlutterPage(mockito.any)).thenAnswer((
+        invocation,
+      ) {
+        navigationResult =
+            (invocation.positionalArguments[0] as RouteInfo).routePath.name;
+        return Future.value();
+      });
+    });
+
+    // --- MMSNav Page Navigation Methods ---
+    test('showAboutPage()', () async {
+      await testClass.showAboutPage(SearchCriteriaDTO()..init(.none));
+      expect(navigationResult, 'about');
+    });
+
+    test('showChangelogPage()', () async {
+      await testClass.showChangelogPage(SearchCriteriaDTO()..init(.none));
+      expect(navigationResult, 'changelog');
+    });
+
+    test('showNavigationHistory()', () async {
+      await testClass.showNavigationHistory(SearchCriteriaDTO()..init(.none));
+      expect(navigationResult, 'navigationHistory');
+    });
+
+    test('showSettingsPage()', () async {
+      await testClass.showSettingsPage(SearchCriteriaDTO()..init(.none));
+      expect(navigationResult, 'settings');
+    });
+
+    test('showErrorPage()', () async {
+      await testClass.showErrorPage(SearchCriteriaDTO()..init(.none));
+      expect(navigationResult, 'errordetails');
+    });
+
+    test('showCriteriaPage() calls viewFlutterRootPage', () async {
+      mockito.when(mockCanvas.viewFlutterRootPage(mockito.any)).thenAnswer((
+        invocation,
+      ) {
+        navigationResult =
+            (invocation.positionalArguments[0] as RouteInfo).routePath.name;
+        return Future.value();
+      });
+
+      await testClass.showCriteriaPage(
+        SearchCriteriaDTO()..init(SearchCriteriaType.none),
+      );
+      expect(navigationResult, 'search');
+    });
+
+    // --- Magnet Links & Routes ---
+    test(
+      'remoteMagnetLink() returns false when movie type is not download',
+      () async {
+        final movie = MovieResultDTO()
+          ..init(type: MovieContentType.movie.toString());
+        final result = await testClass.remoteMagnetLink(
+          movie,
+          MockBuildContext(),
+        );
+        expect(result, isFalse);
+      },
+    );
+
+    test('getRoutes() returns configured route list', () {
+      final routes = MMSNav.getRoutes();
+      expect(routes, isNotEmpty);
+      expect(
+        routes.any((route) => route is GoRoute && route.path == '/'),
+        isTrue,
+      );
+    });
+
+    // --- Drilldown with Related Errors ---
+    test(
+      'resultDrillDown() with related error list calls searchForRelated',
+      () async {
+        final movie = MovieResultDTO()
+          ..init(type: MovieContentType.error.toString());
+        movie.related[errorsCollection] = {
+          'err1': MovieResultDTO()
+            ..init(type: MovieContentType.error.toString()),
+          'err2': MovieResultDTO()
+            ..init(type: MovieContentType.error.toString()),
+        };
+
+        await testClass.resultDrillDown(movie);
+        expect(navigationResult, 'searchresults');
+      },
+    );
+  });
+
+  group('MMSFlutterCanvas web and dialog tests', () {
+    late MockAppDialogs mockDialogs;
+    late MockCustomTabsLauncher mockTabsLauncher;
+    late MMSFlutterCanvas canvas;
+
+    setUp(() {
+      mockDialogs = MockAppDialogs();
+      mockTabsLauncher = MockCustomTabsLauncher();
+      canvas = MMSFlutterCanvas(
+        dialogs: mockDialogs,
+        customTabsLauncher: mockTabsLauncher,
+      );
+    });
+
+    test('getInput() delegates to dialogs', () async {
+      mockito
+          .when(mockDialogs.inputPopup('Prompt', 'Title'))
+          .thenAnswer((_) async => 'user_input');
+
+      final result = await canvas.getInput('Title', 'Prompt');
+      expect(result, 'user_input');
+      mockito.verify(mockDialogs.inputPopup('Prompt', 'Title')).called(1);
+    });
+
+    test(
+      'viewWebPage returns string summary when theme/dialogs are null',
+      () async {
+        final bareCanvas = MMSFlutterCanvas();
+        final result = await bareCanvas.viewWebPage('https://example.com');
+        expect(result, contains('openBrowser(https://example.com)'));
+      },
+    );
   });
 }
