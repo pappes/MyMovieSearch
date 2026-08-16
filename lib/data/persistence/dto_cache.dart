@@ -6,25 +6,25 @@ import 'package:my_movie_search/utilities/app_logger.dart';
 
 /// Stores MovieResultDTO objects in a tiered cache.
 class DtoCache {
-  DtoCache();
-  DtoCache._internal();
+  /// Constructor allows injecting a custom or mock [TieredCache] for testing.
+  DtoCache({TieredCache<MovieResultDTO>? cache})
+    : _globalDtoCache = cache ?? TieredCache<MovieResultDTO>();
 
   factory DtoCache.singleton() => _singleton;
 
-  static final DtoCache _singleton = DtoCache._internal();
+  static final DtoCache _singleton = DtoCache();
 
-  final _globalDtoCache = TieredCache<MovieResultDTO>();
+  final TieredCache<MovieResultDTO> _globalDtoCache;
 
-  static Map<Object, MovieResultDTO> dumpCache() {
-    final cache = _singleton._globalDtoCache.memoryCache;
+  Map<Object, MovieResultDTO> dumpCache() {
+    final cache = _globalDtoCache.memoryCache;
     for (final record in cache.entries) {
       AppLogger.instance.info('${record.key} - ${record.value.title}');
     }
     return cache;
   }
 
-  /// Retrieve data from the memory cache if available.
-  ///
+  /// Retrieve data from the memory cache synchronously if available.
   MovieResultDTO? fetchSynchronously(String uniqueId) {
     try {
       return _globalDtoCache.get(uniqueId);
@@ -40,8 +40,7 @@ class DtoCache {
       // that exceptions are propagated as Future errors.
       Future.sync(() => merge(newValue));
 
-  /// remove [newValue] from the cache.
-  ///
+  /// Remove [newValue] from the cache.
   void remove(MovieResultDTO newValue) =>
       _globalDtoCache.remove(_key(newValue));
 
@@ -61,14 +60,29 @@ class DtoCache {
 
   /// Update cache to merge in movies from [newDtos] and
   /// return the same records with updated values.
-  ///
   Future<MovieCollection> mergeCollection(MovieCollection newDtos) async {
-    final MovieCollection merged = {};
-    for (final dto in newDtos.entries) {
-      merged[dto.key] = await merge(dto.value);
+    Future<MovieCollection> mergeUnawaited(
+      String key,
+      MovieResultDTO newValue,
+    ) async {
+      await merge(newValue);
+      return {key: newValue};
     }
+
+    final MovieCollection merged = {};
+    final futures = <Future<MovieCollection>>[];
+    for (final dto in newDtos.entries) {
+      futures.add(mergeUnawaited(dto.key, dto.value));
+    }
+    await Future.wait(futures).then((results) {
+      results.forEach(merged.addAll);
+    });
     return merged;
   }
+
+  /// Remove all items from the cache.
+  ///
+  Future<void> clear() => _globalDtoCache.clear();
 
   static String _key(MovieResultDTO dto) => dto.uniqueId;
 }
