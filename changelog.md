@@ -1,3 +1,7 @@
+## Version 1.2.8
+- Fix IMDB generic image issue.
+- Fix incorrect device identification
+
 ## Version 1.2.7
 - More data for rare titles at bottom of list.
 

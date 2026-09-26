@@ -43,9 +43,9 @@ const List<Map<String, Object>> intermediateMapList = [
           'titleResults': {
             'titleListItems': [
               {
-                "interests": {
-                  "primaryImage": {
-                    "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                'interests': {
+                  'primaryImage': {
+                    'url': 'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
                   },
                 },
                 'certificate': 'TV-MA',
@@ -67,9 +67,9 @@ const List<Map<String, Object>> intermediateMapList = [
                 'titleType': {'id': 'tvSeries', 'text': 'TV Series'},
               },
               {
-                "interests": {
-                  "primaryImage": {
-                    "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                'interests': {
+                  'primaryImage': {
+                    'url': 'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
                   },
                 },
                 'certificate': 'R',

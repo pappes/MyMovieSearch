@@ -21,9 +21,9 @@ const List<Map<String, Object>> intermediateMapList = [
         'nmconst': 'nm0123456',
         'aboveTheFold': {
           'id': 'nm0123456',
-          "interests": {
-            "primaryImage": {
-              "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+          'interests': {
+            'primaryImage': {
+              'url': 'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
             },
           },
           'nameText': {'text': 'Mescalon Smoochington <3'},
@@ -67,10 +67,10 @@ const List<Map<String, Object>> intermediateMapList = [
                                     ],
                                   },
                                   'title': {
-                                    "interests": {
-                                      "primaryImage": {
-                                        "url":
-                                            "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                                    'interests': {
+                                      'primaryImage': {
+                                        'url':
+                                            'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
                                       },
                                     },
                                     'id': 'tt0012370',
@@ -115,10 +115,10 @@ const List<Map<String, Object>> intermediateMapList = [
                                     ],
                                   },
                                   'title': {
-                                    "interests": {
-                                      "primaryImage": {
-                                        "url":
-                                            "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                                    'interests': {
+                                      'primaryImage': {
+                                        'url':
+                                            'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
                                       },
                                     },
                                     'id': 'tt0123580',
