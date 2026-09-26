@@ -29,7 +29,7 @@ dependencies:
   cloud_firestore: ^6.8.0               # Store data in Firebase Firestore cloud database
   
   cupertino_icons: ^1.0.9               # iOS style icons.
-  #device_info_plus: ^10.1.0             # get infomation about the manufacturer of the phone
+  device_info_plus: ^13.2.0             # get infomation about the manufacturer of the phone
   
   easy_debounce: ^2.0.3                 # manage the frequency fo requests
   easy_image_viewer: ^1.5.1
