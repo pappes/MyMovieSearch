@@ -115,7 +115,10 @@ mixin ScrapeIMDBSearchDetails
     rowData[outerElementIdentity] = person[outerSearchPersonId];
     rowData[outerElementOfficialTitle] = person[deepPersonNameHeader];
 
-    rowData[outerElementImage] = person.searchForString(key: deepImageField);
+    rowData[outerElementImage] = person.searchForString(
+      key: deepImageField,
+      skipKeys: [ignoreImageHeader],
+    );
     var knownFor = person[deepPersonDescriptionHeader].toString();
     if (null != person[outerSearchResultsKnownForYear]) {
       ///???
@@ -135,7 +138,10 @@ mixin ScrapeIMDBSearchDetails
     final yearRange = endYear == null ? startYear : '$startYear-$endYear';
     rowData[outerElementYearRange] = yearRange;
     rowData[outerElementDuration] = movie[deepRelatedMovieDurationHeader];
-    rowData[outerElementImage] = movie.searchForString(key: deepImageField);
+    rowData[outerElementImage] = movie.searchForString(
+      key: deepImageField,
+      skipKeys: [ignoreImageHeader],
+    );
     rowData[outerElementDescription] =
         movie[outerSearchResultsMovieDescription];
 

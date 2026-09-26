@@ -48,6 +48,7 @@ const imdbParentalPath = 'parentalguide';
 // Fields common to person and title
 // primaryImage can be repeated for related movies - use first instance only
 const deepImageHeader = 'primaryImage';
+const ignoreImageHeader = 'interests';
 const deepImageField = 'url';
 const deepRelatedMovieCollection = 'edges';
 const deepRelatedMovieContainer = 'node';

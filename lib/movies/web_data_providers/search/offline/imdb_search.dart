@@ -96,6 +96,11 @@ const imdbSampleJson = '''
                     {
                         "index": "nm0152436",
                         "listItem": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                             "bio": "known for Superman(1994)",
                             "knownFor": {
                                 "originalTitleText": "Moving Mily",
@@ -116,6 +121,11 @@ const imdbSampleJson = '''
                     {
                         "index": "nm2122834",
                         "listItem": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                             "bio": "known for Catwoman!(1993- )",
                             "knownFor": {
                                 "originalTitleText": "Catwoman!",
@@ -136,6 +146,11 @@ const imdbSampleJson = '''
                     {
                         "index": "nm5122134",
                         "listItem": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                             "bio": "known for Batman",
                             "knownFor": {
                                 "originalTitleText": "Batman!",
@@ -158,6 +173,11 @@ const imdbSampleJson = '''
             "titleResults": {
                 "results": [
                     {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                       "index": "tt0152239",
                       "listItem": {
                         "titleId": "tt0152239",
@@ -184,6 +204,11 @@ const imdbSampleJson = '''
                       }
                     },
                     {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                       "index": "tt0172034",
                       "listItem": {
                         "titleId": "tt0172034",
@@ -207,6 +232,11 @@ const imdbSampleJson = '''
                       }
                     },
                     {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                       "index": "tt1142838",
                       "listItem": {
                         "titleId": "tt1142838",
@@ -231,6 +261,11 @@ const imdbSampleJson = '''
                     {
                       "index": "tt1182333",
                       "listItem": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                         "titleId": "tt1182333",
                         "titleText": "Batman!",
                         "originalTitleText": "Batman",

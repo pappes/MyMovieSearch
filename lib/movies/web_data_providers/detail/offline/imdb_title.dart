@@ -20,13 +20,18 @@ const List<Map<String, Object>> intermediateMapList = [
       'pageProps': {
         'tconst': 'tt6123456',
         'aboveTheFold': {
+          "interests": {
+            "primaryImage": {
+              "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+            },
+          },
           'id': 'tt6123456',
           'certificate': {'rating': 'TV-G'},
           'originalTitleText': {'text': 'Aussieland'},
           'titleText': {'text': 'Scott And Sharlene <3'},
           'titleType': {'text': 'TV Series'},
           'primaryImage': {
-            'url': 'https://www.microsoft.com/images/M/MV5BYjAxMz.jpg',
+            'url': 'https://www.microsoft.com/images/M/MV5BYjAxMz.jpg'
           },
           'ratingsSummary': {'aggregateRating': 7.5, 'voteCount': 5123},
           'releaseYear': {'year': 1985, 'endYear': 2023},
@@ -72,10 +77,16 @@ const List<Map<String, Object>> intermediateMapList = [
                     {'name': 'Jimmy Banter'},
                   ],
                   'name': {
+                    "interests": {
+                      "primaryImage": {
+                        "url":
+                            "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                      },
+                    },
                     'id': 'nm0012370',
                     'nameText': {'text': 'Bill Jole'},
                     'primaryImage': {
-                      'url': 'https://www.microsoft.com/images/M/MV5BM.jpg',
+                      'url': 'https://www.microsoft.com/images/M/MV5BM.jpg'
                     },
                   },
                 },
@@ -87,10 +98,16 @@ const List<Map<String, Object>> intermediateMapList = [
                     {'name': 'Jenny Banter'},
                   ],
                   'name': {
+                    "interests": {
+                      "primaryImage": {
+                        "url":
+                            "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                      },
+                    },
                     'id': 'nm0012372',
                     'nameText': {'text': 'Jenny Jole'},
                     'primaryImage': {
-                      'url': 'https://www.microsoft.com/images/M/MV5BY.jpg',
+                      'url': 'https://www.microsoft.com/images/M/MV5BY.jpg'
                     },
                   },
                 },
@@ -102,19 +119,31 @@ const List<Map<String, Object>> intermediateMapList = [
               'credits': [
                 {
                   'name': {
+                    "interests": {
+                      "primaryImage": {
+                        "url":
+                            "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                      },
+                    },
                     'id': 'nm0214370',
                     'nameText': {'text': 'Andy Jole'},
                     'primaryImage': {
-                      'url': 'https://www.microsoft.com/images/M/M2V5BM.jpg',
+                      'url': 'https://www.microsoft.com/images/M/M2V5BM.jpg'
                     },
                   },
                 },
                 {
                   'name': {
+                    "interests": {
+                      "primaryImage": {
+                        "url":
+                            "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                      },
+                    },
                     'id': 'nm0214372',
                     'nameText': {'text': 'Shazza Jole'},
                     'primaryImage': {
-                      'url': 'https://www.microsoft.com/images/M/M2V5BY.jpg',
+                      'url': 'https://www.microsoft.com/images/M/M2V5BY.jpg'
                     },
                   },
                 },
@@ -125,13 +154,19 @@ const List<Map<String, Object>> intermediateMapList = [
             'edges': [
               {
                 'node': {
+                  "interests": {
+                    "primaryImage": {
+                      "url":
+                          "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                    },
+                  },
                   'id': 'tt0012370',
                   'certificate': {'rating': 'PG-13'},
                   'originalTitleText': {'text': 'Run Forrest Run'},
                   'titleText': {'text': 'Walk Skip Run'},
                   'titleType': {'text': 'Movie'},
                   'primaryImage': {
-                    'url': 'https://www.microsoft.com/images/M/MV5BM.jpg',
+                    'url': 'https://www.microsoft.com/images/M/MV5BM.jpg'
                   },
                   'ratingsSummary': {'aggregateRating': 8.6, 'voteCount': 4837},
                   'releaseYear': {'year': 1973, 'endYear': 1974},
@@ -146,13 +181,19 @@ const List<Map<String, Object>> intermediateMapList = [
               },
               {
                 'node': {
+                  "interests": {
+                    "primaryImage": {
+                      "url":
+                          "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                    },
+                  },
                   'id': 'tt0123580',
                   'certificate': {'rating': 'TV-G'},
                   'originalTitleText': {'text': 'Aussieland'},
                   'titleText': {'text': 'Scott And Sharlene'},
                   'titleType': {'text': 'TV Series'},
                   'primaryImage': {
-                    'url': 'https://www.microsoft.com/images/M/MV5BYjAxMz.jpg',
+                    'url': 'https://www.microsoft.com/images/M/MV5BYjAxMz.jpg'
                   },
                   'ratingsSummary': {'aggregateRating': 7.5, 'voteCount': 5123},
                   'releaseYear': {'year': 1985, 'endYear': 2023},
@@ -176,6 +217,11 @@ const List<Map<String, Object>> intermediateMapList = [
 const _embeddedJson = r'''
 {"props":{"pageProps":{"tconst":"tt6123456",
       "aboveTheFold": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
         "id": "tt6123456",
         "certificate": {"rating": "TV-G"},
         "originalTitleText": {"text": "Aussieland"},
@@ -228,6 +274,11 @@ const _embeddedJson = r'''
                   {"name": "Jimmy Banter"}
                 ],
                 "name": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                   "id": "nm0012370",
                   "nameText": {"text": "Bill Jole"},
                   "primaryImage": {
@@ -243,6 +294,11 @@ const _embeddedJson = r'''
                   {"name": "Jenny Banter"}
                 ],
                 "name": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                   "id": "nm0012372",
                   "nameText": {"text": "Jenny Jole"},
                   "primaryImage": {
@@ -258,6 +314,11 @@ const _embeddedJson = r'''
             "credits": [
               {
                 "name": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                   "id": "nm0214370",
                   "nameText": {"text": "Andy Jole"},
                   "primaryImage": {
@@ -267,6 +328,11 @@ const _embeddedJson = r'''
               },
               {
                 "name": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                   "id": "nm0214372",
                   "nameText": {"text": "Shazza Jole"},
                   "primaryImage": {
@@ -281,6 +347,16 @@ const _embeddedJson = r'''
           "edges": [
             {
               "node": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                 "id": "tt0012370",
                 "certificate": {"rating": "PG-13"},
                 "originalTitleText": {"text": "Run Forrest Run"},
@@ -302,6 +378,11 @@ const _embeddedJson = r'''
             },
             {
               "node": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                 "id": "tt0123580",
                 "certificate": {"rating": "TV-G"},
                 "originalTitleText": {"text": "Aussieland"},

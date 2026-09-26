@@ -25,8 +25,8 @@ class ImdbNameConverter extends ImdbConverterBase
 
     // ...{'primaryImage':...{...'url':<value>...}};
     final url = map
-        .deepSearch(deepImageHeader)
-        ?.searchForString(key: deepImageField);
+        .deepSearch(deepImageHeader, skipKeys: [ignoreImageHeader])
+        ?.searchForString(key: deepImageField, skipKeys: [ignoreImageHeader]);
     // ...{'bio':...{...'plainText':<value>...}};
     final description = map
         .deepSearch(deepPersonDescriptionHeader)
