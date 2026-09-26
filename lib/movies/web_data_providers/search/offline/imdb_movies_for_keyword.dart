@@ -43,6 +43,11 @@ const List<Map<String, Object>> intermediateMapList = [
           'titleResults': {
             'titleListItems': [
               {
+                'interests': {
+                  'primaryImage': {
+                    'url': 'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+                  },
+                },
                 'certificate': 'TV-MA',
                 'creators': <Object?>[],
                 'directors': <Object?>[],
@@ -62,6 +67,11 @@ const List<Map<String, Object>> intermediateMapList = [
                 'titleType': {'id': 'tvSeries', 'text': 'TV Series'},
               },
               {
+                'interests': {
+                  'primaryImage': {
+                    'url': 'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+                  },
+                },
                 'certificate': 'R',
                 'endYear': null,
                 'genres': ['Drama', 'Mystery', 'Thriller'],
@@ -105,6 +115,11 @@ const _embeddedJson = r'''
         "titleResults": {
           "titleListItems": [
             {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
               "certificate": "TV-MA",
               "creators": [],
               "directors": [],
@@ -133,6 +148,11 @@ const _embeddedJson = r'''
               }
             },
             {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
               "certificate": "R",
               "endYear": null,
               "genres": [

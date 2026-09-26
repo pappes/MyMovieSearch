@@ -21,6 +21,11 @@ const List<Map<String, Object>> intermediateMapList = [
         'nmconst': 'nm0123456',
         'aboveTheFold': {
           'id': 'nm0123456',
+          'interests': {
+            'primaryImage': {
+              'url': 'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+            },
+          },
           'nameText': {'text': 'Mescalon Smoochington <3'},
           'primaryImage': {
             'url': 'https://www.microsoft.com/images/M/MV5BNjdhNz.jpg',
@@ -62,6 +67,12 @@ const List<Map<String, Object>> intermediateMapList = [
                                     ],
                                   },
                                   'title': {
+                                    'interests': {
+                                      'primaryImage': {
+                                        'url':
+                                            'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+                                      },
+                                    },
                                     'id': 'tt0012370',
                                     'originalTitleText': {
                                       'text': 'Run Forrest Run',
@@ -104,6 +115,12 @@ const List<Map<String, Object>> intermediateMapList = [
                                     ],
                                   },
                                   'title': {
+                                    'interests': {
+                                      'primaryImage': {
+                                        'url':
+                                            'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+                                      },
+                                    },
                                     'id': 'tt0123580',
                                     'certificate': {'rating': 'TV-G'},
                                     'originalTitleText': {'text': 'Aussieland'},
@@ -154,6 +171,11 @@ const _embeddedJson = r'''
       "nmconst": "nm0123456",
       "aboveTheFold": {
         "id": "nm0123456",
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
         "nameText": {
           "text": "Mescalon Smoochington \u003c3"
         },
@@ -206,6 +228,11 @@ const _embeddedJson = r'''
                                   ]
                                 },
                                 "title": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                                   "id": "tt0012370",
                                   "originalTitleText": {
                                     "text": "Run Forrest Run"
@@ -263,6 +290,11 @@ const _embeddedJson = r'''
                                   ]
                                 },
                                 "title": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                                   "id": "tt0123580",
                                   "certificate": {
                                     "rating": "TV-G"
