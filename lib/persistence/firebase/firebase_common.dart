@@ -11,16 +11,30 @@ import 'package:my_movie_search/utilities/app_logger.dart';
 
 enum Fields { devices, text }
 
-const runtimeDevices = {
-  'android.Google.Pixel 8 Pro': 'dave', // Google Pixel 8 Pro
-  'android.samsung.SM-F926B': 'dave', // Samsung Fold 3
-  'android.samsung.SM-F966B': 'dave', // Samsung Fold 7
-  'linux.Ubuntu.': 'dave', // development VM
-  'android.samsung.SM-G950F': 'dave', // Samsung S8
-  'android.Microsoft Corporation.Subsystem for Android(TM)': 'dave', // Chair
-  'TBD': 'tash',
+const currentDeviceDave = 'F966B';
+const currentDeviceTash = 'G980F';
 
-  /// G980F
+enum KnownUser {
+  dave(currentDeviceDave),
+  tash(currentDeviceTash),
+  other('other');
+
+  // const constructor
+  const KnownUser(this.deviceId);
+  // attribute to hold the device
+  final String deviceId;
+}
+
+const runtimeDevices = {
+  'android.Google.Pixel 8 Pro': KnownUser.dave, // Google Pixel 8 Pro
+  'android.samsung.SM-F926B': KnownUser.dave, // Samsung Fold 3
+  'android.samsung.SM-F966B': KnownUser.dave, // Samsung Fold 7
+  'linux.Ubuntu.': KnownUser.dave, // development VM
+  'android.samsung.SM-G950F': KnownUser.dave, // Samsung S8
+  'android.Microsoft Corporation.Subsystem for Android(TM)':
+      KnownUser.dave, // Chair
+  'android.samsung.SM-G980F': KnownUser.tash, // Samsung S20
+
 };
 
 /// Grants access to firebase persistent data
@@ -138,7 +152,19 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
     Fields.devices.name: [deviceType],
   };
 
-  String derivedUser(String? device) => runtimeDevices[device] ?? 'tash';
+  KnownUser derivedUser(String? device) {
+    final knownUser = runtimeDevices[device];
+    if (knownUser != null) {
+      return knownUser;
+    }
+    for (final user in KnownUser.values) {
+      if (device?.contains(user.deviceId) ?? false) {
+        return user;
+      }
+    }
+    return KnownUser.other;
+  }
+
   bool derivedUserMatch(String? device, Object? devices) {
     if (devices is Iterable) {
       final currentUser = derivedUser(device);
