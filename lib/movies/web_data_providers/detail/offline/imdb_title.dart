@@ -20,6 +20,11 @@ const List<Map<String, Object>> intermediateMapList = [
       'pageProps': {
         'tconst': 'tt6123456',
         'aboveTheFold': {
+          'interests': {
+            'primaryImage': {
+              'url': 'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+            },
+          },
           'id': 'tt6123456',
           'certificate': {'rating': 'TV-G'},
           'originalTitleText': {'text': 'Aussieland'},
@@ -72,6 +77,12 @@ const List<Map<String, Object>> intermediateMapList = [
                     {'name': 'Jimmy Banter'},
                   ],
                   'name': {
+                    'interests': {
+                      'primaryImage': {
+                        'url':
+                            'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+                      },
+                    },
                     'id': 'nm0012370',
                     'nameText': {'text': 'Bill Jole'},
                     'primaryImage': {
@@ -87,6 +98,12 @@ const List<Map<String, Object>> intermediateMapList = [
                     {'name': 'Jenny Banter'},
                   ],
                   'name': {
+                    'interests': {
+                      'primaryImage': {
+                        'url':
+                            'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+                      },
+                    },
                     'id': 'nm0012372',
                     'nameText': {'text': 'Jenny Jole'},
                     'primaryImage': {
@@ -102,6 +119,12 @@ const List<Map<String, Object>> intermediateMapList = [
               'credits': [
                 {
                   'name': {
+                    'interests': {
+                      'primaryImage': {
+                        'url':
+                            'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+                      },
+                    },
                     'id': 'nm0214370',
                     'nameText': {'text': 'Andy Jole'},
                     'primaryImage': {
@@ -111,6 +134,12 @@ const List<Map<String, Object>> intermediateMapList = [
                 },
                 {
                   'name': {
+                    'interests': {
+                      'primaryImage': {
+                        'url':
+                            'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+                      },
+                    },
                     'id': 'nm0214372',
                     'nameText': {'text': 'Shazza Jole'},
                     'primaryImage': {
@@ -125,6 +154,12 @@ const List<Map<String, Object>> intermediateMapList = [
             'edges': [
               {
                 'node': {
+                  'interests': {
+                    'primaryImage': {
+                      'url':
+                          'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+                    },
+                  },
                   'id': 'tt0012370',
                   'certificate': {'rating': 'PG-13'},
                   'originalTitleText': {'text': 'Run Forrest Run'},
@@ -146,6 +181,12 @@ const List<Map<String, Object>> intermediateMapList = [
               },
               {
                 'node': {
+                  'interests': {
+                    'primaryImage': {
+                      'url':
+                          'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+                    },
+                  },
                   'id': 'tt0123580',
                   'certificate': {'rating': 'TV-G'},
                   'originalTitleText': {'text': 'Aussieland'},
@@ -176,6 +217,11 @@ const List<Map<String, Object>> intermediateMapList = [
 const _embeddedJson = r'''
 {"props":{"pageProps":{"tconst":"tt6123456",
       "aboveTheFold": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
         "id": "tt6123456",
         "certificate": {"rating": "TV-G"},
         "originalTitleText": {"text": "Aussieland"},
@@ -228,6 +274,11 @@ const _embeddedJson = r'''
                   {"name": "Jimmy Banter"}
                 ],
                 "name": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                   "id": "nm0012370",
                   "nameText": {"text": "Bill Jole"},
                   "primaryImage": {
@@ -243,6 +294,11 @@ const _embeddedJson = r'''
                   {"name": "Jenny Banter"}
                 ],
                 "name": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                   "id": "nm0012372",
                   "nameText": {"text": "Jenny Jole"},
                   "primaryImage": {
@@ -258,6 +314,11 @@ const _embeddedJson = r'''
             "credits": [
               {
                 "name": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                   "id": "nm0214370",
                   "nameText": {"text": "Andy Jole"},
                   "primaryImage": {
@@ -267,6 +328,11 @@ const _embeddedJson = r'''
               },
               {
                 "name": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                   "id": "nm0214372",
                   "nameText": {"text": "Shazza Jole"},
                   "primaryImage": {
@@ -281,6 +347,16 @@ const _embeddedJson = r'''
           "edges": [
             {
               "node": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                 "id": "tt0012370",
                 "certificate": {"rating": "PG-13"},
                 "originalTitleText": {"text": "Run Forrest Run"},
@@ -302,6 +378,11 @@ const _embeddedJson = r'''
             },
             {
               "node": {
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg"
+                }
+              },
                 "id": "tt0123580",
                 "certificate": {"rating": "TV-G"},
                 "originalTitleText": {"text": "Aussieland"},

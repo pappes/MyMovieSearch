@@ -9,20 +9,24 @@ extension TreeListHelper on Iterable<Object?> {
     bool multipleMatch = false,
     bool stopAtTopLevel = true,
     bool returnParent = false,
+    Iterable<String> skipKeys = const [],
   }) => TreeHelper(this).deepSearch(
     tag,
     suffixMatch: suffixMatch,
     multipleMatch: multipleMatch,
     stopAtTopLevel: stopAtTopLevel,
     returnParent: returnParent,
+    skipKeys: skipKeys,
   );
 
   /// {@macro getGrandChildren}
   List<Object?> getGrandChildren() => TreeHelper(this).getGrandChildren();
 
   /// {@macro searchForString}
-  String? searchForString({Object key = 'text'}) =>
-      TreeHelper(this).searchForString(key: key);
+  String? searchForString({
+    Object key = 'text',
+    Iterable<String> skipKeys = const [],
+  }) => TreeHelper(this).searchForString(key: key, skipKeys: skipKeys);
 }
 
 extension TreeMapHelper on Map<Object?, Object?> {
@@ -31,19 +35,23 @@ extension TreeMapHelper on Map<Object?, Object?> {
     bool suffixMatch = false,
     bool multipleMatch = false,
     bool returnParent = false,
+    Iterable<String> skipKeys = const [],
   }) => TreeHelper(this).deepSearch(
     tag,
     suffixMatch: suffixMatch,
     multipleMatch: multipleMatch,
     returnParent: returnParent,
+    skipKeys: skipKeys,
   );
 
   /// {@macro getGrandChildren}
   List<Object?> getGrandChildren() => values.getGrandChildren();
 
   /// {@macro searchForString}
-  String? searchForString({Object key = 'text'}) =>
-      TreeHelper(this).searchForString(key: key);
+  String? searchForString({
+    Object key = 'text',
+    Iterable<String> skipKeys = const [],
+  }) => TreeHelper(this).searchForString(key: key, skipKeys: skipKeys);
 }
 
 extension TreeSetHelper on Set<Object?> {
@@ -64,8 +72,10 @@ extension TreeSetHelper on Set<Object?> {
   List<Object?> getGrandChildren() => toList().getGrandChildren();
 
   /// {@macro searchForString}
-  String? searchForString({Object key = 'text'}) =>
-      TreeHelper(this).searchForString(key: key);
+  String? searchForString({
+    Object key = 'text',
+    Iterable<String> skipKeys = const [],
+  }) => TreeHelper(this).searchForString(key: key, skipKeys: skipKeys);
 }
 
 class TreeHelper {
@@ -92,6 +102,8 @@ class TreeHelper {
   /// * [multipleMatch] return all matches.
   /// * [stopAtTopLevel] do not search inside result for more matches.
   /// * [returnParent] identify the tree level above the matched node.
+  /// * [skipKeys] list of keys to skip when searching.
+  /// ( [parent] and [grandparent] are used internally for recursion.)
   /// {@endtemplate}
   List<Object?>? deepSearch(
     Object tag, {
@@ -99,6 +111,7 @@ class TreeHelper {
     bool multipleMatch = false,
     bool stopAtTopLevel = true,
     bool returnParent = false,
+    Iterable<String> skipKeys = const [],
     Object? parent,
     Object? grandparent,
   }) {
@@ -121,18 +134,21 @@ class TreeHelper {
       }
       if (value is Map || value is Iterable) {
         // Recursively search children.
-        final result = TreeHelper(value).deepSearch(
-          tag,
-          suffixMatch: suffixMatch,
-          multipleMatch: multipleMatch,
-          stopAtTopLevel: stopAtTopLevel,
-          returnParent: returnParent,
-          parent: value,
-          grandparent: parent,
-        );
-        if (result is List) {
-          matches.addAll(result);
-          if (!multipleMatch) return matches;
+        if (!_shouldSkipKey(key, skipKeys)) {
+          final result = TreeHelper(value).deepSearch(
+            tag,
+            suffixMatch: suffixMatch,
+            multipleMatch: multipleMatch,
+            stopAtTopLevel: stopAtTopLevel,
+            returnParent: returnParent,
+            skipKeys: skipKeys,
+            parent: value,
+            grandparent: parent,
+          );
+          if (result is List) {
+            matches.addAll(result);
+            if (!multipleMatch) return matches;
+          }
         }
       }
     }
@@ -142,6 +158,22 @@ class TreeHelper {
       return matches;
     }
     return null;
+  }
+
+  /// Determine if the key should be skipped based on the provided skipKeys.
+  bool _shouldSkipKey(Object? key, Iterable<String>? skipKeys) {
+    if (skipKeys == null || skipKeys.isEmpty) {
+      return false;
+    }
+    if (key is MapEntry) {
+      if (skipKeys.contains(key.key.toString())) {
+        return true;
+      }
+    }
+    if (skipKeys.contains(key.toString())) {
+      return true;
+    }
+    return false;
   }
 
   /// determine which value to return
@@ -186,8 +218,11 @@ class TreeHelper {
   /// It finds the first occurrence of the [key]
   /// and returns the associated value.
   /// {@endtemplate}
-  String? searchForString({Object key = 'text'}) {
-    final results = deepSearch(key);
+  String? searchForString({
+    Object key = 'text',
+    Iterable<String> skipKeys = const [],
+  }) {
+    final results = deepSearch(key, skipKeys: skipKeys);
     if (null != results && results.isNotEmpty && null != results.first) {
       return results.first!.toString();
     }

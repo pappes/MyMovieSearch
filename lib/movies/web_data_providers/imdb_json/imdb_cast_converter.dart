@@ -150,7 +150,10 @@ class ImdbCastConverter extends ImdbConverterBase {
       // get id, rowTitle and image url
       uniqueId: person.searchForString(key: deepEntityExtraCastId),
       title: person.searchForString(key: deepEntityExtraCastPersonName),
-      imageUrl: imageProps.searchForString(key: deepImageField),
+      imageUrl: imageProps.searchForString(
+        key: deepImageField,
+        skipKeys: [ignoreImageHeader],
+      ),
     );
     collection[movieDto.uniqueId] = movieDto;
 

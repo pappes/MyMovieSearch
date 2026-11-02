@@ -21,6 +21,11 @@ const Map<String, Object> imdbJsonWrappedFilteredSample = {
 
 const Map<String, Object> imdbJsonInnerNameSample = {
   'nameText': {'text': 'Raman Rodger'},
+  'interests': {
+    'primaryImage': {
+      'url': 'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+    },
+  },
   'primaryImage': {
     'caption': {'plainText': 'Raman Rodger'},
     'height': 1479,
@@ -110,6 +115,11 @@ const Map<String, Object> imdbJsonNode1Sample = {
         'text': 'TV Series',
         'id': 'tvSeries',
       },
+      'interests': {
+        'primaryImage': {
+          'url': 'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+        },
+      },
       'primaryImage': {
         'url':
             'https://m.media-amazon.com/images/M/MV5BNjZhZWMwNTMmVmXkEyXkFqcGdeQXVyMTY0Njc2MTUx._V1_.jpg',
@@ -158,6 +168,11 @@ const Map<String, Object> imdbJsonNode2Sample = {
         'text': 'Movie',
         'id': 'movie',
       },
+      'interests': {
+        'primaryImage': {
+          'url': 'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+        },
+      },
       'primaryImage': {
         'url':
             'https://m.media-amazon.com/images/M/MV5BNWFhNcGdeQXVyMTcyODY0OTE@._V1_.jpg',
@@ -199,6 +214,11 @@ const Map<String, Object> imdbJsonNode3Sample = {
         },
         'text': 'TV Movie',
         'id': 'tvMovie',
+      },
+      'interests': {
+        'primaryImage': {
+          'url': 'https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg',
+        },
       },
       'primaryImage': {
         'url':

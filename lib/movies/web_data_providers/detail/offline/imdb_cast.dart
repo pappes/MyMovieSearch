@@ -33,6 +33,11 @@ const intermediateMapList = [
             "title": {
               "id": "tt0106977",
               "titleType": {"id": "movie", "text": "Movie"},
+              "interests": {
+                "primaryImage": {
+                  "url": "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                },
+              },
               "creditCategories": [
                 {
                   "credits": {
@@ -55,6 +60,12 @@ const intermediateMapList = [
                 },
                 {
                   "category": {"id": "writer"},
+                  "interests": {
+                    "primaryImage": {
+                      "url":
+                          "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                    },
+                  },
                   "credits": {
                     "edges": [
                       {
@@ -94,6 +105,12 @@ const intermediateMapList = [
                 },
                 {
                   "category": {"id": "cast"},
+                  "interests": {
+                    "primaryImage": {
+                      "url":
+                          "https://m.media-amazon.com/images/M/FAKE_IMAGE.jpg",
+                    },
+                  },
                   "credits": {
                     "edges": [
                       {

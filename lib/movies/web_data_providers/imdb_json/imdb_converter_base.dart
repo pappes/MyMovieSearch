@@ -119,8 +119,8 @@ abstract class ImdbConverterBase extends ConverterHelper {
         map.searchForString(key: deepRelatedMoviePlot);
     // ...{'primaryImage':...{...'url':<value>...}}
     final url = map
-        .deepSearch(deepImageHeader)
-        ?.searchForString(key: deepImageField);
+        .deepSearch(deepImageHeader, skipKeys: [ignoreImageHeader])
+        ?.searchForString(key: deepImageField, skipKeys: [ignoreImageHeader]);
     // ...{...'aggregateRating':<value>...}
     final userRating = map.searchForString(key: deepRelatedMovieUserRating);
     // ...{...'voteCount':<value>...}
@@ -319,8 +319,8 @@ abstract class ImdbConverterBase extends ConverterHelper {
         ?.searchForString();
     final url = // ...{'primaryImage':...{...'url':<value>...}}
     map
-        .deepSearch(deepImageHeader)
-        ?.searchForString(key: deepImageField);
+        .deepSearch(deepImageHeader, skipKeys: [ignoreImageHeader])
+        ?.searchForString(key: deepImageField, skipKeys: [ignoreImageHeader]);
 
     final newDTO = MovieResultDTO().init(
       bestSource: .imdbSuggestions,
