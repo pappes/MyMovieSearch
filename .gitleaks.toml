@@ -1,0 +1,19 @@
+# gitleaks configuration — see https://github.com/gitleaks/gitleaks
+#
+# Default rules are used; the allowlist below only exempts values that are
+# public client-side configuration by design, not secrets.
+
+title = "MyMovieSearch gitleaks config"
+
+[allowlist]
+description = """
+Public client-side Firebase configuration. The AIza... keys in these files are
+shipped inside the app binary and are not secrets (access control is done with
+Firebase Auth / App Check / key restrictions, not by hiding them).
+"""
+paths = [
+  '''lib/firebase_options\.dart''',
+  '''android/app/google-services\.json''',
+  '''ios/Runner/GoogleService-Info\.plist''',
+  '''macos/Runner/GoogleService-Info\.plist''',
+]

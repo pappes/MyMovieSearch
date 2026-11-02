@@ -127,7 +127,8 @@ abstract class QueryTVDBCommon
   // Add authorization token for compatibility with the TVDB V4 API.
   @override
   void myConstructHeaders(HttpHeaders headers) {
-    // Get key from the file assets/secrets.json (not source controlled)
+    // The session key comes from the TVDB login API (see [login]),
+    // which authenticates with Settings().tvdbKey (not source controlled).
     headers
       ..add('Authorization', ' Bearer $sessionKey')
       ..add('accept', 'application/json');
