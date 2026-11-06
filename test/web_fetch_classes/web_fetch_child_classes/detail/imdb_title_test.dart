@@ -20,9 +20,6 @@ Future<Stream<String>> _emitInvalidHtmlSample(_) =>
     Future.value(Stream.value('not valid html'));
 
 void main() {
-  // Wait for api key to be initialised
-  setUpAll(() => lockWebFetchTreadedCache);
-  tearDownAll(() => unlockWebFetchTreadedCache);
   ////////////////////////////////////////////////////////////////////////////////
   /// Unit tests
   ////////////////////////////////////////////////////////////////////////////////

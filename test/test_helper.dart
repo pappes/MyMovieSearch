@@ -16,7 +16,6 @@ import 'package:my_movie_search/movies/domain/models/movie_result_transformation
 import 'package:my_movie_search/movies/models/movie_result_dto.dart';
 import 'package:my_movie_search/movies/models/search_criteria_dto.dart';
 import 'package:my_movie_search/movies/web_data_providers/common/imdb_helpers.dart';
-import 'package:my_movie_search/utilities/settings.dart';
 import 'package:my_movie_search/utilities/web_data/web_html_extractor.dart';
 import 'package:quiver/iterables.dart';
 
@@ -276,19 +275,6 @@ Matcher containsSubstring(String substring, {String startsWith = ''}) {
   return predicate(testFunction);
 }
 
-Future<bool> waitForExcusiveAccess(String mutexName) async {
-  final lockFile = File('/tmp/testMutex_$mutexName.txt');
-  while (lockFile.existsSync()) {
-    await Future<void>.delayed(const Duration(seconds: 1));
-  }
-  lockFile.openSync(mode: FileMode.write).closeSync();
-  return true;
-}
-
-Future<void> releaseExcusiveAccess(String mutexName) async {
-  File('/tmp/testMutex_$mutexName.txt').deleteSync();
-}
-
 /// Check if the test should be skipped based on the platform and environment.
 ///
 /// [isImdb] indicates if the test is related to IMDb data extraction.
@@ -328,14 +314,6 @@ Object skipLiveGroup({bool isImdb = false, bool allowAndroidOnly = false}) {
   // and broken the tests.
   return false;
 }
-
-Future<bool> lockWebFetchTreadedCache() {
-  Settings().init();
-  return waitForExcusiveAccess('WebFetchTreadedCache');
-}
-
-Future<void> unlockWebFetchTreadedCache() =>
-    releaseExcusiveAccess('WebFetchTreadedCache');
 
 /// Expectation matcher for test framework to compare DTOs
 class MovieResultDTOMatcher extends Matcher {
