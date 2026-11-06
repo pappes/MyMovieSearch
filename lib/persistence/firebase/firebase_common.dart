@@ -25,7 +25,7 @@ enum KnownUser {
   final String deviceId;
 }
 
-const runtimeDevices = {
+const runtimeDevices = <String, KnownUser>{
   'android.Google.Pixel 8 Pro': KnownUser.dave, // Google Pixel 8 Pro
   'android.samsung.SM-F926B': KnownUser.dave, // Samsung Fold 3
   'android.samsung.SM-F966B': KnownUser.dave, // Samsung Fold 7
@@ -34,7 +34,6 @@ const runtimeDevices = {
   'android.Microsoft Corporation.Subsystem for Android(TM)':
       KnownUser.dave, // Chair
   'android.samsung.SM-G980F': KnownUser.tash, // Samsung S20
-
 };
 
 /// Grants access to firebase persistent data
