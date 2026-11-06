@@ -72,8 +72,20 @@ class DatabaseHelper {
         await _getDbLocation(),
         version: _databaseVersion,
         onCreate: _onCreate,
+        onConfigure: _onConfigure,
       );
     }
+  }
+
+  /// Configure the database connection for safe concurrent access.
+  ///
+  /// Multiple isolates (e.g. parallel test files) may open this database at
+  /// the same time. WAL journal mode allows readers and a writer to operate
+  /// concurrently, and the busy timeout makes SQLite wait instead of failing
+  /// immediately with 'database is locked' when the file is briefly busy.
+  static Future<void> _onConfigure(Database db) async {
+    await db.setJournalMode('WAL');
+    await db.execute('PRAGMA busy_timeout = 5000');
   }
 
   /// Get the path to the database.
