@@ -5,7 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:googleapis/secretmanager/v1.dart';
+import 'package:googleapis/secretmanager/v1.dart'; // keep an eye on https://pub.dev/packages/google_cloud_secretmanager_v1/versions for general release
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:meta/meta.dart';

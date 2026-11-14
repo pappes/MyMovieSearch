@@ -7,24 +7,32 @@ plugins {
 
 android {
     namespace = "com.example.my_movie_search"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = "28.2.13676358" //flutter.ndkVersion //was defaulting to "NDK 26.3.11579264"  for flutter 3.22.8
+    compileSdk = 37
+    // compileSdk = flutter.compileSdkVersion // flutter 3.50.0 was defaulting to 36
+    // ndkVersion = "28.2.13676358" 
+    ndkVersion = flutter.ndkVersion //was defaulting to "NDK 26.3.11579264"  for flutter 3.22.8
 
     // for Android Gradle Plugin (AGP).
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     // For Kotlin Gradle Plugin (KGP).
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
-    }
+    //kotlinOptions {
+    //    jvmTarget = JavaVersion.VERSION_11.toString()
+    //}
     // Not ready for newer syntax. When upgrading gradle/kotlin, change this to compilerOptions block.
     // See https://docs.gradle.org/current/userguide/kotlin-dsl.html#kotlin-compiler-options
-    //compilerOptions {
-    //    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    // compilerOptions {
+    //    jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17)
     //}
+
+
+    lint {  // Workaround for firebase failing the android linting
+        abortOnError = false
+        checkReleaseBuilds = false
+    }
 
     defaultConfig {
         applicationId = "com.example.my_movie_search"
@@ -50,15 +58,15 @@ android {
     productFlavors {
         create("dev") {
             dimension = "app"
-            // FIX: Set a distinct app title for the development build.
-            resValue("string", "app_name", "Aperture (Dev)")
+            // moved to android/app/src/dev/res/values/strings.xml.
+            // resValue("string", "app_name", "Aperture (Dev)")
         }
 
         create("prod") {
             dimension = "app"
             applicationIdSuffix = ".prod"
-            // FIX: Set the production app title.
-            resValue("string", "app_name", "Aperture") 
+            // moved to ndroid/app/src/prod/res/values/strings.xml
+            // resValue("string", "app_name", "Aperture") 
             // alternative names Aurora , Crescendo, Fable, Glimpse, Glow, Glyph*, Mythos, Odyssey, Paradox, Relic, Saga, Zenith**
         }
     }
@@ -152,6 +160,11 @@ afterEvaluate {
 
 }
 
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_17
+    }
+}
 
 flutter {
     source = "../.."

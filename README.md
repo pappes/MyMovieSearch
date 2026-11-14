@@ -8,6 +8,10 @@ For linux builds the libc6-dev c library is used for the linux_webview dart libr
 you may need to install it with:
 sudo apt-get install libc6-dev
 
+Hack for outdated inappwebview apk build failure:
+- edit file ~/.pub-cache/hosted/pub.dev/flutter_inappwebview_android-1.1.3/android/build.gradle
+- change 'proguard-android.txt' to 'proguard-android-optimize.txt'
+
 Before compiling it is recommended to generate your own API keys.
 For all supported options for API keys see [Settings] in lib/utilities/settings.dart
 From the command line at build time:

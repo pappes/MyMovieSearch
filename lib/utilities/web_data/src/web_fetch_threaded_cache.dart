@@ -39,8 +39,10 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
   }) async {
     var result = <OUTPUT_TYPE>[];
 
+    final isCached = await isThreadedResultCached();
+    final isStale = isThreadedCacheStale();
     // if cached and not stale yield from cache
-    if (await isThreadedResultCached() && !isThreadedCacheStale()) {
+    if (isCached && !isStale) {
       AppLogger.instance.trace(
         '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
         'value was pre-cached ${myFormatInputAsText()}',
