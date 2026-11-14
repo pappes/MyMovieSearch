@@ -99,7 +99,7 @@ abstract class HeadlessWebEngineBase implements HeadlessWebEngine {
     urlProxyFilter = urlInterceptFilter;
     httpStatusCode = HttpStatus.processing;
 
-    return Future<int>.value(httpStatusCode!);
+    return Future<int>.syncValue(httpStatusCode!);
   }
 
   /// Disposes the headless web engine after a timeout period.

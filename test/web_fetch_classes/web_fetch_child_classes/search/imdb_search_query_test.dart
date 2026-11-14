@@ -16,19 +16,19 @@ import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedHtmlSample(_) =>
-    Future.value(Stream.value('<html><body>stuff</body></html>'));
+    Future.syncValue(Stream.value('<html><body>stuff</body></html>'));
 
 Future<Stream<String>> _emitInvalidHtmlSample(_) =>
-    Future.value(Stream.value('not valid html'));
+    Future.syncValue(Stream.value('not valid html'));
 
 Future<Stream<String>> _emitUnexpectedJsonSample(_) {
   final unexpectedJson = htmlSampleFull.replaceAll('"results"', '"found"');
-  return Future.value(Stream.value(unexpectedJson));
+  return Future.syncValue(Stream.value(unexpectedJson));
 }
 
 Future<Stream<String>> _emitEmtpyJsonSample(_) {
   const emptyJson = '$htmlSampleStart{}$htmlSampleEnd';
-  return Future.value(Stream.value(emptyJson));
+  return Future.syncValue(Stream.value(emptyJson));
 }
 
 final SearchCriteriaDTO criteria = SearchCriteriaDTO().fromString('123');

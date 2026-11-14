@@ -71,7 +71,7 @@ class BaseMovieRepository {
 
   /// Cancels or completes an in progress search.
   @awaitNotRequired
-  Future<void> close({
+  Future<dynamic> close({
     String message = 'Search completed ...',
     Duration delay = const Duration(seconds: 1),
   }) async {
@@ -86,7 +86,7 @@ class BaseMovieRepository {
       AppLogger.instance.trace('closing repository stream');
       final tempController = _movieStreamController;
       _movieStreamController = null;
-      return tempController?.close();
+      return await tempController?.close();
     }
   }
 

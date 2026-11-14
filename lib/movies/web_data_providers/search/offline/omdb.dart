@@ -18,7 +18,7 @@ const jsonSampleEmpty = '{"Response":"False","Error":"Movie not found!"}';
 const jsonSampleError = '{"Response":"False","Error":"Invalid API key!"}';
 
 Future<Stream<String>> streamOmdbJsonOfflineData(_) =>
-    Future.value(Stream.value(jsonSampleFull));
+    Future.syncValue(Stream.value(jsonSampleFull));
 
 const omdbJsonSearchInner = '''
   {"Title":"Wonder Woman","Year":"2017","imdbID":"tt0451279","Type":"movie","Poster":"https://m.media-amazon.com/images/M/MV5BMTYzODQzYjQtNTczNC00MzZhLTg1ZWYtZDUxYmQ3ZTY4NzA1XkEyXkFqcGdeQXVyODE5NzE3OTE@._V1_SX300.jpg"},

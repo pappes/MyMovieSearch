@@ -11,10 +11,10 @@ import '../../../test_data/imdb_suggestion_converter_data.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonSample(_) =>
-    Future.value(Stream.value('imdbJsonFunction(null)'));
+    Future.syncValue(Stream.value('imdbJsonFunction(null)'));
 
 Future<Stream<String>> _emitInvalidJsonSample(_) =>
-    Future.value(Stream.value('imdbJsonFunction({not valid json})'));
+    Future.syncValue(Stream.value('imdbJsonFunction({not valid json})'));
 
 final SearchCriteriaDTO criteria = SearchCriteriaDTO().fromString('123');
 

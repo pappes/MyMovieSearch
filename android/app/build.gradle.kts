@@ -7,10 +7,10 @@ plugins {
 
 android {
     namespace = "com.example.my_movie_search"
-    compileSdk = 37
-    // compileSdk = flutter.compileSdkVersion // flutter 3.50.0 was defaulting to 36
-    // ndkVersion = "28.2.13676358" 
-    ndkVersion = flutter.ndkVersion //was defaulting to "NDK 26.3.11579264"  for flutter 3.22.8
+    compileSdk = 37  // flutter 3.50.0 was defaulting to 36
+    // compileSdk = flutter.compileSdkVersion
+    // ndkVersion = "28.2.13676358" //was defaulting to "NDK 26.3.11579264"  for flutter 3.22.8
+    ndkVersion = flutter.ndkVersion 
 
     // for Android Gradle Plugin (AGP).
     compileOptions {

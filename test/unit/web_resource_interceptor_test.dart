@@ -50,9 +50,9 @@ class ConfigurableMockHttpClientResponse extends mockito.Mock
   @override
   Future<S> fold<S>(S initialValue, S Function(S, List<int>) combine) {
     if (S == List<int>) {
-      return Future.value(bodyBytes.toList()) as Future<S>;
+      return Future.syncValue(bodyBytes.toList()) as Future<S>;
     }
-    return Future.value(initialValue);
+    return Future.syncValue(initialValue);
   }
 }
 

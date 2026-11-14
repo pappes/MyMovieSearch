@@ -75,4 +75,4 @@ const jsonSampleError =
     '"The resource you requested could not be found."}';
 
 Future<Stream<String>> streamTmdbJsonOfflineData(_) =>
-    Future.value(Stream.value(jsonSampleFull));
+    Future.syncValue(Stream.value(jsonSampleFull));

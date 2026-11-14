@@ -6,7 +6,7 @@ const imdbHtmlSampleFull =
     '$imdbHtmlSampleMiddle $imdbHtmlSampleInner $imdbHtmlSampleEnd';
 
 Future<Stream<String>> streamImdbHtmlOfflineData(_) =>
-    Future.value(Stream.value(imdbHtmlSampleFull));
+    Future.syncValue(Stream.value(imdbHtmlSampleFull));
 
 const imdbJsonSampleInner =
     '''

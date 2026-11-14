@@ -50,4 +50,4 @@ const imdbJsonPSampleFull =
   ) ''';
 
 Future<Stream<String>> streamImdbJsonPOfflineData(_) =>
-    Future.value(Stream.value(imdbJsonPSampleFull));
+    Future.syncValue(Stream.value(imdbJsonPSampleFull));

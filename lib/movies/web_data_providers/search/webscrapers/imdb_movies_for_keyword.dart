@@ -24,7 +24,7 @@ mixin ScrapeIMDBMoviesForKeyword
     try {
       return fastParse(webText);
     } on FastParseException {
-      return slowConvertWebTextToTraversableTree(webText);
+      return await slowConvertWebTextToTraversableTree(webText);
     }
   }
 

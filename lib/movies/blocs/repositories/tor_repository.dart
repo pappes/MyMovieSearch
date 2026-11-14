@@ -39,7 +39,7 @@ class TorRepository extends TorMultiSearchRepository {
       limit = 100;
     }
     final results = await provider.readList(limit: limit);
-    return addResults(
+    return await addResults(
       searchUID,
       results,
     ).then((value) => finishProvider(provider));
@@ -47,7 +47,7 @@ class TorRepository extends TorMultiSearchRepository {
 
   /// Manufacture a navigation card
   /// to expand downloadSimple to downloadAdvanced
-  Future<void> _advancedDownloadCard(int searchUID) async {
+  Future<void> _advancedDownloadCard(int searchUID) {
     if (criteria.criteriaType == .downloadSimple) {
       return addResults(searchUID, [
         MovieResultDTO().init(
@@ -57,6 +57,7 @@ class TorRepository extends TorMultiSearchRepository {
         ),
       ]);
     }
+    return Future.value();
   }
 
   /// Determine best provider(s) for the supplied criteria.

@@ -176,4 +176,4 @@ const intermediateMapList = [
 ];
 
 Future<Stream<String>> streamImdbHtmlOfflineData(_) =>
-    Future.value(Stream.value(imdbHtmlSampleFull));
+    Future.syncValue(Stream.value(imdbHtmlSampleFull));

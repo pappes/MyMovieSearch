@@ -47,7 +47,7 @@ abstract class WebFetchThreadedCache<OUTPUT_TYPE, INPUT_TYPE>
         '${ThreadRunner.currentThreadName}($priority) ${myDataSourceName()} '
         'value was pre-cached ${myFormatInputAsText()}',
       );
-      return fetchResultFromThreadedCache().toList();
+      return await fetchResultFromThreadedCache().toList();
     }
     final newPriority = confirmThreadCachePriority(priority, limit);
 

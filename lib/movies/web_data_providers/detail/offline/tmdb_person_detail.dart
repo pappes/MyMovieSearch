@@ -57,4 +57,4 @@ const jsonSampleError =
     '"success":false}';
 
 Future<Stream<String>> streamTmdbJsonOfflineData(_) =>
-    Future.value(Stream.value(jsonSampleFull));
+    Future.syncValue(Stream.value(jsonSampleFull));

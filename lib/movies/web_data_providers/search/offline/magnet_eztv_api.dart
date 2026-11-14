@@ -4,9 +4,9 @@
 import 'dart:convert';
 
 Future<Stream<String>> streamHtmlOfflineData(_) =>
-    Future.value(Stream.value(jsonSample));
+    Future.syncValue(Stream.value(jsonSample));
 Future<Stream<String>> streamHtmlOfflineDataLarge(_) =>
-    Future.value(Stream.value(jsonSampleLarge));
+    Future.syncValue(Stream.value(jsonSampleLarge));
 
 const jsonSampleEmpty =
     '{"imdb_id":"93443470","torrents_count":0,"limit":100,"page":1}';

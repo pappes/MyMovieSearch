@@ -103,11 +103,11 @@ class HeadlessHttpClient implements HttpClient {
     String host,
     int port,
     String path,
-  ) => Future.value(HeadlessHttpClientRequest('http://$host:$port$path'));
+  ) => Future.syncValue(HeadlessHttpClientRequest('http://$host:$port$path'));
 
   @override
   Future<HttpClientRequest> openUrl(String method, Uri url) =>
-      Future.value(HeadlessHttpClientRequest(url.toString()));
+      Future.syncValue(HeadlessHttpClientRequest(url.toString()));
 
   // throw exception for all unimplimented methods.
   @override

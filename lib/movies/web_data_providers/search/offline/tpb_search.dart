@@ -3,7 +3,7 @@
 // ignore_for_file: unnecessary_raw_strings
 
 Future<Stream<String>> streamTpbHtmlOfflineData(_) =>
-    Future.value(Stream.value(htmlSample4Columns));
+    Future.syncValue(Stream.value(htmlSample4Columns));
 
 const htmlSample8Columns =
     '$tpbHtmlSampleStart$tpbSampleMid8Columns$tpbHtmlSampleEnd';

@@ -96,11 +96,11 @@ class MovieListRepository extends BaseMovieRepository {
   /// Maintain a map of unique movie detail requests
   /// and request retrieval if the fetch is not already in progress.
   @override
-  Future<int> getExtraDetails(int originalSearchUID, MovieResultDTO dto) async {
+  Future<void> getExtraDetails(int originalSearchUID, MovieResultDTO dto) {
     if (!dto.isMessage()) {
       return _callDetailFetchFunction(originalSearchUID, dto);
     }
-    return 0;
+    return Future<void>.value();
   }
 
   static final priorTvdbCalls = <String>[];
@@ -152,7 +152,7 @@ class MovieListRepository extends BaseMovieRepository {
 
   /// Maintain a map of unique movie detail requests
   /// and request retrieval if the fetch is not already in progress.
-  Future<int> _callDetailFetchFunction(
+  Future<void> _callDetailFetchFunction(
     int originalSearchUID,
     MovieResultDTO dto,
   ) async {
@@ -166,7 +166,6 @@ class MovieListRepository extends BaseMovieRepository {
     if (_readyForTmdbExtraDetails(dto) && !_hasFullTmdbDetails(dto)) {
       await _fetchTmdbDetails(originalSearchUID, dto);
     }
-    return 0;
   }
 
   /// Call webfetch for the criteria and manage expected web fetches.
@@ -178,7 +177,7 @@ class MovieListRepository extends BaseMovieRepository {
     final provider = searchClass(criteria);
     initProvider(provider);
     final results = await provider.readList();
-    return _addExtraDetails(
+    return await _addExtraDetails(
       originalSearchUID,
       results,
     ).then((_) => finishProvider(provider));

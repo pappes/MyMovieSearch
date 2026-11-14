@@ -93,7 +93,7 @@ class MovieLocation {
 
       _movies[uniqueId]!.clear();
       final id = StackerContents(uniqueId: uniqueId, titleName: '');
-      return _writeToCloud(id);
+      return await _writeToCloud(id);
     }
     return false;
   }

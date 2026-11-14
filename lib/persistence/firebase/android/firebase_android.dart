@@ -48,11 +48,11 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
 
   void loginStatusEvent(android_firebase.User? user) {
     if (user != null) {
-      loggedIn = Future<bool>.value(true);
+      loggedIn = Future<bool>.syncValue(true);
       userDisplayName = user.displayName;
       userId = user.uid;
     } else {
-      loggedIn = Future<bool>.value(false);
+      loggedIn = Future<bool>.syncValue(false);
       userDisplayName = null;
       userId = null;
     }

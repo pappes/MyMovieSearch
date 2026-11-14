@@ -29,7 +29,7 @@ const jsonSampleError =
     '"Invalid API key: You must be granted a valid key.","success":false}';
 
 Future<Stream<String>> streamTmdbJsonOfflineData(_) =>
-    Future.value(Stream.value(jsonSampleFull));
+    Future.syncValue(Stream.value(jsonSampleFull));
 
 const tmdbJsonSearchInner = '''
 {"adult":false,

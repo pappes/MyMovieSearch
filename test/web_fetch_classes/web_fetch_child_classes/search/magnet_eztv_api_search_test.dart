@@ -18,10 +18,10 @@ import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedHtmlSample(_) =>
-    Future.value(Stream.value('<html><body>stuff</body></html>'));
+    Future.syncValue(Stream.value('<html><body>stuff</body></html>'));
 
 Future<Stream<String>> _emitInvalidHtmlSample(_) =>
-    Future.value(Stream.value('not valid html'));
+    Future.syncValue(Stream.value('not valid html'));
 
 final SearchCriteriaDTO criteria = SearchCriteriaDTO().fromString('dream');
 
