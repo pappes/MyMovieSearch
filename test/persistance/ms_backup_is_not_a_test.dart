@@ -141,7 +141,7 @@ Future<String> getMovieDetails() async {
       'of ${movies.keys.length} uniqueId:$uniqueId',
     );
     // Delay execution for 1 second to avoid rate limiting issues.
-    await Future<void>.delayed(const Duration(seconds: 1));
+    await Future.pause(const Duration(seconds: 1));
 
     // Fetch movie details from IMDB.
     final criteria = SearchCriteriaDTO()..init(.movieTitle, title: uniqueId);

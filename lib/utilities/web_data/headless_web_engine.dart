@@ -118,7 +118,7 @@ abstract class HeadlessWebEngineBase implements HeadlessWebEngine {
   @awaitNotRequired
   Future<void> dispose({Duration optionalDelay = Duration.zero}) async {
     timeoutTimer?.cancel();
-    await Future<void>.delayed(optionalDelay);
+    await Future.pause(optionalDelay);
     await closePage();
 
     if (!dataLoadedCompleter.isCompleted) {
@@ -126,7 +126,7 @@ abstract class HeadlessWebEngineBase implements HeadlessWebEngine {
       dataLoadedCompleter.complete();
     }
     // Allow time for any final requests to complete.
-    await Future<void>.delayed(timeoutDurationMicroSleep);
+    await Future.pause(timeoutDurationMicroSleep);
   }
 
   /// Handles the completion of a page load.

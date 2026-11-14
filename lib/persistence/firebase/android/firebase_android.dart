@@ -182,7 +182,7 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
       if (!completer.isCompleted) {
         // Do not know when initial data load is completre
         // so just wait a fixed amount of time then notify the caller.
-        await Future<void>.delayed(const Duration(seconds: 5));
+        await Future.pause(const Duration(seconds: 5));
       }
       if (!completer.isCompleted) completer.complete(true);
     }

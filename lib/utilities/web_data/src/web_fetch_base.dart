@@ -369,7 +369,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///   lastRequestTime = DateTime.now();
   ///   final delay = nextRequestTime.difference(lastRequestTime);
   ///   if (!delay.isNegative) {
-  ///     return Future.delayed(delay);
+  ///     return Future.pause(delay);
   ///   }
   /// ```
   Future<void> myDelayRequest() => Future.value();

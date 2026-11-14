@@ -32,7 +32,7 @@ class HeadlessWebBrowserLinux {
         headless: false,
         executablePath: '/usr/bin/google-chrome',
       );
-      await Future<void>.delayed(const Duration(milliseconds: 100));
+      await Future.pause(const Duration(milliseconds: 100));
       _browserLaunchCompleter!.complete(_browser);
     }
     await _browserLaunchCompleter!.future;

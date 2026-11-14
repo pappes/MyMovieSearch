@@ -101,7 +101,7 @@ void main() {
       repository.search(mockCriteria).listen((_) {});
 
       // Allow async tasks to run.
-      await Future<void>.delayed(Duration.zero);
+      await Future.pause(); //Duration.zero
 
       // Verify provider was called with the correct limit.
       verify(mockProvider.readList(limit: 10)).called(1);

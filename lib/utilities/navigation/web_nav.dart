@@ -441,7 +441,7 @@ class MMSFlutterCanvas {
         ),
       );
       while (closeCurrentScreen()) {
-        await Future<void>.delayed(Duration.zero);
+        await Future.pause(); //Duration.zero
       }
       try {
         // Open the page.
