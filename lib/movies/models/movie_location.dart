@@ -93,7 +93,7 @@ class MovieLocation {
 
       _movies[uniqueId]!.clear();
       final id = StackerContents(uniqueId: uniqueId, titleName: '');
-      return _writeToCloud(id);
+      return await _writeToCloud(id);
     }
     return false;
   }
@@ -109,7 +109,7 @@ class MovieLocation {
     // Wait for stream to be populated with data.
     await init();
     // Wait for data to be consumed from the stream.
-    await Future<void>.delayed(const Duration(seconds: 1));
+    await Future.pause(const Duration(seconds: 1));
 
     final dtos = <MovieResultDTO>[];
     for (final dvd in await _getDvds()) {
@@ -174,7 +174,7 @@ class MovieLocation {
     // Wait for stream to be populated with initial data.
     await init();
     // Wait for data to be consumed from the stream.
-    await Future<void>.delayed(const Duration(seconds: 2));
+    await Future.pause(const Duration(seconds: 2));
     if (clearCache) {
       clear();
 
@@ -182,7 +182,7 @@ class MovieLocation {
           .fetchRecords('/dvds')
           .listen(_cloudDataReceived);
 
-      await Future<void>.delayed(const Duration(seconds: 10));
+      await Future.pause(const Duration(seconds: 10));
       await streamSubscription.cancel();
     }
     final movies = <String, Object>{};

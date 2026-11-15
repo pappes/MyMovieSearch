@@ -1,10 +1,10 @@
 import 'package:my_movie_search/movies/domain/models/movie_result_enums.dart';
 
 Future<Stream<String>> streamImdbSearchHtmlOfflineData(_) =>
-    Future.value(Stream.value(htmlSampleFull));
+    Future.syncValue(Stream.value(htmlSampleFull));
 
 Future<Stream<String>> emitEmptyImdbSearchSample(_) =>
-    Future.value(Stream.value(htmlSampleEmpty));
+    Future.syncValue(Stream.value(htmlSampleEmpty));
 
 const htmlSampleEmpty =
     '$htmlSampleStart$imdbSearchJsonSampleEmpty$htmlSampleEnd';

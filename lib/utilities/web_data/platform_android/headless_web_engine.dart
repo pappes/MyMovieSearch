@@ -163,7 +163,7 @@ class HeadlessWebEngineAndroid extends HeadlessWebEngineBase {
   /// Returns the html content of the page.
   @override
   Future<String?> getPageContent() async =>
-      _headlessWebView?.webViewController?.getHtml();
+      await _headlessWebView?.webViewController?.getHtml();
 
   // void return signature required
   // so that it can be used as a callback for the WebView.
@@ -193,7 +193,7 @@ class HeadlessWebEngineAndroid extends HeadlessWebEngineBase {
       case .delegateRequest:
         return null;
       case .executeRequest:
-        return transferResponseData(request, response.httpResponse!);
+        return await transferResponseData(request, response.httpResponse!);
     }
   }
 

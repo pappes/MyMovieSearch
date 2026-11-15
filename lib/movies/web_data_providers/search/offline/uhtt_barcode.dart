@@ -1,5 +1,5 @@
 Future<Stream<String>> streamHtmlOfflineData(_) =>
-    Future.value(Stream.value(htmlSampleFull));
+    Future.syncValue(Stream.value(htmlSampleFull));
 
 const htmlSampleFull = '$htmlSampleStart$htmlSampleMid$htmlSampleEnd';
 const htmlSampleEmpty = '$htmlSampleStart$htmlSampleEnd';

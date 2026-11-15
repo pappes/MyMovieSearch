@@ -3,7 +3,7 @@
 // ignore_for_file: unnecessary_raw_strings
 
 Future<Stream<String>> streamHtmlOfflineData(_) =>
-    Future.value(Stream.value(htmlSampleFull));
+    Future.syncValue(Stream.value(htmlSampleFull));
 
 const htmlSampleFull = '$gtHtmlSampleStart$gtSampleMid$gtHtmlSampleEnd';
 const htmlSampleEmpty = '$gtHtmlSampleStart$gtSampleMidEmpty$gtHtmlSampleEnd';

@@ -13,7 +13,7 @@ import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 
 import '../../../test_helper.dart';
 
-// Future<Stream<String>> _emitUnexpectedJsonSample(_) => Future.value(
+// Future<Stream<String>> _emitUnexpectedJsonSample(_) => Future.syncValue(
 //   Stream.value(
 //     '{{['
 //     ']}}',
@@ -21,7 +21,7 @@ import '../../../test_helper.dart';
 // );
 
 // Future<Stream<String>> _emitInvalidJsonSample(_) =>
-//     Future.value(Stream.value('not valid json'));
+//     Future.syncValue(Stream.value('not valid json'));
 
 void main() {
   ////////////////////////////////////////////////////////////////////////////////

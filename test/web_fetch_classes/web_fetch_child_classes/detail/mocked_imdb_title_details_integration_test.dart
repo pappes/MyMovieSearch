@@ -64,7 +64,7 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
     );
 
     Future<MockHttpClientResponse> getClientResponse(_) =>
-        Future.value(clientResponse);
+        Future.syncValue(clientResponse);
 
     // Use Mockito to return a successful response when it calls the
     // provided HttpClient.
@@ -79,10 +79,12 @@ class QueryIMDBTitleDetailsMocked extends QueryIMDBTitleDetails {
 
     when(
       client.openUrl('GET', expectedUri),
-    ).thenAnswer((_) => Future.value(clientRequest));
+    )
+        .thenAnswer((_) => Future.syncValue(clientRequest));
     when(
       client.getUrl(expectedUri),
-    ).thenAnswer((_) => Future.value(clientRequest));
+    )
+        .thenAnswer((_) => Future.syncValue(clientRequest));
     when(clientRequest.headers).thenAnswer((_) => headers);
 
     return client;
@@ -145,7 +147,7 @@ Stream<String> _getOfflineHTML(String id) => Stream.value('''
 /// Make dummy html results for offline queries.
 Future<Stream<String>> _offlineSearch(dynamic criteria) {
   criteria as SearchCriteriaDTO;
-  return Future.value(_getOfflineHTML(criteria.criteriaTitle));
+  return Future.syncValue(_getOfflineHTML(criteria.criteriaTitle));
 }
 
 /// Call IMDB for each criteria in the list.

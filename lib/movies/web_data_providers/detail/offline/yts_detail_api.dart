@@ -4,7 +4,7 @@
 import 'dart:convert';
 
 Future<Stream<String>> streamhtmlOfflineData(_) =>
-    Future.value(Stream.value(jsonTextSimple));
+    Future.syncValue(Stream.value(jsonTextSimple));
 
 final String jsonTextSimple = jsonEncode(jsonSampleSimple);
 final String jsonTextNotFound = jsonEncode(jsonSampleNotFound);

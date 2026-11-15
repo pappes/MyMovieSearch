@@ -5,7 +5,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
-import 'package:googleapis/secretmanager/v1.dart';
+import 'package:googleapis/secretmanager/v1.dart'; // keep an eye on https://pub.dev/packages/google_cloud_secretmanager_v1/versions for general release
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:meta/meta.dart';
@@ -277,7 +277,7 @@ class Settings {
   String? runtimeEnvValue(SettingKey key) => _runtimeEnvValues[key];
 
   late FirebaseApplicationState _firebaseData;
-  Future<bool> cloudSettingsInitialised = Future.value(false);
+  Future<bool> cloudSettingsInitialised = Future.syncValue(false);
   final _cloudSettingsInit = Completer<bool>();
   static final _settingsInitiaisedMutexLock = Mutex();
 
@@ -312,7 +312,7 @@ class Settings {
       if (includeCloudSettings) {
         return asyncInit();
       } else {
-        return Future.value(true);
+        return Future.syncValue(true);
       }
     }
     return cloudSettingsInitialised;
@@ -342,7 +342,7 @@ class Settings {
     if (!_cloudSettingsInit.isCompleted) {
       _cloudSettingsInit.complete(true);
     }
-    return cloudSettingsInitialised;
+    return await cloudSettingsInitialised;
   }
 
   /// Clear all local settings.
@@ -540,7 +540,7 @@ class Settings {
         final credentials = ServiceAccountCredentials.fromJson(account);
         _gcpSecretsProject = (jsonDecode(account) as Map)['project_id']
             .toString();
-        return clientViaServiceAccount(credentials, [
+        return await clientViaServiceAccount(credentials, [
           SecretManagerApi.cloudPlatformScope,
         ]);
       }

@@ -348,7 +348,7 @@ class MMSFlutterCanvas {
   ///
   /// For platforms that don't support CustomTabs
   /// the URL is displayed to the user.
-  Future<Object?> viewWebPage(String url) async {
+  Future<Object?> viewWebPage(String url) {
     final useAndroidCustomTabs =
         Platform.isAndroid && url.startsWith(webAddressPrefix);
     if (theme != null && dialogs != null) {
@@ -359,7 +359,10 @@ class MMSFlutterCanvas {
       }
     }
     // Tell the mock tests what we would have done.
-    return useAndroidCustomTabs ? 'openTab($url)' : 'openBrowser($url)';
+    final mockAnswer = useAndroidCustomTabs
+        ? 'openTab($url)'
+        : 'openBrowser($url)';
+    return Future.syncValue(mockAnswer);
   }
 
   /// Construct route to Material user interface page
@@ -438,7 +441,7 @@ class MMSFlutterCanvas {
         ),
       );
       while (closeCurrentScreen()) {
-        await Future<void>.delayed(Duration.zero);
+        await Future.pause(); //Duration.zero
       }
       try {
         // Open the page.
@@ -499,14 +502,14 @@ class MMSFlutterCanvas {
           'Received error $e\nwhen opening $url',
           'Navigation error',
         ) ??
-        Future.value(e);
+        Future.syncValue(e);
   }
 
   Future<Object?> _openBrowser(AppDialogs? dialogs, String url) async {
     final success = await launcher.launchUrl(Uri.parse(url));
     // An exception is thrown if browser app is not installed on Android device.
     if (!success) {
-      return dialogs?.popup(url, 'Browser error');
+      return await dialogs?.popup(url, 'Browser error');
     }
     return success;
   }

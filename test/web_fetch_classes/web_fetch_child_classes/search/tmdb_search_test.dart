@@ -13,10 +13,10 @@ import 'package:my_movie_search/utilities/web_data/src/web_fetch_base.dart';
 import '../../../test_helper.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonSample(_) =>
-    Future.value(Stream.value('[{"hello":"world"}]'));
+    Future.syncValue(Stream.value('[{"hello":"world"}]'));
 
 Future<Stream<String>> _emitInvalidJsonSample(_) =>
-    Future.value(Stream.value('not valid json'));
+    Future.syncValue(Stream.value('not valid json'));
 
 final SearchCriteriaDTO criteria = SearchCriteriaDTO().fromString('123');
 

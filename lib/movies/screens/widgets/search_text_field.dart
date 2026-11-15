@@ -33,9 +33,9 @@ class SearchTextField extends StatelessWidget {
   Future<Iterable<String>> _getOptions(
     TextEditingValue textValue,
     BuildContext context,
-  ) async {
+  ) {
     if (textValue.text.length < 3) {
-      return const Iterable<String>.empty();
+      return Future.syncValue(const Iterable<String>.empty());
     }
 
     final completer = Completer<Iterable<String>>();

@@ -9,7 +9,6 @@ abstract class AppNavigator {
 }
 
 /// An abstraction for theme access to make testing easier.
-// ignore: one_member_abstracts
 abstract class AppTheme {
   Color? getPrimaryColor();
 }
@@ -21,13 +20,11 @@ abstract class AppDialogs {
 }
 
 /// An abstraction for focus management to make testing easier.
-// ignore: one_member_abstracts
 abstract class AppFocus {
   FocusNode? primaryFocus();
 }
 
 /// An abstraction for launching custom tabs to make testing easier.
-// ignore: one_member_abstracts
 abstract class CustomTabsLauncher {
   Future<void> launch(String url, {tabs.CustomTabsOptions? customTabsOptions});
 }

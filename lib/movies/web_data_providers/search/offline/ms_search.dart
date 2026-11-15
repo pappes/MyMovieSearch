@@ -19,7 +19,7 @@ const jsonSampleFull =
     '$jsonSearchInner $jsonSearchSuffix';
 
 Future<Stream<String>> streamJsonOfflineData(_) =>
-    Future.value(Stream.value(jsonSampleFull));
+    Future.syncValue(Stream.value(jsonSampleFull));
 
 const jsonSearchPrefix = '[';
 const jsonSearchSuffix = ']';

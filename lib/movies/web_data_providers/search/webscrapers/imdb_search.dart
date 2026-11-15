@@ -28,7 +28,7 @@ mixin ScrapeIMDBSearchDetails
       final json = fastParse(webText);
       return await _scrapeSearchResult(webText, json);
     } on FastParseException {
-      return _slowConvertWebTextToTraversableTree(webText);
+      return await _slowConvertWebTextToTraversableTree(webText);
     }
   }
 
@@ -58,7 +58,7 @@ mixin ScrapeIMDBSearchDetails
     if (null != contents) {
       try {
         final list = _extractSearchResults(contents);
-        return Future.value(list);
+        return Future.syncValue(list);
       } catch (_) {}
     } else if (null != TreeHelper(jsonTree).deepSearch(deepRelatedHeader)) {
       return _scrapeMovieDetails(webText);

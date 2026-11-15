@@ -17,9 +17,9 @@ const jsonSampleError = '''
 ''';
 
 Future<Stream<String>> streamMovieJsonOfflineData(_) =>
-    Future.value(Stream.value(jsonEncode(jsonMovie)));
+    Future.syncValue(Stream.value(jsonEncode(jsonMovie)));
 Future<Stream<String>> streamPersonJsonOfflineData(_) =>
-    Future.value(Stream.value(jsonEncode(jsonPerson)));
+    Future.syncValue(Stream.value(jsonEncode(jsonPerson)));
 
 final Map<String, Object> jsonMovie = {
   'entities': {

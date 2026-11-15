@@ -17,11 +17,11 @@ class TorMultiSearchRepository extends BaseMovieRepository {
   /// Maintain a map of unique movie detail requests
   /// and request retrieval if the fetch is not already in progress.
   @override
-  Future<int> getExtraDetails(int originalSearchUID, MovieResultDTO dto) async {
+  Future<void> getExtraDetails(int originalSearchUID, MovieResultDTO dto) {
     if (!dto.isAControlObject()) {
       return _callSearchFunction(originalSearchUID, dto);
     }
-    return 0;
+    return Future.value();
   }
 
   /// Call YTS details when YTS search has completed
@@ -71,7 +71,7 @@ class TorMultiSearchRepository extends BaseMovieRepository {
     final provider = searchClass(criteria);
     initProvider(provider);
     final results = await provider.readList();
-    return _addExtraDetails(
+    return await _addExtraDetails(
       originalSearchUID,
       results,
     ).then((_) => finishProvider(provider));

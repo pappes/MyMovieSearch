@@ -36,7 +36,7 @@ const jsonSampleError =
     '"success": false, "status_code": 7 }';
 
 Future<Stream<String>> streamTmdbJsonOfflineData(_) =>
-    Future.value(Stream.value(jsonSampleFull));
+    Future.syncValue(Stream.value(jsonSampleFull));
 
 const tmdbJsonSearchInner = '''
   {"adult":false,"backdrop_path":"/8XiTPUQJf.jpg","genre_ids":[28,12,878],"id":429617,"original_language":"en",

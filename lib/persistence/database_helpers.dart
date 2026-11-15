@@ -120,33 +120,33 @@ class DatabaseHelper {
   @awaitNotRequired
   Future<int> insert(MovieModel movie) async {
     final db = await database;
-    return mutexLock.protect(() => _insert(db, movie));
+    return await mutexLock.protect(() => _insert(db, movie));
   }
 
   /// Update a movie record in the database.
   @awaitNotRequired
   Future<int> update(MovieModel movie) async {
     final db = await database;
-    return mutexLock.protect(() => _update(db, movie));
+    return await mutexLock.protect(() => _update(db, movie));
   }
 
   /// Delete a movie record from the database.
   @awaitNotRequired
   Future<int> delete(MovieModel movie) async {
     final db = await database;
-    return mutexLock.protect(() => _delete(db, movie));
+    return await mutexLock.protect(() => _delete(db, movie));
   }
 
   /// Query the database for all stored movie records.
   Future<List<Map<Object?, Object?>>> queryAllMovies() async {
     final db = await database;
-    return mutexLock.protect(() => _queryAllMovies(db));
+    return await mutexLock.protect(() => _queryAllMovies(db));
   }
 
   /// Query the database for a specific movie record based on its unique ID.
   Future<MovieModel?> queryMovieUniqueId(String uniqueId) async {
     final db = await database;
-    return mutexLock.protect(() => _queryMovieUniqueId(db, uniqueId));
+    return await mutexLock.protect(() => _queryMovieUniqueId(db, uniqueId));
   }
 
   Future<int> _insert(Database db, MovieModel movie) => db.insert(

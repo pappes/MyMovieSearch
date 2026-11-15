@@ -48,11 +48,11 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
 
   void loginStatusEvent(android_firebase.User? user) {
     if (user != null) {
-      loggedIn = Future<bool>.value(true);
+      loggedIn = Future<bool>.syncValue(true);
       userDisplayName = user.displayName;
       userId = user.uid;
     } else {
-      loggedIn = Future<bool>.value(false);
+      loggedIn = Future<bool>.syncValue(false);
       userDisplayName = null;
       userId = null;
     }
@@ -182,7 +182,7 @@ class FirebaseApplicationStateAndriod extends FirebaseApplicationState {
       if (!completer.isCompleted) {
         // Do not know when initial data load is completre
         // so just wait a fixed amount of time then notify the caller.
-        await Future<void>.delayed(const Duration(seconds: 5));
+        await Future.pause(const Duration(seconds: 5));
       }
       if (!completer.isCompleted) completer.complete(true);
     }

@@ -132,7 +132,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   Future<List<OUTPUT_TYPE>> readList({DataSourceFn? source, int? limit}) async {
     searchResultsLimit.limit = limit;
     final result = await baseYieldFetchedObjects(source: source);
-    return result.toList();
+    return await result.toList();
   }
 
   /// Return a cached list of [OUTPUT_TYPE] objects matching [criteria].
@@ -147,9 +147,9 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
     searchResultsLimit.limit = limit;
     if (await myIsResultCached()) {
       final result = await baseYieldFetchedObjects(source: source);
-      return result.toList();
+      return await result.toList();
     }
-    return Future.value(<OUTPUT_TYPE>[]);
+    return <OUTPUT_TYPE>[];
   }
 
   /// Convert dart [List] or [Map] or Document to [OUTPUT_TYPE] object data.
@@ -279,9 +279,10 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         retryDelay <= maxDelay) {
       final oldDelay = retryDelay;
       retryDelay = retryDelay * 2;
-      return Future<void>.delayed(
+      return await Future.delayed(
         Duration(milliseconds: oldDelay),
-      ).then((value) => myFetchWebText(criteria));
+        () => myFetchWebText(criteria),
+      );
     }
 
     // Check for successful HTTP status before transforming (avoid HTTP 404)
@@ -368,7 +369,7 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
   ///   lastRequestTime = DateTime.now();
   ///   final delay = nextRequestTime.difference(lastRequestTime);
   ///   if (!delay.isNegative) {
-  ///     return Future.delayed(delay);
+  ///     return Future.pause(delay);
   ///   }
   /// ```
   Future<void> myDelayRequest() => Future.value();
@@ -663,9 +664,8 @@ abstract class WebFetchBase<OUTPUT_TYPE, INPUT_TYPE> {
         'value was cached ${myFormatInputAsText()}',
       );
       final cachedResults = myFetchResultFromCache();
-      WebLog(
-        myDataSourceName(),
-      ).logResponses(criteria, cachedResults, cached: true);
+      WebLog(myDataSourceName())
+          .logResponses(criteria, cachedResults, cached: true);
       return Stream.fromIterable(cachedResults);
     }
     if (myFormatInputAsText() == '') {

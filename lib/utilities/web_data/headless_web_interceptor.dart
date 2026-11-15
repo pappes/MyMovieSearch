@@ -206,7 +206,7 @@ class HeadlessWebInterceptor {
       method ?? HttpMethod.get.value,
     );
     _transferHeaders(headers, dartRequest);
-    return dartRequest.close();
+    return await dartRequest.close();
   }
 
   /// Transfers request data from `Map<String, String>`

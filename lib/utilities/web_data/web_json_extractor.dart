@@ -99,9 +99,9 @@ class WebJsonExtractor extends WebHeadlessExtractor {
 
     // Only wait if buttons were actually found and clicked
     if (buttonsFound == true || buttonsFound == 'true') {
-      await Future<void>.delayed(_shortDelay);
+      await Future.pause(_shortDelay);
     } else {
-      await Future<void>.delayed(_veryShortDelay);
+      await Future.pause(_veryShortDelay);
     }
 
     const javascriptToExecute = '''

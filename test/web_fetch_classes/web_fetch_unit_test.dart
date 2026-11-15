@@ -84,8 +84,9 @@ class QueryUnknownSourceMocked
 
     when(
       client.openUrl(any, any),
-    ).thenAnswer((_) => Future.value(clientRequest));
-    when(client.getUrl(any)).thenAnswer((_) => Future.value(clientRequest));
+    )
+        .thenAnswer((_) => Future.syncValue(clientRequest));
+    when(client.getUrl(any)).thenAnswer((_) => Future.syncValue(clientRequest));
     when(clientRequest.headers).thenAnswer((_) => headers);
 
     return client;
@@ -113,13 +114,14 @@ class QueryUnknownSourceMocked
   // Default myConvertWebTextToTraversableTree
   // to jsonDecode but allow tests to alter it
   ConvertWebTextToTreeFn overriddenConvertWebTextToTraversableTree =
-      (webText) => Future.value([jsonDecode(webText)]);
+      (
+    webText,
+  ) => Future.syncValue([jsonDecode(webText)]);
   @override
   Future<List<Object?>> myConvertWebTextToTraversableTree(
     String webText,
     // Needs to be async so it handles future exceptions properly.
-    // ignore: unnecessary_async
-  ) async => overriddenConvertWebTextToTraversableTree(webText);
+  ) => overriddenConvertWebTextToTraversableTree(webText);
 
   /// Include entire error in the movie title when an error occurs.
   @override
@@ -137,8 +139,8 @@ class QueryUnknownSourceMocked
       (_) async => const Stream<String>.empty();
 
   static Future<List<MovieResultDTO>> treeToDto(Object? tree) {
-    if (tree is Map) return Future.value([_mapToDto(tree)]);
-    if (tree is List) return Future.value(_listToDto(tree));
+    if (tree is Map) return Future.syncValue([_mapToDto(tree)]);
+    if (tree is List) return Future.syncValue(_listToDto(tree));
     throw TreeConvertException('Unknown: $tree');
   }
 
@@ -164,7 +166,7 @@ class WebFetchBasic extends WebFetchBase<String, String> {
     selectedDataSource = loopBackDataSource;
   }
   Future<Stream<String>> loopBackDataSource(Object? s) =>
-      Future.value(Stream.value(s.toString()));
+      Future.syncValue(Stream.value(s.toString()));
 
   @override
   String myDataSourceName() => 'WebFetchBasic';
@@ -464,7 +466,7 @@ void main() {
     test('empty cache', () async {
       final testClass = WebFetchCached('Marco');
       final listResult = await testClass.readCachedList(
-        source: (_) => Future.value(Stream.value('Polo')),
+        source: (_) => Future.syncValue(Stream.value('Polo')),
       );
       expect(listResult, <void>[]);
       final resultIsCached = await testClass.myIsResultCached();
@@ -479,11 +481,11 @@ void main() {
       testClass.populateStream(
         sc,
         source: (_) =>
-            Future.value(Stream.value('"Polo"')), // Stream a Json result
+            Future.syncValue(Stream.value('"Polo"')), // Stream a Json result
       );
       await sc.stream.drain<void>();
       final listResult = await testClass.readCachedList(
-        source: (_) => Future.value(Stream.value('Who Is Marco?')),
+        source: (_) => Future.syncValue(Stream.value('Who Is Marco?')),
       );
       expect(listResult, ['Polo']);
       final resultIsCached = await testClass.myIsResultCached();
@@ -496,7 +498,7 @@ void main() {
       final testClass = WebFetchCached('Marco');
       await testClass.myAddResultToCache('Polo');
       final listResult = await testClass.readCachedList(
-        source: (_) => Future.value(Stream.value('Polo')),
+        source: (_) => Future.syncValue(Stream.value('Polo')),
       );
       expect(listResult, ['Polo']);
       final resultIsCached = await testClass.myIsResultCached();

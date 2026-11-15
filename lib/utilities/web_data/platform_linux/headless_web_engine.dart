@@ -32,7 +32,7 @@ class HeadlessWebBrowserLinux {
         headless: false,
         executablePath: '/usr/bin/google-chrome',
       );
-      await Future<void>.delayed(const Duration(milliseconds: 100));
+      await Future.pause(const Duration(milliseconds: 100));
       _browserLaunchCompleter!.complete(_browser);
     }
     await _browserLaunchCompleter!.future;
@@ -41,7 +41,7 @@ class HeadlessWebBrowserLinux {
   /// Creates a new browser tab.
   Future<Page> newPage() async {
     await init();
-    return _browser!.newPage();
+    return await _browser!.newPage();
   }
 
   /// Disposes the headless web page
@@ -111,7 +111,7 @@ class HeadlessWebEngineLinux extends HeadlessWebEngineBase {
 
   /// Returns the html content of the page.
   @override
-  Future<String?> getPageContent() async => _page?.content;
+  Future<String?> getPageContent() async => await _page?.content;
 
   /// Perform actions when page load is stopped.
   Future<void> _loadStopped(_) => pageLoadComplete();

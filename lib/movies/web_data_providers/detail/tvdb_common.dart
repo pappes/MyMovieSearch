@@ -151,7 +151,7 @@ abstract class QueryTVDBCommon
       final delay = nextRequestTime.difference(currentRequestTime);
       // Update last request time to the scheduled time.
       lastRequestTime = nextRequestTime;
-      return Future.delayed(delay);
+      return Future.pause(delay);
     }
   }
 

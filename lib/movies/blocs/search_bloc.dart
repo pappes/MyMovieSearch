@@ -63,7 +63,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
   Future<void> close() async {
     await _searchStatusSubscription?.cancel();
     await _movieRepository.close();
-    return super.close();
+    return await super.close();
   }
 
   /// Clean up the results of any previous search

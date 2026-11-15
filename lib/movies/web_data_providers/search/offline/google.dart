@@ -19,7 +19,7 @@ const jsonSampleFull =
     '$googleMoviesJsonSearchInner $googleMoviesJsonSearchSuffix';
 
 Future<Stream<String>> streamGoogleMoviesJsonOfflineData(_) =>
-    Future.value(Stream.value(jsonSampleFull));
+    Future.syncValue(Stream.value(jsonSampleFull));
 
 const googleMoviesJsonSearchSuffix = '''
   ]

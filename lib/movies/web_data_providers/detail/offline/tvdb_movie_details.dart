@@ -92,7 +92,7 @@ const jsonSampleError =
 
 const String jsonSampleFull = tvdbJsonSearchMovie;
 Future<Stream<String>> streamTvdbJsonOfflineData(_) =>
-    Future.value(Stream.value(jsonSampleFull));
+    Future.syncValue(Stream.value(jsonSampleFull));
 
 const tvdbJsonSearchEpisode = '''
 {

@@ -21,7 +21,7 @@ const imdbJsonEmptySampleInner =
 ''';
 
 Future<Stream<String>> streamImdbKeywordsHtmlOfflineData(_) =>
-    Future.value(Stream.value(imdbHtmlSampleFull));
+    Future.syncValue(Stream.value(imdbHtmlSampleFull));
 
 const List<Map<String, Object>> intermediateEmptyMapList = [
   {

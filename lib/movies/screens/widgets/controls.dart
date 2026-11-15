@@ -119,7 +119,6 @@ DataRow movieLocationRow(
   DenormalizedLocation title, {
   void Function()? onLongPress,
   // DataRow requires nullable bool for onSelectChanged
-  // ignore: avoid_positional_boolean_parameters
   void Function(bool?)? onSelectChanged,
 }) => DataRow(
   onLongPress: onLongPress,

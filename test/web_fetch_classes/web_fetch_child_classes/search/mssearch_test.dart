@@ -22,10 +22,10 @@ import '../../../test_helper.dart';
 import 'mssearch_test.mocks.dart';
 
 Future<Stream<String>> _emitUnexpectedJsonSample(_) =>
-    Future.value(Stream.value('{"hello":"world"}'));
+    Future.syncValue(Stream.value('{"hello":"world"}'));
 
 Future<Stream<String>> _emitInvalidJsonSample(_) =>
-    Future.value(Stream.value('not valid json'));
+    Future.syncValue(Stream.value('not valid json'));
 
 final SearchCriteriaDTO criteria = SearchCriteriaDTO().fromString('123');
 
@@ -162,7 +162,8 @@ void main() {
       when(mockMeiliSearchClient.index(any)).thenReturn(mockIndex);
       when(
         mockIndex.search(any),
-      ).thenAnswer((_) => Future.value(mockSearcheable));
+      )
+          .thenAnswer((_) => Future.syncValue(mockSearcheable));
       when(mockSearcheable.hits).thenReturn([
         {'title': 'Test Movie 1'},
         {'title': 'Test Movie 2'},

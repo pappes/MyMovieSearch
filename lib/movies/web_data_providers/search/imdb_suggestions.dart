@@ -49,7 +49,7 @@ class QueryIMDBSuggestions
         );
         requests[movie.uniqueId] = QueryIMDBSuggestions(criteria).readList();
         // Avoid rate limit
-        await Future<void>.delayed(const Duration(milliseconds: 100));
+        await Future.pause(const Duration(milliseconds: 100));
       }
     }
 

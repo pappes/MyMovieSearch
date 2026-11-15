@@ -53,7 +53,7 @@ abstract class FirebaseApplicationState extends ChangeNotifier {
 
   static final loginMutexLock = Mutex();
 
-  Future<bool> loggedIn = Future<bool>.value(false);
+  Future<bool> loggedIn = Future<bool>.syncValue(false);
 
   String? userDisplayName;
   String? userId;

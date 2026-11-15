@@ -6,10 +6,10 @@
 import 'dart:convert';
 
 Future<Stream<String>> streamImdbHtmlOfflineFilteredData(_) =>
-    Future.value(Stream.value(jsonEncode(imdbJsonWrappedPaginatedSample)));
+    Future.syncValue(Stream.value(jsonEncode(imdbJsonWrappedPaginatedSample)));
 
 Future<Stream<String>> streamImdbHtmlOfflinePaginatedData(_) =>
-    Future.value(Stream.value(jsonEncode(imdbJsonWrappedPaginatedSample)));
+    Future.syncValue(Stream.value(jsonEncode(imdbJsonWrappedPaginatedSample)));
 
 const Map<String, Object> imdbJsonWrappedPaginatedSample = {
   'data': {'name': imdbJsonInnerPaginatedSample},
